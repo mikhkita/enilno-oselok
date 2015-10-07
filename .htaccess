@@ -1,0 +1,11 @@
+addDefaultCharset "utf-8"
+Options +FollowSymLinks
+IndexIgnore */*
+RewriteEngine on
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+RewriteRule . index.php
+
+php_value mbstring.func_overload 0
