@@ -380,7 +380,7 @@ class Controller extends CController
         if($good->good_type_id==2) $path .= "/discs/";
         $dir = $path.$code;
         if (is_dir($dir)) {
-            $imgs = array_values(array_diff(scandir($dir), array('..', '.', 'Thumbs.db')));
+            $imgs = array_values(array_diff(scandir($dir), array('..', '.', 'Thumbs.db', '.DS_Store')));
             $dir = Yii::app()->request->baseUrl."/".$path.$code;
             if(count($imgs)) {
                 if($number) {
