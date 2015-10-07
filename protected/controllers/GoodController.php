@@ -26,33 +26,60 @@ class GoodController extends Controller
 		);
 	}
 
-	public function actionAdminCreate()
+	public function actionAdminCreate($goodTypeId)
 	{
-		$model=new Good;
-
-		if(isset($_POST['Good']))
+		$model = new Good;
+		$model->good_type_id = $goodTypeId;
+		$result = array();
+		if(isset($_POST['Good_attr']) && $model->save())
 		{
-			$model->attributes=$_POST['Good'];
-			if($model->save()){
-				$this->actionAdminIndex(true);
-				return true;
+			foreach ($_POST['Good_attr'] as $attr_id => $value) {
+				if(!is_array($value) ) {
+					if($value) {
+						$attr = new GoodAttribute;
+						$attr->good_id = $model->id;
+						$attr->attribute_id = $attr_id;
+						$attr[$this->getAttrType($model,$attr_id)] = $value;
+						$attr->save();
+					}
+				} else if(isset($value['single']) ){
+					if($value['single']) {
+						$attr = new GoodAttribute;
+						$attr->good_id = $model->id;
+						$attr->attribute_id = $attr_id;
+						$attr->variant_id = $value['single'];
+						$attr->save();
+					}
+				} else {
+					if(!empty($value)) {
+						foreach ($value as $variant) {
+							$attr = new GoodAttribute;
+							$attr->good_id = $model->id;
+							$attr->attribute_id = $attr_id;
+							$attr->variant_id = $variant;
+							$attr->save();
+						}
+					}
+				}
 			}
-		}
 
-		$this->renderPartial('adminCreate',array(
-			'model'=>$model,
-		));
+			$this->redirect( Yii::app()->createUrl('good/adminindex',array('goodTypeId'=>$goodTypeId,'partial'=>true)) );
+
+		}else{
+			$this->renderPartial('adminCreate',array(
+				'model'=>$model,
+				'result' => $result
+			));
+		}
 
 	}
 
 	public function actionAdminUpdate($id,$goodTypeId)
 	{
-		$model=$this->loadModel($id);
+		$model = $this->loadModel($id);
 		$result = $this->getAttr($model);
 		if(isset($_POST['Good_attr']))
 		{
-			// print_r($_POST['Good_attr']);
-			// die();
 			GoodAttribute::model()->deleteAll('good_id='.$id);
 			foreach ($_POST['Good_attr'] as $attr_id => $value) {
 				if(!is_array($value) ) {
@@ -224,12 +251,13 @@ class GoodController extends Controller
 		$attributes = $this->getFilterVariants($params[$goodTypeId]["FILTER"],$params[$goodTypeId]["FILTER_NAMES"],$goodTypeId);
 		$labels = $this->getLabels($params[$goodTypeId]["FILTER"]);
 
-		session_start();
+		if(!isset($_SESSION)) session_start();
 		if( !isset($_POST["sort"]) ){
 			if( isset($_SESSION["POST"][$goodTypeId]) ){
 				$_POST = $_SESSION["POST"][$goodTypeId];
 			}else{
 				$_POST["sort"] = array("field"=>20,"type"=>"ASC");
+				$_POST[$arr_name] = array();
 			}
 		}else{
 			$_SESSION["POST"][$goodTypeId] = $_POST;
@@ -250,8 +278,7 @@ class GoodController extends Controller
 				array(
 					"good_type_id"=>$goodTypeId,
 					"attributes"=>$filter_values,
-				),
-				$goods_no_photo
+				)
 			)->sort( 
 				$_POST['sort'] 
 			)->getPage(

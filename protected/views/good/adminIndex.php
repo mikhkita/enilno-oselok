@@ -1,5 +1,8 @@
 <h1><?=$name?></h1>
+
+
 <div class="b-buttons-left">
+	<a href="<?php echo $this->createUrl('/good/admincreate',array('goodTypeId'=> $_GET["goodTypeId"] ))?>" class="ajax-form ajax-create b-butt">Добавить</a>
 	<a href="#" class="fancy left b-butt" data-block=".b-popup-filter">Фильтр</a>
 	<div class="b-sort-cont left">
         <label for="sort">Сортировать: </label>

@@ -619,7 +619,7 @@ h1{
             padding: 5px 10px;
             font-size: 14px;
             display: block;
-            min-width: 200px;
+            width: 200px;
         }
         .fancybox-skin .select2-choices {
             padding: 1px 0 1px;
