@@ -68,35 +68,34 @@ class ShopController extends Controller
 		$price_max = array_pop($model)->int_value;
 	
 		// Поиск айдишников товаров у которых есть фото		
-		$imgs = array_values(array_diff(scandir(Yii::app()->params["imageFolder"]."/".$type), array('..', '.', 'Thumbs.db','default-big.png','default.jpg')));
-		$temp = "0";
-		if(count($imgs)) {
-			$temp = "";
-			foreach ($imgs as $value) {
-				$temp.="'".$value."',";
-			}
-			$temp = substr($temp, 0, -1);	
-		}
+		// $imgs = array_values(array_diff(scandir(Yii::app()->params["imageFolder"]."/".$type), array('..', '.', 'Thumbs.db','default-big.png','default.jpg')));
+		// $temp = "0";
+		// if(count($imgs)) {
+		// 	$temp = "";
+		// 	foreach ($imgs as $value) {
+		// 		$temp.="'".$value."',";
+		// 	}
+		// 	$temp = substr($temp, 0, -1);	
+		// }
 
-		$criteria=new CDbCriteria();
-		$criteria->select = 'id,good_type_id';
-	   	$criteria->with = array('fields' => array('select'=> array('attribute_id','varchar_value')));
-		$criteria->condition = 'good_type_id='.$_GET['type'].' AND (fields.attribute_id=3 AND fields.varchar_value IN('.$temp.'))';
+		// $criteria=new CDbCriteria();
+		// $criteria->select = 'id,good_type_id';
+	 //   	$criteria->with = array('fields' => array('select'=> array('attribute_id','varchar_value')));
+		// $criteria->condition = 'good_type_id='.$_GET['type'].' AND (fields.attribute_id=3 AND fields.varchar_value IN('.$temp.'))';
 
-		$model=GoodFilter::model()->findAll($criteria);
+		// $model=GoodFilter::model()->findAll($criteria);
 
-		$goods_no_photo = array();
-		foreach ($model as $good) {
-			array_push($goods_no_photo, $good->id); 
-		}
+		// $goods_no_photo = array();
+		// foreach ($model as $good) {
+		// 	array_push($goods_no_photo, $good->id); 
+		// }
 		// Поиск айдишников товаров у которых есть фото
 
 		$goods = Good::model()->filter(
 			array(
 				"good_type_id"=>$_GET['type'],
 				"attributes"=>$_GET["arr"],
-			),
-			$goods_no_photo
+			)
 		)->sort( 
 			$_GET['sort'] 
 		)->getPage(
@@ -131,7 +130,7 @@ class ShopController extends Controller
             	$criteria->condition .= 't.attribute_id=6 OR t.attribute_id=5 OR t.attribute_id=31 OR t.attribute_id=32';
         	}	
 
-        	$criteria->addInCondition("good.id",$goods_no_photo);
+        	// $criteria->addInCondition("good.id",$goods_no_photo);
             $criteria->group = 't.variant_id';
             $criteria->order = 'variant.sort ASC';
 

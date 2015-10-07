@@ -225,12 +225,12 @@ input:-moz-placeholder {
 		}
 			.b-main .b-block .b-main-filter .filter-cont{
 				width: 264px;
-				padding: 20px 16px 16px 19px;	
+				padding: 15px 16px 12px 19px;
 				margin-bottom: 12px;
 				border-radius: 5px;
 				border-bottom: 3px solid #e3e4e8;
 				background-color: rgb(255, 255, 255);
-				box-shadow: 0px 3px 0px 0px rgba(227, 228, 232, 0.004);	
+				box-shadow: 0px 3px 0px 0px rgba(227, 228, 232, 0.004);
 				position: relative;
 			}
 			.b-main .b-block .b-main-filter .filter-cont #filter-search {
@@ -298,13 +298,13 @@ input:-moz-placeholder {
 					}
 			.b-main .b-block .b-main-filter .filter-cont .check-cont {
 				max-height: 195px;
-				margin-top: 16px;
+				margin-top: 10px;
 				overflow: auto;
 			}
 				.b-main .b-block .b-main-filter .filter-cont .check-cont li {
 					width: 50%;
 					position: relative;
-					margin-bottom: 13px;
+					margin-bottom: 5px;
 				}
 				.b-main .b-block .b-main-filter .filter-cont .check-cont ul li:nth-child(2n) {
 					width: 50%;
@@ -763,7 +763,7 @@ input:-moz-placeholder {
 			color: #585858;
 		}
 		.b-items-sort li.active:after {	
-			content: "˅";
+			content: "Ë…";
 			position: absolute;
 			font-family: 'HNM';
 			font-weight: 700;
@@ -772,7 +772,7 @@ input:-moz-placeholder {
 			right: -10px;
 		}
 		.b-items-sort li.active.up:after {
-			content: "˄";
+			content: "Ë„";
 		}
 		.b-items-sort li input {
 			display: none;
