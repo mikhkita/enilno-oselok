@@ -224,12 +224,13 @@ class GoodController extends Controller
 		$attributes = $this->getFilterVariants($params[$goodTypeId]["FILTER"],$params[$goodTypeId]["FILTER_NAMES"],$goodTypeId);
 		$labels = $this->getLabels($params[$goodTypeId]["FILTER"]);
 
-		session_start();
+		if(!isset($_SESSION)) session_start();
 		if( !isset($_POST["sort"]) ){
 			if( isset($_SESSION["POST"][$goodTypeId]) ){
 				$_POST = $_SESSION["POST"][$goodTypeId];
 			}else{
 				$_POST["sort"] = array("field"=>20,"type"=>"ASC");
+				$_POST[$arr_name] = array();
 			}
 		}else{
 			$_SESSION["POST"][$goodTypeId] = $_POST;
@@ -250,8 +251,7 @@ class GoodController extends Controller
 				array(
 					"good_type_id"=>$goodTypeId,
 					"attributes"=>$filter_values,
-				),
-				$goods_no_photo
+				)
 			)->sort( 
 				$_POST['sort'] 
 			)->getPage(
