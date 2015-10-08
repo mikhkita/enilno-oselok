@@ -31,6 +31,7 @@ class GoodController extends Controller
 		$model = new Good;
 		$model->good_type_id = $goodTypeId;
 		$result = array();
+
 		if(isset($_POST['Good_attr']) && $model->save())
 		{
 			foreach ($_POST['Good_attr'] as $attr_id => $value) {
@@ -66,6 +67,7 @@ class GoodController extends Controller
 			$this->redirect( Yii::app()->createUrl('good/adminindex',array('goodTypeId'=>$goodTypeId,'partial'=>true)) );
 
 		}else{
+
 			$this->renderPartial('adminCreate',array(
 				'model'=>$model,
 				'result' => $result

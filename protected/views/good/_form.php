@@ -7,6 +7,7 @@
 
 	<?php echo $form->errorSummary($model); ?>
 	<div class="clearfix">
+	
 	<? foreach ($model->type->fields as $item): ?>
 		<div class="row">
 			<label><?=$item->attribute->name?></label>
