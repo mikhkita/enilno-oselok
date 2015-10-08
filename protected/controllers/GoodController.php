@@ -446,7 +446,7 @@ class GoodController extends Controller
 		}
 	}
 
-	public function getArrayFromModel($model){
-
+	public function calculatePrices(){
+		
 	}
 }
