@@ -91,6 +91,57 @@ class Good extends CActiveRecord
 		));
 	}
 
+	public function updatePrices($ids = array()){
+		$codes = array(
+			1 => 95,
+			2 => 94,
+			// 3 => 95,
+		);
+
+		// $start = microtime(true);
+		
+		if( !count($ids) ){
+			GoodAttribute::model()->deleteAll("attribute_id=51");
+
+			foreach ($codes as $key => $code) {
+				$model = Good::model()->with(array("fields.attribute","fields.variant"))->findAll(array("condition"=>"good_type_id=".$key));
+
+				Good::setPrices($model,$codes);
+				Log::debug("Обновление цен ".$key);
+				unset($model);
+			}
+		}else{
+			$model = Good::model()->with(array("fields.attribute","fields.variant"))->findAllByPk($ids);
+
+			$criteria = new CDbCriteria();
+			$criteria->condition = "attribute_id=51";
+	    	$criteria->addInCondition("good_id",$ids);
+			GoodAttribute::model()->deleteAll($criteria);
+
+			Good::setPrices($model,$codes);
+		}
+
+		// list($queryCount, $queryTime) = Yii::app()->db->getStats();
+		// echo "Query count: $queryCount, Total query time: ".sprintf('%0.5f',$queryTime)."s";
+		// printf('<br>Прошло %.4F сек.<br>', microtime(true) - $start);	
+		return true;
+	}
+
+	public function setPrices($model,$codes){
+		$tableName = GoodAttribute::tableName();
+		$sql = "INSERT INTO `$tableName` (`good_id`,`attribute_id`,`int_value`) VALUES ";
+
+		$values = array();
+		foreach ($model as $good) {
+			$newPrice = Interpreter::generate($codes[$good->good_type_id],$good);
+			$values[] = "('".$good->id."','51',".( ($newPrice != "")?("'".$newPrice."'"):"NULL" ).")";
+		}
+
+		$sql .= implode(",", $values);
+
+		Yii::app()->db->createCommand($sql)->execute();
+	}
+
 	public function filter($options = array(),$ids = NULL){
 
 		$this->criteria = $this->filterItems($options,$ids);
@@ -153,7 +204,7 @@ class Good extends CActiveRecord
 		$criteria->select = 'id';
 		$criteria->group = 'fields.good_id';
         $criteria->with = array('fields' => array('select'=> array('variant_id','attribute_id')));
-        $criteria->condition = '(good_type_id='.$options["good_type_id"].' AND fields.attribute_id=20 AND fields.int_value>=0 AND fields.int_value<=100000)';
+        
         if( $ids ) $criteria->addInCondition("t.id", $ids);
 
         $count = 0;
@@ -165,7 +216,23 @@ class Good extends CActiveRecord
 				$count++;
 			}
 
-    	$criteria->having = 'COUNT(DISTINCT fields.attribute_id)='.($count+1);
+		if(isset($options["int_attributes"]) && count($options["int_attributes"]))
+			foreach ($options["int_attributes"] as $id => $attribute) {
+				if( count($attribute) ){
+					$criteria->addCondition('(good_type_id='.$options["good_type_id"].' AND fields.attribute_id='.$id.' '.(isset($attribute["min"])?(' AND fields.int_value>='.$attribute["min"]):'').(isset($attribute["max"])?' AND fields.int_value<='.$attribute["max"]:'').')','OR');
+					$count++;
+				}
+			}
+
+		// $criteria->addCondition('good_type_id='.$options["good_type_id"].' AND fields.attribute_id=3','OR');
+		// $count++;
+
+		if( $count == 0 ){
+			$criteria->condition = 'good_type_id='.$options["good_type_id"].' AND fields.attribute_id=3';
+			$criteria->having = 'COUNT(DISTINCT fields.attribute_id)>='.$count;
+		}else{
+			$criteria->having = 'COUNT(DISTINCT fields.attribute_id)='.$count;
+		}
 
     	return $criteria;
 	}

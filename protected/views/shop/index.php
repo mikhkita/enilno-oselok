@@ -1,6 +1,6 @@
 <?php $this->renderPartial('_menu', array()); ?>
-<input type='hidden' name="price_min" id="price_min" value="<?=$price_min?>">
-<input type='hidden' name="price_max" id="price_max" value="<?=$price_max?>">
+<input type='hidden' name="int[51][min]" id="price_min" value="<?=$price_min?>">
+<input type='hidden' name="int[51][max]" id="price_max" value="<?=$price_max?>">
 <div class='b b-content'>
     <div class="b b-main">
         <div class="b-block clearfix">
@@ -131,8 +131,8 @@
                         <div class="slider-text clearfix">
                             <h3 class="left">от <span id="amount-l"><span></h3>
                             <h3 class="right" style="margin-right:7px;">до <span id="amount-r"><span></h3>
-                            <input type='hidden' name="price-min" id="price-min" >
-                            <input type='hidden' name="price-max" id="price-max" >
+                            <input type='hidden' name="int[51][min]" id="price-min" >
+                            <input type='hidden' name="int[51][max]" id="price-max" >
                             <input type='hidden' name="type" value="<?=$_GET['type']?>">
                         </div>
                         <div id="slider-range"></div>

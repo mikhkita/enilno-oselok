@@ -168,7 +168,7 @@ class IntegrateController extends Controller
                 array_push($result, array(
                         "TEXT" => $this->replaceToBr(Interpreter::generate($curParams["TEXT_CODE"],$item)),
                         "TITLE" => Interpreter::generate($curParams["TITLE_CODE"],$item),
-                        "PRICE" => $item->fields_assoc[20]->value,
+                        "PRICE" => $item->fields_assoc[51]->value,
                         "IMAGE" => substr($this->getImages($item)[0],1)
                     )
                 );
@@ -204,7 +204,7 @@ class IntegrateController extends Controller
         $min = 999999;
 
         foreach ($group as $i => $item) {
-            $price = intval($item->fields_assoc[20]->value);
+            $price = intval($item->fields_assoc[51]->value);
             if( $price < $min && $price != 0 ){
                 $min = $price;
             } 

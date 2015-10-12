@@ -911,6 +911,24 @@ $(document).ready(function(){
     }
     /* Filter Pagination ------------------------- Filter Pagination */
 
+    $(".ajax-update-prices").click(function(){
+        progress.setColor("#D26A44");
+        progress.start(10);
+
+        $.ajax({
+            url: $(this).attr("href"),
+            success: function(msg){
+                progress.end(function(){
+                    alert("Цены успешно обновлены");
+                });
+            },
+            error: function(){
+                alert("Ошибка обновления цен");
+            }
+        });
+        return false;
+    });
+
     function transition(el,dur){
         el.css({
             "-webkit-transition":  "all "+dur+"s ease-in-out", "-moz-transition":  "all "+dur+"s ease-in-out", "-o-transition":  "all "+dur+"s ease-in-out", "transition":  "all "+dur+"s ease-in-out"

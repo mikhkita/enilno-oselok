@@ -59,7 +59,7 @@ class ShopController extends Controller
 
 		$criteria=new CDbCriteria();
 		$criteria->with = array('good' => array('select'=> false));
-        $criteria->condition = 'attribute_id=20 AND good.good_type_id='.$_GET['type'];
+        $criteria->condition = 'attribute_id=51 AND good.good_type_id='.$_GET['type'];
         $criteria->select = array('int_value');
         $criteria->order = 'int_value ASC';
 
@@ -95,6 +95,7 @@ class ShopController extends Controller
 			array(
 				"good_type_id"=>$_GET['type'],
 				"attributes"=>$_GET["arr"],
+				"int_attributes"=>isset( $_GET["int"] )?$_GET["int"]:array(),
 			)
 		)->sort( 
 			$_GET['sort'] 
