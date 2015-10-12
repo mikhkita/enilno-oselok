@@ -1,6 +1,6 @@
 <? if(count($goods)): ?>
 <?
-    $sort_arr = array("20" => "по цене", "9" => "по диаметру");
+    $sort_arr = array("51" => "по цене", "9" => "по диаметру");
     if ($_GET['type'] == 1) {
         $sort_arr["7"] = "по ширине";
         $sort_arr["8"] = "по профилю";
@@ -15,14 +15,14 @@
     <h2 class="left">Сортировать:</h2>
     <ul class="left b-items-sort clearfix">
         <? foreach ($sort_arr as $key => $value): ?>
-            <? if(isset($_GET['sort']['id']) && $_GET['sort']['id']==$key): ?>
+            <? if(isset($_GET['sort']['field']) && $_GET['sort']['field']==$key): ?>
                 <li class="active <? if($sort_type =='ASC') echo 'up'; ?>">
                 <?=$value?>
-                <input type="radio" name="sort[id]" value="<?=$key?>" checked>
+                <input type="radio" name="sort[field]" value="<?=$key?>" checked>
             <? else: ?>
                 <li>
                 <?=$value?>
-                <input type="radio" name="sort[id]" value="<?=$key?>">
+                <input type="radio" name="sort[field]" value="<?=$key?>">
             <? endif; ?>
             </li>
         <? endforeach;?>
@@ -38,7 +38,7 @@
                 <div class="desc">
                     <h3><?=Interpreter::generate($this->params[$_GET['type']]["TITLE_CODE"], $good);?></h3>
                     <h4><?=Interpreter::generate($this->params[$_GET['type']]["TITLE_2_CODE"], $good);?></h4>
-                    <? $price = 0; $price = Interpreter::generate($this->params[$_GET['type']]["PRICE_CODE"], $good); $order = Interpreter::generate($this->params[$_GET['type']]["ORDER"], $good); ?>
+                    <? $price = 0; $price = ($good->fields_assoc[51])?$good->fields_assoc[51]->value:0; $order = Interpreter::generate($this->params[$_GET['type']]["ORDER"], $good); ?>
                     <h5><?=$price==0 ? Yii::app()->params["zeroPrice"] : number_format( $price, 0, ',', ' ' )." руб."?> <span><? if($order) echo "(".$order.")"; ?></span></h5>
                 </div>
             </a>

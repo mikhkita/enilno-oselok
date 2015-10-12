@@ -13,7 +13,7 @@ class GoodController extends Controller
 	{
 		return array(
 			array('allow',
-				'actions'=>array('adminIndex','adminTest','adminCreate','adminUpdate','adminDelete','adminEdit','getAttrType','getAttr'),
+				'actions'=>array('adminIndex','adminTest','updatePrices','adminCreate','adminUpdate','adminDelete','adminEdit','getAttrType','getAttr'),
 				'roles'=>array('manager'),
 			),
 			array('allow',
@@ -64,6 +64,8 @@ class GoodController extends Controller
 				}
 			}
 
+			Good::updatePrices(array($model->id));
+
 			$this->redirect( Yii::app()->createUrl('good/adminindex',array('goodTypeId'=>$goodTypeId,'partial'=>true)) );
 
 		}else{
@@ -112,6 +114,7 @@ class GoodController extends Controller
 					}
 				}
 			}
+			Good::updatePrices(array($id));
 			$this->redirect( Yii::app()->createUrl('good/adminindex',array('goodTypeId'=>$goodTypeId,'partial'=>true,'GoodFilter_page' => $_GET["GoodFilter_page"])) );
 
 		}else{
@@ -236,7 +239,8 @@ class GoodController extends Controller
 
 		$goodType = GoodType::model()->findByPk($goodTypeId);
 
-		$arr_name = "filter";
+		$attr_arr = "filter";
+		$int_attr_arr = "int";
 		$params = array(
 			1 => array(
 					"FILTER" => array(43,26,23,27,16),
@@ -259,7 +263,7 @@ class GoodController extends Controller
 				$_POST = $_SESSION["POST"][$goodTypeId];
 			}else{
 				$_POST["sort"] = array("field"=>20,"type"=>"ASC");
-				$_POST[$arr_name] = array();
+				$_POST[$attr_arr] = array();
 			}
 		}else{
 			$_SESSION["POST"][$goodTypeId] = $_POST;
@@ -269,17 +273,21 @@ class GoodController extends Controller
 			$this->layout='admin';
 		}
 
+		print_r($_POST["int"]);
+
 		if( $goodTypeId ){
 			unset($_GET["id"]);
 
-			if( isset( $_POST[$arr_name] ) ){
-				$filter_values = $_POST[$arr_name];
+			if( isset( $_POST[$attr_arr] ) ){
+				$filter_values = $_POST[$attr_arr];
 			}
 
 			$goods = Good::model()->filter(
 				array(
 					"good_type_id"=>$goodTypeId,
 					"attributes"=>$filter_values,
+					"int_attributes"=>isset( $_POST[$int_attr_arr] )?$_POST[$int_attr_arr]:array(),
+					"price"=>isset($_POST['price'])?$_POST['price']:NULL
 				)
 			)->sort( 
 				$_POST['sort'] 
@@ -297,7 +305,7 @@ class GoodController extends Controller
 			'pages' => $goods["pages"],
 			'attributes' => $attributes,
 			'labels' => $labels,
-			'arr_name' => $arr_name,
+			'arr_name' => $attr_arr,
 			'filter_values' => $filter_values,
 			'good_count' => $goods["count"],
 			'sort_fields' => $sort_fields,
@@ -448,7 +456,11 @@ class GoodController extends Controller
 		}
 	}
 
-	public function calculatePrices(){
-		
+	public function actionUpdatePrices(){
+		$ids = array(1564);
+		if(Good::updatePrices()){
+			header("HTTP/1.0 200 OK");
+			echo "success";
+		}
 	}
 }

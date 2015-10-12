@@ -24,8 +24,8 @@ $(document).ready(function(){
     if(location.search!='') {
         var price = decodeURIComponent(location.search.substr(1)).split('&');
         $.each( price, function( key, value ) {
-            if(value.indexOf('price-min') + 1) price_min = value.split('=').pop()*1;
-            if(value.indexOf('price-max') + 1) price_max = value.split('=').pop()*1;
+            if(value.indexOf('int[51][min]') + 1) price_min = value.split('=').pop()*1;
+            if(value.indexOf('int[51][max]') + 1) price_max = value.split('=').pop()*1;
             if(value.indexOf('type') + 1) type = value.split('=').pop()*1;
         });
         
