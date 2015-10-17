@@ -6,11 +6,14 @@ $url = "http://www.seogadget.ru/location";
 curl_setopt($ch, CURLOPT_URL, $url);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1); 
-curl_setopt($ch, CURLOPT_PROXY, '193.107.239.39:1212'); 
+curl_setopt($ch, CURLOPT_PROXY, '185.63.191.103:1212');
 curl_setopt($ch, CURLOPT_PROXYUSERPWD, 'admin:4815162342'); 
-$html = str_get_html(curl_exec( $ch ));
+$exec = curl_exec( $ch );
+$html = str_get_html($exec);
+// print_r($exec);
+
 $ip = $html->find('input[name=addr]',0)->value;
-if( $ip == '193.107.239.39') {
+if( $ip == '185.63.191.103') {
 	die($ip);
 	$url = "https://www.avito.ru/profile/login";
 	curl_setopt($ch, CURLOPT_URL, $url);

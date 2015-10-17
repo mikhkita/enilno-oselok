@@ -11,7 +11,6 @@
  * @property integer $list
  * @property integer $width
  * @property integer $dynamic
- * @property integer $group_id
  */
 class Attribute extends CActiveRecord
 {
@@ -32,11 +31,11 @@ class Attribute extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('name, attribute_type_id', 'required'),
-			array('attribute_type_id, multi, list, width, dynamic, group_id', 'numerical', 'integerOnly'=>true),
+			array('attribute_type_id, multi, list, width, dynamic', 'numerical', 'integerOnly'=>true),
 			array('name', 'length', 'max'=>255),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, name, attribute_type_id, multi, list, width, dynamic, group_id', 'safe', 'on'=>'search'),
+			array('id, name, attribute_type_id, multi, list, width, dynamic', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -53,7 +52,6 @@ class Attribute extends CActiveRecord
 			'type' => array(self::BELONGS_TO, 'AttributeType', 'attribute_type_id'),
 			'variants' => array(self::HAS_MANY, 'AttributeVariant', 'attribute_id','order'=>'variants.sort'),
 			'exports' => array(self::HAS_MANY, 'ExportAttribute', 'attribute_id'),
-			'group' => array(self::BELONGS_TO, 'Attribute', 'group_id'),
 		);
 	}
 
@@ -69,8 +67,7 @@ class Attribute extends CActiveRecord
 			'multi' => 'Множественный',
 			'list' => 'Список',
 			'width' => 'Ширина в пикселях',
-			'dynamic' => 'Динамический атрибут',
-			'group_id' => 'Привязка к атрибуту',
+			'dynamic' => 'Динамичный атрибут',
 		);
 	}
 
@@ -99,7 +96,6 @@ class Attribute extends CActiveRecord
 		$criteria->compare('list',$this->list);
 		$criteria->compare('width',$this->width);
 		$criteria->compare('dynamic',$this->dynamic);
-		$criteria->compare('group_id',$this->group_id);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

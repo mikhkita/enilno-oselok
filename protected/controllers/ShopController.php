@@ -118,9 +118,7 @@ class ShopController extends Controller
                     'select' => false,
                     'condition' => 'good_type_id='.$_GET['type']
                     ),
-                'variant' => array(
-                		'select' => false
-                	)
+                'variant.attribute'
 
                 );
             $criteria->condition = 't.attribute_id=9 OR t.attribute_id=27 OR t.attribute_id=28 OR ';
@@ -133,7 +131,7 @@ class ShopController extends Controller
 
         	// $criteria->addInCondition("good.id",$goods_no_photo);
             $criteria->group = 't.variant_id';
-            $criteria->order = 'variant.sort ASC';
+            $criteria->order = 'attribute.sort ASC';
 
             $model = GoodAttribute::model()->findAll($criteria);
             $filter = array();
@@ -146,7 +144,7 @@ class ShopController extends Controller
    				$temp['variant_id'] = $item->variant_id;
 	                    $temp['value'] = $item->value;
 	                    if(isset($check[$item->variant_id])) {
-	                    $temp['checked'] = "checked";
+	                    	$temp['checked'] = "checked";
 	                	} else {
 	                		$temp['checked'] = "";
 	                	}

@@ -38,6 +38,12 @@
 	</div>
 
 	<div class="row">
+		<?php echo $form->labelEx($model,'group_id'); ?>
+		<?php echo $form->dropDownList($model, 'group_id', array(0=>"")+CHtml::listData(Attribute::model()->findAll( ((isset($_GET["id"]))?("id!=".$_GET["id"]):NULL ) ), 'id', 'name')); ?>
+		<?php echo $form->error($model,'group_id'); ?>
+	</div>
+
+	<div class="row">
 		<?php echo $form->labelEx($model,'width'); ?>
 		<?php echo $form->textField($model,'width',array('maxlength'=>255,'required'=>true,'class'=>'numeric')); ?>
 		<?php echo $form->error($model,'width'); ?>

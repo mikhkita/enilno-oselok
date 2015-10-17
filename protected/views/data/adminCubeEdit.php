@@ -34,3 +34,4 @@
 <? endforeach; ?>
 </div>
 <?php $this->endWidget(); ?>
+<a href="" data-var="<?php echo Yii::app()->createUrl('/data/adminvarsupdate',array('none'=>'1','id'=>''))?>" data-table="<?=(Yii::app()->request->hostInfo."/admin/data/tableedit?id=")?>" class="ajax-form ajax-update b-tool b-tool-update hidden" id="b-update-button" ></a>

@@ -283,6 +283,11 @@ $(document).ready(function(){
         $(".numeric").numericInput({ allowFloat: true, allowNegative: true });
 
         $form.submit(function(e,a){
+            if( $(this).attr("id") == "good-edit-form" ){
+                $("#good-edit-form").find("input[type='number']").each(function(){
+                    if( $(this).val() == "" ) $(this).val(0);
+                });
+            }
             tinymce.triggerSave();
             if( $(this).valid() && !$(this).find("input[type=submit]").hasClass("blocked") ){
                 var $form = $(this),
@@ -298,7 +303,12 @@ $(document).ready(function(){
                 progress.setColor("#FFF");
                 progress.start(3);
 
-                url = ( $(".main form").length ) ? (url+( (url.split("?").length>1)?"&":"?" )+$(".main form").serialize()) : url;
+
+                if( $(".main form").length ){
+                    if( $(".main form").attr("id") != "b-matrix-form" ){
+                        url = url+( (url.split("?").length>1)?"&":"?" )+$(".main form").serialize();
+                    }
+                }
 
                 if( $form.attr("data-beforeAjax") && customHandlers[$form.attr("data-beforeAjax")] ){
                     customHandlers[$form.attr("data-beforeAjax")]($form);
@@ -311,7 +321,7 @@ $(document).ready(function(){
                     success: function(msg){
                         progress.end(function(){
                             $form.find("input[type=submit]").removeClass("blocked");
-                            setResult(msg);
+                            if( msg != "none" ) setResult(msg);
                         });
                         if( a != false ){
                             $.fancybox.close();
@@ -415,7 +425,8 @@ $(document).ready(function(){
     /* Hot keys ------------------------------------ Hot keys */
     
     var cmddown = false,
-        ctrldown = false;
+        ctrldown = false,
+        shiftdown = false;
     function down(e){
         // alert(e.keyCode);
         if( e.keyCode == 13 && ( cmddown || ctrldown ) ){
@@ -436,24 +447,26 @@ $(document).ready(function(){
         if( e.keyCode == 91 ) cmddown = false;
         if( e.keyCode == 17 ) ctrldown = false;
     }
-    if( $(".ajax-create").length ){
+    // if( $(".ajax-create").length ){
         $(document).keydown(down);
         $(document).keyup(up);
-    }
+    // }
     /* Hot keys ------------------------------------ Hot keys */
 
     /* Редактирование таблиц ------------------------------------ Редактирование таблиц */
     function downTable(e,el){
-        if( e.keyCode == 86 && ( cmddown || ctrldown ) ){
+        if( e.keyCode == 86 && ( cmddown || ctrldown ) && shiftdown ){
             el.val("");
             setTimeout(function(){ pasteHandler(el); },10);
         }
         if( e.keyCode == 91 ) cmddown = true;
         if( e.keyCode == 17 ) ctrldown = true;
+        if( e.keyCode == 16 ) shiftdown = true;
     }
     function upTable(e){
         if( e.keyCode == 91 ) cmddown = false;
         if( e.keyCode == 17 ) ctrldown = false;
+        if( e.keyCode == 16 ) shiftdown = false;
     }
 
     function pasteHandler(el){
@@ -488,6 +501,26 @@ $(document).ready(function(){
         });
         $(document).keyup(upTable);
     }
+
+    $(".b-table-td-editable textarea").click(function(){
+        if( cmddown || ctrldown ){
+            var val = $(this).val(),
+                found = val.match(/\[\+([\w]+)\=([\wА-я\_]+)\+\]/i);
+
+            if( found != null && found.length == 3 ){
+                switch (found[1]) {
+                    case "VAR":
+                        $("#b-update-button").attr("href",$("#b-update-button").attr("data-var")+found[2].trim()).trigger("click");
+                        break
+                    case "TABLE":
+                        document.location.href = $("#b-update-button").attr("data-table")+found[2].trim();
+                        break
+                }
+            }
+
+            cmddown = ctrldown = false;
+        }
+    });
     /* Редактирование таблиц ------------------------------------ Редактирование таблиц */
 
     /* Autocomplete -------------------------------- Autocomplete */
@@ -739,7 +772,7 @@ $(document).ready(function(){
     function updateVariantsSort(){
         var i = 0;
         $("#b-variants ul li").each(function(){
-            i+=10;
+            i+=1;
             $(this).find("input").val(i);
         });
     }

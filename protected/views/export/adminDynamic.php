@@ -6,12 +6,12 @@
 	<? foreach ($data as $key => $value): ?>
 		<div class="left b-dynamic b-choosable">
 			<p><label>Пример</label></p>
-			<?php echo CHtml::dropDownList('dynamic['.$value->attribute->id.']', $value->attribute->variants[0]->id, CHtml::listData($value->attribute->variants, 'id', 'value')); ?>
+			<?php echo CHtml::dropDownList('dynamic['.$value->attribute->id.']', $value->attribute->variants[0]->variant_id, CHtml::listData($value->attribute->variants, 'variant_id', 'value')); ?>
 			<input type="hidden" name="dynamic_values[<?=$value->attribute->id?>]" value="">
 			<div class="b-error">Нужно выбрать хотя бы один параметр</div>
 			<ul class="b-dynamic-values b-choosable-values">
 				<? foreach ($value->attribute->variants as $variant): ?>
-					<li data-id="<?=$variant->id?>" class="selected"><?=$variant->value?></li>
+					<li data-id="<?=$variant->variant_id?>" class="selected"><?=$variant->value?></li>
 				<? endforeach; ?>
 			</ul>
 			<div class="b-select-buttons">

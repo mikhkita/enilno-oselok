@@ -602,10 +602,13 @@ h1{
             border-radius: 5px;
             background: #FFF5D1;
             border: 1px solid #452716;
-            padding: 7px 10px;
+            padding: 9px 10px 8px;
             font-size: 14px;
             display: block;
             width: 420px;
+        }
+        .fancybox-skin input[type="number"]{
+            padding: 7px 10px;
         }
         .fancybox-skin select{
             width: auto;
@@ -616,7 +619,7 @@ h1{
             border-radius: 5px;
             background: #FFF5D1;
             border: 1px solid #452716;
-            padding: 5px 10px;
+            padding: 7px 10px 6px;
             font-size: 14px;
             display: block;
             width: 200px;
@@ -2044,7 +2047,16 @@ ul.b-filter-list{
         position: relative;
         top: 1px;
     }
-
+.b-group-vars{
+    text-align: left;
+}
+    .b-group-vars input{
+        display: inline-block;
+    }
+    .b-group-vars label{
+        display: inline-block;
+        margin-left: 10px;
+    }
 
 
 

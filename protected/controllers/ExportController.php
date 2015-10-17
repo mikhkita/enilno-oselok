@@ -221,7 +221,7 @@ class ExportController extends Controller
 		$criteria->with = array("attribute.variants");
 
         $model = GoodTypeAttribute::model()->findAll($criteria);
-
+        
 		$this->render('adminDynamic',array(
 			'data'=>$model,
 			'id'=>$id

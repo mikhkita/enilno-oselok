@@ -4,11 +4,8 @@
  * This is the model class for table "attribute_variant".
  *
  * The followings are the available columns in table 'attribute_variant':
- * @property string $id
- * @property integer $int_value
- * @property string $varchar_value
- * @property double $float_value
  * @property string $attribute_id
+ * @property string $variant_id
  * @property integer $sort
  */
 class AttributeVariant extends CActiveRecord
@@ -29,14 +26,12 @@ class AttributeVariant extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('attribute_id, sort', 'required'),
-			array('int_value, sort', 'numerical', 'integerOnly'=>true),
-			array('float_value', 'numerical'),
-			array('varchar_value', 'length', 'max'=>255),
-			array('attribute_id', 'length', 'max'=>10),
+			array('attribute_id, variant_id, sort', 'required'),
+			array('sort', 'numerical', 'integerOnly'=>true),
+			array('attribute_id, variant_id', 'length', 'max'=>10),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, int_value, varchar_value, float_value, attribute_id, sort', 'safe', 'on'=>'search'),
+			array('attribute_id, variant_id, sort', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -49,7 +44,7 @@ class AttributeVariant extends CActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
 			'attribute' => array(self::BELONGS_TO, 'Attribute', 'attribute_id'),
-			'field' => array(self::HAS_MANY, 'GoodAttribute', 'variant_id'),
+			'variant' => array(self::BELONGS_TO, 'Variant', 'variant_id'),
 		);
 	}
 
@@ -59,11 +54,8 @@ class AttributeVariant extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'id' => 'ID',
-			'int_value' => 'Int Value',
-			'varchar_value' => 'Varchar Value',
-			'float_value' => 'Float Value',
 			'attribute_id' => 'Attribute',
+			'variant_id' => 'Variant',
 			'sort' => 'Sort',
 		);
 	}
@@ -86,16 +78,22 @@ class AttributeVariant extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('id',$this->id,true);
-		$criteria->compare('int_value',$this->int_value);
-		$criteria->compare('varchar_value',$this->varchar_value,true);
-		$criteria->compare('float_value',$this->float_value);
 		$criteria->compare('attribute_id',$this->attribute_id,true);
+		$criteria->compare('variant_id',$this->variant_id,true);
 		$criteria->compare('sort',$this->sort);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 		));
+	}
+
+	public function afterFind()
+	{
+		parent::afterFind();
+		 
+		// $val = ($this->attributes["int_value"] == NULL)?( ($this->attributes["float_value"] == NULL)?($this->attributes["varchar_value"]):($this->attributes["float_value"]) ):($this->attributes["int_value"]);
+		
+		$this->setAttribute("value",$this->variant->value,true);
 	}
 
 	/**
@@ -107,19 +105,5 @@ class AttributeVariant extends CActiveRecord
 	public static function model($className=__CLASS__)
 	{
 		return parent::model($className);
-	}
-
-	public function beforeDelete(){
- 		GoodAttribute::model()->deleteAll("variant_id=".$this->id);
-  		return parent::beforeDelete();
- 	}
-
-	public function afterFind()
-	{
-		parent::afterFind();
-		 
-		$val = ($this->attributes["int_value"] == NULL)?( ($this->attributes["float_value"] == NULL)?($this->attributes["varchar_value"]):($this->attributes["float_value"]) ):($this->attributes["int_value"]);
-		
-		$this->setAttribute("value",($val != NULL)?$val:false,true);
 	}
 }

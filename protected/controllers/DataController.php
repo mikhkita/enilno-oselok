@@ -52,8 +52,11 @@ class DataController extends Controller
 		if(isset($_POST['Vars']))
 		{
 			$model->attributes=$_POST['Vars'];
-			if($model->save())
-				$this->actionAdminVars(true);
+			if($model->save()){
+				if( isset($_GET["none"]) ){
+					echo "none";
+				}else $this->actionAdminVars(true);
+			}
 		}else{
 			$this->renderPartial('adminVarsUpdate',array(
 				'model'=>$model,

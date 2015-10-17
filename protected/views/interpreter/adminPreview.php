@@ -3,7 +3,7 @@
 <?php $form=$this->beginWidget('CActiveForm'); ?>
 	<? foreach ($dynamic as $key => $dyn): ?>
 		<div class="row">
-		<?php echo CHtml::dropDownList('dynamic['.$key.']', $dyn["CURRENT"], CHtml::listData($dyn["ALL"], 'id', 'value'), array('class'=>'b-select-dynamic')); ?>
+		<?php echo CHtml::dropDownList('dynamic['.$key.']', $dyn["CURRENT"], CHtml::listData($dyn["ALL"], 'variant_id', 'value'), array('class'=>'b-select-dynamic')); ?>
 		</div>
 	<? endforeach; ?>
 <?php $this->endWidget(); ?>

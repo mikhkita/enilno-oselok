@@ -257,7 +257,7 @@ class Controller extends CController
         $modelDyn = Attribute::model()->findAll($criteria);
         
         foreach ($modelDyn as $key => $value) {
-            $curObj = AttributeVariant::model()->findByPk($dynamic[$value->id]);
+            $curObj = Variant::model()->findByPk($dynamic[$value->id]);
             $dynObjects[$value->id] = (object) array("value"=>$curObj->value,"variant_id"=>$curObj->id);
         }
 
@@ -404,6 +404,7 @@ class Controller extends CController
 
     public function updateRows($table_name,$values = array(),$update){
         $result = true;
+
         if( count($values) ){
             $query = Yii::app()->db->createCommand("SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = '".$table_name."'")->query();
 
@@ -412,9 +413,12 @@ class Controller extends CController
             $columns = array();
             $vals = array();
             while($next = $query->read()){
-                array_push($columns, "`".$next["COLUMN_NAME"]."`");
-                if( $next["COLUMN_KEY"] == "PRI" ) array_push($primary_keys, "`".$next["COLUMN_NAME"]."`");
-                $structure[$next["COLUMN_NAME"]] = $next["COLUMN_TYPE"]." ".(($next["IS_NULLABLE"] == "NO" && $next["EXTRA"] != "auto_increment")?"NOT ":"")."NULL";
+                if( !in_array("`".$next["COLUMN_NAME"]."`", $columns) ){
+                    array_push($columns, "`".$next["COLUMN_NAME"]."`");
+                    if( $next["COLUMN_KEY"] == "PRI" ) 
+                            array_push($primary_keys, "`".$next["COLUMN_NAME"]."`");
+                    $structure[$next["COLUMN_NAME"]] = $next["COLUMN_TYPE"]." ".(($next["IS_NULLABLE"] == "NO" && $next["EXTRA"] != "auto_increment")?"NOT ":"")."NULL";
+                }
             }
 
             $structure[0] = "PRIMARY KEY (".implode(",", $primary_keys).")";
@@ -428,7 +432,7 @@ class Controller extends CController
             foreach ($values as $arr) {
                 $strArr = array();
                 foreach ($arr as $item) {
-                    array_push($strArr, ( $item === NULL )?"NULL":("'".$item."'"));
+                    array_push($strArr, ( $item === NULL )?"NULL":( ($item == "LAST_INSERT_ID()")?$item:("'".$item."'")));
                 }
                 array_push($vals, "(".implode(",", $strArr).")");
             }
@@ -446,6 +450,7 @@ class Controller extends CController
                 Yii::app()->db->createCommand()->dropTable($tmpName);
             }else $result = false;
         }
+
         return $result;
     }
 

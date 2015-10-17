@@ -82,12 +82,14 @@ class GoodController extends Controller
 	{
 		$model = $this->loadModel($id);
 		$result = $this->getAttr($model);
+		Log::debug($id." ".$model->id);
+		
 		if(isset($_POST['Good_attr']))
 		{
 			GoodAttribute::model()->deleteAll('good_id='.$id);
 			foreach ($_POST['Good_attr'] as $attr_id => $value) {
 				if(!is_array($value) ) {
-					if($value) {
+					if($value != "") {
 						$attr = new GoodAttribute;
 						$attr->good_id = $id;
 						$attr->attribute_id = $attr_id;
@@ -290,7 +292,7 @@ class GoodController extends Controller
 					"price"=>isset($_POST['price'])?$_POST['price']:NULL
 				)
 			)->sort( 
-				$_POST['sort'] 
+				$_POST['sort']
 			)->getPage(
 				array(
 			    	'pageSize'=>25,
@@ -344,9 +346,10 @@ class GoodController extends Controller
 		foreach ($array_names as $key => $val) {
 			if( isset($result[$key]) ){
 				$list = $this->getListValue(41);
-				foreach ($result[$key]["VARIANTS"] as $i => &$variant) {
-					$variant = $list[$i];
-				}
+				if( isset($result[$key]["VARIANTS"]) )
+					foreach ($result[$key]["VARIANTS"] as $i => &$variant) {
+						$variant = $list[$i];
+					}
 			}
 		}
 

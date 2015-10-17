@@ -11,7 +11,7 @@ var progress = new KitProgress("#FFF",2);
         });
     }
 
-    $(".b-table input").change(function(){
+    $(".b-table input,.b-table textarea").change(function(){
         changed = true;
     });
 
@@ -19,6 +19,10 @@ var progress = new KitProgress("#FFF",2);
         var formData = form2js("b-matrix-form", ".", true);
 
         var json = JSON.stringify(formData);
+
+        json = json.split("+").join("%2B");
+
+        console.log(json);
 
         progress.setColor("#D26A44");
         progress.start(3);

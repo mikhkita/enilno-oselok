@@ -126,9 +126,10 @@ class InterpreterController extends Controller
         $dynamic = array();
         $dynObjects = array();
 
+
         foreach ($modelDyn as $key => $value) {
-        	$current = ( isset($_POST["dynamic"][$value->id]) )?$_POST["dynamic"][$value->id]:$value->variants[0]->id;
-        	$curObj = AttributeVariant::model()->findByPk($current);
+        	$current = ( isset($_POST["dynamic"][$value->id]) )?$_POST["dynamic"][$value->id]:$value->variants[0]->variant_id;
+        	$curObj = Variant::model()->findByPk($current);
         	$dynamic[$value->id] = array("CURRENT" => $curObj->id, "ALL" => $value->variants);
         	$dynObjects[$value->id] = (object) array("value"=>$curObj->value,"variant_id"=>$curObj->id);
         }

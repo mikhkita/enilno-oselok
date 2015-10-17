@@ -27,7 +27,7 @@
                     <li>
                         <p><?=$variant->value?></p>
                         <span></span>
-                        <input type="hidden" data-name="<?=mb_strtolower($variant->value, 'UTF-8')?>" name="Variants[<?=$variant->id?>]" value="<?=$variant->sort?>">
+                        <input type="hidden" data-name="<?=mb_strtolower($variant->value, 'UTF-8')?>" name="Variants[<?=$variant->variant->id?>]" value="<?=$variant->sort?>">
                     </li>
                     <? endif; ?>
                 <? endforeach; ?>

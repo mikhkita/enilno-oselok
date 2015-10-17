@@ -56,7 +56,7 @@ class AttributeController extends Controller
 				$this->actionAdminIndex(true);
 		}else{
 			$this->renderPartial('adminUpdate',array(
-				'model'=>$model,
+				'model'=>$model
 			));
 		}
 	}
@@ -69,10 +69,43 @@ class AttributeController extends Controller
 		{
 			$this->updateVariants($model);
 			$this->actionAdminIndex(true);
+		}else if(isset($_POST["Group"])){
+			AttributeVariant::model()->deleteAll("attribute_id=".$model->id);
+
+			if( count($_POST["VariantsGroup"]) ){
+				$values = array();
+
+				foreach ($_POST["VariantsGroup"] as $key => $value) {
+					$values[] = array($model->id,$value,$key+1);
+				}
+
+				$this->updateRows(AttributeVariant::tableName(),$values,array("sort"));
+			}
+			$this->actionAdminIndex(true);
 		}else{
-			$this->renderPartial('adminEdit',array(
-				'model'=>$model,
-			));
+
+			if( $model->group_id != 0 ){
+				$variants = array();
+				$selected = array();
+
+				foreach ($model->group->variants as $variant) {
+					$variants[$variant->variant_id] = $variant->variant->value;
+				}
+
+				foreach ($model->variants as $variant) {
+					$selected[] = $variant->variant_id;
+				}
+
+				$this->renderPartial('adminEditGroup',array(
+					'model'=>$model,
+					'variants'=>$variants,
+					'selected'=>$selected
+				));
+			}else{
+				$this->renderPartial('adminEdit',array(
+					'model'=>$model,
+				));
+			}
 		}
 	}
 
@@ -144,64 +177,48 @@ class AttributeController extends Controller
 	}
 
 	public function updateVariants($model){
-		$tableName = AttributeVariant::tableName();
+		$tableName = Variant::tableName();
 
-		if( count($model->variants) ){
-			$modelArr = array();
-			foreach ($model->variants as $key => $value) {
-				$modelArr[$value->id] = $value->sort;
-			}
+		$modelArr = array();
+		foreach ($model->variants as $key => $value) {
+			$modelArr[$value->variant->id] = $value->sort;
+		}
 
 
-			if( isset($_POST["Variants"]) ){
-				$delArr = array_diff_key($modelArr,$_POST["Variants"]);
-			}else{
-				$delArr = $modelArr;
-			}
-			$this->deleteVariants($delArr);
+		if( isset($_POST["Variants"]) ){
+			$delArr = array_diff_key($modelArr,$_POST["Variants"]);
+		}else{
+			$delArr = $modelArr;
+		}
+		$this->deleteVariants($delArr);
 
-			if( isset($_POST["Variants"]) ){
-				$tmpName = "tmp_".md5(rand().time());
+		if( isset($_POST["Variants"]) || isset($_POST["VariantsNew"]) ){
+			$values = array();
+			$attrVariants = array();
 
-				Yii::app()->db->createCommand()->createTable($tmpName, array(
-				    'id' => 'int NOT NULL',
-				    'int_value' => 'int NULL',
-				    'varchar_value' => 'varchar(255) NULL',
-				    'float_value' => 'float NULL',
-				    'attribute_id' => 'int NULL',
-				    'sort' => 'int NOT NULL',
-				    0 => 'PRIMARY KEY (`id`)'
-				), 'ENGINE=InnoDB');
+			$this->updateRows(Variant::tableName(),$values,array("sort"));
 
-				$sql = "INSERT INTO `$tmpName` (`id`,`attribute_id`,`sort`) VALUES ";
-
-				$values = array();
-				foreach ($_POST["Variants"] as $key => $value) {
-					$values[] = "('".$key."','".$model->id."','".$value."')";
+			if( isset($_POST["VariantsNew"]) )
+				foreach ($_POST["VariantsNew"] as $key => $value) {
+					$attrs = array($model->type->code."_value"=>$key);
+					$new = new Variant();
+					$new->attributes = $attrs;
+					$new->save();
+					$attrVariants[$new->id] = $value;
 				}
-
-				$sql .= implode(",", $values);
-
-				if( Yii::app()->db->createCommand($sql)->execute() ){
-					$sql = "INSERT INTO `$tableName` SELECT * FROM `$tmpName` ON DUPLICATE KEY UPDATE $tableName.sort = $tmpName.sort";
-					$result = Yii::app()->db->createCommand($sql)->execute();
-					
-					Yii::app()->db->createCommand()->dropTable($tmpName);
-				}
-			}
-		}	
-
-		if( isset($_POST["VariantsNew"]) ){
-			$sql = "INSERT INTO `$tableName` (`attribute_id`,`".$model->type->code."_value`,`sort`) VALUES ";
 
 			$values = array();
-			foreach ($_POST["VariantsNew"] as $key => $value) {
-				$values[] = "('".$model->id."','".$key."','".$value."')";
+
+			foreach ($attrVariants as $key => $value) {
+				$values[] = array($model->id,$key,$value);
 			}
 
-			$sql .= implode(",", $values);
+			if( isset($_POST["Variants"]) )
+				foreach ($_POST["Variants"] as $key => $value) {
+					$values[] = array($model->id,$key,$value);
+				}
 
-			Yii::app()->db->createCommand($sql)->execute();
+			$this->updateRows(AttributeVariant::tableName(),$values,array("sort"));
 		}
 	}
 
@@ -212,7 +229,7 @@ class AttributeController extends Controller
 			foreach ($delArr as $key => $value) {
 				$pks[] = $key;
 			}
-			$model = AttributeVariant::model()->findAllByPk($pks);
+			$model = Variant::model()->findAllByPk($pks);
 			foreach ($model as $key => $value) {
 				$value->delete();
 			}
