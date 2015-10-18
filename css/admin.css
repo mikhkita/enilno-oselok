@@ -447,6 +447,9 @@ h1{
             height: 27px;
             padding: 5px 10px;
         }
+        .b-good-table td{
+            padding: 0px 2px;
+        }
         .b-table td.b-empty{
             background-color: #B27C5E;
         }
@@ -975,6 +978,14 @@ h1{
         margin: 0px 5px;
         background-size: 25px;
         /*background-color: #000;*/
+    }
+    .b-good-table .b-tool{
+        width: 20px;
+        height: 20px;
+        display: inline-block;
+        margin: 0px 5px;
+        margin-top: 3px;
+        background-size: 20px;
     }
         .b-tool:hover{
             opacity: 0.7;
