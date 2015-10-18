@@ -207,6 +207,7 @@ class AttributeController extends Controller
 					$attrVariants[$new->id] = $value;
 				}
 
+
 			$values = array();
 
 			foreach ($attrVariants as $key => $value) {
