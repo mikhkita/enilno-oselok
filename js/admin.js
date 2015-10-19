@@ -985,7 +985,7 @@ $(document).ready(function(){
         $(compare1).each(function(i,bg) {
             contain = false;
             $(compare2).each(function(j,sm) {
-                if( (bg.indexOf(sm)+1) ) {
+                if( bg == sm ) {
                     contain = true;
                 }
             });
@@ -994,7 +994,7 @@ $(document).ready(function(){
         $(compare2).each(function(i,bg) {
             contain = false;
             $(compare1).each(function(j,sm) {
-                if( (bg.indexOf(sm)+1) ) {
+                if( bg == sm ) {
                     contain = true;
                 }
             });
