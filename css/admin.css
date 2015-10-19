@@ -2058,9 +2058,47 @@ ul.b-filter-list{
         margin-left: 10px;
     }
 
-
-
-
+.b-compare {
+    width: 1000px;
+    margin: 20px auto;
+}
+    .b-compare textarea {
+        border-radius: 5px;
+        background-color: #FFF5D1;
+        border: 1px solid #452716;
+        padding: 5px 10px;
+        font-size: 14px;
+        width: 420px;
+        height: 200px;
+        display: block;
+    }
+    .b-compare button {
+        margin-top: 20px;
+        float: none;
+    }
+    .b-compare .same {
+        width: 100%;
+    }
+        .b-compare .compare-cont {
+            display: none;
+        }
+        .b-compare .compare-cont h2{
+            padding-top: 30px;
+        }
+            .b-compare .compare-cont p {
+                display: block;
+            }
+            .b-compare .same,.b-compare .compare1,.b-compare .compare2 {
+                text-align: center;
+                border-radius: 5px;
+                background-color: #FFF5D1;
+                border: 1px solid #452716;
+                padding: 10px;
+                font-size: 14px;
+                width: 420px;
+                min-height: 100px;
+                margin: 0 auto;
+            }
 
 
 

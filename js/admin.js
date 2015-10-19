@@ -1,5 +1,6 @@
 var customHandlers = [];
-$(document).ready(function(){   
+$(document).ready(function(){  
+
     var myWidth,
         myHeight,
         title = window.location.href,
@@ -973,4 +974,37 @@ $(document).ready(function(){
     bindAutocomplete();
     bindTooltip();
     bindImageUploader();
+
+
+    $(".b-compare button").click(function(){
+        $(".compare1,.compare2,.same").html("");
+        var compare1 = $("textarea[name=compare1]").val().split('\n'),
+        compare2 = $("textarea[name=compare2]").val().split('\n');
+        var same = new Array(),diff1 = new Array(),diff2 = new Array(),contain;
+
+        $(compare1).each(function(i,bg) {
+            contain = false;
+            $(compare2).each(function(j,sm) {
+                if( (bg.indexOf(sm)+1) ) {
+                    contain = true;
+                }
+            });
+            if(!contain) {$(".compare1").append("<p>"+bg+"</p>"); $(".same").append("<p>"+bg+"</p>"); }
+        });
+        $(compare2).each(function(i,bg) {
+            contain = false;
+            $(compare1).each(function(j,sm) {
+                if( (bg.indexOf(sm)+1) ) {
+                    contain = true;
+                }
+            });
+            if(!contain) { $(".compare2").append("<p>"+bg+"</p>"); $(".same").append("<p>"+bg+"</p>"); }
+        });
+        $(".compare-cont").show();
+    });
+
+
+
+
+
 });
