@@ -15,11 +15,11 @@
 <?php $this->renderPartial('_filter', array('attributes'=>$attributes, 'arr_name' => $arr_name, 'labels' => $labels, 'filter_values' => $filter_values, 'sort_fields' => $sort_fields)); ?>
 <div class="b-filter-pagination">
 	<?php $form=$this->beginWidget('CActiveForm'); ?>
-		<table class="b-table" border="1">
+		<table class="b-table b-good-table" border="1">
 			<tr>
 				<th>&nbsp;</th>
 				<? foreach ($fields as $field): ?>
-					<th><? echo $field->attribute->name; ?></th>
+					<th <?if($field->attribute_id == 3):?>style="min-width: 55px;"<?endif;?>><? echo $field->attribute->name; ?></th>
 				<? endforeach; ?>	
 			</tr>
 			<? if( count($data) ): ?>
@@ -37,7 +37,11 @@
 											<div><?=$attr->value?></div>
 										<? endforeach; ?>
 									<? else: ?>
-										<div><?=$item->fields_assoc[$field->attribute->id]->value?></div>
+										<? if($field->attribute->id == 44 || $field->attribute->id == 53): ?>
+											<div><a href="<?=$item->fields_assoc[$field->attribute->id]->value?>" target="_blank"><?=$this->cutText($item->fields_assoc[$field->attribute->id]->value,30)?></a></div>
+										<? else: ?>
+											<div><?=$item->fields_assoc[$field->attribute->id]->value?></div>
+										<? endif; ?>
 									<? endif; ?>
 								<? endif; ?>
 							</td>

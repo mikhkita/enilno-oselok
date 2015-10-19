@@ -295,7 +295,7 @@ class GoodController extends Controller
 				$_POST['sort']
 			)->getPage(
 				array(
-			    	'pageSize'=>25,
+			    	'pageSize'=>40,
 			    )
 			);
 		}
@@ -331,7 +331,7 @@ class GoodController extends Controller
 		$criteria->with = array("good_filter"=>array("select"=>"good_type_id"));
 		$criteria->condition = "good_filter.good_type_id = ".$goodTypeId;
 	    $criteria->addInCondition("t.attribute_id",$array);
-	    $criteria->group = "variant_id";
+	    $criteria->group = "t.variant_id";
 
 		$model = GoodAttribute::model()->with(array("attribute","variant"))->findAll($criteria);
 
