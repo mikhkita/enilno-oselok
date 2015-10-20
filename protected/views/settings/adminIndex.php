@@ -1,4 +1,7 @@
 <h1><?=$this->adminMenu["cur"]->name?></h1>
+<div class="b-buttons-left">
+	<a href="<?php echo $this->createUrl('/integrate/generatepdqueue/')?>" class="ajax-photodoska b-butt">Выложить фотодоску</a>
+</div>
 <a href="<?php echo $this->createUrl('/'.$this->adminMenu["cur"]->code.'/admincategorycreate')?>" class="ajax-form ajax-create b-butt b-top-butt">Добавить</a>
 <?php $form=$this->beginWidget('CActiveForm'); ?>
 	<table class="b-table" border="1">

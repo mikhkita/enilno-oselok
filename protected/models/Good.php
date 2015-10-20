@@ -204,8 +204,6 @@ class Good extends CActiveRecord
 		$criteria->select = 'id';
 		$criteria->group = 'fields.good_id';
         $criteria->with = array('fields' => array('select'=> array('variant_id','attribute_id')));
-        
-        if( $ids ) $criteria->addInCondition("t.id", $ids);
 
         $count = 0;
         if(isset($options["attributes"]) && count($options["attributes"]))
@@ -233,6 +231,8 @@ class Good extends CActiveRecord
 		}else{
 			$criteria->having = 'COUNT(DISTINCT fields.attribute_id)='.$count;
 		}
+
+		if( $ids ) $criteria->addInCondition("fields.good_id", $ids);
 
     	return $criteria;
 	}

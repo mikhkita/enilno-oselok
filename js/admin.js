@@ -963,6 +963,18 @@ $(document).ready(function(){
         return false;
     });
 
+    $(".ajax-photodoska").click(function(){
+        progress.setColor("#D26A44");
+        progress.start(10);
+
+        progress.end();
+
+        $.ajax({
+            url: $(this).attr("href")
+        });
+        return false;
+    });
+
     function transition(el,dur){
         el.css({
             "-webkit-transition":  "all "+dur+"s ease-in-out", "-moz-transition":  "all "+dur+"s ease-in-out", "-o-transition":  "all "+dur+"s ease-in-out", "transition":  "all "+dur+"s ease-in-out"

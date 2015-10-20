@@ -61,65 +61,85 @@ class ImportController extends Controller
 
 	public function actionAdminStep3($partial = false)
 	{
+		$start = microtime(true);
 		$this->scripts[] = "import";
 
 		if(isset($_POST["excel_path"]) && isset($_POST["excel"]) && isset($_POST["GoodTypeId"])) {
-			$model = GoodType::model()->with('goods.fields.variant','goods.fields.attribute')->findByPk($_POST["GoodTypeId"]);
+			$model = Attribute::model()->with('variants.variant','type','goodTypes')->findAll("goodTypes.good_type_id=".$_POST["GoodTypeId"]);
+
+			$goods = $data["items"];
+
 			$sorted_titles = $_POST["excel"];// Массив соответствующих "ID атрибута" каждому столбцу
 
 			$titles = array();
 
 			// Получаем массив заголовков с их вариантами
-			foreach ($model->fields as $key => $field) {
+			foreach ($model as $key => $field) {
 				$variants = NULL;
 
-				if( $field->attribute->list ){
+				if( $field->list ){
 					$variants = array();
-					foreach ($field->attribute->variants as $i => $variant) {
+					foreach ($field->variants as $i => $variant) {
 						$variants[mb_strtolower($variant->value,'UTF-8')] = true;
 					}
 				}
-            	$titles[intval($field->attribute->id)] = array(
-            		"NAME" => $field->attribute->name,
-            		"TYPE" => $field->attribute->type->code,
+            	$titles[intval($field->id)] = array(
+            		"NAME" => $field->name,
+            		"TYPE" => $field->type->code,
             		"VARIANTS" => $variants
             	);
             }	
+
             // Получаем матрицу считанного экселя в отсортированном по столбцами виде
 			$xls = $this->getXLS($_POST["excel_path"],$sorted_titles,$titles);
 
 			// Генерация структурированного ассоциативного массива для вью.
-			$arResult = $this->getArResult($xls, $model->goods, $sorted_titles, $titles);
+			$arResult = $this->getArResult($xls, $_POST["GoodTypeId"], $sorted_titles, $titles);
 
-			// print_r($arResult);
-			// die();
 			$this->render('adminStep3',array(
 				'arResult'=>$arResult
 			));
 		}
 	}
 
-	public function getArResult($xls, $goods, $sorted_titles, $titles){
+	public function getArResult($xls, $good_type_id, $sorted_titles, $titles){
 		$all_goods = array();
+		$ids = array();
 		$exist_codes = array();
 		$arResult = array(
 			"TITLES"=>NULL,
 			"ROWS" => array(),
 		);
+		$report = array();
 
-		// Составление массива кодов элементов для проверки на наличие элемента из экселя в БД
+		$codes = array();
+		for($i = 1; $i < count($xls); $i++) {
+			$codes[] = $xls[$i][array_search($this->codeId, $sorted_titles)];
+		}
+
+		$criteria = new CDbCriteria();
+    	$criteria->addInCondition("varchar_value",$codes);
+
+		$attrs = GoodAttributeFilter::model()->findAll($criteria);
+		foreach ($attrs as $item) {
+			$ids[] = $item->good_id;
+		}
+
+		$data = Good::model()->filter(
+			array(
+				"good_type_id"=>$good_type_id,
+			),
+			$ids
+		)->getPage(
+			array(
+		    	'pageSize'=>100000,
+		    )
+		);
+
+		$goods = $data["items"];
+
 		foreach ($goods as $key => $good) {
-			$fields = array();
-			$code = NULL;
-
-			foreach ($good->fields as $field) {
-				$fieldId = $field->attribute->id;
-				if( !isset($fields[$fieldId]) ) $fields[$fieldId] = array();
-				$fields[$fieldId][] = $field->value;
-
-				if( $field->attribute->id == $this->codeId ) $code = $field->value;
-			}
-			$all_goods[$code] = array("ID" => $good->id, "FIELDS" => $fields);
+			$all_goods[$good->fields_assoc[3]->value] = $good;
 		}
 
 		$arResult["TITLES"] = $xls[0];
@@ -129,13 +149,22 @@ class ImportController extends Controller
 		for($i = 1; $i < count($xls); $i++) {
 			$code = $xls[$i][array_search($this->codeId, $sorted_titles)];
 			$isset = isset($all_goods[$code]);
+			$error = false;
 
 			// Кладем в каждую ячейку матрицы массив данных об этой ячейке вида:
 			// array("ID" => "ID атрибута", "VALUE" => "Значение этого атрибута из экселя", "HIGHLIGHT" => "Тип подсветки ячейки");
         	foreach ($xls[$i] as $j => $cell) {
         		$id = $sorted_titles[$j]; // ID атрибута, в который будет вставляться значение
-        		$field = ($isset)?( (isset($all_goods[$code]["FIELDS"][$id]))?($all_goods[$code]["FIELDS"][$id]):false ):false;
+        		$field = ($isset)?( (isset($all_goods[$code]->fields_assoc[$id]))?($all_goods[$code]->fields_assoc[$id]->value):false ):false;
+        		$field = ( is_array($field) || $field == false )?$field:array($field);
         		$cellValueAndHighlight = $this->getCellValueAndHighlight($cell,$titles[$id]["TYPE"],$field,$titles[$id]["VARIANTS"]);
+
+        		if( $cellValueAndHighlight["HIGHLIGHT"] == "new-variant" ){
+        			$item_code = $all_goods[$code]->fields_assoc[3]->value;
+        			if( !isset($report[$item_code]) ) $report[$item_code] = array();
+        			$report[$item_code][$titles[$id]["NAME"]] = $cell;
+        			$error = true;
+        		}
 
         		$xls[$i][$j] = array(
         			"ID" => $id,
@@ -146,11 +175,14 @@ class ImportController extends Controller
 
         	$arResult["ROWS"][] = array(
         		// Если уже есть элемент с таким кодом, то выделяем всю строку
-				"HIGHLIGHT" => ($isset)?"exist":NULL,
+				"HIGHLIGHT" => ($error)?("error"):(($isset)?"exist":NULL),
 				"COLS" => $xls[$i],
-				"ID" => ($isset)?$all_goods[$code]["ID"]:NULL
+				"ID" => ($isset)?$all_goods[$code]->id:NULL
 			);
         }
+
+        $arResult["REPORT"] = $report;
+
         return $arResult;
 	}
 
@@ -191,12 +223,9 @@ class ImportController extends Controller
 		$highlight = ($isEmpty)?"empty":$highlight;
 		$highlight = ($isNotValid)?"not-valid":$highlight;
 
-		if( $highlight == NULL && is_array($variants) ){
+		if( is_array($variants) && is_array($value) ){
 			foreach ($value as $i => $item) {
 				if( !isset($variants[mb_strtolower($item,'UTF-8')]) ) $highlight = "new-variant";
-				// if( count(preg_grep("/". str_replace("/", "\/", preg_quote($item))."/i" , $variants )) < 1 ) $highlight = "new-variant";
-				// print_r($item);
-				// echo "<br>";
 			}
 		}
 		
@@ -218,12 +247,13 @@ class ImportController extends Controller
 
 	public function actionAdminImport()
 	{
+		$start = microtime(true);
 		$result = "error";
 		$message = "";
 
 		if( isset($_POST["IMPORT"]["GOODTYPEID"]) ){
 			if( isset($_POST["IMPORT"]["ITEMS"]) ){
-				$model = GoodType::model()->findByPk($_POST["IMPORT"]["GOODTYPEID"]);
+				$model = Attribute::model()->with("goodTypes","variants.variant","type")->findAll("goodTypes.good_type_id=".$_POST["IMPORT"]["GOODTYPEID"]);
 				$import = $_POST["IMPORT"];
 				$titles = array();
 				$newFields = array();
@@ -235,43 +265,23 @@ class ImportController extends Controller
 				$goodCode;
 
 				// Получаем массив заголовков с их вариантами
-				$titles = $this->getTitlesWithVariants($model->fields);
+				$titles = $this->getTitlesWithVariants($model);
 
-		        // Добавляем варианты новые варианты атрибутов, если таковые присутствуют.
-		        $sql = "INSERT INTO `$AttributeVariantTableName` (`attribute_id`,`int_value`,`varchar_value`,`float_value`,`sort`) VALUES ";
-		        foreach ($import["ITEMS"] as $i => $fields){
-		        	foreach ($fields as $key => $value){
-		        		if( intval($key) == $this->codeId ) $goodCode = $value;
-		        		$title = $titles[intval($key)];
+
+		        foreach ($import["ITEMS"] as $i => $fields)
+		        	foreach ($fields as $key => $value)
 		        		$newFields[] = $key;
-		        		if( is_array($title["VARIANTS"]) ){
-		        			$variants = $title["VARIANTS"];
-		        			if( !isset($variants[mb_strtolower($value,'UTF-8')]) )
-								$addVariants[] = "('".$key."',".(($title["TYPE"] == "int")?("'".mysql_real_escape_string($value)."'"):"NULL").",".(($title["TYPE"] == "varchar")?("'".mysql_real_escape_string($value)."'"):"NULL").",".(($title["TYPE"] == "float")?("'".mysql_real_escape_string($value)."'"):"NULL").",'1000')";
-		        		}
-		        	}
-		        }
-		        if( count($addVariants) > 0 ){
-			        $sql .= implode(",", $addVariants);
-					Yii::app()->db->createCommand($sql)->execute();
-
-					// Получаем обновленный массив заголовков с их вариантами
-					$model = GoodType::model()->findByPk($_POST["IMPORT"]["GOODTYPEID"]);
-					$titles = $this->getTitlesWithVariants($model->fields);
-				}
 
 				// Если есть ID товара, то удаляем атрибуты, которые будем перезаписывать
 				if( isset($import["ID"]) ){
 					$id = $import["ID"];
-					$good = Good::model()->findByPk($import["ID"]);
-					$pks = array();
+					
+					$criteria = new CDbCriteria();
+					$criteria->condition = "good_id=".$id;
+			    	$criteria->addInCondition("attribute_id",$newFields);
+					GoodAttribute::model()->deleteAll($criteria);
 
-					foreach ($good->fields as $field) {
-						if( in_array($field->attribute_id, $newFields) )
-							$pks[] = $field->id;
-					}
-					if( count($pks) > 0 )
-						GoodAttribute::model()->deleteByPk($pks);
+					$goodCode = GoodAttribute::model()->find("good_id=".$id." AND attribute_id=".$this->codeId)->value;
 
 					$message = "Обновился товар с кодом: ";
 				}else{
@@ -285,7 +295,9 @@ class ImportController extends Controller
 					$message = "Добавился товар с кодом: ";
 				}
 
-				// Добавляем атрибуты к товару
+
+
+				// // Добавляем атрибуты к товару
 		        $sql = "INSERT INTO `$GoodAttributeTableName` (`good_id`,`attribute_id`,`int_value`,`varchar_value`,`text_value`,`float_value`,`variant_id`) VALUES ";
 		        foreach ($import["ITEMS"] as $i => $fields){
 		        	foreach ($fields as $key => $value){
@@ -295,7 +307,7 @@ class ImportController extends Controller
 			        		$val = array("int"=>"NULL","varchar"=>"NULL","text"=>"NULL","float"=>"NULL");
 
 			        		if( !is_array($title["VARIANTS"]) ){
-			        			$val[$title["TYPE"]] = "'".mysql_real_escape_string($value)."'";
+			        			$val[$title["TYPE"]] = "'".addslashes($value)."'";
 			        		}
 
 							$addFields[] = "('".$id."','".$key."',".implode(",", $val).",".((is_array($title["VARIANTS"]))?("'".$title["VARIANTS"][mb_strtolower($value,'UTF-8')]."'"):"NULL").")";
@@ -319,6 +331,7 @@ class ImportController extends Controller
 			$result = "error";
 			$message = "Отсутствует ID типа товара";
 		}
+
 		echo json_encode(array("result"=>$result,"message"=>$message));
 	}
 
@@ -327,14 +340,14 @@ class ImportController extends Controller
 		foreach ($fields as $key => $field) {
 			$variants = NULL;
 
-			if( $field->attribute->list ){
+			if( $field->list ){
 				$variants = array();
-				foreach ($field->attribute->variants as $i => $variant) {
-					$variants[mb_strtolower($variant->value,'UTF-8')] = $variant->id;
+				foreach ($field->variants as $i => $variant) {
+					$variants[mb_strtolower($variant->value,'UTF-8')] = $variant->variant_id;
 				}
 			}
-        	$titles[intval($field->attribute->id)] = array(
-        		"TYPE" => $field->attribute->type->code,
+        	$titles[intval($field->id)] = array(
+        		"TYPE" => $field->type->code,
         		"VARIANTS" => $variants
         	);
         }	

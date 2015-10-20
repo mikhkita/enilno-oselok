@@ -91,9 +91,9 @@ class AttributeVariant extends CActiveRecord
 	{
 		parent::afterFind();
 		 
-		// $val = ($this->attributes["int_value"] == NULL)?( ($this->attributes["float_value"] == NULL)?($this->attributes["varchar_value"]):($this->attributes["float_value"]) ):($this->attributes["int_value"]);
+		$val = ($this->variant->attributes["int_value"] == NULL)?( ($this->variant->attributes["float_value"] == NULL)?($this->variant->attributes["varchar_value"]):($this->variant->attributes["float_value"]) ):($this->variant->attributes["int_value"]);
 		
-		$this->setAttribute("value",$this->variant->value,true);
+		$this->setAttribute("value",$val,true);
 	}
 
 	/**

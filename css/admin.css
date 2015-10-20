@@ -459,8 +459,12 @@ h1{
         .b-table td.b-overwrite{
             background-color: #FF8A5F;
         }
-        .b-table td.b-new-variant{
-            background-color: #48E048;
+        .b-table tr.b-error td{
+            background-color: #E10000 !important;
+        }
+        .b-table tr td.b-new-variant{
+            background-color: #000000 !important;
+            color: #FCEFBE;
         }
             .b-import-preview-table tr td{
                 text-align: center;

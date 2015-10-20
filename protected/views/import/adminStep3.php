@@ -21,13 +21,13 @@
 							<? foreach ($cell["VALUE"] as $g => $value): ?>
 								<div>
 									<?=$value?>
-									<? if( $cell["HIGHLIGHT"] != "equal" ): ?>
+									<? if( $cell["HIGHLIGHT"] != "equal" && $row["HIGHLIGHT"] != "error" ): ?>
 										<input type="hidden" name="IMPORT[ITEMS][][<?=$cell["ID"]?>]" value="<?=$value?>">
 									<? endif; ?>
 								</div>
 							<? endforeach ?>	
 						<? endif; ?>
-						<? if(intval($cell["ID"]) == $this->codeId): ?>
+						<? if(intval($cell["ID"]) == $this->codeId && $row["HIGHLIGHT"] != "error"): ?>
 							<input type="hidden" name="IMPORT[GOODTYPEID]" value="<?=$_POST['GoodTypeId']?>">
 							<? if(isset($row["ID"])): ?>
 								<input type="hidden" name="IMPORT[ID]" value="<?=$row["ID"]?>">
@@ -40,3 +40,13 @@
 	</table>
 	<a href="#" class="b-butt b-import-butt">Импортировать</a>
 </div>
+<? if( count($arResult["REPORT"]) ): ?>
+<div class="b-compare">
+	<h2>Лоты, которые не будут импортированы</h2>
+	<div class="b-report compare1">
+		<? foreach ($arResult["REPORT"] as $id => $item): ?>
+			<p><?=$id?></p>
+		<? endforeach; ?>
+	</div>
+</div>
+<? endif; ?>

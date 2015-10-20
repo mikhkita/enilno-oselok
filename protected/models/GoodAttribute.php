@@ -55,7 +55,6 @@ class GoodAttribute extends CActiveRecord
 			'good_filter' => array(self::BELONGS_TO, 'GoodFilter', 'good_id'),
 			'attribute' => array(self::BELONGS_TO, 'Attribute', 'attribute_id'),
 			'variant' => array(self::BELONGS_TO, 'Variant', 'variant_id'),
-			'attribute' => array(self::HAS_MANY, 'AttributeVariant', 'variant_id'),
 		);
 	}
 

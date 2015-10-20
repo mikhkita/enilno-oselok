@@ -54,6 +54,7 @@ $(document).ready(function(){
         });
     }
     function startImport(){
+        $(".b-import-preview-table tr.b-error").remove();
         count = $(".b-import-preview-table tr").length-1,
         showImport();
         sendNext();

@@ -8,8 +8,8 @@
 				<tr>
 					<td class="tleft"><?=$item->value?></td>
 					<td class="b-table-td-editable">
-						<input type="hidden" name="Values[<?=$i?>][attribute_1]" value="<?=$item->id?>">
-						<input type="text" name="Values[<?=$i?>][value]" value="<?=((isset($values[$item->id]))?$values[$item->id]:"")?>">
+						<input type="hidden" name="Values[<?=$i?>][attribute_1]" value="<?=$item->variant_id?>">
+						<input type="text" name="Values[<?=$i?>][value]" value="<?=((isset($values[$item->variant_id]))?$values[$item->variant_id]:"")?>">
 					</td>
 				</tr>
 			<? endforeach; ?>

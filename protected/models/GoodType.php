@@ -43,6 +43,7 @@ class GoodType extends CActiveRecord
 		return array(
 			'fields' => array(self::HAS_MANY, 'GoodTypeAttribute', 'good_type_id','order'=>'sort'),
 			'goods' => array(self::HAS_MANY, 'Good', 'good_type_id'),
+			'goodsFilter' => array(self::HAS_MANY, 'GoodFilter', 'good_type_id'),
 			'pdAdverts' => array(self::HAS_MANY, 'Photodoska', 'good_type_id'),
 			'interpreters' => array(self::HAS_MANY, 'Interpreter', 'good_type_id'),
 			'exports' => array(self::HAS_MANY, 'Export', 'good_type_id'),
