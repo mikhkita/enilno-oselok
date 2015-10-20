@@ -138,4 +138,27 @@ $(document).ready(function(){
         } else $("input[name='sort[type]']").val("DESC");
         $("#filter").submit();
     });
+
+    var type;
+    $(".good-del").click(function(){
+        type = ($(this).hasClass("detail")) ? "detail" : "main";
+        $("#b-popup-del .red-btn.blue-btn").attr("data-href",$(this).attr("href"));
+        $.fancybox($("#b-popup-del"), {
+            padding: 0
+        });
+        return false;
+    });
+
+    $("#b-popup-del .red-btn.blue-btn").click(function(){
+        var href = $(this).attr("data-href");
+        $.ajax({
+            type: 'GET',
+            url: href,
+            success: function(msg){ 
+                if(type == "detail") {
+                   $("#go-back").click();
+                } else window.location.reload();
+            }
+        }); 
+    });
 });

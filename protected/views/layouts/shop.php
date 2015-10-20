@@ -60,6 +60,13 @@
                 </form>
             </div>
         </div>
+        <div id="b-popup-del" style="display:none;">
+            <div class="for_all b-popup clearfix">
+                <h3 class="popup-title">Ты уверен, БРАТ?</h3>
+                <button type="button" data-href="#" class="left red-btn blue-btn">да, БРАТ</button>
+                <button type="button" class="right red-btn" onclick="$.fancybox.close(); return false;" value="Ага">ты мне не брат</button>
+            </div>
+        </div>
         <div id="b-popup-thanks">
             <div class="b-thanks b-popup">
                 <h3>Спасибо за заявку</h3>

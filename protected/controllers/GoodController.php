@@ -163,11 +163,10 @@ class GoodController extends Controller
 		}
 	}
 
-	public function actionAdminDelete($id)
+	public function actionAdminDelete($id,$shop = false)
 	{
 		$this->loadModel($id)->delete();
-
-		$this->actionAdminIndex(true);
+		if($shop) echo "1"; else $this->actionAdminIndex(true);
 	}
 
 	public function actionAdminTest($partial = false, $goodTypeId = false)
