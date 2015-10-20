@@ -382,8 +382,10 @@ input:-moz-placeholder {
 					position: absolute;
 					cursor: pointer;
 					font-size: 20px;
-					right: 8px;
+					right: 0;
 					top: 0;
+					padding: 3px 10px;
+					z-index: 1000;
 				}
 				.b-main .b-block .b-main-items .pagination ul:nth-child(1) li:last-child {
 					margin-bottom: 0;
@@ -551,6 +553,16 @@ input:-moz-placeholder {
 				.b-item .b-block .desc .detail-price {
 					width: 225px;
 				}
+					.b-item .b-block .desc .detail-price .good-del{
+						color: red;
+					    position: absolute;
+					    cursor: pointer;
+					    font-size: 20px;
+					    right: 0;
+					    top: 0;
+					    padding: 3px 10px;
+					    z-index: 1000;
+					}
 				.b-item .b-block .desc div h3 {
 					font-family: "HNR";
 	  				font-size: 29px;
@@ -560,9 +572,10 @@ input:-moz-placeholder {
 				.good .desc h3:hover{
 					text-decoration: underline;
 				}
-				.b-item .b-block .desc div .red-btn {
+				.red-btn {
 	  				border-radius: 7px;
 	  				background-color: rgb(255, 31, 31);
+	  				border: none;
 	  				border-bottom: 3px solid #cc0000;
 	  				box-shadow: 0px 3px 0px 0px rgba(204, 0, 0, 0.004);
 	  				width: 166px;
@@ -572,12 +585,12 @@ input:-moz-placeholder {
 	  				line-height: 1.333;
 	  				text-align: center;
 				}
-					.b-item .b-block .desc div .red-btn:hover {
+					.red-btn:hover {
 						background-color: rgb(228,31,31);
 					}
-					.b-item .b-block .desc div .red-btn:active {
+					.red-btn:active {
 						margin-top: 3px;
-						border-bottom: none;
+						border-bottom: none !important;
 					}
 			.b-item .b-block .desc ul {
 				margin-bottom: 30px;
@@ -785,6 +798,24 @@ input:-moz-placeholder {
 		}
 		.b-items-sort li input {
 			display: none;
+		}
+#b-popup-del .b-popup {
+	text-align: center;
+}
+	#b-popup-del .b-popup h3 {
+		font-size: 20px;
+		margin-bottom: 20px;
+	}
+	#b-popup-del .b-popup .red-btn {
+		font-size: 18px;
+		cursor: pointer;
+	}
+	#b-popup-del .b-popup .blue-btn {
+		background-color: #448ccb;
+		border-bottom: 3px solid #4172a6;
+	}
+		#b-popup-del .b-popup .blue-btn:hover {
+			background-color: #4172a6;
 		}
 @media screen and (max-width: 1180px){
 	.b-main .b-block .b-main-filter .filter-cont #filter-search{
