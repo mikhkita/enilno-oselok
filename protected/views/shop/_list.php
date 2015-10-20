@@ -33,6 +33,7 @@
     <ul>
     	<? foreach ($goods as $good): ?>
 			<li class="clearfix good">
+               <span class="good-del">x</span>
                <a href="<?=Yii::app()->createUrl('/shop/detail',array('type'=> $_GET['type'],"id"=>$good->fields_assoc[3]->value))?>">
                     <div class="img" style="background-image: url(<? $images = $this->getImages($good); echo $images[0];?>);"></div>
                 <div class="desc">
