@@ -21,7 +21,9 @@
 				<div class="clearfix">
 					<? $price = 0; $price = ($good->fields_assoc[51])?$good->fields_assoc[51]->value:0; $order = Interpreter::generate($this->params[$_GET['type']]["ORDER"], $good); ?>
 					<div class="left detail-price" <? if(!$order) echo 'style="margin-top:10px;"';?> >
-					<a href="<?=Yii::app()->createUrl('/good/admindelete',array('id' => $good->id,'shop' => true))?>" class="good-del detail">x</a>
+					<? if($this->user->role->code == "root"): ?>
+						<a href="<?=Yii::app()->createUrl('/good/admindelete',array('id' => $good->id,'shop' => true))?>" class="good-del detail">x</a>
+					<? endif; ?>
 					<h3><?=(!$price )? Yii::app()->params["zeroPrice"] : number_format( $price, 0, ',', ' ' )." руб."?></h3>
 					<p style="color: #4172A6;"><?=$order?></p>
 					</div>

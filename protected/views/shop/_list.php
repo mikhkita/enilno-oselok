@@ -33,8 +33,10 @@
     <ul>
     	<? foreach ($goods as $good): ?>
 			<li class="clearfix good">
-               <a href="<?=Yii::app()->createUrl('/good/admindelete',array('id' => $good->id,'shop' => true))?>" class="good-del">x</a>
-               <a href="<?=Yii::app()->createUrl('/shop/detail',array('type'=> $_GET['type'],"id"=>$good->fields_assoc[3]->value))?>">
+                <? if($this->user->role->code == "root"): ?>
+                    <a href="<?=Yii::app()->createUrl('/good/admindelete',array('id' => $good->id,'shop' => true))?>" class="good-del">x</a>
+                <? endif; ?>
+                <a href="<?=Yii::app()->createUrl('/shop/detail',array('type'=> $_GET['type'],"id"=>$good->fields_assoc[3]->value))?>">
                     <div class="img" style="background-image: url(<? $images = $this->getImages($good); echo $images[0];?>);"></div>
                 <div class="desc">
                     <h3><?=Interpreter::generate($this->params[$_GET['type']]["TITLE_CODE"], $good);?></h3>
