@@ -1,0 +1,131 @@
+@charset "utf-8";
+
+@font-face {
+	font-family: 'PFL';
+	src: url('../fonts/pdfintextcondpro-light-webfont.eot');
+    src: url('../fonts/pdfintextcondpro-light-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/pdfintextcondpro-light-webfont.woff') format('woff'),
+         url('../fonts/pdfintextcondpro-light-webfont.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+	font-family: 'PFR';
+	src: url('../fonts/pfdintextcondpro-regular-webfont.eot');
+    src: url('../fonts/pfdintextcondpro-regular-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/pfdintextcondpro-regular-webfont.woff') format('woff'),
+         url('../fonts/pfdintextcondpro-regular-webfont.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+	font-family: 'PFM';
+	src: url('../fonts/pfdintextcondpro-medium-webfont.eot');
+    src: url('../fonts/pfdintextcondpro-medium-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/pfdintextcondpro-medium-webfont.woff') format('woff'),
+         url('../fonts/pfdintextcondpro-medium-webfont.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+
+html,
+body {
+	position: relative;
+}
+body {
+	min-width: 1000px;
+	text-align: center;
+	font-family: 'PFL';
+	overflow-x: hidden;
+	color: #472275;
+}
+a{
+	text-decoration: none;
+	color: #472275;
+}
+li{
+	list-style: none;
+}
+h1,h2,h3,h4,h5,h6{
+	font-weight: 100;
+}
+label.error{
+	display: none !important;
+}
+input.error,textarea.error{
+	border: 1px solid #F00 !important;
+	box-shadow: 0 0px 0px 1px #F00;
+}
+.ps-lines{
+
+}
+	.ps-lines li.v{
+		position: fixed;
+		left: 50%;
+		height: 100%;
+		width: 1px;
+		top: 0px;
+		background-color: #00ffff;
+		opacity: 0.8;
+		z-index: 9999;
+	}
+	.ps-lines li.g{
+		position: absolute;
+		left: 0px;
+		width: 100%;
+		height: 1px;
+		background-color: #00ffff;
+		opacity: 0.8;
+		z-index: 9999;
+	}
+.fancybox-inner{
+	overflow: visible !important;
+}
+.bold{
+	font-family: 'PFM';
+}
+.underline{
+	text-decoration: underline;
+}
+.white{
+	color: #FFF;
+}
+.b{
+	position: relative;
+}
+.b-block{
+	position: relative;
+	width: 1000px;
+	margin: 0px auto;
+}
+.b-absolute{
+	position: absolute;
+	top: 0px;
+	left: 50%;
+	margin-left: -500px;
+}
+input::-webkit-input-placeholder {
+	color: #434343;
+}
+input:-moz-placeholder {
+	color: #434343;
+}
+.b-orange-butt{
+
+}
+	.b-orange-butt:hover{
+		
+	}
+.b-1{
+	
+}
+	
+@media screen and (max-width: 1250px){
+	
+}
+@media screen and (max-width: 1020px){
+
+}

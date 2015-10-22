@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<meta name="keywords" content=''>
+	<meta name="description" content=''>
+
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=1">
+	<link rel="stylesheet" href="css/reset.css" type="text/css">
+	<link rel="stylesheet" href="css/jquery.fancybox.css" type="text/css">
+	<link rel="stylesheet" href="css/KitAnimate.css" type="text/css">
+	<link rel="stylesheet" href="css/layout.css" type="text/css">
+	<link rel="icon" type="image/vnd.microsoft.icon" href="favicon.ico">
+
+	<meta name="viewport" content="width=1000">
+
+	<script type="text/javascript" src="js/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript" src="js/jquery.fancybox.js"></script>
+	<script type="text/javascript" src="js/jssor.js"></script>
+	<script type="text/javascript" src="js/jssor.slider.js"></script>
+	<script type="text/javascript" src="js/TweenMax.min.js"></script>
+	<script type="text/javascript" src="js/swipe.js"></script>
+	<script type="text/javascript" src="js/carousel.lite.js"></script>
+	<script type="text/javascript" src="js/css3-mediaqueries.js"></script>
+	<script type="text/javascript" src="js/jquery.maskedinput.min.js"></script>
+	<script type="text/javascript" src="js/jquery.validate.min.js"></script>
+	<script type="text/javascript" src="js/KitProgress.js"></script>
+	<script type="text/javascript" src="js/KitAnimate.js"></script>
+	<script type="text/javascript" src="js/device.js"></script>
+	<script type="text/javascript" src="js/KitSend.js"></script>
+	<script type="text/javascript" src="js/main.js"></script>
+
+</head>
+<body>
+	<ul class="ps-lines">
+		<li class="v" style="margin-left:-501px"></li>
+		<li class="v" style="margin-left:500px"></li>
+		<li class="v" ></li>
+	</ul>
+	<div class="b b-1">
+		<div class="b-block">
+			<div class="b-logo-cont left">
+				<div class="b-logo-text left blue">ФРАНШИЗА "ELECTROFROG"<br/>ОТ КРУПНЕЙШЕГО ЗАВОДА ЗАО "ЛИТМАШДЕТАЛЬ"</div>
+			</div>
+			<div class="b-date-cont right">
+				<h2 class="blue">8 (800) 555 15 24</h2>
+				<p class="right"><a href="#" class="b-get-callback b-orange-butt">Заказать звонок</a></p>
+			</div>
+		</div>
+	</div>
+	<div class="b b-2">
+		<div class="b-block">
+			
+		</div>
+	</div>
+	<div class="b b-3">
+		<div class="b-block">
+			
+		</div>
+	</div>
+	<div class="b b-4">
+		<div class="b-block">
+			
+		</div>
+	</div>
+	<div class="b b-5">
+		<div class="b-block">
+			
+		</div>
+	</div>
+	<div class="b b-6">
+		<div class="b-block">
+			
+		</div>
+	</div>
+	<div class="b b-7">
+		<div class="b-block">
+			
+		</div>
+	</div>
+	<div class="b b-8">
+		<div class="b-block">
+			
+		</div>
+	</div>
+	<div class="b b-9">
+		<div class="b-block">
+			
+		</div>
+	</div>
+<div style="display:none;">
+	<div id="b-popup-1">
+			<div class="for_all b-popup" >
+				<h3>Оставьте заявку</h3>
+				<h4>и наши специалисты<br>свяжутся с Вами в ближайшее время</h4>
+				<form action="kitsend.php" method="POST" id="b-form-1" data-block="#b-popup-1">
+					<div class="b-popup-form">
+						<label for="name">Введите Ваше имя</label>
+						<input type="text" id="name" name="name" required/>
+						<label for="tel">Введите Ваш номер телефона</label>
+						<input type="text" id="tel" name="phone" required/>
+						<input type="hidden" name="subject" value="Заказ"/>
+						<input type="submit" class="ajax b-orange-butt" value="Заказать">
+					</div>
+				</form>
+			</div>
+		</div>
+		<div id="b-popup-2">
+			<div class="b-thanks b-popup">
+				<h3>Спасибо!</h3>
+				<h4>Ваша заявка успешно отправлена.<br/>Наш менеджер свяжется с Вами в течение часа.</h4>
+				<input type="submit" class="b-orange-butt" onclick="$.fancybox.close(); return false;" value="Закрыть">
+			</div>
+		</div>
+		<div id="b-popup-error">
+			<div class="b-thanks b-popup">
+				<h3>Ошибка отправки!</h3>
+				<h4>Приносим свои извинения. Пожалуйста, попробуйте отправить Вашу заявку позже.</h4>
+				<input type="submit" class="b-orange-butt" onclick="$.fancybox.close(); return false;" value="Закрыть">
+			</div>
+		</div>
+	</div>
+</body>
+</html>

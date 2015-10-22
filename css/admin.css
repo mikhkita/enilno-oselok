@@ -233,7 +233,7 @@ h2{
                 float: left;
                 height: 64px;
                 /*width: 83px;*/
-                width: 100%;
+                width: 50%;
                 background-position: 50% 50%;
                 background-repeat: no-repeat;
             }
@@ -250,6 +250,7 @@ h2{
             }
             .b-panel-icons-home a{
                 background-image: url("../images/home.png");
+                background-size: 45px;
             }
             .b-panel-icons-logout a{
                 background-size: 45px;
