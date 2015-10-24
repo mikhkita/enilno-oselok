@@ -60,14 +60,16 @@
                     </div>
                 </div>
             </div>
-            <ul class="modules">
-                <?foreach ($this->adminMenu["items"] as $i => $menuItem):?>
-                    <li data-name="<?=$menuItem->code?>"><a href="<?php echo $this->createUrl('/'.$menuItem->code.'/adminindex')?>"><?=$menuItem->name?></a></li>
-                <?endforeach;?>
-            </ul>
-            <? if(Yii::app()->params['debug']): ?>
-                <div class="b-debug"><?=$this->debugText?></div>
-            <? endif; ?>
+            <div class="b-modules-cont">
+                <ul class="modules">
+                    <?foreach ($this->adminMenu["items"] as $i => $menuItem):?>
+                        <li data-name="<?=$menuItem->code?>"><a href="<?php echo $this->createUrl('/'.$menuItem->code.'/adminindex')?>"><?=$menuItem->name?></a></li>
+                    <?endforeach;?>
+                </ul>
+                <? if(Yii::app()->params['debug']): ?>
+                    <div class="b-debug"><?=$this->debugText?></div>
+                <? endif; ?>
+            </div>
         </div>
         <div class="main">
             <div class="b-main-center">

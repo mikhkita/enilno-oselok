@@ -162,7 +162,7 @@ h2{
     border-right: 20px solid #D26A44;
     height: 100%;
     box-shadow: 0 0 20px rgba(0,0,0,0.5);
-    min-height: 350px;
+    overflow: auto;
 }
 .who_am_i
 {
@@ -256,8 +256,12 @@ h2{
                 background-size: 45px;
                 background-image: url("../images/logout.png");
             }
+.b-modules-cont{
+    position: relative;
+}
 .modules{
     padding: 15px 0;
+    padding-bottom: 38px;
     text-align: left;
 }
     .modules li{

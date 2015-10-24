@@ -235,16 +235,17 @@ input:-moz-placeholder {
 			}
 			.b-main .b-block .b-main-filter .filter-cont #filter-search {
 				position: absolute;
-  				left: -115px;
-  				width: 100px;
-  				background-color: #FFF;
-  				border: none;
-  				border-bottom: 3px solid #e3e4e8;
-  				top: 10px;
-  				text-align: center;
-  				padding: 10px 3px 2px 4px;
-  				border-radius: 5px;
+				left: -115px;
+				width: 100px;
+				background-color: #FFF;
+				border: none;
+				border-bottom: 3px solid #e3e4e8;
+				top: 10px;
+				text-align: center;
+				padding: 10px 3px 2px 4px;
+				border-radius: 5px;
 				height: 59px;
+				z-index: 10;
 			}
 			.filter-search img{
 				margin-top: 10px;

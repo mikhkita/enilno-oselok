@@ -44,13 +44,13 @@ $(document).ready(function(){
             setTo($(this));
 		},
     change: function( event, ui ) {
-        filter++;
-         setTimeout(function() {
-           filter--;
-        }, 900);
+        // filter++;
+         // setTimeout(function() {
+           // filter--;
+        // }, 900);
         setTimeout(function() {
-            showCount(filter);
-        }, 1000);
+            showCount();
+        }, 50);
     }
 	});
 	$( "#amount-l" ).text( $( "#slider-range" ).slider( "values", 0 ) );
@@ -79,12 +79,12 @@ $(document).ready(function(){
         filter++;
         $("#filter-search").remove();
         setTo($(this));
+        // setTimeout(function() {
+        //    filter--;
+        // }, 900);
         setTimeout(function() {
-           filter--;
-        }, 900);
-        setTimeout(function() {
-            showCount(filter);
-        }, 1000);
+            showCount();
+        }, 50);
         
     });
 
@@ -102,7 +102,7 @@ $(document).ready(function(){
         }
     });
     function showCount() {
-        if(filter==0) {
+        // if(filter==0) {
             $.ajax({
                 type: 'GET',
                 url: "/shop/index?countGood=true",
@@ -113,7 +113,7 @@ $(document).ready(function(){
                     $("#filter-search img").hide();
                 }
             }); 
-        }
+        // }
     }
     
     if( $("#yw0 .selected a").text()*1>3 && $("#yw0 li.page").eq(0).find("a").text()*1>1 ) {

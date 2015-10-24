@@ -13,7 +13,7 @@ class AttributeVariantController extends Controller
 	{
 		return array(
 			array('allow',
-				'actions'=>array('adminIndex','adminCreate','adminUpdate','adminDelete'),
+				'actions'=>array('adminIndex','adminEdit','adminCreate','adminUpdate','adminDelete'),
 				'roles'=>array('manager'),
 			),
 			array('allow',
@@ -42,21 +42,25 @@ class AttributeVariantController extends Controller
 		}
 	}
 
-	public function actionAdminEdit($id)
+	public function actionAdminEdit()
 	{
-		$model=$this->loadModel($id);
+		ini_set("memory_limit", "420M");
+		$criteria = new CDbCriteria();
+		$criteria->with = array("attribute");
+		$criteria->condition = "attribute.list=1 AND variant_id is NULL";
+		// $criteria->condition = "attribute_id=6";
+    	// $criteria->group = "variant_id";
+    	$criteria->limit = 10000;
+    	// $model = GoodAttribute::model()->deleteAll($criteria);
+		$model = GoodAttribute::model()->findAll($criteria);
 
-		if(isset($_POST['Variants']))
-		{
-			// $model->attributes=$_POST['Variants'];
-			// if($model->save())
-			// 	$this->actionAdminIndex(true);
-			print_r($_POST["Variants"]);
-		}else{
-			$this->renderPartial('adminEdit',array(
-				'model'=>$model,
-			));
+		echo count($model);
+		$count = 0;
+		foreach ($model as $value) {
+			if($value->varchar_value)$count++;
+			echo $value->varchar_value."<br>";
 		}
+		echo $count;
 	}
 
 	public function actionAdminDelete($id)
