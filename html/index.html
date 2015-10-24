@@ -9,10 +9,18 @@
 	<meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=1">
 	<link rel="stylesheet" href="css/reset.css" type="text/css">
 	<link rel="stylesheet" href="css/jquery.fancybox.css" type="text/css">
+	<link rel="stylesheet" href="css/slick.css" type="text/css">
 	<link rel="stylesheet" href="css/KitAnimate.css" type="text/css">
 	<link rel="stylesheet" href="css/layout.css" type="text/css">
 	<link rel="icon" type="image/vnd.microsoft.icon" href="favicon.ico">
-
+	
+	<!--[if gte IE 9]>
+		<style type="text/css">
+		    .gradient {
+		       filter: none;
+		    }
+	    </style>
+	<![endif]-->
 	<meta name="viewport" content="width=1000">
 
 	<script type="text/javascript" src="js/jquery-2.1.1.min.js"></script>
@@ -25,6 +33,7 @@
 	<script type="text/javascript" src="js/css3-mediaqueries.js"></script>
 	<script type="text/javascript" src="js/jquery.maskedinput.min.js"></script>
 	<script type="text/javascript" src="js/jquery.validate.min.js"></script>
+	<script type="text/javascript" src="js/slick.min.js"></script>
 	<script type="text/javascript" src="js/KitProgress.js"></script>
 	<script type="text/javascript" src="js/KitAnimate.js"></script>
 	<script type="text/javascript" src="js/device.js"></script>
@@ -34,29 +43,98 @@
 </head>
 <body>
 	<ul class="ps-lines">
-		<li class="v" style="margin-left:-501px"></li>
-		<li class="v" style="margin-left:500px"></li>
+		<li class="v" style="margin-left:-481px"></li>
+		<li class="v" style="margin-left:480px"></li>
 		<li class="v" ></li>
 	</ul>
-	<div class="b b-1">
-		<div class="b-block">
-			<div class="b-logo-cont left">
-				<div class="b-logo-text left blue">ФРАНШИЗА "ELECTROFROG"<br/>ОТ КРУПНЕЙШЕГО ЗАВОДА ЗАО "ЛИТМАШДЕТАЛЬ"</div>
+	<div class="b b-header">
+		<div class="b b-menu">
+			<div class="b-block">
+				<ul class="clearfix">
+					<li><a href="#">О магазине</a></li>
+					<li><a href="#">Доставка и оплата</a></li>
+					<li><a href="#">Гарантия</a></li>
+					<li><a href="#">Контакты</a></li>
+				</ul>
+			</div>  
+		</div>
+		<div class="b b-header-main">
+			<div class="b-block clearfix">
+				<span class="stamp"></span>
+				<div class="left">
+					<div class="clearfix">
+						<img class="left" src="i/logo.png">
+						<div class="right">
+							<h1>Колесо<span>онлайн</span></h1>
+							<h2>Вы находитесь в г. <a href="#">Томск</a></h2>
+						</div>
+					</div>
+				</div>
+				<div class="right">
+					<div class="clearfix contacts">
+						<a href="#" class="left">+7 (999) 321-11-22</a>
+						<a href="mailto:koleso@yandex.ru" class="left mail">koleso@yandex.ru</a>
+					</div>
+					<form action="#" method="GET">
+						<input type="text" name="search">
+						<button class="b-orange-butt gradient">Поиск</button>
+					</form>
+				</div>
+				
 			</div>
-			<div class="b-date-cont right">
-				<h2 class="blue">8 (800) 555 15 24</h2>
-				<p class="right"><a href="#" class="b-get-callback b-orange-butt">Заказать звонок</a></p>
+		</div>
+		<div class="b b-sub-menu gradient">
+			<div class="b-block">
+				<ul class="clearfix">
+					<li><a href="#">Шины</a></li>
+					<li><a href="#">Диски</a></li>
+					<li><a href="#">Колеса</a></li>
+				</ul>
 			</div>
 		</div>
 	</div>
-	<div class="b b-2">
-		<div class="b-block">
-			
+	<div class="b b-main-slider">
+		<div class="slide" style="background-image: url('i/back-main.jpg');">
+			<div class="b-block">
+				<h2>ШИРОКИЙ АССОРТИМЕНТ</h2>
+				<p>Только в нашем магазине вы найдете именно те колеса, которые вам нужны.</p>
+			</div>
+		</div>
+		<div class="slide" style="background-image: url('i/back-main.jpg');">
+			<div class="b-block">
+				<h2>ШИРОКИЙ АССОРТИМЕНТ</h2>
+				<p>Только в нашем магазине вы найдете именно те колеса, которые вам нужны.</p>
+			</div>
 		</div>
 	</div>
-	<div class="b b-3">
-		<div class="b-block">
-			
+	<div class="b b-filters">
+		<div class="b-block" id="tabs">
+			<ul class="tabs clearfix">
+				<li class="active"><a class="tire-tab" href="#tabs-tire">Подбор шин</a></li>
+				<li class="gradient-2"><a class="disc-tab" href="#tabs-disc">Подбор дисков</a></li>
+				<li><a class="wheel-tab" href="#tabs-wheel">Подбор колес</a></li>
+			</ul>
+			<div id="tabs-tire">
+				<form action="#" method="GET">
+					<div class="filter-cont">
+						<div class="tire-type clearfix">
+							<label for="tire-winter">Зимние нешипованные</label>
+							<label for="tire-spike">Зимние шипованные</label>
+							<label for="tire-summer">Летние</label>
+							<input id="tire-winter" type="radio" name="tire-type" value="0">
+							<input id="tire-spike" type="radio" name="tire-type" value="1">
+							<input id="tire-summer" type="radio" name="tire-type" value="2">
+						</div>
+					</div>
+					<div class="filter-cont">
+						<div class="filter-item">
+							<label>Производитель</label>
+							<input type="text">
+							<span class="arrow"></span>
+						</div>
+					</div>
+				</form>
+			</div>
 		</div>
 	</div>
 	<div class="b b-4">

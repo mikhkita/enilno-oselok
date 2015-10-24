@@ -1,36 +1,94 @@
 @charset "utf-8";
 
 @font-face {
-	font-family: 'PFL';
-	src: url('../fonts/pdfintextcondpro-light-webfont.eot');
-    src: url('../fonts/pdfintextcondpro-light-webfont.eot?#iefix') format('embedded-opentype'),
-         url('../fonts/pdfintextcondpro-light-webfont.woff') format('woff'),
-         url('../fonts/pdfintextcondpro-light-webfont.ttf') format('truetype');
+    font-family: 'helveticaneuecyrthin';
+    src: url('../fonts/helveticaneuecyr-thin.eot');
+    src: url('../fonts/helveticaneuecyr-thin.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/helveticaneuecyr-thin.woff2') format('woff2'),
+         url('../fonts/helveticaneuecyr-thin.woff') format('woff'),
+         url('../fonts/helveticaneuecyr-thin.ttf') format('truetype'),
+         url('../fonts/helveticaneuecyr-thin.svg#helveticaneuecyrthin') format('svg');
     font-weight: normal;
     font-style: normal;
+
 }
 
 @font-face {
-	font-family: 'PFR';
-	src: url('../fonts/pfdintextcondpro-regular-webfont.eot');
-    src: url('../fonts/pfdintextcondpro-regular-webfont.eot?#iefix') format('embedded-opentype'),
-         url('../fonts/pfdintextcondpro-regular-webfont.woff') format('woff'),
-         url('../fonts/pfdintextcondpro-regular-webfont.ttf') format('truetype');
+    font-family: 'helveticaneuecyrlight';
+    src: url('../fonts/helveticaneuecyr-light.eot');
+    src: url('../fonts/helveticaneuecyr-light.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/helveticaneuecyr-light.woff2') format('woff2'),
+         url('../fonts/helveticaneuecyr-light.woff') format('woff'),
+         url('../fonts/helveticaneuecyr-light.ttf') format('truetype'),
+         url('../fonts/helveticaneuecyr-light.svg#helveticaneuecyrlight') format('svg');
     font-weight: normal;
     font-style: normal;
+
 }
 
 @font-face {
-	font-family: 'PFM';
-	src: url('../fonts/pfdintextcondpro-medium-webfont.eot');
-    src: url('../fonts/pfdintextcondpro-medium-webfont.eot?#iefix') format('embedded-opentype'),
-         url('../fonts/pfdintextcondpro-medium-webfont.woff') format('woff'),
-         url('../fonts/pfdintextcondpro-medium-webfont.ttf') format('truetype');
+    font-family: 'helveticaneuecyrroman';
+    src: url('../fonts/helveticaneuecyr-roman.eot');
+    src: url('../fonts/helveticaneuecyr-roman.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/helveticaneuecyr-roman.woff2') format('woff2'),
+         url('../fonts/helveticaneuecyr-roman.woff') format('woff'),
+         url('../fonts/helveticaneuecyr-roman.ttf') format('truetype'),
+         url('../fonts/helveticaneuecyr-roman.svg#helveticaneuecyrroman') format('svg');
     font-weight: normal;
     font-style: normal;
+
 }
 
+@font-face {
+    font-family: 'helveticaneuecyrmedium';
+    src: url('../fonts/helveticaneuecyr-medium.eot');
+    src: url('../fonts/helveticaneuecyr-medium.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/helveticaneuecyr-medium.woff2') format('woff2'),
+         url('../fonts/helveticaneuecyr-medium.woff') format('woff'),
+         url('../fonts/helveticaneuecyr-medium.ttf') format('truetype'),
+         url('../fonts/helveticaneuecyr-medium.svg#helveticaneuecyrmedium') format('svg');
+    font-weight: normal;
+    font-style: normal;
 
+}
+
+@font-face {
+    font-family: 'helveticaneuecyrbold';
+    src: url('../fonts/helveticaneuecyr-bold.eot');
+    src: url('../fonts/helveticaneuecyr-bold.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/helveticaneuecyr-bold.woff2') format('woff2'),
+         url('../fonts/helveticaneuecyr-bold.woff') format('woff'),
+         url('../fonts/helveticaneuecyr-bold.ttf') format('truetype'),
+         url('../fonts/helveticaneuecyr-bold.svg#helveticaneuecyrbold') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+@font-face {
+    font-family: 'museo_sans_cyrl300';
+    src: url('../fonts/museosanscyrl_0.eot');
+    src: url('../fonts/museosanscyrl_0.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/museosanscyrl_0.woff2') format('woff2'),
+         url('../fonts/museosanscyrl_0.woff') format('woff'),
+         url('../fonts/museosanscyrl_0.ttf') format('truetype'),
+         url('../fonts/museosanscyrl_0.svg#museo_sans_cyrl300') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'museo_sans_cyrl700';
+    src: url('../fonts/museosanscyrl_2.eot');
+    src: url('../fonts/museosanscyrl_2.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/museosanscyrl_2.woff2') format('woff2'),
+         url('../fonts/museosanscyrl_2.woff') format('woff'),
+         url('../fonts/museosanscyrl_2.ttf') format('truetype'),
+         url('../fonts/museosanscyrl_2.svg#museo_sans_cyrl700') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
 html,
 body {
 	position: relative;
@@ -38,14 +96,20 @@ body {
 body {
 	min-width: 1000px;
 	text-align: center;
-	font-family: 'PFL';
+	font-family: 'helveticaneuecyrlight';
+	font-size: 14px;
+	line-height: 1.2;
 	overflow-x: hidden;
-	color: #472275;
+	overflow: scroll;
+	/*color: #472275;*/
 }
 a{
-	text-decoration: none;
-	color: #472275;
+	text-decoration: underline;
+	display: block;
 }
+	a:hover{
+		text-decoration: none;
+	}
 li{
 	list-style: none;
 }
@@ -85,7 +149,7 @@ input.error,textarea.error{
 	overflow: visible !important;
 }
 .bold{
-	font-family: 'PFM';
+	/*font-family: 'PFM';*/
 }
 .underline{
 	text-decoration: underline;
@@ -98,7 +162,7 @@ input.error,textarea.error{
 }
 .b-block{
 	position: relative;
-	width: 1000px;
+	width: 960px;
 	margin: 0px auto;
 }
 .b-absolute{
@@ -107,25 +171,324 @@ input.error,textarea.error{
 	left: 50%;
 	margin-left: -500px;
 }
+input {
+	font-size: 14px;
+	font-family: 'helveticaneuecyrlight';
+}
 input::-webkit-input-placeholder {
 	color: #434343;
 }
 input:-moz-placeholder {
 	color: #434343;
 }
-.b-orange-butt{
+.gradient {
+	background: #ffda00; /* Old browsers */
+	/* IE9 SVG, needs conditional override of 'filter' to 'none' */
+	background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2ZmZGEwMCIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjMzJSIgc3RvcC1jb2xvcj0iI2ZmYmMwMCIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjY2JSIgc3RvcC1jb2xvcj0iI2ZmYWMwMCIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNmZjk2MDAiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
+	background: -moz-linear-gradient(top,  #ffda00 0%, #ffbc00 33%, #ffac00 66%, #ff9600 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffda00), color-stop(33%,#ffbc00), color-stop(66%,#ffac00), color-stop(100%,#ff9600)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  #ffda00 0%,#ffbc00 33%,#ffac00 66%,#ff9600 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  #ffda00 0%,#ffbc00 33%,#ffac00 66%,#ff9600 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  #ffda00 0%,#ffbc00 33%,#ffac00 66%,#ff9600 100%); /* IE10+ */
+	background: linear-gradient(to bottom,  #ffda00 0%,#ffbc00 33%,#ffac00 66%,#ff9600 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffda00', endColorstr='#ff9600',GradientType=0 ); /* IE6-8 */
+}
+.gradient-2 {
+/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#433942+0,211d20+100 */
+background: rgb(67,57,66); /* Old browsers */
+/* IE9 SVG, needs conditional override of 'filter' to 'none' */
+background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzQzMzk0MiIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMyMTFkMjAiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
+background: -moz-linear-gradient(top,  rgba(67,57,66,1) 0%, rgba(33,29,32,1) 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(67,57,66,1)), color-stop(100%,rgba(33,29,32,1))); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(top,  rgba(67,57,66,1) 0%,rgba(33,29,32,1) 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(top,  rgba(67,57,66,1) 0%,rgba(33,29,32,1) 100%); /* Opera 11.10+ */
+background: -ms-linear-gradient(top,  rgba(67,57,66,1) 0%,rgba(33,29,32,1) 100%); /* IE10+ */
+background: linear-gradient(to bottom,  rgba(67,57,66,1) 0%,rgba(33,29,32,1) 100%); /* W3C */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#433942', endColorstr='#211d20',GradientType=0 ); /* IE6-8 */
 
+
+}
+.b-orange-butt{
+	border: none;
+	cursor: pointer;
 }
 	.b-orange-butt:hover{
 		
 	}
-.b-1{
+.b-header{
+	text-align: left;
+}
+	.b-header .b-menu {
+		background-image: url("../i/back-menu.jpg");
+	}	
+		.b-header .b-menu .b-block {
+
+		}
+			.b-header .b-menu .b-block ul {
+
+			}
+				.b-header .b-menu .b-block ul li {
+					float: left;
+					margin-right: 10px;
+				}
+					.b-header .b-menu .b-block ul li a {
+						font-size: 12px;
+						color: rgb(172, 171, 172);
+						padding: 7px 10px 10px;
+					}
+					.b-header .b-menu .b-block ul li:first-child a {
+						padding-left: 0;
+					}
+	.b-header .b-header-main {
+		background-image: url("../i/back-asphalt.jpg");
+	}
+		.b-header .b-header-main .b-block {
+			padding: 24px 0 30px;
+		}
+			.b-header .b-header-main .b-block .stamp {
+				position: absolute;
+				right: 0;
+				bottom: 0;
+				margin-right: -120px;
+				width: 230px;
+				height: 114px;
+				background-position: 0% 100%;
+				background-image: url("../i/tire-stamp1.png");
+			}
+			.b-header .b-header-main .b-block > .left{
+
+			}
+				.b-header .b-header-main .b-block > .left img {
+
+				margin-top: 2px;}
+				.b-header .b-header-main .b-block > .left .right {
+					margin-left: 10px;
+				}
+					.b-header .b-header-main .b-block > .left .right h1{
+						font-size: 27px;
+						font-family: "museo_sans_cyrl700";
+						color: #fff; 
+						text-transform: uppercase;
+						letter-spacing: 1.6px;
+					}
+						.b-header .b-header-main .b-block > .left .right h1 span{
+							font-family: "museo_sans_cyrl300";
+							margin-left: 6px;
+						}
+					.b-header .b-header-main .b-block > .left .right h2 {
+						color: #fff;
+						margin-top: 8px;
+						/* letter-spacing: 0.7px; */
+						font-family: "helveticaneuecyrthin";
+						font-size: 14px;
+					}
+						.b-header .b-header-main .b-block > .left .right h2 a{
+							color: #fff;
+							display: inline-block;
+							position: relative;
+							padding-left: 18px;
+						}
+							.b-header .b-header-main .b-block > .left .right h2 a:before {
+								position: absolute;
+								font-size: 0;
+								content: "";
+								width: 11px;
+								height: 16px;
+								background-image: url("../i/map-marker.png");
+								top: -3px;
+								left: 1px;
+							}
+			.b-header .b-header-main .b-block > .right{
+
+			margin-top: 2px;position: relative;}
+				.b-header .b-header-main .b-block > .right .contacts{
+
+				margin-bottom: 8px;}
+					.b-header .b-header-main .b-block > .right .contacts a {
+						font-size: 17px;
+						font-family: "helveticaneuecyrlight";
+						color: rgb(255, 255, 255);
+						padding-left: 26px;
+						margin-right: 47px;
+						position: relative;
+					}
+					.b-header .b-header-main .b-block > .right .contacts a:before {
+						position: absolute;
+						font-size: 0;
+						content: "";
+						width: 17px;
+						height: 17px;
+						background-image: url("../i/phone.png");
+						top: 2px;
+						left: 0px;
+					}
+					.b-header .b-header-main .b-block > .right .contacts a.mail {
+						font-size: 14px;
+						margin-top: 2px;
+						padding-left: 30px;
+					}
+					.b-header .b-header-main .b-block > .right .contacts a.mail:before {
+						width: 20px;
+						height: 13px;
+						background-image: url("../i/mail.png");
+						left: -2px;
+					}
+					.b-header .b-header-main .b-block > .right form {
+						font-size: 0;
+					}
+						.b-header .b-header-main .b-block > .right form input{
+							width: 448px;
+							box-sizing: border-box;
+							border: 1px solid #ffb000;
+							background: none;
+							padding: 7px 8px 6px;
+							color: #fff;
+						}
+						.b-header .b-header-main .b-block > .right form button{
+							font-size: 14px;
+							font-family: "helveticaneuecyrmedium";
+							color: rgb(31, 31, 31);
+							text-transform: uppercase;
+							text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.4);
+							border:none;
+							width: 103px;
+							padding: 8px 0px 7px;
+						}
+	.b-header .b-sub-menu {
+
+	}
+		.b-header .b-sub-menu .b-block {
+		}
+			.b-header .b-sub-menu .b-block ul {
+
+			}
+				.b-header .b-sub-menu .b-block ul li {
+					float: left;
+					margin-right: 47px;
+				}
+					.b-header .b-sub-menu .b-block ul li a{
+						text-decoration: none;
+						font-family: "helveticaneuecyrmedium";
+						color: rgb(31, 31, 31);
+						text-transform: uppercase;
+						text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.7);
+						padding: 11px;
+					}
+					.b-header .b-sub-menu .b-block ul li:first-child a {
+						padding-left: 0;
+					}
+.b-main-slider {
+
+height: 300px;}
+	.b-main-slider .slide {
+		height: 300px;
+		background-size: cover;
+		background-position: 50%;
+		background-repeat: no-repeat;
+		text-align: left;
+	}
+		.b-main-slider .slide .b-block {
+
+		padding-top: 45px;     box-sizing: border-box;}
+			.b-main-slider .slide .b-block h2 {
+				font-size: 40px;
+				font-family: "museo_sans_cyrl700";
+				color: rgb(255, 255, 255);
+				line-height: 1.073;
+				width: 540px;
+				margin-bottom: 14px;
+			}
+			.b-main-slider .slide .b-block p {
+				font-size: 18px;
+				font-family: "helveticaneuecyrroman";
+				color: rgb(255, 255, 255);
+				line-height: 1.667;
+				width: 540px;
+			}
+	.b-main-slider .slick-dots {
+		font-size: 0;
+		bottom: 92px;
+		position: relative;
+	}
+		.b-main-slider .slick-dots li{
+			display: inline-block;
+			margin-right: 10px;
+			cursor: pointer;
+		}
+		.b-main-slider .slick-dots li:last-child {
+			margin-right: 0;
+		}
+			.b-main-slider .slick-dots li button {
+				font-size: 0;
+				border: none;
+				width: 11px;
+				height: 11px;
+				border-radius: 50%;
+				background-color: rgba(255, 255, 255,0.749);
+				cursor: pointer;
+			}
+		.b-main-slider .slick-dots li.slick-active button{
+			background-color: #fff;
+		}
+.b-filters {
 	
 }
-	
+	.b-filters .b-block {
+		background-color: #f7f7f7;
+		margin-top: -66px;
+	}
+		.b-filters .b-block .tabs {
+
+		}
+			.b-filters .b-block .tabs li {
+				float: left;
+				width: 320px;
+			}
+				.b-filters .b-block .tabs li a{
+					font-family: "helveticaneuecyrmedium";
+					color: rgb(31, 31, 31);
+					text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.57);
+					text-decoration: none;
+					text-transform: uppercase;
+					padding: 16px 0px;
+					box-sizing: border-box;
+				}
+		.b-filters .b-block .filter-cont {
+			
+		}
+			.b-filters .b-block .filter-cont .tire-type {
+
+			}
+				.b-filters .b-block .filter-cont .tire-type label {
+					display: block;
+					float: left;
+				}
+				.b-filters .b-block .filter-cont .tire-type input {
+					display: none;
+				}
+			.b-filters .b-block .filter-cont .filter-item {
+
+			}
+				.b-filters .b-block .filter-cont .filter-item label {
+
+				}
+				.b-filters .b-block .filter-cont .filter-item input {
+
+				}
+				.b-filters .b-block .filter-cont .filter-item .arrow {
+
+				}
 @media screen and (max-width: 1250px){
 	
 }
 @media screen and (max-width: 1020px){
 
 }
+
+
+
+
+
+
+
+

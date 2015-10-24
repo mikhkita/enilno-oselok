@@ -76,4 +76,11 @@ $(document).ready(function(){
 
     // var jssor_slider1 = new $JssorSlider$("slider1_container", options);
 
+    $(".b-main-slider").slick({
+        autoplay: true,
+        dots: true,
+        arrows: false,
+        autoplaySpeed: 6000
+        // fade: true
+    });
 });
