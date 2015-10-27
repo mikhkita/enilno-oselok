@@ -16,7 +16,7 @@
 	
 	<!--[if gte IE 9]>
 		<style type="text/css">
-		    .gradient {
+		    .gradient-orange,.gradient-black{
 		       filter: none;
 		    }
 	    </style>
@@ -77,13 +77,13 @@
 					</div>
 					<form action="#" method="GET">
 						<input type="text" name="search">
-						<button class="b-orange-butt gradient">Поиск</button>
+						<button class="b-orange-butt gradient-orange">Поиск</button>
 					</form>
 				</div>
 				
 			</div>
 		</div>
-		<div class="b b-sub-menu gradient">
+		<div class="b b-sub-menu gradient-orange">
 			<div class="b-block">
 				<ul class="clearfix">
 					<li><a href="#">Шины</a></li>
@@ -110,20 +110,20 @@
 	<div class="b b-filters">
 		<div class="b-block" id="tabs">
 			<ul class="tabs clearfix">
-				<li class="active"><a class="tire-tab" href="#tabs-tire">Подбор шин</a></li>
-				<li class="gradient-2"><a class="disc-tab" href="#tabs-disc">Подбор дисков</a></li>
-				<li><a class="wheel-tab" href="#tabs-wheel">Подбор колес</a></li>
+				<li class="active gradient-black"><a class="tire-tab" href="#tabs-tire">Подбор шин</a></li>
+				<li class="gradient-black"><a class="disc-tab" href="#tabs-disc">Подбор дисков</a></li>
+				<li><a class="wheel-tab gradient-black" href="#tabs-wheel">Подбор колес</a></li>
 			</ul>
 			<div id="tabs-tire">
 				<form action="#" method="GET">
 					<div class="filter-cont">
-						<div class="tire-type clearfix">
-							<label for="tire-winter">Зимние нешипованные</label>
-							<label for="tire-spike">Зимние шипованные</label>
-							<label for="tire-summer">Летние</label>
+						<div class="tire-type clearfix">	
 							<input id="tire-winter" type="radio" name="tire-type" value="0">
+							<label for="tire-winter">Зимние нешипованные</label>
 							<input id="tire-spike" type="radio" name="tire-type" value="1">
+							<label for="tire-spike">Зимние шипованные</label>
 							<input id="tire-summer" type="radio" name="tire-type" value="2">
+							<label for="tire-summer">Летние</label>
 						</div>
 					</div>
 					<div class="filter-cont">
