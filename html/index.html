@@ -16,7 +16,7 @@
 	
 	<!--[if gte IE 9]>
 		<style type="text/css">
-		    .gradient-orange,.gradient-black{
+		    .gradient-orange,.gradient-black,.gradient-grey{
 		       filter: none;
 		    }
 	    </style>
@@ -77,7 +77,7 @@
 					</div>
 					<form action="#" method="GET">
 						<input type="text" name="search">
-						<button class="b-orange-butt gradient-orange">Поиск</button>
+						<button class="b-orange-butt">Поиск</button>
 					</form>
 				</div>
 				
@@ -108,11 +108,11 @@
 		</div>
 	</div>
 	<div class="b b-filters">
-		<div class="b-block" id="tabs">
+		<div class="b-block gradient-grey" id="tabs">
 			<ul class="tabs clearfix">
-				<li class="active gradient-black"><a class="tire-tab" href="#tabs-tire">Подбор шин</a></li>
-				<li class="gradient-black"><a class="disc-tab" href="#tabs-disc">Подбор дисков</a></li>
-				<li><a class="wheel-tab gradient-black" href="#tabs-wheel">Подбор колес</a></li>
+				<li class="active gradient-lightBlack"><a href="#"><span class="tire-icon icon">Подбор шин</span></a></li>
+				<li class="gradient-lightBlack"><a href="#"><span class="disc-icon icon">Подбор дисков</span></a></li>
+				<li class="gradient-lightBlack"><a href="#"><span class="wheel-icon icon">Подбор Колес</span></a></li>
 			</ul>
 			<div id="tabs-tire">
 				<form action="#" method="GET">
@@ -126,20 +126,86 @@
 							<label for="tire-summer">Летние</label>
 						</div>
 					</div>
-					<div class="filter-cont">
+					<div class="filter-cont clearfix">
 						<div class="filter-item">
-							<label>Производитель</label>
-							<input type="text">
-							<span class="arrow"></span>
+							<h5>Производитель</h5>
+							<div class="input"><span></span></div>	
+						</div>
+						<div class="filter-item">
+							<h5>Тип</h5>
+							<div class="input"><span></span></div>	
+						</div>
+						<div class="filter-item">
+							<h5>Состояние</h5>
+							<div class="input"><span></span></div>	
+						</div>
+						<div class="filter-item">
+							<h5>Посадочный диаметр</h5>
+							<div class="input"><span></span></div>	
+						</div>
+					</div>
+					<div class="filter-cont clearfix">
+						<div class="filter-item">
+							<h5>Сверловка</h5>
+							<div class="input"><span></span></div>	
+						</div>
+						<div class="filter-item">
+							<h5>Ширина диска</h5>
+							<div class="input"><span></span></div>	
+						</div>
+						<div class="filter-item">
+							<h5>Вылет</h5>
+							<div class="input"><span></span></div>	
 						</div>
 					</div>
 				</form>
 			</div>
 		</div>
 	</div>
-	<div class="b b-4">
+	<div class="b b-popular">
 		<div class="b-block">
-			
+			<div class="main-category left">
+				<div class="gradient-grey">
+					<h3>Категории товаров</h3>
+					<ul>
+						<li class="active"><a href="#"><span class="tire-icon icon">Шины</span></a></li>
+						<li class="active"><a href="#"><span class="disc-icon icon">Диски</span></a></li>
+						<li class="active"><a href="#"><span class="wheel-icon icon">Колеса</span></a></li>
+					</ul>
+				</div>
+				<div class="gradient-grey">
+					<h3>О нас</h3>
+					<p>Этот магазин сделан специально для оптимального выбора шин, дисков и других аксессуаров для вашего автомобиля.
+					<p>Удобство выбора и простота оформления покупки - вот два простых принципа, которые делают наш магазин лучшим.</p>
+				</div>
+			</div>
+			<div class="popular-good right">
+				<h3 class="category-title">популярные товары</h3>
+				<ul class="popular-category clearfix">
+					<li class="active"><a href="#"><span class="tire-icon icon">Шины</span></a></li>
+					<li class="active"><a href="#"><span class="disc-icon icon">Диски</span></a></li>
+					<li class="active"><a href="#"><span class="wheel-icon icon">Колеса</span></a></li>
+				</ul>
+				<ul class="goods clearfix">
+					<li class="gradient-grey">
+						<div class="good-img" style="background-image: url('i/tire.jpg');"></div>
+						<div class="params-cont">
+							<h4>Yokohama DNA</h4>
+							<h5><span>8900 р.</span> + 800 р.</h5>
+							<h5>доставка в г. Томск</h5>
+							<h6>225/45/17  2 шт.</h6>
+						</div>
+						<div class="good-hover">
+							<h4>Yokohama DNA</h4>
+							<h5><span>8900 р.</span> + 800 р.</h5>
+							<h5>доставка в г. Томск</h5>
+							<h6>225/45/17  2 шт.</h6>
+							<h3><span></span></h3>
+							<h3><span></span></h3>
+						</div>
+					</li>
+				</ul>
+			</div>
 		</div>
 	</div>
 	<div class="b b-5">
