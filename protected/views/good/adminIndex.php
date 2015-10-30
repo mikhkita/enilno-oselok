@@ -27,7 +27,7 @@
 					<tr>
 						<td <?if($this->user->role->code == "root"):?>style="min-width: 75px;"<?endif;?>>
 							<a href="<?php echo Yii::app()->createUrl('/good/adminupdate',array('id'=>$item->id,'goodTypeId' => $_GET['goodTypeId'],'GoodFilter_page' => ($pages->currentPage+1) ))?>" class="ajax-form ajax-update b-tool b-tool-update" title="Редактировать"></a>
-							<? if($this->user->role->code == "root"): ?><a href="<?php echo Yii::app()->createUrl('/good/adminindex',array('delete'=>$item->id,'partial'=>'true','goodTypeId'=>$_GET["goodTypeId"],'GoodFilter_page'=>isset($_GET["GoodFilter_page"])?$_GET["GoodFilter_page"]:1))?>" class="ajax-form ajax-delete b-tool b-tool-delete not-ajax-delete" data-warning="Вы действительно хотите удалить <?=$this->adminMenu["cur"]->vin_name?> &quot;<?=$item->fields_assoc[3]->value?>&quot;?" title="Удалить <?=$this->adminMenu["cur"]->vin_name?>"></a><? endif; ?>
+							<? if($this->user->role->code == "root"): ?><a href="<?php echo Yii::app()->createUrl('/good/adminindex',array('delete'=>$item->id,'partial'=>'true','goodTypeId'=>$_GET["goodTypeId"],'GoodFilter_page'=>isset($_GET["GoodFilter_page"])?$_GET["GoodFilter_page"]:1))?>" class="ajax-form ajax-delete b-tool b-tool-delete not-ajax-delete" data-warning="Вы действительно хотите удалить товар &quot;<?=$item->fields_assoc[3]->value?>&quot;?" title="Удалить товар>"></a><? endif; ?>
 						</td>
 						<? foreach ($fields as $field): ?>
 							<td>

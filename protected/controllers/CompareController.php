@@ -13,7 +13,7 @@ class CompareController extends Controller
 	{
 		return array(
 			array('allow',
-				'actions'=>array('adminIndex'),
+				'actions'=>array('adminIndex','adminPut'),
 				'roles'=>array('manager'),
 			),
 			array('allow',
@@ -31,4 +31,13 @@ class CompareController extends Controller
 		$this->render('adminIndex');
 	}
 
+	public function actionAdminPut($left=null,$right=null)
+	{
+		if( $left === null ){
+			file_put_contents(Yii::app()->basePath."/data/right.txt", $right);
+		}else{
+			file_put_contents(Yii::app()->basePath."/data/left.txt", $left);
+		}
+		
+	}
 }

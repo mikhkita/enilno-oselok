@@ -28,6 +28,10 @@ Class Log {
     public function debug($message,$error = false){
         Log::set("debug",$message,$error);
     }
+    public function error($message){
+        Log::set("debug","ОШИБКА: ".$message,true);
+        return false;
+    }
 
 }
 

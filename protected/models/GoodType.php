@@ -47,6 +47,7 @@ class GoodType extends CActiveRecord
 			'pdAdverts' => array(self::HAS_MANY, 'Photodoska', 'good_type_id'),
 			'interpreters' => array(self::HAS_MANY, 'Interpreter', 'good_type_id'),
 			'exports' => array(self::HAS_MANY, 'Export', 'good_type_id'),
+			'places' => array(self::HAS_MANY, 'Place', 'good_type_id'),
 		);
 	}
 

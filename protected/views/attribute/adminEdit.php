@@ -27,16 +27,18 @@
                     <li>
                         <p><?=$variant->value?></p>
                         <span></span>
-                        <input type="hidden" data-name="<?=mb_strtolower($variant->value, 'UTF-8')?>" name="Variants[<?=$variant->variant->id?>]" value="<?=$variant->sort?>">
+                        <input type="hidden" data-name="<?=mb_strtolower($variant->value, 'UTF-8')?>" name="Variants[<?=$variant->variant->id?>]" value="<?=$variant->variant->sort?>">
                     </li>
                     <? endif; ?>
                 <? endforeach; ?>
             </ul>
         </div>
 
-        <div class="row buttons">
+        <div class="row buttons" style="position: relative;">
+            <a href="#" class="b-sort-link b-sort-asc">По возрастанию</a>
             <?php echo CHtml::submitButton('Сохранить'); ?>
             <input type="button" onclick="$.fancybox.close(); return false;" value="Отменить">
+            <a href="#" class="b-sort-link b-sort-desc">По убыванию</a>
         </div>
 
     <?php $this->endWidget(); ?>

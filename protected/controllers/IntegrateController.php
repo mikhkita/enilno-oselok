@@ -44,8 +44,13 @@ class IntegrateController extends Controller
 
         $photodoska = new Photodoska();
         $photodoska->auth();
+
+        $main_adverts = explode(",", $this->getParam("PHOTODOSKA","MAIN_ADVERT"));
+
+        foreach ($main_adverts as $key => $value)
+            $main_adverts[$key] = trim($value);
         
-        $photodoska->deleteAdverts(trim($this->getParam("PHOTODOSKA","MAIN_ADVERT")));
+        $photodoska->deleteAdverts($main_adverts);
 
         $this->generatePdQueue($this->getGroups("TIRE"),"TIRE");
 

@@ -63,7 +63,7 @@ class AttributeController extends Controller
 
 	public function actionAdminEdit($id)
 	{
-		$model=$this->loadModel($id);
+		$model = Attribute::model()->with(array("variants.variant"=>array("order"=>"variant.sort ASC")))->findByPk($id);
 
 		if( isset($_POST['Edit']) )
 		{
@@ -76,10 +76,10 @@ class AttributeController extends Controller
 				$values = array();
 
 				foreach ($_POST["VariantsGroup"] as $key => $value) {
-					$values[] = array($model->id,$value,$key+1);
+					$values[] = array("attribute_id"=>$model->id,"variant_id"=>$value);
 				}
 
-				$this->updateRows(AttributeVariant::tableName(),$values,array("sort"));
+				$this->insertValues(AttributeVariant::tableName(),$values);
 			}
 			$this->actionAdminIndex(true);
 		}else{
@@ -181,7 +181,7 @@ class AttributeController extends Controller
 
 		$modelArr = array();
 		foreach ($model->variants as $key => $value) {
-			$modelArr[$value->variant->id] = $value->sort;
+			$modelArr[$value->variant->id] = $value->variant->sort;
 		}
 
 
@@ -200,7 +200,7 @@ class AttributeController extends Controller
 
 			if( isset($_POST["VariantsNew"]) )
 				foreach ($_POST["VariantsNew"] as $key => $value) {
-					$attrs = array($model->type->code."_value"=>$key);
+					$attrs = array($model->type->code."_value"=>$key,"sort"=>$value);
 					$new = new Variant();
 					$new->attributes = $attrs;
 					$new->save();
@@ -209,17 +209,21 @@ class AttributeController extends Controller
 
 
 			$values = array();
+			$values_attr = array();
 
 			foreach ($attrVariants as $key => $value) {
-				$values[] = array($model->id,$key,$value);
+				$values[] = array($key,NULL,NULL,NULL,$value);
+				$values_attr[] = array("attribute_id"=>$model->id,"variant_id"=>$key);
 			}
+
+			$this->insertValues(AttributeVariant::tableName(),$values_attr);
 
 			if( isset($_POST["Variants"]) )
 				foreach ($_POST["Variants"] as $key => $value) {
-					$values[] = array($model->id,$key,$value);
+					$values[] = array($key,NULL,NULL,NULL,$value);
 				}
 
-			$this->updateRows(AttributeVariant::tableName(),$values,array("sort"));
+			$this->updateRows(Variant::tableName(),$values,array("sort"));
 		}
 	}
 

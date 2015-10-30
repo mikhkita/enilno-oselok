@@ -45,20 +45,23 @@ class AttributeVariantController extends Controller
 	public function actionAdminEdit()
 	{
 		ini_set("memory_limit", "420M");
-		$criteria = new CDbCriteria();
-		$criteria->with = array("attribute");
-		$criteria->condition = "attribute.list=1 AND variant_id is NULL";
+		// $criteria = new CDbCriteria();
+		// $criteria->with = array("attribute");
+		// $criteria->condition = "attribute.list=1 AND variant_id is NULL";
 		// $criteria->condition = "attribute_id=6";
     	// $criteria->group = "variant_id";
-    	$criteria->limit = 10000;
+    	// $criteria->limit = 10000;
     	// $model = GoodAttribute::model()->deleteAll($criteria);
-		$model = GoodAttribute::model()->findAll($criteria);
+		$model = AttributeVariant::model()->with("variant")->findAll();
 
 		echo count($model);
 		$count = 0;
 		foreach ($model as $value) {
-			if($value->varchar_value)$count++;
-			echo $value->varchar_value."<br>";
+			// if($value->varchar_value)$count++;
+			
+			$value->variant->sort = $value->sort;
+			$value->variant->save();
+			echo $value->variant->sort."<br>";
 		}
 		echo $count;
 	}

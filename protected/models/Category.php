@@ -47,6 +47,7 @@ class Category extends CActiveRecord
 		return array(
 			'interpreters' => array(self::HAS_MANY, 'Interpreter', 'category_id'),
 			'settings' => array(self::HAS_MANY, 'Settings', 'category_id'),
+			'places' => array(self::HAS_MANY, 'Place', 'category_id'),
 		);
 	}
 

@@ -8,6 +8,7 @@
  * @property integer $int_value
  * @property string $varchar_value
  * @property double $float_value
+ * @property integer $sort
  */
 class Variant extends CActiveRecord
 {
@@ -27,12 +28,13 @@ class Variant extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('int_value', 'numerical', 'integerOnly'=>true),
+			array('sort', 'required'),
+			array('int_value, sort', 'numerical', 'integerOnly'=>true),
 			array('float_value', 'numerical'),
 			array('varchar_value', 'length', 'max'=>255),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, int_value, varchar_value, float_value', 'safe', 'on'=>'search'),
+			array('id, int_value, varchar_value, float_value, sort', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -58,6 +60,7 @@ class Variant extends CActiveRecord
 			'int_value' => 'Int Value',
 			'varchar_value' => 'Varchar Value',
 			'float_value' => 'Float Value',
+			'sort' => 'Sort',
 		);
 	}
 
@@ -83,6 +86,7 @@ class Variant extends CActiveRecord
 		$criteria->compare('int_value',$this->int_value);
 		$criteria->compare('varchar_value',$this->varchar_value,true);
 		$criteria->compare('float_value',$this->float_value);
+		$criteria->compare('sort',$this->sort);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

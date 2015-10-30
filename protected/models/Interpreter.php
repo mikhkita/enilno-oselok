@@ -153,6 +153,7 @@ class Interpreter extends CActiveRecord
     public function generate($interpreter_id,$model,$dynObjects = NULL){
     	$attributes = (isset($model->fields_assoc))?$model->fields_assoc:$model;
     	if( $dynObjects !== NULL ) $attributes = $attributes + $dynObjects;
+
     	if( isset($this->interpreters[(string)$interpreter_id]) ){
     		if( $this->interpreters[(string)$interpreter_id]->good_type_id == $model->good_type_id ){
     			$template = $this->interpreters[(string)$interpreter_id]->template;
@@ -223,6 +224,7 @@ class Interpreter extends CActiveRecord
 					$matches[1][$i] = Interpreter::generate(intval($params["INTER"]),$model,$dynObjects);
 				}else if( isset($params["LIST"]) ){
 					$matches[1][$i] = $this->getListValue(intval($params["LIST"]),$attributes);
+					if( is_array($matches[1][$i]) ) $matches[1][$i] = "";
 				}else if( isset($params["TABLE"]) ){
 					$matches[1][$i] = $this->getTableValue(intval($params["TABLE"]),$attributes);
 				}else if( isset($params["CUBE"]) ){
@@ -231,6 +233,12 @@ class Interpreter extends CActiveRecord
 					$matches[1][$i] = $this->getVarValue($params["VAR"]);
 				}else{
 					throw new CHttpException(500,"Отсутствует параметр \"ATTR\" у интерпретатора с идентификатором ".$interpreter_id);
+				}
+				if( isset($params["ITEM"]) ){
+					$items = explode(";", $matches[1][$i]);
+					if( $params["ITEM"] == "RAND" ) 
+						$params["ITEM"] = rand(1,count($items));
+					$matches[1][$i] = (isset($items[intval($params["ITEM"])-1]))?$items[intval($params["ITEM"])-1]:"";
 				}
 			}
 			$template = str_replace($matches[0], $matches[1], $template);

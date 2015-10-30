@@ -56,10 +56,11 @@ Class Photodoska {
         $this->curl->request("http://photodoska.ru/?a=add_ad",$data);
     }
 
-    public function deleteAdverts($save_id = NULL) {
+    public function deleteAdverts($save_id = array()) {
+        if( !is_array($save_id) ) $save_id = array($save_id);
         $arr = $this->parseAdverts();
         foreach($arr as $element) {
-            if($save_id != $element['id']) {
+            if( !in_array($element['id'], $save_id) ) {
                 $this->curl->request("http://photodoska.ru/?a=delete_ad",array("id" => $element['id']));
             }
         }

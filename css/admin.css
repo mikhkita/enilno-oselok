@@ -702,6 +702,8 @@ h1{
                 position: absolute;
                 right: 5px;
                 top: 0px;
+                background-color: #F5E9BC;
+                padding: 0px 0px 0px 6px;
                 color: #D26A44;
             }
             input.error{
@@ -960,6 +962,59 @@ h1{
                                 .b-variant-cont .b-set-input:hover{
                                     background-color: #D26A44;
                                 }
+                        .b-sort-link{
+                            position: absolute;
+                            top: 7px;
+                        }
+                            .b-sort-asc{
+                                left: 5px;
+                            }
+                            .b-sort-desc{
+                                right: 5px;
+                            }
+        .b-add-cont{
+
+        }
+            .b-add-cont select{
+                width: 257px;
+                margin-left: 10px;
+            }
+            .b-add-cont input[type="text"]{
+                padding: 7px 10px 7px;
+                width: 240px;
+            }
+            .b-add-cont input[type="button"]{
+                padding: 6px 20px 7px !important;
+                margin: 0px 0px 0px 10px !important;
+            }
+.fancybox-inner{
+    background-color: #F5E9BC;
+}
+        textarea.error,
+        input.error,
+        select.error{
+            border: 1px solid #D26A44 !important;
+        }
+        textarea.b-other-column{
+            background-color: #AAA182 !important;
+        }
+        .b-add-items{
+
+        }
+            .b-add-items li{
+                border: 1px solid #452716;
+                list-style: none;
+                padding: 5px 10px;
+                background-color: #FFF5D1;
+                margin-top: -1px;
+            }
+                .b-add-items li p{
+
+                }
+                    .b-add-items li p a{
+                        float: right;
+                        margin-left: 20px;
+                    }
         .autocomplete{
             position: absolute;
             left: 0px;
@@ -1834,6 +1889,9 @@ li.ui-autocomplete-category {
     float: none;
     cursor: pointer;
 }
+.b-butt{
+    cursor: pointer;
+}
 
 .yahoo-list {
     margin-top: 20px;
@@ -2119,10 +2177,6 @@ ul.b-filter-list{
                 min-height: 100px;
                 margin: 0 auto;
             }
-
-
-
-
 
 @media screen and (max-width: 1500px){
     .b-hide-title{

@@ -98,6 +98,12 @@ $(document).ready(function(){
             },
             title : null
         },
+        ajax : {
+            complete: function(el,type) {
+                if( type == "error" )
+                    $(".fancybox-inner").html("<div class='b-popup' style='width: 600px;'><h2>Ошибка</h2>"+el.responseText+"</div>");
+            }
+        },
         padding: 0,
         margin: 30,
         beforeShow: function(){
@@ -688,7 +694,61 @@ $(document).ready(function(){
     }
     /* Double-list --------------------------------- Double-list */
 
+    /* Add-items ----------------------------------- Add-items */
+    $("body").on("click","#add-inter-button",function(){
+        if( $("#add-code").val() == "" ){
+            $("#add-code").addClass("error");
+            return false;
+        }
+        $("#add-code").removeClass("error");
+        var li = $('<li><p><span></span><a href="#" class="b-add-remove">Удалить</a></p><input type="hidden" name="" value=""></li>')
+        li.find("span").text($("#add-code").val().trim().toUpperCase()+" ("+$("#add-inter").find("option:selected").text()+")");
+        li.find("input").attr("name","inter["+$("#add-inter").val()+"]").val($("#add-code").val().trim().toUpperCase());
+        $(".b-add-items").append(li);
+    });
+    $("body").on("click",".b-add-remove",function(){
+        $(this).parents("li").remove();
+    });
+    /* Add-items ----------------------------------- Add-items */
+
     /* Variants ------------------------------------ Variants */
+    $("body").on("click", ".b-sort-asc", function(){
+        customHandlers["sortVariants"]();
+        return false;
+    });
+    $("body").on("click", ".b-sort-desc", function(){
+        customHandlers["sortVariants"](-1);
+        return false;
+    });
+
+    customHandlers["sortVariants"] = function(side){
+        var arr = [],
+            isInt = $("#new-variant").attr("data-type") != "varchar",
+            sort = 1,
+            side = (side)?-1:1;
+
+        $(".b-variants li").each(function(){
+            arr.push($(this));
+        });
+
+        arr.sort(function (a,b){
+            a = a.find("input").attr("data-name");
+            b = b.find("input").attr("data-name");
+            if( isInt ){
+                a *= 1;
+                b *= 1;
+            }
+            return (( a > b )?1:(( b == a )?0:-1))*side;
+        });
+
+        $(".b-variants").html();
+        for(var i in arr){
+            arr[i].find("input").val(sort);
+            $(".b-variants").append(arr[i]);
+            sort++;
+        }
+    }
+
     $("body").on("click","#add-variant",function(){
         $(".b-variant-cont .error").addClass("hidden");
         if( !$("#new-variant").hasClass("hidden") ){
@@ -987,11 +1047,10 @@ $(document).ready(function(){
     bindTooltip();
     bindImageUploader();
 
-
-    $(".b-compare button").click(function(){
+    $(".b-compare button").click(function(el,attr){
         $(".compare1,.compare2,.same").html("");
-        var compare1 = $("textarea[name=compare1]").val().split('\n'),
-        compare2 = $("textarea[name=compare2]").val().split('\n');
+        var compare1 = $("#compare1").val().split('\n'),
+            compare2 = $("#compare2").val().split('\n');
         var same = new Array(),diff1 = new Array(),diff2 = new Array(),contain;
 
         $(compare1).each(function(i,bg) {
@@ -1013,9 +1072,23 @@ $(document).ready(function(){
             if(!contain) { $(".compare2").append("<p>"+bg+"</p>"); $(".same").append("<p>"+bg+"</p>"); }
         });
         $(".compare-cont").show();
+
+        
+
+        if( attr != true ){
+            progress.setColor("#D26A44");
+            progress.start(2);
+            $.ajax({
+                url: $(".b-compare").attr("data-url"),
+                data: $(".b-main-column").serialize(),
+                success: function(msg){
+                    progress.end();
+                }
+            });
+        }
     });
 
-
+    if( $(".b-compare button").length ) $(".b-compare button").trigger("click",true);
 
 
 

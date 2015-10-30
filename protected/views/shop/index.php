@@ -211,6 +211,25 @@
                             </ul>
                         </div>  
                     </div>
+                    <? if($this->isRoot()): ?>
+                        <div class="filter-cont one-col">
+                            <h2>Реализация</h2> 
+                            <div class="check-cont ">
+                                <ul class="hor clearfix">
+                                    <? foreach ($filter[43] as $item): ?>
+                                    <li>
+                                        <input type="checkbox" id="f<?=$item['variant_id']?>" name="arr[43][]" value="<?=$item['variant_id']?>" <?=$item['checked']?>>
+                                        <label class="clearfix" for="f<?=$item['variant_id']?>">
+                                            <span class="checked"></span>
+                                            <span class="default"></span>   
+                                            <h3><?=$item['value']?></h3>
+                                        </label>
+                                    </li>
+                                    <? endforeach; ?>
+                                </ul>
+                            </div>  
+                        </div>
+                    <? endif; ?>
                 <? if ($_GET['type'] == 2): ?>
                     <div class="filter-cont">
                         <h2>Город</h2>

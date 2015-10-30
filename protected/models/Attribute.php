@@ -11,7 +11,8 @@
  * @property integer $list
  * @property integer $width
  * @property integer $dynamic
- * @property integer $group_id
+ * @property integer $required
+ * @property string $group_id
  */
 class Attribute extends CActiveRecord
 {
@@ -32,11 +33,12 @@ class Attribute extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('name, attribute_type_id', 'required'),
-			array('attribute_type_id, multi, list, width, dynamic, group_id', 'numerical', 'integerOnly'=>true),
+			array('attribute_type_id, multi, list, width, dynamic, required', 'numerical', 'integerOnly'=>true),
 			array('name', 'length', 'max'=>255),
+			array('group_id', 'length', 'max'=>10),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, name, attribute_type_id, multi, list, width, dynamic, group_id', 'safe', 'on'=>'search'),
+			array('id, name, attribute_type_id, multi, list, width, dynamic, required, group_id', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -51,7 +53,7 @@ class Attribute extends CActiveRecord
 			'goods' => array(self::HAS_MANY, 'GoodAttribute', 'attribute_id'),
 			'goodTypes' => array(self::HAS_MANY, 'GoodTypeAttribute', 'attribute_id'),
 			'type' => array(self::BELONGS_TO, 'AttributeType', 'attribute_type_id'),
-			'variants' => array(self::HAS_MANY, 'AttributeVariant', 'attribute_id','order'=>'variants.sort'),
+			'variants' => array(self::HAS_MANY, 'AttributeVariant', 'attribute_id'),
 			'exports' => array(self::HAS_MANY, 'ExportAttribute', 'attribute_id'),
 			'group' => array(self::BELONGS_TO, 'Attribute', 'group_id'),
 		);
@@ -70,6 +72,7 @@ class Attribute extends CActiveRecord
 			'list' => 'Список',
 			'width' => 'Ширина в пикселях',
 			'dynamic' => 'Динамический атрибут',
+			'required' => 'Обязательное',
 			'group_id' => 'Привязка к атрибуту',
 		);
 	}
@@ -99,22 +102,12 @@ class Attribute extends CActiveRecord
 		$criteria->compare('list',$this->list);
 		$criteria->compare('width',$this->width);
 		$criteria->compare('dynamic',$this->dynamic);
-		$criteria->compare('group_id',$this->group_id);
+		$criteria->compare('required',$this->required);
+		$criteria->compare('group_id',$this->group_id,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 		));
-	}
-
-	/**
-	 * Returns the static model of the specified AR class.
-	 * Please note that you should have this exact method in all your CActiveRecord descendants!
-	 * @param string $className active record class name.
-	 * @return Attribute the static model class
-	 */
-	public static function model($className=__CLASS__)
-	{
-		return parent::model($className);
 	}
 
 	public function beforeSave(){
@@ -135,4 +128,15 @@ class Attribute extends CActiveRecord
   		}
   		return parent::beforeDelete();
  	}
+
+	/**
+	 * Returns the static model of the specified AR class.
+	 * Please note that you should have this exact method in all your CActiveRecord descendants!
+	 * @param string $className active record class name.
+	 * @return Attribute the static model class
+	 */
+	public static function model($className=__CLASS__)
+	{
+		return parent::model($className);
+	}
 }

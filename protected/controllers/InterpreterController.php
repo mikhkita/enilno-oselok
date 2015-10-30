@@ -28,6 +28,7 @@ class InterpreterController extends Controller
 
 		if(isset($_POST['Interpreter']))
 		{
+			$_POST["Interpreter"]["category_id"] = 5;
 			$model->attributes=$_POST['Interpreter'];
 			if($model->save()){
 				$this->actionAdminIndex(true);
@@ -114,12 +115,12 @@ class InterpreterController extends Controller
 		$criteria = new CDbCriteria();
 		$criteria->condition = "good_type_id=".$inter->good_type_id;
 		$criteria->limit = 30;
-		$criteria->with = array("fields.variant");
+		// $criteria->with = array("fields.variant");
 
         $model = Good::model()->findAll($criteria);
         
         $criteria = new CDbCriteria();
-		$criteria->with = array("goodTypes","variants");
+		$criteria->with = array("goodTypes","variants.variant"=>array("order"=>"variant.sort ASC"));
 		$criteria->condition = "goodTypes.good_type_id=".$inter->good_type_id." AND dynamic=1";
         $modelDyn = Attribute::model()->findAll($criteria);
 
@@ -138,7 +139,6 @@ class InterpreterController extends Controller
         foreach ($model as $item) {
         	$data[] = array("ID"=>$item->fields_assoc[3]->value,"VALUE"=>$this->replaceToBr(Interpreter::generate($id,$item,$dynObjects)));
         }
-
 
 		$this->renderPartial('adminPreview',array(
 			'data'=>$data,

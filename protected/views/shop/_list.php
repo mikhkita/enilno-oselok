@@ -33,7 +33,7 @@
     <ul>
     	<? foreach ($goods as $good): ?>
 			<li class="clearfix good">
-                <? if($this->user->role->code == "root"): ?>
+                <? if($this->isRoot()): ?>
                     <a href="<?=Yii::app()->createUrl('/good/admindelete',array('id' => $good->id,'shop' => true))?>" class="good-del">x</a>
                 <? endif; ?>
                 <a href="<?=Yii::app()->createUrl('/shop/detail',array('type'=> $_GET['type'],"id"=>$good->fields_assoc[3]->value))?>">

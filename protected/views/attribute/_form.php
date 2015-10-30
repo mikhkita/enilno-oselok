@@ -38,6 +38,12 @@
 	</div>
 
 	<div class="row">
+		<?php echo $form->CheckBox($model,'required',array("class"=>"b-checkbox")); ?>
+		<?php echo $form->labelEx($model,'required'); ?>
+		<?php echo $form->error($model,'required'); ?>
+	</div>
+
+	<div class="row">
 		<?php echo $form->labelEx($model,'group_id'); ?>
 		<?php echo $form->dropDownList($model, 'group_id', array(0=>"")+CHtml::listData(Attribute::model()->findAll( ((isset($_GET["id"]))?("id!=".$_GET["id"]):NULL ) ), 'id', 'name')); ?>
 		<?php echo $form->error($model,'group_id'); ?>

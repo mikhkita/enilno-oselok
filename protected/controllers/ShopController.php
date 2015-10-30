@@ -50,6 +50,7 @@ class ShopController extends Controller
 
 	public function actionIndex($countGood = false)
 	{	
+		$start = microtime(true);
 		$count=0;
         $condition="";
         $check = $this->getChecked( (isset($_GET["arr"]))?$_GET["arr"]:array() );
@@ -118,10 +119,10 @@ class ShopController extends Controller
                     'select' => false,
                     'condition' => 'good_type_id='.$_GET['type']
                     ),
-                'variant.attribute'
+                'variant'
 
                 );
-            $criteria->condition = 't.attribute_id=9 OR t.attribute_id=27 OR t.attribute_id=28 OR ';
+            $criteria->condition = 't.attribute_id=9 OR t.attribute_id=43 OR t.attribute_id=27 OR t.attribute_id=28 OR ';
             if($_GET['type']==1) {
             	$criteria->condition .= 't.attribute_id=7 OR t.attribute_id=8 OR t.attribute_id=23 OR t.attribute_id=16';
         	}	
@@ -131,7 +132,7 @@ class ShopController extends Controller
 
         	// $criteria->addInCondition("good.id",$goods_no_photo);
             $criteria->group = 't.variant_id';
-            $criteria->order = 'attribute.sort ASC';
+            $criteria->order = 'variant.sort ASC';
 
             $model = GoodAttribute::model()->findAll($criteria);
             $filter = array();
@@ -150,6 +151,19 @@ class ShopController extends Controller
 	                	}
    				array_push($filter[$item->attribute_id], $temp);
    			}
+
+   			foreach ($filter as $attr_id => $attr) {
+   				if( $attr_id == 43 ){
+					$list = $this->getListValue(41);
+					foreach ($filter[$attr_id] as $i => &$variant) {
+						$variant["value"] = $list[$variant["variant_id"]];
+					}
+   				}
+   			}
+
+  //  			list($queryCount, $queryTime) = Yii::app()->db->getStats();
+		// echo "Query count: $queryCount, Total query time: ".sprintf('%0.5f',$queryTime)."s";
+		// printf('<br>Прошло %.4F сек.<br>', microtime(true) - $start);	
 
 			$this->render('index',array(
 				'goods'=>$goods,

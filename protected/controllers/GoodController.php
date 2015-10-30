@@ -34,35 +34,24 @@ class GoodController extends Controller
 
 		if(isset($_POST['Good_attr']) && $model->save())
 		{
+			$values = array();
 			foreach ($_POST['Good_attr'] as $attr_id => $value) {
-				if(!is_array($value) ) {
-					if($value) {
-						$attr = new GoodAttribute;
-						$attr->good_id = $model->id;
-						$attr->attribute_id = $attr_id;
-						$attr[$this->getAttrType($model,$attr_id)] = $value;
-						$attr->save();
-					}
-				} else if(isset($value['single']) ){
-					if($value['single']) {
-						$attr = new GoodAttribute;
-						$attr->good_id = $model->id;
-						$attr->attribute_id = $attr_id;
-						$attr->variant_id = $value['single'];
-						$attr->save();
+				if(!is_array($value) || isset($value['single']) ) {
+					$tmp = array("good_id"=>$model->id,"attribute_id"=>$attr_id,"int_value"=>NULL,"varchar_value"=>NULL,"float_value"=>NULL,"text_value"=>NULL,"variant_id"=>NULL);
+					if(!is_array($value) && $value != ""){
+						$tmp[$this->getAttrType($model,$attr_id)] = $value;
+						$values[] = $tmp;
+					}else if(isset($value['single']) && $value['single']){
+						$tmp["variant_id"] = $value['single'];
+						$values[] = $tmp;
 					}
 				} else {
-					if(!empty($value)) {
-						foreach ($value as $variant) {
-							$attr = new GoodAttribute;
-							$attr->good_id = $model->id;
-							$attr->attribute_id = $attr_id;
-							$attr->variant_id = $variant;
-							$attr->save();
-						}
-					}
+					if(!empty($value))
+						foreach ($value as $variant)
+							$values[] = array("good_id"=>$model->id,"attribute_id"=>$attr_id,"int_value"=>NULL,"varchar_value"=>NULL,"float_value"=>NULL,"text_value"=>NULL,"variant_id"=>$variant);
 				}
 			}
+			$this->insertValues(GoodAttribute::tableName(),$values);
 
 			Good::updatePrices(array($model->id));
 
@@ -87,36 +76,28 @@ class GoodController extends Controller
 		if(isset($_POST['Good_attr']))
 		{
 			GoodAttribute::model()->deleteAll('good_id='.$id);
+			$values = array();
 			foreach ($_POST['Good_attr'] as $attr_id => $value) {
-				if(!is_array($value) ) {
-					if($value != "") {
-						$attr = new GoodAttribute;
-						$attr->good_id = $id;
-						$attr->attribute_id = $attr_id;
-						$attr[$this->getAttrType($model,$attr_id)] = $value;
-						$attr->save();
-					}
-				} else if(isset($value['single']) ){
-					if($value['single']) {
-						$attr = new GoodAttribute;
-						$attr->good_id = $id;
-						$attr->attribute_id = $attr_id;
-						$attr->variant_id = $value['single'];
-						$attr->save();
+				if(!is_array($value) || isset($value['single']) ) {
+					$tmp = array("good_id"=>$id,"attribute_id"=>$attr_id,"int_value"=>NULL,"varchar_value"=>NULL,"float_value"=>NULL,"text_value"=>NULL,"variant_id"=>NULL);
+					if(!is_array($value) && $value != ""){
+						$tmp[$this->getAttrType($model,$attr_id)] = $value;
+						$values[] = $tmp;
+					}else if(isset($value['single']) && $value['single']){
+						$tmp["variant_id"] = $value['single'];
+						$values[] = $tmp;
 					}
 				} else {
-					if(!empty($value)) {
-						foreach ($value as $variant) {
-							$attr = new GoodAttribute;
-							$attr->good_id = $id;
-							$attr->attribute_id = $attr_id;
-							$attr->variant_id = $variant;
-							$attr->save();
-						}
-					}
+					if(!empty($value))
+						foreach ($value as $variant)
+							$values[] = array("good_id"=>$id,"attribute_id"=>$attr_id,"int_value"=>NULL,"varchar_value"=>NULL,"float_value"=>NULL,"text_value"=>NULL,"variant_id"=>$variant);
 				}
 			}
+			$this->insertValues(GoodAttribute::tableName(),$values);
+
 			Good::updatePrices(array($id));
+
+			$model->update();
 			$this->redirect( Yii::app()->createUrl('good/adminindex',array('goodTypeId'=>$goodTypeId,'partial'=>true,'GoodFilter_page' => $_GET["GoodFilter_page"])) );
 
 		}else{
@@ -146,20 +127,6 @@ class GoodController extends Controller
 	public function getAttrType($model, $attrId) {
 		foreach ($model->type->fields as $attr) {
 			if($attr->attribute_id == $attrId) return $attr->attribute->type->code."_value";
-		}
-	}
-	public function actionAdminEdit($id)
-	{
-		$model=$this->loadModel($id);
-
-		if( isset($_POST['Edit']) )
-		{
-			$this->updateVariants($model);
-			$this->actionAdminIndex(true);
-		}else{
-			$this->renderPartial('adminEdit',array(
-				'model'=>$model,
-			));
 		}
 	}
 
@@ -274,7 +241,7 @@ class GoodController extends Controller
 			$this->layout='admin';
 		}
 
-		print_r($_POST["int"]);
+		// print_r($_POST["int"]);
 
 		if( $goodTypeId ){
 			unset($_GET["id"]);
@@ -344,7 +311,7 @@ class GoodController extends Controller
 
 		foreach ($array_names as $key => $val) {
 			if( isset($result[$key]) ){
-				$list = $this->getListValue(41);
+				$list = $this->getListValue($val);
 				if( isset($result[$key]["VARIANTS"]) )
 					foreach ($result[$key]["VARIANTS"] as $i => &$variant) {
 						$variant = $list[$i];
@@ -383,79 +350,6 @@ class GoodController extends Controller
 		if($model===null)
 			throw new CHttpException(404,'The requested page does not exist.');
 		return $model;
-	}
-
-	public function updateVariants($model){
-		$tableName = GoodVariant::tableName();
-
-		if( count($model->variants) ){
-			$modelArr = array();
-			foreach ($model->variants as $key => $value) {
-				$modelArr[$value->id] = $value->sort;
-			}
-
-
-			if( isset($_POST["Variants"]) ){
-				$delArr = array_diff_key($modelArr,$_POST["Variants"]);
-			}else{
-				$delArr = $modelArr;
-			}
-			$this->deleteVariants($delArr);
-
-			if( isset($_POST["Variants"]) ){
-				$tmpName = "tmp_".md5(rand().time());
-
-				Yii::app()->db->createCommand()->createTable($tmpName, array(
-				    'id' => 'int NOT NULL',
-				    'int_value' => 'int NULL',
-				    'varchar_value' => 'varchar(255) NULL',
-				    'float_value' => 'float NULL',
-				    'attribute_id' => 'int NULL',
-				    'sort' => 'int NOT NULL',
-				    0 => 'PRIMARY KEY (`id`)'
-				), 'ENGINE=InnoDB');
-
-				$sql = "INSERT INTO `$tmpName` (`id`,`attribute_id`,`sort`) VALUES ";
-
-				$values = array();
-				foreach ($_POST["Variants"] as $key => $value) {
-					$values[] = "('".$key."','".$model->id."','".$value."')";
-				}
-
-				$sql .= implode(",", $values);
-
-				if( Yii::app()->db->createCommand($sql)->execute() ){
-					$sql = "INSERT INTO `$tableName` SELECT * FROM `$tmpName` ON DUPLICATE KEY UPDATE $tableName.sort = $tmpName.sort";
-					$result = Yii::app()->db->createCommand($sql)->execute();
-					
-					Yii::app()->db->createCommand()->dropTable($tmpName);
-				}
-			}
-		}	
-
-		if( isset($_POST["VariantsNew"]) ){
-			$sql = "INSERT INTO `$tableName` (`attribute_id`,`".$model->type->code."_value`,`sort`) VALUES ";
-
-			$values = array();
-			foreach ($_POST["VariantsNew"] as $key => $value) {
-				$values[] = "('".$model->id."','".$key."','".$value."')";
-			}
-
-			$sql .= implode(",", $values);
-
-			Yii::app()->db->createCommand($sql)->execute();
-		}
-	}
-
-	public function deleteVariants($delArr){
-		if( count($delArr) ){
-			$pks = array();
-
-			foreach ($delArr as $key => $value) {
-				$pks[] = $key;
-			}
-			GoodVariant::model()->deleteByPk($pks);
-		}
 	}
 
 	public function actionUpdatePrices(){

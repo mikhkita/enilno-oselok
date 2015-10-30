@@ -8,10 +8,10 @@
 	<?php echo $form->errorSummary($model); ?>
 	<div class="row">
 		<?php echo $form->labelEx($model,'name'); ?>
-		<?php echo $form->textField($model,'name',array('maxlength'=>255,'required'=>true,'disabled'=> !( $this->getUserRole() == "root" ) )); ?>
+		<?php echo $form->textField($model,'name',array('maxlength'=>255,'required'=>true,'disabled'=> !($this->isRoot()) )); ?>
 		<?php echo $form->error($model,'name'); ?>
 	</div>
-<? if( $this->getUserRole() == "root" ):  ?>
+<? if($this->isRoot()): ?>
 	<div class="clearfix">
 		<div class="row row-half">
 			<?php echo $form->labelEx($model,'code'); ?>
@@ -30,7 +30,7 @@
 		<?php echo $form->textArea($model,'value',array('class'=>"b-settings-textarea")); ?>
 		<?php echo $form->error($model,'value'); ?>
 	</div>
-<? if( Yii::app()->user->checkAccess("rootActions") ): ?>
+<? if($this->isRoot()): ?>
 	<div class="row">
 		<?php echo $form->labelEx($model,'rule_code'); ?>
 		<?php echo $form->DropDownList($model,'rule_code',CHtml::listData(Rule::model()->findAll(array('order'=>'name ASC')), 'code', 'name')); ?>

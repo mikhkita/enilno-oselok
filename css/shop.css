@@ -318,6 +318,10 @@ input:-moz-placeholder {
 				.three-cols .check-cont li{
 					width: 33% !important;
 				}
+				.one-col ul li:nth-child(2n),
+				.one-col .check-cont li{
+					width: 100% !important;
+				}
 					.b-main .b-block .b-main-filter .filter-cont .check-cont li input {
 						display: none;
 					}
@@ -352,6 +356,9 @@ input:-moz-placeholder {
 							float: left;
 							margin-left: 7px;
 							max-width: 100px;
+						}
+						.b-main .b-block .b-main-filter .filter-cont.one-col .check-cont li label h3 {
+							max-width: none;
 						}
 	.b-main .b-block .b-main-items{
 		width: 625px;

@@ -31,7 +31,7 @@
 		<?php echo $form->error($model,'sort'); ?>
 	</div>
 
-	<? if( Yii::app()->user->checkAccess("rootActions") ): ?>
+	<? if($this->isRoot()): ?>
 	<div class="row">
 		<?php echo $form->labelEx($model,'rule_code'); ?>
 		<?php echo $form->DropDownList($model,'rule_code',CHtml::listData(Rule::model()->findAll(array('order'=>'name ASC')), 'code', 'name')); ?>

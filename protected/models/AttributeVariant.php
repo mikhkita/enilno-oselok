@@ -6,7 +6,6 @@
  * The followings are the available columns in table 'attribute_variant':
  * @property string $attribute_id
  * @property string $variant_id
- * @property integer $sort
  */
 class AttributeVariant extends CActiveRecord
 {
@@ -26,12 +25,11 @@ class AttributeVariant extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('attribute_id, variant_id, sort', 'required'),
-			array('sort', 'numerical', 'integerOnly'=>true),
+			array('attribute_id, variant_id', 'required'),
 			array('attribute_id, variant_id', 'length', 'max'=>10),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('attribute_id, variant_id, sort', 'safe', 'on'=>'search'),
+			array('attribute_id, variant_id', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -56,7 +54,6 @@ class AttributeVariant extends CActiveRecord
 		return array(
 			'attribute_id' => 'Attribute',
 			'variant_id' => 'Variant',
-			'sort' => 'Sort',
 		);
 	}
 
@@ -80,7 +77,6 @@ class AttributeVariant extends CActiveRecord
 
 		$criteria->compare('attribute_id',$this->attribute_id,true);
 		$criteria->compare('variant_id',$this->variant_id,true);
-		$criteria->compare('sort',$this->sort);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

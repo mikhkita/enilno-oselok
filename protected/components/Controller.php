@@ -124,7 +124,11 @@ class Controller extends CController
         foreach ($values as $value) {
             $item = array();
             foreach ($value as $el) {
-                $item[] = "'".addslashes($el)."'";
+                if( $el === NULL ){
+                    $item[] = "NULL";
+                }else{
+                    $item[] = "'".addslashes($el)."'";
+                }
             }
             $vals[] = "(".implode(",", $item).")";
         }
@@ -452,6 +456,10 @@ class Controller extends CController
         }
 
         return $result;
+    }
+
+    public function isRoot(){
+        return $this->user->role->code == "root";
     }
 
     public function startTimer(){

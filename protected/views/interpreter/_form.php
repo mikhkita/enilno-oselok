@@ -20,18 +20,12 @@
 	</div>
 
 	<div class="row">
-		<?php echo $form->labelEx($model,'category_id'); ?>
-		<?php echo $form->dropDownList($model, 'category_id', CHtml::listData(Category::model()->findAll(), 'id', 'name')); ?>
-		<?php echo $form->error($model,'category_id'); ?>
-	</div>
-
-	<div class="row">
 		<?php echo $form->labelEx($model,'template'); ?>
 		<?php echo $form->textArea($model,'template',array('maxlength'=>20000,'required'=>true,'style'=>'height: 300px;')); ?>
 		<?php echo $form->error($model,'template'); ?>
 	</div>
 
-	<? if( Yii::app()->user->checkAccess("rootActions") ): ?>
+	<? if($this->isRoot()): ?>
 	<div class="row">
 		<?php echo $form->labelEx($model,'rule_code'); ?>
 		<?php echo $form->DropDownList($model,'rule_code',CHtml::listData(Rule::model()->findAll(array('order'=>'name ASC')), 'code', 'name')); ?>

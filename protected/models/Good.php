@@ -49,6 +49,7 @@ class Good extends CActiveRecord
 		return array(
 			'fields' => array(self::HAS_MANY, 'GoodAttribute', 'good_id'),
 			'type' => array(self::BELONGS_TO, 'GoodType', 'good_type_id'),
+			'adverts' => array(self::HAS_MANY, 'Advert', 'good_id'),
 		);
 	}
 
@@ -93,8 +94,8 @@ class Good extends CActiveRecord
 
 	public function updatePrices($ids = array()){
 		$codes = array(
-			1 => 95,
-			2 => 94,
+			1 => $this->getParam("OTHER","PRICE_INTERPRETER_TIRE"),
+			2 => $this->getParam("OTHER","PRICE_INTERPRETER_DISC"),
 			// 3 => 95,
 		);
 
@@ -134,6 +135,7 @@ class Good extends CActiveRecord
 		$values = array();
 		foreach ($model as $good) {
 			$newPrice = Interpreter::generate($codes[$good->good_type_id],$good);
+			
 			$values[] = "('".$good->id."','51',".( ($newPrice != "")?("'".$newPrice."'"):"NULL" ).")";
 		}
 
@@ -209,7 +211,7 @@ class Good extends CActiveRecord
         if(isset($options["attributes"]) && count($options["attributes"]))
 			foreach ($options["attributes"] as $id => $attribute_vals) {		
 				foreach ($attribute_vals as $variant_id) {
-					$criteria->addCondition('fields.variant_id='.$variant_id,'OR');
+					$criteria->addCondition('good_type_id='.$options["good_type_id"].' AND fields.variant_id='.$variant_id,'OR');
 				}
 				$count++;
 			}
@@ -305,6 +307,38 @@ class Good extends CActiveRecord
 			}
 			$this->setAttribute("fields_assoc",$fields,true);
 		}
+	}
+
+	public function update(){
+		if( $this->isDiff() ){
+			echo "diff";
+		}else{
+			echo "NOT diff";
+		}
+		die();
+	}
+
+	public function isDiff(){
+		$newModel = Good::model()->findByPk($this->id);
+
+		if( count($newModel->fields_assoc) != count($this->fields_assoc) ) return true;
+
+		if( $this->compareModels($this,$newModel) ) return true;
+		if( $this->compareModels($newModel,$this) ) return true;
+
+		return false;
+	}
+
+	public function compareModels($model1, $model2){
+		foreach ($model1->fields_assoc as $key => $value) {
+			if( isset($model2->fields_assoc[$key]) ){
+				if( is_array($model2->fields_assoc[$key]) ) die("МНОГО БУКАФ");
+				if( $model2->fields_assoc[$key]->value != $value->value ) return true;
+			}else{
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public function beforeDelete(){

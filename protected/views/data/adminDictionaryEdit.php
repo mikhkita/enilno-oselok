@@ -9,7 +9,7 @@
 					<td class="tleft"><?=$item->value?></td>
 					<td class="b-table-td-editable">
 						<input type="hidden" name="Values[<?=$i?>][attribute_1]" value="<?=$item->variant_id?>">
-						<input type="text" name="Values[<?=$i?>][value]" value="<?=((isset($values[$item->variant_id]))?$values[$item->variant_id]:"")?>">
+						<textarea name="Values[<?=$i?>][value]"><?=((isset($values[$item->variant_id]))?$values[$item->variant_id]:"")?></textarea>
 					</td>
 				</tr>
 			<? endforeach; ?>
@@ -20,3 +20,4 @@
 		<? endif; ?>
 	</table>
 <?php $this->endWidget(); ?>
+<a href="" data-var="<?php echo Yii::app()->createUrl('/data/adminvarsupdate',array('none'=>'1','id'=>''))?>" data-table="<?=(Yii::app()->request->hostInfo."/admin/data/tableedit?id=")?>" class="ajax-form ajax-update b-tool b-tool-update hidden" id="b-update-button" ></a>
