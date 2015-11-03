@@ -83,4 +83,10 @@ $(document).ready(function(){
         autoplaySpeed: 6000
         // fade: true
     });
+
+    $(".goods li").hover(function(){
+        $(this).find(".good-hover").slideDown();
+    }, function(){
+        $(this).find(".good-hover").slideUp();
+    });
 });
