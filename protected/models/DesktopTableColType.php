@@ -1,20 +1,21 @@
 <?php
 
 /**
- * This is the model class for table "vars".
+ * This is the model class for table "desktop_table_col_type".
  *
- * The followings are the available columns in table 'vars':
+ * The followings are the available columns in table 'desktop_table_col_type':
+ * @property integer $id
  * @property string $name
- * @property string $value
+ * @property string $code
  */
-class Vars extends CActiveRecord
+class DesktopTableColType extends CActiveRecord
 {
 	/**
 	 * @return string the associated database table name
 	 */
 	public function tableName()
 	{
-		return 'data_vars';
+		return 'desktop_table_col_type';
 	}
 
 	/**
@@ -25,11 +26,12 @@ class Vars extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('name, value', 'required'),
-			array('name', 'length', 'max'=>50),
+			array('name, code', 'required'),
+			array('name', 'length', 'max'=>100),
+			array('code', 'length', 'max'=>10),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('name, value', 'safe', 'on'=>'search'),
+			array('id, name, code', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -50,8 +52,9 @@ class Vars extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'name' => 'Ключ',
-			'value' => 'Значение',
+			'id' => 'ID',
+			'name' => 'Name',
+			'code' => 'Code',
 		);
 	}
 
@@ -73,8 +76,9 @@ class Vars extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
+		$criteria->compare('id',$this->id);
 		$criteria->compare('name',$this->name,true);
-		$criteria->compare('value',$this->value,true);
+		$criteria->compare('code',$this->code,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -85,7 +89,7 @@ class Vars extends CActiveRecord
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return Vars the static model class
+	 * @return DesktopTableColType the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{

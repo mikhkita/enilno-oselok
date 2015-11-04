@@ -15,7 +15,7 @@ class DictionaryVariant extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'dictionary_variant';
+		return 'data_dictionary_variant';
 	}
 
 	/**

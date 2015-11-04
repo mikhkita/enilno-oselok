@@ -332,7 +332,6 @@ class Good extends CActiveRecord
 	public function compareModels($model1, $model2){
 		foreach ($model1->fields_assoc as $key => $value) {
 			if( isset($model2->fields_assoc[$key]) ){
-				if( is_array($model2->fields_assoc[$key]) ) die("МНОГО БУКАФ");
 				if( $model2->fields_assoc[$key]->value != $value->value ) return true;
 			}else{
 				return true;

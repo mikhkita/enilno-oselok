@@ -1,20 +1,21 @@
 <?php
 
 /**
- * This is the model class for table "vars".
+ * This is the model class for table "desktop_table".
  *
- * The followings are the available columns in table 'vars':
+ * The followings are the available columns in table 'desktop_table':
+ * @property string $id
  * @property string $name
- * @property string $value
+ * @property string $folder_id
  */
-class Vars extends CActiveRecord
+class DesktopTable extends CActiveRecord
 {
 	/**
 	 * @return string the associated database table name
 	 */
 	public function tableName()
 	{
-		return 'data_vars';
+		return 'desktop_table';
 	}
 
 	/**
@@ -25,11 +26,12 @@ class Vars extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('name, value', 'required'),
-			array('name', 'length', 'max'=>50),
+			array('name, folder_id', 'required'),
+			array('name', 'length', 'max'=>100),
+			array('folder_id', 'length', 'max'=>10),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('name, value', 'safe', 'on'=>'search'),
+			array('id, name, folder_id', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -41,6 +43,9 @@ class Vars extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'folder' => array(self::BELONGS_TO, 'Desktop', 'folder_id'),
+			'cols' => array(self::HAS_MANY, 'DesktopTableCol', 'table_id', 'order' => "cols.sort ASC"),
+			'rows' => array(self::HAS_MANY, 'DesktopTableRow', 'table_id', 'order' => "rows.id ASC"),
 		);
 	}
 
@@ -50,8 +55,9 @@ class Vars extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'name' => 'Ключ',
-			'value' => 'Значение',
+			'id' => 'ID',
+			'name' => 'Название',
+			'folder_id' => 'Папка',
 		);
 	}
 
@@ -73,8 +79,9 @@ class Vars extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
+		$criteria->compare('id',$this->id,true);
 		$criteria->compare('name',$this->name,true);
-		$criteria->compare('value',$this->value,true);
+		$criteria->compare('folder_id',$this->folder_id,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -85,7 +92,7 @@ class Vars extends CActiveRecord
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return Vars the static model class
+	 * @return DesktopTable the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{

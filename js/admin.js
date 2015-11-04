@@ -213,10 +213,13 @@ $(document).ready(function(){
     }
 
     function bindDelete(url,filter){
-        $(document).unbind("keypress");
-        $(document).bind("keypress",function( event ) {
+        $(document).unbind("keydown");
+        $(document).bind("keydown",function( event ) {
             if ( event.which == 13 ) {
-                $(".fancybox-inner .b-delete-yes").click();
+                $(".b-delete-yes").trigger("click");
+                $(".qtip").remove();
+                $(document).unbind("keydown");
+                return false;
             }
         });
 
@@ -298,7 +301,8 @@ $(document).ready(function(){
             tinymce.triggerSave();
             if( $(this).valid() && !$(this).find("input[type=submit]").hasClass("blocked") ){
                 var $form = $(this),
-                    url = $form.attr("action");
+                    url = $form.attr("action"),
+                    data = $form.serialize();
 
                 $(this).find("input[type=submit]").addClass("blocked");
 
@@ -324,7 +328,7 @@ $(document).ready(function(){
                 $.ajax({
                     type: $form.attr("method"),
                     url: url,
-                    data: $form.serialize(),
+                    data: data,
                     success: function(msg){
                         progress.end(function(){
                             $form.find("input[type=submit]").removeClass("blocked");
@@ -339,6 +343,7 @@ $(document).ready(function(){
                 $(".fancybox-overlay").animate({
                     scrollTop : 0
                 },200);
+                $("input.error,textarea.error").focus();
             }
             return false;
         });
@@ -431,28 +436,29 @@ $(document).ready(function(){
 
     /* Hot keys ------------------------------------ Hot keys */
     
-    var cmddown = false,
-        ctrldown = false,
+    var ctrldown = false,
         shiftdown = false;
     function down(e){
         // alert(e.keyCode);
-        if( e.keyCode == 13 && ( cmddown || ctrldown ) ){
+        if( e.keyCode == 13 && ctrldown ){
             if( !$(".b-popup form").length ){
                 $(".ajax-create").click();
             }else{
-                $(".fancybox-wrap form").trigger("submit",[false]);
+                $(".fancybox-wrap form").trigger("submit",false);
             }
         }
         if( e.keyCode == 13 ){
             enterVariantsHandler();
         }
-        if( e.keyCode == 91 ) cmddown = true;
-        if( e.keyCode == 17 ) ctrldown = true;
+        if( e.keyCode == 91 || e.keyCode == 17 ){
+            ctrldown = true;
+        }
         if( e.keyCode == 27 && $(".fancybox-wrap").length ) $.fancybox.close();
     }
     function up(e){
-        if( e.keyCode == 91 ) cmddown = false;
-        if( e.keyCode == 17 ) ctrldown = false;
+        if( e.keyCode == 91 || e.keyCode == 17 ){
+            ctrldown = false;
+        }
     }
     // if( $(".ajax-create").length ){
         $(document).keydown(down);
@@ -697,14 +703,20 @@ $(document).ready(function(){
     /* Add-items ----------------------------------- Add-items */
     $("body").on("click","#add-inter-button",function(){
         if( $("#add-code").val() == "" ){
-            $("#add-code").addClass("error");
+            $("#add-code").addClass("error").focus();
             return false;
+        }
+        var val = $("#add-code").val().trim();
+        if( $(this).attr("data-case") ){
+            if( $(this).attr("data-case") == "upper" )
+                val = val.toUpperCase();
         }
         $("#add-code").removeClass("error");
         var li = $('<li><p><span></span><a href="#" class="b-add-remove">Удалить</a></p><input type="hidden" name="" value=""></li>')
-        li.find("span").text($("#add-code").val().trim().toUpperCase()+" ("+$("#add-inter").find("option:selected").text()+")");
-        li.find("input").attr("name","inter["+$("#add-inter").val()+"]").val($("#add-code").val().trim().toUpperCase());
+        li.find("span").text(val+" ("+$("#add-inter").find("option:selected").text()+")");
+        li.find("input").attr("name","inter["+$("#add-inter").val()+"]").val(val);
         $(".b-add-items").append(li);
+        $("#add-code").val("").focus();
     });
     $("body").on("click",".b-add-remove",function(){
         $(this).parents("li").remove();
@@ -1090,6 +1102,28 @@ $(document).ready(function(){
 
     if( $(".b-compare button").length ) $(".b-compare button").trigger("click",true);
 
-
+    if( $(".b-kit-switcher").length ){
+        $("body").on("click",".b-kit-switcher",function(){
+            toggleMode(!$(this).hasClass("checked"));
+            return false;
+        });
+        function toggleMode(tog){
+            if( tog ){
+                $(".b-kit-switcher").addClass("checked");
+                $(".b-kit-not-update").removeClass("b-kit-not-update").addClass("b-kit-update");
+                if( $(".b-kit-switcher").attr("data-on") ) customHandlers[$(".b-kit-switcher").attr("data-on")]();
+            }else{
+                $(".b-kit-switcher").removeClass("checked");
+                $(".b-kit-update").removeClass("b-kit-update").addClass("b-kit-not-update");
+                if( $(".b-kit-switcher").attr("data-off") ) customHandlers[$(".b-kit-switcher").attr("data-off")]();
+            }
+        }
+        customHandlers["setEditable"] = function(){
+            $(".b-desktop").addClass("b-editable");
+        }
+        customHandlers["unsetEditable"] = function(){
+            $(".b-desktop").removeClass("b-editable");
+        }
+    }
 
 });

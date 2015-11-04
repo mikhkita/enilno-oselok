@@ -17,7 +17,7 @@ class Table extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'table';
+		return 'data_table';
 	}
 
 	/**

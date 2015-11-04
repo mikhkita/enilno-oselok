@@ -16,7 +16,7 @@ class Dictionary extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'dictionary';
+		return 'data_dictionary';
 	}
 
 	/**

@@ -17,7 +17,7 @@ class CubeVariant extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'cube_variant';
+		return 'data_cube_variant';
 	}
 
 	/**

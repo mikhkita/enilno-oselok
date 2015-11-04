@@ -91,7 +91,7 @@ class PlaceController extends Controller
 
 		print_r(Place::getValues(Place::getInters(1,2),Good::model()->find("good_type_id=2")));
 
-		Good::model()->find("good_type_id=2")->update();
+		// Good::model()->find("good_type_id=2")->update();
 
 		if (isset($_GET['Place']))
         {
