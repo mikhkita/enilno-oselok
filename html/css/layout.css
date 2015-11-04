@@ -53,7 +53,8 @@ li{
 	list-style: none;
 }
 h1,h2,h3,h4,h5,h6{
-	font-weight: 100;
+	font-weight: 300;
+	font-size: 14px;
 }
 label.error{
 	display: none !important;
@@ -408,7 +409,7 @@ height: 300px;}
 			.b-main-slider .slide .b-block p {
 				font-size: 18px;
 				font-family: "Roboto";
-				font-weight: 500;
+				font-weight: 300;
 				color: rgb(255, 255, 255);
 				line-height: 1.667;
 				width: 540px;
@@ -736,13 +737,19 @@ height: 300px;}
 }
 	.goods li {
 		float: left;
-		padding: 15px 10px;
+		padding: 15px 10px 12px;
 		width: 160px;
 		box-sizing: border-box;
 		box-shadow: 0px 0px 4.85px 0.15px rgba(32, 32, 32, 0.3);
 		border-radius: 2px;
-
+		position: relative;
+		margin-right: 18px;
+		margin-bottom: 30px;
+		cursor: pointer;
 	}	
+	.goods li:nth-child(4n) {
+		margin-right: 0;
+	}
 		.goods li .good-img{
 			width: 140px;
 			height: 110px;
@@ -750,26 +757,62 @@ height: 300px;}
 			background-position: 50%;
 		}
 		.goods li .params-cont {
-
+			margin-top: 12px;
 		}
-			.goods li .params-cont h4{
-			
+			.goods li h4{
+				font-weight: 500;
+				color: #ffbc00;
+				text-decoration: underline;
+				margin-bottom: 12px;
 			}
-			.goods li .params-cont h5{
-			
+			.goods li h5{
+				color: #848383;
+				font-size: 12px;
+				margin-bottom: 6px;
 			}
-				.goods li .params-cont h5 span{
-			
+				.goods li h5 span{
+					font-weight: 500;
+					color: #2a2b2b;
+					font-size: 14px;
 				}
-			.goods li .params-cont h6{
-			
+			.goods li h6{
+				color: #3c3c3c;
+				margin-top: 10px;
 			}
-			.goods li .params-cont h3{
-			
+			.goods li h3{
+				font-size: 12px;
+				color: #424242;
+				margin-top: 10px;
 			}
-				.goods li .params-cont h3 span {
-
+				.goods li h3 span {
+					font-weight: 500;
 				}
+			.goods li a {
+				color: #181818;
+				font-size: 12px;
+				text-decoration: none;
+				text-transform: uppercase;
+				font-weight: 500;
+				border-radius: 2px;
+				border-bottom: 2px solid #f69303;
+				display: inline-block;
+				margin-top: 15px;
+				width: 116px;
+				padding: 12px 0 9px;
+			}
+				.goods li a:active {
+					border-bottom: 2px solid #FFD900;
+				}
+	.goods li .good-hover {
+		position: absolute;
+		display: none;
+		top: 0;
+		left: 0;
+		width: 140px;
+		background-color: rgba(255,255,255,0.9);
+		padding: 29px 10px 19px;
+		border-radius: 2px;
+	}
 
 
 .icon:before,
