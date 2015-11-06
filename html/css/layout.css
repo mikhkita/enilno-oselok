@@ -654,7 +654,7 @@ height: 300px;}
 
 }
 	.b-popular .b-block{
-	
+		margin-bottom: 5px;
 	}
 		.b-popular .b-block .main-category {
 			width: 247px;
@@ -813,9 +813,61 @@ height: 300px;}
 		padding: 29px 10px 19px;
 		border-radius: 2px;
 	}
+.b-footer {
 
+}
+	.b-footer .b-footer-main {
+		background-image: url("../i/back-asphalt@2x.jpg");
+	}
+		.b-footer .b-footer-main .b-block{
+		
+		}
+			.b-footer .b-footer-main .b-block .sections {
 
-.icon:before,
+			}
+				.b-footer .b-footer-main .b-block .sections > li {
+					float: left;
+				} 
+					.b-footer .b-footer-main .b-block .sections > li h3 {
+						font-size: 18px;
+						font-weight: 700;
+						color: #fff;
+					}
+					.b-footer .b-footer-main .b-block .sections > li h4 {
+
+					}
+						.b-footer .b-footer-main .b-block .sections > li h4 span {
+
+						}
+					.b-footer .b-footer-main .b-block .sections > li p {
+
+					}
+					.b-footer .b-footer-main .b-block .sections > li ul {
+
+					}
+						.b-footer .b-footer-main .b-block .sections > li ul li {
+
+						}
+							.b-footer .b-footer-main .b-block .sections > li ul li a {
+
+							}
+					.b-footer .b-footer-main .b-block .sections > li .footer-contacts {
+
+					}
+					.b-footer .b-footer-main .b-block .sections > li .social {
+
+					}
+						.b-footer .b-footer-main .b-block .sections > li .social h3 {
+
+						}
+						.b-footer .b-footer-main .b-block .sections > li .social .social-icon {
+
+						}
+							.b-footer .b-footer-main .b-block .sections > li .social .social-icon a {
+
+							}
+
+.icon:before,			
 .b-filters .b-block .filter-cont .tire-type label:before,
 .b-header .b-header-main .b-block > .left .right h2 a:before,
 .b-header .b-header-main .b-block > .right .contacts a:before,
