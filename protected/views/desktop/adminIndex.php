@@ -1,32 +1,40 @@
-<h1><?=$this->adminMenu["cur"]->name?></h1>
-<a href="<?php echo $this->createUrl('/'.$this->adminMenu["cur"]->code.'/admincreate')?>" class="ajax-form ajax-create b-butt b-top-butt">Добавить</a>
-<?php $form=$this->beginWidget('CActiveForm'); ?>
-	<table class="b-table" border="1">
-		<tr>
-			<th><? echo $labels['name']; ?></th>
-			<th><? echo $labels['value']; ?></th>
-			<th style="width: 150px;">Действия</th>
-		</tr>
-		<tr class="b-filter">
-			<td><?php echo CHtml::activeTextField($filter, 'name'); ?></td>
-			<td></td>
-			<td><a href="#" class="b-clear-filter">Сбросить фильтр</a></td>
-		</tr>
-		<? if( count($data) ): ?>
-			<? foreach ($data as $i => $item): ?>
-				<tr<?if(isset($_GET["id"]) && $item->id == $_GET["id"]):?> class="b-refresh"<?endif;?>>
-					<td class="align-left"><?=$item->name?></td>
-					<td class="align-left"><? if($item->link): ?><a href="<?=$item->value?>" target="_blank"><?endif;?><?=$item->value?><? if($item->link): ?></a><?endif;?></td>
-					<td class="b-tool-cont">
-						<? if($this->checkAccess($item,true)): ?><a href="<?php echo Yii::app()->createUrl('/'.$this->adminMenu["cur"]->code.'/adminupdate',array('id'=>$item->id))?>" class="ajax-form ajax-update b-tool b-tool-update" title="Редактировать <?=$this->adminMenu["cur"]->vin_name?>"></a><? endif; ?>
-						<? if($this->checkAccess($item,true)): ?><a href="<?php echo Yii::app()->createUrl('/'.$this->adminMenu["cur"]->code.'/admindelete',array('id'=>$item->id))?>" class="ajax-form ajax-delete b-tool b-tool-delete" data-warning="Вы действительно хотите удалить <?=$this->adminMenu["cur"]->vin_name?> &quot;<?=$item->name?>&quot;?" title="Удалить <?=$this->adminMenu["cur"]->vin_name?>"></a><? endif; ?>
-					</td>
-				</tr>
-			<? endforeach; ?>
-		<? else: ?>
-			<tr>
-				<td colspan=10>Пусто</td>
-			</tr>
-		<? endif; ?>
-	</table>
-<?php $this->endWidget(); ?>
+<h1><?=$folder->name?></h1>
+<div class="b-top-butt">
+	<a href="<?php echo $this->createUrl('/'.$this->adminMenu["cur"]->code.'/admincreate',array("parent_id"=>$folder->id))?>" class="ajax-form ajax-create b-butt">Создать папку</a>
+	<a href="<?php echo $this->createUrl('/'.$this->adminMenu["cur"]->code.'/admintablecreate',array("parent_id"=>$folder->id))?>" class="ajax-form ajax-create b-butt" style="margin-right: 10px;">Создать таблицу</a>
+</div>
+<div class="b-link-back">
+	<? if(isset($folder->parent)): ?>
+		<a href="<?=$this->createUrl('/'.$this->adminMenu["cur"]->code.'/adminindex',array("id"=>$folder->parent_id))?>">Назад</a>
+	<? endif; ?>
+	<span>Режим правки: </span>
+	<a href="#" class="b-kit-switcher right<?if($editable) echo" checked";?>" data-on="setEditable" data-off="unsetEditable">
+	    <div class="b-kit-rail">
+	        <div class="b-kit-state1">Вкл.</div>
+	        <div class="b-kit-slider"></div>
+	        <div class="b-kit-state2">Выкл.</div>
+	    </div>
+	</a>
+</div>
+<div class="b-desktop<?if($editable) echo" b-editable";?>">
+	<? if( count($folder->childs) ): ?>
+		<ul class="clearfix">
+			<? if( isset($folder->childs) ): ?>
+				<? foreach ($folder->childs as $child): ?>
+					<li>
+						<div class="b-folder-control">
+							<a href="<?php echo Yii::app()->createUrl('/'.$this->adminMenu["cur"]->code.'/adminupdate',array('id'=>$child->id,"parent_id"=>$child->parent_id))?>" class="ajax-form ajax-update b-tool b-tool-update" title="Редактировать <?=$this->adminMenu["cur"]->vin_name?>"></a>
+							<a href="<?php echo Yii::app()->createUrl('/'.$this->adminMenu["cur"]->code.'/admindelete',array('id'=>$child->id))?>" class="ajax-form ajax-delete b-tool b-tool-delete" data-warning="Вы действительно хотите удалить папку &#34;<?=$child->name?>&#34;" title="Удалить <?=$this->adminMenu["cur"]->vin_name?>"></a>
+						</div>
+						<a class="link" href="<?=$this->createUrl('/'.$this->adminMenu["cur"]->code.'/adminindex',array("id"=>$child->id))?>">
+							<div class="b-icon b-folder"></div>
+							<h3><?=$child->name?></h3>
+						</a>
+					</li>
+				<? endforeach; ?>
+			<? endif; ?>
+		</ul>
+	<? else: ?>
+		Папка пуста
+	<? endif; ?>
+</div>

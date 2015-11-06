@@ -1,20 +1,22 @@
 <?php
 
 /**
- * This is the model class for table "vars".
+ * This is the model class for table "desktop_table_col_variant".
  *
- * The followings are the available columns in table 'vars':
- * @property string $name
- * @property string $value
+ * The followings are the available columns in table 'desktop_table_col_variant':
+ * @property integer $id
+ * @property integer $col_id
+ * @property integer $int_value
+ * @property string $varchar_value
  */
-class Vars extends CActiveRecord
+class DesktopTableColVariant extends CActiveRecord
 {
 	/**
 	 * @return string the associated database table name
 	 */
 	public function tableName()
 	{
-		return 'data_vars';
+		return 'desktop_table_col_variant';
 	}
 
 	/**
@@ -25,11 +27,12 @@ class Vars extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('name, value', 'required'),
-			array('name', 'length', 'max'=>50),
+			array('col_id, int_value, varchar_value', 'required'),
+			array('col_id, int_value', 'numerical', 'integerOnly'=>true),
+			array('varchar_value', 'length', 'max'=>255),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('name, value', 'safe', 'on'=>'search'),
+			array('id, col_id, int_value, varchar_value', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -50,8 +53,10 @@ class Vars extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'name' => 'Ключ',
-			'value' => 'Значение',
+			'id' => 'ID',
+			'col_id' => 'Col',
+			'int_value' => 'Int Value',
+			'varchar_value' => 'Varchar Value',
 		);
 	}
 
@@ -73,8 +78,10 @@ class Vars extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('name',$this->name,true);
-		$criteria->compare('value',$this->value,true);
+		$criteria->compare('id',$this->id);
+		$criteria->compare('col_id',$this->col_id);
+		$criteria->compare('int_value',$this->int_value);
+		$criteria->compare('varchar_value',$this->varchar_value,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -85,7 +92,7 @@ class Vars extends CActiveRecord
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return Vars the static model class
+	 * @return DesktopTableColVariant the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{

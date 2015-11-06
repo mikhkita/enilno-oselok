@@ -13,7 +13,7 @@ class DesktopController extends Controller
 	{
 		return array(
 			array('allow',
-				'actions'=>array('adminIndex','adminCreate','adminUpdate','adminDelete'),
+				'actions'=>array('adminIndex','adminCreate','adminUpdate','adminDelete','adminTableCreate'),
 				'roles'=>array('manager'),
 			),
 			array('deny',
@@ -30,7 +30,7 @@ class DesktopController extends Controller
 		{
 			$model->attributes=$_POST['Desktop'];
 			if($model->save()){
-				$this->actionAdminIndex(true);
+				$this->actionAdminIndex(true,$model->parent_id);
 				return true;
 			}
 		}
@@ -38,20 +38,19 @@ class DesktopController extends Controller
 		$this->renderPartial('adminCreate',array(
 			'model'=>$model,
 		));
-
 	}
 
 	public function actionAdminUpdate($id)
 	{
 		$model=$this->loadModel($id);
 
-		$this->checkAccess($model);
+		// $this->checkAccess($model);
 
 		if(isset($_POST['Desktop']))
 		{
 			$model->attributes=$_POST['Desktop'];
 			if($model->save())
-				$this->actionAdminIndex(true);
+				$this->actionAdminIndex(true,$model->parent_id,true);
 		}else{
 			$this->renderPartial('adminUpdate',array(
 				'model'=>$model,
@@ -61,54 +60,56 @@ class DesktopController extends Controller
 
 	public function actionAdminDelete($id)
 	{
-		$this->checkAccess( Desktop::model()->findByPk($id) );
+		// $this->checkAccess( Desktop::model()->findByPk($id) );
 
-		$this->loadModel($id)->delete();
+		$model = $this->loadModel($id);
+		$model->delete();
 
-		$this->actionAdminIndex(true);
+		$this->actionAdminIndex(true,$model->parent_id,true);
 	}
 
-	public function actionAdminIndex($partial = false)
+	public function actionAdminIndex($partial = false, $id = 1, $editable = false)
 	{
 		if( !$partial ){
 			$this->layout='admin';
 		}
-		$filter = new Desktop('filter');
-		$criteria = new CDbCriteria();
 
-		if (isset($_GET['Desktop']))
-        {
-            $filter->attributes = $_GET['Desktop'];
-            foreach ($_GET['Desktop'] AS $key => $val)
-            {
-                if ($val != '')
-                {
-                    $criteria->addSearchCondition($key, $val);
-                }
-            }
-        }
+        $model = Desktop::model()->with("childs")->findByPk($id);
 
-        $criteria->order = 'sort ASC, name ASC';
-
-        $model = Desktop::model()->findAll($criteria);
-
-        foreach ($model as $key => $value) {
-        	if(!$this->checkAccess($value,true)) unset($model[$key]);
-        }
+        // foreach ($model as $key => $value) {
+        // 	if(!$this->checkAccess($value,true)) unset($model[$key]);
+        // }
 
 		if( !$partial ){
 			$this->render('adminIndex',array(
-				'data'=>$model,
-				'filter'=>$filter,
-				'labels'=>Desktop::attributeLabels()
+				'folder'=>$model,
+				'editable'=>$editable
 			));
 		}else{
 			$this->renderPartial('adminIndex',array(
-				'data'=>$model,
-				'filter'=>$filter,
-				'labels'=>Desktop::attributeLabels()
+				'folder'=>$model,
+				'editable'=>$editable
 			));
 		}
+	}
+
+	public function actionAdminTableCreate()
+	{
+		$model=new DesktopTable;
+
+		if(isset($_POST['DesktopTable']))
+		{
+			$model->attributes=$_POST['DesktopTable'];
+			if($model->save()){
+				$this->actionAdminIndex(true,$model->folder_id);
+				return true;
+			}
+		}
+
+		$this->renderPartial('adminTableCreate',array(
+			'model'=>$model,
+		));
+
 	}
 
 	public function loadModel($id)

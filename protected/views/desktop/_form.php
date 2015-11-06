@@ -1,4 +1,4 @@
-<div class="form b-full-width">
+<div class="form">
 
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'faculties-form',
@@ -12,32 +12,7 @@
 		<?php echo $form->textField($model,'name',array('maxlength'=>255,'required'=>true)); ?>
 		<?php echo $form->error($model,'name'); ?>
 	</div>
-
-	<div class="row checkbox-row clearfix">
-		<?php echo $form->labelEx($model,'link'); ?>
-		<?php echo $form->checkBox($model,'link'); ?>
-		<?php echo $form->error($model,'link'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'value'); ?>
-		<?php echo $form->textArea($model,'value',array('maxlength'=>20000,'required'=>true,'style'=>'height: 200px;')); ?>
-		<?php echo $form->error($model,'value'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'sort'); ?>
-		<?php echo $form->numberField($model,'sort',array('maxlength'=>255,'required'=>true)); ?>
-		<?php echo $form->error($model,'sort'); ?>
-	</div>
-
-	<? if($this->isRoot()): ?>
-	<div class="row">
-		<?php echo $form->labelEx($model,'rule_code'); ?>
-		<?php echo $form->DropDownList($model,'rule_code',CHtml::listData(Rule::model()->findAll(array('order'=>'name ASC')), 'code', 'name')); ?>
-		<?php echo $form->error($model,'rule_code'); ?>
-	</div>
-	<? endif; ?>
+	<input type="hidden" name="Desktop[parent_id]" value="<?=$_GET["parent_id"]?>">
 
 	<div class="row buttons">
 		<?php echo CHtml::submitButton($model->isNewRecord ? 'Добавить' : 'Сохранить'); ?>

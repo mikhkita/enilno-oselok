@@ -16,7 +16,7 @@ class TableVariant extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'table_variant';
+		return 'data_table_variant';
 	}
 
 	/**

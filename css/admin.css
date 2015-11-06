@@ -559,6 +559,9 @@ h1{
         .b-link-back .b-delete-selected{
             display: none;
         }
+        .b-link-back a{
+            margin-right: 20px;
+        }
 .fancybox-skin{
     /*background-color: #F5E9BC;*/
     border-radius: 0px;
@@ -2177,7 +2180,170 @@ ul.b-filter-list{
                 min-height: 100px;
                 margin: 0 auto;
             }
+.b-desktop{
+    margin-top: 20px;
+}
+    .b-desktop ul{
+        text-align: left;
+    }
+        .b-desktop ul li{
+            text-align: center;
+            display: inline-block;
+            vertical-align: top;
+            list-style: none;
+            position: relative;
+        }      
+            .b-folder-control{
+                position: absolute;
+                left: 50%;
+                margin-left: -40px;
+                top: 57px;
+                background-color: #FFF5D1;
+                padding: 5px;
+                font-size: 0px;
+                border-radius: 5px;
+                visibility: hidden;
+                opacity: 0;
+                -webkit-transition: all 200ms ease-out;
+                   -moz-transition: all 200ms ease-out;
+                    -ms-transition: all 200ms ease-out;
+                     -o-transition: all 200ms ease-out;
+                        transition: all 200ms ease-out;
+            }
+            .b-desktop.b-editable .b-folder-control{
+                visibility: visible;
+                opacity: 1;
+            }
+                .b-folder-control a{
 
+                }
+            .b-desktop ul li a.link{
+                display: block;
+                width: 122px;
+                padding: 10px 10px;
+                margin: 10px;
+                border-radius: 5px;
+            }  
+                .b-desktop ul li a.link:hover{
+                    background-color: #FFF5D1;
+                    box-shadow: 0px 0px 0px 1px #452716;
+                }
+                    .b-desktop ul li .b-icon{
+                        width: 100px;
+                        height: 100px;
+                        /*background-color: #452716;*/
+                        display: inline-block;
+                        margin-bottom: 10px;
+                        background-position: 50% 50%;
+                        background-repeat: no-repeat;
+                        background-size: contain;
+                    }
+                    .b-desktop ul li .b-icon.b-folder{
+                        background-image: url('../images/folder.png');
+                    }
+                    .b-desktop ul li h3{
+                        display: block;
+                        font-size: 14px;
+                        color: #452716;
+                        text-decoration: underline;
+                    }
+                    .b-desktop ul li a.link:hover h3{
+                        text-decoration: none;
+                    }
+.b-kit-switcher {
+    margin-left: 15px;
+    margin-top: -1px;
+    display: block;
+    width:67px;
+    height:18px;
+    background-color:silver;
+    position:relative;
+    overflow:hidden;
+    white-space:nowrap;
+    border-radius:100px;
+    padding:2px;
+    box-shadow: inset 0px 3px 10px 0px rgba(0, 0, 0, 0.4);
+    font-family:sans-serif;
+    font-size:14px;
+    -webkit-transition: all 0.1s ease-in-out;
+    -moz-transition: all 0.1s ease-in-out;
+    -o-transition: all 0.1s ease-in-out;
+    transition: all 0.1s ease-in-out;
+    background-size: 28px 28px;
+    position: relative;
+    background-color: #F5E9BC;
+    /*margin-right: 10px;*/
+}
+.b-kit-rail {
+    position:absolute;
+    top:2px;
+    left: -34px;
+    -webkit-transition: all 0.1s ease-in-out;
+    -moz-transition: all 0.1s ease-in-out;
+    -o-transition: all 0.1s ease-in-out;
+    transition: all 0.1s ease-in-out;
+    font-size: 0px;
+    cursor: pointer;
+}
+.b-kit-state1 {
+    text-shadow: 0 1px 1px rgba(0,0,0,0.5);
+    display: inline-block;
+    height:24px;
+    position:relative;
+    top: -4px;
+    left: -2px;
+    padding-left: 5px;
+    color: #F5E9BC;
+    width: 31px;
+}
+.b-kit-state2 {
+    display: inline-block;
+    height:24px;
+    position:relative;
+    top: -4px;
+    left: 1px;                
+    color:#452716;    
+}
+.b-kit-slider {
+    display: inline-block;
+    height:18px;
+    width:18px;
+    position:relative;
+    border-radius:100px;
+    background-color:#ccc;
+    box-shadow: 0px 3px 4px 0px rgba(0, 0, 0, 0.2), inset 0px 1px 1px 1px rgba(255, 255, 255, 0.7);
+}
+.b-kit-switcher.checked .b-kit-rail{
+    left: 15px;
+}
+.b-kit-switcher.checked {
+    background-color: #D26A44;
+    box-shadow: inset 0px 3px 10px 0px rgba(0, 0, 0, 0.4);
+}
+.b-kit-switcher:hover {
+    /*background-image: url('../images/toggle_back.png');*/
+    background-image: -webkit-gradient(linear, left top, right bottom, 
+         color-stop(0%,rgba(69, 39, 22,0)), 
+        color-stop(25%,rgba(69, 39, 22,0)), 
+        color-stop(25%,rgba(69, 39, 22,.1)), 
+        color-stop(50%,rgba(69, 39, 22,.1)), 
+        color-stop(50%,rgba(69, 39, 22,0)), 
+        color-stop(75%,rgba(69, 39, 22,0)), 
+        color-stop(75%,rgba(69, 39, 22,.1)), 
+       color-stop(100%,rgba(69, 39, 22,.1)));   
+}
+.b-kit-switcher.checked:hover {
+    /*background-image: url('../images/toggle_back.png');*/
+    background-image: -webkit-gradient(linear, left top, right bottom, 
+         color-stop(0%,rgba(255,255,255,0)), 
+        color-stop(25%,rgba(255,255,255,0)), 
+        color-stop(25%,rgba(255,255,255,.15)), 
+        color-stop(50%,rgba(255,255,255,.15)), 
+        color-stop(50%,rgba(255,255,255,0)), 
+        color-stop(75%,rgba(255,255,255,0)), 
+        color-stop(75%,rgba(255,255,255,.15)), 
+       color-stop(100%,rgba(255,255,255,.15)));  
+}
 @media screen and (max-width: 1500px){
     .b-hide-title{
         opacity: 0;

@@ -18,7 +18,7 @@ class Cube extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'cube';
+		return 'data_cube';
 	}
 
 	/**

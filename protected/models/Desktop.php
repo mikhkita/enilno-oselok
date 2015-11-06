@@ -6,10 +6,7 @@
  * The followings are the available columns in table 'desktop':
  * @property string $id
  * @property string $name
- * @property string $value
- * @property integer $link
- * @property string $rule_code
- * @property integer $sort
+ * @property string $parent_id
  */
 class Desktop extends CActiveRecord
 {
@@ -29,13 +26,12 @@ class Desktop extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('name, value', 'required'),
-			array('link, sort', 'numerical', 'integerOnly'=>true),
+			array('name', 'required'),
 			array('name', 'length', 'max'=>255),
-			array('rule_code', 'length', 'max'=>50),
+			array('parent_id', 'length', 'max'=>10),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, name, value, link, rule_code, sort', 'safe', 'on'=>'search'),
+			array('id, name, parent_id', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -47,6 +43,9 @@ class Desktop extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'childs' => array(self::HAS_MANY, 'Desktop', 'parent_id', 'order' => "childs.name ASC"),
+			'parent' => array(self::BELONGS_TO, 'Desktop', 'parent_id'),
+			'tables' => array(self::HAS_MANY, 'DesktopTable', 'folder_id', 'order' => "tables.name ASC"),
 		);
 	}
 
@@ -58,10 +57,7 @@ class Desktop extends CActiveRecord
 		return array(
 			'id' => 'ID',
 			'name' => 'Название',
-			'value' => 'Значение',
-			'link' => 'Ссылка',
-			'rule_code' => 'Роль',
-			'sort' => 'Сортировка',
+			'parent_id' => 'Родительская папка',
 		);
 	}
 
@@ -85,15 +81,18 @@ class Desktop extends CActiveRecord
 
 		$criteria->compare('id',$this->id,true);
 		$criteria->compare('name',$this->name,true);
-		$criteria->compare('value',$this->value,true);
-		$criteria->compare('link',$this->link);
-		$criteria->compare('rule_code',$this->rule_code,true);
-		$criteria->compare('sort',$this->sort);
+		$criteria->compare('parent_id',$this->parent_id,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 		));
 	}
+
+	public function beforeDelete(){
+ 		foreach ($this->childs as $key => $child)
+ 			$child->delete();
+ 		return parent::beforeDelete();
+ 	}
 
 	/**
 	 * Returns the static model of the specified AR class.
