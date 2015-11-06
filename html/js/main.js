@@ -84,9 +84,11 @@ $(document).ready(function(){
         // fade: true
     });
 
-    $(".goods li").hover(function(){
-        $(this).find(".good-hover").slideDown();
-    }, function(){
-        $(this).find(".good-hover").slideUp();
+    $(".filter-item").click(function(){
+        $(this).find(".variants").css("display","table").addClass("active");
+        if( $(this).position().left > 480 ) {
+            $(this).find(".variants").css("right","0");
+        } else $(this).find(".variants").css("left","0");
     });
+   
 });
