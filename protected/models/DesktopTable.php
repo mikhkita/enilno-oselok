@@ -44,8 +44,8 @@ class DesktopTable extends CActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
 			'folder' => array(self::BELONGS_TO, 'Desktop', 'folder_id'),
-			'cols' => array(self::HAS_MANY, 'DesktopTableCol', 'table_id', 'order' => "cols.sort ASC"),
-			'rows' => array(self::HAS_MANY, 'DesktopTableRow', 'table_id', 'order' => "rows.id ASC"),
+			'cols' => array(self::HAS_MANY, 'DesktopTableCol', 'table_id', 'order' => "cols.id ASC"),
+			'rows' => array(self::HAS_MANY, 'DesktopTableRow', 'table_id', 'order' => "rows.id DESC"),
 		);
 	}
 
@@ -87,6 +87,16 @@ class DesktopTable extends CActiveRecord
 			'criteria'=>$criteria,
 		));
 	}
+
+	public function beforeDelete(){
+  		foreach ($this->cols as $key => $col)
+  			$col->delete();
+
+  		foreach ($this->rows as $key => $row)
+  			$row->delete();
+
+  		return parent::beforeDelete();
+ 	}
 
 	/**
 	 * Returns the static model of the specified AR class.

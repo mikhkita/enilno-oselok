@@ -108,6 +108,7 @@ $(document).ready(function(){
         margin: 30,
         beforeShow: function(){
             var $form = $(".fancybox-inner form");
+            bindTableForm();
             bindForm($form);
             bindImageUploader();
             bindTinymce();
@@ -283,12 +284,14 @@ $(document).ready(function(){
     function bindForm($form){
 
         $(".select2").select2({
-          placeholder: "",
-          allowClear: true
+            placeholder: "",
+            allowClear: true
         });
         $form.validate({
             ignore: ""
         });
+
+        $form.find("input.phone").mask('+7 (999) 999-99-99',{placeholder:"_"});
 
         $(".numeric").numericInput({ allowFloat: true, allowNegative: true });
 
@@ -299,7 +302,7 @@ $(document).ready(function(){
                 });
             }
             tinymce.triggerSave();
-            if( $(this).valid() && !$(this).find("input[type=submit]").hasClass("blocked") ){
+            if( $(this).valid() && !$(this).find("input[type=submit]").hasClass("blocked") && !$(this).hasClass("blocked") ){
                 var $form = $(this),
                     url = $form.attr("action"),
                     data = $form.serialize();
@@ -714,7 +717,7 @@ $(document).ready(function(){
         $("#add-code").removeClass("error");
         var li = $('<li><p><span></span><a href="#" class="b-add-remove">Удалить</a></p><input type="hidden" name="" value=""></li>')
         li.find("span").text(val+" ("+$("#add-inter").find("option:selected").text()+")");
-        li.find("input").attr("name","inter["+$("#add-inter").val()+"]").val(val);
+        li.find("input").attr("name",$(this).attr("data-name")+"["+$("#add-inter").val()+"]").val(val);
         $(".b-add-items").append(li);
         $("#add-code").val("").focus();
     });
@@ -1123,6 +1126,23 @@ $(document).ready(function(){
         }
         customHandlers["unsetEditable"] = function(){
             $(".b-desktop").removeClass("b-editable");
+        }
+    }
+
+    function bindTableForm(){
+        if( $("#table-form").length ){
+            $("#table-form").submit(function(){
+                var tog = false;
+                $(this).find("textarea,input[type='text'],input[type='number'],input[type='date'],select").each(function(){
+                    if( $(this).val() != "" && $(this).val() != "0" ) tog = true;
+                });
+                if(!tog){
+                    $(this).addClass("blocked");
+                    return false;
+                }else{
+                    $(this).removeClass("blocked");
+                }
+            });
         }
     }
 

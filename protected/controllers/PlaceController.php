@@ -17,7 +17,7 @@ class PlaceController extends Controller
 				'roles'=>array('root'),
 			),
 			array('allow',
-				'actions'=>array('adminIndex','adminCreate','adminUpdate','adminPreview'),
+				'actions'=>array('adminIndex','adminCreate','adminUpdate','adminPreview','adminDrom'),
 				'roles'=>array('manager'),
 			),
 			array('deny',
@@ -69,7 +69,7 @@ class PlaceController extends Controller
 			$this->renderPartial('adminUpdate',array(
 				'model' => $model,
 				'inter' => $model->interpreters,
-				'allInter' => Interpreter::model()->findAll(array("order"=>"name ASC")),
+				'allInter' => Interpreter::model()->findAll(array("order"=>"name ASC","condition"=>"good_type_id=".$model->good_type_id)),
 			));
 		}
 	}
@@ -88,8 +88,6 @@ class PlaceController extends Controller
 		}
 		$filter = new Place('filter');
 		$criteria = new CDbCriteria();
-
-		print_r(Place::getValues(Place::getInters(1,2),Good::model()->find("good_type_id=2")));
 
 		// Good::model()->find("good_type_id=2")->update();
 
@@ -124,13 +122,33 @@ class PlaceController extends Controller
 		}
 	}
 
+	public function actionAdminDrom(){
+		$good = Good::model()->find("good_type_id=1");
+		$fields = Place::getValues(Place::getInters(2,$good->type->id),$good);
+		// print_r($fields);
+		$fields = Drom::self()->generateFields($fields,1);
+		print_r($fields);
+		$images = $this->getImages($good);
+		print_r($images);
+		// die();
+
+		$fields["login"] = explode(":", $fields["login"]);
+
+		$drom = new Drom();
+        $drom->setUser($fields["login"][0],$fields["login"][1]);
+        unset($fields["login"]);
+        $drom->auth("http://baza.drom.ru/");
+        $drom->addAdvert($fields,$images);
+        $drom->curl->removeCookies();
+	}
+
 	public function updateInters($model){
 		PlaceInterpreter::model()->deleteAll("place_id=".$model->id);
 
 		if( isset($_POST["inter"]) ){
 			$values = array();
 			foreach ($_POST["inter"] as $key => $value) {
-				$values[] = array("place_id"=>$model->id, "interpreter_id"=>$key, "code"=>mb_strtoupper($value,"UTF-8"));
+				$values[] = array("place_id"=>$model->id, "interpreter_id"=>$key, "code"=>$value);
 			}
 			$this->insertValues(PlaceInterpreter::tableName(),$values);
 		}

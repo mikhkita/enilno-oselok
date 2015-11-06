@@ -458,6 +458,13 @@ class Controller extends CController
         return $result;
     }
 
+    public function getAssoc($items,$attr){
+        $out = array();
+        foreach ($items as $item)
+            $out[$item->getAttribute($attr)] = $item;
+        return $out;
+    }
+
     public function isRoot(){
         return $this->user->role->code == "root";
     }

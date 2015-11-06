@@ -7,6 +7,7 @@
  * @property integer $id
  * @property string $name
  * @property string $code
+ * @property string $class
  */
 class DesktopTableColType extends CActiveRecord
 {
@@ -26,12 +27,12 @@ class DesktopTableColType extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('name, code', 'required'),
-			array('name', 'length', 'max'=>100),
+			array('name, code, class', 'required'),
+			array('name, class', 'length', 'max'=>100),
 			array('code', 'length', 'max'=>10),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, name, code', 'safe', 'on'=>'search'),
+			array('id, name, code, class', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -43,6 +44,7 @@ class DesktopTableColType extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'cols' => array(self::HAS_MANY, 'DesktopTableCol', 'type_id'),
 		);
 	}
 
@@ -55,6 +57,7 @@ class DesktopTableColType extends CActiveRecord
 			'id' => 'ID',
 			'name' => 'Name',
 			'code' => 'Code',
+			'class' => 'Class',
 		);
 	}
 
@@ -79,6 +82,7 @@ class DesktopTableColType extends CActiveRecord
 		$criteria->compare('id',$this->id);
 		$criteria->compare('name',$this->name,true);
 		$criteria->compare('code',$this->code,true);
+		$criteria->compare('class',$this->class,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

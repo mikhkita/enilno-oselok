@@ -4,6 +4,10 @@ Class Drom {
     private $login = "";
     private $password = "";
     public $curl;
+    public $dir_codes = array(
+        1 => 234,
+        2 => 235
+    );
     
     function __construct() {
         $this->curl = new Curl();
@@ -69,13 +73,13 @@ Class Drom {
         $advert_id = json_decode($this->curl->request("http://baza.drom.ru/api/1.0/save/bulletin",$options))->id;
         $this->updateAdvert($advert_id,$params,$images);
         
-        $this->curl->request("http://baza.drom.ru/bulletin/".$advert_id."/draft/publish?from=draft.publish",array('from'=>'adding.publish'));
+        print_r($this->curl->request("http://baza.drom.ru/bulletin/".$advert_id."/draft/publish?from=draft.publish",array('from'=>'adding.publish')));
     }
     
     public function updateAdvert($advert_id,$params,$images = NULL) {
         if($images) {
             foreach ($images as &$image_path) {
-                $image_path = json_decode($this->curl->request("http://baza.drom.ru/upload-image-jquery",array('up[]' => '@'.Yii::app()->basePath.DIRECTORY_SEPARATOR.'..'.$image_path)))->id;
+                $image_path = json_decode($this->curl->request("http://baza.drom.ru/upload-image-jquery",array('up[]' => new CurlFile(Yii::app()->basePath.DIRECTORY_SEPARATOR.'..'.$image_path))))->id;
             }
             $params['images'] = array('images' => $images);
         }
@@ -118,6 +122,42 @@ Class Drom {
         $options = array('changeDescription' => json_encode($options));
         $options['client_type'] = ($advert_id) ? 'v2:editing' : "v2:adding";
         return $options;
+    }
+
+    public function generateFields($fields,$good_type_id){
+        $fields['dirId'] = $this->dir_codes[intval($good_type_id)];
+        $fields['model'] = array($fields["model"],0,0);
+        $fields['price'] = array($fields["price"],"RUB");
+        $fields['quantity'] = 1;
+        $fields['contacts'] =  array("email" => "","is_email_hidden" => false,"contactInfo" => "+79528960999");
+        $fields['delivery'] = array("pickupAddress" => $fields['pickupAddress'],"localPrice" => $fields['localPrice'],"minPostalPrice" => $fields['minPostalPrice'],"comment" => $fields['comment']);
+        unset($fields['pickupAddress'],$fields['localPrice'],$fields['minPostalPrice'],$fields['comment']);
+
+        if( isset($fields["disc_width"]) ){
+            $disc_width = explode("/",$fields['disc_width']);
+            $disc_et = explode("/",$fields['disc_width']);
+            $fields['wheelPcd'] = explode("/",$fields['wheelPcd']);
+
+            $fields['discParameters'] = array();
+            foreach ($disc_width as $i => $value)
+                $fields['discParameters'][$i] = array("disc_width"=>$value);
+
+            foreach ($disc_et as $i => $value){
+                if( !isset($fields['discParameters'][$i]) ) $fields['discParameters'][$i] = array();
+                $fields['discParameters'][$i]["disc_et"] = $value;
+            }
+  
+            unset($fields['disc_width'],$fields['disc_et'],$disc_width,$disc_et);
+        }
+
+        if( $good_type_id == 1 ){
+            $fields['predestination'] = "regular";
+        }
+        return $fields;
+    }
+
+    public function self(){
+        return new Drom();
     }
 }
 

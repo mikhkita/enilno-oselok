@@ -44,7 +44,7 @@
 		        <? endforeach; ?>
 			</select>
 			<div class="buttons left">
-				<input type="button" id="add-inter-button" data-case="upper" value="Добавить">
+				<input type="button" id="add-inter-button" data-name="inter" value="Добавить">
 			</div>
 		</div>
 	<? endif; ?>

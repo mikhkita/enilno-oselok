@@ -111,4 +111,19 @@ class DesktopTableCell extends CActiveRecord
 	{
 		return parent::model($className);
 	}
+
+	public function afterFind()
+	{
+		parent::afterFind();
+
+		if( $this->attributes["variant_id"] == NULL ){
+			$val = ($this->attributes["int_value"] == NULL)?( ($this->attributes["time_value"] == NULL)?( ($this->attributes["varchar_value"] == NULL)?($this->attributes["text_value"]):($this->attributes["varchar_value"]) ):($this->attributes["time_value"]) ):($this->attributes["int_value"]);
+		
+			$this->setAttribute("value",($val != NULL)?$val:false,true);
+		}else{
+			// $val = ($this->variant->int_value == NULL)?($this->variant->varchar_value):($this->variant->int_value);
+
+			// $this->setAttribute("value",($val != NULL)?$val:false,true);
+		}
+	}
 }

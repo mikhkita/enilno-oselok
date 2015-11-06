@@ -655,6 +655,10 @@ h1{
             resize: none;
             height: 400px;
         }
+        .b-desktop-table-form textarea{
+            height: 200px;
+            resize: vertical;
+        }
         .fancybox-skin .texts-row{
             /*width: 420px;*/
             /*display: inline-block;*/
@@ -2197,7 +2201,7 @@ ul.b-filter-list{
                 position: absolute;
                 left: 50%;
                 margin-left: -40px;
-                top: 57px;
+                top: 53px;
                 background-color: #FFF5D1;
                 padding: 5px;
                 font-size: 0px;
@@ -2209,6 +2213,7 @@ ul.b-filter-list{
                     -ms-transition: all 200ms ease-out;
                      -o-transition: all 200ms ease-out;
                         transition: all 200ms ease-out;
+                box-shadow: 0 0 0 1px #452716;
             }
             .b-desktop.b-editable .b-folder-control{
                 visibility: visible;
@@ -2240,6 +2245,9 @@ ul.b-filter-list{
                     }
                     .b-desktop ul li .b-icon.b-folder{
                         background-image: url('../images/folder.png');
+                    }
+                    .b-desktop ul li .b-icon.b-excel{
+                        background-image: url('../images/excel-light.png');   
                     }
                     .b-desktop ul li h3{
                         display: block;

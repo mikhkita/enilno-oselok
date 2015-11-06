@@ -28,7 +28,7 @@ class DromController extends Controller
             "cityId" => array("type" => 'inter',"id" => 30),
             "goodPresentState" => array("type" => 'inter',"id" => 103),
             "model" => array("type" => 'inter',"id" => 92),
-            "condition" => array("type" => 'inter',"id" => 108),
+            "condition" => array("type" => 'inter',"id" => 136),
             "wheelDiameter" => array("type" => 'attr',"id" => 9),
             "inSetQuantity" => array("type" => 'attr',"id" => 28),
             "wheelPcd" => array("type" => 'attr',"id" => 5),
@@ -66,7 +66,7 @@ class DromController extends Controller
 
 // Дром ------------------------------------------------------------------ Дром
     public function actionCreate(){
-        $good = Good::model()->find("id=1181");
+        $good = Good::model()->find("id=3382");
         $images = $this->getImages($good);
         $dynamic = array( 38 => 1081, 37 => 869);
         

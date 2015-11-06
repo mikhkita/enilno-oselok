@@ -117,6 +117,13 @@ class Place extends CActiveRecord
 		return $out;
 	}
 
+	public function beforeDelete(){
+  		foreach ($this->interpreters as $key => $inter) {
+  			$inter->delete();
+  		}
+  		return parent::beforeDelete();
+ 	}
+
 	/**
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!

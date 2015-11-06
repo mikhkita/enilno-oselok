@@ -8,7 +8,8 @@
  * @property string $name
  * @property string $table_id
  * @property integer $type_id
- * @property integer $sort
+ * @property integer $list
+ * @property integer $required
  */
 class DesktopTableCol extends CActiveRecord
 {
@@ -28,13 +29,13 @@ class DesktopTableCol extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('name, table_id, type_id, sort', 'required'),
-			array('type_id, sort', 'numerical', 'integerOnly'=>true),
+			array('name, table_id, type_id', 'required'),
+			array('type_id, list, required', 'numerical', 'integerOnly'=>true),
 			array('name', 'length', 'max'=>100),
 			array('table_id', 'length', 'max'=>10),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, name, table_id, type_id, sort', 'safe', 'on'=>'search'),
+			array('id, name, table_id, type_id, list, required', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -48,6 +49,7 @@ class DesktopTableCol extends CActiveRecord
 		return array(
 			'table' => array(self::BELONGS_TO, 'DesktopTable', 'table_id'),
 			'cells' => array(self::HAS_MANY, 'DesktopTableCell', 'row_id'),
+			'type' => array(self::BELONGS_TO, 'DesktopTableColType', 'type_id'),
 		);
 	}
 
@@ -61,7 +63,8 @@ class DesktopTableCol extends CActiveRecord
 			'name' => 'Name',
 			'table_id' => 'Table',
 			'type_id' => 'Type',
-			'sort' => 'Sort',
+			'list' => 'List',
+			'required' => 'Required',
 		);
 	}
 
@@ -87,7 +90,8 @@ class DesktopTableCol extends CActiveRecord
 		$criteria->compare('name',$this->name,true);
 		$criteria->compare('table_id',$this->table_id,true);
 		$criteria->compare('type_id',$this->type_id);
-		$criteria->compare('sort',$this->sort);
+		$criteria->compare('list',$this->list);
+		$criteria->compare('required',$this->required);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

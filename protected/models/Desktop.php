@@ -91,6 +91,10 @@ class Desktop extends CActiveRecord
 	public function beforeDelete(){
  		foreach ($this->childs as $key => $child)
  			$child->delete();
+
+ 		foreach ($this->tables as $key => $table)
+ 			$table->delete();
+
  		return parent::beforeDelete();
  	}
 
