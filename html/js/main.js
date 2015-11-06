@@ -84,9 +84,9 @@ $(document).ready(function(){
         // fade: true
     });
 
-    $(".goods li").hover(function(){
-        $(this).find(".good-hover").slideDown();
-    }, function(){
-        $(this).find(".good-hover").slideUp();
-    });
+    // $(".goods li").hover(function(){
+    //     $(this).find(".good-hover").slideDown();
+    // }, function(){
+    //     $(this).find(".good-hover").slideUp();
+    // });
 });
