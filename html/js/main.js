@@ -1,4 +1,5 @@
 $(document).ready(function(){	
+    var myWidth,myHeight;
     function resize(){
        if( typeof( window.innerWidth ) == 'number' ) {
             myWidth = window.innerWidth;
@@ -11,10 +12,15 @@ $(document).ready(function(){
             myWidth = document.body.clientWidth;
             myHeight = document.body.clientHeight;
         }
+        $(".b-content").css("min-height",myHeight-$(".b-header").height()-$(".b-footer").height());
     }
     $(window).resize(resize);
     resize();
-
+    
+    $(window).load(function(){
+        $(".b-content").css("min-height",myHeight-$(".b-header").height()-$(".b-footer").height());
+    });
+    
     $.fn.placeholder = function() {
         if(typeof document.createElement("input").placeholder == 'undefined') {
             $('[placeholder]').focus(function() {
@@ -85,10 +91,36 @@ $(document).ready(function(){
     });
 
     $(".filter-item").click(function(){
-        $(this).find(".variants").css("display","table").addClass("active");
+        $(this).find(".variants").css("display","table");
+        $(this).find(".input").addClass("active");
         if( $(this).position().left > 480 ) {
             $(this).find(".variants").css("right","0");
         } else $(this).find(".variants").css("left","0");
     });
+
+    $(".variants input").change(function(){
+        var obj = $(this).closest(".filter-item").find("input:checked"),
+        input = $(this).closest(".filter-item").find(".input"),
+        text="";
+        if(obj.length != 0) {
+            obj.each(function(index, item){
+                console.log($(item).siblings("span").text());
+                text = text+$(item).siblings("span").text()+",";
+            });
+            text = text.substr(0,text.length-1);
+            input.html(text+"<span></span>");
+        } else {
+            input.html("<span></span>");
+        }        
+    });
+    $( ".main-tabs" ).tabs({
+        active: 0
+    });
+
+
+
+
+
+
    
 });
