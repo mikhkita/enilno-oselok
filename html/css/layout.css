@@ -216,6 +216,50 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff9600', endColorstr='#ffda00',GradientType=0 ); /* IE6-8 */
 
 	}
+.b-black-butt{
+	border: none;
+	border-bottom: 2px solid #000;
+	cursor: pointer;
+	border-radius: 2px;
+	color: #fff;
+	padding: 10px 0 8px;
+	width: 116px;
+	text-transform: uppercase;
+	font-weight: 500;
+
+	background: #4d414b;
+	background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzRkNDE0YiIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMyMzFkMjMiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
+	background: -moz-linear-gradient(top,  #4d414b 0%, #231d23 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#4d414b), color-stop(100%,#231d23));
+	background: -webkit-linear-gradient(top,  #4d414b 0%,#231d23 100%);
+	background: -o-linear-gradient(top,  #4d414b 0%,#231d23 100%);
+	background: -ms-linear-gradient(top,  #4d414b 0%,#231d23 100%);
+	background: linear-gradient(to bottom,  #4d414b 0%,#231d23 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4d414b', endColorstr='#231d23',GradientType=0 );
+}
+	.b-black-butt:hover{
+		background: #6b5a69;
+		background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzZiNWE2OSIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMzNDJiMzMiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
+		background: -moz-linear-gradient(top,  #6b5a69 0%, #342b33 100%);
+		background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#6b5a69), color-stop(100%,#342b33));
+		background: -webkit-linear-gradient(top,  #6b5a69 0%,#342b33 100%);
+		background: -o-linear-gradient(top,  #6b5a69 0%,#342b33 100%);
+		background: -ms-linear-gradient(top,  #6b5a69 0%,#342b33 100%);
+		background: linear-gradient(to bottom,  #6b5a69 0%,#342b33 100%);
+		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#6b5a69', endColorstr='#342b33',GradientType=0 );
+	}
+	.b-black-butt:active {
+		background: #342b33;
+		background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzM0MmIzMyIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiM2YjVhNjkiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
+		background: -moz-linear-gradient(top,  #342b33 0%, #6b5a69 100%);
+		background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#342b33), color-stop(100%,#6b5a69));
+		background: -webkit-linear-gradient(top,  #342b33 0%,#6b5a69 100%);
+		background: -o-linear-gradient(top,  #342b33 0%,#6b5a69 100%);
+		background: -ms-linear-gradient(top,  #342b33 0%,#6b5a69 100%);
+		background: linear-gradient(to bottom,  #342b33 0%,#6b5a69 100%);
+		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#342b33', endColorstr='#6b5a69',GradientType=0 );
+		border-bottom: 2px solid #6A5A68;
+	}
 .b-header{
 	text-align: left;
 }
@@ -737,8 +781,8 @@ height: 300px;}
 					top: 13px;
 					right: 9px;
 				}
-				.filter-item .input:hover,.filter-item .input:hover:after {
-					border-color: #ffad00;
+				.filter-item .input:hover,.filter-item .input:hover:after,input[type="text"]:hover {
+					border-color: #ffad00 !important;
 				}
 .b-popular {
 
@@ -747,7 +791,7 @@ height: 300px;}
 		margin-bottom: 5px;
 	}
 		.grey-block {
-			width: 247px;
+			width: 245px;
 		}
 			.grey-block > div {
 				box-shadow: 0px 0px 4.85px 0.15px rgba(32, 32, 32, 0.3);
@@ -1088,23 +1132,223 @@ height: 300px;}
 
 }			
 	.b-category .b-block {
-		padding-top: 20px;
+		padding-top: 25px;
 	}
 		.b-category .b-block .grey-block {
 
 		}
-			.b-category .b-block .grey-block h5 {
-				font-weight: 500;
+			.b-category .b-block .grey-block .filter-block {
+				padding: 25px 25px 30px;
+				padding-right: 0;
+				text-align: left;
 			}
+				.b-category .b-block .grey-block .filter-block h5 {
+					font-weight: 500;	
+					margin-bottom: 10px;
+				}
+				.b-category .b-block .grey-block .filter-block .tire-type {
+					text-align: left;
+					margin-bottom: 15px;
+				}
+					.b-category .b-block .grey-block .filter-block .tire-type label {
+						font-size: 14px;
+						display: block;
+						font-family: "Roboto";
+						font-weight: 500;
+						color: #1c1c1c;
+						position: relative;
+						cursor: pointer;
+						text-align: left;
+						padding: 13px 0 18px 51px;
+					}
+					.b-category .b-block .grey-block .filter-block .tire-type label:before {
+						position: absolute;
+						font-size: 0;
+						content: "";
+						background-position: -37px -2px;
+						width: 31px;
+						height: 35px;
+						top: 2px;
+						left: 0;
+					}
+					.b-category .b-block .grey-block .filter-block .tire-type label[for=tire-spike]:before {
+						width: 40px;
+						height: 32px;
+						top: 5px;
+						left: 0;
+						background-position: 42px -3px;
+					}
+					.b-category .b-block .grey-block .filter-block .tire-type label[for=tire-summer] {
+						padding-top: 22px;
+					}
+					.b-category .b-block .grey-block .filter-block .tire-type label[for=tire-summer]:before {
+						width: 34px;
+						height: 34px;
+						top: 11px;
+						left: 0;
+						background-position: 121px -2px;
+					}
+
+					.b-category .b-block .grey-block .tire-type input {
+						display: none;
+					}
+				.b-category .b-block .grey-block .filter-block .filter-item {
+					margin-bottom: 25px;
+				}
+					.b-category .b-block .grey-block .filter-block .filter-item .input {
+						width: 195px;
+					}
+				.slider-range {
+					height: 14px;
+					border: 2px solid #d7d7d7;
+					background-color: #fff;
+					border-radius: 10px;
+					cursor: pointer;
+				}
+				.slider-range .ui-widget-header {
+					height: 4px;
+					background-color: #ffc200;
+					top: 5px;
+				}
+				.slider-range .ui-state-default {
+					border:none;
+					background: none;
+					background-color: #fff;
+					border: 1px solid rgb(215, 215, 215);
+					border-radius: 50%;
+					box-shadow: inset 0px 3px 10px 0px rgba(0, 0, 0, 0.18);
+					width: 18px;
+					height: 18px;
+					top: -3px;
+					margin-left: -10px;
+					cursor: pointer;
+				}
+					.slider-range .ui-state-default:before {
+						position: absolute;
+						font-size: 0;
+						content: "";
+						width: 8px;
+						height: 8px;
+						top: 5px;
+						left: 5px;
+						border-radius: 50%;
+						background-color: #c2c2c2;
+					}
+				.slider-range .ui-state-default.ui-state-hover {
+					width: 24px;
+					height: 24px;
+					border-color: rgb(255, 255, 255);
+					background-color: #ffc200;
+					top: -6px;
+					margin-left: -12px;
+				}
+					.slider-range .ui-state-default.ui-state-hover:before {
+						width: 10px;
+						height: 10px;
+						top: 7px;
+						left: 7px;
+						background-color: #fff;
+					}
+				.slider-range .ui-state-default.ui-state-hover.ui-state-active {
+					width: 20px;
+					height: 20px;
+					top: -4px;
+					margin-left: -11px;
+				}
+					.slider-range .ui-state-default.ui-state-hover.ui-state-active:before {
+						width: 8px;
+						height: 8px;
+						top: 6px;
+						left: 6px;
+					}
+					.b-category .b-block .grey-block .filter-block .slide-type {
+						text-align: left;
+					}
+						.b-category .b-block .grey-block .filter-block .slide-type .slider-range {
+							width: 180px;
+							margin-left: 5px;
+							margin-top: 22px;
+						}
+						.b-category .b-block .grey-block .filter-block .slide-type input{
+							width: 80px;
+							box-sizing: border-box;
+							border: 2px solid #d7d7d7;
+							padding: 7px 0 6px;
+							text-align: center;
+						}
+						.b-category .b-block .grey-block .filter-block .slide-type .dash {
+							margin: 0 12px;
+						}
+				.b-category .b-block .grey-block .filter-block .b-black-butt {		
+					margin-top: 35px;
+				}
+		.b-category .b-block .good-list {
+			width: 695px;
+		}
+			.b-category .b-block .good-list .navigation {
+
+			}
+				.b-category .b-block .good-list .navigation li {
+					position: relative;
+					float: left;
+					margin-left: 4px;
+				}
+				.b-category .b-block .good-list .navigation li:nth-child(n+2) a{
+				padding: 0 13px;
+				}
+				.b-category .b-block .good-list .navigation li:nth-child(n+2):before {
+					position: absolute;
+					font-size: 14px;
+					content: "/";
+					left: -4px;
+					top: 0px;
+				}
+					.b-category .b-block .good-list .navigation li a {
+						color: #414141;
+						text-decoration: none;
+					}
+					.b-category .b-block .good-list .navigation li a:hover {
+						text-decoration: underline;
+					}
+					.b-category .b-block .good-list .navigation li:last-child a:hover {
+						text-decoration: none;
+						cursor: default;
+					}
+					.b-category .b-block .good-list .navigation li:last-child a {
+						color: #8f8f8f;
+					}
+				.b-category .b-block .good-list .navigation li:first-child {
+					margin-left: 0;
+				}
+					.b-category .b-block .good-list .navigation li:first-child a {
+						position: relative;
+						width: 22px;
+						height: 14px;
+					}
+					.b-category .b-block .good-list .navigation li:first-child a:before{
+						position: absolute;
+						font-size: 0;
+						content: "";
+						width: 15px;
+						height: 14px;
+						left: 0;
+						top: -1px;
+						background-position: -162px -99px;
+					}
+					.b-category .b-block .good-list .navigation li:first-child:hover a:before{
+						background-position: -179px -99px;
+					}
 
 .icon:before,			
 .b-filters .b-block .filter-cont .tire-type label:before,
 .b-header .b-header-main .b-block > .left .right h2 a:before,
 .b-header .b-header-main .b-block > .right .contacts a:before,
-.b-filters .b-block .filter-cont .filter-item .input:before,
+.filter-item .input:before,
 .b-footer .b-footer-main .b-block .sections > li .footer-contacts:before,
 .b-footer .b-footer-main .b-block .sections > li .social .social-icon a,
-.b-filters .b-block .filter-cont .filter-item .variants span:after{
+.filter-item .variants span:after,
+.b-category .b-block .grey-block .filter-block .tire-type label:before,
+.b-category .b-block .good-list .navigation li:first-child a:before{
 	background-image: url("../i/sprite.png");
 }
 
@@ -1113,10 +1357,12 @@ height: 300px;}
 	.b-filters .b-block .filter-cont .tire-type label:before,
 	.b-header .b-header-main .b-block > .left .right h2 a:before,
 	.b-header .b-header-main .b-block > .right .contacts a:before,
-	.b-filters .b-block .filter-cont .filter-item .input:before,
+	.filter-item .input:before,
 	.b-footer .b-footer-main .b-block .sections > li .footer-contacts:before,
 	.b-footer .b-footer-main .b-block .sections > li .social .social-icon a,
-	.b-filters .b-block .filter-cont .filter-item .variants span:after{
+	.filter-item .variants span:after,
+	.b-category .b-block .grey-block .filter-block .tire-type label:before,
+	.b-category .b-block .good-list .navigation li:first-child a:before{
 		background-image: url("../i/sprite@2x.png");
 		background-size: 222px;
 	}

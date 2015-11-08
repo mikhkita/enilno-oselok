@@ -11,13 +11,20 @@
 	<link rel="stylesheet" href="css/reset.css" type="text/css">
 	<link rel="stylesheet" href="css/jquery.fancybox.css" type="text/css">
 	<link rel="stylesheet" href="css/slick.css" type="text/css">
+	<link rel="stylesheet" href="css/jquery-ui.css" type="text/css">
 	<link rel="stylesheet" href="css/KitAnimate.css" type="text/css">
 	<link rel="stylesheet" href="css/layout.css" type="text/css">
 	<link rel="icon" type="image/vnd.microsoft.icon" href="favicon.ico">
 	
 	<!--[if gte IE 9]>
 		<style type="text/css">
-		    .gradient-orange,.gradient-black,.gradient-grey,.gradient-lightBlack{
+		    .gradient-orange,
+		    .gradient-black,
+		    .gradient-grey,
+		    .gradient-lightBlack,
+		    .b-orange-butt,.b-black-butt,
+		    .b-filters .b-block .tabs li:hover a,
+		    .b-filters .b-block .tabs li.ui-tabs-active a{
 		       filter: none;
 		    }
 	    </style>
@@ -82,7 +89,132 @@
 				<div class="grey-block left">
 					<div class="gradient-grey">
 						<h3>Фильтры</h3>
-						<h5>dsa</h5>
+						<div class="filter-block">
+							<form action="#">
+							<h5>Сезонность</h5>
+							<div class="tire-type clearfix">	
+								<input id="tire-winter" type="radio" name="tire-type" value="0">
+								<label for="tire-winter">Зимние нешипованные</label>
+								<input id="tire-spike" type="radio" name="tire-type" value="1">
+								<label for="tire-spike">Зимние шипованные</label>
+								<input id="tire-summer" type="radio" name="tire-type" value="2">
+								<label for="tire-summer">Летние</label>
+							</div>
+							<div class="filter-item">
+								<h5>Производитель</h5>
+								<div class="input"></div>	
+								<div class="variants clearfix">
+									<div>
+										<label>
+											<input type="checkbox">
+											<span onselectstart="return false;">Achilles</span>
+										</label>
+										<label>
+											<input type="checkbox">
+											<span onselectstart="return false;">Bridgestone</span>
+										</label>
+										<label>
+											<input type="checkbox">
+											<span onselectstart="return false;">Bridgestone</span>
+										</label>
+										<label>
+											<input type="checkbox">
+											<span onselectstart="return false;">Bridgestone</span>
+										</label>
+										<label>
+											<input type="checkbox">
+											<span onselectstart="return false;">Bridgestone</span>
+										</label>
+										<label>
+											<input type="checkbox">
+											<span onselectstart="return false;">Bridgestone</span>
+										</label>
+										<label>
+											<input type="checkbox">
+											<span onselectstart="return false;">Bridgestone</span>
+										</label>
+										<label>
+											<input type="checkbox">
+											<span onselectstart="return false;">Bridgestone</span>
+										</label>
+										<label>
+											<input type="checkbox">
+											<span onselectstart="return false;">Bridgestone</span>
+										</label>
+										<label>
+											<input type="checkbox">
+											<span onselectstart="return false;">Bridgestone</span>
+										</label>
+									</div>
+									<div>
+										<label>
+											<input type="checkbox">
+											<span onselectstart="return false;">Achilles</span>
+										</label>
+										<label>
+											<input type="checkbox">
+											<span onselectstart="return false;">Bridgestone</span>
+										</label>
+										<label>
+											<input type="checkbox">
+											<span onselectstart="return false;">Bridgestone</span>
+										</label>
+										<label>
+											<input type="checkbox">
+											<span onselectstart="return false;">Bridgestone</span>
+										</label>
+										<label>
+											<input type="checkbox">
+											<span onselectstart="return false;">Bridgestone</span>
+										</label>
+										<label>
+											<input type="checkbox">
+											<span onselectstart="return false;">Bridgestone</span>
+										</label>
+										<label>
+											<input type="checkbox">
+											<span onselectstart="return false;">Bridgestone</span>
+										</label>
+										<label>
+											<input type="checkbox">
+											<span onselectstart="return false;">Bridgestone</span>
+										</label>
+										<label>
+											<input type="checkbox">
+											<span onselectstart="return false;">Bridgestone</span>
+										</label>
+										<label>
+											<input type="checkbox">
+											<span onselectstart="return false;">Bridgestone</span>
+										</label>
+									</div>
+								</div>
+							</div>
+							<div class="filter-item">
+								<h5>Тип</h5>
+								<div class="input"></div>	
+							</div>
+							<div class="filter-item">
+								<h5>Тип</h5>
+								<div class="input"></div>	
+							</div>
+							<h5>Ценовой диапазон</h5>
+							<div class="slide-type">
+								<input class="min-val price" type="text" maxlength="5">
+								<span class="dash">-</span>
+								<input class="max-val price" type="text" maxlength="5">
+								<div data-min="6500" data-max="9000" data-min-cur="6500" data-max-cur="9000" data-step="100" class="slider-range"></div>
+							</div>	
+							<input type="submit" class="b-black-butt" value="Принять">
+							</form>						
+						</div>
+					</div>
+				</div>
+				<div class="right good-list">
+					<ul class="navigation clearfix">
+						<li><a href="#"></a></li>
+						<li><a href="#">Каталог</a></li>
+						<li><a href="#">Шины</a></li>
 					</div>
 				</div>
 			</div>
