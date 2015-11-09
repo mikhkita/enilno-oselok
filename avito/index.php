@@ -6,15 +6,14 @@ $url = "http://www.seogadget.ru/location";
 curl_setopt($ch, CURLOPT_URL, $url);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1); 
-curl_setopt($ch, CURLOPT_PROXY, '62.109.4.240:1212');
-curl_setopt($ch, CURLOPT_PROXYUSERPWD, 'admin:4815162342'); 
+// curl_setopt($ch, CURLOPT_PROXY, '62.109.4.240:1212');
+// curl_setopt($ch, CURLOPT_PROXYUSERPWD, 'admin:4815162342'); 
 $exec = curl_exec( $ch );
 $html = str_get_html($exec);
 // print_r($exec);
 
-$ip = $html->find('input[name=addr]',0)->value;
-if( $ip == '62.109.4.240') {
-	die($ip);
+// $ip = $html->find('input[name=addr]',0)->value;
+// if( $ip == '62.109.4.240') {
 	$url = "https://www.avito.ru/profile/login";
 	curl_setopt($ch, CURLOPT_URL, $url);
 	curl_setopt($ch, CURLOPT_REFERER, "https://www.avito.ru"); 
@@ -123,7 +122,7 @@ if( $ip == '62.109.4.240') {
 	} else {
 		die($captcha."КАПТЧА НЕ ОТПРАВИЛАСЬ");
 	}
-}
+// }
 curl_close($ch);    
 
 ?> 

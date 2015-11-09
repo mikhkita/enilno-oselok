@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title></title>
+	<title>Главная</title>
 	<meta name="keywords" content=''>
 	<meta name="description" content=''>
 
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=1">
+	<meta name="viewport" content="width=1000">	
+
 	<link rel="stylesheet" href="css/reset.css" type="text/css">
 	<link rel="stylesheet" href="css/jquery.fancybox.css" type="text/css">
 	<link rel="stylesheet" href="css/slick.css" type="text/css">
@@ -16,30 +17,12 @@
 	
 	<!--[if gte IE 9]>
 		<style type="text/css">
-		    .gradient-orange,.gradient-black,.gradient-grey{
+		    .gradient-orange,.gradient-black,.gradient-grey,.gradient-lightBlack{
 		       filter: none;
 		    }
 	    </style>
 	<![endif]-->
-	<meta name="viewport" content="width=1000">
-
-	<script type="text/javascript" src="js/jquery-2.1.1.min.js"></script>
-	<script type="text/javascript" src="js/jquery.fancybox.js"></script>
-	<script type="text/javascript" src="js/jssor.js"></script>
-	<script type="text/javascript" src="js/jssor.slider.js"></script>
-	<script type="text/javascript" src="js/TweenMax.min.js"></script>
-	<script type="text/javascript" src="js/swipe.js"></script>
-	<script type="text/javascript" src="js/carousel.lite.js"></script>
-	<script type="text/javascript" src="js/css3-mediaqueries.js"></script>
-	<script type="text/javascript" src="js/jquery.maskedinput.min.js"></script>
-	<script type="text/javascript" src="js/jquery.validate.min.js"></script>
-	<script type="text/javascript" src="js/slick.min.js"></script>
-	<script type="text/javascript" src="js/KitProgress.js"></script>
-	<script type="text/javascript" src="js/KitAnimate.js"></script>
-	<script type="text/javascript" src="js/device.js"></script>
-	<script type="text/javascript" src="js/KitSend.js"></script>
-	<script type="text/javascript" src="js/main.js"></script>
-
+	
 </head>
 <body>
 	<ul class="ps-lines">
@@ -76,7 +59,7 @@
 						<a href="mailto:koleso@yandex.ru" class="left mail">koleso@yandex.ru</a>
 					</div>
 					<form action="#" method="GET">
-						<input type="text" name="search">
+						<input type="text" name="search" placeholder="Поиск">
 						<button class="b-orange-butt">Поиск</button>
 					</form>
 				</div>
@@ -93,6 +76,7 @@
 			</div>
 		</div>
 	</div>
+	<div class="b-content">
 	<div class="b b-main-slider">
 		<div class="slide" style="background-image: url('i/back-main.jpg');">
 			<div class="b-block">
@@ -108,10 +92,10 @@
 		</div>
 	</div>
 	<div class="b b-filters">
-		<div class="b-block gradient-grey" id="tabs">
+		<div class="b-block gradient-grey main-tabs">
 			<ul class="tabs clearfix">
-				<li class="active gradient-lightBlack"><a href="#"><span class="tire-icon icon">Подбор шин</span></a></li>
-				<li class="gradient-lightBlack"><a href="#"><span class="disc-icon icon">Подбор дисков</span></a></li>
+				<li class="gradient-lightBlack"><a href="#tabs-tire"><span class="tire-icon icon">Подбор шин</span></a></li>
+				<li class="gradient-lightBlack"><a href="#tabs-disc"><span class="disc-icon icon">Подбор дисков</span></a></li>
 				<li class="gradient-lightBlack"><a href="#"><span class="wheel-icon icon">Подбор Колес</span></a></li>
 			</ul>
 			<div id="tabs-tire">
@@ -129,7 +113,7 @@
 					<div class="filter-cont clearfix">
 						<div class="filter-item">
 							<h5>Производитель</h5>
-							<div class="input"><span></span></div>	
+							<div class="input"></div>	
 							<div class="variants clearfix">
 								<div>
 									<label>
@@ -219,15 +203,15 @@
 						</div>
 						<div class="filter-item">
 							<h5>Тип</h5>
-							<div class="input"><span></span></div>	
+							<div class="input"></div>	
 						</div>
 						<div class="filter-item">
 							<h5>Состояние</h5>
-							<div class="input"><span></span></div>	
+							<div class="input"></div>	
 						</div>
 						<div class="filter-item">
 							<h5>Посадочный диаметр</h5>
-							<div class="input"><span></span></div>	
+							<div class="input"></div>	
 							<div class="variants">
 								<div>
 									<label>
@@ -319,15 +303,61 @@
 					<div class="filter-cont clearfix">
 						<div class="filter-item">
 							<h5>Сверловка</h5>
-							<div class="input"><span></span></div>	
+							<div class="input"></div>	
 						</div>
 						<div class="filter-item">
 							<h5>Ширина диска</h5>
-							<div class="input"><span></span></div>	
+							<div class="input"></div>	
 						</div>
 						<div class="filter-item">
 							<h5>Вылет</h5>
-							<div class="input"><span></span></div>	
+							<div class="input"></div>	
+						</div>
+					</div>
+				</form>
+			</div>
+			<div id="tabs-disc">
+				<form action="#" method="GET">
+					<div class="filter-cont">
+						<div class="tire-type clearfix">	
+							<input id="tire-winter" type="radio" name="tire-type" value="0">
+							<label for="tire-winter">Зимние нешaafsипованные</label>
+							<input id="tire-spike" type="radio" name="tire-type" value="1">
+							<label for="tire-spike">Зимние шипованные</label>
+							<input id="tire-summer" type="radio" name="tire-type" value="2">
+							<label for="tire-summer">Летние</label>
+						</div>
+					</div>
+					<div class="filter-cont clearfix">
+						<div class="filter-item">
+							<h5>Производитель</h5>
+							<div class="input"></div>	
+						</div>
+						<div class="filter-item">
+							<h5>Тип</h5>
+							<div class="input"></div>	
+						</div>
+						<div class="filter-item">
+							<h5>Состояние</h5>
+							<div class="input"></div>	
+						</div>
+						<div class="filter-item">
+							<h5>Посадочный диаметр</h5>
+							<div class="input"></div>	
+						</div>
+					</div>
+					<div class="filter-cont clearfix">
+						<div class="filter-item">
+							<h5>Сверловка</h5>
+							<div class="input"></div>	
+						</div>
+						<div class="filter-item">
+							<h5>Ширина диска</h5>
+							<div class="input"></div>	
+						</div>
+						<div class="filter-item">
+							<h5>Вылет</h5>
+							<div class="input"></div>	
 						</div>
 					</div>
 				</form>
@@ -336,13 +366,13 @@
 	</div>
 	<div class="b b-popular">
 		<div class="b-block clearfix">
-			<div class="main-category left">
+			<div class="grey-block main-category left">
 				<div class="gradient-grey">
 					<h3>Категории товаров</h3>
 					<ul>
-						<li class="active"><a href="#"><span class="tire-icon icon">Шины</span></a></li>
-						<li class="active"><a href="#"><span class="disc-icon icon">Диски</span></a></li>
-						<li class="active"><a href="#"><span class="wheel-icon icon">Колеса</span></a></li>
+						<li><a href="#"><span class="tire-icon icon">Шины</span></a></li>
+						<li><a href="#"><span class="disc-icon icon">Диски</span></a></li>
+						<li><a href="#"><span class="wheel-icon icon">Колеса</span></a></li>
 					</ul>
 				</div>
 				<div class="gradient-grey">
@@ -351,114 +381,116 @@
 					<p>Удобство выбора и простота оформления покупки - вот два простых принципа, которые делают наш магазин лучшим.</p>
 				</div>
 			</div>
-			<div class="popular-good right">
+			<div class="popular-good right main-tabs">
 				<h3 class="category-title">популярные товары</h3>
 				<ul class="popular-category clearfix">
-					<li class="active"><a href="#"><span class="tire-icon icon">Шины</span></a></li>
-					<li class="active"><a href="#"><span class="disc-icon icon">Диски</span></a></li>
-					<li class="active"><a href="#"><span class="wheel-icon icon">Колеса</span></a></li>
+					<li><a href="#popular-tire"><span class="tire-icon icon">Шины</span></a></li>
+					<li><a href="#"><span class="disc-icon icon">Диски</span></a></li>
+					<li><a href="#"><span class="wheel-icon icon">Колеса</span></a></li>
 				</ul>
-				<ul class="goods clearfix">
-					<li class="gradient-grey">
-						<div class="good-img" style="background-image: url('i/tire.jpg');"></div>
-						<div class="params-cont">
-							<h4>Yokohama DNA</h4>
-							<h5><span>8900 р.</span> + 800 р.</h5>
-							<h5>доставка в г. Томск</h5>
-							<h6>225/45/17  2 шт.</h6>
-							<h3>Износ: <span>82%</span></h3>
-							<h3>Год выпуска: <span>2013</span></h3>
-							<a href="#" class="b-orange-butt">Купить</a>
-						</div>
-					</li>
-					<li class="gradient-grey">
-						<div class="good-img" style="background-image: url('i/tire.jpg');"></div>
-						<div class="params-cont">
-							<h4>Yokohama DNA</h4>
-							<h5><span>8900 р.</span> + 800 р.</h5>
-							<h5>доставка в г. Томск</h5>
-							<h6>225/45/17  2 шт.</h6>
-							<h3>Износ: <span>82%</span></h3>
-							<h3>Год выпуска: <span>2013</span></h3>
-							<a href="#" class="b-orange-butt">Купить</a>
-						</div>
-					</li>
-					<li class="gradient-grey">
-						<div class="good-img" style="background-image: url('i/tire.jpg');"></div>
-						<div class="params-cont">
-							<h4>Yokohama DNA</h4>
-							<h5><span>8900 р.</span> + 800 р.</h5>
-							<h5>доставка в г. Томск</h5>
-							<h6>225/45/17  2 шт.</h6>
-							<h3>Износ: <span>82%</span></h3>
-							<h3>Год выпуска: <span>2013</span></h3>
-							<a href="#" class="b-orange-butt">Купить</a>
-						</div>
-					</li>
-					<li class="gradient-grey">
-						<div class="good-img" style="background-image: url('i/tire.jpg');"></div>
-						<div class="params-cont">
-							<h4>Yokohama DNA</h4>
-							<h5><span>8900 р.</span> + 800 р.</h5>
-							<h5>доставка в г. Томск</h5>
-							<h6>225/45/17  2 шт.</h6>
-							<h3>Износ: <span>82%</span></h3>
-							<h3>Год выпуска: <span>2013</span></h3>
-							<a href="#" class="b-orange-butt">Купить</a>
-						</div>
-					</li>
-					<li class="gradient-grey">
-						<div class="good-img" style="background-image: url('i/tire.jpg');"></div>
-						<div class="params-cont">
-							<h4>Yokohama DNA</h4>
-							<h5><span>8900 р.</span> + 800 р.</h5>
-							<h5>доставка в г. Томск</h5>
-							<h6>225/45/17  2 шт.</h6>
-							<h3>Износ: <span>82%</span></h3>
-							<h3>Год выпуска: <span>2013</span></h3>
-							<a href="#" class="b-orange-butt">Купить</a>
-						</div>
-					</li>
-					<li class="gradient-grey">
-						<div class="good-img" style="background-image: url('i/tire.jpg');"></div>
-						<div class="params-cont">
-							<h4>Yokohama DNA</h4>
-							<h5><span>8900 р.</span> + 800 р.</h5>
-							<h5>доставка в г. Томск</h5>
-							<h6>225/45/17  2 шт.</h6>
-							<h3>Износ: <span>82%</span></h3>
-							<h3>Год выпуска: <span>2013</span></h3>
-							<a href="#" class="b-orange-butt">Купить</a>
-						</div>
-					</li>
-					<li class="gradient-grey">
-						<div class="good-img" style="background-image: url('i/tire.jpg');"></div>
-						<div class="params-cont">
-							<h4>Yokohama DNA</h4>
-							<h5><span>8900 р.</span> + 800 р.</h5>
-							<h5>доставка в г. Томск</h5>
-							<h6>225/45/17  2 шт.</h6>
-							<h3>Износ: <span>82%</span></h3>
-							<h3>Год выпуска: <span>2013</span></h3>
-							<a href="#" class="b-orange-butt">Купить</a>
-						</div>
-					</li>
-					<li class="gradient-grey">
-						<div class="good-img" style="background-image: url('i/tire.jpg');"></div>
-						<div class="params-cont">
-							<h4>Yokohama DNA</h4>
-							<h5><span>8900 р.</span> + 800 р.</h5>
-							<h5>доставка в г. Томск</h5>
-							<h6>225/45/17  2 шт.</h6>
-							<h3>Износ: <span>82%</span></h3>
-							<h3>Год выпуска: <span>2013</span></h3>
-							<a href="#" class="b-orange-butt">Купить</a>
-						</div>
-					</li>
-
-				</ul>
+				<div id="popular-tire">
+					<ul class="goods clearfix">
+						<li class="gradient-grey">
+							<div class="good-img" style="background-image: url('i/tire.jpg');"></div>
+							<div class="params-cont">
+								<h4>Yokohama DNA</h4>
+								<h5><span>8900 р.</span> + 800 р.</h5>
+								<h5>доставка в г. Томск</h5>
+								<h6>225/45/17  2 шт.</h6>
+								<h3>Износ: <span>82%</span></h3>
+								<h3>Год выпуска: <span>2013</span></h3>
+								<a href="#" class="b-orange-butt">Купить</a>
+							</div>
+						</li>
+						<li class="gradient-grey">
+							<div class="good-img" style="background-image: url('i/tire.jpg');"></div>
+							<div class="params-cont">
+								<h4>Yokohama DNA</h4>
+								<h5><span>8900 р.</span> + 800 р.</h5>
+								<h5>доставка в г. Томск</h5>
+								<h6>225/45/17  2 шт.</h6>
+								<h3>Износ: <span>82%</span></h3>
+								<h3>Год выпуска: <span>2013</span></h3>
+								<a href="#" class="b-orange-butt">Купить</a>
+							</div>
+						</li>
+						<li class="gradient-grey">
+							<div class="good-img" style="background-image: url('i/tire.jpg');"></div>
+							<div class="params-cont">
+								<h4>Yokohama DNA</h4>
+								<h5><span>8900 р.</span> + 800 р.</h5>
+								<h5>доставка в г. Томск</h5>
+								<h6>225/45/17  2 шт.</h6>
+								<h3>Износ: <span>82%</span></h3>
+								<h3>Год выпуска: <span>2013</span></h3>
+								<a href="#" class="b-orange-butt">Купить</a>
+							</div>
+						</li>
+						<li class="gradient-grey">
+							<div class="good-img" style="background-image: url('i/tire.jpg');"></div>
+							<div class="params-cont">
+								<h4>Yokohama DNA</h4>
+								<h5><span>8900 р.</span> + 800 р.</h5>
+								<h5>доставка в г. Томск</h5>
+								<h6>225/45/17  2 шт.</h6>
+								<h3>Износ: <span>82%</span></h3>
+								<h3>Год выпуска: <span>2013</span></h3>
+								<a href="#" class="b-orange-butt">Купить</a>
+							</div>
+						</li>
+						<li class="gradient-grey">
+							<div class="good-img" style="background-image: url('i/tire.jpg');"></div>
+							<div class="params-cont">
+								<h4>Yokohama DNA</h4>
+								<h5><span>8900 р.</span> + 800 р.</h5>
+								<h5>доставка в г. Томск</h5>
+								<h6>225/45/17  2 шт.</h6>
+								<h3>Износ: <span>82%</span></h3>
+								<h3>Год выпуска: <span>2013</span></h3>
+								<a href="#" class="b-orange-butt">Купить</a>
+							</div>
+						</li>
+						<li class="gradient-grey">
+							<div class="good-img" style="background-image: url('i/tire.jpg');"></div>
+							<div class="params-cont">
+								<h4>Yokohama DNA</h4>
+								<h5><span>8900 р.</span> + 800 р.</h5>
+								<h5>доставка в г. Томск</h5>
+								<h6>225/45/17  2 шт.</h6>
+								<h3>Износ: <span>82%</span></h3>
+								<h3>Год выпуска: <span>2013</span></h3>
+								<a href="#" class="b-orange-butt">Купить</a>
+							</div>
+						</li>
+						<li class="gradient-grey">
+							<div class="good-img" style="background-image: url('i/tire.jpg');"></div>
+							<div class="params-cont">
+								<h4>Yokohama DNA</h4>
+								<h5><span>8900 р.</span> + 800 р.</h5>
+								<h5>доставка в г. Томск</h5>
+								<h6>225/45/17  2 шт.</h6>
+								<h3>Износ: <span>82%</span></h3>
+								<h3>Год выпуска: <span>2013</span></h3>
+								<a href="#" class="b-orange-butt">Купить</a>
+							</div>
+						</li>
+						<li class="gradient-grey">
+							<div class="good-img" style="background-image: url('i/tire.jpg');"></div>
+							<div class="params-cont">
+								<h4>Yokohama DNA</h4>
+								<h5><span>8900 р.</span> + 800 р.</h5>
+								<h5>доставка в г. Томск</h5>
+								<h6>225/45/17  2 шт.</h6>
+								<h3>Износ: <span>82%</span></h3>
+								<h3>Год выпуска: <span>2013</span></h3>
+								<a href="#" class="b-orange-butt">Купить</a>
+							</div>
+						</li>
+					</ul>
+				</div>
 			</div>
 		</div>
+	</div>
 	</div>
 	<div class="b b-footer">
 		<div class="b-footer-main">
@@ -536,35 +568,51 @@
 	</div>
 <div style="display:none;">
 	<div id="b-popup-1">
-			<div class="for_all b-popup" >
-				<h3>Оставьте заявку</h3>
-				<h4>и наши специалисты<br>свяжутся с Вами в ближайшее время</h4>
-				<form action="kitsend.php" method="POST" id="b-form-1" data-block="#b-popup-1">
-					<div class="b-popup-form">
-						<label for="name">Введите Ваше имя</label>
-						<input type="text" id="name" name="name" required/>
-						<label for="tel">Введите Ваш номер телефона</label>
-						<input type="text" id="tel" name="phone" required/>
-						<input type="hidden" name="subject" value="Заказ"/>
-						<input type="submit" class="ajax b-orange-butt" value="Заказать">
-					</div>
-				</form>
-			</div>
-		</div>
-		<div id="b-popup-2">
-			<div class="b-thanks b-popup">
-				<h3>Спасибо!</h3>
-				<h4>Ваша заявка успешно отправлена.<br/>Наш менеджер свяжется с Вами в течение часа.</h4>
-				<input type="submit" class="b-orange-butt" onclick="$.fancybox.close(); return false;" value="Закрыть">
-			</div>
-		</div>
-		<div id="b-popup-error">
-			<div class="b-thanks b-popup">
-				<h3>Ошибка отправки!</h3>
-				<h4>Приносим свои извинения. Пожалуйста, попробуйте отправить Вашу заявку позже.</h4>
-				<input type="submit" class="b-orange-butt" onclick="$.fancybox.close(); return false;" value="Закрыть">
-			</div>
+		<div class="for_all b-popup" >
+			<h3>Оставьте заявку</h3>
+			<h4>и наши специалисты<br>свяжутся с Вами в ближайшее время</h4>
+			<form action="kitsend.php" method="POST" id="b-form-1" data-block="#b-popup-1">
+				<div class="b-popup-form">
+					<label for="name">Введите Ваше имя</label>
+					<input type="text" id="name" name="name" required/>
+					<label for="tel">Введите Ваш номер телефона</label>
+					<input type="text" id="tel" name="phone" required/>
+					<input type="hidden" name="subject" value="Заказ"/>
+					<input type="submit" class="ajax b-orange-butt" value="Заказать">
+				</div>
+			</form>
 		</div>
 	</div>
+	<div id="b-popup-2">
+		<div class="b-thanks b-popup">
+			<h3>Спасибо!</h3>
+			<h4>Ваша заявка успешно отправлена.<br/>Наш менеджер свяжется с Вами в течение часа.</h4>
+			<input type="submit" class="b-orange-butt" onclick="$.fancybox.close(); return false;" value="Закрыть">
+		</div>
+	</div>
+	<div id="b-popup-error">
+		<div class="b-thanks b-popup">
+			<h3>Ошибка отправки!</h3>
+			<h4>Приносим свои извинения. Пожалуйста, попробуйте отправить Вашу заявку позже.</h4>
+			<input type="submit" class="b-orange-butt" onclick="$.fancybox.close(); return false;" value="Закрыть">
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript" src="js/jquery-2.1.1.min.js"></script>
+<script type="text/javascript" src="js/jquery.fancybox.js"></script>
+<script type="text/javascript" src="js/TweenMax.min.js"></script>
+<script type="text/javascript" src="js/swipe.js"></script>
+<script type="text/javascript" src="js/css3-mediaqueries.js"></script>
+<script type="text/javascript" src="js/jquery.maskedinput.min.js"></script>
+<script type="text/javascript" src="js/jquery.validate.min.js"></script>
+<script type="text/javascript" src="js/slick.min.js"></script>
+<script type="text/javascript" src="js/jquery-ui.min.js"></script>
+<script type="text/javascript" src="js/KitProgress.js"></script>
+<script type="text/javascript" src="js/KitAnimate.js"></script>
+<script type="text/javascript" src="js/device.js"></script>
+<script type="text/javascript" src="js/KitSend.js"></script>
+<script type="text/javascript" src="js/main.js"></script>
+
 </body>
 </html>
