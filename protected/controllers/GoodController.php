@@ -95,7 +95,7 @@ class GoodController extends Controller
 			}
 			$this->insertValues(GoodAttribute::tableName(),$values);
 
-			Good::updatePrices(array($id));
+			// Good::updatePrices(array($id));
 
 			$model->update();
 			$this->redirect( Yii::app()->createUrl('good/adminindex',array('goodTypeId'=>$goodTypeId,'partial'=>true,'GoodFilter_page' => $_GET["GoodFilter_page"])) );

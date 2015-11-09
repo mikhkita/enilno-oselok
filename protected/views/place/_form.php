@@ -12,7 +12,7 @@
 		<div class="clearfix">
 			<div class="row left">
 				<?php echo $form->labelEx($model,'category_id'); ?>
-				<?php echo $form->DropDownList($model,'category_id',CHtml::listData(Category::model()->findAll(array('order'=>'name ASC')), 'id', 'name'),array("style"=>"width:317px;")); ?>
+				<?php echo $form->DropDownList($model,'category_id',CHtml::listData(Variant::model()->with('attribute')->findAll(array('order'=>'varchar_value ASC','condition'=>'attribute.attribute_id=57')), 'id', 'value'),array("style"=>"width:317px;")); ?>
 				<?php echo $form->error($model,'category_id'); ?>
 			</div>
 

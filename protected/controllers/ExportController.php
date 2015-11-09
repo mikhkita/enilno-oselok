@@ -273,7 +273,8 @@ class ExportController extends Controller
 		}
 
 		foreach ($export->interpreters as $key => $value) {
-			$arr[intval($value->sort)] = array("TYPE"=>"inter", "VALUE"=>$value->interpreter);
+			if( stripos($value->interpreter->name, "головок") !== false )
+				$arr[intval($value->sort)] = array("TYPE"=>"inter", "VALUE"=>$value->interpreter);
 		}
 
 		ksort($arr);

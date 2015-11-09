@@ -100,12 +100,30 @@ class Queue extends CActiveRecord
 				$model = new Queue();
 				$model->advert_id = $advert_id;
 				$model->code = $code;
-				return $model->save();
+				$model->save();
+				return $model;
 			}else{
 				return Log::error("Не найдено действие с кодом \"".$code."\"");;
 			}
 		}else{
 			return Log::error("Отсутствует ID объявления или код действия");;
+		}
+	}
+
+	public function addAll($adverts = array(), $code = false){
+		if( count($adverts) && $code ){
+			if( isset($this->codes[$code]) ){
+				$values = array();
+				foreach ($adverts as $advert)
+					array_push($values, array("advert_id" => isset($advert->id)?$advert->id:$advert, "action_id" => $this->codes[$code] ));
+				
+				$this->insertValues(Queue::tableName(),$values);
+				return true;
+			}else{
+				return Log::error("Не найдено действие с кодом \"".$code."\"");;
+			}
+		}else{
+			return Log::error("Отсутствуют ID объявлений или код действия");;
 		}
 	}
 

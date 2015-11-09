@@ -69,11 +69,18 @@ Class Drom {
     }
 
     public function addAdvert($params,$images){
+        include_once Yii::app()->basePath.'/extensions/simple_html_dom.php';
+
         $options = $this->setOptions($params);
         $advert_id = json_decode($this->curl->request("http://baza.drom.ru/api/1.0/save/bulletin",$options))->id;
         $this->updateAdvert($advert_id,$params,$images);
         
-        print_r($this->curl->request("http://baza.drom.ru/bulletin/".$advert_id."/draft/publish?from=draft.publish",array('from'=>'adding.publish')));
+        $result = iconv('windows-1251', 'utf-8', $this->curl->request("http://baza.drom.ru/bulletin/".$advert_id."/draft/publish?from=draft.publish",array('from'=>'adding.publish')));
+
+        // file_put_contents(Yii::app()->basePath."/drom.txt", $result."\n", FILE_APPEND);
+        $html = str_get_html($result);
+        return ( $html->find('#fieldsetView',0)->getAttribute("bulletinid") == $advert_id )?$advert_id:false;
+        // return "asd";
     }
     
     public function updateAdvert($advert_id,$params,$images = NULL) {

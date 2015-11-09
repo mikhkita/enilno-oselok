@@ -127,9 +127,9 @@ class PlaceController extends Controller
 		$fields = Place::getValues(Place::getInters(2,$good->type->id),$good);
 		// print_r($fields);
 		$fields = Drom::self()->generateFields($fields,1);
-		print_r($fields);
+		// print_r($fields);
 		$images = $this->getImages($good);
-		print_r($images);
+		// print_r($images);
 		// die();
 
 		$fields["login"] = explode(":", $fields["login"]);
@@ -137,8 +137,9 @@ class PlaceController extends Controller
 		$drom = new Drom();
         $drom->setUser($fields["login"][0],$fields["login"][1]);
         unset($fields["login"]);
-        $drom->auth("http://baza.drom.ru/");
-        $drom->addAdvert($fields,$images);
+      	$drom->auth("https://baza.drom.ru/partner/sign");
+        $id = $drom->addAdvert($fields,$images);
+        print_r($id);
         $drom->curl->removeCookies();
 	}
 

@@ -305,9 +305,15 @@ $(document).ready(function(){
             if( $(this).valid() && !$(this).find("input[type=submit]").hasClass("blocked") && !$(this).hasClass("blocked") ){
                 var $form = $(this),
                     url = $form.attr("action"),
-                    data = $form.serialize();
+                    data;
 
                 $(this).find("input[type=submit]").addClass("blocked");
+
+                if( $form.attr("data-beforeAjax") && customHandlers[$form.attr("data-beforeAjax")] ){
+                    customHandlers[$form.attr("data-beforeAjax")]($form);
+                }
+
+                data = $form.serialize();
 
                 if( a == false ){
                     $form.find("input[type='text'],input[type='number'],textarea").val("");
@@ -322,10 +328,6 @@ $(document).ready(function(){
                     if( $(".main form").attr("id") != "b-matrix-form" ){
                         url = url+( (url.split("?").length>1)?"&":"?" )+$(".main form").serialize();
                     }
-                }
-
-                if( $form.attr("data-beforeAjax") && customHandlers[$form.attr("data-beforeAjax")] ){
-                    customHandlers[$form.attr("data-beforeAjax")]($form);
                 }
 
                 $.ajax({
@@ -1128,6 +1130,14 @@ $(document).ready(function(){
             $(".b-desktop").removeClass("b-editable");
         }
     }
+
+    $("body").on("click",".b-group-popup .select-all",function(){
+        $(".b-group-popup").find("input[type='checkbox']").prop("checked","checked");
+    });
+
+    $("body").on("click",".b-group-popup .select-none",function(){
+        $(".b-group-popup").find("input[type='checkbox']").prop("checked",false);
+    });
 
     function bindTableForm(){
         if( $("#table-form").length ){
