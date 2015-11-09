@@ -31,11 +31,12 @@ class Good extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('good_type_id', 'required'),
+			array('share', 'numerical', 'integerOnly'=>true),
 			array('code', 'length', 'max'=>255),
 			array('good_type_id', 'length', 'max'=>10),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, code, good_type_id', 'safe', 'on'=>'search'),
+			array('id, code, good_type_id, share', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -62,6 +63,7 @@ class Good extends CActiveRecord
 			'id' => 'ID',
 			'code' => 'Код',
 			'good_type_id' => 'Тип товара',
+			'share' => 'Выкладывать',
 		);
 	}
 
@@ -310,15 +312,66 @@ class Good extends CActiveRecord
 	}
 
 	public function update(){
-		if( $this->isDiff() ){
-			echo "diff";
-		}else{
-			echo "NOT diff";
+		$newModel = Good::model()->findByPk($this->id);
+		// if($this->isDiff()){
+		// 	echo "DIFF";
+		// }else{
+		// 	echo "NOT DIFF";
+		// }
+		// die();
+
+		if( $this->isDiff($newModel) && !$this->share ){
+
+			$cities = Place::model()->cities;
+			$places = $this->getPlaces();
+
+			$add_arr = array();
+			$delete_arr = array();
+			foreach ($cities as $attr_id => $city) {
+				$new_arr = $this->getArray(isset($newModel->fields_assoc[$attr_id."-d"])?$newModel->fields_assoc[$attr_id."-d"]:array());
+
+				$delete_arr = $delete_arr + array_udiff($this->adverts, $new_arr, function ($a,$b){return ((isset($a->city_id))?$a->city_id:$a->variant_id) == ((isset($b->city_id))?$b->city_id:$b->variant_id) ? 0 : -1;});
+				$add = array_udiff($new_arr, $this->adverts, function ($a,$b){return ((isset($a->city_id))?$a->city_id:$a->variant_id) == ((isset($b->city_id))?$b->city_id:$b->variant_id) ? 0 : -1;});
+
+				foreach ($add as $key => $item)
+					array_push($add_arr, array("good_id"=>$this->id,"place_id"=>$places[$this->good_type_id][$city["PLACE"]]->id,"city_id"=>$item->variant_id,"type_id"=>$city["TYPE"]));
+
+				print_r($delete_arr);
+				// $delete = array();
+				// foreach ($items as $item)
+					// array_push($delete, $item->id);
+				// die();
+
+
+			}
+			Advert::addAll($add_arr);
+			// Queue::addAll($this->adverts,"update");
 		}
-		die();
 	}
 
-	public function isDiff(){
+	public function getPlaces(){
+		$model = Place::model()->findAll();
+		$out = array();
+		foreach ($model as $key => $value) {
+			if( !isset($out[$value->good_type_id]) ) $out[$value->good_type_id] = array();
+			$out[$value->good_type_id][$value->category_id] = $value;
+		}
+		return $out;
+	}
+
+	public function getArray($items){
+        $out = array();
+        if( $items ){
+            if( is_array($items) ){
+                $out = $items;
+            }else{
+                array_push($out, $items);
+            }
+        }
+        return $out;
+    }
+
+	public function isDiff($newModel){
 		$newModel = Good::model()->findByPk($this->id);
 
 		if( count($newModel->fields_assoc) != count($this->fields_assoc) ) return true;
@@ -332,7 +385,12 @@ class Good extends CActiveRecord
 	public function compareModels($model1, $model2){
 		foreach ($model1->fields_assoc as $key => $value) {
 			if( isset($model2->fields_assoc[$key]) ){
-				if( $model2->fields_assoc[$key]->value != $value->value ) return true;
+				if( is_array($model2->fields_assoc[$key]) || is_array($value) ){
+					if( !is_array($model2->fields_assoc[$key]) || !is_array($value) ) return true;
+					if( count(array_udiff($model2->fields_assoc[$key], $value, function ($a,$b){return $a->value == $b->value ? 0 : -1;})) || count(array_udiff($value, $model2->fields_assoc[$key], function ($a,$b){return $a->value == $b->value ? 0 : -1;})) ) return true;
+				}else{
+					if( $model2->fields_assoc[$key]->value != $value->value ) return true;
+				}
 			}else{
 				return true;
 			}

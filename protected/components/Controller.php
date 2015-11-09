@@ -259,6 +259,23 @@ class Controller extends CController
         $criteria->with = array("goodTypes","variants");
         $criteria->condition = "goodTypes.good_type_id=".$good_type_id." AND dynamic=1";
         $modelDyn = Attribute::model()->findAll($criteria);
+        $dynObjects = array();
+
+        foreach ($modelDyn as $key => $value) {
+            $curObj = Variant::model()->findByPk($dynamic[$value->id]);
+            $dynObjects[$value->id] = (object) array("value"=>$curObj->value,"variant_id"=>$curObj->id);
+        }
+
+        return $dynObjects;
+    }
+
+    public function getDyn($dynamic){
+        $criteria = new CDbCriteria();
+        $criteria->addInCondition("variant_id",array_values($dynamic));
+        $modelDyn = Variant::model()->findAll($criteria);
+
+        print_r($modelDyn);
+        die();
         
         foreach ($modelDyn as $key => $value) {
             $curObj = Variant::model()->findByPk($dynamic[$value->id]);
@@ -458,10 +475,41 @@ class Controller extends CController
         return $result;
     }
 
+    public function splitByRows($row_count,$items){
+        $out = array();
+        $i = 0;
+        $j = 0;
+        foreach ($items as $key => $item) {
+            if( $i!=0 && $i%$row_count == 0 ){
+                $j++;
+                $out[$j] = array();
+            }
+            $out[$j][$key] = $item;
+            $i++;
+        }
+        return $out;
+    }
+
+    public function splitByCols($col_count,$items){
+        return $this->splitByRows(ceil(count($items)/$col_count),$items);
+    }
+
     public function getAssoc($items,$attr){
         $out = array();
         foreach ($items as $item)
             $out[$item->getAttribute($attr)] = $item;
+        return $out;
+    }
+
+    public function getArray($items){
+        $out = array();
+        if( $items ){
+            if( is_array($items) ){
+                $out = $items;
+            }else{
+                array_push($out, $items);
+            }
+        }
         return $out;
     }
 

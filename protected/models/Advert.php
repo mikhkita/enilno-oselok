@@ -7,7 +7,6 @@
  * @property string $good_id
  * @property string $place_id
  * @property string $url
- * @property integer $state
  * @property string $type_id
  * @property string $city_id
  */
@@ -29,13 +28,12 @@ class Advert extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('good_id, place_id, url, state, type_id, city_id', 'required'),
-			array('state', 'numerical', 'integerOnly'=>true),
+			array('good_id, place_id, type_id, city_id', 'required'),
 			array('good_id, place_id, type_id, city_id', 'length', 'max'=>10),
 			array('url', 'length', 'max'=>255),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('good_id, place_id, url, state, type_id, city_id', 'safe', 'on'=>'search'),
+			array('good_id, place_id, url, type_id, city_id', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -89,13 +87,26 @@ class Advert extends CActiveRecord
 		$criteria->compare('good_id',$this->good_id,true);
 		$criteria->compare('place_id',$this->place_id,true);
 		$criteria->compare('url',$this->url,true);
-		$criteria->compare('state',$this->state);
 		$criteria->compare('type_id',$this->type_id,true);
 		$criteria->compare('city_id',$this->city_id,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 		));
+	}
+
+	public function addAll($items = array()){
+		if( count($items) ){
+			if( isset($this->codes[$code]) ){
+				
+				$this->insertValues(Queue::tableName(),$values);
+				return true;
+			}else{
+				return Log::error("Не найдено действие с кодом \"".$code."\"");;
+			}
+		}else{
+			return Log::error("Отсутствуют элементы для добавления объявлений");
+		}
 	}
 
 	/**

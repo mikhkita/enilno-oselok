@@ -2132,17 +2132,37 @@ ul.b-filter-list{
         position: relative;
         top: 1px;
     }
+.b-group-popup .form{
+    text-align: center;
+} 
+    .b-group-popup form{
+        display: inline-block;
+    }
 .b-group-vars{
     text-align: left;
+    display: table;
+    margin-top: 20px;
 }
-    .b-group-vars input{
-        display: inline-block;
+    .b-group-col{
+        display: table-cell;  
+        padding-right: 20px;
     }
-    .b-group-vars label{
-        display: inline-block;
-        margin-left: 10px;
+        .b-group-vars input{
+            display: inline-block;
+        }
+        .b-group-vars label{
+            display: inline-block;
+            margin-left: 10px;
+        }
+.b-checkbox-nav{
+    text-align: left;
+    margin-top: 10px;
+    padding-bottom: 10px;
+}
+    .b-checkbox-nav a{
+        margin-right: 20px;
+        font-size: 14px;
     }
-
 .b-compare {
     width: 1000px;
     margin: 20px auto;

@@ -10,6 +10,21 @@
  */
 class Place extends CActiveRecord
 {
+	public $cities = array(
+		58 => array(
+			"PLACE" => 2047,
+			"TYPE" => 869
+		),
+		59 => array(
+			"PLACE" => 2047,
+			"TYPE" => 868
+		),
+		60 => array(
+			"PLACE" => 2048,
+			"TYPE" => 869
+		),
+	);
+
 	/**
 	 * @return string the associated database table name
 	 */
@@ -45,7 +60,7 @@ class Place extends CActiveRecord
 			'adverts' => array(self::HAS_MANY, 'Advert', 'good_id'),
 			'interpreters' => array(self::HAS_MANY, 'PlaceInterpreter', 'place_id'),
 			'goodType' => array(self::BELONGS_TO, 'GoodType', 'good_type_id'),
-			'category' => array(self::BELONGS_TO, 'Category', 'category_id'),
+			'category' => array(self::BELONGS_TO, 'Variant', 'category_id'),
 		);
 	}
 
@@ -56,7 +71,7 @@ class Place extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'category_id' => 'Категория',
+			'category_id' => 'Ресурс',
 			'good_type_id' => 'Тип товара',
 		);
 	}
