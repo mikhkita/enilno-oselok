@@ -345,12 +345,12 @@ class Good extends CActiveRecord
 
 			if( $isDiffAdverts ){
 				$delete_arr = $delete_arr + array_udiff($this->adverts, $new_items, "compare");
-				// Queue::addAll($delete_arr,"delete");
+				Queue::addAll($delete_arr,"delete");
 			}
 
 			if( $isDiff ){
 				$update_arr = array_udiff($this->adverts, $delete_arr, "compare");
-				// Queue::addAll($update_arr,"update");
+				Queue::addAll($update_arr,"update");
 			}
 
 			if( $isDiffAdverts ){
@@ -359,16 +359,16 @@ class Good extends CActiveRecord
 				foreach ($add as $key => $item)
 					array_push($add_arr, array("good_id"=>$this->id,"place_id"=>$places[$this->good_type_id][$cities[$item->attribute_id]["PLACE"]]->id,"city_id"=>$item->variant_id,"type_id"=>$cities[$item->attribute_id]["TYPE"]));
 
-				// $new_adverts = Advert::addAll($add_arr);
-				// Queue::addAll($new_adverts,"add");
+				$new_adverts = Advert::addAll($add_arr);
+				Queue::addAll($new_adverts,"add");
 			}
 
-			print_r($add_arr);
-			echo "<br><br><br><br>";
-			print_r($delete_arr);
-			echo "<br><br><br><br>";
-			print_r($update_arr);
-			die();
+			// print_r($add_arr);
+			// echo "<br><br><br><br>";
+			// print_r($delete_arr);
+			// echo "<br><br><br><br>";
+			// print_r($update_arr);
+			// die();
 			
 
 			

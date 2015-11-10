@@ -1,24 +1,21 @@
 <?php
 
 /**
- * This is the model class for table "advert".
+ * This is the model class for table "queue_state".
  *
- * The followings are the available columns in table 'advert':
- * @property string $id
- * @property string $good_id
- * @property string $place_id
- * @property string $url
- * @property string $type_id
- * @property string $city_id
+ * The followings are the available columns in table 'queue_state':
+ * @property integer $id
+ * @property string $name
+ * @property string $code
  */
-class Advert extends CActiveRecord
+class QueueState extends CActiveRecord
 {
 	/**
 	 * @return string the associated database table name
 	 */
 	public function tableName()
 	{
-		return 'advert';
+		return 'queue_state';
 	}
 
 	/**
@@ -29,12 +26,11 @@ class Advert extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('good_id, place_id, type_id, city_id', 'required'),
-			array('good_id, place_id, type_id, city_id', 'length', 'max'=>10),
-			array('url', 'length', 'max'=>255),
+			array('name, code', 'required'),
+			array('name, code', 'length', 'max'=>50),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, good_id, place_id, url, type_id, city_id', 'safe', 'on'=>'search'),
+			array('id, name, code', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -46,10 +42,6 @@ class Advert extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'good' => array(self::BELONGS_TO, 'Good', 'good_id'),
-			'place' => array(self::BELONGS_TO, 'Place', 'place_id'),
-			'city' => array(self::BELONGS_TO, 'Variant', 'city_id'),
-			'type' => array(self::BELONGS_TO, 'Variant', 'type_id'),
 			'queue' => array(self::HAS_MANY, 'Queue', 'advert_id'),
 		);
 	}
@@ -61,11 +53,8 @@ class Advert extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'good_id' => 'Товар',
-			'place_id' => 'Площадка',
-			'url' => 'Ссылка',
-			'type_id' => 'Тип объявления',
-			'city_id' => 'Город',
+			'name' => 'Name',
+			'code' => 'Code',
 		);
 	}
 
@@ -87,32 +76,20 @@ class Advert extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('id',$this->id,true);
-		$criteria->compare('good_id',$this->good_id,true);
-		$criteria->compare('place_id',$this->place_id,true);
-		$criteria->compare('url',$this->url,true);
-		$criteria->compare('type_id',$this->type_id,true);
-		$criteria->compare('city_id',$this->city_id,true);
+		$criteria->compare('id',$this->id);
+		$criteria->compare('name',$this->name,true);
+		$criteria->compare('code',$this->code,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 		));
 	}
 
-	public function addAll($items = array()){
-		if( count($items) ){
-			Controller::insertValues(Advert::tableName(),$items);
-			return Controller::getValues(Advert::model(),$items);
-		}else{
-			return Log::error("Отсутствуют элементы для добавления объявлений");
-		}
-	}
-
 	/**
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return Advert the static model class
+	 * @return QueueState the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{

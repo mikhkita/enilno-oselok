@@ -117,10 +117,10 @@ input {
 	font-weight: 300;
 }
 input::-webkit-input-placeholder {
-	color: #434343;
+	color: rgba(255,255,255,0.7);
 }
 input:-moz-placeholder {
-	color: #434343;
+	color: rgba(255,255,255,0.7);
 }
 .gradient-orange{
 	/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ffe57f+0,ffdc1c+5,ff9a00+93,966304+100 */
@@ -391,7 +391,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 							box-sizing: border-box;
 							border: 1px solid #ffb000;
 							background: none;
-							padding: 7px 8px 6px;
+							padding: 7px 12px 6px;
 							color: #fff;
 						}
 						.b-header .b-header-main .b-block > .right form button{
@@ -881,7 +881,7 @@ height: 300px;}
 		border-radius: 2px;
 		position: relative;
 		margin-right: 18px;
-		margin-bottom: 30px;
+		margin-bottom: 20px;
 		cursor: pointer;
 		height: 239px;
 		overflow: hidden;
@@ -1437,6 +1437,13 @@ height: 300px;}
 	.b-footer .b-footer-main .b-block .sections > li .social .social-icon .fb {
 
 		background-position: -1px -63px;
+	}
+	.filter-item .variants span:before{
+		width: 10px;
+		height: 10px;
+	}
+	.filter-item .variants span:after{
+		background-position: -109px -98px;
 	}
 }
 
