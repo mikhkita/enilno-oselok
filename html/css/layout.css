@@ -557,7 +557,7 @@ height: 300px;}
 		}
 			.popular-category .ui-tabs-active .tire-icon:before,.main-category li:hover .tire-icon:before{
 				background-position: -2px -39px;
-				width: 20px;
+				width: 21px;
 			}
 			.popular-category .ui-tabs-active .disc-icon:before,.main-category li:hover .disc-icon:before {
 				background-position: -48px -39px;
@@ -1379,22 +1379,22 @@ height: 300px;}
 	    background-position: -1px -98px;
 	}
 	.tire-icon:before {
-	    background-position: -1px -38px;
+	    background-position: -23px -38px !important;
 	}
 	.active a .tire-icon:before {
-	    background-position: -23px -38px;
+	    background-position: -23px -38px !important;
 	}
 	.wheel-icon:before {
-	    background-position: -95px -38px;
+	    background-position: -95px -38px !important;
 	}
 	.active a .wheel-icon:before {
-	    background-position: -121px -38px;
+	    background-position: -121px -38px !important;
 	}
 	.disc-icon:before {
-	    background-position: -46px -38px;
+	    background-position: -46px -38px !important;
 	}
 	.active a .disc-icon:before {
-	    background-position: -71px -38px;
+	    background-position: -71px -38px !important;
 	}
 	.b-filters .b-block .filter-cont .tire-type label:before {
 	    background-position: -34px -1px;
@@ -1417,6 +1417,26 @@ height: 300px;}
 	.b-footer .b-footer-sub {
 		background-image: url("../i/back-menu@2x.jpg");
 		background-size: 22px;
+	}
+	.b-footer .b-footer-main .b-block .sections > li .social .social-icon .tw {
+		background-position: -71px -63px;
+	}
+	.b-footer .b-footer-main .b-block .sections > li .social .social-icon .yt {
+		background-position: -141px -63px;
+		width: 34px;
+	}
+	.b-footer .b-footer-main .b-block .sections > li .social .social-icon .inst {
+
+		background-position: -36px -63px;
+	}
+	.b-footer .b-footer-main .b-block .sections > li .social .social-icon .vk {
+
+		background-position: -106px -63px;
+		width: 34px;
+	}
+	.b-footer .b-footer-main .b-block .sections > li .social .social-icon .fb {
+
+		background-position: -1px -63px;
 	}
 }
 
