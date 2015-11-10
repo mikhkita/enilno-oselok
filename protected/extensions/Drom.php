@@ -48,7 +48,9 @@ Class Drom {
     public function parseExpired(){
         include_once Yii::app()->basePath.'/extensions/simple_html_dom.php';
 
-        $html = str_get_html($this->auth("http://baza.drom.ru/personal/non_active/bulletins"));
+        $this->auth("https://baza.drom.ru/partner/sign");
+        
+        $html = str_get_html(iconv('windows-1251', 'utf-8', $this->curl->request("https://baza.drom.ru/personal/non_active/bulletins")));
 
         $links = array();
         $pageLinks = $html->find('.bullNotPublished');

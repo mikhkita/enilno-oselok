@@ -4,6 +4,7 @@
  * This is the model class for table "advert".
  *
  * The followings are the available columns in table 'advert':
+ * @property string $id
  * @property string $good_id
  * @property string $place_id
  * @property string $url
@@ -33,7 +34,7 @@ class Advert extends CActiveRecord
 			array('url', 'length', 'max'=>255),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('good_id, place_id, url, type_id, city_id', 'safe', 'on'=>'search'),
+			array('id, good_id, place_id, url, type_id, city_id', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -57,10 +58,10 @@ class Advert extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
+			'id' => 'ID',
 			'good_id' => 'Товар',
 			'place_id' => 'Площадка',
 			'url' => 'Ссылка',
-			'state' => 'Состояние',
 			'type_id' => 'Тип объявления',
 			'city_id' => 'Город',
 		);
@@ -84,6 +85,7 @@ class Advert extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
+		$criteria->compare('id',$this->id,true);
 		$criteria->compare('good_id',$this->good_id,true);
 		$criteria->compare('place_id',$this->place_id,true);
 		$criteria->compare('url',$this->url,true);
@@ -97,13 +99,8 @@ class Advert extends CActiveRecord
 
 	public function addAll($items = array()){
 		if( count($items) ){
-			if( isset($this->codes[$code]) ){
-				
-				$this->insertValues(Queue::tableName(),$values);
-				return true;
-			}else{
-				return Log::error("Не найдено действие с кодом \"".$code."\"");;
-			}
+			Controller::insertValues(Advert::tableName(),$items);
+			return Controller::getValues(Advert::model(),$items);
 		}else{
 			return Log::error("Отсутствуют элементы для добавления объявлений");
 		}

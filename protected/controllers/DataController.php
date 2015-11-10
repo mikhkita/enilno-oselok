@@ -177,7 +177,7 @@ class DataController extends Controller
 				echo "0";
 			}
 		}else{
-			$model=Dictionary::model()->with("attribute_1.variants")->findByPk($id);
+			$model=Dictionary::model()->with(array("attribute_1.variants.variant"=>array("order"=>"variant.sort ASC")))->findByPk($id);
 
 			$values = array();
 			foreach ($model->values as $key => $value) {
@@ -311,8 +311,8 @@ class DataController extends Controller
 		}else{
 			$model=Table::model()->findByPk($id);
 
-			$x = AttributeVariant::model()->findAll("attribute_id=".$model->attribute_id_1);
-			$y = AttributeVariant::model()->findAll("attribute_id=".$model->attribute_id_2);
+			$x = AttributeVariant::model()->with(array("variant"=>array("order"=>"variant.sort ASC")))->findAll("attribute_id=".$model->attribute_id_1);
+			$y = AttributeVariant::model()->with(array("variant"=>array("order"=>"variant.sort ASC")))->findAll("attribute_id=".$model->attribute_id_2);
 
 			$values = array();
 			foreach ($model->values as $key => $value) {
@@ -447,9 +447,9 @@ class DataController extends Controller
 		}else{
 			$model=Cube::model()->findByPk($id);
 
-			$x = AttributeVariant::model()->findAll("attribute_id=".$model->attribute_id_1);
-			$y = AttributeVariant::model()->findAll("attribute_id=".$model->attribute_id_2);
-			$z = AttributeVariant::model()->findAll("attribute_id=".$model->attribute_id_3);
+			$x = AttributeVariant::model()->with(array("variant"=>array("order"=>"variant.sort ASC")))->findAll("attribute_id=".$model->attribute_id_1);
+			$y = AttributeVariant::model()->with(array("variant"=>array("order"=>"variant.sort ASC")))->findAll("attribute_id=".$model->attribute_id_2);
+			$z = AttributeVariant::model()->with(array("variant"=>array("order"=>"variant.sort ASC")))->findAll("attribute_id=".$model->attribute_id_3);
 
 			$values = array();
 			foreach ($model->values as $key => $value) {

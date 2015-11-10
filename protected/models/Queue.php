@@ -112,12 +112,12 @@ class Queue extends CActiveRecord
 
 	public function addAll($adverts = array(), $code = false){
 		if( count($adverts) && $code ){
-			if( isset($this->codes[$code]) ){
+			if( isset(Queue::model()->codes[$code]) ){
 				$values = array();
 				foreach ($adverts as $advert)
-					array_push($values, array("advert_id" => isset($advert->id)?$advert->id:$advert, "action_id" => $this->codes[$code] ));
+					array_push($values, array("advert_id" => isset($advert->id)?$advert->id:$advert, "action_id" => Queue::model()->codes[$code] ));
 				
-				$this->insertValues(Queue::tableName(),$values);
+				Controller::insertValues(Queue::tableName(),$values);
 				return true;
 			}else{
 				return Log::error("Не найдено действие с кодом \"".$code."\"");;
