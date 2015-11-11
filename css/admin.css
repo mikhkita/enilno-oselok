@@ -452,6 +452,10 @@ h1{
             height: 27px;
             padding: 5px 10px;
         }
+        .b-table td b{
+            color: #D26A44;
+            /*font-weight: 700 !important;*/
+        }
         .b-good-table td{
             padding: 0px 2px;
         }

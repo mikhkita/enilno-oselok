@@ -7,6 +7,7 @@
  * @property string $id
  * @property string $advert_id
  * @property string $action_id
+ * @property integer $state_id
  */
 class Queue extends CActiveRecord
 {
@@ -16,7 +17,6 @@ class Queue extends CActiveRecord
 		"delete" => 3
 	);
 
-
 	/**
 	 * @return string the associated database table name
 	 */
@@ -24,6 +24,18 @@ class Queue extends CActiveRecord
 	{
 		return 'queue';
 	}
+
+	public function scopes()
+    {
+        return array(
+            'next'=>array(
+                'condition'=>'action_id != 3',
+            ),
+            'toDelete'=>array(
+                'condition'=>'action_id = 3',
+            ),
+        );
+    }
 
 	/**
 	 * @return array validation rules for model attributes.
@@ -34,10 +46,11 @@ class Queue extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('advert_id, action_id', 'required'),
+			array('state', 'numerical', 'integerOnly'=>true),
 			array('advert_id, action_id', 'length', 'max'=>10),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, advert_id, action_id', 'safe', 'on'=>'search'),
+			array('id, advert_id, action_id, state_id', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -51,6 +64,7 @@ class Queue extends CActiveRecord
 		return array(
 			'advert' => array(self::BELONGS_TO, 'Advert', 'advert_id'),
 			'action' => array(self::BELONGS_TO, 'Action', 'action_id'),
+			'state' => array(self::BELONGS_TO, 'QueueState', 'state_id'),
 		);
 	}
 
@@ -63,6 +77,7 @@ class Queue extends CActiveRecord
 			'id' => 'ID',
 			'advert_id' => 'Объявление',
 			'action_id' => 'Действие',
+			'state_id' => 'Состояние',
 		);
 	}
 
@@ -87,6 +102,7 @@ class Queue extends CActiveRecord
 		$criteria->compare('id',$this->id,true);
 		$criteria->compare('advert_id',$this->advert_id,true);
 		$criteria->compare('action_id',$this->action_id,true);
+		$criteria->compare('state_id',$this->state);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -112,12 +128,12 @@ class Queue extends CActiveRecord
 
 	public function addAll($adverts = array(), $code = false){
 		if( count($adverts) && $code ){
-			if( isset($this->codes[$code]) ){
+			if( isset(Queue::model()->codes[$code]) ){
 				$values = array();
 				foreach ($adverts as $advert)
-					array_push($values, array("advert_id" => isset($advert->id)?$advert->id:$advert, "action_id" => $this->codes[$code] ));
+					array_push($values, array("advert_id" => isset($advert->id)?$advert->id:$advert, "action_id" => Queue::model()->codes[$code] ));
 				
-				$this->insertValues(Queue::tableName(),$values);
+				Controller::insertValues(Queue::tableName(),$values);
 				return true;
 			}else{
 				return Log::error("Не найдено действие с кодом \"".$code."\"");;

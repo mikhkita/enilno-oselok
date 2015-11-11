@@ -138,6 +138,20 @@ class Controller extends CController
         return Yii::app()->db->createCommand($sql)->execute();
     }
 
+    public function getValues($model,$values){
+        $criteria = new CDbCriteria();
+        foreach ($values as $key => $value) {
+            $tmp = array();
+            foreach ($value as $i => $field) {
+                array_push($tmp, $i."='".$field."'");
+            }
+            $values[$key] = "(".implode(" AND ", $tmp).")";
+        }
+        $criteria->condition = implode(" OR ", $values);
+
+        return $model->findAll($criteria);
+    }
+
     public function replaceToBr($str){
         return str_replace("\n", "<br>", $str);
     }

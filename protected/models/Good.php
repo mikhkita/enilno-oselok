@@ -312,7 +312,18 @@ class Good extends CActiveRecord
 	}
 
 	public function update(){
-		$newModel = Good::model()->findByPk($this->id);
+		$newModel = Good::model()->with("adverts.queue.action")->findByPk($this->id);
+
+		function compare($a,$b){ 
+			$a = ((isset($a->city_id))?$a->city_id:$a->variant_id); 
+			$b = ((isset($b->city_id))?$b->city_id:$b->variant_id); 
+
+			return $a < $b ? -1 : ( $a > $b ? 1 : 0 ); 
+		};
+
+		$isDiffAdverts = $this->isDiff($newModel, true);
+		$isDiff = $this->isDiff($newModel);
+
 		// if($this->isDiff()){
 		// 	echo "DIFF";
 		// }else{
@@ -320,33 +331,66 @@ class Good extends CActiveRecord
 		// }
 		// die();
 
-		if( $this->isDiff($newModel) && !$this->share ){
+		if( ($isDiff || $isDiffAdverts) && !$this->share ){
 
 			$cities = Place::model()->cities;
 			$places = $this->getPlaces();
 
 			$add_arr = array();
+			$update_arr = array();
 			$delete_arr = array();
-			foreach ($cities as $attr_id => $city) {
-				$new_arr = $this->getArray(isset($newModel->fields_assoc[$attr_id."-d"])?$newModel->fields_assoc[$attr_id."-d"]:array());
+			$new_items = array();
+			$adverts_without_delete = $this->filterAdverts($this->adverts);
+			foreach ($cities as $attr_id => $city)
+				$new_items = $new_items + $this->getArray(isset($newModel->fields_assoc[$attr_id."-d"])?$newModel->fields_assoc[$attr_id."-d"]:array());
 
-				$delete_arr = $delete_arr + array_udiff($this->adverts, $new_arr, function ($a,$b){return ((isset($a->city_id))?$a->city_id:$a->variant_id) == ((isset($b->city_id))?$b->city_id:$b->variant_id) ? 0 : -1;});
-				$add = array_udiff($new_arr, $this->adverts, function ($a,$b){return ((isset($a->city_id))?$a->city_id:$a->variant_id) == ((isset($b->city_id))?$b->city_id:$b->variant_id) ? 0 : -1;});
+			if( $isDiffAdverts ){
+				$delete_arr = array_udiff($adverts_without_delete, $new_items, "compare");
+				Queue::addAll($delete_arr,"delete");
+			}
+
+			if( $isDiff ){
+				$update_arr = array_udiff($this->adverts, $delete_arr, "compare");
+				Queue::addAll($update_arr,"update");
+			}
+
+			if( $isDiffAdverts ){
+				$add = array_udiff($new_items, $this->adverts, "compare");
 
 				foreach ($add as $key => $item)
-					array_push($add_arr, array("good_id"=>$this->id,"place_id"=>$places[$this->good_type_id][$city["PLACE"]]->id,"city_id"=>$item->variant_id,"type_id"=>$city["TYPE"]));
+					array_push($add_arr, array("good_id"=>$this->id,"place_id"=>$places[$this->good_type_id][$cities[$item->attribute_id]["PLACE"]]->id,"city_id"=>$item->variant_id,"type_id"=>$cities[$item->attribute_id]["TYPE"]));
 
-				print_r($delete_arr);
-				// $delete = array();
-				// foreach ($items as $item)
-					// array_push($delete, $item->id);
-				// die();
-
-
+				$new_adverts = Advert::addAll($add_arr);
+				if( $new_adverts )
+					Queue::addAll($new_adverts,"add");
 			}
-			Advert::addAll($add_arr);
-			// Queue::addAll($this->adverts,"update");
+
+			// print_r($add_arr);
+			// echo "<br><br><br><br>";
+			// print_r($delete_arr);
+			// echo "<br><br><br><br>";
+			// print_r($update_arr);
+			// die();
+			
+
+			
+			
+			// 
 		}
+	}
+
+	public function	filterAdverts($adverts, $without_delete_only = true){
+		foreach ($adverts as $i => $advert) {
+			if( $without_delete_only ){
+				if( isset($advert->queue) ) {
+					foreach ($advert->queue as $key => $queue)
+						if( $queue->action->code == "delete" ) unset($adverts[$i]);
+				}
+			}else{
+				if( isset($advert->queue) ) unset($adverts[$i]);
+			}
+		}
+		return $adverts;
 	}
 
 	public function getPlaces(){
@@ -371,19 +415,25 @@ class Good extends CActiveRecord
         return $out;
     }
 
-	public function isDiff($newModel){
+	public function isDiff($newModel,$dynamic = false){
 		$newModel = Good::model()->findByPk($this->id);
 
 		if( count($newModel->fields_assoc) != count($this->fields_assoc) ) return true;
 
-		if( $this->compareModels($this,$newModel) ) return true;
-		if( $this->compareModels($newModel,$this) ) return true;
+		if( $this->compareModels($this,$newModel,$dynamic) ) return true;
+		if( $this->compareModels($newModel,$this,$dynamic) ) return true;
 
 		return false;
 	}
 
-	public function compareModels($model1, $model2){
-		foreach ($model1->fields_assoc as $key => $value) {
+	public function compareModels($model1, $model2, $dynamic){
+		foreach ($model1->fields as $key => $value) {
+			if( $value->attribute->dynamic && !$dynamic ) continue;
+			if( !$value->attribute->dynamic && $dynamic ) continue;
+
+			$key = (($value->attribute->dynamic)?($value->attribute_id."-d"):$value->attribute_id);
+			$value = $model1->fields_assoc[$key];
+
 			if( isset($model2->fields_assoc[$key]) ){
 				if( is_array($model2->fields_assoc[$key]) || is_array($value) ){
 					if( !is_array($model2->fields_assoc[$key]) || !is_array($value) ) return true;

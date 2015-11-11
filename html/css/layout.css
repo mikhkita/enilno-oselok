@@ -117,10 +117,10 @@ input {
 	font-weight: 300;
 }
 input::-webkit-input-placeholder {
-	color: #434343;
+	color: rgba(255,255,255,0.7);
 }
 input:-moz-placeholder {
-	color: #434343;
+	color: rgba(255,255,255,0.7);
 }
 .gradient-orange{
 	/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ffe57f+0,ffdc1c+5,ff9a00+93,966304+100 */
@@ -391,7 +391,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 							box-sizing: border-box;
 							border: 1px solid #ffb000;
 							background: none;
-							padding: 7px 8px 6px;
+							padding: 7px 12px 6px;
 							color: #fff;
 						}
 						.b-header .b-header-main .b-block > .right form button{
@@ -557,7 +557,7 @@ height: 300px;}
 		}
 			.popular-category .ui-tabs-active .tire-icon:before,.main-category li:hover .tire-icon:before{
 				background-position: -2px -39px;
-				width: 20px;
+				width: 21px;
 			}
 			.popular-category .ui-tabs-active .disc-icon:before,.main-category li:hover .disc-icon:before {
 				background-position: -48px -39px;
@@ -881,7 +881,7 @@ height: 300px;}
 		border-radius: 2px;
 		position: relative;
 		margin-right: 18px;
-		margin-bottom: 30px;
+		margin-bottom: 20px;
 		cursor: pointer;
 		height: 239px;
 		overflow: hidden;
@@ -1094,7 +1094,20 @@ height: 300px;}
 								width: 33px;
 								height: 34px;
 								margin-right: 23px;
+								border-radius: 5px;
+								-webkit-transition: all 80ms ease-out;
+								   -moz-transition: all 80ms ease-out;
+								    -ms-transition: all 80ms ease-out;
+								   	 -o-transition: all 80ms ease-out;
+										transition: all 80ms ease-out;
 							}
+								.b-footer .b-footer-main .b-block .sections > li .social .social-icon a:hover{
+									background-color: rgba(255, 218, 0, 0.13);
+								}
+								.b-footer .b-footer-main .b-block .sections > li .social .social-icon a:active{
+									position: relative;
+									top: 1px;
+								}
 							.b-footer .b-footer-main .b-block .sections > li .social .social-icon .tw {
 								background-position: -71px -64px;
 							}
@@ -1249,17 +1262,20 @@ height: 300px;}
 						left: 7px;
 						background-color: #fff;
 					}
-				.slider-range .ui-state-default.ui-state-hover.ui-state-active {
+				.slider-range .ui-state-default.ui-state-active {
 					width: 20px;
 					height: 20px;
+					border-color: rgb(255, 255, 255);
+					background-color: #ffc200;
 					top: -4px;
 					margin-left: -11px;
 				}
-					.slider-range .ui-state-default.ui-state-hover.ui-state-active:before {
+					.slider-range .ui-state-default.ui-state-active:before {
 						width: 8px;
 						height: 8px;
 						top: 6px;
 						left: 6px;
+						background-color: #fff;
 					}
 					.b-category .b-block .grey-block .filter-block .slide-type {
 						text-align: left;
@@ -1379,22 +1395,22 @@ height: 300px;}
 	    background-position: -1px -98px;
 	}
 	.tire-icon:before {
-	    background-position: -1px -38px;
+	    background-position: -23px -38px !important;
 	}
 	.active a .tire-icon:before {
-	    background-position: -23px -38px;
+	    background-position: -23px -38px !important;
 	}
 	.wheel-icon:before {
-	    background-position: -95px -38px;
+	    background-position: -95px -38px !important;
 	}
 	.active a .wheel-icon:before {
-	    background-position: -121px -38px;
+	    background-position: -121px -38px !important;
 	}
 	.disc-icon:before {
-	    background-position: -46px -38px;
+	    background-position: -46px -38px !important;
 	}
 	.active a .disc-icon:before {
-	    background-position: -71px -38px;
+	    background-position: -71px -38px !important;
 	}
 	.b-filters .b-block .filter-cont .tire-type label:before {
 	    background-position: -34px -1px;
@@ -1417,6 +1433,36 @@ height: 300px;}
 	.b-footer .b-footer-sub {
 		background-image: url("../i/back-menu@2x.jpg");
 		background-size: 22px;
+	}
+	.b-footer .b-footer-main .b-block .sections > li .social .social-icon .tw {
+		background-position: -71px -63px;
+	}
+	.b-footer .b-footer-main .b-block .sections > li .social .social-icon .yt {
+		background-position: -141px -63px;
+		width: 34px;
+	}
+	.b-footer .b-footer-main .b-block .sections > li .social .social-icon .inst {
+
+		background-position: -36px -63px;
+	}
+	.b-footer .b-footer-main .b-block .sections > li .social .social-icon .vk {
+
+		background-position: -106px -63px;
+		width: 34px;
+	}
+	.b-footer .b-footer-main .b-block .sections > li .social .social-icon .fb {
+
+		background-position: -1px -63px;
+	}
+	.filter-item .variants span:before{
+		width: 10px;
+		height: 10px;
+	}
+	.filter-item .variants span:after{
+		background-position: -109px -98px;
+	}
+	.b-footer .b-footer-main .b-block .sections > li .social .social-icon a{
+		height: 33px;
 	}
 }
 

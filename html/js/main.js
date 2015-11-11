@@ -101,14 +101,13 @@ $(document).ready(function(){
     $(".variants input").change(function(){
         var obj = $(this).closest(".filter-item").find("input:checked"),
         input = $(this).closest(".filter-item").find(".input"),
-        text="";
+        text=[];
         if(obj.length != 0) {
             obj.each(function(index, item){
                 console.log($(item).siblings("span").text());
-                text = text+$(item).siblings("span").text()+",";
+                text.push($(item).siblings("span").text());
             });
-            text = text.substr(0,text.length-1);
-            input.html(text+"<span></span>");
+            input.html(text.join(",&nbsp;")+"<span></span>");
         } else {
             input.html("<span></span>");
         }        

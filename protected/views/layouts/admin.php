@@ -74,6 +74,11 @@
         <div class="main">
             <div class="b-main-center">
                 <?php echo $content;?>
+                <br>
+                <? 
+                    list($queryCount, $queryTime) = Yii::app()->db->getStats();
+                    echo "Кол-во запросов: $queryCount, Общее время запросов: ".sprintf('%0.5f',$queryTime)."s";
+                ?>
             </div>
         </div>
     <? endif; ?>
