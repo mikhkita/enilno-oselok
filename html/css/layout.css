@@ -176,6 +176,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 .b-orange-butt{
 	border: none;
 	cursor: pointer;
+	text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.3);
 	/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ffdf25+0,ffb23f+100 */
 	background: rgb(255,223,37); /* Old browsers */
 	/* IE9 SVG, needs conditional override of 'filter' to 'none' */
@@ -202,19 +203,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 		background: linear-gradient(to bottom,  rgba(255,218,0,1) 0%,rgba(255,188,0,1) 33%,rgba(255,172,0,1) 66%,rgba(255,150,0,1) 100%); /* W3C */
 		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffda00', endColorstr='#ff9600',GradientType=0 ); /* IE6-8 */
 	}
-	.b-orange-butt:active {
-		/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ff9600+0,ffac00+33,ffbc00+66,ffda00+100 */
-		background: rgb(255,150,0); /* Old browsers */
-		/* IE9 SVG, needs conditional override of 'filter' to 'none' */
-		background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2ZmOTYwMCIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjMzJSIgc3RvcC1jb2xvcj0iI2ZmYWMwMCIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjY2JSIgc3RvcC1jb2xvcj0iI2ZmYmMwMCIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNmZmRhMDAiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
-		background: -moz-linear-gradient(top,  rgba(255,150,0,1) 0%, rgba(255,172,0,1) 33%, rgba(255,188,0,1) 66%, rgba(255,218,0,1) 100%); /* FF3.6+ */
-		background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,150,0,1)), color-stop(33%,rgba(255,172,0,1)), color-stop(66%,rgba(255,188,0,1)), color-stop(100%,rgba(255,218,0,1))); /* Chrome,Safari4+ */
-		background: -webkit-linear-gradient(top,  rgba(255,150,0,1) 0%,rgba(255,172,0,1) 33%,rgba(255,188,0,1) 66%,rgba(255,218,0,1) 100%); /* Chrome10+,Safari5.1+ */
-		background: -o-linear-gradient(top,  rgba(255,150,0,1) 0%,rgba(255,172,0,1) 33%,rgba(255,188,0,1) 66%,rgba(255,218,0,1) 100%); /* Opera 11.10+ */
-		background: -ms-linear-gradient(top,  rgba(255,150,0,1) 0%,rgba(255,172,0,1) 33%,rgba(255,188,0,1) 66%,rgba(255,218,0,1) 100%); /* IE10+ */
-		background: linear-gradient(to bottom,  rgba(255,150,0,1) 0%,rgba(255,172,0,1) 33%,rgba(255,188,0,1) 66%,rgba(255,218,0,1) 100%); /* W3C */
-		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff9600', endColorstr='#ffda00',GradientType=0 ); /* IE6-8 */
-
+	.b-orange-butt:active {/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ff9600+0,ffac00+33,ffbc00+66,ffda00+100 *//* Old browsers *//* IE9 SVG, needs conditional override of 'filter' to 'none' *//* FF3.6+ *//* Chrome,Safari4+ *//* Chrome10+,Safari5.1+ *//* Opera 11.10+ *//* IE10+ *//* W3C *//* IE6-8 */
 	}
 .b-black-butt{
 	border: none;
@@ -265,6 +254,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 }
 	.b-header .b-menu {
 		background-image: url("../i/back-menu.jpg");
+		background-color: #221F26;
 	}	
 		.b-header .b-menu .b-block {
 
@@ -286,6 +276,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 					}
 	.b-header .b-header-main {
 		background-image: url("../i/back-asphalt.jpg");
+		background-color: #28252C;
 	}
 	/*.b-header .b-header-main {
 		background-image: url("../i/back-asphalt@2x.jpg");
@@ -296,7 +287,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 			.b-header .b-header-main .b-block .stamp {
 				position: absolute;
 				right: 0;
-				bottom: 0;
+				bottom: 1px;
 				margin-right: -120px;
 				width: 230px;
 				height: 114px;
@@ -423,7 +414,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 						font-weight: 500;
 						color: rgb(31, 31, 31);
 						text-transform: uppercase;
-						text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.7);
+						text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.5);
 						padding: 11px;
 					}
 					.b-header .b-sub-menu .b-block ul li:first-child a {
@@ -556,15 +547,15 @@ height: 300px;}
 			background-position: -125px -39px;
 		}
 			.popular-category .ui-tabs-active .tire-icon:before,.main-category li:hover .tire-icon:before{
-				background-position: -2px -39px;
+				background-position: -23px -38px !important;
 				width: 21px;
 			}
 			.popular-category .ui-tabs-active .disc-icon:before,.main-category li:hover .disc-icon:before {
-				background-position: -48px -39px;
+				background-position: -48px -39px !important;
 				width: 23px;
 			}
 			.popular-category .ui-tabs-active .wheel-icon:before,.main-category li:hover .wheel-icon:before {
-				background-position: -100px -39px;
+				background-position: -100px -39px !important;
 				width: 24px;
 			}
 
@@ -599,6 +590,7 @@ height: 300px;}
 					filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffdc1c', endColorstr='#ff9a00',GradientType=0 );/* IE6-8 */
 					color: #1f1f1f;
 					border-bottom: 1px solid #D38003;
+					text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.3);
 				}
 		.b-filters .b-block .filter-cont {
 			border-bottom: 1px solid #e2e2e2;
@@ -943,13 +935,14 @@ height: 300px;}
 				font-weight: 500;
 				border-radius: 2px;
 				border-bottom: 2px solid #f69303;
-				margin-top: 15px;
+				margin-top: 16px;
 				width: 116px;
 				padding: 12px 0 9px;
 				display: inline-block;
 			}
 				.goods li a:active {
-					border-bottom: 2px solid #FFD900;
+					border-bottom: 0px solid #FFD900;
+					margin-top: 18px;
 				}
 	.goods li:hover .params-cont{
 		background-color: rgba(255,255,255,0.9);
@@ -965,6 +958,7 @@ height: 300px;}
 }
 	.b-footer .b-footer-main {
 		background-image: url("../i/back-asphalt.jpg");
+		background-color: #28252C;
 	}
 
 		.b-footer .b-footer-main .b-block{
@@ -1131,6 +1125,7 @@ height: 300px;}
 
 	.b-footer .b-footer-sub {
 		background-image: url("../i/back-menu.jpg");
+		background-color: #211E25;
 	}
 		.b-footer .b-footer-sub .b-block{
 		padding: 17px 0;
@@ -1394,24 +1389,50 @@ height: 300px;}
 	.b-footer .b-footer-main .b-block .sections > li .footer-contacts.mail:before {
 	    background-position: -1px -98px;
 	}
-	.tire-icon:before {
-	    background-position: -23px -38px !important;
+	.tire-icon:before,
+	.active a .tire-icon:before,
+	.tabs .ui-tabs-active .tire-icon:before{
+		width: 21px;
+		background-position: -23px -38px !important;
 	}
-	.active a .tire-icon:before {
-	    background-position: -23px -38px !important;
+	.popular-category .ui-tabs-active .tire-icon:before,
+	.main-category li:hover .tire-icon:before,
+	.tabs .tire-icon:before{
+		background-position: -1px -38px !important;
 	}
-	.wheel-icon:before {
-	    background-position: -95px -38px !important;
-	}
+	.wheel-icon:before,
+	.tabs .ui-tabs-active .wheel-icon:before,
 	.active a .wheel-icon:before {
 	    background-position: -121px -38px !important;
 	}
-	.disc-icon:before {
-	    background-position: -46px -38px !important;
+	.popular-category .ui-tabs-active .wheel-icon:before,
+	.main-category li:hover .wheel-icon:before,
+	.tabs .wheel-icon:before{
+		background-position: -96px -38px !important;
 	}
-	.active a .disc-icon:before {
+	.disc-icon:before,
+	.active a .disc-icon:before,
+	.tabs .ui-tabs-active .disc-icon:before{
+		width: 24px;
 	    background-position: -71px -38px !important;
 	}
+	.popular-category .ui-tabs-active .disc-icon:before,
+	.main-category li:hover .disc-icon:before,
+	.tabs .disc-icon:before{
+		background-position: -46px -38px !important;
+	}
+/*	.popular-category .ui-tabs-active .tire-icon:before,.main-category li:hover .tire-icon:before{
+				background-position: -23px -38px !important;
+				width: 21px;
+			}
+			.popular-category .ui-tabs-active .disc-icon:before,.main-category li:hover .disc-icon:before {
+				background-position: -48px -39px !important;
+				width: 23px;
+			}
+			.popular-category .ui-tabs-active .wheel-icon:before,.main-category li:hover .wheel-icon:before {
+				background-position: -100px -39px !important;
+				width: 24px;
+			}*/
 	.b-filters .b-block .filter-cont .tire-type label:before {
 	    background-position: -34px -1px;
 	}
