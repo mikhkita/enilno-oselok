@@ -2,21 +2,12 @@
 include_once(dirname(__FILE__).'/simple_html_dom.php');
 $html = new simple_html_dom();
 $ch = curl_init();
-$url = "http://www.seogadget.ru/location";
-curl_setopt($ch, CURLOPT_URL, $url);
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1); 
-// curl_setopt($ch, CURLOPT_PROXY, '62.109.4.240:1212');
-// curl_setopt($ch, CURLOPT_PROXYUSERPWD, 'admin:4815162342'); 
-$exec = curl_exec( $ch );
-$html = str_get_html($exec);
-// print_r($exec);
 
-// $ip = $html->find('input[name=addr]',0)->value;
-// if( $ip == '62.109.4.240') {
 	$url = "https://www.avito.ru/profile/login";
 	curl_setopt($ch, CURLOPT_URL, $url);
-	curl_setopt($ch, CURLOPT_REFERER, "https://www.avito.ru"); 
+	curl_setopt($ch, CURLOPT_AUTOREFERER,true);
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
 	curl_setopt($ch, CURLOPT_COOKIEFILE,  dirname(__FILE__).'/cookie.txt');
 	curl_setopt($ch, CURLOPT_COOKIEJAR,  dirname(__FILE__).'/cookie.txt');
 	curl_setopt($ch, CURLOPT_POST, 1);
@@ -25,52 +16,64 @@ $html = str_get_html($exec);
 		'login'=>'vladis1ove81@gmail.com',
 		'password'=>'Friday13'
 	));
-
+	curl_exec( $ch );
+	
 	$url = "https://www.avito.ru/additem/image";
 	curl_setopt($ch, CURLOPT_URL, $url);
 	curl_setopt($ch, CURLOPT_POSTFIELDS, array(
-		'image'=>'@'.dirname(__FILE__)."/1.jpg"
+		'image'=> new CurlFile(dirname(__FILE__)."/6.jpg")
 	));
 
-	$image_id = json_decode(curl_exec( $ch ))->id;
+	$image_id1 = json_decode(curl_exec( $ch ))->id;
+	$url = "https://www.avito.ru/additem/image";
+	curl_setopt($ch, CURLOPT_URL, $url);
+	curl_setopt($ch, CURLOPT_POSTFIELDS, array(
+		'image'=> new CurlFile(dirname(__FILE__)."/8.jpg")
+	));
+
+	$image_id2 = json_decode(curl_exec( $ch ))->id;
 
 	$url = "https://www.avito.ru/additem";
 	curl_setopt($ch, CURLOPT_URL, $url);
 
 	$html = str_get_html(curl_exec( $ch ));
-	        $token = array();
-	        $token['name'] = $html->find('input[name^=token]',0)->name;
-	        $token['value'] = $html->find('input[name^=token]',0)->value;
+    $token = array();
+    $token['name'] = $html->find('input[name^=token]',0)->name;
+    $token['value'] = $html->find('input[name^=token]',0)->value;
 
-	curl_setopt($ch, CURLOPT_POSTFIELDS, array(
+	$params_arr =  array(
 		$token['name'] => $token['value'],
 		'email'=>'vladis1ove81@gmail.com',
 		'authState'=>'phone-edit',
 		'private' => 1,
+		'source' => "add",
 		'seller_name' => "Владислав",
-		'phone' => '8 952 896-09-88',
+		'phone' => '8+952+896-09-88',
 		'root_category_id' => 1,
 		'category_id' => 10,
-		'params[5]' => 19,
-		'params[709]' => 10048,
 		'location_id' => 657600,
 		'metro_id' => "",
 		'district_id' => "",
 		'road_id' => "",
+		'params[5]' => 19,
+		'params[709]' => 10048,
 		'params[733]' => 10359,
 		'params[734]' => 10376,
 		'params[731]' => 10312,
 		'params[732]' => 10340,
-		'title' => 'Шины',
-		'description' => 'Шины',
+		'title' => 'Что-то123123',
+		'description' => 'Что-то тамasdasd',
 		'price' => 1000,
-		'images[]' => $image_id,
-		'rotate['.$image_id.']' => 0,
+		'images' => array($image_id1,$image_id2),
+		// 'images' => $image_id2,
+		'rotate['.$image_id1.']' => 0,
+		'rotate['.$image_id2.']' => 0,
 		'image' => "",
 		'videoUrl' => "",
 		'service_code' => 'free'
 
-	));     
+	);
+	curl_setopt($ch, CURLOPT_POSTFIELDS,$params_arr);     
 	$html = str_get_html(curl_exec( $ch ));
 	$captcha = $html->find('.form-captcha-image',0)->src;
 	curl_setopt($ch, CURLOPT_URL, 'https://www.avito.ru'.$captcha);
@@ -115,14 +118,41 @@ $html = str_get_html($exec);
 				'done' => "",
 				'subscribe-position' => '0'
 			));     
-			print_r(curl_exec($ch));
+			$html = str_get_html(curl_exec( $ch ));
+			$id = $html->find('.content-text a[rel="nofollow"]',0)->href;
+			$id = end(explode("_", $id));
+			// print_r($id);
+
+			$url ="https://www.avito.ru/".$id;
+			curl_setopt($ch, CURLOPT_URL, $url);
+			$html = str_get_html(curl_exec( $ch ));
+			$href = $html->find('.item_change',0)->href;
+			$href = "https://www.avito.ru".substr($href, 0, -3)."/edit";
+
+			curl_setopt($ch, CURLOPT_URL, $href);
+			$html = str_get_html(curl_exec( $ch ));
+			$version = $html->find('input[name="version"]',0)->value;
+
+			$params_arr['version'] = $version;
+			$params_arr['source'] = 'edit';	
+			$params_arr['title'] = "Измена";
+			$params_arr['description'] = "Измена1";
+			curl_setopt($ch, CURLOPT_URL, $href);
+			curl_setopt($ch, CURLOPT_POSTFIELDS, $params_arr);
+			curl_exec($ch);
+			$url = $href."/confirm";
+			curl_setopt($ch, CURLOPT_URL, $url);
+			curl_setopt($ch, CURLOPT_POSTFIELDS, array(
+				'done' => "",
+				'subscribe-position' => '1'
+			));     
+			print_r(curl_exec( $ch ));
 		} else {
 			die($captcha."РАСШИФРОВКА НЕ ПРИШЛА");
 		}
 	} else {
 		die($captcha."КАПТЧА НЕ ОТПРАВИЛАСЬ");
 	}
-// }
 curl_close($ch);    
 
 ?> 

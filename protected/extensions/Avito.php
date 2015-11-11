@@ -18,15 +18,16 @@ Class Drom {
         $this->password = $password;
     }
 
-    public function auth($redirect = ""){
+    public function auth(){
         $this->curl->removeCookies();
 
         $params = array(
-            'sign' => $this->login,
-            'password' => $this->password
+            'next'=>'/profile',
+			'login'=>$this->login,
+			'password'=>$this->password
         );
 
-        return iconv('windows-1251', 'utf-8', $this->curl->request("https://www.farpost.ru/sign?mode=openid&return=".urlencode($redirect)."&login_by_password=1",$params));
+        return iconv('windows-1251', 'utf-8', $this->curl->request("https://www.avito.ru/profile/login",$params));
     }
 
     public function upAdverts(){
@@ -70,6 +71,28 @@ Class Drom {
 
     public function addAdvert($params,$images){
         include_once Yii::app()->basePath.'/extensions/simple_html_dom.php';
+        
+        $this->curl->request("http://baza.drom.ru/upload-image-jquery",array('up[]' => new CurlFile(Yii::app()->basePath.DIRECTORY_SEPARATOR.'..'.$image_path)))
+        $url = "https://www.avito.ru/additem/image";
+		curl_setopt($ch, CURLOPT_URL, $url);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, array(
+			'image'=>'@'.dirname(__FILE__)."/5.jpg"
+		));
+
+		$image_id = json_decode(curl_exec( $ch ))->id;
+
+		$url = "https://www.avito.ru/additem";
+		curl_setopt($ch, CURLOPT_URL, $url);
+
+		$html = str_get_html(curl_exec( $ch ));
+	    $token = array();
+	    $token['name'] = $html->find('input[name^=token]',0)->name;
+	    $token['value'] = $html->find('input[name^=token]',0)->value;
+
+
+
+
+
 
         $options = $this->setOptions($params);
         $advert_id = json_decode($this->curl->request("http://baza.drom.ru/api/1.0/save/bulletin",$options))->id;
@@ -132,6 +155,14 @@ Class Drom {
     }
 
     public function generateFields($fields,$good_type_id){
+        
+
+
+
+
+
+
+
         $fields['dirId'] = $this->dir_codes[intval($good_type_id)];
         $fields['model'] = array($fields["model"],0,0);
         $fields['price'] = array($fields["price"],"RUB");
