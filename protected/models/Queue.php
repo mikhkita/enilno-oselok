@@ -119,10 +119,10 @@ class Queue extends CActiveRecord
 				$model->save();
 				return $model;
 			}else{
-				return Log::error("Не найдено действие с кодом \"".$code."\"");;
+				return Log::error("Не найдено действие с кодом \"".$code."\"");
 			}
 		}else{
-			return Log::error("Отсутствует ID объявления или код действия");;
+			return Log::error("Отсутствует ID объявления или код действия");
 		}
 	}
 
@@ -136,10 +136,31 @@ class Queue extends CActiveRecord
 				Controller::insertValues(Queue::tableName(),$values);
 				return true;
 			}else{
-				return Log::error("Не найдено действие с кодом \"".$code."\"");;
+				return Log::error("Не найдено действие с кодом \"".$code."\" для добавления в очередь");
 			}
 		}else{
-			return Log::error("Отсутствуют ID объявлений или код действия");;
+			return Log::error("Отсутствуют ID объявлений или код действия для добавления в очередь");
+		}
+	}
+
+	public function delAll($adverts = array(), $code = false){
+		if( count($adverts) && $code ){
+			if( isset(Queue::model()->codes[$code]) ){
+				$advert_ids = array();
+
+				foreach ($adverts as $advert)
+					array_push($advert_ids, isset($advert->id)?$advert->id:$advert);
+				
+				$criteria = new CDbCriteria();
+	    		$criteria->addInCondition("advert_id", $advert_ids);
+
+	    		Queue::model()->deleteAll($criteria);
+				return true;
+			}else{
+				return Log::error("Не найдено действие с кодом \"".$code."\" для добавления в очередь");
+			}
+		}else{
+			return Log::error("Отсутствуют ID объявлений или код действия для удаления из очереди");
 		}
 	}
 

@@ -332,7 +332,6 @@ class Good extends CActiveRecord
 		// die();
 
 		if( ($isDiff || $isDiffAdverts) && !$this->share ){
-
 			$cities = Place::model()->cities;
 			$places = $this->getPlaces();
 
@@ -340,21 +339,35 @@ class Good extends CActiveRecord
 			$update_arr = array();
 			$delete_arr = array();
 			$new_items = array();
-			$adverts_without_delete = $this->filterAdverts($this->adverts);
+			$adverts_without_add_or_update = $this->filterAdverts($this->adverts,array("add","update"));
+			$adverts_without_delete = $this->filterAdverts($this->adverts,array("delete"));
+			$adverts_without_add = $this->filterAdverts($this->adverts,array("add"));
+			$adverts_with_delete = array_udiff($this->adverts, $adverts_without_delete, "compare");
+
 			foreach ($cities as $attr_id => $city)
 				$new_items = $new_items + $this->getArray(isset($newModel->fields_assoc[$attr_id."-d"])?$newModel->fields_assoc[$attr_id."-d"]:array());
 
 			if( $isDiffAdverts ){
+				// Удаление из очереди действий на удаление объявлений, которые нужно оставить
+				$delete_delete_arr = array_udiff($adverts_with_delete, $new_items, "compare");
+				Queue::deleteAll($delete_delete_arr,"delete");
+
+				// Добавление в очередь действий на удаление объявлений (если у этого объявления есть в очереди действие на удаление, то не добавится действие в очередь)
 				$delete_arr = array_udiff($adverts_without_delete, $new_items, "compare");
 				Queue::addAll($delete_arr,"delete");
 			}
 
 			if( $isDiff ){
-				$update_arr = array_udiff($this->adverts, $delete_arr, "compare");
+				// Добавление в очередь действий на редактирование объявлений (если у этого объявления есть в очереди действие на редактирование или добавление, то не добавится действие в очередь)
+				$update_arr = array_uintersect($adverts_without_add_or_update, $new_items, "compare");
 				Queue::addAll($update_arr,"update");
 			}
 
 			if( $isDiffAdverts ){
+				// Удаление из очереди действий на добавление объявлений, которые нужно удалить
+				$delete_add_arr = array_udiff($adverts_without_add, $new_items, "compare");
+				Queue::deleteAll($delete_add_arr,"add");
+
 				$add = array_udiff($new_items, $this->adverts, "compare");
 
 				foreach ($add as $key => $item)
@@ -371,24 +384,17 @@ class Good extends CActiveRecord
 			// echo "<br><br><br><br>";
 			// print_r($update_arr);
 			// die();
-			
-
-			
-			
-			// 
 		}
 	}
 
-	public function	filterAdverts($adverts, $without_delete_only = true){
+	public function	filterAdverts($adverts, $actions){
 		foreach ($adverts as $i => $advert) {
-			if( $without_delete_only ){
-				if( isset($advert->queue) ) {
-					foreach ($advert->queue as $key => $queue)
-						if( $queue->action->code == "delete" ) unset($adverts[$i]);
-				}
-			}else{
-				if( isset($advert->queue) ) unset($adverts[$i]);
-			}
+			if( isset($advert->queue) )
+				foreach ($advert->queue as $key => $queue)
+					if( in_array($queue->action->code, $actions) ){
+						unset($adverts[$i]);
+						break;
+					}
 		}
 		return $adverts;
 	}
