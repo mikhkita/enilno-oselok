@@ -25,6 +25,18 @@ class Queue extends CActiveRecord
 		return 'queue';
 	}
 
+	public function scopes()
+    {
+        return array(
+            'next'=>array(
+                'condition'=>'action_id != 3',
+            ),
+            'toDelete'=>array(
+                'condition'=>'action_id = 3',
+            ),
+        );
+    }
+
 	/**
 	 * @return array validation rules for model attributes.
 	 */

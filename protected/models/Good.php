@@ -312,7 +312,7 @@ class Good extends CActiveRecord
 	}
 
 	public function update(){
-		$newModel = Good::model()->findByPk($this->id);
+		$newModel = Good::model()->with("adverts.queue.action")->findByPk($this->id);
 
 		function compare($a,$b){ 
 			$a = ((isset($a->city_id))?$a->city_id:$a->variant_id); 
@@ -340,11 +340,12 @@ class Good extends CActiveRecord
 			$update_arr = array();
 			$delete_arr = array();
 			$new_items = array();
+			$adverts_without_delete = $this->filterAdverts($this->adverts);
 			foreach ($cities as $attr_id => $city)
 				$new_items = $new_items + $this->getArray(isset($newModel->fields_assoc[$attr_id."-d"])?$newModel->fields_assoc[$attr_id."-d"]:array());
 
 			if( $isDiffAdverts ){
-				$delete_arr = $delete_arr + array_udiff($this->adverts, $new_items, "compare");
+				$delete_arr = array_udiff($adverts_without_delete, $new_items, "compare");
 				Queue::addAll($delete_arr,"delete");
 			}
 
@@ -360,7 +361,8 @@ class Good extends CActiveRecord
 					array_push($add_arr, array("good_id"=>$this->id,"place_id"=>$places[$this->good_type_id][$cities[$item->attribute_id]["PLACE"]]->id,"city_id"=>$item->variant_id,"type_id"=>$cities[$item->attribute_id]["TYPE"]));
 
 				$new_adverts = Advert::addAll($add_arr);
-				Queue::addAll($new_adverts,"add");
+				if( $new_adverts )
+					Queue::addAll($new_adverts,"add");
 			}
 
 			// print_r($add_arr);
@@ -375,6 +377,20 @@ class Good extends CActiveRecord
 			
 			// 
 		}
+	}
+
+	public function	filterAdverts($adverts, $without_delete_only = true){
+		foreach ($adverts as $i => $advert) {
+			if( $without_delete_only ){
+				if( isset($advert->queue) ) {
+					foreach ($advert->queue as $key => $queue)
+						if( $queue->action->code == "delete" ) unset($adverts[$i]);
+				}
+			}else{
+				if( isset($advert->queue) ) unset($adverts[$i]);
+			}
+		}
+		return $adverts;
 	}
 
 	public function getPlaces(){

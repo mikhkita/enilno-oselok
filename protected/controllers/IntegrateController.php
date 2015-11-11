@@ -245,7 +245,6 @@ class IntegrateController extends Controller
 
         Log::debug("Кончало автоподнятия дром");
     }
-
 // Дром ------------------------------------------------------------------ Дром
 
 // Yahoo ----------------------------------------------------------------- Yahoo
@@ -375,6 +374,22 @@ class IntegrateController extends Controller
         return date("Y-m-d H:i:s", date_timestamp_get(date_create(substr(str_replace("T", " ", $time), 0, strpos($time, "+"))))-3*60*60);
     }
 // Yahoo ----------------------------------------------------------------- Yahoo
+
+// Выкладка -------------------------------------------------------------- Выкладка
+    public function actionQueueNext(){
+        $model = Queue::model()->next()->find();
+        // print_r($model);
+
+        $this->deleteAdverts();
+    }
+
+    public function deleteAdverts(){
+        $model = Queue::model()->toDelete()->findAll();
+
+        print_r($model);
+    }
+// Выкладка -------------------------------------------------------------- Выкладка
+
 
     public function actionAdminIndex(){
         
