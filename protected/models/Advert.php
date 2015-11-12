@@ -108,6 +108,23 @@ class Advert extends CActiveRecord
 		}
 	}
 
+	public function delAll($items = array()){
+		if( count($items) ){
+			$delete_arr = array();
+
+			foreach ($items as $item)
+				array_push($delete_arr, $item->id);
+
+			$criteria = new CDbCriteria();
+    		$criteria->addInCondition("id", $delete_arr);
+    		Advert::model()->deleteAll($criteria);		
+    			
+			return true;
+		}else{
+			return Log::error("Отсутствуют элементы для удаления объявлений");
+		}
+	}
+
 	/**
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!

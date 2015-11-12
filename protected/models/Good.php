@@ -341,16 +341,17 @@ class Good extends CActiveRecord
 			$new_items = array();
 			$adverts_without_add_or_update = $this->filterAdverts($this->adverts,array("add","update"));
 			$adverts_without_delete = $this->filterAdverts($this->adverts,array("delete"));
-			$adverts_without_add = $this->filterAdverts($this->adverts,array("add"));
+			$adverts_with_add = array_udiff($this->adverts, $this->filterAdverts($this->adverts,array("add")), "compare");
 			$adverts_with_delete = array_udiff($this->adverts, $adverts_without_delete, "compare");
 
 			foreach ($cities as $attr_id => $city)
 				$new_items = $new_items + $this->getArray(isset($newModel->fields_assoc[$attr_id."-d"])?$newModel->fields_assoc[$attr_id."-d"]:array());
 
 			if( $isDiffAdverts ){
-				// Удаление из очереди действий на удаление объявлений, которые нужно оставить
-				$delete_delete_arr = array_udiff($adverts_with_delete, $new_items, "compare");
-				Queue::deleteAll($delete_delete_arr,"delete");
+				// Удаление из очереди действий на удаление объявлений, которые нужно оставить (тут же происходит добавление в очеред действия на добавление или редактирование)
+				$delete_delete_arr = array_uintersect($adverts_with_delete, $new_items, "compare");
+				Queue::delAll($delete_delete_arr,"delete");
+				Advert::delAll($delete_delete_arr);
 
 				// Добавление в очередь действий на удаление объявлений (если у этого объявления есть в очереди действие на удаление, то не добавится действие в очередь)
 				$delete_arr = array_udiff($adverts_without_delete, $new_items, "compare");
@@ -365,8 +366,8 @@ class Good extends CActiveRecord
 
 			if( $isDiffAdverts ){
 				// Удаление из очереди действий на добавление объявлений, которые нужно удалить
-				$delete_add_arr = array_udiff($adverts_without_add, $new_items, "compare");
-				Queue::deleteAll($delete_add_arr,"add");
+				$delete_add_arr = array_udiff($adverts_with_add, $new_items, "compare");
+				Queue::delAll($delete_add_arr,"add");
 
 				$add = array_udiff($new_items, $this->adverts, "compare");
 
