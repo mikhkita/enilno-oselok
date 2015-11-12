@@ -292,7 +292,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 				width: 230px;
 				height: 114px;
 				background-position: 0% 100%;
-				background-image: url("../i/tire-stamp1.png");
+				background-image: url("../i/tire-stamp.png");
 			}
 			.b-header .b-header-main .b-block > .left{
 
@@ -975,7 +975,7 @@ height: 300px;}
 				width: 335px;
 				height: 320px;
 				background-position: 0% 100%;
-				background-image: url("../i/tire-stamp1.png");
+				background-image: url("../i/tire-stamp.png");
 			}
 			.b-footer .b-footer-main .b-block .stamp-left {
 				left: 0;
