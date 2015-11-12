@@ -89,29 +89,7 @@ $(document).ready(function(){
         autoplaySpeed: 6000
         // fade: true
     });
-
-    $(".filter-item").click(function(){
-        $(this).find(".variants").css("display","table");
-        $(this).find(".input").addClass("active");
-        if( $(this).position().left > 480 ) {
-            $(this).find(".variants").css("right","0");
-        } else $(this).find(".variants").css("left","0");
-    });
-
-    $(".variants input").change(function(){
-        var obj = $(this).closest(".filter-item").find("input:checked"),
-        input = $(this).closest(".filter-item").find(".input"),
-        text=[];
-        if(obj.length != 0) {
-            obj.each(function(index, item){
-                console.log($(item).siblings("span").text());
-                text.push($(item).siblings("span").text());
-            });
-            input.html(text.join(",&nbsp;")+"<span></span>");
-        } else {
-            input.html("<span></span>");
-        }        
-    });
+        
     $( ".main-tabs" ).tabs({
         active: 0
     });
@@ -196,8 +174,50 @@ $(document).ready(function(){
         
     }
     if ($(".slider-range").length) range_init();
+    
+    $(".filter-item").click(function(){   
+        if(!$(this).hasClass("active")) {
+            closeBubble();
+            $(this).find(".variants").css("display","table");
+            $(this).addClass("active");
+            if( $(this).position().left > 480 ) {
+                $(this).find(".variants").css("right","0");
+            } else $(this).find(".variants").css("left","0");
+        } else closeBubble();
+    });
 
+    $(".variants input").change(function(){
+        var obj = $(this).closest(".filter-item").find("input:checked"),
+        input = $(this).closest(".filter-item").find(".input"),
+        text=[];
+        if(obj.length != 0) {
+            obj.each(function(index, item){
+                console.log($(item).siblings("span").text());
+                text.push($(item).siblings("span").text());
+            });
+            input.html(text.join(",&nbsp;")+"<span></span>");
+        } else {
+            input.html("<span></span>");
+        }        
+    });
 
+    var active,open;
+    function closeBubble(active){
+        if( typeof active == "undefined" ) active = $(".filter-item.active");
+            active.removeClass('active');
+            active.find('.variants').hide();
+    }
+
+    $("body").on("mouseup",".variants *,.filter-item *",function(){
+        open = true;
+    });
+
+    $("body").on("mousedown",function() {
+        open = false;
+    }).bind("mouseup",function(){
+        if( !open )
+            closeBubble();
+    });
 
 
 
