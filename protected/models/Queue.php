@@ -147,14 +147,26 @@ class Queue extends CActiveRecord
 		if( count($adverts) && $code ){
 			if( isset(Queue::model()->codes[$code]) ){
 				$advert_ids = array();
+				$add_arr = array();
+				$update_arr = array();
 
-				foreach ($adverts as $advert)
+				foreach ($adverts as $advert){
 					array_push($advert_ids, isset($advert->id)?$advert->id:$advert);
+					if( $advert->url == NULL ){
+						array_push($update_arr, $advert);
+					}else{
+						array_push($add_arr, $advert);
+					}
+				}
 				
 				$criteria = new CDbCriteria();
 	    		$criteria->addInCondition("advert_id", $advert_ids);
 
 	    		Queue::model()->deleteAll($criteria);
+	    		if( $code == "delete" ){
+	    			Queue::addAll($add_arr,"add");
+	    			Queue::addAll($update_arr,"update");
+	    		}
 				return true;
 			}else{
 				return Log::error("Не найдено действие с кодом \"".$code."\" для добавления в очередь");
