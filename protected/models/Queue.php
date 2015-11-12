@@ -17,6 +17,12 @@ class Queue extends CActiveRecord
 		"delete" => 3
 	);
 
+	public $states = array(
+		"waiting" => 1,
+		"processing" => 2,
+		"error" => 3
+	);
+
 	/**
 	 * @return string the associated database table name
 	 */
@@ -173,6 +179,15 @@ class Queue extends CActiveRecord
 			}
 		}else{
 			return Log::error("Отсутствуют ID объявлений или код действия для удаления из очереди");
+		}
+	}
+
+	public function	setState($code){
+		if( isset($this->states[$code]) ){
+			$this->state_id = $this->states[$code];
+			return $this->save();
+		}else{
+			return Log::error("Не найдено состояние с кодом \"$code\"");
 		}
 	}
 

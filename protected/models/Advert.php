@@ -125,6 +125,11 @@ class Advert extends CActiveRecord
 		}
 	}
 
+	public function	setUrl($url = NULL){
+		$this->url = $url;
+		return $this->save();
+	}
+
 	/**
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!

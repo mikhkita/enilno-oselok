@@ -123,24 +123,37 @@ class PlaceController extends Controller
 	}
 
 	public function actionAdminDrom(){
-		$good = Good::model()->find("good_type_id=1");
-		$fields = Place::getValues(Place::getInters(2,$good->type->id),$good);
-		// print_r($fields);
+		$queue = Queue::model()->with("advert.good.type","advert.place")->findByPk(156);
+		$advert = $queue->advert;
+
+		$queue->setState("processing");
+
+		$dynamic = $this->getDynObjects(array(
+			57 => $advert->place->category_id,
+			38 => $advert->city_id,
+			37 => $advert->type_id
+		));
+
+		$fields = Place::getValues(Place::getInters(2047,$advert->good->type->id),$advert->good,$dynamic);
 		$fields = Drom::self()->generateFields($fields,1);
-		// print_r($fields);
-		$images = $this->getImages($good);
-		// print_r($images);
-		// die();
+		$images = $this->getImages($advert->good);
 
 		$fields["login"] = explode(":", $fields["login"]);
 
 		$drom = new Drom();
         $drom->setUser($fields["login"][0],$fields["login"][1]);
         unset($fields["login"]);
-      	$drom->auth("https://baza.drom.ru/partner/sign");
+      	$drom->auth();
         $id = $drom->addAdvert($fields,$images);
-        print_r($id);
         $drom->curl->removeCookies();
+
+        if( $id ){
+        	$advert->setUrl($id);
+
+        	$queue->delete();
+        }else{
+        	$queue->setState("error");
+        }
 	}
 
 	public function updateInters($model){

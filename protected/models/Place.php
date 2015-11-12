@@ -120,14 +120,14 @@ class Place extends CActiveRecord
 		return NULL;
 	}
 
-	public function getValues($inters, $model, $dynObjects = NULL, $category_id = NULL){
+	public function getValues($inters, $model, $dynObjects = NULL){
 		if( $inters === NULL ){
 			return Log::error("Пустой inters");
 		}
 
 		$out = $inters;
 		foreach ($out as $code => $inter_id)
-			$out[$code] = Interpreter::generate($inter_id,$model);
+			$out[$code] = Interpreter::generate($inter_id, $model, $dynObjects);
 
 		return $out;
 	}

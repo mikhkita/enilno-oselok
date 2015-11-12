@@ -268,32 +268,25 @@ class Controller extends CController
         }
     }
 
-    public function getDynObjects($dynamic,$good_type_id){
-        $criteria = new CDbCriteria();
-        $criteria->with = array("goodTypes","variants");
-        $criteria->condition = "goodTypes.good_type_id=".$good_type_id." AND dynamic=1";
-        $modelDyn = Attribute::model()->findAll($criteria);
-        $dynObjects = array();
+    public function getDynObjects($dynamic,$good_type_id = NULL){
+        if( $good_type_id != NULL ){
+            $criteria = new CDbCriteria();
+            $criteria->with = array("goodTypes","variants");
+            $criteria->condition = "goodTypes.good_type_id=".$good_type_id." AND dynamic=1";
+            $modelDyn = Attribute::model()->findAll($criteria);
+            $dynObjects = array();
 
-        foreach ($modelDyn as $key => $value) {
-            $curObj = Variant::model()->findByPk($dynamic[$value->id]);
-            $dynObjects[$value->id] = (object) array("value"=>$curObj->value,"variant_id"=>$curObj->id);
-        }
+            foreach ($modelDyn as $key => $value) {
+                $curObj = Variant::model()->findByPk($dynamic[$value->id]);
+                $dynObjects[$value->id] = (object) array("value"=>$curObj->value,"variant_id"=>$curObj->id);
+            }
+        }else{
+            $criteria = new CDbCriteria();
+            $criteria->addInCondition("id",array_values($dynamic));
+            $modelDyn = Variant::model()->findAll($criteria);
 
-        return $dynObjects;
-    }
-
-    public function getDyn($dynamic){
-        $criteria = new CDbCriteria();
-        $criteria->addInCondition("variant_id",array_values($dynamic));
-        $modelDyn = Variant::model()->findAll($criteria);
-
-        print_r($modelDyn);
-        die();
-        
-        foreach ($modelDyn as $key => $value) {
-            $curObj = Variant::model()->findByPk($dynamic[$value->id]);
-            $dynObjects[$value->id] = (object) array("value"=>$curObj->value,"variant_id"=>$curObj->id);
+            foreach ($modelDyn as $key => $variant)
+                $dynObjects[array_search($variant->id, $dynamic)] = (object) array("value"=>$variant->value,"variant_id"=>$variant->id);
         }
 
         return $dynObjects;

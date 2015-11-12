@@ -133,7 +133,7 @@ class IntegrateController extends Controller
             foreach ($curParams["JOIN"] as $field)
                 if( !(isset($item->fields_assoc[intval($field)]) && $item->fields_assoc[intval($field)]->value != 0) ) $tog = false;
 
-            if( $tog && isset($item->fields_assoc[46] && intval($item->fields_assoc[46]->value) == 1 ){
+            if( $tog && isset($item->fields_assoc[46]) && intval($item->fields_assoc[46]->value) == 1 ){
                 $title = Interpreter::generate($curParams["ADVERT_TITLE_CODE"],$item);
 
                 if( !isset($result[$title]) ) $result[$title] = array();
@@ -244,6 +244,29 @@ class IntegrateController extends Controller
         }
 
         Log::debug("Кончало автоподнятия дром");
+    }
+
+    public function actionDromParseAll(){
+        $drom = new Drom();
+
+        $ids = array();
+        $ids2 = array();
+        
+        $drom->setUser("wheels70","u8atas5c");
+        $links = $drom->parseAllItems("http://baza.drom.ru/personal/all/bulletins");
+
+        foreach ($links as $key => $link) {
+            $tmp = explode("-", $link);
+            $tmp = array_pop(explode("/", $tmp[0]));
+            if( ctype_digit($tmp) ){
+                $ids[$tmp] = "1";
+                array_push($ids2, $tmp);
+            }
+        }
+
+        foreach ($ids as $id => $seller) {
+            file_put_contents(Yii::app()->basePath."/drom-links.txt", $id."\n", FILE_APPEND);
+        }
     }
 // Дром ------------------------------------------------------------------ Дром
 

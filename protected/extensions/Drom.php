@@ -18,7 +18,7 @@ Class Drom {
         $this->password = $password;
     }
 
-    public function auth($redirect = ""){
+    public function auth($redirect = "https://baza.drom.ru/partner/sign"){
         $this->curl->removeCookies();
 
         $params = array(
@@ -67,6 +67,29 @@ Class Drom {
             $pageLinks = $html->find('.bullNotPublished');
         }
 
+        return $links;
+    }
+
+    public function parseAllItems($link){
+        include_once Yii::app()->basePath.'/extensions/simple_html_dom.php';
+
+        $this->auth("https://baza.drom.ru/partner/sign");
+        
+        $html = str_get_html(iconv('windows-1251', 'utf-8', $this->curl->request($link)));
+
+        $links = array();
+        $pageLinks = $html->find('.bulletinLink');
+        $page = 1;
+        while(count($pageLinks)){
+            foreach($pageLinks as $element){
+                array_push($links, $element->getAttribute("href"));
+            }
+
+            $page++;
+            $html = str_get_html(iconv('windows-1251', 'utf-8', $this->curl->request($link."?page=".$page)));
+            $pageLinks = $html->find('.bulletinLink');
+        }
+        
         return $links;
     }
 
@@ -138,7 +161,7 @@ Class Drom {
         $fields['model'] = array($fields["model"],0,0);
         $fields['price'] = array($fields["price"],"RUB");
         $fields['quantity'] = 1;
-        $fields['contacts'] =  array("email" => "","is_email_hidden" => false,"contactInfo" => "+79528960999");
+        // $fields['contacts'] =  array("email" => "","is_email_hidden" => false,"contactInfo" => "+79528960999");
         $fields['delivery'] = array("pickupAddress" => $fields['pickupAddress'],"localPrice" => $fields['localPrice'],"minPostalPrice" => $fields['minPostalPrice'],"comment" => $fields['comment']);
         unset($fields['pickupAddress'],$fields['localPrice'],$fields['minPostalPrice'],$fields['comment']);
 

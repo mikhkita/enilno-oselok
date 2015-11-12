@@ -2,9 +2,9 @@
 
 Class Curl {
 
-    public $cookie;
-    public $proxy_login;
-    public $proxy_ip;
+    public $cookie = NULL;
+    public $proxy_login = NULL;
+    public $proxy_ip = NULL;
 
     function __construct($proxy = NULL) {
         $this->cookie = md5(rand().time());
@@ -21,9 +21,9 @@ Class Curl {
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 30);
         curl_setopt($ch, CURLOPT_AUTOREFERER,true);
-        if($this->$proxy_login && $this->$proxy_ip) {
-            curl_setopt($ch, CURLOPT_PROXY, $this->$proxy_ip);
-            curl_setopt($ch, CURLOPT_PROXYUSERPWD, $this->$proxy_login); 
+        if($this->proxy_login && $this->proxy_ip) {
+            curl_setopt($ch, CURLOPT_PROXY, $this->proxy_ip);
+            curl_setopt($ch, CURLOPT_PROXYUSERPWD, $this->proxy_login); 
         }
         if (!is_dir(dirname(__FILE__).'/cookies')) mkdir(dirname(__FILE__).'/cookies',0777, true);
         curl_setopt($ch, CURLOPT_COOKIEJAR, dirname(__FILE__).'/cookies/'.$this->cookie.'.txt');
