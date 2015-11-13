@@ -102,10 +102,8 @@ Class Drom {
         
         $result = iconv('windows-1251', 'utf-8', $this->curl->request("http://baza.drom.ru/bulletin/".$advert_id."/draft/publish?from=draft.publish",array('from'=>'adding.publish')));
 
-        // file_put_contents(Yii::app()->basePath."/drom.txt", $result."\n", FILE_APPEND);
         $html = str_get_html($result);
-        return ( $html->find('#fieldsetView',0)->getAttribute("bulletinid") == $advert_id )?$advert_id:false;
-        // return "asd";
+        return ( $html->find('#fieldsetView',0) && $html->find('#fieldsetView',0)->getAttribute("bulletinid") == $advert_id )?$advert_id:false;
     }
     
     public function updateAdvert($advert_id,$params,$images = NULL) {
