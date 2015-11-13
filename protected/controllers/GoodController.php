@@ -71,7 +71,6 @@ class GoodController extends Controller
 	{
 		$model = $this->loadModel($id);
 		$result = $this->getAttr($model);
-		Log::debug($id." ".$model->id);
 		
 		if(isset($_POST['Good_attr']))
 		{
@@ -259,7 +258,7 @@ class GoodController extends Controller
 				)
 			)->sort( 
 				$_POST['sort']
-			)->getPage(
+			)->with("adverts")->getPage(
 				array(
 			    	'pageSize'=>40,
 			    )

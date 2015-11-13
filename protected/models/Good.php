@@ -324,13 +324,6 @@ class Good extends CActiveRecord
 		$isDiffAdverts = $this->isDiff($newModel, true);
 		$isDiff = $this->isDiff($newModel);
 
-		// if($this->isDiff()){
-		// 	echo "DIFF";
-		// }else{
-		// 	echo "NOT DIFF";
-		// }
-		// die();
-
 		if( ($isDiff || $isDiffAdverts) && !$this->share ){
 			$cities = Place::model()->cities;
 			$places = $this->getPlaces();
@@ -453,6 +446,18 @@ class Good extends CActiveRecord
 			}
 		}
 		return false;
+	}
+
+	public function advertsCount($with_url_only = false){
+		if( $with_url_only ){
+			$i = 0;
+			foreach ($this->adverts as $advert) {
+				if( $advert->url != NULL ) $i++;
+			}
+			return $i;
+		}else{
+			return count($this->adverts);
+		}
 	}
 
 	public function beforeDelete(){

@@ -14,7 +14,8 @@ class Queue extends CActiveRecord
 	public $codes = array(
 		"add" => 1,
 		"update" => 2,
-		"delete" => 3
+		"delete" => 3,
+		"updateImages" => 4
 	);
 
 	public $states = array(
@@ -34,12 +35,15 @@ class Queue extends CActiveRecord
 	public function scopes()
     {
         return array(
-            'next'=>array(
-                'condition'=>'action_id != 3',
+        	'next'=>array(
+                'condition'=>'state_id = 1',
             ),
-            'toDelete'=>array(
-                'condition'=>'action_id = 3',
-            ),
+            // 'next'=>array(
+            //     'condition'=>'action_id != 3 AND state_id = 1',
+            // ),
+            // 'toDelete'=>array(
+            //     'condition'=>'action_id = 3 AND state_id = 1',
+            // ),
         );
     }
 
@@ -144,8 +148,6 @@ class Queue extends CActiveRecord
 			}else{
 				return Log::error("Не найдено действие с кодом \"".$code."\" для добавления в очередь");
 			}
-		}else{
-			return Log::error("Отсутствуют ID объявлений или код действия для добавления в очередь");
 		}
 	}
 
@@ -177,8 +179,6 @@ class Queue extends CActiveRecord
 			}else{
 				return Log::error("Не найдено действие с кодом \"".$code."\" для добавления в очередь");
 			}
-		}else{
-			return Log::error("Отсутствуют ID объявлений или код действия для удаления из очереди");
 		}
 	}
 

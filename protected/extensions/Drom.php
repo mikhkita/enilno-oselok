@@ -98,7 +98,7 @@ Class Drom {
 
         $options = $this->setOptions($params);
         $advert_id = json_decode($this->curl->request("http://baza.drom.ru/api/1.0/save/bulletin",$options))->id;
-        $this->updateAdvert($advert_id,$params,$images);
+        $this->updateAdvertImages($advert_id,$params,$images);
         
         $result = iconv('windows-1251', 'utf-8', $this->curl->request("http://baza.drom.ru/bulletin/".$advert_id."/draft/publish?from=draft.publish",array('from'=>'adding.publish')));
 
@@ -122,21 +122,41 @@ Class Drom {
         return $this->updateAdvert($advert_id,$params);
     }
 
-    public function deleteAdverts($arr) {
+    // public function deleteAdverts($arr) {
+    //     include_once Yii::app()->basePath.'/extensions/simple_html_dom.php';
+    //     $html = str_get_html($this->curl->request('https://baza.drom.ru/bulletin/service-configure?ids='.$arr[0].'&applier=deleteBulletin'));
+        
+    //     $del_arr = array(
+    //         'applier' => 'deleteBulletin',
+    //         'uid' => $html->find('input[name="uid"]', 0)->value,
+    //         'price' => 0,
+    //         'order_id' => 0,
+    //         'return_to' => ''
+    //         );
+    //     foreach ($arr as $key => $value) {
+    //         $del_arr['bulletin['.$value.']']= 'on';
+    //     }
+    //     $this->curl->request('https://baza.drom.ru/bulletin/service-apply',$del_arr);
+    // }
+
+    public function deleteAdvert($advert_id) {
         include_once Yii::app()->basePath.'/extensions/simple_html_dom.php';
-        $html = str_get_html($this->curl->request('https://baza.drom.ru/bulletin/service-configure?ids='.$arr[0].'&applier=deleteBulletin'));
+        $html = str_get_html($this->curl->request('https://baza.drom.ru/bulletin/service-configure?ids='.$advert_id.'&applier=deleteBulletin'));
         
         $del_arr = array(
             'applier' => 'deleteBulletin',
             'uid' => $html->find('input[name="uid"]', 0)->value,
             'price' => 0,
             'order_id' => 0,
-            'return_to' => ''
-            );
-        foreach ($arr as $key => $value) {
-            $del_arr['bulletin['.$value.']']= 'on';
-        }
-        $this->curl->request('https://baza.drom.ru/bulletin/service-apply',$del_arr);
+            'return_to' => 'http://baza.drom.ru/'.$advert_id.'.html',
+            'bulletin['.$advert_id.']' => 'on'
+        );
+
+        $result = iconv('windows-1251', 'utf-8', $this->curl->request('https://baza.drom.ru/bulletin/service-apply',$del_arr));
+
+        $html = str_get_html($result);
+
+        return ( $html->find('.bulletin_expired_notification h2',0) && $html->find('.bulletin_expired_notification h2',0)->plaintext == "Вы удалили объявление" );
     }
 
     public function setOptions($params,$advert_id = NULL) {
@@ -162,9 +182,8 @@ Class Drom {
         $fields['dirId'] = $this->dir_codes[intval($good_type_id)];
         $fields['model'] = array($fields["model"],0,0);
         $fields['price'] = array($fields["price"],"RUB");
-        $fields["login"] = explode(":", $fields["login"]);
         $fields['quantity'] = 1;
-        // $fields['contacts'] =  array("email" => "","is_email_hidden" => false,"contactInfo" => "+79528960999");
+        $fields['contacts'] =  array("email" => "","is_email_hidden" => false,"contactInfo" => $fields['contacts']);
         $fields['delivery'] = array("pickupAddress" => $fields['pickupAddress'],"localPrice" => $fields['localPrice'],"minPostalPrice" => $fields['minPostalPrice'],"comment" => $fields['comment']);
         unset($fields['pickupAddress'],$fields['localPrice'],$fields['minPostalPrice'],$fields['comment']);
 

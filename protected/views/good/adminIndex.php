@@ -17,7 +17,7 @@
 	<?php $form=$this->beginWidget('CActiveForm'); ?>
 		<table class="b-table b-good-table" border="1">
 			<tr>
-				<th>&nbsp;</th>
+				<th style="min-width: 110px;">&nbsp;</th>
 				<? foreach ($fields as $field): ?>
 					<th <?if($field->attribute_id == 3):?>style="min-width: 55px;"<?endif;?>><? echo $field->attribute->name; ?></th>
 				<? endforeach; ?>	
@@ -26,6 +26,7 @@
 				<? foreach ($data as $i => $item): ?>
 					<tr>
 						<td <?if($this->user->role->code == "root"):?>style="min-width: 75px;"<?endif;?>>
+							<span class="advert-info"><?=$item->advertsCount()?> (<?=$item->advertsCount(true)?>)</span>
 							<a href="<?php echo Yii::app()->createUrl('/good/adminupdate',array('id'=>$item->id,'goodTypeId' => $_GET['goodTypeId'],'GoodFilter_page' => ($pages->currentPage+1) ))?>" class="ajax-form ajax-update b-tool b-tool-update" title="Редактировать"></a>
 							<? if($this->user->role->code == "root"): ?><a href="<?php echo Yii::app()->createUrl('/good/adminindex',array('delete'=>$item->id,'partial'=>'true','goodTypeId'=>$_GET["goodTypeId"],'GoodFilter_page'=>isset($_GET["GoodFilter_page"])?$_GET["GoodFilter_page"]:1))?>" class="ajax-form ajax-delete b-tool b-tool-delete not-ajax-delete" data-warning="Вы действительно хотите удалить товар &quot;<?=$item->fields_assoc[3]->value?>&quot;?" title="Удалить товар>"></a><? endif; ?>
 						</td>

@@ -379,6 +379,23 @@ class Controller extends CController
         return ( isset($this->settings[$category_code][$param_code]) )?$this->settings[$category_code][$param_code]:"";
     }
 
+    public function getDromAccounts(){
+        $users = $this->getParam("DROM","USERS");
+
+        $users = explode("\n", $users);
+        $out = array();
+
+        foreach ($users as $i => &$user) {
+            if( $user == NULL || $user == "" ){
+                unset($users[$i]);
+                continue;
+            }
+            $user = preg_split("/[\s]+/", $user);
+            $out[$user[0]] = (object) array("login"=>$user[0],"password"=>$user[1],"phone"=>$user[2]);
+        }
+        return $out;
+    }
+
     public function setParam($category,$code,$value){
         $model = Settings::model()->with("category")->find("category.code='".$category."' AND t.code='".$code."'");
         $model->value = $value;

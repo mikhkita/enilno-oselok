@@ -401,7 +401,9 @@ class IntegrateController extends Controller
 // Выкладка -------------------------------------------------------------- Выкладка
     public function actionQueueNext(){
         $queue = Queue::model()->with("advert.good.type","advert.place","action")->next()->find();
+        if( !$queue ) return true;
         $advert = $queue->advert;
+        $accounts = $this->getDromAccounts();
 
         $queue->setState("processing");
 
@@ -412,29 +414,47 @@ class IntegrateController extends Controller
         ));
 
         $fields = Place::getValues(Place::getInters($advert->place->category_id,$advert->good->type->id),$advert->good,$dynamic);
+        $account = $accounts[$fields["login"]];
+        $fields["contacts"] = $account->phone;
         $fields = Drom::self()->generateFields($fields,1);
         $images = $this->getImages($advert->good);
 
         $drom = new Drom();
-        $drom->setUser($fields["login"][0],$fields["login"][1]);
-        Log::debug("Выкладка ".$advert->good->fields_assoc[3]->value." в аккаунт ".$fields["login"][0]);
-        unset($fields["login"]);
+        $drom->setUser($account->login, $account->password);
         $drom->auth();
 
         if( $queue->action->code == "delete" ){
 
+            Log::debug("Удаление ".$advert->good->fields_assoc[3]->value." в аккаунте ".$account->login);
+            $result = $drom->deleteAdvert($advert->url);
+            if( $result )
+                $advert->delete();
+
+        }else if( $queue->action->code == "add" ){
+
+            Log::debug("Выкладка ".$advert->good->fields_assoc[3]->value." в аккаунт ".$account->login);
+            $result = $drom->addAdvert($fields,$images);
+            if( $result )
+                $advert->setUrl($result);
+
+        }else if( $queue->action->code == "update" ){
+
+            Log::debug("Редактирование ".$advert->good->fields_assoc[3]->value." в аккаунте ".$account->login);
+            $result = $drom->updateAdvert($advert->url,$fields);
+
+        } else if( $queue->action->code == "updateImages" ){
+
+            Log::debug("Обновление фотографий ".$advert->good->fields_assoc[3]->value." в аккаунте ".$account->login);
+            $result = $drom->updateAdvertImages($advert->url,$fields,$images);
+
+        } 
+
+        if( $result ){
+            Log::debug("Действие ".$advert->good->fields_assoc[3]->value." в аккаунте ".$account->login." прошло успешно");
+            $queue->delete();
         }else{
-            if( $queue->action->code == "add" ){
-                $id = $drom->addAdvert($fields,$images);
-
-                if( $id ){
-                    $advert->setUrl($id);
-
-                    $queue->delete();
-                }else{
-                    $queue->setState("error");
-                }
-            }
+            Log::debug("Действие ".$advert->good->fields_assoc[3]->value." в аккаунте ".$account->login." прошло с ОШБИКОЙ");
+            $queue->setState("error");
         }
 
         $drom->curl->removeCookies();
