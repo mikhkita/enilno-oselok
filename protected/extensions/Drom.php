@@ -108,16 +108,20 @@ Class Drom {
         // return "asd";
     }
     
-    public function updateAdvert($advert_id,$params,$images = NULL) {
+    public function updateAdvert($advert_id,$params) {
+        $options = $this->setOptions($params,$advert_id);    
+        $result = json_decode($this->curl->request("http://baza.drom.ru/api/1.0/save/bulletin",$options));
+        return $result->id;
+    }
+
+    public function updateAdvertImages($advert_id,$params,$images = NULL) {
         if($images) {
             foreach ($images as &$image_path) {
                 $image_path = json_decode($this->curl->request("http://baza.drom.ru/upload-image-jquery",array('up[]' => new CurlFile(Yii::app()->basePath.DIRECTORY_SEPARATOR.'..'.$image_path))))->id;
             }
             $params['images'] = array('images' => $images);
         }
-        $options = $this->setOptions($params,$advert_id);
-        
-        $this->curl->request("http://baza.drom.ru/api/1.0/save/bulletin",$options);
+        return $this->updateAdvert($advert_id,$params);
     }
 
     public function deleteAdverts($arr) {

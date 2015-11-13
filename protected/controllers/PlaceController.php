@@ -134,7 +134,7 @@ class PlaceController extends Controller
 			37 => $advert->type_id
 		));
 
-		$fields = Place::getValues(Place::getInters(2047,$advert->good->type->id),$advert->good,$dynamic);
+		$fields = Place::getValues(Place::getInters($advert->place->category_id,$advert->good->type->id),$advert->good,$dynamic);
 		$fields = Drom::self()->generateFields($fields,1);
 		$images = $this->getImages($advert->good);
 

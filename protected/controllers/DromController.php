@@ -64,6 +64,62 @@ class DromController extends Controller
     }
 
 
+    public function actionAdminIndex(){
+        $queue = Queue::model()->with("advert.good.type","advert.place","action")->findByPk(156);
+        $advert = $queue->advert;
+
+        $queue->setState("processing");
+
+        $dynamic = $this->getDynObjects(array(
+            57 => $advert->place->category_id,
+            38 => $advert->city_id,
+            37 => $advert->type_id
+        ));
+
+        $fields = Place::getValues(Place::getInters($advert->place->category_id,$advert->good->type->id),$advert->good,$dynamic);
+        $fields = Drom::self()->generateFields($fields,1);
+        $images = $this->getImages($advert->good);
+
+        $drom = new Drom();
+        $drom->setUser("79528960988","aeesnb33");
+        // unset($fields["login"]);
+        $drom->auth();
+
+        if( $queue->action->code == "delete" ){
+
+        } else if( $queue->action->code == "add" ){
+            $id = $drom->addAdvert($fields,$images);
+
+            if( $id ){
+                $advert->setUrl($id);
+
+                $queue->delete();
+            }else{
+                $queue->setState("error");
+            }
+        } else if( $queue->action->code == "update" ){
+            $id = $drom->updateAdvert($advert->url,$fields);
+            
+            if( $id ){
+                $queue->delete();
+            }else{
+                $queue->setState("error");
+            }
+        } else if( $queue->action->code == "updateImages" ){
+            $id = $drom->updateAdvertImages($advert->url,$fields,$images);
+            
+            if( $id ){
+                $queue->delete();
+            }else{
+                $queue->setState("error");
+            }
+        } 
+
+        $drom->curl->removeCookies();
+    }
+
+
+
 // Дром ------------------------------------------------------------------ Дром
     public function actionCreate(){
         $good = Good::model()->find("id=3382");
@@ -154,7 +210,4 @@ class DromController extends Controller
         return $params;
     }
 
-    public function actionAdminIndex(){
-        
-    }
 }
