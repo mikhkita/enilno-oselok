@@ -123,7 +123,7 @@ class PlaceController extends Controller
 	}
 
 	public function actionAdminDrom(){
-		$queue = Queue::model()->with("advert.good.type","advert.place")->findByPk(156);
+		$queue = Queue::model()->with("advert.good.type","advert.place","action")->findByPk(156);
 		$advert = $queue->advert;
 
 		$queue->setState("processing");
@@ -138,22 +138,28 @@ class PlaceController extends Controller
 		$fields = Drom::self()->generateFields($fields,1);
 		$images = $this->getImages($advert->good);
 
-		$fields["login"] = explode(":", $fields["login"]);
-
 		$drom = new Drom();
         $drom->setUser($fields["login"][0],$fields["login"][1]);
         unset($fields["login"]);
       	$drom->auth();
-        $id = $drom->addAdvert($fields,$images);
-        $drom->curl->removeCookies();
 
-        if( $id ){
-        	$advert->setUrl($id);
+		if( $queue->action->code == "delete" ){
 
-        	$queue->delete();
-        }else{
-        	$queue->setState("error");
-        }
+		}else{
+			if( $queue->action->code == "add" ){
+				$id = $drom->addAdvert($fields,$images);
+
+				if( $id ){
+		        	$advert->setUrl($id);
+
+		        	$queue->delete();
+		        }else{
+		        	$queue->setState("error");
+		        }
+			}
+		}
+
+		$drom->curl->removeCookies();
 	}
 
 	public function updateInters($model){

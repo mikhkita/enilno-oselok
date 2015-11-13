@@ -52,7 +52,7 @@ class Queue extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('advert_id, action_id', 'required'),
-			array('state', 'numerical', 'integerOnly'=>true),
+			// array('state', 'numerical', 'integerOnly'=>true),
 			array('advert_id, action_id', 'length', 'max'=>10),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.

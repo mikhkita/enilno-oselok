@@ -400,10 +400,44 @@ class IntegrateController extends Controller
 
 // Выкладка -------------------------------------------------------------- Выкладка
     public function actionQueueNext(){
-        $model = Queue::model()->next()->find();
-        // print_r($model);
+        $queue = Queue::model()->with("advert.good.type","advert.place","action")->next()->find();
+        $advert = $queue->advert;
 
-        $this->deleteAdverts();
+        $queue->setState("processing");
+
+        $dynamic = $this->getDynObjects(array(
+            57 => $advert->place->category_id,
+            38 => $advert->city_id,
+            37 => $advert->type_id
+        ));
+
+        $fields = Place::getValues(Place::getInters($advert->place->category_id,$advert->good->type->id),$advert->good,$dynamic);
+        $fields = Drom::self()->generateFields($fields,1);
+        $images = $this->getImages($advert->good);
+
+        $drom = new Drom();
+        $drom->setUser($fields["login"][0],$fields["login"][1]);
+        Log::debug("Выкладка ".$advert->good->fields_assoc[3]->value." в аккаунт ".$fields["login"][0]);
+        unset($fields["login"]);
+        $drom->auth();
+
+        if( $queue->action->code == "delete" ){
+
+        }else{
+            if( $queue->action->code == "add" ){
+                $id = $drom->addAdvert($fields,$images);
+
+                if( $id ){
+                    $advert->setUrl($id);
+
+                    $queue->delete();
+                }else{
+                    $queue->setState("error");
+                }
+            }
+        }
+
+        $drom->curl->removeCookies();
     }
 
     public function deleteAdverts(){

@@ -160,6 +160,7 @@ Class Drom {
         $fields['dirId'] = $this->dir_codes[intval($good_type_id)];
         $fields['model'] = array($fields["model"],0,0);
         $fields['price'] = array($fields["price"],"RUB");
+        $fields["login"] = explode(":", $fields["login"]);
         $fields['quantity'] = 1;
         // $fields['contacts'] =  array("email" => "","is_email_hidden" => false,"contactInfo" => "+79528960999");
         $fields['delivery'] = array("pickupAddress" => $fields['pickupAddress'],"localPrice" => $fields['localPrice'],"minPostalPrice" => $fields['minPostalPrice'],"comment" => $fields['comment']);
