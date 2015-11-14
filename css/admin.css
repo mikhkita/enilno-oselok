@@ -1766,11 +1766,16 @@ li.ui-autocomplete-category {
             margin-bottom: 10px;
             list-style: none;
         }
-        .b-log li.error{
-            color: #c00;
+        .b-log li.error,
+        .red,
+        .live-error{
+            color: #c00 !important;
         }
         .b-log li.success{
-            color: #452716;
+            color: #452716 !important;
+        }
+        .live-processing{
+            color: #D26A44 !important;
         }
 .b-get-xls{
     margin-bottom: 10px;

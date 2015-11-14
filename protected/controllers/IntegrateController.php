@@ -423,37 +423,42 @@ class IntegrateController extends Controller
         $drom->setUser($account->login, $account->password);
         $drom->auth();
 
-        if( $queue->action->code == "delete" ){
+        switch ($queue->action->code) {
+            case 'delete':
 
-            Log::debug("Удаление ".$advert->good->fields_assoc[3]->value." в аккаунте ".$account->login);
-            $result = $drom->deleteAdvert($advert->url);
-            if( $result )
-                $advert->delete();
+                Log::debug("Удаление ".$advert->good->fields_assoc[3]->value." в аккаунте ".$account->login);
+                $result = $drom->deleteAdvert($advert->url);
+                if( $result )
+                    $advert->delete();
 
-        }else if( $queue->action->code == "add" ){
+                break;
+            case 'add':
 
-            Log::debug("Выкладка ".$advert->good->fields_assoc[3]->value." в аккаунт ".$account->login);
-            $result = $drom->addAdvert($fields,$images);
-            if( $result )
-                $advert->setUrl($result);
+                Log::debug("Выкладка ".$advert->good->fields_assoc[3]->value." в аккаунт ".$account->login);
+                $result = $drom->addAdvert($fields,$images);
+                if( $result )
+                    $advert->setUrl($result);
 
-        }else if( $queue->action->code == "update" ){
+                break;
+            case 'update':
 
-            Log::debug("Редактирование ".$advert->good->fields_assoc[3]->value." в аккаунте ".$account->login);
-            $result = $drom->updateAdvert($advert->url,$fields);
+                Log::debug("Редактирование ".$advert->good->fields_assoc[3]->value." в аккаунте ".$account->login);
+                $result = $drom->updateAdvert($advert->url,$fields);
 
-        } else if( $queue->action->code == "updateImages" ){
+                break;
+            case 'updateImages':
 
-            Log::debug("Обновление фотографий ".$advert->good->fields_assoc[3]->value." в аккаунте ".$account->login);
-            $result = $drom->updateAdvertImages($advert->url,$fields,$images);
+                Log::debug("Обновление фотографий ".$advert->good->fields_assoc[3]->value." в аккаунте ".$account->login);
+                $result = $drom->updateAdvertImages($advert->url,$fields,$images);
 
-        } 
+                break;
+        }
 
         if( $result ){
-            Log::debug("Действие ".$advert->good->fields_assoc[3]->value." в аккаунте ".$account->login." прошло успешно");
+            Log::debug("Действие над ".$advert->good->fields_assoc[3]->value." в аккаунте ".$account->login." прошло успешно");
             $queue->delete();
         }else{
-            Log::debug("Действие ".$advert->good->fields_assoc[3]->value." в аккаунте ".$account->login." прошло с ОШБИКОЙ");
+            Log::debug("Действие над ".$advert->good->fields_assoc[3]->value." в аккаунте ".$account->login." прошло с ОШБИКОЙ");
             $queue->setState("error");
         }
 
