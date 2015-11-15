@@ -20,19 +20,25 @@ Class Curl {
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 30);
-        curl_setopt($ch, CURLOPT_AUTOREFERER,true);
+        if(strpos($url, "avito") !== false) {
+            curl_setopt($ch, CURLOPT_REFERER,"https://www.avito.ru/");
+        }
+        curl_setopt($ch, CURLOPT_AUTOREFERER,1);
         if($this->proxy_login && $this->proxy_ip) {
             curl_setopt($ch, CURLOPT_PROXY, $this->proxy_ip);
             curl_setopt($ch, CURLOPT_PROXYUSERPWD, $this->proxy_login); 
         }
         if (!is_dir(dirname(__FILE__).'/cookies')) mkdir(dirname(__FILE__).'/cookies',0777, true);
-        curl_setopt($ch, CURLOPT_COOKIEJAR, dirname(__FILE__).'/cookies/'.$this->cookie.'.txt');
-        curl_setopt($ch, CURLOPT_COOKIEFILE,  dirname(__FILE__).'/cookies/'.$this->cookie.'.txt');
+        
+            curl_setopt($ch, CURLOPT_COOKIEJAR, dirname(__FILE__).'/cookies/'.$this->cookie.'.txt');
+            curl_setopt($ch, CURLOPT_COOKIEFILE,  dirname(__FILE__).'/cookies/'.$this->cookie.'.txt');
+       
         if( $post != NULL ){
             curl_setopt($ch, CURLOPT_POST, 1);
             curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
         }
         $result = curl_exec($ch);
+        // print_r($result);
         curl_close( $ch );
         return $result;
     }

@@ -64,8 +64,8 @@ $ch = curl_init();
 		'title' => 'Что-то123123',
 		'description' => 'Что-то тамasdasd',
 		'price' => 1000,
-		'images' => array($image_id1,$image_id2),
-		// 'images' => $image_id2,
+		'images[0]' => $image_id1,
+		'images[1]' => $image_id2,
 		'rotate['.$image_id1.']' => 0,
 		'rotate['.$image_id2.']' => 0,
 		'image' => "",
@@ -80,6 +80,8 @@ $ch = curl_init();
 
 	curl_setopt($ch, CURLOPT_BINARYTRANSFER,1);  
 	    $out = curl_exec($ch);  
+	    var_dump(iconv_get_encoding('all'));
+	    die();
 	    $image_sv = dirname(__FILE__).'/123.jpg';  
 	    file_put_contents($image_sv, $out); 
 	$url = "http://rucaptcha.com/in.php";
