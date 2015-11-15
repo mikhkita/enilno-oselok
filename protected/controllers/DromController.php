@@ -102,11 +102,16 @@ class DromController extends Controller
         $avito->auth();
 
         if( $queue->action->code == "delete" ){
-
+            $delete = $avito->deleteAdvert($advert->url);
+            if($delete){
+                // $queue->delete();
+            }else{
+                $queue->setState("error");
+            }
         } else if( $queue->action->code == "add" ){
             $id = $avito->addAdvert($fields,$images);
-            print_r($id);
-            if( $id ){
+
+            if( $id && $id != "error"){
                 $advert->setUrl($id);
 
                 // $queue->delete();
@@ -115,23 +120,21 @@ class DromController extends Controller
             }
         } else if( $queue->action->code == "update" ){
             $id = $avito->updateAdvert($advert->url,$fields);
-            
             if( $id ){
-                $queue->delete();
+                // $queue->delete();
             }else{
                 $queue->setState("error");
             }
         } else if( $queue->action->code == "updateImages" ){
-            $id = $avito->updateAdvertImages($advert->url,$fields,$images);
-            
+            $id = $avito->updateAdvert($advert->url,$fields,$images);
             if( $id ){
-                $queue->delete();
+                // $queue->delete();
             }else{
                 $queue->setState("error");
             }
         } 
 
-        // $avito->curl->removeCookies();
+        $avito->curl->removeCookies();
 
         // $drom = new Drom();
         // $drom->setUser("79528960988","aeesnb33");

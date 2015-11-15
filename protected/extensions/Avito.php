@@ -29,45 +29,6 @@ Class Avito {
         return $this->curl->request("https://www.avito.ru/profile/login",$params);
     }
 
-    public function upAdverts(){
-        $links = $this->parseExpired();
-        $upLinks = array();
-        Log::debug("Пользователь ".$this->login." ".count($links)." неактивных объявлений");
-
-        foreach ($links as $key => $value) {
-            $index = floor($key/50);
-            $upLinks[$index] = $upLinks[$index]."&bulletin%5B".$value."%5D=on";
-        }
-
-        foreach ($upLinks as $key => $value) {
-            $url = "http://baza.drom.ru/bulletin/service-configure?return_to=%2Fpersonal%2Fnon_active%2Fbulletins%3Fpage%3D2&from=personal.non_active&applier%5BprolongBulletin%5D=prolongBulletin".$value."=on&note=";
-            $this->curl->request($url);
-        }
-    }
-
-    public function parseExpired(){
-        include_once Yii::app()->basePath.'/extensions/simple_html_dom.php';
-
-        $html = str_get_html($this->auth("http://baza.drom.ru/personal/non_active/bulletins"));
-
-        $links = array();
-        $pageLinks = $html->find('.bullNotPublished');
-        $page = 1;
-        while(count($pageLinks)){
-            foreach($pageLinks as $element){
-                $exp = $element->find(".expired");
-                if( count($exp) )
-                    array_push($links, $element->find(".bulletinLink",0)->getAttribute("name"));
-            }
-
-            $page++;
-            $html = str_get_html(iconv('windows-1251', 'utf-8', $this->curl->request("http://baza.drom.ru/personal/non_active/bulletins?page=".$page)));
-            $pageLinks = $html->find('.bullNotPublished');
-        }
-
-        return $links;
-    }
-
     public function addAdvert($params,$images = NULL){
         include_once Yii::app()->basePath.'/extensions/simple_html_dom.php';
         if($images !== NULL) {
@@ -121,12 +82,12 @@ Class Avito {
 		}
     }
     public function updateAdvert($advert_id,$params,$images = NULL){
-    	
-		$html = str_get_html(iconv('windows-1251', 'utf-8', $this->curl->request("https://www.avito.ru/".$advert_id)));
+    	include_once Yii::app()->basePath.'/extensions/simple_html_dom.php';
+		$html = str_get_html($this->curl->request("https://www.avito.ru/".$advert_id));
 		$href = $html->find('.item_change',0)->href;
 		$href = "https://www.avito.ru".substr($href, 0, -3)."/edit";
 
-		$html = str_get_html(iconv('windows-1251', 'utf-8', $this->curl->request($href)));
+		$html = str_get_html( $this->curl->request($href));
 		$version = $html->find('input[name="version"]',0)->value;
 		if($images !== NULL) {
         	$params = $this->addImages($params,$images);
@@ -139,9 +100,12 @@ Class Avito {
 		$params['version'] = $version;
 		$params['source'] = 'edit';	
 
-		iconv('windows-1251', 'utf-8', $this->curl->request($href,$params));
+		$this->curl->request($href,$params);
    
-		print_r(iconv('windows-1251', 'utf-8', $this->curl->request($href."/confirm",array('done' => "",'subscribe-position' => '1'))));
+		$html = str_get_html($this->curl->request($href."/confirm",array('done' => "",'subscribe-position' => '1')));
+		$id = $html->find('.content-text a[rel="nofollow"]',0)->href;
+		$id = end(explode("_", $id));
+		return $id;
     }
    				
     public function addImages($params,$images = NULL) {
@@ -158,21 +122,12 @@ Class Avito {
         }
     }
 
-    public function deleteAdverts($arr) {
+    public function deleteAdvert($advert_id) {
         include_once Yii::app()->basePath.'/extensions/simple_html_dom.php';
-        $html = str_get_html($this->curl->request('https://baza.drom.ru/bulletin/service-configure?ids='.$arr[0].'&applier=deleteBulletin'));
-        
-        $del_arr = array(
-            'applier' => 'deleteBulletin',
-            'uid' => $html->find('input[name="uid"]', 0)->value,
-            'price' => 0,
-            'order_id' => 0,
-            'return_to' => ''
-            );
-        foreach ($arr as $key => $value) {
-            $del_arr['bulletin['.$value.']']= 'on';
-        }
-        $this->curl->request('https://baza.drom.ru/bulletin/service-apply',$del_arr);
+        $this->curl->request("https://www.avito.ru/profile",array('item_id[]' => $advert_id,'delete' => 'Снять объявление с публикации'));
+		$html = str_get_html($this->curl->request("https://www.avito.ru/".$advert_id));
+		$delete = $html->find('.has-bold',0)->plaintext;
+		return ($delete == "Вы закрыли это объявление");
     }
 
     public function generateFields($fields,$good_type_id){
