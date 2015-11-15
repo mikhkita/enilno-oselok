@@ -402,10 +402,10 @@ class IntegrateController extends Controller
     public function actionQueueNext(){
         if( !$this->checkAccess() ) return true;
 
-        // while( $this->allowed() ){
-            // $this->writeTime();
+        while( $this->allowed() ){
+            $this->writeTime();
             if( !$this->getNext() ) sleep(5);
-        // }
+        }
     }
 
     public function checkAccess(){
