@@ -1,6 +1,6 @@
 <?
 
-Class Drom {
+Class Avito {
     private $login = "";
     private $password = "";
     public $curl;
@@ -26,8 +26,7 @@ Class Drom {
 			'login'=>$this->login,
 			'password'=>$this->password
         );
-
-        return iconv('windows-1251', 'utf-8', $this->curl->request("https://www.avito.ru/profile/login",$params));
+        return $this->curl->request("https://www.avito.ru/profile/login",$params);
     }
 
     public function upAdverts(){
@@ -69,53 +68,94 @@ Class Drom {
         return $links;
     }
 
-    public function addAdvert($params,$images){
+    public function addAdvert($params,$images = NULL){
         include_once Yii::app()->basePath.'/extensions/simple_html_dom.php';
-        
-        $this->curl->request("http://baza.drom.ru/upload-image-jquery",array('up[]' => new CurlFile(Yii::app()->basePath.DIRECTORY_SEPARATOR.'..'.$image_path)))
-        $url = "https://www.avito.ru/additem/image";
-		curl_setopt($ch, CURLOPT_URL, $url);
-		curl_setopt($ch, CURLOPT_POSTFIELDS, array(
-			'image'=>'@'.dirname(__FILE__)."/5.jpg"
-		));
-
-		$image_id = json_decode(curl_exec( $ch ))->id;
-
-		$url = "https://www.avito.ru/additem";
-		curl_setopt($ch, CURLOPT_URL, $url);
-
-		$html = str_get_html(curl_exec( $ch ));
+        if($images !== NULL) {
+        	$params = $this->addImages($params,$images);
+		}
+		$html = str_get_html($this->curl->request("https://www.avito.ru/additem"));
 	    $token = array();
 	    $token['name'] = $html->find('input[name^=token]',0)->name;
 	    $token['value'] = $html->find('input[name^=token]',0)->value;
+	    $params[$token['name']] = $token['value'];
+	    $params['source'] = "add";
 
+		$html = str_get_html($this->curl->request("https://www.avito.ru/additem",$params));
+		$captcha = $html->find('.form-captcha-image',0)->src;
 
+        $out = $this->curl->request('https://www.avito.ru'.$captcha);
+	    $captcha_path = Yii::app()->basePath.'/extensions/captcha.jpg';  
+	    file_put_contents($captcha_path, $out); 
 
+		$captcha = $this->curl->request("http://rucaptcha.com/in.php",array('key'=>'0b07ab2862c1ad044df277cbaf7ceb99','file'=> new CurlFile($captcha_path)));
+		while ($captcha == 'ERROR_NO_SLOT_AVAILABLE') {
+			sleep(5);
+		    $captcha = $this->curl->request("http://rucaptcha.com/in.php",array('key'=>'0b07ab2862c1ad044df277cbaf7ceb99','file'=> new CurlFile($captcha_path)));
+		} 
+		if(strpos($captcha, "|") !== false) {
+			$captcha = substr($captcha, 3);
+			$url = "http://rucaptcha.com/res.php?";
+					$url_params = array(
+				    	'key' => '0b07ab2862c1ad044df277cbaf7ceb99',
+				    	'action' => 'get',
+				    	'id' => $captcha
+					);
+			$url .= urldecode(http_build_query($url_params));
 
-
-
-        $options = $this->setOptions($params);
-        $advert_id = json_decode($this->curl->request("http://baza.drom.ru/api/1.0/save/bulletin",$options))->id;
-        $this->updateAdvert($advert_id,$params,$images);
-        
-        $result = iconv('windows-1251', 'utf-8', $this->curl->request("http://baza.drom.ru/bulletin/".$advert_id."/draft/publish?from=draft.publish",array('from'=>'adding.publish')));
-
-        // file_put_contents(Yii::app()->basePath."/drom.txt", $result."\n", FILE_APPEND);
-        $html = str_get_html($result);
-        return ( $html->find('#fieldsetView',0)->getAttribute("bulletinid") == $advert_id )?$advert_id:false;
-        // return "asd";
+			$captcha = $this->curl->request($url);
+			while ($captcha == 'CAPCHA_NOT_READY') {
+				sleep(2);
+		   		$captcha = $this->curl->request($url);
+			} 
+			if(strpos($captcha, "|") !== false) {
+				$captcha = substr($captcha, 3);
+				$html = str_get_html($this->curl->request("https://www.avito.ru/additem/confirm",array('captcha' => $captcha,'done' => "",'subscribe-position' => '0')));
+				$id = $html->find('.content-text a[rel="nofollow"]',0)->href;
+				$id = end(explode("_", $id));
+				return $id;
+			} else {
+				return "error";
+			}
+		} else {
+			return "error";
+		}
     }
-    
-    public function updateAdvert($advert_id,$params,$images = NULL) {
+    public function updateAdvert($advert_id,$params,$images = NULL){
+    	
+		$html = str_get_html(iconv('windows-1251', 'utf-8', $this->curl->request("https://www.avito.ru/".$advert_id)));
+		$href = $html->find('.item_change',0)->href;
+		$href = "https://www.avito.ru".substr($href, 0, -3)."/edit";
+
+		$html = str_get_html(iconv('windows-1251', 'utf-8', $this->curl->request($href)));
+		$version = $html->find('input[name="version"]',0)->value;
+		if($images !== NULL) {
+        	$params = $this->addImages($params,$images);
+		} else {
+			foreach ( $html->find('input[name="images[]"]') as $i => $image) {
+				$params['images['.$i.']'] = $image->value;
+			}
+		}
+		
+		$params['version'] = $version;
+		$params['source'] = 'edit';	
+
+		iconv('windows-1251', 'utf-8', $this->curl->request($href,$params));
+   
+		print_r(iconv('windows-1251', 'utf-8', $this->curl->request($href."/confirm",array('done' => "",'subscribe-position' => '1'))));
+    }
+   				
+    public function addImages($params,$images = NULL) {
         if($images) {
-            foreach ($images as &$image_path) {
-                $image_path = json_decode($this->curl->request("http://baza.drom.ru/upload-image-jquery",array('up[]' => new CurlFile(Yii::app()->basePath.DIRECTORY_SEPARATOR.'..'.$image_path))))->id;
+        	$img = array();
+            foreach ($images as $key => $image_path) {
+            	if($key == 5) break;
+                array_push($img, json_decode($this->curl->request("https://www.avito.ru/additem/image",array('image' => new CurlFile(Yii::app()->basePath.DIRECTORY_SEPARATOR.'..'.$image_path))))->id);
             }
-            $params['images'] = array('images' => $images);
+            foreach ( $img as $i => $image) {
+				$params['images['.$i.']'] = $image;
+			}
+            return $params;
         }
-        $options = $this->setOptions($params,$advert_id);
-        
-        $this->curl->request("http://baza.drom.ru/api/1.0/save/bulletin",$options);
     }
 
     public function deleteAdverts($arr) {
@@ -135,67 +175,24 @@ Class Drom {
         $this->curl->request('https://baza.drom.ru/bulletin/service-apply',$del_arr);
     }
 
-    public function setOptions($params,$advert_id = NULL) {
-        $options = array(
-            'cityId' => $params['cityId'],
-            'bulletinType'=>'bulletinRegular',
-            'directoryId'=> $params['dirId'],
-            'fields'=> $params
-        );
-       
-        if($advert_id) {
-            if(isset($params['images'])) {
-                $options['images'] = $params['images'];
-            }
-            $options['id'] = $advert_id;
-        }
-        $options = array('changeDescription' => json_encode($options));
-        $options['client_type'] = ($advert_id) ? 'v2:editing' : "v2:adding";
-        return $options;
-    }
-
     public function generateFields($fields,$good_type_id){
-        
-
-
-
-
-
-
-
-        $fields['dirId'] = $this->dir_codes[intval($good_type_id)];
-        $fields['model'] = array($fields["model"],0,0);
-        $fields['price'] = array($fields["price"],"RUB");
-        $fields['quantity'] = 1;
-        $fields['contacts'] =  array("email" => "","is_email_hidden" => false,"contactInfo" => "+79528960999");
-        $fields['delivery'] = array("pickupAddress" => $fields['pickupAddress'],"localPrice" => $fields['localPrice'],"minPostalPrice" => $fields['minPostalPrice'],"comment" => $fields['comment']);
-        unset($fields['pickupAddress'],$fields['localPrice'],$fields['minPostalPrice'],$fields['comment']);
-
-        if( isset($fields["disc_width"]) ){
-            $disc_width = explode("/",$fields['disc_width']);
-            $disc_et = explode("/",$fields['disc_width']);
-            $fields['wheelPcd'] = explode("/",$fields['wheelPcd']);
-
-            $fields['discParameters'] = array();
-            foreach ($disc_width as $i => $value)
-                $fields['discParameters'][$i] = array("disc_width"=>$value);
-
-            foreach ($disc_et as $i => $value){
-                if( !isset($fields['discParameters'][$i]) ) $fields['discParameters'][$i] = array();
-                $fields['discParameters'][$i]["disc_et"] = $value;
-            }
-  
-            unset($fields['disc_width'],$fields['disc_et'],$disc_width,$disc_et);
-        }
-
-        if( $good_type_id == 1 ){
-            $fields['predestination'] = "regular";
-        }
+		$fields['authState'] = 'phone-edit';
+		$fields['private'] =  0;
+		$fields['root_category_id' ] = 1;
+		$fields['category_id'] = 10;
+		$fields['metro_id'] = "";
+		$fields['district_id'] = "";
+		$fields['road_id'] = "";
+		$fields['params[5]'] = 19;
+		$fields['params[709]'] = $this->dir_codes[intval($good_type_id)];
+		$fields['image'] = "";
+		$fields['videoUrl'] = "";
+		$fields['service_code'] = 'free';
         return $fields;
     }
 
     public function self(){
-        return new Drom();
+        return new Avito();
     }
 }
 
