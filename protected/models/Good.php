@@ -312,7 +312,7 @@ class Good extends CActiveRecord
 	}
 
 	public function update(){
-		$newModel = Good::model()->with("adverts.queue.action")->findByPk($this->id);
+		$newModel = Good::model()->with(array("adverts.queue.action","adverts.queue.state"))->findByPk($this->id);
 
 		function compare($a,$b){ 
 			$a = ((isset($a->city_id))?$a->city_id:$a->variant_id); 
@@ -323,13 +323,6 @@ class Good extends CActiveRecord
 
 		$isDiffAdverts = $this->isDiff($newModel, true);
 		$isDiff = $this->isDiff($newModel);
-
-		// if($this->isDiff()){
-		// 	echo "DIFF";
-		// }else{
-		// 	echo "NOT DIFF";
-		// }
-		// die();
 
 		if( ($isDiff || $isDiffAdverts) && !$this->share ){
 			$cities = Place::model()->cities;
@@ -351,7 +344,6 @@ class Good extends CActiveRecord
 				// Удаление из очереди действий на удаление объявлений, которые нужно оставить (тут же происходит добавление в очеред действия на добавление или редактирование)
 				$delete_delete_arr = array_uintersect($adverts_with_delete, $new_items, "compare");
 				Queue::delAll($delete_delete_arr,"delete");
-				Advert::delAll($delete_delete_arr);
 
 				// Добавление в очередь действий на удаление объявлений (если у этого объявления есть в очереди действие на удаление, то не добавится действие в очередь)
 				$delete_arr = array_udiff($adverts_without_delete, $new_items, "compare");
@@ -368,6 +360,7 @@ class Good extends CActiveRecord
 				// Удаление из очереди действий на добавление объявлений, которые нужно удалить
 				$delete_add_arr = array_udiff($adverts_with_add, $new_items, "compare");
 				Queue::delAll($delete_add_arr,"add");
+				Advert::delAll($delete_add_arr);
 
 				$add = array_udiff($new_items, $this->adverts, "compare");
 
@@ -392,7 +385,7 @@ class Good extends CActiveRecord
 		foreach ($adverts as $i => $advert) {
 			if( isset($advert->queue) )
 				foreach ($advert->queue as $key => $queue)
-					if( in_array($queue->action->code, $actions) ){
+					if( in_array($queue->action->code, $actions) && $queue->state->code == "waiting" ){
 						unset($adverts[$i]);
 						break;
 					}
@@ -453,6 +446,18 @@ class Good extends CActiveRecord
 			}
 		}
 		return false;
+	}
+
+	public function advertsCount($with_url_only = false){
+		if( $with_url_only ){
+			$i = 0;
+			foreach ($this->adverts as $advert) {
+				if( $advert->url != NULL ) $i++;
+			}
+			return $i;
+		}else{
+			return count($this->adverts);
+		}
 	}
 
 	public function beforeDelete(){

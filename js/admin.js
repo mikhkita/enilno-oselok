@@ -1022,6 +1022,31 @@ $(document).ready(function(){
     }
     /* Filter Pagination ------------------------- Filter Pagination */
 
+    /* Live -------------------------------------- Live */
+
+    if( $("#b-live").length ){
+        var liveDelay = $("#b-live").attr("data-delay")*1000,
+            liveUrl = $("#b-live").attr("data-url");
+        function liveUpdate(){
+            $.ajax({
+                url: liveUrl,
+                success: function(msg){
+                    console.log("success");
+                    $(".b-main-center").html(msg);
+                },
+                error: function(){
+                    
+                },
+                complete: function(){
+                    setTimeout(liveUpdate,liveDelay);
+                }
+            });
+        }
+        setTimeout(liveUpdate,liveDelay);
+    }
+
+    /* Live -------------------------------------- Live */
+
     $(".ajax-update-prices").click(function(){
         progress.setColor("#D26A44");
         progress.start(10);

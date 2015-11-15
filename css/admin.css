@@ -475,6 +475,11 @@ h1{
             background-color: #000000 !important;
             color: #FCEFBE;
         }
+        .b-table tr td .advert-info{
+            display: inline-block;
+            margin: 5px 10px 0px;
+            vertical-align: top;
+        }
             .b-import-preview-table tr td{
                 text-align: center;
             }
@@ -1059,7 +1064,7 @@ h1{
         height: 20px;
         display: inline-block;
         margin: 0px 5px;
-        margin-top: 3px;
+        margin-top: 5px;
         background-size: 20px;
     }
         .b-tool:hover{
@@ -1761,11 +1766,16 @@ li.ui-autocomplete-category {
             margin-bottom: 10px;
             list-style: none;
         }
-        .b-log li.error{
-            color: #c00;
+        .b-log li.error,
+        .red,
+        .live-error{
+            color: #c00 !important;
         }
         .b-log li.success{
-            color: #452716;
+            color: #452716 !important;
+        }
+        .live-processing{
+            color: #D26A44 !important;
         }
 .b-get-xls{
     margin-bottom: 10px;

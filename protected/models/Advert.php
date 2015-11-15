@@ -103,8 +103,6 @@ class Advert extends CActiveRecord
 		if( count($items) ){
 			Controller::insertValues(Advert::tableName(),$items);
 			return Controller::getValues(Advert::model(),$items);
-		}else{
-			return Log::error("Отсутствуют элементы для добавления объявлений");
 		}
 	}
 
@@ -120,8 +118,6 @@ class Advert extends CActiveRecord
     		Advert::model()->deleteAll($criteria);		
     			
 			return true;
-		}else{
-			return Log::error("Отсутствуют элементы для удаления объявлений");
 		}
 	}
 
