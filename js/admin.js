@@ -719,7 +719,11 @@ $(document).ready(function(){
         $("#add-code").removeClass("error");
         var li = $('<li><p><span></span><a href="#" class="b-add-remove">Удалить</a></p><input type="hidden" name="" value=""></li>')
         li.find("span").text(val+" ("+$("#add-inter").find("option:selected").text()+")");
-        li.find("input").attr("name",$(this).attr("data-name")+"["+$("#add-inter").val()+"]").val(val);
+        if( $("#b-add-table-desktop").length ){
+            li.find("input").attr("name",$(this).attr("data-name")+"["+val+"]").val($("#add-inter").val().trim());
+        }else{
+            li.find("input").attr("name",$(this).attr("data-name")+"["+$("#add-inter").val().trim()+"]").val(val);
+        }
         $(".b-add-items").append(li);
         $("#add-code").val("").focus();
     });

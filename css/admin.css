@@ -459,6 +459,9 @@ h1{
         .b-good-table td{
             padding: 0px 2px;
         }
+        .b-advert-table td{
+            padding: 2px 10px;
+        }
         .b-table td.b-empty{
             background-color: #B27C5E;
         }
@@ -480,6 +483,12 @@ h1{
             margin: 5px 10px 0px;
             vertical-align: top;
         }
+            .b-adverts-link span{
+                text-decoration: underline !important;
+            }
+            .b-adverts-link:hover span{
+                text-decoration: none !important;
+            }
             .b-import-preview-table tr td{
                 text-align: center;
             }

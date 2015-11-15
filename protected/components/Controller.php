@@ -379,21 +379,23 @@ class Controller extends CController
         return ( isset($this->settings[$category_code][$param_code]) )?$this->settings[$category_code][$param_code]:"";
     }
 
-    public function getDromAccounts(){
-        $users = $this->getParam("DROM","USERS");
+    public function getDromAccount($login){
+        $cols = array(
+            46 => "login",
+            47 => "password",
+            48 => "phone"
+        );
+        $cell = DesktopTableCell::model()->with(array("row"))->find("row.table_id=12 AND varchar_value='$login'");
+        if( $cell ){
+            $row = DesktopTableRow::model()->with(array("cells"))->findByPk($cell->row->id);
+            $out = array();
+            foreach ($row->cells as $key => $cell)
+                $out[$cols[$cell->col_id]] = $cell->value;
 
-        $users = explode("\n", $users);
-        $out = array();
-
-        foreach ($users as $i => &$user) {
-            if( $user == NULL || $user == "" ){
-                unset($users[$i]);
-                continue;
-            }
-            $user = preg_split("/[\s]+/", $user);
-            $out[$user[0]] = (object) array("login"=>$user[0],"password"=>$user[1],"phone"=>$user[2]);
+            return (object) $out;
+        }else{
+            return NULL;
         }
-        return $out;
     }
 
     public function setParam($category,$code,$value){

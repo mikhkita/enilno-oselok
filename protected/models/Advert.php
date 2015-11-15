@@ -126,6 +126,14 @@ class Advert extends CActiveRecord
 		return $this->save();
 	}
 
+	public function getUrl(){
+		if( $this->place->category_id == 2047 ){
+			return "http://baza.drom.ru/".$this->url.".html";
+		}else if( $this->place->category_id == 2048 ){
+			return $this->url;
+		}
+	}
+
 	/**
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!

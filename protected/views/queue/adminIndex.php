@@ -1,6 +1,6 @@
 <h1><?=$this->adminMenu["cur"]->name?></h1>
 <?php $form=$this->beginWidget('CActiveForm'); ?>
-	<table class="b-table" border="1" id="b-live" data-delay="5" data-url="<?php echo Yii::app()->createUrl('/'.$this->adminMenu["cur"]->code.'/adminindex',array("partial"=>'true'))?>">
+	<table class="b-table" border="1" id="b-live" data-delay="3" data-url="<?php echo Yii::app()->createUrl('/'.$this->adminMenu["cur"]->code.'/adminindex',array("partial"=>'true'))?>">
 		<tr>
 			<th style="width: 30px;"><? echo $labels['id']; ?></th>
 			<th><? echo $labels['advert_id']; ?></th>

@@ -400,10 +400,32 @@ class IntegrateController extends Controller
 
 // Выкладка -------------------------------------------------------------- Выкладка
     public function actionQueueNext(){
+        if( !$this->checkAccess() ) return true;
+
+        // while( $this->allowed() ){
+            // $this->writeTime();
+            if( !$this->getNext() ) sleep(5);
+        // }
+    }
+
+    public function checkAccess(){
+        $last = file_get_contents(Yii::app()->basePath."/data/queue_time.txt");
+        return ( time() - intval($last) > 300 );
+    }
+
+    public function writeTime(){
+        file_put_contents(Yii::app()->basePath."/data/queue_time.txt",time());
+    }
+
+    public function allowed(){
+        $queue = file_get_contents(Yii::app()->basePath."/data/queue.txt");
+        return ( $queue == "1" );
+    }
+
+    public function getNext(){
         $queue = Queue::model()->with("advert.good.type","advert.place","action")->next()->find();
-        if( !$queue ) return true;
+        if( !$queue ) return false;
         $advert = $queue->advert;
-        $accounts = $this->getDromAccounts();
 
         $queue->setState("processing");
 
@@ -414,9 +436,16 @@ class IntegrateController extends Controller
         ));
 
         $fields = Place::getValues(Place::getInters($advert->place->category_id,$advert->good->type->id),$advert->good,$dynamic);
-        $account = $accounts[$fields["login"]];
+        $account = $this->getDromAccount($fields["login"]);
+        if( !$account ){
+            Log::error("Не найден пользователь с логином \"$login\"");
+            $queue->setState("error");
+            return true;
+        }
+
         $fields["contacts"] = $account->phone;
-        $fields = Drom::self()->generateFields($fields,1);
+        $fields = Drom::self()->generateFields($fields,$advert->good->good_type_id);
+
         $images = $this->getImages($advert->good);
 
         $drom = new Drom();
@@ -463,6 +492,8 @@ class IntegrateController extends Controller
         }
 
         $drom->curl->removeCookies();
+
+        return true;
     }
 
     public function deleteAdverts(){

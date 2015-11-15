@@ -17,7 +17,7 @@ class PlaceController extends Controller
 				'roles'=>array('root'),
 			),
 			array('allow',
-				'actions'=>array('adminIndex','adminCreate','adminUpdate','adminPreview','adminDrom'),
+				'actions'=>array('adminIndex','adminCreate','adminUpdate','adminPreview','adminDrom','adminTest'),
 				'roles'=>array('manager'),
 			),
 			array('deny',
@@ -46,6 +46,10 @@ class PlaceController extends Controller
 				'model'=>$model,
 			));
 		}
+	}
+
+	public function actionAdminTest(){
+		print_r($this->getDromAccount("wheels70"));
 	}
 
 	public function actionAdminUpdate($id)

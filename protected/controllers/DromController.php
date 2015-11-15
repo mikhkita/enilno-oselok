@@ -3,7 +3,7 @@
 class DromController extends Controller
 {
    private $drom_params = array(
-        "1" => array(
+        1 => array(
             "subject" => array("type" => 'inter',"id" => 8),
             "cityId" => array("type" => 'inter',"id" => 31),
             "goodPresentState" => array("type" => 'inter',"id" => 102),
@@ -22,7 +22,7 @@ class DromController extends Controller
             "comment" => array("type" => 'inter',"id" => 72),
             "guarantee" => array("type" => 'inter',"id" => 73),   
         ),
-        "2" => array(
+        2 => array(
             "price" => array("type" => 'inter',"id" => 22),
             "subject" => array("type" => 'inter',"id" => 17),
             "cityId" => array("type" => 'inter',"id" => 30),
@@ -122,9 +122,12 @@ class DromController extends Controller
 
 // Дром ------------------------------------------------------------------ Дром
     public function actionCreate(){
-        $good = Good::model()->find("id=3382");
+        $good = Good::model()->find("id=1633");
         $images = $this->getImages($good);
         $dynamic = array( 38 => 1081, 37 => 869);
+
+        print_r($this->getParams($good,$dynamic));
+        die();
         
         $drom = new Drom();
         $drom->setUser("79528960988","aeesnb33");

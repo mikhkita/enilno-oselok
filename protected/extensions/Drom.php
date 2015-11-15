@@ -189,7 +189,7 @@ Class Drom {
 
         if( isset($fields["disc_width"]) ){
             $disc_width = explode("/",$fields['disc_width']);
-            $disc_et = explode("/",$fields['disc_width']);
+            $disc_et = explode("/",$fields['disc_et']);
             $fields['wheelPcd'] = explode("/",$fields['wheelPcd']);
 
             $fields['discParameters'] = array();

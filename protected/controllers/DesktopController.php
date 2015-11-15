@@ -168,7 +168,7 @@ class DesktopController extends Controller
 			if( !in_array($col->id, $cols) ) $col->delete();
 
 		if( isset($_POST["new_col"]) ){
-			foreach ($_POST["new_col"] as $type => $name) {
+			foreach ($_POST["new_col"] as $name => $type) {
 				$new = new DesktopTableCol();
 				$new->name = $name;
 				$new->type_id = $type;
@@ -245,7 +245,7 @@ class DesktopController extends Controller
 					"time_value" => NULL,
 					"variant_id" => NULL,
 				);
-				$value[$cols[$col_id]->type->code."_value"] = $val;
+				$value[$cols[$col_id]->type->code."_value"] = trim($val);
 				array_push($values, $value);
 			}
 		}

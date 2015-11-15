@@ -26,12 +26,16 @@
 				<? foreach ($data as $i => $item): ?>
 					<tr>
 						<td <?if($this->user->role->code == "root"):?>style="min-width: 75px;"<?endif;?>>
-							<span class="advert-info"><?=$item->advertsCount()?> (<?=$item->advertsCount(true)?>)</span>
+							<? if($item->advertsCount()): ?>
+								<a href="<?php echo Yii::app()->createUrl('/good/adminadverts',array('id'=>$item->id))?>" class="ajax-form ajax-update b-adverts-link"><span class="advert-info"><?=$item->advertsCount()?> (<?=$item->advertsCount(true)?>)</span></a>
+							<? else: ?>
+								<span class="advert-info"><?=$item->advertsCount()?> (<?=$item->advertsCount(true)?>)</span>
+							<? endif; ?>
 							<a href="<?php echo Yii::app()->createUrl('/good/adminupdate',array('id'=>$item->id,'goodTypeId' => $_GET['goodTypeId'],'GoodFilter_page' => ($pages->currentPage+1) ))?>" class="ajax-form ajax-update b-tool b-tool-update" title="Редактировать"></a>
 							<? if($this->user->role->code == "root"): ?><a href="<?php echo Yii::app()->createUrl('/good/adminindex',array('delete'=>$item->id,'partial'=>'true','goodTypeId'=>$_GET["goodTypeId"],'GoodFilter_page'=>isset($_GET["GoodFilter_page"])?$_GET["GoodFilter_page"]:1))?>" class="ajax-form ajax-delete b-tool b-tool-delete not-ajax-delete" data-warning="Вы действительно хотите удалить товар &quot;<?=$item->fields_assoc[3]->value?>&quot;?" title="Удалить товар>"></a><? endif; ?>
 						</td>
 						<? foreach ($fields as $field): ?>
-							<td>
+							<td style="min-width: <?=$field->attribute->width?>px;">
 								<? if( isset($item->fields_assoc[$field->attribute->id]) ): ?>
 									<? if( is_array($item->fields_assoc[$field->attribute->id]) ): ?>
 										<? foreach ($item->fields_assoc[$field->attribute->id] as $attr): ?>

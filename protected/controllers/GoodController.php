@@ -13,7 +13,7 @@ class GoodController extends Controller
 	{
 		return array(
 			array('allow',
-				'actions'=>array('adminIndex','adminTest','updatePrices','adminCreate','adminUpdate','adminDelete','adminEdit','getAttrType','getAttr'),
+				'actions'=>array('adminIndex','adminTest','updatePrices','adminCreate','adminUpdate','adminDelete','adminEdit','getAttrType','getAttr','adminAdverts'),
 				'roles'=>array('manager'),
 			),
 			array('allow',
@@ -106,6 +106,7 @@ class GoodController extends Controller
 			));
 		}
 	}
+
 	public function getAttr($model) {
 		$result = array();
 		foreach ($model->type->fields as $attr) {
@@ -340,6 +341,24 @@ class GoodController extends Controller
 
 		$this->render('index',array(
 			'data'=>$GoodType->goods
+		));
+	}
+
+	public function actionAdminAdverts($id){
+		$good = Good::model()->with(array("type"=>array("alias"=>"goodType"),"adverts.place.category","adverts.type","adverts.city"))->findByPk($id);
+
+		$adverts = array();
+		foreach ($good->adverts as $advert) {
+			if( !isset($adverts[$advert->place->category->value]) ) $adverts[$advert->place->category->value] = array();
+			array_push($adverts[$advert->place->category->value], $advert);
+		}
+
+		// var_dump($adverts);
+
+		$this->renderPartial('adminAdverts',array(
+			'adverts'=>$adverts,
+			'labels'=>Advert::attributeLabels(),
+			'good'=>$good
 		));
 	}
 

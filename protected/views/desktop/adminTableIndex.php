@@ -1,4 +1,4 @@
-<h1>Таблица</h1>
+<h1>Таблица "<?=$table->name?>"</h1>
 <div class="b-link-back">
 	<a href="<?=$this->createUrl('/'.$this->adminMenu["cur"]->code.'/adminindex',array("id"=>$table->folder_id))?>">Назад</a>
 </div>

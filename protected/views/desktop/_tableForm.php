@@ -25,7 +25,7 @@
 		</ul>
 	</div>
 
-	<div class="row b-add-cont clearfix">
+	<div class="row b-add-cont clearfix" id="b-add-table-desktop">
 		<input type="text" class="left" name="add-code" id="add-code">
 		<?php echo CHtml::DropDownList('add',array(),CHtml::listData(DesktopTableColType::model()->findAll(array('order'=>'id ASC')), 'id', 'name'),array("id"=>"add-inter","class"=>"left")); ?>
 		<div class="buttons left">
