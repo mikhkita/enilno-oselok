@@ -65,7 +65,7 @@ class DromController extends Controller
 
 
     public function actionAdminIndex(){
-        $queue = Queue::model()->with("advert.good.type","advert.place","action")->findByPk(156);
+        $queue = Queue::model()->with("advert.good.type","advert.place","action")->findByPk(198);
         $advert = $queue->advert;
 
         $queue->setState("processing");
@@ -139,14 +139,14 @@ class DromController extends Controller
         $fields = Drom::self()->generateFields($fields,1);
         $images = $this->getImages($advert->good);
         $drom = new Drom();
-        $drom->setUser("beatbox787@gmail.com","vtebar8u");
+        $drom->setUser("kitaev123","vtebar8u");
         unset($fields["login"]);
         $drom->auth();
 
         if( $queue->action->code == "delete" ){
 
         } else if( $queue->action->code == "add" ){
-            $id = $drom->addAdvert('bestOf12fer',$fields,$images);
+            $id = $drom->addAdvert($fields,$images);
             print_r($id);
             if( $id ){
                 $advert->setUrl($id);

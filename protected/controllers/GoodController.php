@@ -13,7 +13,7 @@ class GoodController extends Controller
 	{
 		return array(
 			array('allow',
-				'actions'=>array('adminIndex','adminTest','updatePrices','adminCreate','adminUpdate','adminDelete','adminEdit','getAttrType','getAttr','adminAdverts','adminUpdateImages'),
+				'actions'=>array('adminIndex','adminTest','updatePrices','adminCreate','adminUpdate','adminDelete','adminEdit','getAttrType','getAttr','adminAdverts','adminUpdateImages',"adminAddCheckbox","adminRemoveCheckbox",'adminUpdateAll'),
 				'roles'=>array('manager'),
 			),
 			array('allow',
@@ -101,6 +101,65 @@ class GoodController extends Controller
 
 		}else{
 			$this->renderPartial('adminUpdate',array(
+				'model'=>$model,
+				'result' => $result
+			));
+		}
+	}
+
+	public function actionAdminUpdateAll($good_type_id)
+	{
+		$good_ids = Good::getCheckboxes($good_type_id);
+		if( !count($good_ids) ) return false;
+
+		$model = $this->loadModel($good_ids[0]);
+		$result = NULL;
+		
+		if(isset($_POST['Good_attr']) || isset($_POST['Dynamic_attr']))
+		{
+			$goods = Good::model()->with(array("type","fields.variant","fields.attribute"))->findAllByPk($good_ids);
+
+			$attrs_id = array();
+			foreach ($_POST['Dynamic_attr'] as $key => $attr_id) {
+				array_push($attrs_id, "attribute_id=".$attr_id);
+			}
+			$goods_id = array();
+			foreach ($good_ids as $key => $good_id) {
+				array_push($goods_id, "good_id=".$good_id);
+			}	
+			GoodAttribute::model()->deleteAll('('.implode(" OR ", $goods_id).') AND ('.implode(" OR ", $attrs_id).')');
+			if( isset($_POST['Good_attr']) ){
+				$values = array();
+				foreach ($good_ids as $key => $id) {
+					foreach ($_POST['Good_attr'] as $attr_id => $value) {
+						if(!is_array($value) || isset($value['single']) ) {
+							$tmp = array("good_id"=>$id,"attribute_id"=>$attr_id,"int_value"=>NULL,"varchar_value"=>NULL,"float_value"=>NULL,"text_value"=>NULL,"variant_id"=>NULL);
+							if(!is_array($value) && $value != ""){
+								$tmp[$this->getAttrType($model,$attr_id)] = $value;
+								$values[] = $tmp;
+							}else if(isset($value['single']) && $value['single']){
+								$tmp["variant_id"] = $value['single'];
+								$values[] = $tmp;
+							}
+						} else {
+							if(!empty($value))
+								foreach ($value as $variant)
+									$values[] = array("good_id"=>$id,"attribute_id"=>$attr_id,"int_value"=>NULL,"varchar_value"=>NULL,"float_value"=>NULL,"text_value"=>NULL,"variant_id"=>$variant);
+						}
+					}
+				}
+				$this->insertValues(GoodAttribute::tableName(),$values);
+			}
+
+			foreach ($goods as $i => $good) {
+				$good->update();
+			}
+			// list($queryCount, $queryTime) = Yii::app()->db->getStats();
+			// echo "Query count: $queryCount, Total query time: ".sprintf('%0.5f',$queryTime)."s";
+			$this->redirect( Yii::app()->createUrl('good/adminindex',array('goodTypeId'=>$good_type_id,'partial'=>true,'GoodFilter_page' => $_GET["GoodFilter_page"])) );
+
+		}else{
+			$this->renderPartial('adminUpdateAll',array(
 				'model'=>$model,
 				'result' => $result
 			));
@@ -377,9 +436,17 @@ class GoodController extends Controller
 		}
 	}
 
+	public function actionAdminAddCheckbox($id = NULL){
+		echo ( Good::addCheckbox($this->loadModel($id)) )?"1":"0";
+	}
+
+	public function actionAdminRemoveCheckbox($id = NULL){
+		echo ( Good::removeCheckbox($this->loadModel($id)) )?"1":"0";
+	}
+
 	public function loadModel($id)
 	{
-		$model=Good::model()->findByPk($id);
+		$model=Good::model()->with(array("type","fields.variant","fields.attribute"))->findByPk($id);
 		if($model===null)
 			throw new CHttpException(404,'The requested page does not exist.');
 		return $model;

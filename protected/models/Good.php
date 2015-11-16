@@ -312,14 +312,16 @@ class Good extends CActiveRecord
 	}
 
 	public function update(){
-		$newModel = Good::model()->with(array("adverts.queue.action","adverts.queue.state"))->findByPk($this->id);
+		$newModel = Good::model()->with(array("adverts.queue.action","adverts.queue.state","fields.variant","fields.attribute"))->findByPk($this->id);
 
-		function compare($a,$b){ 
-			$a = ((isset($a->city_id))?$a->city_id:$a->variant_id); 
-			$b = ((isset($b->city_id))?$b->city_id:$b->variant_id); 
+		if( !function_exists("compare") ){
+			function compare($a,$b){ 
+				$a = ((isset($a->city_id))?$a->city_id:$a->variant_id); 
+				$b = ((isset($b->city_id))?$b->city_id:$b->variant_id); 
 
-			return $a < $b ? -1 : ( $a > $b ? 1 : 0 ); 
-		};
+				return $a < $b ? -1 : ( $a > $b ? 1 : 0 ); 
+			};
+		}
 
 		$isDiffAdverts = $this->isDiff($newModel, true);
 		$isDiff = $this->isDiff($newModel);
@@ -409,8 +411,6 @@ class Good extends CActiveRecord
     }
 
 	public function isDiff($newModel,$dynamic = false){
-		$newModel = Good::model()->findByPk($this->id);
-
 		if( count($newModel->fields_assoc) != count($this->fields_assoc) ) return true;
 
 		if( $this->compareModels($this,$newModel,$dynamic) ) return true;
@@ -441,25 +441,46 @@ class Good extends CActiveRecord
 		return false;
 	}
 
-	public function	getCheckboxes(){
+	public function	getCheckboxes($good_type_id = NULL){
 		if(!isset($_SESSION)) session_start();
 
-		return ( isset($_SESSION["goods"]) )?$_SESSION["goods"]:array();
+		if( !$good_type_id ) throw new CHttpException(404,'Good::getCheckboxes() $good_type_id не задан');
+
+		return ( isset($_SESSION["goods"])  && isset($_SESSION["goods"][$good_type_id]) )?array_values($_SESSION["goods"][$good_type_id]):array();
 	}
 
-	public function setCheckbox($id = NULL){
-		if( $id ){
-			if(!in_array($id, $_SESSION["goods"])) 
-				array_push($_SESSION["goods"], $id);
+	public function addCheckbox($good = NULL){
+		if(!isset($_SESSION)) session_start();
+
+		if( $good ){
+			if( !is_array($_SESSION["goods"]) ) $_SESSION["goods"] = array();
+			if( !is_array($_SESSION["goods"][$good->good_type_id]) ) $_SESSION["goods"][$good->good_type_id] = array();
+			if(!in_array($id, $_SESSION["goods"][$good->good_type_id])) 
+				array_push($_SESSION["goods"][$good->good_type_id], $good->id);
+
+			return true;
+		}else{
+			return false;
 		}
 	}
 
-	public function removeCheckbox($id = NULL){
-		if( $id && in_array($id, $_SESSION["goods"]) ){
-			if(){
+	public function removeCheckbox($good = NULL){
+		if(!isset($_SESSION)) session_start();
 
-			}
+		if( $good  ){
+			if( is_array($_SESSION["goods"]) && is_array($_SESSION["goods"][$good->good_type_id]) && in_array($good->id, $_SESSION["goods"][$good->good_type_id]) )
+				unset($_SESSION["goods"][$good->good_type_id][array_search($good->id, $_SESSION["goods"][$good->good_type_id])]);
+
+			return true;
+		}else{
+			return false;
 		}
+	}
+
+	public function isChecked(){
+		if(!isset($_SESSION)) session_start();
+
+		return ( is_array($_SESSION["goods"]) && is_array($_SESSION["goods"][$this->good_type_id]) && in_array($this->id, $_SESSION["goods"][$this->good_type_id]) );
 	}
 
 	public function advertsCount($with_url_only = false){

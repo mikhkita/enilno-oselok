@@ -1060,6 +1060,9 @@ h1{
 .b-tool-cont{
     font-size: 0px;
 }
+    .b-sess-checkbox{
+        cursor: pointer;
+    }
     .b-tool{
         width: 25px;
         height: 25px;

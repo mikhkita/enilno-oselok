@@ -10,12 +10,13 @@
         <label for="sort">Порядок: </label>
         <?=CHTML::dropDownList("sort[type]", $_POST["sort"]["type"], array("ASC"=>"По возрастанию", "DESC"=>"По убыванию"),array('id'=>'b-order-1')); ?>
     </div>
+    <a href="<?php echo $this->createUrl('/good/adminupdateall',array('good_type_id'=> $_GET["goodTypeId"],'GoodFilter_page' => ($pages->currentPage+1) ))?>" class="ajax-form ajax-create b-butt" data-block=".b-popup-filter">Редактировать города</a>
 </div>
 
 <?php $this->renderPartial('_filter', array('attributes'=>$attributes, 'arr_name' => $arr_name, 'labels' => $labels, 'filter_values' => $filter_values, 'sort_fields' => $sort_fields)); ?>
 <div class="b-filter-pagination">
 	<?php $form=$this->beginWidget('CActiveForm'); ?>
-		<table class="b-table b-good-table" border="1">
+		<table class="b-table b-good-table b-sess-checkbox-info" data-add-url="<?=Yii::app()->createUrl('/good/adminaddcheckbox')?>" data-remove-url="<?=Yii::app()->createUrl('/good/adminremovecheckbox')?>" border="1">
 			<tr>
 				<th style="min-width: 20px;">&nbsp;</th>
 				<th style="min-width: 110px;">&nbsp;</th>
@@ -26,7 +27,7 @@
 			<? if( count($data) ): ?>
 				<? foreach ($data as $i => $item): ?>
 					<tr>
-						<td><input type="checkbox"></td>
+						<td><input type="checkbox" name="good_id" class="b-sess-checkbox" <? if($item->isChecked()): ?>checked="checked"<? endif; ?> data-url="" value="<?=$item->id?>"></td>
 						<td style="min-width: 125px;">
 							<? if($item->advertsCount()): ?>
 								<a href="<?php echo Yii::app()->createUrl('/good/adminadverts',array('id'=>$item->id))?>" class="ajax-form ajax-update b-adverts-link b-tooltip" title="Объявления"><span class="advert-info"><?=$item->advertsCount()?> (<?=$item->advertsCount(true)?>)</span></a>

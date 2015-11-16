@@ -1051,6 +1051,34 @@ $(document).ready(function(){
 
     /* Live -------------------------------------- Live */
 
+    /* Session Checkboxes ------------------------ Session Checkboxes */
+
+    if( $(".b-sess-checkbox").length ){
+        var addUrl = $(".b-sess-checkbox-info").attr("data-add-url"),
+            removeUrl = $(".b-sess-checkbox-info").attr("data-remove-url");
+
+        $("body").on("click",".b-sess-checkbox",function(){
+            progress.setColor("#D26A44");
+            progress.start(1);
+
+            $.ajax({
+            url: ( $(this).prop("checked") )?addUrl:removeUrl,
+            data: "id="+$(this).val(),
+                success: function(msg){
+                    progress.end();
+                    if( msg != "1" ) alert("Какая-то ошибка. Не удалось выяснить причину. Попробуй еще пару раз и звони Мише.");
+                },
+                error: function(){
+                    progress.end();
+                    alert("Какая-то ошибка. Не удалось выяснить причину. Попробуй еще пару раз и звони Мише.");
+                }
+            });
+
+        });
+    }
+
+    /* Session Checkboxes ------------------------ Session Checkboxes */
+
     $(".ajax-update-prices").click(function(){
         progress.setColor("#D26A44");
         progress.start(10);
