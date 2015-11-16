@@ -42,6 +42,11 @@
 		<?php echo $form->labelEx($model,'required'); ?>
 		<?php echo $form->error($model,'required'); ?>
 	</div>
+	<div class="row">
+		<?php echo $form->CheckBox($model,'folder',array("class"=>"b-checkbox")); ?>
+		<?php echo $form->labelEx($model,'folder'); ?>
+		<?php echo $form->error($model,'folder'); ?>
+	</div>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'group_id'); ?>

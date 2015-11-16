@@ -32,6 +32,7 @@ class GoodController extends Controller
 		$model->good_type_id = $goodTypeId;
 		$result = array();
 
+			die();
 		if(isset($_POST['Good_attr']) && $model->save())
 		{
 			$values = array();
@@ -55,6 +56,7 @@ class GoodController extends Controller
 
 			Good::updatePrices(array($model->id));
 
+			
 			$this->redirect( Yii::app()->createUrl('good/adminindex',array('goodTypeId'=>$goodTypeId,'partial'=>true)) );
 
 		}else{
@@ -198,6 +200,16 @@ class GoodController extends Controller
 
 	public function actionAdminIndex($partial = false, $goodTypeId = false)
 	{
+		$groups = Attribute::model()->with("variants")->findAll("folder=1");
+		$cities = array();
+		foreach ($groups as $key => $group) {
+			$cities[$key]['name'] = $group->name;
+			$cities[$key]['values'] = array();
+			foreach ($group->variants as $city) {
+				array_push($cities[$key]['values'],$city->value);
+			}
+		}
+		print_r($cities);
 		unset($_GET["partial"]);
 
 		if( isset($_GET["delete"]) ){

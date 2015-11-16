@@ -13,6 +13,7 @@
  * @property integer $dynamic
  * @property integer $required
  * @property string $group_id
+ * @property integer $folder
  */
 class Attribute extends CActiveRecord
 {
@@ -32,13 +33,13 @@ class Attribute extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('name, attribute_type_id', 'required'),
-			array('attribute_type_id, multi, list, width, dynamic, required', 'numerical', 'integerOnly'=>true),
+			array('name, attribute_type_id, group_id', 'required'),
+			array('attribute_type_id, multi, list, width, dynamic, required, folder', 'numerical', 'integerOnly'=>true),
 			array('name', 'length', 'max'=>255),
 			array('group_id', 'length', 'max'=>10),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, name, attribute_type_id, multi, list, width, dynamic, required, group_id', 'safe', 'on'=>'search'),
+			array('id, name, attribute_type_id, multi, list, width, dynamic, required, group_id, folder', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -74,6 +75,7 @@ class Attribute extends CActiveRecord
 			'dynamic' => 'Динамический атрибут',
 			'required' => 'Обязательное',
 			'group_id' => 'Привязка к атрибуту',
+			'folder' => 'Группа'
 		);
 	}
 
@@ -104,6 +106,7 @@ class Attribute extends CActiveRecord
 		$criteria->compare('dynamic',$this->dynamic);
 		$criteria->compare('required',$this->required);
 		$criteria->compare('group_id',$this->group_id,true);
+		$criteria->compare('folder',$this->folder);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
