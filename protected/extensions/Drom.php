@@ -98,7 +98,7 @@ Class Drom {
 
         $options = $this->setOptions($params);
         $advert_id = json_decode($this->curl->request("http://baza.drom.ru/api/1.0/save/bulletin",$options))->id;
-        $this->updateAdvertImages($advert_id,$params,$images);
+        $this->updateAdvert($advert_id,$params,$images);
         
         $result = iconv('windows-1251', 'utf-8', $this->curl->request("http://baza.drom.ru/bulletin/".$advert_id."/draft/publish?from=draft.publish",array('from'=>'adding.publish')));
 
@@ -106,20 +106,16 @@ Class Drom {
         return ( $html->find('#fieldsetView',0) && $html->find('#fieldsetView',0)->getAttribute("bulletinid") == $advert_id )?$advert_id:false;
     }
     
-    public function updateAdvert($advert_id,$params) {
-        $options = $this->setOptions($params,$advert_id);    
-        $result = json_decode($this->curl->request("http://baza.drom.ru/api/1.0/save/bulletin",$options));
-        return $result->id;
-    }
-
-    public function updateAdvertImages($advert_id,$params,$images = NULL) {
+    public function updateAdvert($advert_id,$params,$images == NULL) {
         if($images) {
             foreach ($images as &$image_path) {
                 $image_path = json_decode($this->curl->request("http://baza.drom.ru/upload-image-jquery",array('up[]' => new CurlFile(Yii::app()->basePath.DIRECTORY_SEPARATOR.'..'.$image_path))))->id;
             }
             $params['images'] = array('images' => $images);
         }
-        return $this->updateAdvert($advert_id,$params);
+        $options = $this->setOptions($params,$advert_id);    
+        $result = json_decode($this->curl->request("http://baza.drom.ru/api/1.0/save/bulletin",$options));
+        return $result->id;
     }
 
     // public function deleteAdverts($arr) {
