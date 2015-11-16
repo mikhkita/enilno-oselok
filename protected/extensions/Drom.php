@@ -94,7 +94,7 @@ Class Drom {
         return $links;
     }
 
-    public function addAdvert($type = NULL,$params,$images){
+    public function addAdvert($params,$images,$type = NULL){
         include_once Yii::app()->basePath.'/extensions/simple_html_dom.php';
         print_r($params);
         $options = $this->setOptions($params);

@@ -456,9 +456,9 @@ class Good extends CActiveRecord
 
 	public function removeCheckbox($id = NULL){
 		if( $id && in_array($id, $_SESSION["goods"]) ){
-			if(){
+			// if(){
 
-			}
+			// }
 		}
 	}
 
