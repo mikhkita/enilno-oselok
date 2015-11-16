@@ -147,7 +147,7 @@ class DromController extends Controller
         if( $queue->action->code == "delete" ){
 
         } else if( $queue->action->code == "add" ){
-            $id = $drom->addAdvert($fields,$images);
+            $id = $drom->addAdvert($fields,$images,'fixedPrice');
             print_r($id);
             if( $id ){
                 $advert->setUrl($id);
