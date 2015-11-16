@@ -22,6 +22,7 @@ Class Drom {
         $this->curl->removeCookies();
 
         $params = array(
+        	'radio' => 'sign',
             'sign' => $this->login,
             'password' => $this->password
         );
@@ -93,20 +94,55 @@ Class Drom {
         return $links;
     }
 
-    public function addAdvert($params,$images){
+    public function addAdvert($type = NULL,$params,$images){
         include_once Yii::app()->basePath.'/extensions/simple_html_dom.php';
-
+        print_r($params);
         $options = $this->setOptions($params);
+		// print_r($options);
         $advert_id = json_decode($this->curl->request("http://baza.drom.ru/api/1.0/save/bulletin",$options))->id;
-        $this->updateAdvert($advert_id,$params,$images);
-        
-        $result = iconv('windows-1251', 'utf-8', $this->curl->request("http://baza.drom.ru/bulletin/".$advert_id."/draft/publish?from=draft.publish",array('from'=>'adding.publish')));
 
+        $this->updateAdvert($advert_id,$params,$images);
+
+        if($type == 'bestOffer' || $type == 'fixedPrice') {
+        	
+        	$url = "https://baza.drom.ru/bulletin/service-configure?";
+			$url_params = array(
+		    	'ids' => $advert_id,
+		    	'applier' => 'publishBulletinWithDealCapabilities',
+		    	'return_to' => 'bulletin',
+		    	'from' => 'adding.publish__publishBulletinWithDealCapabilities',
+		    	'auctionType' => $type,
+		    	'buyitnowPrice' => $params['price'][0],
+		    	'currency' => 'RUB',
+		    	'isAutoExtension' => 'false',
+		    	'isAutoRecreation' => 'false'
+
+			);
+
+			$url .= urldecode(http_build_query($url_params));
+			print_r($url);
+			print_r($this->curl->request($url));
+
+			$auction = array(
+				'return_to' => $html->find("input[name=return_to]",0)->value,
+				'applier' => $html->find("input[name=applier]",0)->value,
+				'uid' => $html->find("input[name=uid]",0)->value,
+				'price' => $html->find("input[name=price]",0)->value,
+				'order_id' => $html->find("input[name=order_id]",0)->value,
+				'bulletin['.$advert_id.']' => 'on',
+				'auctionType' => $type,
+				'buyitnowPrice' => $params['price'][0],
+				'currency' => 'RUB',
+				'nextUp' => 0
+			);
+        	$result = iconv('windows-1251', 'utf-8', $this->curl->request("https://baza.drom.ru/bulletin/service-apply",$auction));
+        } else $result = iconv('windows-1251', 'utf-8', $this->curl->request("http://baza.drom.ru/bulletin/".$advert_id."/draft/publish?from=draft.publish",array('from'=>'adding.publish')));
         $html = str_get_html($result);
         return ( $html->find('#fieldsetView',0) && $html->find('#fieldsetView',0)->getAttribute("bulletinid") == $advert_id )?$advert_id:false;
     }
     
-    public function updateAdvert($advert_id,$params,$images == NULL) {
+
+    public function updateAdvert($advert_id,$params,$images = NULL) {
         if($images) {
             foreach ($images as &$image_path) {
                 $image_path = json_decode($this->curl->request("http://baza.drom.ru/upload-image-jquery",array('up[]' => new CurlFile(Yii::app()->basePath.DIRECTORY_SEPARATOR.'..'.$image_path))))->id;

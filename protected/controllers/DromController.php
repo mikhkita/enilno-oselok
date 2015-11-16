@@ -76,77 +76,41 @@ class DromController extends Controller
             37 => $advert->type_id
         ));
 
-        // $fields = Place::getValues(Place::getInters($advert->place->category_id,$advert->good->type->id),$advert->good,$dynamic);
+        
 
-        $fields = array(
-            'email'=>'vladis1ove81@gmail.com',
-            'seller_name' => "Владислав",
-            'phone' => '8 952 896-09-88',
-            'location_id' => 657600,
-            'params[733]' => 10359,
-            'params[734]' => 10376,
-            'params[731]' => 10312,
-            'params[732]' => 10340,
-            'title' => 'Шины для машны',
-            'description' => 'Шины для машны 123213',
-            'price' => 1000
-        );
+        // $fields = array(
+        //     'email'=>'vladis1ove81@gmail.com',
+        //     'seller_name' => "Владислав",
+        //     'phone' => '8 952 896-09-88',
+        //     'location_id' => 657600,
+        //     'params[733]' => 10359,
+        //     'params[734]' => 10376,
+        //     'params[731]' => 10312,
+        //     'params[732]' => 10340,
+        //     'title' => 'Шины для машны',
+        //     'description' => 'Шины для машны 123213',
+        //     'price' => 1000
+        // );
 
-        $fields = Avito::self()->generateFields($fields,1);
-        $images = $this->getImages($advert->good);
+        
 
 
-        $avito = new Avito();
-        $avito->setUser("vladis1ove81@gmail.com","Friday13");
-        // unset($fields["login"]);
-        $avito->auth();
-
-        if( $queue->action->code == "delete" ){
-            $delete = $avito->deleteAdvert($advert->url);
-            if($delete){
-                // $queue->delete();
-            }else{
-                $queue->setState("error");
-            }
-        } else if( $queue->action->code == "add" ){
-            $id = $avito->addAdvert($fields,$images);
-
-            if( $id && $id != "error"){
-                $advert->setUrl($id);
-
-                // $queue->delete();
-            }else{
-                $queue->setState("error");
-            }
-        } else if( $queue->action->code == "update" ){
-            $id = $avito->updateAdvert($advert->url,$fields);
-            if( $id ){
-                // $queue->delete();
-            }else{
-                $queue->setState("error");
-            }
-        } else if( $queue->action->code == "updateImages" ){
-            $id = $avito->updateAdvert($advert->url,$fields,$images);
-            if( $id ){
-                // $queue->delete();
-            }else{
-                $queue->setState("error");
-            }
-        } 
-
-        $avito->curl->removeCookies();
-
-        // $drom = new Drom();
-        // $drom->setUser("79528960988","aeesnb33");
+        // $avito = new Avito();
+        // $avito->setUser("vladis1ove81@gmail.com","Friday13");
         // // unset($fields["login"]);
-        // $drom->auth();
+        // $avito->auth();
 
         // if( $queue->action->code == "delete" ){
-
+        //     $delete = $avito->deleteAdvert($advert->url);
+        //     if($delete){
+        //         // $queue->delete();
+        //     }else{
+        //         $queue->setState("error");
+        //     }
         // } else if( $queue->action->code == "add" ){
-        //     $id = $drom->addAdvert($fields,$images);
+        //     $id = $avito->addAdvert($fields,$images);
 
-        //     if( $id ){
+        //     if( $id && $id != "error"){
         //         $advert->setUrl($id);
 
         //         // $queue->delete();
@@ -154,24 +118,62 @@ class DromController extends Controller
         //         $queue->setState("error");
         //     }
         // } else if( $queue->action->code == "update" ){
-        //     $id = $drom->updateAdvert($advert->url,$fields);
-            
+        //     $id = $avito->updateAdvert($advert->url,$fields);
         //     if( $id ){
-        //         $queue->delete();
+        //         // $queue->delete();
         //     }else{
         //         $queue->setState("error");
         //     }
         // } else if( $queue->action->code == "updateImages" ){
-        //     $id = $drom->updateAdvertImages($advert->url,$fields,$images);
-            
+        //     $id = $avito->updateAdvert($advert->url,$fields,$images);
         //     if( $id ){
-        //         $queue->delete();
+        //         // $queue->delete();
         //     }else{
         //         $queue->setState("error");
         //     }
         // } 
 
-        // $drom->curl->removeCookies();
+        // $avito->curl->removeCookies();
+
+        $fields = Place::getValues(Place::getInters($advert->place->category_id,$advert->good->type->id),$advert->good,$dynamic);
+        $fields = Drom::self()->generateFields($fields,1);
+        $images = $this->getImages($advert->good);
+        $drom = new Drom();
+        $drom->setUser("beatbox787@gmail.com","vtebar8u");
+        unset($fields["login"]);
+        $drom->auth();
+
+        if( $queue->action->code == "delete" ){
+
+        } else if( $queue->action->code == "add" ){
+            $id = $drom->addAdvert('bestOf12fer',$fields,$images);
+            print_r($id);
+            if( $id ){
+                $advert->setUrl($id);
+
+                // $queue->delete();
+            }else{
+                $queue->setState("error");
+            }
+        } else if( $queue->action->code == "update" ){
+            $id = $drom->updateAdvert($advert->url,$fields);
+            
+            if( $id ){
+                $queue->delete();
+            }else{
+                $queue->setState("error");
+            }
+        } else if( $queue->action->code == "updateImages" ){
+            $id = $drom->updateAdvert($advert->url,$fields,$images);
+            
+            if( $id ){
+                $queue->delete();
+            }else{
+                $queue->setState("error");
+            }
+        } 
+
+        $drom->curl->removeCookies();
     }
 
 

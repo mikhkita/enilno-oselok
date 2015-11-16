@@ -38,7 +38,6 @@ Class Curl {
             curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
         }
         $result = curl_exec($ch);
-        // print_r($result);
         curl_close( $ch );
         return $result;
     }
