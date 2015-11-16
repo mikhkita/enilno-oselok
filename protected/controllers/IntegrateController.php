@@ -399,8 +399,8 @@ class IntegrateController extends Controller
 // Yahoo ----------------------------------------------------------------- Yahoo
 
 // Выкладка -------------------------------------------------------------- Выкладка
-    public function actionQueueNext(){
-        if( !$this->checkAccess() ) return true;
+    public function actionQueueNext($debug = false){
+        if( !$this->checkAccess() && !$debug ) return true;
 
         while( $this->allowed() ){
             $this->writeTime();
@@ -410,7 +410,7 @@ class IntegrateController extends Controller
 
     public function checkAccess(){
         $last = file_get_contents(Yii::app()->basePath."/data/queue_time.txt");
-        return ( time() - intval($last) > 300 );
+        return ( time() - intval($last) > 120 );
     }
 
     public function writeTime(){

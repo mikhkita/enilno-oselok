@@ -171,8 +171,12 @@ class Controller extends CController
             $model = Dictionary::model()->with("values")->findByPk($list_id);
             $tmp = array( "ATTRS" => array(), "VALUES" => array() );
             $tmp["ATTRS"]["attr_1"] = $model->attribute_id_1;
-            foreach ($model->values as $key => $value) {
-                $tmp["VALUES"][$value->attribute_1] = $value->value;
+            if( isset($model->values) ){
+                foreach ($model->values as $key => $value) {
+                    $tmp["VALUES"][$value->attribute_1] = $value->value;
+                }
+            }else{
+                Log::error("getListValue: Список с идентификатором ".$list_id." не найден");
             }
             $this->cache[$i] = $tmp;
         }
