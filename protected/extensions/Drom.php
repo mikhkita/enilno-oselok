@@ -96,9 +96,7 @@ Class Drom {
 
     public function addAdvert($params,$images,$type = NULL){
         include_once Yii::app()->basePath.'/extensions/simple_html_dom.php';
-        print_r($params);
         $options = $this->setOptions($params);
-		// print_r($options);
         $advert_id = json_decode($this->curl->request("http://baza.drom.ru/api/1.0/save/bulletin",$options))->id;
 
         $this->updateAdvert($advert_id,$params,$images);
@@ -119,9 +117,8 @@ Class Drom {
 
 			);
 
-			$url .= urldecode(http_build_query($url_params));
-			print_r($url);
-			print_r($this->curl->request($url));
+			$url .= http_build_query($url_params);
+			$html = str_get_html(iconv('windows-1251', 'utf-8', $this->curl->request($url)));
 
 			$auction = array(
 				'return_to' => $html->find("input[name=return_to]",0)->value,

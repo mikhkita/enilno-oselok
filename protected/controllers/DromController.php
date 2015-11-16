@@ -68,7 +68,7 @@ class DromController extends Controller
         $queue = Queue::model()->with("advert.good.type","advert.place","action")->findByPk(198);
         $advert = $queue->advert;
 
-        $queue->setState("processing");
+        // $queue->setState("processing");
 
         $dynamic = $this->getDynObjects(array(
             57 => $advert->place->category_id,
@@ -136,6 +136,7 @@ class DromController extends Controller
         // $avito->curl->removeCookies();
 
         $fields = Place::getValues(Place::getInters($advert->place->category_id,$advert->good->type->id),$advert->good,$dynamic);
+        $fields["contacts"] = '+79994995000';
         $fields = Drom::self()->generateFields($fields,1);
         $images = $this->getImages($advert->good);
         $drom = new Drom();
@@ -146,7 +147,7 @@ class DromController extends Controller
         if( $queue->action->code == "delete" ){
 
         } else if( $queue->action->code == "add" ){
-            $id = $drom->addAdvert($fields,$images);
+            $id = $drom->addAdvert($fields,$images,'fixedPrice');
             print_r($id);
             if( $id ){
                 $advert->setUrl($id);
