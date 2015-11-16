@@ -1069,7 +1069,7 @@ $(document).ready(function(){
         return false;
     });
 
-    $(".ajax-photodoska").click(function(){
+    $("body").on("click",".ajax-photodoska",function(){
         progress.setColor("#D26A44");
         progress.start(10);
 

@@ -371,13 +371,6 @@ class Good extends CActiveRecord
 				if( $new_adverts )
 					Queue::addAll($new_adverts,"add");
 			}
-
-			// print_r($add_arr);
-			// echo "<br><br><br><br>";
-			// print_r($delete_arr);
-			// echo "<br><br><br><br>";
-			// print_r($update_arr);
-			// die();
 		}
 	}
 
@@ -446,6 +439,27 @@ class Good extends CActiveRecord
 			}
 		}
 		return false;
+	}
+
+	public function	getCheckboxes(){
+		if(!isset($_SESSION)) session_start();
+
+		return ( isset($_SESSION["goods"]) )?$_SESSION["goods"]:array();
+	}
+
+	public function setCheckbox($id = NULL){
+		if( $id ){
+			if(!in_array($id, $_SESSION["goods"])) 
+				array_push($_SESSION["goods"], $id);
+		}
+	}
+
+	public function removeCheckbox($id = NULL){
+		if( $id && in_array($id, $_SESSION["goods"]) ){
+			if(){
+
+			}
+		}
 	}
 
 	public function advertsCount($with_url_only = false){

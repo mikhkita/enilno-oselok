@@ -13,7 +13,7 @@ class GoodController extends Controller
 	{
 		return array(
 			array('allow',
-				'actions'=>array('adminIndex','adminTest','updatePrices','adminCreate','adminUpdate','adminDelete','adminEdit','getAttrType','getAttr','adminAdverts'),
+				'actions'=>array('adminIndex','adminTest','updatePrices','adminCreate','adminUpdate','adminDelete','adminEdit','getAttrType','getAttr','adminAdverts','adminUpdateImages'),
 				'roles'=>array('manager'),
 			),
 			array('allow',
@@ -353,13 +353,28 @@ class GoodController extends Controller
 			array_push($adverts[$advert->place->category->value], $advert);
 		}
 
-		// var_dump($adverts);
-
 		$this->renderPartial('adminAdverts',array(
 			'adverts'=>$adverts,
 			'labels'=>Advert::attributeLabels(),
 			'good'=>$good
 		));
+	}
+
+	public function actionAdminUpdateImages($id = NULL){
+		if( $id ){
+			$good = Good::model()->with(array("adverts.queue.action","adverts.queue.state"))->findByPk($id);
+			if( $good ){
+				$adverts = array();
+				foreach ($good->adverts as $advert) {
+					$allow = true;
+					foreach ($advert->queue as $queue) {
+						if( $queue->action->code == "updateImages" ) $allow = false;
+					}
+					if( $allow ) array_push($adverts, $advert);
+				}
+				Queue::addAll($adverts,"updateImages");
+			}
+		}
 	}
 
 	public function loadModel($id)
