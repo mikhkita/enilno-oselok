@@ -140,6 +140,7 @@ class Queue extends CActiveRecord
 		if( count($adverts) && $code ){
 			if( isset(Queue::model()->codes[$code]) ){
 				$values = array();
+				// print_r($adverts);
 				foreach ($adverts as $advert)
 					array_push($values, array("advert_id" => isset($advert->id)?$advert->id:$advert, "action_id" => Queue::model()->codes[$code] ));
 				
