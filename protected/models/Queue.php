@@ -168,6 +168,7 @@ class Queue extends CActiveRecord
 				}
 				
 				$criteria = new CDbCriteria();
+				$criteria->condition = "action_id=".Queue::model()->codes[$code]." AND state_id = 1";
 	    		$criteria->addInCondition("advert_id", $advert_ids);
 
 	    		Queue::model()->deleteAll($criteria);

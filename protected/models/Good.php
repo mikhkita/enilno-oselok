@@ -316,9 +316,13 @@ class Good extends CActiveRecord
 
 		if( !function_exists("compare") ){
 			function compare($a,$b){ 
-				$a = ((isset($a->city_id))?$a->city_id:$a->variant_id); 
-				$b = ((isset($b->city_id))?$b->city_id:$b->variant_id); 
+				$cities = Place::model()->cities;
 
+				if(!isset($a->city_id)) $aplace = $cities[$a->attribute_id];
+				if(!isset($b->city_id)) $bplace = $cities[$b->attribute_id];
+				$a = ((isset($a->city_id))?($a->city_id."_".$a->place->category_id."_".$a->type_id):($a->variant_id."_".$aplace["PLACE"]."_".$aplace["TYPE"])); 
+				$b = ((isset($b->city_id))?($b->city_id."_".$b->place->category_id."_".$b->type_id):($b->variant_id."_".$bplace["PLACE"]."_".$bplace["TYPE"])); 
+				// echo $a." ".$b."<br>";
 				return $a < $b ? -1 : ( $a > $b ? 1 : 0 ); 
 			};
 		}
@@ -329,7 +333,6 @@ class Good extends CActiveRecord
 		if( ($isDiff || $isDiffAdverts) && !$this->share ){
 			$cities = Place::model()->cities;
 			$places = $this->getPlaces();
-
 			$add_arr = array();
 			$update_arr = array();
 			$delete_arr = array();
@@ -338,9 +341,20 @@ class Good extends CActiveRecord
 			$adverts_without_delete = $this->filterAdverts($this->adverts,array("delete"));
 			$adverts_with_add = array_udiff($this->adverts, $this->filterAdverts($this->adverts,array("add")), "compare");
 			$adverts_with_delete = array_udiff($this->adverts, $adverts_without_delete, "compare");
+			$adverts_with_update = array_udiff($this->adverts, $this->filterAdverts($this->adverts,array("update")), "compare");
 
-			foreach ($cities as $attr_id => $city)
-				$new_items = $new_items + $this->getArray(isset($newModel->fields_assoc[$attr_id."-d"])?$newModel->fields_assoc[$attr_id."-d"]:array());
+			foreach ($cities as $attr_id => $city){
+				// var_dump($this->getArray(isset($newModel->fields_assoc[$attr_id."-d"])?$newModel->fields_assoc[$attr_id."-d"]:array()));
+				if( isset($newModel->fields_assoc[$attr_id."-d"]) ){
+					if( is_array($newModel->fields_assoc[$attr_id."-d"]) ){
+						foreach ($newModel->fields_assoc[$attr_id."-d"] as $key => $item)
+							array_push($new_items, $item);
+					}else{
+						array_push($new_items, $newModel->fields_assoc[$attr_id."-d"]);
+					}
+				}
+
+			}
 
 			if( $isDiffAdverts ){
 				// Удаление из очереди действий на удаление объявлений, которые нужно оставить (тут же происходит добавление в очеред действия на добавление или редактирование)
@@ -359,9 +373,11 @@ class Good extends CActiveRecord
 			}
 
 			if( $isDiffAdverts ){
-				// Удаление из очереди действий на добавление объявлений, которые нужно удалить
+				// Удаление из очереди действий на добавление и объявление объявлений, которые нужно удалить
 				$delete_add_arr = array_udiff($adverts_with_add, $new_items, "compare");
-				Queue::delAll($delete_add_arr,"add");
+				$delete_update_arr = array_udiff($adverts_with_update, $new_items, "compare");
+				Queue::delAll($adverts_with_add,"add");
+				Queue::delAll($delete_update_arr,"update");
 				Advert::delAll($delete_add_arr);
 
 				$add = array_udiff($new_items, $this->adverts, "compare");
@@ -374,6 +390,7 @@ class Good extends CActiveRecord
 					Queue::addAll($new_adverts,"add");
 			}
 		}
+		die();
 	}
 
 	public function	filterAdverts($adverts, $actions){

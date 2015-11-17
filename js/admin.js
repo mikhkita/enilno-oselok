@@ -189,6 +189,7 @@ $(document).ready(function(){
     }
 
     $(document).on("click",".ajax-delete", function(){
+        $(".qtip").remove();
         var warning = ($(this).attr("data-warning"))?$(this).attr("data-warning"):"Вы действительно хотите удалить</br>запись?";
         warning += ( $(this).parents(".b-table").attr("data-warning") )?"<br><b>"+$(this).parents(".b-table").attr("data-warning")+"</b>":"";
         $.fancybox.open({
