@@ -31,8 +31,7 @@ class GoodController extends Controller
 		$model = new Good;
 		$model->good_type_id = $goodTypeId;
 		$result = array();
-
-			die();
+		
 		if(isset($_POST['Good_attr']) && $model->save())
 		{
 			$values = array();
@@ -63,7 +62,8 @@ class GoodController extends Controller
 
 			$this->renderPartial('adminCreate',array(
 				'model'=>$model,
-				'result' => $result
+				'result' => $result,
+				'cities' => $this->cityGroup()
 			));
 		}
 
@@ -73,7 +73,6 @@ class GoodController extends Controller
 	{
 		$model = $this->loadModel($id);
 		$result = $this->getAttr($model);
-		
 		if(isset($_POST['Good_attr']))
 		{
 			GoodAttribute::model()->deleteAll('good_id='.$id);
@@ -104,7 +103,8 @@ class GoodController extends Controller
 		}else{
 			$this->renderPartial('adminUpdate',array(
 				'model'=>$model,
-				'result' => $result
+				'result' => $result,
+				'cities' => $this->cityGroup()
 			));
 		}
 	}
@@ -163,7 +163,8 @@ class GoodController extends Controller
 		}else{
 			$this->renderPartial('adminUpdateAll',array(
 				'model'=>$model,
-				'result' => $result
+				'result' => $result,
+				'cities' => $this->cityGroup()
 			));
 		}
 	}
@@ -259,16 +260,7 @@ class GoodController extends Controller
 
 	public function actionAdminIndex($partial = false, $goodTypeId = false)
 	{
-		$groups = Attribute::model()->with("variants")->findAll("folder=1");
-		$cities = array();
-		foreach ($groups as $key => $group) {
-			$cities[$key]['name'] = $group->name;
-			$cities[$key]['values'] = array();
-			foreach ($group->variants as $city) {
-				array_push($cities[$key]['values'],$city->value);
-			}
-		}
-		// print_r($cities);
+		
 		unset($_GET["partial"]);
 
 		if( isset($_GET["delete"]) ){
@@ -475,5 +467,19 @@ class GoodController extends Controller
 			header("HTTP/1.0 200 OK");
 			echo "success";
 		}
+	}
+	public function cityGroup() {
+		$groups = Attribute::model()->with("variants")->findAll("folder=1");
+		$cities = array();
+		if($groups) {		
+			foreach ($groups as $key => $group) {
+				$temp = array();
+				foreach ($group->variants as $city) {
+					array_push($temp,$city->variant_id);
+				}
+				array_push($cities,(object)array("name"=>$group->name,"ids"=>implode(",", $temp)));
+			}
+		}
+		return $cities;
 	}
 }

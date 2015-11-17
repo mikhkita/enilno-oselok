@@ -287,6 +287,29 @@ $(document).ready(function(){
             placeholder: "",
             allowClear: true
         });
+        $(".select2-all").click(function() {
+            var element = $(this).siblings("select.select2");
+            var selected = [];
+            element.find("option").each(function(i,e){
+                selected[selected.length]=$(e).attr("value");
+            });
+            element.select2("val", selected);
+        });
+        $(".select2-none").click(function() {
+            var element = $(this).siblings("select.select2");
+            element.select2("val", "");
+        });
+
+        $(".select-city-group").click(function(){
+            var element = $(this).siblings("select.select2");
+            var selected = [];
+            var ids = $(this).attr("data-ids").split(',');
+            $(ids).each(function(i,val){
+                selected[selected.length] = val;
+            });
+            element.select2("val", selected);
+        });
+
         $form.validate({
             ignore: ""
         });
