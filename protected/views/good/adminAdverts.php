@@ -7,6 +7,9 @@
 			<th><?=$labels["type_id"]?></th>
 			<th><?=$labels["city_id"]?></th>
 			<th><?=$labels["url"]?></th>
+			<? if($this->isRoot()): ?>
+				<th></th>
+			<? endif; ?>
 		</tr>
 		<? foreach ($adverts as $name => $place): ?>
 			<? foreach ($place as $id => $advert): ?>
@@ -20,6 +23,9 @@
 					<a href="<?=$advert->getUrl();?>" target="_blank"><?=$advert->getUrl();?></a>
 					<? endif; ?>
 				</td>
+				<? if($this->isRoot()): ?>
+					<td><a href="<?php echo Yii::app()->createUrl('/good/adminindex',array('deleteAdvert'=>$advert->id,'partial'=>'true','goodTypeId'=>$_GET["goodTypeId"],'GoodFilter_page'=>isset($_GET["GoodFilter_page"])?$_GET["GoodFilter_page"]:1))?>" class="ajax-form ajax-delete b-tool b-tool-delete not-ajax-delete" data-warning="Вы действительно хотите удалить объявление &quot;<?=$advert->id." ".$advert->place->category->value." ".$advert->type->value." ".$advert->city->value?>&quot;?" title="Удалить"></a></td>
+				<? endif; ?>
 			</tr>
 			<? endforeach; ?>
 		<? endforeach; ?>

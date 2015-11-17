@@ -30,7 +30,7 @@
 						<td><input type="checkbox" name="good_id" class="b-sess-checkbox" <? if($item->isChecked()): ?>checked="checked"<? endif; ?> data-url="" value="<?=$item->id?>"></td>
 						<td style="min-width: 125px;">
 							<? if($item->advertsCount()): ?>
-								<a href="<?php echo Yii::app()->createUrl('/good/adminadverts',array('id'=>$item->id))?>" class="ajax-form ajax-update b-adverts-link b-tooltip" title="Объявления"><span class="advert-info"><?=$item->advertsCount()?> (<?=$item->advertsCount(true)?>)</span></a>
+								<a href="<?php echo Yii::app()->createUrl('/good/adminadverts',array('id'=>$item->id,'goodTypeId'=> $_GET["goodTypeId"],'GoodFilter_page' => ($pages->currentPage+1)))?>" class="ajax-form ajax-update b-adverts-link b-tooltip" title="Объявления"><span class="advert-info"><?=$item->advertsCount()?> (<?=$item->advertsCount(true)?>)</span></a>
 							<? else: ?>
 								<span class="advert-info b-tooltip" title="Нет объявлений"><?=$item->advertsCount()?> (<?=$item->advertsCount(true)?>)</span>
 							<? endif; ?>

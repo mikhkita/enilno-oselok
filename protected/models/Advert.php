@@ -144,4 +144,11 @@ class Advert extends CActiveRecord
 	{
 		return parent::model($className);
 	}
+
+	public function beforeDelete(){
+  		foreach ($this->queue as $key => $queue) {
+  			$queue->delete();
+  		}
+  		return parent::beforeDelete();
+ 	}
 }

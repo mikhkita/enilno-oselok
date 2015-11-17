@@ -276,6 +276,11 @@ class GoodController extends Controller
 			unset($_GET["delete"]);
 		}
 
+		if( isset($_GET["deleteAdvert"]) ){
+			Advert::model()->findByPk($_GET["deleteAdvert"])->delete();
+			unset($_GET["deleteAdvert"]);
+		}			
+
 		$goodType = GoodType::model()->findByPk($goodTypeId);
 
 		$attr_arr = "filter";
