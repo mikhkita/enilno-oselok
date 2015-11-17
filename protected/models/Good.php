@@ -337,6 +337,7 @@ class Good extends CActiveRecord
 			$update_arr = array();
 			$delete_arr = array();
 			$new_items = array();
+			$adverts_without_queue = $this->filterAdverts($this->adverts,array("add","update","delete"));
 			$adverts_without_add_or_update = $this->filterAdverts($this->adverts,array("add","update"));
 			$adverts_without_delete = $this->filterAdverts($this->adverts,array("delete"));
 			$adverts_with_add = array_udiff($this->adverts, $this->filterAdverts($this->adverts,array("add")), "compare");
@@ -344,7 +345,6 @@ class Good extends CActiveRecord
 			$adverts_with_update = array_udiff($this->adverts, $this->filterAdverts($this->adverts,array("update")), "compare");
 
 			foreach ($cities as $attr_id => $city){
-				// var_dump($this->getArray(isset($newModel->fields_assoc[$attr_id."-d"])?$newModel->fields_assoc[$attr_id."-d"]:array()));
 				if( isset($newModel->fields_assoc[$attr_id."-d"]) ){
 					if( is_array($newModel->fields_assoc[$attr_id."-d"]) ){
 						foreach ($newModel->fields_assoc[$attr_id."-d"] as $key => $item)
@@ -368,7 +368,7 @@ class Good extends CActiveRecord
 
 			if( $isDiff ){
 				// Добавление в очередь действий на редактирование объявлений (если у этого объявления есть в очереди действие на редактирование или добавление, то не добавится действие в очередь)
-				$update_arr = array_uintersect($adverts_without_add_or_update, $new_items, "compare");
+				$update_arr = array_uintersect($adverts_without_queue, $new_items, "compare");
 				Queue::addAll($update_arr,"update");
 			}
 
@@ -390,7 +390,7 @@ class Good extends CActiveRecord
 					Queue::addAll($new_adverts,"add");
 			}
 		}
-		die();
+		// die();
 	}
 
 	public function	filterAdverts($adverts, $actions){
