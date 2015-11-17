@@ -308,6 +308,9 @@ $(document).ready(function(){
             $(ids).each(function(i,val){
                 selected[selected.length] = val;
             });
+            element.find("option:selected").each(function(i,e){
+                selected[selected.length]=$(e).attr("value");
+            });
             element.select2("val", selected);
         });
 
