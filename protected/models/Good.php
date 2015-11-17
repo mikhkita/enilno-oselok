@@ -338,7 +338,6 @@ class Good extends CActiveRecord
 			$delete_arr = array();
 			$new_items = array();
 			$adverts_without_queue = $this->filterAdverts($this->adverts,array("add","update","delete"));
-			$adverts_without_add_or_update = $this->filterAdverts($this->adverts,array("add","update"));
 			$adverts_without_delete = $this->filterAdverts($this->adverts,array("delete"));
 			$adverts_with_add = array_udiff($this->adverts, $this->filterAdverts($this->adverts,array("add")), "compare");
 			$adverts_with_delete = array_udiff($this->adverts, $adverts_without_delete, "compare");
@@ -356,32 +355,32 @@ class Good extends CActiveRecord
 
 			}
 
-			if( $isDiffAdverts ){
-				// Удаление из очереди действий на удаление объявлений, которые нужно оставить (тут же происходит добавление в очеред действия на добавление или редактирование)
-				$delete_delete_arr = array_uintersect($adverts_with_delete, $new_items, "compare");
-				Queue::delAll($delete_delete_arr,"delete");
-
-				// Добавление в очередь действий на удаление объявлений (если у этого объявления есть в очереди действие на удаление, то не добавится действие в очередь)
-				$delete_arr = array_udiff($adverts_without_delete, $new_items, "compare");
-				Queue::addAll($delete_arr,"delete");
-			}
-
 			if( $isDiff ){
 				// Добавление в очередь действий на редактирование объявлений (если у этого объявления есть в очереди действие на редактирование или добавление, то не добавится действие в очередь)
 				$update_arr = array_uintersect($adverts_without_queue, $new_items, "compare");
+				print_r('$update_arr '.count($update_arr)."<br>");
 				Queue::addAll($update_arr,"update");
 			}
 
 			if( $isDiffAdverts ){
-				// Удаление из очереди действий на добавление и объявление объявлений, которые нужно удалить
+				// Удаление из очереди действий на добавление объявлений, которые нужно удалить
 				$delete_add_arr = array_udiff($adverts_with_add, $new_items, "compare");
-				$delete_update_arr = array_udiff($adverts_with_update, $new_items, "compare");
-				Queue::delAll($adverts_with_add,"add");
-				Queue::delAll($delete_update_arr,"update");
+				Queue::delAll($delete_add_arr,"add");
 				Advert::delAll($delete_add_arr);
 
-				$add = array_udiff($new_items, $this->adverts, "compare");
+				// Удаление из очереди действий на удаление объявлений, которые нужно оставить (тут же происходит добавление в очеред действия на добавление или редактирование)
+				$delete_delete_arr = array_uintersect($adverts_with_delete, $new_items, "compare");
+				Queue::delAll($delete_delete_arr,"delete");
 
+				// Удаление из очереди действий на редактирование объявлений, которые нужно удалить
+				$delete_update_arr = array_udiff($adverts_with_update, $new_items, "compare");
+				Queue::delAll($delete_update_arr,"update");
+
+				// Добавление в очередь действий на удаление объявлений (если у этого объявления есть в очереди действие на удаление, то не добавится действие в очередь)
+				$delete_arr = array_udiff($adverts_without_delete, $new_items, $delete_add_arr, "compare");
+				Queue::addAll($delete_arr,"delete");
+
+				$add = array_udiff($new_items, $this->adverts, "compare");
 				foreach ($add as $key => $item)
 					array_push($add_arr, array("good_id"=>$this->id,"place_id"=>$places[$this->good_type_id][$cities[$item->attribute_id]["PLACE"]]->id,"city_id"=>$item->variant_id,"type_id"=>$cities[$item->attribute_id]["TYPE"]));
 
