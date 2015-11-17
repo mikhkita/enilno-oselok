@@ -14,9 +14,21 @@
 	</div>
 
 	<div class="row">
+		<?php echo $form->labelEx($model,'alias'); ?>
+		<?php echo $form->textField($model,'alias',array('maxlength'=>255)); ?>
+		<?php echo $form->error($model,'alias'); ?>
+	</div>
+
+	<div class="row">
 		<?php echo $form->labelEx($model,'attribute_type_id'); ?>
 		<?php echo $form->DropDownList($model,'attribute_type_id',CHtml::listData(AttributeType::model()->findAll(array('order'=>'id ASC')), 'id', 'name')); ?>
 		<?php echo $form->error($model,'attribute_type_id'); ?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->CheckBox($model,'major',array("class"=>"b-checkbox")); ?>
+		<?php echo $form->labelEx($model,'major'); ?>
+		<?php echo $form->error($model,'major'); ?>
 	</div>
 
 	<div class="row">
@@ -42,6 +54,7 @@
 		<?php echo $form->labelEx($model,'required'); ?>
 		<?php echo $form->error($model,'required'); ?>
 	</div>
+
 	<div class="row">
 		<?php echo $form->CheckBox($model,'folder',array("class"=>"b-checkbox")); ?>
 		<?php echo $form->labelEx($model,'folder'); ?>

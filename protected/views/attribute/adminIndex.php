@@ -5,7 +5,9 @@
 		<tr>
 			<th style="width: 30px;"><? echo $labels['id']; ?></th>
 			<th><? echo $labels['name']; ?></th>
+			<th><? echo $labels['alias']; ?></th>
 			<th><? echo $labels['attribute_type_id']; ?></th>
+			<th><? echo $labels['major']; ?></th>
 			<th><? echo $labels['multi']; ?></th>
 			<th><? echo $labels['list']; ?></th>
 			<th><? echo $labels['dynamic']; ?></th>
@@ -15,7 +17,9 @@
 		<tr class="b-filter">
 			<td></td>
 			<td><?php echo CHtml::activeTextField($filter, 'name'); ?></td>
+			<td><?php echo CHtml::activeTextField($filter, 'alias'); ?></td>
 			<td><?php echo CHtml::activeDropDownList($filter, 'attribute_type_id', array(""=>"Все типы данных")+CHtml::listData(AttributeType::model()->findAll(array('order'=>'id ASC')), 'id', 'name')); ?></td>
+			<td></td>
 			<td></td>
 			<td></td>
 			<td></td>
@@ -27,7 +31,9 @@
 				<tr<?if(isset($_GET["id"]) && $item->id == $_GET["id"]):?> class="b-refresh"<?endif;?>>
 					<td><?=$item->id?></td>
 					<td class="align-left"><?=$item->name?></td>
+					<td class="align-left"><?=$item->alias?></td>
 					<td class="align-left"><?=$item->type->name?></td>
+					<td class="align-center"><?=(($item->major)?("<span class='b-circle'></span>"):("-"))?></td>
 					<td class="align-center"><?=(($item->multi)?("<span class='b-circle'></span>"):("-"))?></td>
 					<td class="align-center"><?=(($item->list)?("<span class='b-circle'></span>"):("-"))?></td>
 					<td class="align-center"><?=(($item->dynamic)?("<span class='b-circle'></span>"):("-"))?></td>

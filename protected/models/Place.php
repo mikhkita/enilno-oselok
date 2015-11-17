@@ -23,6 +23,10 @@ class Place extends CActiveRecord
 			"PLACE" => 2048,
 			"TYPE" => 869
 		),
+		61 => array(
+			"PLACE" => 2047,
+			"TYPE" => 2129
+		),
 	);
 
 	/**

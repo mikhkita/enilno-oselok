@@ -640,6 +640,9 @@ h1{
             display: block;
             width: 420px;
         }
+        .fancybox-skin select{
+            padding: 4px 10px 6px;
+        }
         .fancybox-skin input[type="number"]{
             padding: 7px 10px;
         }

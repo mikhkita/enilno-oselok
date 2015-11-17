@@ -14,6 +14,8 @@
  * @property integer $required
  * @property string $group_id
  * @property integer $folder
+ * @property integer $major
+ * @property string $alias
  */
 class Attribute extends CActiveRecord
 {
@@ -34,12 +36,13 @@ class Attribute extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('name, attribute_type_id, group_id', 'required'),
-			array('attribute_type_id, multi, list, width, dynamic, required, folder', 'numerical', 'integerOnly'=>true),
+			array('attribute_type_id, multi, list, width, dynamic, required, folder, major', 'numerical', 'integerOnly'=>true),
 			array('name', 'length', 'max'=>255),
 			array('group_id', 'length', 'max'=>10),
+			array('alias', 'length', 'max'=>5),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, name, attribute_type_id, multi, list, width, dynamic, required, group_id, folder', 'safe', 'on'=>'search'),
+			array('id, name, attribute_type_id, multi, list, width, dynamic, required, group_id, folder, major, alias', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -75,7 +78,9 @@ class Attribute extends CActiveRecord
 			'dynamic' => 'Динамический атрибут',
 			'required' => 'Обязательное',
 			'group_id' => 'Привязка к атрибуту',
-			'folder' => 'Группа'
+			'folder' => 'Группа',
+			'major' => 'Основной',
+			'alias' => 'Псевдоним',
 		);
 	}
 
@@ -107,6 +112,8 @@ class Attribute extends CActiveRecord
 		$criteria->compare('required',$this->required);
 		$criteria->compare('group_id',$this->group_id,true);
 		$criteria->compare('folder',$this->folder);
+		$criteria->compare('major',$this->major);
+		$criteria->compare('alias',$this->alias,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

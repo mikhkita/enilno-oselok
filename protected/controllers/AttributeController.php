@@ -63,7 +63,7 @@ class AttributeController extends Controller
 
 	public function actionAdminEdit($id)
 	{
-		$model = Attribute::model()->with(array("group.variants.variant"=>array("order"=>"variant.sort ASC")))->findByPk($id);
+		$model = Attribute::model()->with(array("group.variants.variant"=>array("order"=>"variant.sort ASC"),"variants" => array("alias" => "variants2"),"variants.variant"=>array("alias"=>"variant2","order"=>"variant2.sort ASC")))->findByPk($id);
 
 		if( isset($_POST['Edit']) )
 		{

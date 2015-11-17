@@ -121,7 +121,8 @@ class InterpreterController extends Controller
         
         $criteria = new CDbCriteria();
 		$criteria->with = array("goodTypes","variants.variant"=>array("order"=>"variant.sort ASC"));
-		$criteria->condition = "goodTypes.good_type_id=".$inter->good_type_id." AND dynamic=1";
+		$criteria->condition = "t.id=57 OR t.id=37 OR t.id=38";
+		$criteria->order = "t.id DESC";
         $modelDyn = Attribute::model()->findAll($criteria);
 
         $dynamic = array();

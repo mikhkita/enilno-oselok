@@ -21,7 +21,7 @@
 				<th style="min-width: 20px;">&nbsp;</th>
 				<th style="min-width: 110px;">&nbsp;</th>
 				<? foreach ($fields as $field): ?>
-					<th <?if($field->attribute_id == 3):?>style="min-width: 55px;"<?endif;?>><? echo $field->attribute->name; ?></th>
+					<th <?if($field->attribute_id == 3):?>style="min-width: 55px;"<?endif;?> <? if($field->attribute->alias): ?>class="b-tooltip" title="<?=$field->attribute->name?>"<?endif;?>><?=($field->attribute->alias)?$field->attribute->alias:$field->attribute->name; ?></th>
 				<? endforeach; ?>	
 			</tr>
 			<? if( count($data) ): ?>

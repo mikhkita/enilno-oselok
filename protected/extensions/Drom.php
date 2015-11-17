@@ -94,14 +94,14 @@ Class Drom {
         return $links;
     }
 
-    public function addAdvert($params,$images,$type = NULL){
+    public function addAdvert($params,$images){
         include_once Yii::app()->basePath.'/extensions/simple_html_dom.php';
         $options = $this->setOptions($params);
         $advert_id = json_decode($this->curl->request("http://baza.drom.ru/api/1.0/save/bulletin",$options))->id;
 
         $this->updateAdvert($advert_id,$params,$images);
 
-        if($type == 'bestOffer' || $type == 'fixedPrice') {
+        if($params["advert_type"] == 'bestOffer' || $params["advert_type"] == 'fixedPrice') {
         	
         	$url = "https://baza.drom.ru/bulletin/service-configure?";
 			$url_params = array(
@@ -109,7 +109,7 @@ Class Drom {
 		    	'applier' => 'publishBulletinWithDealCapabilities',
 		    	'return_to' => 'bulletin',
 		    	'from' => 'adding.publish__publishBulletinWithDealCapabilities',
-		    	'auctionType' => $type,
+		    	'auctionType' => $params["advert_type"],
 		    	'buyitnowPrice' => $params['price'][0],
 		    	'currency' => 'RUB',
 		    	'isAutoExtension' => 'false',
@@ -127,7 +127,7 @@ Class Drom {
 				'price' => $html->find("input[name=price]",0)->value,
 				'order_id' => $html->find("input[name=order_id]",0)->value,
 				'bulletin['.$advert_id.']' => 'on',
-				'auctionType' => $type,
+				'auctionType' => $params["advert_type"],
 				'buyitnowPrice' => $params['price'][0],
 				'currency' => 'RUB',
 				'nextUp' => 0
