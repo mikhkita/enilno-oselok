@@ -345,6 +345,7 @@ class GoodController extends Controller
 			'filter_values' => $filter_values,
 			'good_count' => $goods["count"],
 			'sort_fields' => $sort_fields,
+			'codes' => $codes
 		);
 
 		if( !$partial ){
@@ -446,11 +447,23 @@ class GoodController extends Controller
 	}
 
 	public function actionAdminAddCheckbox($id = NULL){
-		echo ( Good::addCheckbox($this->loadModel($id)) )?"1":"0";
+		$good = $this->loadModel($id);
+		echo $this->displayCodes(Good::addCheckbox($good),$good->good_type_id);
 	}
 
 	public function actionAdminRemoveCheckbox($id = NULL){
-		echo ( Good::removeCheckbox($this->loadModel($id)) )?"1":"0";
+		$good = $this->loadModel($id);
+		echo $this->displayCodes(Good::removeCheckbox($good),$good->good_type_id);
+	}
+
+	public function displayCodes($success,$good_type_id) {
+		$result = array();
+		$result['result'] = "error";
+		if($success) {
+			$result['result'] = "success";
+			$result['codes'] = implode(", ",$_SESSION['goods'][$good_type_id]);			
+		}
+		return json_encode($result);
 	}
 
 	public function loadModel($id)

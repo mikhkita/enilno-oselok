@@ -75,4 +75,5 @@
 	    )) ?>
         <div class="b-lot-count">Всего товаров: <?=$good_count?></div>
     </div>
+    <div style="text-align:left;"><?=implode(", ",Good::getCheckboxes($_GET["goodTypeId"]))?></div>
 </div>
