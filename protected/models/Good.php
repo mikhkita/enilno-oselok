@@ -465,14 +465,13 @@ class Good extends CActiveRecord
 		return ( isset($_SESSION["goods"])  && isset($_SESSION["goods"][$good_type_id]) )?array_values($_SESSION["goods"][$good_type_id]):array();
 	}
 
-	public function addCheckbox($good = NULL){
+	public function addCheckbox($good){
 		if(!isset($_SESSION)) session_start();
 
 		if( $good ){
 			if( !is_array($_SESSION["goods"]) ) $_SESSION["goods"] = array();
 			if( !is_array($_SESSION["goods"][$good->good_type_id]) ) $_SESSION["goods"][$good->good_type_id] = array();
-			if(!in_array($id, $_SESSION["goods"][$good->good_type_id])) 
-				array_push($_SESSION["goods"][$good->good_type_id], $good->id);
+			$_SESSION["goods"][$good->good_type_id][$good->id] = $good->fields_assoc[3]->value;
 
 			return true;
 		}else{
@@ -484,8 +483,8 @@ class Good extends CActiveRecord
 		if(!isset($_SESSION)) session_start();
 
 		if( $good  ){
-			if( is_array($_SESSION["goods"]) && is_array($_SESSION["goods"][$good->good_type_id]) && in_array($good->id, $_SESSION["goods"][$good->good_type_id]) )
-				unset($_SESSION["goods"][$good->good_type_id][array_search($good->id, $_SESSION["goods"][$good->good_type_id])]);
+			if( is_array($_SESSION["goods"]) && is_array($_SESSION["goods"][$good->good_type_id]) && isset($_SESSION["goods"][$good->good_type_id][$good->id]) )
+				unset($_SESSION["goods"][$good->good_type_id][$good->id]);
 
 			return true;
 		}else{

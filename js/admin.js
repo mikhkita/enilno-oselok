@@ -1085,15 +1085,21 @@ $(document).ready(function(){
             removeUrl = $(".b-sess-checkbox-info").attr("data-remove-url");
 
         $("body").on("click",".b-sess-checkbox",function(){
+            var $this = $(this);
             progress.setColor("#D26A44");
             progress.start(1);
 
             $.ajax({
-            url: ( $(this).prop("checked") )?addUrl:removeUrl,
-            data: "id="+$(this).val(),
+            url: ( $this.prop("checked") )?addUrl:removeUrl,
+            data: "id="+$this.val(),
                 success: function(msg){
+                    var json = JSON.parse(msg);
                     progress.end();
-                    if( msg != "1" ) alert("Какая-то ошибка. Не удалось выяснить причину. Попробуй еще пару раз и звони Мише.");
+                    if( json.result == "success" ){
+                        $($this.attr("data-block")).text(json.goods);
+                    }else{
+                        alert("Какая-то ошибка. Не удалось выяснить причину. Попробуй еще пару раз и звони Мише.");
+                    }
                 },
                 error: function(){
                     progress.end();
