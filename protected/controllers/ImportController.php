@@ -160,7 +160,7 @@ class ImportController extends Controller
         		$cellValueAndHighlight = $this->getCellValueAndHighlight($cell,$titles[$id]["TYPE"],$field,$titles[$id]["VARIANTS"]);
 
         		if( $cellValueAndHighlight["HIGHLIGHT"] == "new-variant" ){
-        			$item_code = $all_goods[$code]->fields_assoc[3]->value;
+        			$item_code = $code;
         			if( !isset($report[$item_code]) ) $report[$item_code] = array();
         			$report[$item_code][$titles[$id]["NAME"]] = $cell;
         			$error = true;
