@@ -28,7 +28,7 @@
 				<? foreach ($data as $i => $item): ?>
 					<tr>
 						<td><input type="checkbox" name="good_id" class="b-sess-checkbox" <? if($item->isChecked()): ?>checked="checked"<? endif; ?> data-url="" value="<?=$item->id?>"></td>
-						<td style="min-width: 125px;">
+						<td style="min-width: 135px;">
 							<? if($item->advertsCount()): ?>
 								<a href="<?php echo Yii::app()->createUrl('/good/adminadverts',array('id'=>$item->id,'goodTypeId'=> $_GET["goodTypeId"],'GoodFilter_page' => ($pages->currentPage+1)))?>" class="ajax-form ajax-update b-adverts-link b-tooltip" title="Объявления"><span class="advert-info"><?=$item->advertsCount()?> (<?=$item->advertsCount(true)?>)</span></a>
 							<? else: ?>
