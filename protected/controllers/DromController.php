@@ -63,7 +63,45 @@ class DromController extends Controller
         );
     }
 
-
+    public function actionAdminUpload() {
+        $arr = array();
+        $i = 0;
+        $handle = @fopen(Yii::app()->basePath.'/disc.txt', "r");
+        if ($handle) {
+            while (($buffer = trim(fgets($handle))) != "") {
+                $temp = explode(" ", $buffer);
+                $url = end(explode("-", $temp[3]));
+                $arr[$i]['url'] = substr($url,0, -5);
+                $arr[$i]['place_id'] = 10;
+                $arr[$i]['good_id'] = $temp[0];
+                $arr[$i]['city_id'] = $temp[1];
+                $arr[$i]['type_id'] = $temp[2];
+                $i++;
+            }
+            if (!feof($handle)) {
+                echo "Error: unexpected fgets() fail\n";
+            }
+            fclose($handle);
+        }
+        $handle = @fopen(Yii::app()->basePath.'/tire.txt', "r");
+        if ($handle) {
+            while (($buffer = trim(fgets($handle))) != "") {
+                $temp = explode(" ", $buffer);
+                $url = end(explode("-", $temp[3]));
+                $arr[$i]['url'] = substr($url,0, -5);
+                $arr[$i]['place_id'] = 9;
+                $arr[$i]['good_id'] = $temp[0];
+                $arr[$i]['city_id'] = $temp[1];
+                $arr[$i]['type_id'] = $temp[2];
+                $i++;
+            }  
+            if (!feof($handle)) {
+                echo "Error: unexpected fgets() fail\n";
+            }
+            fclose($handle);
+            $this->insertValues(Advert::tableName(),$arr);
+        }
+    }
     public function actionAdminIndex(){
         $queue = Queue::model()->with("advert.good.type","advert.place","action")->findByPk(198);
         $advert = $queue->advert;
