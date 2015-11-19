@@ -478,13 +478,24 @@ class Good extends CActiveRecord
 			return false;
 		}
 	}
-	public function addAllCheckbox($good_type_id){
+	public function addAllCheckbox($good_type_id,$ids = NULL){
 		if(!isset($_SESSION)) session_start();
 
 		if( $good_type_id ){
 			if( !is_array($_SESSION["goods"]) ) $_SESSION["goods"] = array();
+			if($ids) {
+				$arr = explode(PHP_EOL,$ids);
+				foreach ($arr as $key => $value) {
+					$arr[$key] = trim($value);
+				}
 
-			$goods = Good::model()->with("fields")->findAll("attribute_id=3 AND good_type_id=".$good_type_id);
+				$criteria = new CDbCriteria();
+				$criteria->with = array("fields");
+				$criteria->condition = "attribute_id=3 AND good_type_id=".$good_type_id;
+				$criteria->addInCondition('fields.varchar_value',$arr); 
+				$goods = Good::model()->findAll($criteria);
+				
+			} else $goods = Good::model()->with("fields")->findAll("attribute_id=3 AND good_type_id=".$good_type_id);
 			$_SESSION["goods"][$good_type_id] = array();
 			foreach ($goods as $key => $good) {
 				$_SESSION["goods"][$good->good_type_id][$good->id] = $good->fields[0]->value;

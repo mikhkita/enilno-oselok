@@ -13,7 +13,7 @@ class GoodController extends Controller
 	{
 		return array(
 			array('allow',
-				'actions'=>array('adminIndex','adminTest','updatePrices','adminCreate','adminUpdate','adminDelete','adminEdit','getAttrType','getAttr','adminAdverts','adminUpdateImages',"adminAddCheckbox","adminRemoveCheckbox","adminAddAllCheckbox","adminRemoveAllCheckbox",'adminUpdateAll'),
+				'actions'=>array('adminIndex','adminTest','updatePrices','adminCreate','adminUpdate','adminDelete','adminEdit','getAttrType','getAttr','adminAdverts','adminUpdateImages',"adminAddCheckbox","adminRemoveCheckbox","adminAddAllCheckbox","adminRemoveAllCheckbox",'adminUpdateAll','adminAddSomeCheckbox'),
 				'roles'=>array('manager'),
 			),
 			array('allow',
@@ -479,6 +479,18 @@ class GoodController extends Controller
 		echo $this->displayCodes(Good::removeAllCheckbox($good_type_id),$good_type_id);
 	}
 
+	public function actionAdminAddSomeCheckbox($good_type_id) {
+		if(isset($_POST['Good']['ids']))
+		{
+			Good::addAllCheckbox($good_type_id,$_POST['Good']['ids']);
+			$this->redirect( Yii::app()->createUrl('good/adminindex',array('goodTypeId'=>$good_type_id,'partial'=>true)) );
+		}else{
+			$this->renderPartial('adminSomeCheckbox',array());
+		}
+		
+	}
+
+	
 	public function displayCodes($success,$good_type_id) {
 		$result = array();
 		$result['result'] = "error";

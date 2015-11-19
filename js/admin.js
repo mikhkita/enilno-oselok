@@ -1113,6 +1113,7 @@ $(document).ready(function(){
             });
 
         });
+
         $(".b-sess-allcheckbox").click(function(){
             var $this = $(this);
             progress.setColor("#D26A44");
@@ -1137,6 +1138,7 @@ $(document).ready(function(){
             });
             return false;
         });
+
     }
 
     

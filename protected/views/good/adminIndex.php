@@ -9,8 +9,9 @@
         <?=CHTML::dropDownList("sort[type]", $_POST["sort"]["type"], array("ASC"=>"По возрастанию", "DESC"=>"По убыванию"),array('id'=>'b-order-1')); ?>
     </div>
     <a href="<?php echo $this->createUrl('/good/adminupdateall',array('good_type_id'=> $_GET["goodTypeId"],'GoodFilter_page' => ($pages->currentPage+1) ))?>" class="ajax-form ajax-create b-butt" data-block=".b-popup-filter">Редактировать города</a>
-	<a href="<?php echo $this->createUrl('/good/adminaddallcheckbox',array('good_type_id'=> $_GET["goodTypeId"]))?>" class="b-sess-allcheckbox b-butt">Выделить все <?=$name?></a>
-	<a href="<?php echo $this->createUrl('/good/adminremoveallcheckbox',array('good_type_id'=> $_GET["goodTypeId"]))?>" class="b-sess-allcheckbox b-butt">Сбросить все <?=$name?></a>
+	<a href="<?php echo $this->createUrl('/good/adminaddsomecheckbox',array('good_type_id'=> $_GET["goodTypeId"]))?>" class="ajax-form ajax-update left b-butt">Выбор по коду</a>
+	<a href="<?php echo $this->createUrl('/good/adminremoveallcheckbox',array('good_type_id'=> $_GET["goodTypeId"]))?>" class="right b-sess-allcheckbox b-butt">Сбросить все <?=$name?></a>
+	<a href="<?php echo $this->createUrl('/good/adminaddallcheckbox',array('good_type_id'=> $_GET["goodTypeId"]))?>" class="right b-sess-allcheckbox b-butt">Выделить все <?=$name?></a>
 </div>
 
 <?php $this->renderPartial('_filter', array('attributes'=>$attributes, 'arr_name' => $arr_name, 'labels' => $labels, 'filter_values' => $filter_values, 'sort_fields' => $sort_fields)); ?>
@@ -64,6 +65,7 @@
 				</tr>
 			<? endif; ?>
 		</table>
+
 	<?php $this->endWidget(); ?>
 	<div class="b-pagination-cont clearfix">
         <?php $this->widget('CLinkPager', array(

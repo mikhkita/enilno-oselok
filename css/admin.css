@@ -533,6 +533,7 @@ h1{
     position: absolute;
     left: 0px;
     top: -19px;
+    width: 100%;
 }
     .b-buttons-left .b-butt{
         float: left;
