@@ -63,10 +63,10 @@ class DromController extends Controller
         );
     }
     public function actionAdminAddCities() {
-        $goods = Advert::model()->findAll("type_id=869");
+        $goods = Advert::model()->findAll("type_id=2129");
         $arr = array();
         foreach ($goods as $key => $good) {
-            $arr[$key]['attribute_id'] = 58;
+            $arr[$key]['attribute_id'] = 61;
             $arr[$key]['good_id'] = $good->good_id;
             $arr[$key]['variant_id'] = $good->city_id;
         }

@@ -63,7 +63,7 @@
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'group_id'); ?>
-		<?php echo $form->dropDownList($model, 'group_id', CHtml::listData(Attribute::model()->findAll( ((isset($_GET["id"]))?("id!=".$_GET["id"]):NULL ) ), 'id', 'name'),array('class'=> 'select2',"empty" => "Не задано","required" => true,'style' => 'width:442px;')); ?>
+		<?php echo $form->dropDownList($model, 'group_id', CHtml::listData(Attribute::model()->findAll( ((isset($_GET["id"]))?("id!=".$_GET["id"]):NULL ) ), 'id', 'name'),array('class'=> 'select2',"empty" => "Не задано",'style' => 'width:442px;')); ?>
 		<?php echo $form->error($model,'group_id'); ?>
 	</div>
 

@@ -95,7 +95,7 @@ class GoodController extends Controller
 			}
 			$this->insertValues(GoodAttribute::tableName(),$values);
 
-			// Good::updatePrices(array($id));
+			Good::updatePrices(array($id));
 
 			$model->update();
 			$this->redirect( Yii::app()->createUrl('good/adminindex',array('goodTypeId'=>$goodTypeId,'partial'=>true,'GoodFilter_page' => $_GET["GoodFilter_page"])) );
@@ -112,30 +112,38 @@ class GoodController extends Controller
 	public function actionAdminUpdateAll($good_type_id)
 	{
 		$good_ids = Good::getCheckboxes($good_type_id);
+		$good_ids_key = array();
 		if( !count($good_ids) ) return false;
 
-		$model = $this->loadModel($good_ids[0]);
+		foreach ($good_ids as $key => $value) {
+			$tmp = $key;
+			array_push($good_ids_key, $key);
+		}
+
+		$model = $this->loadModel($tmp);
 		$result = NULL;
 		
-		if(isset($_POST['Good_attr']) || isset($_POST['Dynamic_attr']))
+		if(isset($_POST['Good_attr']))
 		{
-			$goods = Good::model()->with(array("type","fields.variant","fields.attribute"))->findAllByPk($good_ids);
+			$goods = Good::model()->with(array("type","fields.variant","fields.attribute"))->findAllByPk($good_ids_key);
 
 			$attrs_id = array();
-			foreach ($_POST['Dynamic_attr'] as $key => $attr_id) {
+			foreach ($_POST['Good_attr'] as $attr_id => $val) {
 				array_push($attrs_id, "attribute_id=".$attr_id);
 			}
 			$goods_id = array();
 			foreach ($good_ids as $key => $good_id) {
-				array_push($goods_id, "good_id=".$good_id);
+				array_push($goods_id, "good_id='".$key."'");
 			}	
 			GoodAttribute::model()->deleteAll('('.implode(" OR ", $goods_id).') AND ('.implode(" OR ", $attrs_id).')');
+
 			if( isset($_POST['Good_attr']) ){
 				$values = array();
 				foreach ($good_ids as $key => $id) {
 					foreach ($_POST['Good_attr'] as $attr_id => $value) {
-						if(!is_array($value) || isset($value['single']) ) {
-							$tmp = array("good_id"=>$id,"attribute_id"=>$attr_id,"int_value"=>NULL,"varchar_value"=>NULL,"float_value"=>NULL,"text_value"=>NULL,"variant_id"=>NULL);
+						if( isset($value[0]) && $value[0] == "-" ) continue;
+ 						if(!is_array($value) || isset($value['single']) ) {
+							$tmp = array("good_id"=>$key,"attribute_id"=>$attr_id,"int_value"=>NULL,"varchar_value"=>NULL,"float_value"=>NULL,"text_value"=>NULL,"variant_id"=>NULL);
 							if(!is_array($value) && $value != ""){
 								$tmp[$this->getAttrType($model,$attr_id)] = $value;
 								$values[] = $tmp;
@@ -146,7 +154,7 @@ class GoodController extends Controller
 						} else {
 							if(!empty($value))
 								foreach ($value as $variant)
-									$values[] = array("good_id"=>$id,"attribute_id"=>$attr_id,"int_value"=>NULL,"varchar_value"=>NULL,"float_value"=>NULL,"text_value"=>NULL,"variant_id"=>$variant);
+									$values[] = array("good_id"=>$key,"attribute_id"=>$attr_id,"int_value"=>NULL,"varchar_value"=>NULL,"float_value"=>NULL,"text_value"=>NULL,"variant_id"=>$variant);
 						}
 					}
 				}
