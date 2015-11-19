@@ -495,7 +495,7 @@ class Good extends CActiveRecord
 	public function isChecked(){
 		if(!isset($_SESSION)) session_start();
 
-		return ( is_array($_SESSION["goods"]) && is_array($_SESSION["goods"][$this->good_type_id]) && in_array($this->id, $_SESSION["goods"][$this->good_type_id]) );
+		return ( is_array($_SESSION["goods"]) && is_array($_SESSION["goods"][$this->good_type_id]) && isset($this->id, $_SESSION["goods"][$this->good_type_id][$this->id]) );
 	}
 
 	public function advertsCount($with_url_only = false){

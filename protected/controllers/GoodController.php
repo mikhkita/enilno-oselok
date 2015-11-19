@@ -260,7 +260,8 @@ class GoodController extends Controller
 
 	public function actionAdminIndex($partial = false, $goodTypeId = false)
 	{
-		
+		// if(!isset($_SESSION)) session_start();
+		// unset($_SESSION["goods"]);
 		unset($_GET["partial"]);
 
 		if( isset($_GET["delete"]) ){
@@ -327,9 +328,9 @@ class GoodController extends Controller
 				)
 			)->sort( 
 				$_POST['sort']
-			)->with("adverts")->getPage(
+			)->with(array("adverts"=>array("select"=>"id")))->getPage(
 				array(
-			    	'pageSize'=>40,
+			    	'pageSize'=>20,
 			    )
 			);
 		}

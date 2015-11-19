@@ -27,7 +27,7 @@
 			<? if( count($data) ): ?>
 				<? foreach ($data as $i => $item): ?>
 					<tr>
-						<td><input type="checkbox" name="good_id" class="b-sess-checkbox" <? if($item->isChecked()): ?>checked="checked"<? endif; ?> data-url="" value="<?=$item->id?>"></td>
+						<td><input type="checkbox" name="good_id" class="b-sess-checkbox" data-block="#b-sess-checkbox-list" <? if($item->isChecked()): ?>checked="checked"<? endif; ?> value="<?=$item->id?>"></td>
 						<td style="min-width: 135px;">
 							<? if($item->advertsCount()): ?>
 								<a href="<?php echo Yii::app()->createUrl('/good/adminadverts',array('id'=>$item->id,'goodTypeId'=> $_GET["goodTypeId"],'GoodFilter_page' => ($pages->currentPage+1)))?>" class="ajax-form ajax-update b-adverts-link b-tooltip" title="Объявления"><span class="advert-info"><?=$item->advertsCount()?> (<?=$item->advertsCount(true)?>)</span></a>
@@ -75,5 +75,5 @@
 	    )) ?>
         <div class="b-lot-count">Всего товаров: <?=$good_count?></div>
     </div>
-    <div style="text-align:left;"><?=implode(", ",Good::getCheckboxes($_GET["goodTypeId"]))?></div>
+    <div style="text-align:left;" id="b-sess-checkbox-list"><?=implode(", ",Good::getCheckboxes($_GET["goodTypeId"]))?></div>
 </div>

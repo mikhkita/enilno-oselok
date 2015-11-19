@@ -1096,7 +1096,7 @@ $(document).ready(function(){
                     var json = JSON.parse(msg);
                     progress.end();
                     if( json.result == "success" ){
-                        $($this.attr("data-block")).text(json.goods);
+                        $($this.attr("data-block")).text(json.codes);
                     }else{
                         alert("Какая-то ошибка. Не удалось выяснить причину. Попробуй еще пару раз и звони Мише.");
                     }
