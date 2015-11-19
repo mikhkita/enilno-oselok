@@ -495,8 +495,9 @@ class Good extends CActiveRecord
 				$criteria->addInCondition('fields.varchar_value',$arr); 
 				$goods = Good::model()->findAll($criteria);
 				
-			} else $goods = Good::model()->with("fields")->findAll("attribute_id=3 AND good_type_id=".$good_type_id);
-			$_SESSION["goods"][$good_type_id] = array();
+			} else {
+				$goods = Good::model()->with("fields")->findAll("attribute_id=3 AND good_type_id=".$good_type_id);
+			}
 			foreach ($goods as $key => $good) {
 				$_SESSION["goods"][$good->good_type_id][$good->id] = $good->fields[0]->value;
 			}
