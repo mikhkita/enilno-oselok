@@ -1084,7 +1084,7 @@ $(document).ready(function(){
         var addUrl = $(".b-sess-checkbox-info").attr("data-add-url"),
             removeUrl = $(".b-sess-checkbox-info").attr("data-remove-url");
 
-        $("body").on("click",".b-sess-checkbox",function(){
+        $("body").on("change",".b-sess-checkbox",function(){
             var $this = $(this);
             progress.setColor("#D26A44");
             progress.start(1);
@@ -1096,6 +1096,11 @@ $(document).ready(function(){
                     var json = JSON.parse(msg);
                     progress.end();
                     if( json.result == "success" ){
+                        if($this.hasClass("check-page")) {
+                            if($this.prop("checked")) {
+                                $(".b-sess-checkbox").prop("checked",true);
+                            } else $(".b-sess-checkbox").prop("checked",false);
+                        }
                         $($this.attr("data-block")).text(json.codes);
                     }else{
                         alert("Какая-то ошибка. Не удалось выяснить причину. Попробуй еще пару раз и звони Мише.");
@@ -1108,32 +1113,33 @@ $(document).ready(function(){
             });
 
         });
-    }
+        $(".b-sess-allcheckbox").click(function(){
+            var $this = $(this);
+            progress.setColor("#D26A44");
+            progress.start(1);
 
-    $(".b-sess-allcheckbox").click(function(){
-        var $this = $(this);
-        progress.setColor("#D26A44");
-        progress.start(1);
-
-        $.ajax({
-        url: $this.attr("href"),
-            success: function(msg){
-                var json = JSON.parse(msg);
-                progress.end();
-                if( json.result == "success" ){
-                    if(json.codes) $(".b-sess-checkbox").prop("checked",true); else $(".b-sess-checkbox").prop("checked",false);
-                    $("#b-sess-checkbox-list").text(json.codes);
-                }else{
+            $.ajax({
+            url: $this.attr("href"),
+                success: function(msg){
+                    var json = JSON.parse(msg);
+                    progress.end();
+                    if( json.result == "success" ){
+                        if(json.codes) $(".b-sess-checkbox").prop("checked",true); else $(".b-sess-checkbox").prop("checked",false);
+                        $("#b-sess-checkbox-list").text(json.codes);
+                    }else{
+                        alert("Какая-то ошибка. Не удалось выяснить причину. Попробуй еще пару раз и звони Мише.");
+                    }
+                },
+                error: function(){
+                    progress.end();
                     alert("Какая-то ошибка. Не удалось выяснить причину. Попробуй еще пару раз и звони Мише.");
                 }
-            },
-            error: function(){
-                progress.end();
-                alert("Какая-то ошибка. Не удалось выяснить причину. Попробуй еще пару раз и звони Мише.");
-            }
+            });
+            return false;
         });
-        return false;
-    });
+    }
+
+    
 
     /* Session Checkboxes ------------------------ Session Checkboxes */
 

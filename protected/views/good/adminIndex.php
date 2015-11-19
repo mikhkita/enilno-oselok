@@ -18,7 +18,8 @@
 	<?php $form=$this->beginWidget('CActiveForm'); ?>
 		<table class="b-table b-good-table b-sess-checkbox-info" data-add-url="<?=Yii::app()->createUrl('/good/adminaddcheckbox')?>" data-remove-url="<?=Yii::app()->createUrl('/good/adminremovecheckbox')?>" border="1">
 			<tr>
-				<th style="min-width: 20px;">&nbsp;</th>
+				<? $ids = array(); foreach ($data as $i => $item) array_push($ids, $item->id); ?>
+				<th style="vertical-align:bottom; min-width: 20px;"><input type="checkbox" name="goods_id" class="b-sess-checkbox check-page" data-block="#b-sess-checkbox-list" value="<?=implode(',',$ids)?>"></th>
 				<th style="min-width: 110px;">&nbsp;</th>
 				<? foreach ($fields as $field): ?>
 					<th <?if($field->attribute_id == 3):?>style="min-width: 55px;"<?endif;?> <? if($field->attribute->alias): ?>class="b-tooltip" title="<?=$field->attribute->name?>"<?endif;?>><?=($field->attribute->alias)?$field->attribute->alias:$field->attribute->name; ?></th>

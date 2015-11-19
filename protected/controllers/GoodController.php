@@ -448,12 +448,26 @@ class GoodController extends Controller
 	}
 
 	public function actionAdminAddCheckbox($id = NULL){
-		$good = $this->loadModel($id);
+		$goods = explode(",", $id);
+		$good = $this->loadModel($goods[0]);	
+		if(count($goods) > 1) {
+			foreach ($goods as $key => $id) {
+				$good = $this->loadModel($id);
+				if($key != (count($goods)-1)) $this->displayCodes(Good::addCheckbox($good),$good->good_type_id);
+			}	
+		}
 		echo $this->displayCodes(Good::addCheckbox($good),$good->good_type_id);
 	}
 
 	public function actionAdminRemoveCheckbox($id = NULL){
-		$good = $this->loadModel($id);
+		$goods = explode(",", $id);
+		$good = $this->loadModel($goods[0]);	
+		if(count($goods) > 1) {
+			foreach ($goods as $key => $id) {
+				$good = $this->loadModel($id);
+				if($key != (count($goods)-1)) $this->displayCodes(Good::removeCheckbox($good),$good->good_type_id);
+			}	
+		}
 		echo $this->displayCodes(Good::removeCheckbox($good),$good->good_type_id);
 	}
 
