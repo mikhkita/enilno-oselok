@@ -78,5 +78,5 @@
 	    )) ?>
         <div class="b-lot-count">Всего товаров: <?=$good_count?></div>
     </div>
-    <div style="text-align:left;" id="b-sess-checkbox-list"><?=implode(", ",Good::getCheckboxes($_GET["goodTypeId"]))?></div>
+    <div style="text-align:left;" id="b-sess-checkbox-list">Выделено всего - <? $codes = Good::getCheckboxes($_GET["goodTypeId"]); echo count($codes).":";?> <?=implode(", ",$codes)?></div>
 </div>
