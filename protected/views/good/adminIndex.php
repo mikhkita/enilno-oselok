@@ -1,6 +1,4 @@
 <h1><?=$name?></h1>
-
-
 <div class="b-buttons-left">
 	<a href="<?php echo $this->createUrl('/good/admincreate',array('goodTypeId'=> $_GET["goodTypeId"] ))?>" class="ajax-form ajax-create b-butt">Добавить</a>
 	<a href="#" class="fancy left b-butt" data-block=".b-popup-filter">Фильтр</a>
@@ -12,15 +10,19 @@
     </div>
     <a href="<?php echo $this->createUrl('/good/adminupdateall',array('good_type_id'=> $_GET["goodTypeId"],'GoodFilter_page' => ($pages->currentPage+1) ))?>" class="ajax-form ajax-create b-butt">Редактировать города</a>
 </div>
-
-<a href="<?php echo $this->createUrl('/'.$this->adminMenu["cur"]->code.'/adminauctionlinks')?>" class="ajax-photodoska b-butt b-top-butt">Обновить ссылки с торгом</a>
+<div class="b-top-butt">
+	<a href="<?php echo $this->createUrl('/'.$this->adminMenu["cur"]->code.'/adminauctionlinks')?>" class="ajax-photodoska b-butt">Обновить ссылки с торгом</a>
+	<a href="<?php echo $this->createUrl('/good/adminaddallcheckbox',array('good_type_id'=> $_GET["goodTypeId"]))?>" class="b-sess-allcheckbox b-butt">Выделить все <?=$name?></a>
+	<a href="<?php echo $this->createUrl('/good/adminremoveallcheckbox',array('good_type_id'=> $_GET["goodTypeId"]))?>" class="b-sess-allcheckbox b-butt">Сбросить все <?=$name?></a>
+</div>
 
 <?php $this->renderPartial('_filter', array('attributes'=>$attributes, 'arr_name' => $arr_name, 'labels' => $labels, 'filter_values' => $filter_values, 'sort_fields' => $sort_fields)); ?>
 <div class="b-filter-pagination">
 	<?php $form=$this->beginWidget('CActiveForm'); ?>
 		<table class="b-table b-good-table b-sess-checkbox-info" data-add-url="<?=Yii::app()->createUrl('/good/adminaddcheckbox')?>" data-remove-url="<?=Yii::app()->createUrl('/good/adminremovecheckbox')?>" border="1">
 			<tr>
-				<th style="min-width: 20px;">&nbsp;</th>
+				<? $ids = array(); foreach ($data as $i => $item) array_push($ids, $item->id); ?>
+				<th style="vertical-align:bottom; min-width: 20px;"><input type="checkbox" name="goods_id" class="b-sess-checkbox check-page" data-block="#b-sess-checkbox-list" value="<?=implode(',',$ids)?>"></th>
 				<th style="min-width: 110px;">&nbsp;</th>
 				<? foreach ($fields as $field): ?>
 					<th <?if($field->attribute_id == 3):?>style="min-width: 55px;"<?endif;?> <? if($field->attribute->alias): ?>class="b-tooltip" title="<?=$field->attribute->name?>"<?endif;?>><?=($field->attribute->alias)?$field->attribute->alias:$field->attribute->name; ?></th>

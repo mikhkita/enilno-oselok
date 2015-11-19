@@ -569,6 +569,9 @@ h1{
         right: 0px;
         top: -19px;
     }
+    .b-top-butt .b-butt{
+        margin-left: 10px;
+    }
     .b-link-back{
         position: absolute;
         left: 0px;
