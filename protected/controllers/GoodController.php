@@ -13,7 +13,7 @@ class GoodController extends Controller
 	{
 		return array(
 			array('allow',
-				'actions'=>array('adminIndex','adminTest','updatePrices','adminCreate','adminUpdate','adminDelete','adminEdit','getAttrType','getAttr','adminAdverts','adminUpdateImages',"adminAddCheckbox","adminRemoveCheckbox",'adminUpdateAll'),
+				'actions'=>array('adminIndex','adminTest','updatePrices','adminCreate','adminUpdate','adminDelete','adminEdit','getAttrType','getAttr','adminAdverts','adminUpdateImages',"adminAddCheckbox","adminRemoveCheckbox","adminAddAllCheckbox","adminRemoveAllCheckbox",'adminUpdateAll'),
 				'roles'=>array('manager'),
 			),
 			array('allow',
@@ -455,6 +455,14 @@ class GoodController extends Controller
 	public function actionAdminRemoveCheckbox($id = NULL){
 		$good = $this->loadModel($id);
 		echo $this->displayCodes(Good::removeCheckbox($good),$good->good_type_id);
+	}
+
+	public function actionAdminAddAllCheckbox($good_type_id) {
+		echo $this->displayCodes(Good::addAllCheckbox($good_type_id),$good_type_id);
+	}
+
+	public function actionAdminRemoveAllCheckbox($good_type_id) {
+		echo $this->displayCodes(Good::removeAllCheckbox($good_type_id),$good_type_id);
 	}
 
 	public function displayCodes($success,$good_type_id) {

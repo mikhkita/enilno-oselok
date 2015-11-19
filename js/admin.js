@@ -1110,6 +1110,31 @@ $(document).ready(function(){
         });
     }
 
+    $(".b-sess-allcheckbox").click(function(){
+        var $this = $(this);
+        progress.setColor("#D26A44");
+        progress.start(1);
+
+        $.ajax({
+        url: $this.attr("href"),
+            success: function(msg){
+                var json = JSON.parse(msg);
+                progress.end();
+                if( json.result == "success" ){
+                    if(json.codes) $(".b-sess-checkbox").prop("checked",true); else $(".b-sess-checkbox").prop("checked",false);
+                    $("#b-sess-checkbox-list").text(json.codes);
+                }else{
+                    alert("Какая-то ошибка. Не удалось выяснить причину. Попробуй еще пару раз и звони Мише.");
+                }
+            },
+            error: function(){
+                progress.end();
+                alert("Какая-то ошибка. Не удалось выяснить причину. Попробуй еще пару раз и звони Мише.");
+            }
+        });
+        return false;
+    });
+
     /* Session Checkboxes ------------------------ Session Checkboxes */
 
     $(".ajax-update-prices").click(function(){

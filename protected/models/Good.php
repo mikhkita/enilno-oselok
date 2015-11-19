@@ -478,6 +478,38 @@ class Good extends CActiveRecord
 			return false;
 		}
 	}
+	public function addAllCheckbox($good_type_id){
+		if(!isset($_SESSION)) session_start();
+
+		if( $good_type_id ){
+			if( !is_array($_SESSION["goods"]) ) $_SESSION["goods"] = array();
+
+			$goods = Good::model()->with("fields")->findAll("attribute_id=3 AND good_type_id=".$good_type_id);
+			$_SESSION["goods"][$good_type_id] = array();
+			foreach ($goods as $key => $good) {
+				$_SESSION["goods"][$good->good_type_id][$good->id] = $good->fields[0]->value;
+			}
+
+			return true;
+		}else{
+			return false;
+		}
+	}
+
+	public function removeAllCheckbox($good_type_id){
+		if(!isset($_SESSION)) session_start();
+
+		if( $good_type_id ){
+			if( !is_array($_SESSION["goods"]) ) $_SESSION["goods"] = array(); 
+			if( !is_array($_SESSION["goods"][$good_type_id]) ) $_SESSION["goods"][$good_type_id] = array();
+
+			$_SESSION["goods"][$good_type_id] = array();
+
+			return true;
+		}else{
+			return false;
+		}
+	}
 
 	public function removeCheckbox($good = NULL){
 		if(!isset($_SESSION)) session_start();
