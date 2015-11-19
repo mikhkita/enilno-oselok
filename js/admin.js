@@ -288,6 +288,12 @@ $(document).ready(function(){
             placeholder: "",
             allowClear: true
         });
+
+        $(".select2").change(function(){
+            if( $(this).val().indexOf("-") != -1 )
+                $(this).select2("val", "-");
+        });
+
         $(".select2-all").click(function() {
             var element = $(this).siblings("select.select2");
             var selected = [];

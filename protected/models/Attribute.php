@@ -35,7 +35,7 @@ class Attribute extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('name, attribute_type_id, group_id', 'required'),
+			array('name, attribute_type_id', 'required'),
 			array('attribute_type_id, multi, list, width, dynamic, required, folder, major', 'numerical', 'integerOnly'=>true),
 			array('name', 'length', 'max'=>255),
 			array('group_id', 'length', 'max'=>10),

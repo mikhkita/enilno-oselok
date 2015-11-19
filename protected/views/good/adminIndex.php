@@ -10,8 +10,10 @@
         <label for="sort">Порядок: </label>
         <?=CHTML::dropDownList("sort[type]", $_POST["sort"]["type"], array("ASC"=>"По возрастанию", "DESC"=>"По убыванию"),array('id'=>'b-order-1')); ?>
     </div>
-    <a href="<?php echo $this->createUrl('/good/adminupdateall',array('good_type_id'=> $_GET["goodTypeId"],'GoodFilter_page' => ($pages->currentPage+1) ))?>" class="ajax-form ajax-create b-butt" data-block=".b-popup-filter">Редактировать города</a>
+    <a href="<?php echo $this->createUrl('/good/adminupdateall',array('good_type_id'=> $_GET["goodTypeId"],'GoodFilter_page' => ($pages->currentPage+1) ))?>" class="ajax-form ajax-create b-butt">Редактировать города</a>
 </div>
+
+<a href="<?php echo $this->createUrl('/'.$this->adminMenu["cur"]->code.'/adminauctionlinks')?>" class="ajax-photodoska b-butt b-top-butt">Обновить ссылки с торгом</a>
 
 <?php $this->renderPartial('_filter', array('attributes'=>$attributes, 'arr_name' => $arr_name, 'labels' => $labels, 'filter_values' => $filter_values, 'sort_fields' => $sort_fields)); ?>
 <div class="b-filter-pagination">

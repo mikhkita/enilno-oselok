@@ -462,7 +462,7 @@ class Good extends CActiveRecord
 
 		if( !$good_type_id ) throw new CHttpException(404,'Good::getCheckboxes() $good_type_id не задан');
 
-		return ( isset($_SESSION["goods"])  && isset($_SESSION["goods"][$good_type_id]) )?array_values($_SESSION["goods"][$good_type_id]):array();
+		return ( isset($_SESSION["goods"])  && isset($_SESSION["goods"][$good_type_id]) )?$_SESSION["goods"][$good_type_id]:array();
 	}
 
 	public function addCheckbox($good){
