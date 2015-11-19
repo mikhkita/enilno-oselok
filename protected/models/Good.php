@@ -134,9 +134,15 @@ class Good extends CActiveRecord
 		$tableName = GoodAttribute::tableName();
 		$sql = "INSERT INTO `$tableName` (`good_id`,`attribute_id`,`int_value`) VALUES ";
 
+		$dynamic = $this->getDynObjects(array(
+            57 => 2047,
+            38 => 1081,
+            37 => 869
+        ));
+
 		$values = array();
 		foreach ($model as $good) {
-			$newPrice = Interpreter::generate($codes[$good->good_type_id],$good);
+			$newPrice = Interpreter::generate($codes[$good->good_type_id],$good,$dynamic);
 			
 			$values[] = "('".$good->id."','51',".( ($newPrice != "")?("'".$newPrice."'"):"NULL" ).")";
 		}
@@ -358,7 +364,6 @@ class Good extends CActiveRecord
 			if( $isDiff ){
 				// Добавление в очередь действий на редактирование объявлений (если у этого объявления есть в очереди действие на редактирование или добавление, то не добавится действие в очередь)
 				$update_arr = array_uintersect($adverts_without_queue, $new_items, "compare");
-				print_r('$update_arr '.count($update_arr)."<br>");
 				Queue::addAll($update_arr,"update");
 			}
 
@@ -427,7 +432,8 @@ class Good extends CActiveRecord
     }
 
 	public function isDiff($newModel,$dynamic = false){
-		if( count($newModel->fields_assoc) != count($this->fields_assoc) ) return true;
+		// Log::debug(count($newModel->fields_assoc)." ".count($this->fields_assoc));
+		// if( count($newModel->fields_assoc) != count($this->fields_assoc) ) return true;
 
 		if( $this->compareModels($this,$newModel,$dynamic) ) return true;
 		if( $this->compareModels($newModel,$this,$dynamic) ) return true;
@@ -445,13 +451,19 @@ class Good extends CActiveRecord
 
 			if( isset($model2->fields_assoc[$key]) ){
 				if( is_array($model2->fields_assoc[$key]) || is_array($value) ){
-					if( !is_array($model2->fields_assoc[$key]) || !is_array($value) ) return true;
-					if( count(array_udiff($model2->fields_assoc[$key], $value, function ($a,$b){return $a->value == $b->value ? 0 : -1;})) || count(array_udiff($value, $model2->fields_assoc[$key], function ($a,$b){return $a->value == $b->value ? 0 : -1;})) ) return true;
+					if( !is_array($model2->fields_assoc[$key]) || !is_array($value) ){
+						return true;
+					}
+					if( count(array_udiff($model2->fields_assoc[$key], $value, function ($a,$b){return $a->value > $b->value ? 1 : (($a->value == $b->value)?0:-1);})) || count(array_udiff($value, $model2->fields_assoc[$key], function ($a,$b){return $a->value > $b->value ? 1 : (($a->value == $b->value)?0:-1);})) ){
+						return true;
+					}
 				}else{
-					if( $model2->fields_assoc[$key]->value != $value->value ) return true;
+					if( $model2->fields_assoc[$key]->value != $value->value ){
+						return true;
+					}
 				}
 			}else{
-				return true;
+				return ($value->value != "");
 			}
 		}
 		return false;

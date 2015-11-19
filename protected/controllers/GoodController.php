@@ -55,7 +55,6 @@ class GoodController extends Controller
 
 			Good::updatePrices(array($model->id));
 
-			
 			$this->redirect( Yii::app()->createUrl('good/adminindex',array('goodTypeId'=>$goodTypeId,'partial'=>true)) );
 
 		}else{
@@ -79,8 +78,12 @@ class GoodController extends Controller
 			$values = array();
 			foreach ($_POST['Good_attr'] as $attr_id => $value) {
 				if(!is_array($value) || isset($value['single']) ) {
+					// if(!is_array($value) && $value == ""){
+					// 	continue;
+					// }
 					$tmp = array("good_id"=>$id,"attribute_id"=>$attr_id,"int_value"=>NULL,"varchar_value"=>NULL,"float_value"=>NULL,"text_value"=>NULL,"variant_id"=>NULL);
-					if(!is_array($value) && $value != ""){
+
+					if(!is_array($value)){
 						$tmp[$this->getAttrType($model,$attr_id)] = $value;
 						$values[] = $tmp;
 					}else if(isset($value['single']) && $value['single']){
@@ -93,11 +96,13 @@ class GoodController extends Controller
 							$values[] = array("good_id"=>$id,"attribute_id"=>$attr_id,"int_value"=>NULL,"varchar_value"=>NULL,"float_value"=>NULL,"text_value"=>NULL,"variant_id"=>$variant);
 				}
 			}
+			Log::debug(print_r($values, true));
 			$this->insertValues(GoodAttribute::tableName(),$values);
+
+			$model->update();
 
 			Good::updatePrices(array($id));
 
-			$model->update();
 			$this->redirect( Yii::app()->createUrl('good/adminindex',array('goodTypeId'=>$goodTypeId,'partial'=>true,'GoodFilter_page' => $_GET["GoodFilter_page"])) );
 
 		}else{
