@@ -43,6 +43,7 @@ class QueueController extends Controller
         }
 
         $criteria->order = 't.id ASC';
+        $criteria->limit = 50;
 
         $model = Queue::model()->with("advert.good.fields.variant","advert.good.fields.attribute","advert.place.category","advert.city","advert.type","state")->findAll($criteria);
 

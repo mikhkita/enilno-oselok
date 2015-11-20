@@ -367,22 +367,29 @@ class Good extends CActiveRecord
 				Queue::addAll($update_arr,"update");
 			}
 
+			// Log::debug("isDiffAdverts ".(($isDiffAdverts)?"true":"false"));
+
 			if( $isDiffAdverts ){
 				// Удаление из очереди действий на добавление объявлений, которые нужно удалить
 				$delete_add_arr = array_udiff($adverts_with_add, $new_items, "compare");
+				// Log::debug("delete_add_arr = ".count($delete_add_arr));
 				Queue::delAll($delete_add_arr,"add");
 				Advert::delAll($delete_add_arr);
 
 				// Удаление из очереди действий на удаление объявлений, которые нужно оставить (тут же происходит добавление в очеред действия на добавление или редактирование)
 				$delete_delete_arr = array_uintersect($adverts_with_delete, $new_items, "compare");
+				// Log::debug("delete_delete_arr = ".count($delete_delete_arr));
 				Queue::delAll($delete_delete_arr,"delete");
 
 				// Удаление из очереди действий на редактирование объявлений, которые нужно удалить
 				$delete_update_arr = array_udiff($adverts_with_update, $new_items, "compare");
+				// Log::debug("delete_update_arr = ".count($delete_update_arr));
 				Queue::delAll($delete_update_arr,"update");
 
 				// Добавление в очередь действий на удаление объявлений (если у этого объявления есть в очереди действие на удаление, то не добавится действие в очередь)
 				$delete_arr = array_udiff($adverts_without_delete, $new_items, $delete_add_arr, "compare");
+				// Log::debug("delete_arr = ".count($delete_arr));
+				// Log::debug("new_items = ".count($new_items));
 				Queue::addAll($delete_arr,"delete");
 
 				$add = array_udiff($new_items, $this->adverts, "compare");
@@ -432,6 +439,11 @@ class Good extends CActiveRecord
     }
 
 	public function isDiff($newModel,$dynamic = false){
+		if( !$dynamic ){
+			// Log::debug(print_r($newModel->fields_assoc, true));
+			// Log::debug(print_r($this->fields_assoc, true));
+		}
+
 		// Log::debug(count($newModel->fields_assoc)." ".count($this->fields_assoc));
 		// if( count($newModel->fields_assoc) != count($this->fields_assoc) ) return true;
 
@@ -443,8 +455,9 @@ class Good extends CActiveRecord
 
 	public function compareModels($model1, $model2, $dynamic){
 		foreach ($model1->fields as $key => $value) {
-			if( $value->attribute->dynamic && !$dynamic ) continue;
-			if( !$value->attribute->dynamic && $dynamic ) continue;
+			if( ($value->attribute->dynamic && !$dynamic) || !$value->attribute->dynamic && $dynamic ){
+				continue;
+			}
 
 			$key = (($value->attribute->dynamic)?($value->attribute_id."-d"):$value->attribute_id);
 			$value = $model1->fields_assoc[$key];
@@ -452,17 +465,29 @@ class Good extends CActiveRecord
 			if( isset($model2->fields_assoc[$key]) ){
 				if( is_array($model2->fields_assoc[$key]) || is_array($value) ){
 					if( !is_array($model2->fields_assoc[$key]) || !is_array($value) ){
+						Log::debug("10");
 						return true;
 					}
-					if( count(array_udiff($model2->fields_assoc[$key], $value, function ($a,$b){return $a->value > $b->value ? 1 : (($a->value == $b->value)?0:-1);})) || count(array_udiff($value, $model2->fields_assoc[$key], function ($a,$b){return $a->value > $b->value ? 1 : (($a->value == $b->value)?0:-1);})) ){
-						return true;
+					// Log::debug(count(array_udiff($model2->fields_assoc[$key], $value, function ($a,$b){return $a->value == $b->value ? 1 : -1;}))." ".count(array_udiff($value, $model2->fields_assoc[$key], function ($a,$b){return $a->value > $b->value ? 1 : -1;})));
+					if( $value->attribute->dynamic ){
+						if( count(array_udiff($model2->fields_assoc[$key], $value, function ($a,$b){return $a->value == $b->value ? 1 : -1;})) || count(array_udiff($value, $model2->fields_assoc[$key], function ($a,$b){return $a->value > $b->value ? 1 : -1;})) ){
+							Log::debug("20 ".$key);
+							return true;
+						}
+					}else{
+						if( count(array_udiff($model2->fields_assoc[$key], $value, function ($a,$b){return $a->value > $b->value ? 1 : (($a->value == $b->value)?0:-1);})) || count(array_udiff($value, $model2->fields_assoc[$key], function ($a,$b){return $a->value > $b->value ? 1 : (($a->value == $b->value)?0:-1);})) ){
+							Log::debug("20 ".$key);
+							return true;
+						}
 					}
 				}else{
 					if( $model2->fields_assoc[$key]->value != $value->value ){
+						Log::debug("30");
 						return true;
 					}
 				}
 			}else{
+				Log::debug("40 ".$value->value);
 				return ($value->value != "");
 			}
 		}
@@ -507,9 +532,8 @@ class Good extends CActiveRecord
 				$criteria->addInCondition('fields.varchar_value',$arr); 
 				$goods = Good::model()->findAll($criteria);
 				
-			} else {
-				$goods = Good::model()->with("fields")->findAll("attribute_id=3 AND good_type_id=".$good_type_id);
-			}
+			} else $goods = Good::model()->with("fields")->findAll("attribute_id=3 AND good_type_id=".$good_type_id);
+			$_SESSION["goods"][$good_type_id] = array();
 			foreach ($goods as $key => $good) {
 				$_SESSION["goods"][$good->good_type_id][$good->id] = $good->fields[0]->value;
 			}
@@ -556,13 +580,9 @@ class Good extends CActiveRecord
 
 	public function advertsCount($with_url_only = false){
 		if( $with_url_only ){
-			$i = 0;
-			foreach ($this->adverts as $advert) {
-				if( $advert->url != NULL ) $i++;
-			}
-			return $i;
+			return Advert::model()->count("good_id=".$this->id." AND url != ''");
 		}else{
-			return count($this->adverts);
+			return Advert::model()->count("good_id=".$this->id."");
 		}
 	}
 

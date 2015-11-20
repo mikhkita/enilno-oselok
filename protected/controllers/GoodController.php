@@ -83,8 +83,9 @@ class GoodController extends Controller
 					// }
 					$tmp = array("good_id"=>$id,"attribute_id"=>$attr_id,"int_value"=>NULL,"varchar_value"=>NULL,"float_value"=>NULL,"text_value"=>NULL,"variant_id"=>NULL);
 
-					if(!is_array($value)){
-						$tmp[$this->getAttrType($model,$attr_id)] = $value;
+					$attr_type = $this->getAttrType($model,$attr_id);
+					if(!is_array($value) && $value != "" ){
+						$tmp[$attr_type] = $value;
 						$values[] = $tmp;
 					}else if(isset($value['single']) && $value['single']){
 						$tmp["variant_id"] = $value['single'];
@@ -96,7 +97,7 @@ class GoodController extends Controller
 							$values[] = array("good_id"=>$id,"attribute_id"=>$attr_id,"int_value"=>NULL,"varchar_value"=>NULL,"float_value"=>NULL,"text_value"=>NULL,"variant_id"=>$variant);
 				}
 			}
-			Log::debug(print_r($values, true));
+			// Log::debug(print_r($values, true));
 			$this->insertValues(GoodAttribute::tableName(),$values);
 
 			$model->update();
@@ -341,7 +342,7 @@ class GoodController extends Controller
 				)
 			)->sort( 
 				$_POST['sort']
-			)->with(array("adverts"=>array("select"=>"id")))->getPage(
+			)->getPage(
 				array(
 			    	'pageSize'=>20,
 			    )

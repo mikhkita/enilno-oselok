@@ -1120,7 +1120,7 @@ $(document).ready(function(){
 
         });
 
-        $(".b-sess-allcheckbox").click(function(){
+        $("body").on("click",".b-sess-allcheckbox",function(){
             var $this = $(this);
             progress.setColor("#D26A44");
             progress.start(1);

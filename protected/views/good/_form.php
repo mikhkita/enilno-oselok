@@ -11,7 +11,7 @@
 		<? if(!$only_cities || $item->attribute->dynamic ): ?>
 			<div class="row">
 				<label><?=$item->attribute->name?></label>
-				<? $attr_id = (isset($result[$item->attribute_id]) && $result[$item->attribute_id]) ? $result[$item->attribute_id] : ""; if($item->attribute->list): ?>
+				<? $attr_id = (isset($result[$item->attribute_id]) && $result[$item->attribute_id] != "") ? $result[$item->attribute_id] : ""; if($item->attribute->list): ?>
 					<?  if($item->attribute->multi): ?>
 						<? $selected = array(); if(!empty($attr_id)) foreach ($attr_id as $multi) $selected[$multi] = array('selected' => 'selected'); ?>
 							<?  if($item->attribute->dynamic): ?>
