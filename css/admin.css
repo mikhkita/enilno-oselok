@@ -126,8 +126,8 @@ a{
         text-decoration: none;
     }
 input,select{
-    /*padding: 5px 0px;*/
-    /*margin-top: 5px;*/
+    /* padding: 5px 0px; */
+    /* margin-top: 5px; */
 }
 a img
 {
@@ -2421,6 +2421,44 @@ ul.b-filter-list{
         color-stop(75%,rgba(255,255,255,.15)), 
        color-stop(100%,rgba(255,255,255,.15)));  
 }
+
+.b-advert-filter {
+    margin-top: 20px;
+} 
+    .b-advert-filter .b-advert-block{
+        
+    }
+        .b-advert-filter h3{
+            margin-top: 20px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-size: 16px;
+            text-align: left;
+        }
+            .b-advert-filter .b-advert-block .b-advert-checkbox {
+                float: left;
+                padding-right: 20px;
+                margin-bottom: 5px;
+            }
+                .b-advert-filter .b-advert-block .b-advert-checkbox label {
+                    padding-left: 10px;
+                }
+.advert-butt {
+    float: none;
+}
+.b-advert-textarea {
+    float: left;
+}
+    .b-advert-textarea textarea {
+        border-radius: 5px;
+        background-color: #FFF5D1;
+        border: 1px solid #452716;
+        padding: 5px 10px;
+        font-size: 14px;
+        width: 420px;
+        resize: none;
+        height: 400px;
+    }
 @media screen and (max-width: 1500px){
     .b-hide-title{
         opacity: 0;

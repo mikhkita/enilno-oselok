@@ -597,6 +597,20 @@ class Good extends CActiveRecord
 		}
 	}
 
+	public function getIdbyCode($good_codes,$good_type_id = NULL){
+		$criteria = new CDbCriteria();
+		$criteria->with = array("fields");
+		$criteria->condition = "fields.attribute_id=3";
+		if($good_type_id && !empty($good_type_id)) $criteria->addInCondition('good_type_id',$good_type_id); 
+		$criteria->addInCondition('fields.varchar_value',$good_codes); 
+		$temp = array();
+		$model = Good::model()->findAll($criteria);
+		foreach($model as $good) {
+			array_push($temp, $good->id);
+		}
+		return $temp;
+	}
+
 	public function beforeDelete(){
   		foreach ($this->fields as $key => $value) {
   			$value->delete();
