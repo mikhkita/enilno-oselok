@@ -7,21 +7,21 @@ class ShopController extends Controller
 	public $params = array(
 		1 => array(
 			"NAME" => "Шины",
-			"TITLE_CODE" => 50,
-			"TITLE_2_CODE" => 13,
-			"DESCRIPTION_CODE" => 74,
-			"GARANTY_CODE" => 77,
-			"PRICE_CODE" => 95,
-			"ORDER" => 120
+			"TITLE_CODE" => 66,
+			"TITLE_2_CODE" => 30,
+			"DESCRIPTION_CODE" => 72,
+			"GARANTY_CODE" => 70,
+			"PRICE_CODE" => 73,
+			"ORDER" => 63
 		),
 		2 => array(
 			"NAME" => "Диски",
-			"TITLE_CODE" => 53,
-			"TITLE_2_CODE" => 54,
-			"DESCRIPTION_CODE" => 75,
-			"GARANTY_CODE" => 78,
-			"PRICE_CODE" => 94,
-			"ORDER" => 121
+			"TITLE_CODE" => 67,
+			"TITLE_2_CODE" => 68,
+			"DESCRIPTION_CODE" => 71,
+			"GARANTY_CODE" => 69,
+			"PRICE_CODE" => 74,
+			"ORDER" => 64
 		));
 
 	public function filters()
@@ -55,7 +55,7 @@ class ShopController extends Controller
         $condition="";
         $check = $this->getChecked( (isset($_GET["arr"]))?$_GET["arr"]:array() );
         
-       	isset($_GET['type']) ? $_GET['type'] : $_GET['type'] = 1;
+       	isset($_GET['type']) ? $_GET['type'] : $_GET['type'] = 2;
 		$type = ($_GET['type']==1) ? "tires": "discs";
 
 		$criteria=new CDbCriteria();

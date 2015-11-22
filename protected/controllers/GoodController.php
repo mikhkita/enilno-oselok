@@ -13,7 +13,7 @@ class GoodController extends Controller
 	{
 		return array(
 			array('allow',
-				'actions'=>array('adminIndex','adminTest','updatePrices','adminCreate','adminUpdate','adminDelete','adminEdit','getAttrType','getAttr','adminAdverts','adminUpdateImages',"adminAddCheckbox","adminRemoveCheckbox","adminAddAllCheckbox","adminRemoveAllCheckbox",'adminUpdateAll','adminAddSomeCheckbox'),
+				'actions'=>array('adminIndex','adminTest','updatePrices','updateAuctionLinks','adminCreate','adminUpdate','adminDelete','adminEdit','getAttrType','getAttr','adminAdverts','adminUpdateImages',"adminAddCheckbox","adminRemoveCheckbox","adminAddAllCheckbox","adminRemoveAllCheckbox",'adminUpdateAll','adminAddSomeCheckbox','adminUpdateAdverts'),
 				'roles'=>array('manager'),
 			),
 			array('allow',
@@ -104,6 +104,8 @@ class GoodController extends Controller
 
 			Good::updatePrices(array($id));
 
+			Good::updateAuctionLinks();
+
 			$this->redirect( Yii::app()->createUrl('good/adminindex',array('goodTypeId'=>$goodTypeId,'partial'=>true,'GoodFilter_page' => $_GET["GoodFilter_page"])) );
 
 		}else{
@@ -137,32 +139,27 @@ class GoodController extends Controller
 			foreach ($_POST['Good_attr'] as $attr_id => $val) {
 				array_push($attrs_id, "attribute_id=".$attr_id);
 			}
-			$goods_id = array();
-			foreach ($good_ids as $key => $good_id) {
-				array_push($goods_id, "good_id='".$key."'");
-			}	
-			GoodAttribute::model()->deleteAll('('.implode(" OR ", $goods_id).') AND ('.implode(" OR ", $attrs_id).')');
+			// $goods_id = array();
+			// foreach ($good_ids as $key => $good_id) {
+			// 	array_push($goods_id, "good_id='".$key."'");
+			// }	
 
 			if( isset($_POST['Good_attr']) ){
 				$values = array();
 				foreach ($good_ids as $key => $id) {
+					$delete_variants = array();
 					foreach ($_POST['Good_attr'] as $attr_id => $value) {
-						if( isset($value[0]) && $value[0] == "-" ) continue;
- 						if(!is_array($value) || isset($value['single']) ) {
-							$tmp = array("good_id"=>$key,"attribute_id"=>$attr_id,"int_value"=>NULL,"varchar_value"=>NULL,"float_value"=>NULL,"text_value"=>NULL,"variant_id"=>NULL);
-							if(!is_array($value) && $value != ""){
-								$tmp[$this->getAttrType($model,$attr_id)] = $value;
-								$values[] = $tmp;
-							}else if(isset($value['single']) && $value['single']){
-								$tmp["variant_id"] = $value['single'];
-								$values[] = $tmp;
-							}
-						} else {
-							if(!empty($value))
-								foreach ($value as $variant)
-									$values[] = array("good_id"=>$key,"attribute_id"=>$attr_id,"int_value"=>NULL,"varchar_value"=>NULL,"float_value"=>NULL,"text_value"=>NULL,"variant_id"=>$variant);
+						if( isset($value[0]) && $value[0] == "-" ) {
+							GoodAttribute::model()->deleteAll("good_id=".$key." AND (".implode(" OR ", $attrs_id).")");
+							continue;
 						}
+						if(!empty($value))
+							foreach ($value as $variant) {
+								$values[] = array("good_id"=>$key,"attribute_id"=>$attr_id,"int_value"=>NULL,"varchar_value"=>NULL,"float_value"=>NULL,"text_value"=>NULL,"variant_id"=>$variant);
+								array_push($delete_variants, $variant);
+							}
 					}
+					GoodAttribute::model()->deleteAll("good_id=".$key." AND (".implode(" OR ", $attrs_id).") AND variant_id IN (".implode(",", $delete_variants).")");
 				}
 				$this->insertValues(GoodAttribute::tableName(),$values);
 			}
@@ -287,6 +284,10 @@ class GoodController extends Controller
 			Advert::model()->findByPk($_GET["deleteAdvert"])->delete();
 			unset($_GET["deleteAdvert"]);
 		}			
+
+		if( isset($_GET["result"]) && $_GET["result"] == "false" ){
+			return true;
+		}
 
 		$goodType = GoodType::model()->findByPk($goodTypeId);
 
@@ -524,12 +525,43 @@ class GoodController extends Controller
 	}
 
 	public function actionUpdatePrices(){
-		$ids = array(1564);
 		if(Good::updatePrices()){
 			header("HTTP/1.0 200 OK");
-			echo "success";
+			echo "Цены успешно обновлены";
 		}
 	}
+
+	public function actionUpdateAuctionLinks(){
+		if(Good::updateAuctionLinks()){
+			header("HTTP/1.0 200 OK");
+			echo "Ссылки на объявления с торгом в Томске успешно обновлены";
+		}
+	}
+
+	public function actionAdminUpdateAdverts($good_type_id = NULL, $images = NULL){
+		if( $good_type_id ){
+			$good_ids = Good::getCheckboxes($good_type_id);
+
+			if( count($good_ids) ){
+				$ids = array();
+				foreach ($good_ids as $id => $value)
+					array_push($ids, $id);
+
+				$adverts = Advert::model()->findAll(array( "condition" => "good_id IN (".implode(",", $ids).") AND t.id NOT IN (SELECT `advert_id` FROM `".Queue::tableName()."` WHERE action_id=".( ($images)?4:2 ).")", "select" => "id" ));
+
+				if( Queue::addAll($adverts, ($images)?"updateImages":"update" ) ){
+					echo "Объявления успешно добавлены в очередь на ".( (($images))?"обновление фотографий":"редактирование" );
+				}else{
+					echo "Не было добавлено ни одного объявления в очередь на обновление ".( (($images))?"обновление фотографий":"редактирование" );
+				}
+			}else{
+				echo "Не выделено ни одного товара";
+			}
+		}else{
+			echo "Не указан тип товара";
+		}
+	}
+
 	public function cityGroup() {
 		$groups = Attribute::model()->with("variants")->findAll("folder=1");
 		$cities = array();

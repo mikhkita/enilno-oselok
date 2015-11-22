@@ -1,6 +1,7 @@
 <h1><?=$this->adminMenu["cur"]->name?></h1>
 <div class="b-buttons-left">
 	<a href="<?php echo $this->createUrl('/good/updateprices')?>" class="ajax-update-prices b-butt">Обновить цены</a>
+	<a href="<?php echo $this->createUrl('/good/updateauctionlinks')?>" class="ajax-update-prices b-butt">Обновить ссылки с торгом</a>
 </div>
 <a href="<?php echo $this->createUrl('/'.$this->adminMenu["cur"]->code.'/admincreate')?>" class="ajax-form ajax-create b-butt b-top-butt">Добавить</a>
 <?php $form=$this->beginWidget('CActiveForm'); ?>

@@ -114,6 +114,7 @@ class InterpreterController extends Controller
 
 		$criteria = new CDbCriteria();
 		$criteria->condition = "good_type_id=".$inter->good_type_id;
+		$criteria->order = "rand()";
 		$criteria->limit = 30;
 		// $criteria->with = array("fields.variant");
 

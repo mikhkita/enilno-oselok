@@ -539,6 +539,17 @@ h1{
         float: left;
         margin-right: 10px;
     }
+.b-buttons-left-cont{
+
+}
+    .b-buttons-left-cont .b-butt{
+        float: left;
+        margin-right: 10px;
+    }
+    .b-buttons-left-cont div .b-butt:last-child{
+        /*margin-right: 0px;*/
+    }
+
 .b-buttons-right{
     position: absolute;
     right: 0px;

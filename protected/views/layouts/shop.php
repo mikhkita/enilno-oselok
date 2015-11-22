@@ -29,7 +29,7 @@
     <? endif; ?>-->
     <div class="b b-header">
         <div class="b-block">
-        <a href="http://koleso.tomsk.ru/"><img src="<?php echo Yii::app()->request->baseUrl; ?>/i/logo.png" alt=""></a><span class="b-top-title">Godzilla Wheels</span>
+        <a href="/"><img src="<?php echo Yii::app()->request->baseUrl; ?>/i/logo.png" alt=""></a><span class="b-top-title">Godzilla Wheels</span>
         </div>
     </div>
     <?php echo $content;?>

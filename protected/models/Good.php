@@ -130,6 +130,20 @@ class Good extends CActiveRecord
 		return true;
 	}
 
+	public function updateAuctionLinks($ids = array()){
+		$adverts = Advert::model()->with(array("place"=>array("select"=>array("id","category_id"))))->findAll("place.category_id=2047 AND type_id=2129 AND city_id=1081".( (count($ids))?" AND good_id IN (".implode(",", $ids).")":"" ));
+
+		GoodAttribute::model()->deleteAll("attribute_id=62");
+
+		$values = array();
+		foreach ($adverts as $key => $advert) {
+			if( ($advert->url != "") )
+				array_push($values, array( "good_id" => $advert->good_id, "attribute_id" => 62, "varchar_value" => "http://baza.drom.ru/".$advert->url.".html" ));
+		}
+
+		return $this->insertValues(GoodAttribute::tableName(),$values);
+	}
+
 	public function setPrices($model,$codes){
 		$tableName = GoodAttribute::tableName();
 		$sql = "INSERT INTO `$tableName` (`good_id`,`attribute_id`,`int_value`) VALUES ";
@@ -367,29 +381,26 @@ class Good extends CActiveRecord
 				Queue::addAll($update_arr,"update");
 			}
 
-			// Log::debug("isDiffAdverts ".(($isDiffAdverts)?"true":"false"));
-
 			if( $isDiffAdverts ){
 				// Удаление из очереди действий на добавление объявлений, которые нужно удалить
 				$delete_add_arr = array_udiff($adverts_with_add, $new_items, "compare");
-				// Log::debug("delete_add_arr = ".count($delete_add_arr));
+				Log::debug('$delete_add_arr = '.count($delete_add_arr));
 				Queue::delAll($delete_add_arr,"add");
 				Advert::delAll($delete_add_arr);
 
 				// Удаление из очереди действий на удаление объявлений, которые нужно оставить (тут же происходит добавление в очеред действия на добавление или редактирование)
 				$delete_delete_arr = array_uintersect($adverts_with_delete, $new_items, "compare");
-				// Log::debug("delete_delete_arr = ".count($delete_delete_arr));
+				Log::debug('$delete_delete_arr = '.count($delete_delete_arr));
 				Queue::delAll($delete_delete_arr,"delete");
 
 				// Удаление из очереди действий на редактирование объявлений, которые нужно удалить
 				$delete_update_arr = array_udiff($adverts_with_update, $new_items, "compare");
-				// Log::debug("delete_update_arr = ".count($delete_update_arr));
+				Log::debug('$delete_update_arr = '.count($delete_update_arr));
 				Queue::delAll($delete_update_arr,"update");
 
 				// Добавление в очередь действий на удаление объявлений (если у этого объявления есть в очереди действие на удаление, то не добавится действие в очередь)
 				$delete_arr = array_udiff($adverts_without_delete, $new_items, $delete_add_arr, "compare");
-				// Log::debug("delete_arr = ".count($delete_arr));
-				// Log::debug("new_items = ".count($new_items));
+				Log::debug('$delete_arr = '.count($delete_arr));
 				Queue::addAll($delete_arr,"delete");
 
 				$add = array_udiff($new_items, $this->adverts, "compare");
@@ -487,8 +498,8 @@ class Good extends CActiveRecord
 					}
 				}
 			}else{
-				Log::debug("40 ".$value->value);
-				return ($value->value != "");
+				Log::debug("40 ".$value->attribute->id." ".(($value->value != "" || $dynamic)?"true":"false") );
+				return ($value->value != "" || $dynamic);
 			}
 		}
 		return false;

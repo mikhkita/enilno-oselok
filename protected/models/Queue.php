@@ -37,6 +37,7 @@ class Queue extends CActiveRecord
         return array(
         	'next'=>array(
                 'condition'=>'state_id = 1',
+                'limit' => 1
             ),
             // 'next'=>array(
             //     'condition'=>'action_id != 3 AND state_id = 1',

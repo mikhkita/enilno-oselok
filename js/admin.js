@@ -196,7 +196,7 @@ $(document).ready(function(){
             padding: 0,
             content: '<div class="b-popup b-popup-delete"><h1>'+warning+'</h1><div class="row buttons"><input type="button" class="b-delete-yes" value="Да"><input type="button" onclick="$.fancybox.close();" value="Нет"></div></div>'
         });
-        bindDelete($(this).attr("href"),$(this).hasClass("not-ajax-delete"));
+        bindDelete($(this).attr("href"),$(this).hasClass("not-ajax-delete"),$(this).hasClass("not-result"));
         return false;
     });
 
@@ -214,7 +214,7 @@ $(document).ready(function(){
         },100);
     }
 
-    function bindDelete(url,filter){
+    function bindDelete(url,filter,setResult){
         $(document).unbind("keydown");
         $(document).bind("keydown",function( event ) {
             if ( event.which == 13 ) {
@@ -245,7 +245,8 @@ $(document).ready(function(){
                 url: url,
                 success: function(msg){
                     progress.end(function(){
-                        setResult(msg);
+                        if( setResult )
+                            setResult(msg);
                     });
                     $.fancybox.close();
                 }
@@ -289,10 +290,10 @@ $(document).ready(function(){
             allowClear: true
         });
 
-        $(".select2").change(function(){
-            if( $(this).val().indexOf("-") != -1 )
-                $(this).select2("val", "-");
-        });
+        // $(".select2").change(function(){
+        //     if( $(this).val().indexOf("-") != -1 )
+        //         $(this).select2("val", "-");
+        // });
 
         $(".select2-all").click(function() {
             var element = $(this).siblings("select.select2");
@@ -1159,24 +1160,31 @@ $(document).ready(function(){
             url: $(this).attr("href"),
             success: function(msg){
                 progress.end(function(){
-                    alert("Цены успешно обновлены");
+                    alert(msg);
                 });
             },
             error: function(){
-                alert("Ошибка обновления цен");
+                alert("Ошибка");
             }
         });
         return false;
     });
 
-    $("body").on("click",".ajax-photodoska",function(){
+    $("body").on("click",".ajax-photodoska,.ajax-request",function(){
         progress.setColor("#D26A44");
         progress.start(10);
 
-        progress.end();
-
         $.ajax({
-            url: $(this).attr("href")
+            url: $(this).attr("href"),
+            complete: function(){
+                progress.end();
+            },
+            success: function(){
+
+            },
+            error: function(){
+                alert("Ошибка");
+            }
         });
         return false;
     });

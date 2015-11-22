@@ -13,7 +13,7 @@ class QueueController extends Controller
 	{
 		return array(
 			array('allow',
-				'actions'=>array('adminIndex'),
+				'actions'=>array('adminIndex','adminToWaiting','adminDelete'),
 				'roles'=>array('manager'),
 			),
 			array('deny',
@@ -22,8 +22,25 @@ class QueueController extends Controller
 		);
 	}
 
+	public function actionAdminDelete($id = NULL){
+		if( $id )
+			Queue::model()->deleteByPk($id);
+	}
+
+	public function actionAdminToWaiting($id = NULL){
+		if( $id ){
+			$item = Queue::model()->findByPk($id);
+			$item->state_id = 1;
+			$item->save();
+		}
+	}
+
 	public function actionAdminIndex($partial = false)
 	{
+		// $adverts = Advert::model()->findAll("place_id=10 AND (type_id=2129 OR type_id=868) AND city_id=1059");
+		// foreach ($adverts as $key => $advert)
+		// 	echo "http://baza.drom.ru/".$advert->url.".html<br>";
+		// die;
 		if( !$partial ){
 			$this->layout='admin';
 		}
@@ -51,13 +68,17 @@ class QueueController extends Controller
 			$this->render('adminIndex',array(
 				'data'=>$model,
 				'filter'=>$filter,
-				'labels'=>Queue::attributeLabels()
+				'labels'=>Queue::attributeLabels(),
+				'count'=>Queue::model()->count(),
+				'error_count'=>Queue::model()->count("state_id=5")
 			));
 		}else{
 			$this->renderPartial('adminIndex',array(
 				'data'=>$model,
 				'filter'=>$filter,
-				'labels'=>Queue::attributeLabels()
+				'labels'=>Queue::attributeLabels(),
+				'count'=>Queue::model()->count(),
+				'error_count'=>Queue::model()->count("state_id=5")
 			));
 		}
 	}

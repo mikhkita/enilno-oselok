@@ -272,7 +272,6 @@ class IntegrateController extends Controller
 
 // Yahoo ----------------------------------------------------------------- Yahoo
     public function actionYahooBids(){
-        return false;
         $model = YahooCategory::model()->findAll(array("order"=>"id ASC"));
         foreach ($model as $item)
             $this->parseCategory($item,true);
@@ -280,7 +279,6 @@ class IntegrateController extends Controller
     }
 
     public function actionYahooAll(){
-        return false;
         $category = $this->getNextCategory();
         
         $this->parseCategory($category);
@@ -423,7 +421,7 @@ class IntegrateController extends Controller
     }
 
     public function getNext(){
-        Log::debug("Start");
+        // Log::debug("Start");
         $queue = Queue::model()->with("advert.good.type","advert.place","action")->next()->find();
         if( !$queue ) return false;
         $advert = $queue->advert;
@@ -493,7 +491,7 @@ class IntegrateController extends Controller
         }
 
         $drom->curl->removeCookies();
-        Log::debug("End");
+        // Log::debug("End");
         return true;
     }
 
