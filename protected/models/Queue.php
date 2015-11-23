@@ -39,6 +39,10 @@ class Queue extends CActiveRecord
                 'condition'=>'state_id = 1',
                 'limit' => 1
             ),
+            'nextStart'=>array(
+                'condition'=>"state_id = 1 AND start < '".date("Y-m-d H:i:s", time())."'",
+                'limit' => 1
+            ),
             // 'next'=>array(
             //     'condition'=>'action_id != 3 AND state_id = 1',
             // ),
@@ -57,11 +61,12 @@ class Queue extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('advert_id, action_id', 'required'),
-			// array('state', 'numerical', 'integerOnly'=>true),
+			array('state_id', 'numerical', 'integerOnly'=>true),
 			array('advert_id, action_id', 'length', 'max'=>10),
+			array('start', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, advert_id, action_id, state_id', 'safe', 'on'=>'search'),
+			array('id, advert_id, action_id, state_id, start', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -89,6 +94,7 @@ class Queue extends CActiveRecord
 			'advert_id' => 'Объявление',
 			'action_id' => 'Действие',
 			'state_id' => 'Состояние',
+			'start' => 'Время',
 		);
 	}
 
@@ -192,6 +198,14 @@ class Queue extends CActiveRecord
 		}else{
 			return Log::error("Не найдено состояние с кодом \"$code\"");
 		}
+	}
+
+	public function getNext(){
+		$queue = Queue::model()->with("advert.good.type","advert.place","action")->nextStart()->find();
+		if( !count($queue) ){
+			$queue = Queue::model()->with("advert.good.type","advert.place","action")->next()->find();
+		}
+		return $queue;
 	}
 
 	/**

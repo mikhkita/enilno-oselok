@@ -604,7 +604,7 @@ class Good extends CActiveRecord
 		if($good_type_id && !empty($good_type_id)) $criteria->addInCondition('good_type_id',$good_type_id); 
 		$criteria->addInCondition('fields.varchar_value',$good_codes); 
 		$temp = array();
-		$model = Good::model()->findAll($criteria);
+		$model = GoodFilter::model()->findAll($criteria);
 		foreach($model as $good) {
 			array_push($temp, $good->id);
 		}

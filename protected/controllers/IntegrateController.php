@@ -403,6 +403,7 @@ class IntegrateController extends Controller
         while( $this->allowed() ){
             $this->writeTime();
             if( !$this->getNext() ) sleep(5);
+            if( $debug ) return true;
         }
     }
 
@@ -422,7 +423,9 @@ class IntegrateController extends Controller
 
     public function getNext(){
         // Log::debug("Start");
-        $queue = Queue::model()->with("advert.good.type","advert.place","action")->next()->find();
+        echo time();
+        $queue = Queue::getNext();
+        return true;
         if( !$queue ) return false;
         $advert = $queue->advert;
 
