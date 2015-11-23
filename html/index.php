@@ -72,10 +72,11 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
 			</div>
 		</div>
 		<div class="b b-sub-menu gradient-orange">
-			<div class="b-block">
-				<ul class="clearfix">
-					<li><a href="#">Шины</a></li>
+			<div class="b-block clearfix">
+				<a href="#" class="b-burger icon left"></a>
+				<ul class="clearfix left">
 					<li><a href="#">Диски</a></li>
+					<li><a href="#">Шины</a></li>
 					<li><a href="#">Колеса</a></li>
 				</ul>
 			</div>
@@ -99,10 +100,56 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
 	<div class="b b-filters">
 		<div class="b-block gradient-grey main-tabs">
 			<ul class="tabs clearfix">
-				<li class="gradient-lightBlack"><a href="#tabs-tire"><span class="tire-icon icon">Подбор шин</span></a></li>
 				<li class="gradient-lightBlack"><a href="#tabs-disc"><span class="disc-icon icon">Подбор дисков</span></a></li>
+				<li class="gradient-lightBlack"><a href="#tabs-tire"><span class="tire-icon icon">Подбор шин</span></a></li>
 				<li class="gradient-lightBlack"><a href="#tabs-wheel"><span class="wheel-icon icon">Подбор Колес</span></a></li>
 			</ul>
+			<div id="tabs-disc">
+				<form action="#" method="GET">
+					<div class="filter-cont">
+						<div class="tire-type clearfix">	
+							<input id="tire-winter" type="radio" name="tire-type" value="0">
+							<label for="tire-winter">Зимние нешaafsипованные</label>
+							<input id="tire-spike" type="radio" name="tire-type" value="1">
+							<label for="tire-spike">Зимние шипованные</label>
+							<input id="tire-summer" type="radio" name="tire-type" value="2">
+							<label for="tire-summer">Летние</label>
+						</div>
+					</div>
+					<div class="filter-cont clearfix">
+						<div class="filter-item">
+							<h5>Производитель</h5>
+							<div class="input"></div>	
+						</div>
+						<div class="filter-item">
+							<h5>Тип</h5>
+							<div class="input"></div>	
+						</div>
+						<div class="filter-item">
+							<h5>Состояние</h5>
+							<div class="input"></div>	
+						</div>
+						<div class="filter-item">
+							<h5>Посадочный диаметр</h5>
+							<div class="input"></div>	
+						</div>
+					</div>
+					<div class="filter-cont clearfix">
+						<div class="filter-item">
+							<h5>Сверловка</h5>
+							<div class="input"></div>	
+						</div>
+						<div class="filter-item">
+							<h5>Ширина диска</h5>
+							<div class="input"></div>	
+						</div>
+						<div class="filter-item">
+							<h5>Вылет</h5>
+							<div class="input"></div>	
+						</div>
+					</div>
+				</form>
+			</div>
 			<div id="tabs-tire">
 				<form action="#" method="GET">
 					<div class="filter-cont">
@@ -318,52 +365,6 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
 									</label>
 								</div>
 							</div>
-						</div>
-					</div>
-					<div class="filter-cont clearfix">
-						<div class="filter-item">
-							<h5>Сверловка</h5>
-							<div class="input"></div>	
-						</div>
-						<div class="filter-item">
-							<h5>Ширина диска</h5>
-							<div class="input"></div>	
-						</div>
-						<div class="filter-item">
-							<h5>Вылет</h5>
-							<div class="input"></div>	
-						</div>
-					</div>
-				</form>
-			</div>
-			<div id="tabs-disc">
-				<form action="#" method="GET">
-					<div class="filter-cont">
-						<div class="tire-type clearfix">	
-							<input id="tire-winter" type="radio" name="tire-type" value="0">
-							<label for="tire-winter">Зимние нешaafsипованные</label>
-							<input id="tire-spike" type="radio" name="tire-type" value="1">
-							<label for="tire-spike">Зимние шипованные</label>
-							<input id="tire-summer" type="radio" name="tire-type" value="2">
-							<label for="tire-summer">Летние</label>
-						</div>
-					</div>
-					<div class="filter-cont clearfix">
-						<div class="filter-item">
-							<h5>Производитель</h5>
-							<div class="input"></div>	
-						</div>
-						<div class="filter-item">
-							<h5>Тип</h5>
-							<div class="input"></div>	
-						</div>
-						<div class="filter-item">
-							<h5>Состояние</h5>
-							<div class="input"></div>	
-						</div>
-						<div class="filter-item">
-							<h5>Посадочный диаметр</h5>
-							<div class="input"></div>	
 						</div>
 					</div>
 					<div class="filter-cont clearfix">

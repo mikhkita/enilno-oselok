@@ -219,15 +219,16 @@ input:-moz-placeholder {
 		}
 			.b-header .b-sub-menu .b-block ul {
 
-			}
+			float: right !important;}
 				.b-header .b-sub-menu .b-block ul li {
 					float: left;
-					margin-right: 47px;
-					font-size: 32px;
+					margin-right: 0px;
+					font-size: 37px;
+					margin-left: 47px;
 				}
 					.b-header .b-sub-menu .b-block ul li a{
 						font-weight: 500;
-						padding: 11px;
+						padding: 21px 20px 19px;
 					}
 					.b-header .b-sub-menu .b-block ul li:first-child a {
 						padding-left: 0;
@@ -1066,6 +1067,9 @@ padding-top: 30px;}
 .b-category .b-block .good-list .b-sort .view:before{
 	background-image: url("../i/sprite@2x.png");
 	background-size: 444px;
+}
+.b-header .b-burger{
+	display: block;
 }
 
 

@@ -188,6 +188,10 @@ Class Drom {
         return $result->id;
     }
 
+    // public function updateAdvertImages($advert_id,$params,$images){
+    //     return $this->updateAdvert($advert_id,array( "cityId" => $params["cityId"] ),$images);
+    // }
+
     // public function deleteAdverts($arr) {
     //     include_once Yii::app()->basePath.'/extensions/simple_html_dom.php';
     //     $html = str_get_html($this->curl->request('https://baza.drom.ru/bulletin/service-configure?ids='.$arr[0].'&applier=deleteBulletin'));
