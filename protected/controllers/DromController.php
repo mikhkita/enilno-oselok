@@ -114,9 +114,9 @@ class DromController extends Controller
     }
     public function actionAdminIndex(){
         $drom = new Drom();
-        $drom->setUser("wheels70","u8atas5c");
+        $drom->setUser("aotomskru","kitaev2");
         $drom->auth();
-        print_r($drom->upPaidAdverts(40426161));
+        var_dump(($drom->upPaidAdverts(31794273));
 
         $drom->curl->removeCookies();
     }

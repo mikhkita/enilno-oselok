@@ -167,8 +167,8 @@ Class Drom {
             );
             $result = iconv('windows-1251', 'utf-8', $this->curl->request("https://baza.drom.ru/bulletin/service-apply",$auction));
             $html = str_get_html($result);
-            if($html->find("div.appliedDisabled",0)->href) {
-                $id = explode("-",$html->find("div.appliedDisabled",0)->href);
+            if($html->find("div.appliedDisabled",0)->getAttribute("href")) {
+                $id = explode("-",$html->find("div.appliedDisabled",0)->getAttribute("href"));
                 $id = substr(end($id),0,-5);
                 return ( $id == $advert_id )?$advert_id:false;
             }
