@@ -625,10 +625,10 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 		.b-filters .b-block .filter-cont:last-child {
 			border-bottom: none;
 		}
-			.b-filters .b-block .filter-cont {
+			.b-filters .b-block .filter-cont .tire-type{
 				display: inline-block;
 			}
-					.b-filters .b-block .filter-cont .tire-type label[for=tire-winter] {
+					/*.b-filters .b-block .filter-cont .tire-type label[for=tire-winter] {
 						width: 400px;
 					}
 					.b-filters .b-block .filter-cont .tire-type label[for=tire-spike] {
@@ -636,7 +636,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 					}
 					.b-filters .b-block .filter-cont .tire-type label[for=tire-summer] {
 						width: 400px;
-					}
+					}*/
 				.b-filters .b-block .filter-cont .tire-type label {
 					font-size: 14px;
 					display: block;
@@ -644,7 +644,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 					font-family: "Roboto";
 					font-weight: 500;
 					color: #1c1c1c;
-					padding: 24px 0px;
+					padding: 24px 60px;
 					position: relative;
 					cursor: pointer;
 				}

@@ -152,7 +152,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
 			</div>
 			<div id="tabs-tire">
 				<form action="#" method="GET">
-					<div class="filter-cont" style="padding:0;">
+					<div class="filter-cont">
 						<div class="tire-type clearfix">	
 							<input id="tire-winter" type="radio" name="tire-type" value="0">
 							<label for="tire-winter">Зимние нешипованные</label>
