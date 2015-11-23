@@ -132,7 +132,7 @@ input:-moz-placeholder {
 				bottom: 1px;
 				margin-right: -120px;
 				width: 230px;
-				height: 114px;
+				height: 154px;
 			}
 			.b-header .b-header-main .b-block > .left{
 
@@ -151,6 +151,7 @@ input:-moz-placeholder {
 							margin-left: 6px;
 						}
 					.b-header .b-header-main .b-block > .left .right h2 {
+						display: none;
 						margin-top: 8px;
 						/* letter-spacing: 0.7px; */
 						font-weight: 100;

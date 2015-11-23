@@ -60,7 +60,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
 				</div>
 				<div class="right">
 					<div class="clearfix contacts">
-						<a href="#" class="left">+7 (999) 321-11-22</a>
+						<a href="callto:+79993211122" class="left">+7 (999) 321-11-22</a>
 						<a href="mailto:koleso@yandex.ru" class="left mail">koleso@yandex.ru</a>
 					</div>
 					<form action="#" method="GET">
