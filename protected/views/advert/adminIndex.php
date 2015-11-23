@@ -40,20 +40,22 @@
 			<th><?=$labels["city_id"]?></th>
 			<th><?=$labels["url"]?></th>
 		</tr>
-		<?if ($adverts):?>
-			<? foreach ($adverts as $name => $place): ?>
-				<? foreach ($place as $id => $advert): ?>
-				<tr>
-					<td><?=$advert->good->fields_assoc[3]->value?></td>
-					<td><?=$advert->place->category->value?></td>
-					<td><?=$advert->type->value?></td>
-					<td><?=$advert->city->value?></td>
-					<td>
-						<? if($advert->url): ?>
-						<a href="<?=$advert->getUrl();?>" target="_blank"><?=$advert->getUrl();?></a>
-						<? endif; ?>
-					</td>
-				</tr>
+		<?if ($adverts_arr):?>
+			<? foreach ($adverts_arr as $name => $place): ?>
+				<? foreach ($place as $code => $adverts): ?>
+					<? foreach ($adverts as $advert): ?>
+					<tr>
+						<td><?=$code?></td>
+						<td><?=$name?></td>
+						<td><?=$advert->type->value?></td>
+						<td><?=$advert->city->value?></td>
+						<td>
+							<? if($advert->url): ?>
+							<a href="<?=$advert->getUrl();?>" target="_blank"><?=$advert->getUrl();?></a>
+							<? endif; ?>
+						</td>
+					</tr>
+					<? endforeach; ?>
 				<? endforeach; ?>
 			<? endforeach; ?>
 		<? else:?>

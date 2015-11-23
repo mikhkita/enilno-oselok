@@ -134,7 +134,7 @@ class Advert extends CActiveRecord
 		}
 	}
 
-	public function getAdverts($params,$select = NULL){
+	public function getAdverts($params,$with = NULL,$select = NULL){
 
 		$good_type_id = array();
 		$criteria = new CDbCriteria();
@@ -143,7 +143,8 @@ class Advert extends CActiveRecord
 			$criteria->select = $select;
 			$options['pagination'] = false;
 		} else {
-			$options['pagination'] = array('pageSize' => 20);
+			$options['pagination'] = array('pageSize' => 50);
+			$criteria->with = $with;
 		}
 
 		if(isset($params['Place'])) {
@@ -166,8 +167,9 @@ class Advert extends CActiveRecord
 		if(isset($params['Attr'][58])) {
 	    	$criteria->addInCondition("city_id",$_GET['Attr'][58]);
 	   	}
+
 	   	$options['criteria'] = $criteria;
-		$dataProvider = new CActiveDataProvider('Advert', $options);
+		$dataProvider = new CActiveDataProvider(Advert::tableName(), $options);
 		return ($select) ? $dataProvider->getData() : $dataProvider;
 	}
 

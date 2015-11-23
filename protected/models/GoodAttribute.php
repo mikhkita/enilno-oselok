@@ -132,4 +132,16 @@ class GoodAttribute extends CActiveRecord
 			$this->setAttribute("value",($val != NULL)?$val:false,true);
 		}
 	}
+
+	public function getCodebyId($good_ids){
+		$criteria = new CDbCriteria();
+		$criteria->condition = "attribute_id=3";
+		$criteria->addInCondition('good_id',$good_ids); 
+		$temp = array();
+		$model = GoodAttribute::model()->findAll($criteria);
+		foreach($model as $good) {
+			$temp[$good->good_id] = $good->varchar_value;
+		}
+		return $temp;
+	}
 }
