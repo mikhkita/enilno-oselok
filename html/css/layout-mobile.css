@@ -124,7 +124,7 @@ input:-moz-placeholder {
 	/*.b-header .b-header-main {
 	}*/
 		.b-header .b-header-main .b-block {
-			padding: 24px 0 30px;
+			padding: 27px 0 30px;
 		}
 			.b-header .b-header-main .b-block .stamp {
 				position: absolute;
@@ -139,7 +139,7 @@ input:-moz-placeholder {
 			}
 				.b-header .b-header-main .b-block > .left img {
 
-				margin-top: 2px;}
+				margin-top: 2px;width: 320px;}
 				.b-header .b-header-main .b-block > .left .right {
 					margin-left: 10px;
 				}
@@ -155,18 +155,23 @@ input:-moz-placeholder {
 						/* letter-spacing: 0.7px; */
 						font-weight: 100;
 						font-size: 14px;
+						font-size: 0px;
+						left: 170px;
+						top: 15px;
 					}
 						.b-header .b-header-main .b-block > .left .right h2 a{
 							position: relative;
 							padding-left: 18px;
+							font-size: 28px;
 						}
 							.b-header .b-header-main .b-block > .left .right h2 a:before {
 								position: absolute;
 								font-size: 0;
-								width: 11px;
-								height: 16px;
-								top: -3px;
-								left: 1px;
+								width: 23px;
+								height: 33px;
+								top: -2px;
+								left: -10px;
+								background-position: -115px -195px;
 							}
 			.b-header .b-header-main .b-block > .right{
 
@@ -175,32 +180,39 @@ input:-moz-placeholder {
 
 				margin-bottom: 8px;}
 					.b-header .b-header-main .b-block > .right .contacts a {
-						font-size: 17px;
+						font-size: 32px;
 						font-weight: 300;
 						padding-left: 26px;
-						margin-right: 47px;
+						margin-right: 0px;
 						position: relative;
+						display: block;
+						float: none !important;
 					}
 					.b-header .b-header-main .b-block > .right .contacts a:before {
 						position: absolute;
 						font-size: 0;
-						width: 18px;
-						height: 17px;
-						top: 2px;
-						left: 0px;
+						width: 36px;
+						height: 34px;
+						top: 5px;
+						left: -22px;
+						background-position: -141px -196px;
 					}
 					.b-header .b-header-main .b-block > .right .contacts a.mail {
-						font-size: 14px;
-						margin-top: 2px;
+						font-size: 28px;
+						text-align: right;
+						margin-top: 17px;
 						padding-left: 32px;
 					}
 					.b-header .b-header-main .b-block > .right .contacts a.mail:before {
-						width: 21px;
-						height: 13px;
-						left: 0px;
+						width: 42px;
+						height: 26px;
+						left: 13px;
+						background-position: -1px -196px;
+						top: 4px;
 					}
 					.b-header .b-header-main .b-block > .right form {
 						font-size: 0;
+						display: none;
 					}
 						.b-header .b-header-main .b-block > .right form input{
 							width: 448px;

@@ -116,7 +116,7 @@ class DromController extends Controller
         $drom = new Drom();
         $drom->setUser("aotomskru","kitaev2");
         $drom->auth();
-        var_dump(($drom->upPaidAdverts(31794273));
+        var_dump($drom->upPaidAdverts(31794216));
 
         $drom->curl->removeCookies();
     }
