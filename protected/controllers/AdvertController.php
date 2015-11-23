@@ -25,13 +25,13 @@ class AdvertController extends Controller
 	public function actionAdminIndex($partial = false)
 	{
 		
-		$model = Place::model()->findAll();
+		$model = Place::model()->with('category','goodType')->findAll();
 		$data = array();
 		$pages;
 		foreach ($model as $key => $item) {
 			$data['Place'][$item->id] = $item->category->value." ".$item->goodType->name;
 		}
-		$model = Attribute::model()->findAllByPk(array(37,58));
+		$model = Attribute::model()->with('variants')->findAllByPk(array(37,58));
 		foreach ($model as $key => $item) {
 			$data['AttrName'][$item->id] = $item->name;
 			foreach ($item->variants as $variant) {
