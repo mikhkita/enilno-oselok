@@ -138,6 +138,43 @@ Class Drom {
         return ( $html->find('#fieldsetView',0) && $html->find('#fieldsetView',0)->getAttribute("bulletinid") == $advert_id )?$advert_id:false;
     }
     
+    public function upPaidAdverts($advert_id){
+        include_once Yii::app()->basePath.'/extensions/simple_html_dom.php';
+        
+        $begin = iconv('windows-1251', 'utf-8', $this->curl->request("https://baza.drom.ru/".$advert_id));
+        $html = str_get_html($begin);
+
+        if($html->find("a.serviceUp",0)->href) {
+            print_r("sadasd");
+            $url = "https://baza.drom.ru/bulletin/service-configure?";
+            $url_params = array(
+                'ids' => $advert_id,
+                'applier' => 'upBulletin',
+                'from' => 'viewbull.menu__upBulletin'
+            );
+
+            $url .= http_build_query($url_params);
+            $html = str_get_html(iconv('windows-1251', 'utf-8', $this->curl->request($url)));
+
+            $auction = array(
+                'return_to' => $html->find("input[name=return_to]",0)->value,
+                'applier' => $html->find("input[name=applier]",0)->value,
+                'uid' => $html->find("input[name=uid]",0)->value,
+                'price' => $html->find("input[name=price]",0)->value,
+                'order_id' => $html->find("input[name=order_id]",0)->value,
+                'bulletin['.$advert_id.']' => 'on',
+                'nextUp' => 0
+            );
+            $result = iconv('windows-1251', 'utf-8', $this->curl->request("https://baza.drom.ru/bulletin/service-apply",$auction));
+            $html = str_get_html($result);
+            if($html->find("div.appliedDisabled",0)->href) {
+                $id = explode("-",$html->find("div.appliedDisabled",0)->href);
+                $id = substr(end($id),0,-5);
+                return ( $id == $advert_id )?$advert_id:false;
+            }
+        }
+        return false;
+    }
 
     public function updateAdvert($advert_id,$params,$images = NULL) {
         if($images) {
