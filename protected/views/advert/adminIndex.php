@@ -25,7 +25,7 @@
 	    </div>
 	</div>
 	<div class="b-advert-textarea">
-		<textarea name="Codes"></textarea>
+		<textarea name="Codes"><?=$_GET['Codes']?></textarea>
 	</div>
 </div>	
 <div class="clearfix">

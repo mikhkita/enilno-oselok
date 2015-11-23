@@ -134,6 +134,43 @@ class Advert extends CActiveRecord
 		}
 	}
 
+	public function getAdverts($params,$select = NULL){
+
+		$good_type_id = array();
+		$criteria = new CDbCriteria();
+		$options = array();
+		if($select) {
+			$criteria->select = $select;
+			$options['pagination'] = false;
+		} else {
+			$options['pagination'] = array('pageSize' => 20);
+		}
+
+		if(isset($params['Place'])) {
+	    	$criteria->addInCondition("place_id",$_GET['Place']);
+	    	$model = Place::model()->findAll('id IN ('.implode(",", $params['Place']).')');
+			foreach ($model as $key => $place) {
+				$good_type_id[$place->goodType->id] = $place->goodType->id;
+			}
+		}
+		if(isset($params['Codes']) && $params['Codes']) {
+			$arr = explode(PHP_EOL,$params['Codes']);
+			foreach ($arr as $key => $value) {
+				$arr[$key] = trim($value);
+			}
+			$criteria->addInCondition("good_id",Good::getIdbyCode($arr,$good_type_id));
+		}
+		if(isset($params['Attr'][37])) {
+	    	$criteria->addInCondition("type_id",$_GET['Attr'][37]);
+	    }
+		if(isset($params['Attr'][58])) {
+	    	$criteria->addInCondition("city_id",$_GET['Attr'][58]);
+	   	}
+	   	$options['criteria'] = $criteria;
+		$dataProvider = new CActiveDataProvider('Advert', $options);
+		return ($select) ? $dataProvider->getData() : $dataProvider;
+	}
+
 	/**
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!

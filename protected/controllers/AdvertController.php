@@ -41,34 +41,7 @@ class AdvertController extends Controller
 		$data['Attr'][58] = $this->splitByRows(5,$data['Attr'][58]);
 		
 		if($_GET) {
-			$good_type_id = array();
-			$criteria = new CDbCriteria();
-			if(isset($_GET['Place'])) {
-		    	$criteria->addInCondition("place_id",$_GET['Place']);
-		    	$model = Place::model()->findAll('id IN ('.implode(",", $_GET['Place']).')');
-				foreach ($model as $key => $place) {
-					$good_type_id[$place->goodType->id] = $place->goodType->id;
-				}
-			}
-			if(isset($_GET['Codes']) && $_GET['Codes']) {
-				$arr = explode(PHP_EOL,$_GET['Codes']);
-				foreach ($arr as $key => $value) {
-					$arr[$key] = trim($value);
-				}
-				$criteria->addInCondition("good_id",Good::getIdbyCode($arr,$good_type_id));
-			}
-			if(isset($_GET['Attr'][37])) {
-		    	$criteria->addInCondition("type_id",$_GET['Attr'][37]);
-		    }
-			if(isset($_GET['Attr'][58])) {
-		    	$criteria->addInCondition("city_id",$_GET['Attr'][58]);
-		   	}
-			$dataProvider = new CActiveDataProvider('Advert', array(
-			    'criteria'=>$criteria,
-			    'pagination'=> array(
-			    	'pageSize' => 20
-			    ),
-			));
+			$dataProvider = Advert::getAdverts($_GET);
 			$pages = $dataProvider->getPagination();
 			foreach ($dataProvider->getData() as $advert) {
 				if( !isset($adverts[$advert->place->category->value]) ) $adverts[$advert->place->category->value] = array();
