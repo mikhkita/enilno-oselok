@@ -25,13 +25,13 @@ class AdvertController extends Controller
 	public function actionAdminIndex($partial = false)
 	{
 		
-		$model = Place::model()->findAll();
+		$model = Place::model()->with('category','goodType')->findAll();
 		$data = array();
 		$pages;
 		foreach ($model as $key => $item) {
 			$data['Place'][$item->id] = $item->category->value." ".$item->goodType->name;
 		}
-		$model = Attribute::model()->findAllByPk(array(37,58));
+		$model = Attribute::model()->with('variants')->findAllByPk(array(37,58));
 		foreach ($model as $key => $item) {
 			$data['AttrName'][$item->id] = $item->name;
 			foreach ($item->variants as $variant) {
@@ -41,25 +41,31 @@ class AdvertController extends Controller
 		$data['Attr'][58] = $this->splitByRows(5,$data['Attr'][58]);
 		
 		if($_GET) {
-			$dataProvider = Advert::getAdverts($_GET);
+			$dataProvider = Advert::getAdverts($_GET,array('type','city','place.category'));
 			$pages = $dataProvider->getPagination();
+			$temp = array();
 			foreach ($dataProvider->getData() as $advert) {
-				if( !isset($adverts[$advert->place->category->value]) ) $adverts[$advert->place->category->value] = array();
-				array_push($adverts[$advert->place->category->value], $advert);
+				array_push($temp, $advert->good_id);
+			}
+			$temp = GoodAttribute::getCodeById($temp);
+			foreach ($dataProvider->getData() as $i => $advert) {
+				if( !isset($adverts_arr[$advert->place->category->value]) ) $adverts_arr[$advert->place->category->value] = array();
+				if( !isset($adverts_arr[$advert->place->category->value][$temp[$advert->good_id]]) ) $adverts_arr[$advert->place->category->value][$temp[$advert->good_id]] = array();
+				array_push($adverts_arr[$advert->place->category->value][$temp[$advert->good_id]], $advert);
 			}
 			
 
 		}
 		if( !$partial ){
 			$this->render('adminIndex',array(
-				'adverts' => $adverts,
+				'adverts_arr' => $adverts_arr,
 				'data'=>$data,
 				"pages" => $pages,
 				'labels'=> Advert::attributeLabels()
 			));
 		}else{
 			$this->renderPartial('adminIndex',array(
-				'adverts' => $adverts,
+				'adverts_arr' => $adverts_arr,
 				'data'=>$data,
 				"pages" => $pages,
 				'labels'=> Advert::attributeLabels()
