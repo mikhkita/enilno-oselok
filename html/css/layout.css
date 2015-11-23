@@ -307,9 +307,10 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 					margin-left: 10px;
 				}
 					.b-header .b-header-main .b-block > .left .right h1{
+						display: none;
 						font-size: 27px;
 						font-family: "museo_sans_cyrl700";
-						color: #fff; 
+						color: #fff;
 						text-transform: uppercase;
 						letter-spacing: 1.6px;
 					}
@@ -324,6 +325,9 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 						font-family: "Roboto";
 						font-weight: 100;
 						font-size: 14px;
+						position: absolute;
+						left: 119px;
+						top: 19px;
 					}
 						.b-header .b-header-main .b-block > .left .right h2 a{
 							color: #fff;
