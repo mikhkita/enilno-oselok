@@ -572,7 +572,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 			background-position: -125px -39px;
 		}
 			.popular-category .ui-tabs-active .tire-icon:before,.main-category li:hover .tire-icon:before{
-				background-position: -25px -38px !important;
+				background-position: -2px -39px !important;
 				width: 21px;
 			}
 			.popular-category .ui-tabs-active .disc-icon:before,.main-category li:hover .disc-icon:before {
@@ -625,9 +625,18 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 		.b-filters .b-block .filter-cont:last-child {
 			border-bottom: none;
 		}
-			.b-filters .b-block .filter-cont .tire-type {
+			.b-filters .b-block .filter-cont {
 				display: inline-block;
 			}
+					.b-filters .b-block .filter-cont .tire-type label[for=tire-winter] {
+						width: 400px;
+					}
+					.b-filters .b-block .filter-cont .tire-type label[for=tire-spike] {
+						width: 400px;
+					}
+					.b-filters .b-block .filter-cont .tire-type label[for=tire-summer] {
+						width: 400px;
+					}
 				.b-filters .b-block .filter-cont .tire-type label {
 					font-size: 14px;
 					display: block;
@@ -635,7 +644,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 					font-family: "Roboto";
 					font-weight: 500;
 					color: #1c1c1c;
-					padding: 24px 60px;
+					padding: 24px 0px;
 					position: relative;
 					cursor: pointer;
 				}
@@ -875,7 +884,12 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 					.b-popular .b-block .popular-good .popular-category li a {
   						color: #5d5d5d;
   						padding: 0 17px;
-  			}
+  					}
+  						.b-popular .b-block .popular-good .popular-category li.ui-tabs-active a{
+							text-decoration: none;
+							font-weight: 500;
+  						}
+
   				.b-popular .b-block .popular-good .popular-category li:last-child {
   					border-right: none;
   				}
