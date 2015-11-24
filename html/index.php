@@ -22,6 +22,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
 	<link rel="stylesheet" href="css/reset.css" type="text/css">
 	<link rel="stylesheet" href="css/jquery.fancybox.css" type="text/css">
 	<link rel="stylesheet" href="css/slick.css" type="text/css">
+	<link rel="stylesheet" href="css/jquery-ui.css" type="text/css">
 	<link rel="stylesheet" href="css/KitAnimate.css" type="text/css">
 	<link rel="stylesheet" href="css/layout.css" type="text/css">
 
@@ -147,6 +148,20 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
 							<h5>Вылет</h5>
 							<div class="input"></div>	
 						</div>
+					</div>
+					<div class="filter-cont">
+						<div class="slide-type clearfix">
+							<div class="left">
+							<h3>Ценовой диапазон от</h3>
+							<input class="min-val price" type="text" maxlength="5" placeholder="Мин.">
+							<span class="dash">до</span>
+							<input class="max-val price" type="text" maxlength="5" placeholder="Макс.">
+							</div>
+							<div data-min="6500" data-max="9000" data-min-cur="6500" data-max-cur="9000" data-step="100" class="slider-range left"></div>
+						</div>	
+					</div>
+					<div class="filter-butt-cont">
+						<input type="submit" class="b-black-butt" value="Принять">
 					</div>
 				</form>
 			</div>

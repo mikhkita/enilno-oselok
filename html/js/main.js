@@ -122,20 +122,27 @@ $(document).ready(function(){
                     (ui.values[ 0 ] == min_val) ? min_input.val('') : min_input.val( ui.values[ 0 ] );
                     (ui.values[ 1 ] == max_val) ? max_input.val('') : max_input.val( ui.values[ 1 ] );  
                     min_text.text( ui.values[ 0 ] );
+                    $(".tt-min").text( ui.values[ 0 ] );
                     max_text.text( ui.values[ 1 ] );
+                    $(".tt-max").text( ui.values[ 1 ] );
 
                 },
                 change: function( event, ui ) {  
                     (ui.values[ 0 ] == min_val) ? min_input.val('') : min_input.val( ui.values[ 0 ] );
                     (ui.values[ 1 ] == max_val) ? max_input.val('') : max_input.val( ui.values[ 1 ] );       
                     min_text.text( ui.values[ 0 ] );
+                    $(".tt-min").text( ui.values[ 0 ] );
                     max_text.text( ui.values[ 1 ] );
+                    $(".tt-max").text( ui.values[ 1 ] );
+
                 }
             });
             (cur_min_val == min_val) ? min_input.val('') : min_input.val( cur_min_val );
             (cur_max_val == max_val) ? max_input.val('') : max_input.val( cur_max_val );
             min_text.text( cur_min_val );
+            $(".tt-min").text( cur_min_val );
             max_text.text( cur_max_val );
+            $(".tt-max").text( cur_max_val );
 
             min_input.change(function() {
             if($(this).val()=='' || (($(this).val()*1) <= min_val) )  {
@@ -219,7 +226,13 @@ $(document).ready(function(){
             closeBubble();
     });
 
-
-
+    $('#similar-slider').slick({
+        slidesToShow: 5,
+        slidesToScroll: 1,
+        prevArrow: "<span class='b-sim-nav gradient-lightBlack b-sim-left'></span>",
+        nextArrow: "<span class='b-sim-nav gradient-lightBlack b-sim-right'></span>"
+    });
+    $(".filter-cont .ui-slider-handle:eq(0)").prepend("<span class='price-tt tt-min'>"+$(".slider-range").attr("data-min-cur")+"</span>");
+    $(".filter-cont .ui-slider-handle:eq(1)").prepend("<span class='price-tt tt-max'>"+$(".slider-range").attr("data-max-cur")+"</span>");
    
 });

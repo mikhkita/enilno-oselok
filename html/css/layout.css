@@ -214,7 +214,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 	width: 116px;
 	text-transform: uppercase;
 	font-weight: 500;
-
+	position: relative;
 	background: #4d414b;
 	background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzRkNDE0YiIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMyMzFkMjMiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
 	background: -moz-linear-gradient(top,  #4d414b 0%, #231d23 100%);
@@ -246,7 +246,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 		background: -ms-linear-gradient(top,  #342b33 0%,#6b5a69 100%);
 		background: linear-gradient(to bottom,  #342b33 0%,#6b5a69 100%);
 		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#342b33', endColorstr='#6b5a69',GradientType=0 );
-		border-bottom: 2px solid #6A5A68;
+		top: 2px;
 	}
 .b-header{
 	text-align: left;
@@ -909,9 +909,9 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 .goods {
 
 }
-	.goods li {
+	.goods .gradient-grey {
 		float: left;
-		width: 160px;
+		width: 160px !important;
 		box-sizing: border-box;
 		box-shadow: 0px 0px 4.85px 0.15px rgba(32, 32, 32, 0.3);
 		border-radius: 2px;
@@ -923,17 +923,17 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 		overflow: hidden;
 	}	
 
-	.goods li:nth-child(4n) {
+	.goods .gradient-grey:nth-child(4n) {
 		margin-right: 0;
 	}
-		.goods li .good-img{
+		.goods .gradient-grey .good-img{
 			width: 140px;
 			height: 110px;
 			background-size: cover;
 			background-position: 50%;
 			margin: 15px 10px 0;
 		}
-		.goods li .params-cont {
+		.goods .gradient-grey .params-cont {
 			width: 140px;
 			padding: 12px 10px;
 			border-radius: 2px;
@@ -942,36 +942,36 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 		    -o-transition: all .3s;
 		    transition: all .3s;
 		}
-			.goods li h4{
+			.goods .gradient-grey h4{
 				font-weight: 500;
 				color: #ffbc00;
 				text-decoration: underline;
 				margin-bottom: 12px;
 			}
-			.goods li h5{
+			.goods .gradient-grey h5{
 				color: #848383;
 				font-size: 12px;
 				margin-bottom: 6px;
 			}
-				.goods li h5 span{
+				.goods .gradient-grey h5 span{
 					font-weight: 500;
 					color: #2a2b2b;
 					font-size: 14px;
 				}
-			.goods li h6{
+			.goods .gradient-grey h6{
 				color: #3c3c3c;
 				margin-top: 10px;
 			}
-			.goods li h3{
+			.goods .gradient-grey h3{
 				font-size: 12px;
 				color: #424242;
 				margin-top: 10px;
 				display: inline-block;
 			}
-				.goods li h3 span {
+				.goods .gradient-grey h3 span {
 					font-weight: 500;
 				}
-			.goods li a {
+			.goods .gradient-grey a {
 				color: #181818;
 				font-size: 12px;
 				text-decoration: none;
@@ -984,11 +984,11 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 				padding: 12px 0 9px;
 				display: inline-block;
 			}
-				.goods li a:active {
+				.goods .gradient-grey a:active {
 					border-bottom: 0px solid #FFD900;
 					margin-top: 18px;
 				}
-	.goods li:hover .params-cont{
+	.goods .gradient-grey:hover .params-cont{
 		background-color: rgba(255,255,255,0.9);
 		padding: 29px 10px 19px;
 	    -webkit-transform: translateY(-125px);
@@ -1271,7 +1271,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 					background-color: #ffc200;
 					top: 5px;
 				}
-				.slider-range .ui-state-default {
+				.slider-range .ui-slider-handle {
 					border:none;
 					background: none;
 					background-color: #fff;
@@ -1284,7 +1284,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 					margin-left: -10px;
 					cursor: pointer;
 				}
-					.slider-range .ui-state-default:before {
+					.slider-range .ui-slider-handle:before {
 						position: absolute;
 						font-size: 0;
 						content: "";
@@ -1295,7 +1295,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 						border-radius: 50%;
 						background-color: #c2c2c2;
 					}
-				.slider-range .ui-state-default.ui-state-hover {
+				.slider-range .ui-slider-handle.ui-state-hover {
 					width: 24px;
 					height: 24px;
 					border-color: rgb(255, 255, 255);
@@ -1303,14 +1303,14 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 					top: -6px;
 					margin-left: -12px;
 				}
-					.slider-range .ui-state-default.ui-state-hover:before {
+					.slider-range .ui-slider-handle.ui-state-hover:before {
 						width: 10px;
 						height: 10px;
 						top: 7px;
 						left: 7px;
 						background-color: #fff;
 					}
-				.slider-range .ui-state-default.ui-state-active {
+				.slider-range .ui-slider-handle.ui-state-active {
 					width: 20px;
 					height: 20px;
 					border-color: rgb(255, 255, 255);
@@ -1318,32 +1318,79 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 					top: -4px;
 					margin-left: -11px;
 				}
-					.slider-range .ui-state-default.ui-state-active:before {
+					.slider-range .ui-slider-handle.ui-state-active:before {
 						width: 8px;
 						height: 8px;
 						top: 6px;
 						left: 6px;
 						background-color: #fff;
 					}
-					.b-category .b-block .grey-block .filter-block .slide-type {
+				.filter-cont .slider-range .price-tt {
+					font-size: 14px;
+					font-weight: 500;
+					padding: 6px 7px 4px;
+					position: absolute;
+					top: -38px;
+					left: -15px;
+					background-color: #fff;
+					border: 2px solid #cbcbcb;
+					border-radius: 2px;
+				}
+				.filter-cont .slider-range .price-tt:before {
+					position: absolute;
+					font-size: 0;
+					content: "";
+					background-image: url("../i/price-triangle.png");
+					width: 15px;
+					height: 9px;
+					left: calc(50% - 8px);
+					bottom: -9px;
+				}
+				.slider-range .ui-slider-handle.ui-state-hover .price-tt {
+					left: -12px;
+				}
+				.slider-range .ui-slider-handle.ui-state-active .price-tt {
+					left: -14px;
+				}
+				.filter-cont .slide-type {
+					margin-top: 22px;
+				}
+				.filter-cont .slide-type .slider-range {
+					margin-top: 25px;
+					margin-left: 45px;
+					margin-bottom: 15px;
+					width: 490px;
+				}
+					.slide-type {
 						text-align: left;
 					}
-						.b-category .b-block .grey-block .filter-block .slide-type .slider-range {
-							width: 190px;
-							/* margin-left: 5px; */
+						.slide-type h3 {
+							display: inline-block;
+							margin-right: 12px;
+							font-weight: 500;	
+						}
+						.slide-type .slider-range {
+							width: 190px;	
 							margin-top: 22px;
 						}
 
-						.b-category .b-block .grey-block .filter-block .slide-type input{
+						.slide-type input{
 							width: 80px;
 							box-sizing: border-box;
 							border: 2px solid #d7d7d7;
 							padding: 7px 0 6px;
 							text-align: center;
 						}
-						.b-category .b-block .grey-block .filter-block .slide-type .dash {
+						.slide-type .dash {
 							margin: 0 12px;
+							color: #1c1c1c;
+							font-size: 14px;
+							font-weight: 500;	
 						}
+				.b-filters .filter-butt-cont {
+					text-align: right;
+					padding: 18px 29px;
+				}
 				.b-category .b-block .grey-block .filter-block .filter-butt-cont {
 					margin-top: 35px;
 					width: 190px;
@@ -1586,7 +1633,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 					font-weight: 500;
 					border-radius: 2px;
 					border-bottom: 2px solid #f69303;
-					padding: 11px 0;
+					padding: 12px 0 10px;
 					text-transform: uppercase;
 				}
 				.good-detail .b-block .detail-wrap .detail-price h5,.good-detail .b-block .detail-wrap .detail-price h6{
@@ -1632,10 +1679,11 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 			}
 			.good-detail .b-block .main-tabs .desc-tabs li span {
 				position: absolute;
-				bottom: -12px;
+				bottom: -10px;
 				overflow: hidden;
 				width: 14px;
 				height: 10px;
+				left: calc(50% - 7px);
 				vertical-align: middle;
 				-webkit-transform: translateZ(0);
 				transform: translateZ(0);
@@ -1657,14 +1705,24 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 				left: calc(50% - 10px);
 				bottom: 10px;
 				border-width: 14px 10px 0px 10px;
-				border-color: #e1e1e1 transparent transparent transparent;
+				border-color: #3C363C transparent transparent transparent;
 			}
 
 				.good-detail .b-block .main-tabs .desc-tabs li a {
 					text-decoration: none;
-					padding: 11px 0;
+					padding: 12px 0 10px;
 					text-transform: uppercase;
 					font-weight: 500;
+				}
+				.good-detail .b-block .main-tabs .desc-tabs li.ui-state-active {
+					margin-top: 2px;
+					background: rgb(83,79,89);
+					background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzUzNGY1OSIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMzNzM0M2IiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
+					background: -moz-linear-gradient(top,  rgba(83,79,89,1) 0%, rgba(55,52,59,1) 100%);
+					background: -webkit-linear-gradient(top,  rgba(83,79,89,1) 0%,rgba(55,52,59,1) 100%);
+					background: linear-gradient(to bottom,  rgba(83,79,89,1) 0%,rgba(55,52,59,1) 100%);
+					filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#534f59', endColorstr='#37343b',GradientType=0 );
+					border-bottom: none;
 				}
 				.good-detail .b-block .main-tabs .desc-tabs li.ui-state-active a {
 					color: #fff;
@@ -1683,7 +1741,38 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 				text-transform: none;
 
 			}
+			.good-detail .b-block .goods .gradient-grey {
+				margin: 5px 16px;
+			}
+			#similar-slider .b-sim-nav {
+				position: absolute;
+				right: 53px;
+				top: -50px;
+				width: 29px;
+				height: 29px;
+				border-bottom: 2px solid #131213;
+				border-radius: 3px;
+				cursor: pointer;
+				
+			}
+				#similar-slider .b-sim-nav:before {
+					position: absolute;
+					font-size: 0;
+					content: "";
+					width: 5px;
+					height: 6px;
+					background-position: -205px -100px;
+				}
+				#similar-slider .b-sim-nav:active {
+					top: -48px;
+					border-bottom: none;
+				}
+				#similar-slider .b-sim-nav.b-sim-right {
+					right: 16px;
+				}
+
 	
+
 
 .icon:before,			
 .b-filters .b-block .filter-cont .tire-type label:before,
@@ -1696,7 +1785,8 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 .b-category .b-block .grey-block .filter-block .tire-type label:before,
 .navigation li:first-child a:before,
 .b-category .b-block .good-list .b-sort .view:before,
-.good-detail .b-block .detail-wrap .detail-price h6 span:before{
+.good-detail .b-block .detail-wrap .detail-price h6 span:before,
+#similar-slider .b-sim-nav:before{
 	background-image: url("../i/sprite.png");
 }
 
@@ -1712,7 +1802,8 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 	.b-category .b-block .grey-block .filter-block .tire-type label:before,
 	.navigation li:first-child a:before,
 	.b-category .b-block .good-list .b-sort .view:before,
-	.good-detail .b-block .detail-wrap .detail-price h6 span:before{
+	.good-detail .b-block .detail-wrap .detail-price h6 span:before,
+	#similar-slider .b-sim-nav:before{
 		background-image: url("../i/sprite@2x.png");
 		background-size: 222px;
 	}

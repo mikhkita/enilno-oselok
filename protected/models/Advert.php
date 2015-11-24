@@ -10,6 +10,7 @@
  * @property string $url
  * @property string $type_id
  * @property string $city_id
+ * @property string $login
  */
 class Advert extends CActiveRecord
 {
@@ -32,9 +33,10 @@ class Advert extends CActiveRecord
 			array('good_id, place_id, type_id, city_id', 'required'),
 			array('good_id, place_id, type_id, city_id', 'length', 'max'=>10),
 			array('url', 'length', 'max'=>255),
+			array('login', 'length', 'max'=>20),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, good_id, place_id, url, type_id, city_id', 'safe', 'on'=>'search'),
+			array('id, good_id, place_id, url, type_id, city_id, login', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -66,6 +68,7 @@ class Advert extends CActiveRecord
 			'url' => 'Ссылка',
 			'type_id' => 'Тип объявления',
 			'city_id' => 'Город',
+			'login' => 'Логин',
 		);
 	}
 
@@ -93,6 +96,7 @@ class Advert extends CActiveRecord
 		$criteria->compare('url',$this->url,true);
 		$criteria->compare('type_id',$this->type_id,true);
 		$criteria->compare('city_id',$this->city_id,true);
+		$criteria->compare('login',$this->login,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -183,7 +187,7 @@ class Advert extends CActiveRecord
 	{
 		return parent::model($className);
 	}
-
+	
 	public function beforeDelete(){
   		foreach ($this->queue as $key => $queue) {
   			$queue->delete();

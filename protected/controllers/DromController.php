@@ -62,6 +62,26 @@ class DromController extends Controller
             ),
         );
     }
+    public function actionAdminLogin() {
+
+        $criteria = new CDbCriteria();
+        $criteria->condition = "login IS NULL";
+        $criteria->limit = 100;
+        $adverts = Advert::model()->findAll($criteria);
+        foreach ($adverts as $advert) {
+
+            $dynamic = $this->getDynObjects(array(
+                57 => $advert->place->category_id,
+                38 => $advert->city_id,
+                37 => $advert->type_id
+            ));
+            $fields = Place::getValues(Place::getInters($advert->place->category_id,$advert->good->type->id),$advert->good,$dynamic);
+            $advert->login = $fields["login"];
+            $advert->save();
+        }
+        
+    }
+     
     public function actionAdminAddCities() {
         $goods = Advert::model()->findAll("type_id=2129");
         $arr = array();
