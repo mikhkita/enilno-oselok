@@ -13,7 +13,7 @@ class QueueController extends Controller
 	{
 		return array(
 			array('allow',
-				'actions'=>array('adminIndex','adminToWaiting','adminDelete'),
+				'actions'=>array('adminIndex','adminToWaiting','adminDelete','adminStart','adminStop','adminReturnAll','adminFreezeFree','adminUnfreezeAll'),
 				'roles'=>array('manager'),
 			),
 			array('deny',
@@ -25,6 +25,33 @@ class QueueController extends Controller
 	public function actionAdminDelete($id = NULL){
 		if( $id )
 			Queue::model()->deleteByPk($id);
+	}
+
+	public function actionAdminStart(){
+		file_put_contents(Yii::app()->basePath."/data/queue.txt", "1");
+		file_put_contents(Yii::app()->basePath."/data/queue_time.txt", "0");
+	}
+
+	public function actionAdminStop(){
+		file_put_contents(Yii::app()->basePath."/data/queue.txt", "2");
+	}
+
+	public function actionAdminReturnAll(){
+		Queue::model()->updateAll(['state_id' => 1], 'state_id = 3');
+	}
+
+	public function actionAdminFreezeFree(){
+		$queue = Queue::model()->with(array("advert"=>array("select"=>array("id","type_id"))))->findAll('state_id = 1 AND advert.type_id=869');
+		$ids = array();
+        foreach ($queue as $key => $item) {
+            array_push($ids, $item->id);
+        }
+
+		Queue::model()->updateAll(['state_id' => 4], 'id IN ('.implode(",", $ids).')');
+	}
+
+	public function actionAdminUnfreezeAll(){
+		Queue::model()->updateAll(['state_id' => 1], 'state_id = 4');
 	}
 
 	public function actionAdminToWaiting($id = NULL){
@@ -47,19 +74,8 @@ class QueueController extends Controller
 		$filter = new Queue('filter');
 		$criteria = new CDbCriteria();
 
-		if (isset($_GET['Queue']))
-        {
-            $filter->attributes = $_GET['Queue'];
-            foreach ($_GET['Queue'] AS $key => $val)
-            {
-                if ($val != '')
-                {
-                    $criteria->addSearchCondition($key, $val);
-                }
-            }
-        }
-
         $criteria->order = 't.id ASC';
+        $criteria->condition = 'state_id!=4';
         $criteria->limit = 50;
 
         $model = Queue::model()->with("advert.good.fields.variant","advert.good.fields.attribute","advert.place.category","advert.city","advert.type","state")->findAll($criteria);
@@ -70,7 +86,9 @@ class QueueController extends Controller
 				'filter'=>$filter,
 				'labels'=>Queue::attributeLabels(),
 				'count'=>Queue::model()->count(),
-				'error_count'=>Queue::model()->count("state_id=5")
+				'waiting_count'=>Queue::model()->count("state_id=1"),
+				'error_count'=>Queue::model()->count("state_id=3"),
+				'freeze_count'=>Queue::model()->count("state_id=4")
 			));
 		}else{
 			$this->renderPartial('adminIndex',array(
@@ -78,7 +96,9 @@ class QueueController extends Controller
 				'filter'=>$filter,
 				'labels'=>Queue::attributeLabels(),
 				'count'=>Queue::model()->count(),
-				'error_count'=>Queue::model()->count("state_id=5")
+				'waiting_count'=>Queue::model()->count("state_id=1"),
+				'error_count'=>Queue::model()->count("state_id=3"),
+				'freeze_count'=>Queue::model()->count("state_id=4")
 			));
 		}
 	}

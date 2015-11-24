@@ -423,9 +423,9 @@ class IntegrateController extends Controller
 
     public function getNext(){
         // Log::debug("Start");
-        echo time();
+        // echo time();
         $queue = Queue::getNext();
-        return true;
+        // return true;
         if( !$queue ) return false;
         $advert = $queue->advert;
 
@@ -453,7 +453,7 @@ class IntegrateController extends Controller
         $drom = new Drom();
         $drom->setUser($account->login, $account->password);
         $drom->auth();
-
+        
         switch ($queue->action->code) {
             case 'delete':
 

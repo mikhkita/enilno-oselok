@@ -1,5 +1,11 @@
 <h1><?=$this->adminMenu["cur"]->name?></h1>
-<p align="left">Всего объявлений: <?=$count?>. С ошибкой выполнения: <?=$error_count?></p>
+<div class="b-buttons-left-cont clearfix">
+	<a href="<?php echo $this->createUrl('/queue/adminstart')?>" class="ajax-request b-butt">Старт</a>
+	<a href="<?php echo $this->createUrl('/queue/adminstop')?>" class="ajax-request b-butt">Стоп</a>
+	<a href="<?php echo $this->createUrl('/queue/adminreturnall')?>" class="ajax-request b-butt right">Вернуть все в очередь</a>
+	<a href="<?php echo $this->createUrl('/queue/adminfreezefree')?>" class="ajax-request b-butt right">Отложить бесплатные</a>
+</div>
+<p align="left" style="margin-top: 30px;">Всего объявлений: <?=$count?>. В очереди: <?=$waiting_count?>. С ошибкой выполнения: <?=$error_count?> <span class="right">Отложено: <?=$freeze_count?></span><?if($freeze_count):?><a href="<?php echo $this->createUrl('/queue/adminunfreezeall')?>" class="ajax-request right" style="margin-right: 20px;">Вернуть отложенное</a><?endif;?></p>
 <?php $form=$this->beginWidget('CActiveForm'); ?>
 	<table class="b-table" border="1" id="b-live" data-delay="3" data-url="<?php echo Yii::app()->createUrl('/'.$this->adminMenu["cur"]->code.'/adminindex',array("partial"=>'true'))?>">
 		<tr>

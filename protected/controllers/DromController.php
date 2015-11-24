@@ -113,12 +113,17 @@ class DromController extends Controller
         }
     }
     public function actionAdminIndex(){
-        $drom = new Drom();
-        $drom->setUser("aotomskru","kitaev2");
-        $drom->auth();
-        var_dump($drom->upPaidAdverts(31794216));
+        // $queue = Queue::model()->with("advert")->findAll('state_id = 4 AND action_id = 1 AND advert.type_id!=869');
+        // foreach ($queue as $key => $item) {
+        //     $item->state_id = 1;
+        //     $item->save();
+        // }
+        // $drom = new Drom();
+        // $drom->setUser("aotomskru","kitaev2");
+        // $drom->auth();
+        // var_dump($drom->upPaidAdverts(31794221));
 
-        $drom->curl->removeCookies();
+        // $drom->curl->removeCookies();
     }
 
 
