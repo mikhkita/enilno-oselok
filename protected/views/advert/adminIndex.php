@@ -19,7 +19,7 @@
 		<div class="b-group-vars">
 	        <? foreach ($data['Attr'][58] as $key => $vars): ?>
 	            <div class="b-group-col">
-	                <?=CHTML::checkBoxList("Attr[58]", $_GET['Attr'][58], $vars, array("separator"=>"","template"=>"<div>{input}{label}</div>")); ?>
+	                <?=CHTML::checkBoxList("Attr[58]", $_GET['Attr'][58], $vars, array("separator"=>"","baseID"=>"arr".$key,"template"=>"<div>{input}{label}</div>")); ?>
 	            </div>
 	        <? endforeach; ?>
 	    </div>
