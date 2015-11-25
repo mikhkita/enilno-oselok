@@ -10,7 +10,7 @@ Class Resize {
     function __construct($fileName) {
 
         $this->image = $this->openImage($fileName);
-        // die($fileName);
+        // die($this->image );
         $this->width  = imagesx($this->image);
         $this->height = imagesy($this->image);
     }
@@ -34,6 +34,27 @@ Class Resize {
                 break;
         }
         return $img;
+    }
+
+    public function resizeImageAvito($option="auto", $newWidth = NULL, $newHeight = NULL) {
+     
+        // *** Get optimal width and height - based on $option
+        $img_ratio = $this->width/$this->height;
+        $newWidth = rand(960,1280);
+        $newHeight = round($newWidth*$img_ratio);
+        $optionArray = $this->getDimensions($newWidth, $newHeight, strtolower($option));
+     
+        $optimalWidth  = $optionArray['optimalWidth'];
+        $optimalHeight = $optionArray['optimalHeight'];
+     
+        // *** Resample - create image canvas of x, y size
+        $this->imageResized = imagecreatetruecolor($optimalWidth, $optimalHeight);
+        imagecopyresampled($this->imageResized, $this->image, 0, 0, 0, 0, $optimalWidth, $optimalHeight, $this->width, $this->height);
+     
+        // *** if option is 'crop', then crop too
+        if ($option == 'crop') {
+            $this->crop($optimalWidth, $optimalHeight, $newWidth, $newHeight);
+        }
     }
 
     public function resizeImage($newWidth, $newHeight, $option="auto") {
