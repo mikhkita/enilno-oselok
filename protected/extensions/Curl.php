@@ -11,6 +11,7 @@ Class Curl {
         $this->removeCookies();
         if($proxy !== NULL) {
             $this->proxySet($proxy);
+            $this->checkProxy();
         }
     }
 
@@ -44,21 +45,36 @@ Class Curl {
 
     public function proxySet($proxy) {
         $proxy = explode("@", $proxy);
+        $this->proxy_login = $proxy[0];
+        $this->proxy_ip = $proxy[1];
+    }
+
+    public function checkProxy(){
+        include_once Yii::app()->basePath.'/extensions/simple_html_dom.php';
+
         $ch = curl_init();
-        $url = "https://2ip.ru/";
+        $url = "http://pr-cy.ru/browser-details/";
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1); 
-        curl_setopt($ch, CURLOPT_PROXY, $proxy[1]);
-        curl_setopt($ch, CURLOPT_PROXYUSERPWD, $proxy[0]); 
-        $html = str_get_html(curl_exec( $ch ));
+        curl_setopt($ch, CURLOPT_PROXY, $this->proxy_ip);
+        curl_setopt($ch, CURLOPT_PROXYUSERPWD, $this->proxy_login); 
+        echo $this->proxy_ip." ".$this->proxy_login;
+        $result = curl_exec( $ch );
+        print_r($result);
+        die();
+        $html = str_get_html($result);
         $ip = $html->find('#d_clip_button',0)->plaintext;
         $temp_ip = explode(":", $proxy[1]);
         if( $ip == $temp_ip[0]) {
-            $this->$proxy_login = $proxy[0];
-            $this->$proxy_ip = $proxy[1];
+            Log::debug("Прокси ".$ip." успешно установлен");
+            return true;
+        }else{
+            Log::debug("Прокси ".$temp_ip[0]." не был установлен. Выдало ".$id);
+            return false;
         }
     }
+
     public function proxyUnset() {
         $this->$proxy_login = NULL;
         $this->$proxy_ip = NULL;
