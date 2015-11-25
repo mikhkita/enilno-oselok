@@ -30,6 +30,7 @@ Class Avito {
     }
 
     public function addAdvert($params,$images = NULL){
+    	print_r($params);
         include_once Yii::app()->basePath.'/extensions/simple_html_dom.php';
         if($images !== NULL) {
         	$params = $this->addImages($params,$images);
@@ -113,8 +114,15 @@ Class Avito {
         	$img = array();
             foreach ($images as $key => $image_path) {
             	if($key == 5) break;
-                array_push($img, json_decode($this->curl->request("https://www.avito.ru/additem/image",array('image' => new CurlFile(Yii::app()->basePath.DIRECTORY_SEPARATOR.'..'.$image_path))))->id);
+            	$filename = Yii::app()->params['tempFolder']."/".md5(time().rand()).".jpg";
+	            $resizeObj = new Resize(Yii::app()->basePath.DIRECTORY_SEPARATOR.'..'.$image_path);
+	            $resizeObj -> resizeImageAvito();
+	            $quality = rand(65,95);
+	            $resizeObj -> saveImage($filename, $quality);
+                array_push($img, json_decode($this->curl->request("https://www.avito.ru/additem/image",array('image' => new CurlFile($filename))))->id);
+            	// unlink($filename);
             }
+            shuffle($img);
             foreach ( $img as $i => $image) {
 				$params['images['.$i.']'] = $image;
 			}
