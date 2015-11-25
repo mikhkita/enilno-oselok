@@ -849,10 +849,10 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
 		</div>
 	</div>
 <div style="display:none;">
-	<div id="b-popup-1">
-		<div class="for_all b-popup" >
-			<h3>Оставьте заявку</h3>
-			<h4>и наши специалисты<br>свяжутся с Вами в ближайшее время</h4>
+	<div id="b-popup-callback">
+		<div class="for_all b-popup">
+			<h3>Заказать звонок</h3>
+			<h4>Или оставьте заявку и мы Вам перезвоним в ближайшее время:</h4>
 			<form action="kitsend.php" method="POST" id="b-form-1" data-block="#b-popup-1">
 				<div class="b-popup-form">
 					<label for="name">Введите Ваше имя</label>
