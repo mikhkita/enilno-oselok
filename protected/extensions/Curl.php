@@ -52,25 +52,24 @@ Class Curl {
     public function checkProxy(){
         include_once Yii::app()->basePath.'/extensions/simple_html_dom.php';
 
-        $ch = curl_init();
-        $url = "http://pr-cy.ru/browser-details/";
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1); 
-        curl_setopt($ch, CURLOPT_PROXY, $this->proxy_ip);
-        curl_setopt($ch, CURLOPT_PROXYUSERPWD, $this->proxy_login); 
-        echo $this->proxy_ip." ".$this->proxy_login;
-        $result = curl_exec( $ch );
-        print_r($result);
-        die();
-        $html = str_get_html($result);
-        $ip = $html->find('#d_clip_button',0)->plaintext;
-        $temp_ip = explode(":", $proxy[1]);
+        $i = 0;
+        do {
+            $i++;
+            $result = $this->request("http://www.seogadget.ru/location");
+
+            $html = str_get_html($result);
+        } while ( !is_object($html) && $i < 5 );
+
+        $ip = $html->find('.url',0)->value;
+        echo $i."<br>";
+
+        $temp_ip = explode(":", $this->proxy_ip);
+        print_r($ip." ".$temp_ip[0]);
         if( $ip == $temp_ip[0]) {
             Log::debug("Прокси ".$ip." успешно установлен");
             return true;
         }else{
-            Log::debug("Прокси ".$temp_ip[0]." не был установлен. Выдало ".$id);
+            Log::debug("Прокси ".$temp_ip[0]." не был установлен. Выдало ".$ip);
             return false;
         }
     }

@@ -440,21 +440,31 @@ class IntegrateController extends Controller
         ));
 
         $fields = Place::getValues(Place::getInters($advert->place->category_id,$advert->good->type->id),$advert->good,$dynamic);
-        $account = $this->getDromAccount($fields["login"]);
+
+        $images = $this->getImages($advert->good);
+
+        if( $place_name == "DROM" ){
+            $account = $this->getDromAccount($fields["login"]);
+            $place = new Drom();
+            $fields["contacts"] = $account->phone;
+        }else if( $place_name == "AVITO" ){
+            $account = $this->getAvitoAccount($fields["login"]);
+            $place = new Avito();
+            $fields["phone"] = $account->phone;
+            $fields["email"] = $account->email;
+            $fields["seller_name"] = $account->name;
+        }
+
         if( !$account ){
             Log::error("Не найден пользователь с логином \"$login\"");
             $queue->setState("error");
             return true;
         }
-        if( $place_name == "DROM" ){
-            $place = new Drom();
-        }else if( $place_name == "AVITO" ){
-            $place = new Avito();
-        }
-        $images = $this->getImages($advert->good);
-        $fields["contacts"] = $account->phone;
-        $fields = Drom::self()->generateFields($fields,$advert->good->good_type_id);
 
+        print_r($fields);
+        die();
+
+        $fields = $place->generateFields($fields,$advert->good->good_type_id);
         
         $place->setUser($account->login, $account->password);
         $place->auth();
@@ -490,7 +500,7 @@ class IntegrateController extends Controller
                 break;
             case 'payUp':
 
-                Log::debug("Обновление фотографий ".$advert->good->fields_assoc[3]->value." в аккаунте ".$account->login);
+                Log::debug("Платное поднятие ".$advert->good->fields_assoc[3]->value." в аккаунте ".$account->login);
                 $result = $place->upPaidAdverts($advert->url);
 
                 break;

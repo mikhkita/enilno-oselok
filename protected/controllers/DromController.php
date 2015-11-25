@@ -161,7 +161,8 @@ class DromController extends Controller
             'price' => 1000
         );
         $images = $this->getImages($advert->good);
-        
+        print_r($fields);
+        die();
 
 
         $avito = new Avito();
