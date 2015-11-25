@@ -384,23 +384,23 @@ class Good extends CActiveRecord
 			if( $isDiffAdverts ){
 				// Удаление из очереди действий на добавление объявлений, которые нужно удалить
 				$delete_add_arr = array_udiff($adverts_with_add, $new_items, "compare");
-				Log::debug('$delete_add_arr = '.count($delete_add_arr));
+				// Log::debug('$delete_add_arr = '.count($delete_add_arr));
 				Queue::delAll($delete_add_arr,"add");
 				Advert::delAll($delete_add_arr);
 
 				// Удаление из очереди действий на удаление объявлений, которые нужно оставить (тут же происходит добавление в очеред действия на добавление или редактирование)
 				$delete_delete_arr = array_uintersect($adverts_with_delete, $new_items, "compare");
-				Log::debug('$delete_delete_arr = '.count($delete_delete_arr));
+				// Log::debug('$delete_delete_arr = '.count($delete_delete_arr));
 				Queue::delAll($delete_delete_arr,"delete");
 
 				// Удаление из очереди действий на редактирование объявлений, которые нужно удалить
 				$delete_update_arr = array_udiff($adverts_with_update, $new_items, "compare");
-				Log::debug('$delete_update_arr = '.count($delete_update_arr));
+				// Log::debug('$delete_update_arr = '.count($delete_update_arr));
 				Queue::delAll($delete_update_arr,"update");
 
 				// Добавление в очередь действий на удаление объявлений (если у этого объявления есть в очереди действие на удаление, то не добавится действие в очередь)
 				$delete_arr = array_udiff($adverts_without_delete, $new_items, $delete_add_arr, "compare");
-				Log::debug('$delete_arr = '.count($delete_arr));
+				// Log::debug('$delete_arr = '.count($delete_arr));
 				Queue::addAll($delete_arr,"delete");
 
 				$add = array_udiff($new_items, $this->adverts, "compare");

@@ -89,7 +89,8 @@ class QueueController extends Controller
 				'count'=>Queue::model()->count(),
 				'waiting_count'=>Queue::model()->count("state_id=1"),
 				'error_count'=>Queue::model()->count("state_id=3"),
-				'freeze_count'=>Queue::model()->count("state_id=4")
+				'freeze_count'=>Queue::model()->count("state_id=4"),
+				'start_count'=>Queue::model()->count("start IS NOT NULL")
 			));
 		}else{
 			$this->renderPartial('adminIndex',array(
@@ -99,7 +100,8 @@ class QueueController extends Controller
 				'count'=>Queue::model()->count(),
 				'waiting_count'=>Queue::model()->count("state_id=1"),
 				'error_count'=>Queue::model()->count("state_id=3"),
-				'freeze_count'=>Queue::model()->count("state_id=4")
+				'freeze_count'=>Queue::model()->count("state_id=4"),
+				'start_count'=>Queue::model()->count("start IS NOT NULL")
 			));
 		}
 	}

@@ -9,8 +9,8 @@ Class Avito {
         2 => 10046
     );
     
-    function __construct() {
-        $this->curl = new Curl();
+    function __construct($proxy = NULL) {
+        $this->curl = new Curl($proxy);
     }
 
     public function setUser($login,$password){

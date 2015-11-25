@@ -429,6 +429,8 @@ class IntegrateController extends Controller
         if( !$queue ) return false;
         $advert = $queue->advert;
 
+        $place_name = $this->getPlaceName($advert->place->category_id);
+
         $queue->setState("processing");
 
         $dynamic = $this->getDynObjects(array(
@@ -444,21 +446,24 @@ class IntegrateController extends Controller
             $queue->setState("error");
             return true;
         }
-
+        if( $place_name == "DROM" ){
+            $place = new Drom();
+        }else if( $place_name == "AVITO" ){
+            $place = new Avito();
+        }
+        $images = $this->getImages($advert->good);
         $fields["contacts"] = $account->phone;
         $fields = Drom::self()->generateFields($fields,$advert->good->good_type_id);
 
-        $images = $this->getImages($advert->good);
-
-        $drom = new Drom();
-        $drom->setUser($account->login, $account->password);
-        $drom->auth();
+        
+        $place->setUser($account->login, $account->password);
+        $place->auth();
         
         switch ($queue->action->code) {
             case 'delete':
 
                 Log::debug("Удаление ".$advert->good->fields_assoc[3]->value." в аккаунте ".$account->login);
-                $result = $drom->deleteAdvert($advert->url);
+                $result = $place->deleteAdvert($advert->url);
                 if( $result )
                     $advert->delete();
 
@@ -466,7 +471,7 @@ class IntegrateController extends Controller
             case 'add':
 
                 Log::debug("Выкладка ".$advert->good->fields_assoc[3]->value." в аккаунт ".$account->login);
-                $result = $drom->addAdvert($fields,$images);
+                $result = $place->addAdvert($fields,$images);
                 if( $result )
                     $advert->setUrl($result);
 
@@ -474,19 +479,19 @@ class IntegrateController extends Controller
             case 'update':
 
                 Log::debug("Редактирование ".$advert->good->fields_assoc[3]->value." в аккаунте ".$account->login);
-                $result = $drom->updateAdvert($advert->url,$fields);
+                $result = $place->updateAdvert($advert->url,$fields);
 
                 break;
             case 'updateImages':
 
                 Log::debug("Обновление фотографий ".$advert->good->fields_assoc[3]->value." в аккаунте ".$account->login);
-                $result = $drom->updateAdvert($advert->url,$fields,$images);
+                $result = $place->updateAdvert($advert->url,$fields,$images);
 
                 break;
             case 'payUp':
 
                 Log::debug("Обновление фотографий ".$advert->good->fields_assoc[3]->value." в аккаунте ".$account->login);
-                $result = $drom->upPaidAdverts($advert->url);
+                $result = $place->upPaidAdverts($advert->url);
 
                 break;
         }
@@ -499,9 +504,27 @@ class IntegrateController extends Controller
             $queue->setState("error");
         }
 
-        $drom->curl->removeCookies();
+        $place->curl->removeCookies();
         // Log::debug("End");
         return true;
+    }
+
+    public function actionTest(){
+        $place = new Avito("admin:4815162342@185.63.191.103:1212");
+    }
+
+    public function getPlaceName($place_id){
+        switch ($place_id) {
+            case 2047:
+                return "DROM";
+                break;
+            case 2048:
+                return "AVITO";
+                break;
+            default:
+                return "UNDEFINED";
+                break;
+        }
     }
 
     public function deleteAdverts(){

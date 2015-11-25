@@ -147,14 +147,14 @@ class Queue extends CActiveRecord
 	public function addAll($adverts = array(), $code = false, $offset = 0, $interval = 0){
 		if( count($adverts) && $code ){
 			$start = time() + $offset;
-			Log::debug($offset);
-			Log::debug($interval);
 			if( isset(Queue::model()->codes[$code]) ){
 				$values = array();
 				foreach ($adverts as $advert){
-					array_push($values, array("advert_id" => isset($advert->id)?$advert->id:$advert, "action_id" => Queue::model()->codes[$code], "start" => date("Y-m-d H:i:s", $start) ));
+					$item = array("advert_id" => isset($advert->id)?$advert->id:$advert, "action_id" => Queue::model()->codes[$code] );
+					if( $offset > 0 || $interval > 0 )
+						$item["start"] = date("Y-m-d H:i:s", $start);
+					array_push($values, $item);
 					$start += $interval;
-					Log::debug($start);
 				}
 				
 				Controller::insertValues(Queue::tableName(),$values);
