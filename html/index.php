@@ -61,7 +61,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
 				</div>
 				<div class="right">
 					<div class="clearfix contacts">
-						<a href="callto:+79993211122" class="left">+7 (999) 321-11-22</a>
+						<a href="callto:+79993211122" class="fancy left" data-block="#b-popup-2">+7 (999) 321-11-22</a>
 						<a href="mailto:koleso@yandex.ru" class="left mail">koleso@yandex.ru</a>
 					</div>
 					<form action="#" method="GET">
@@ -849,26 +849,51 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
 		</div>
 	</div>
 <div style="display:none;">
+	<div id="b-popup-buy">
+		<div class="for_all b-popup-city">
+			<h3>Выбор города</h3>
+			<h4>Ф</h4>
+			
+		</div>
+	</div>
 	<div id="b-popup-callback">
-		<div class="for_all b-popup">
+		<div class="for_all b-popup-small">
 			<h3>Заказать звонок</h3>
 			<h4>Или оставьте заявку и мы Вам перезвоним в ближайшее время:</h4>
-			<form action="kitsend.php" method="POST" id="b-form-1" data-block="#b-popup-1">
+			<form action="kitsend.php" method="POST"  data-block="#b-popup-2">
 				<div class="b-popup-form">
-					<label for="name">Введите Ваше имя</label>
-					<input type="text" id="name" name="name" required/>
-					<label for="tel">Введите Ваш номер телефона</label>
-					<input type="text" id="tel" name="phone" required/>
-					<input type="hidden" name="subject" value="Заказ"/>
-					<input type="submit" class="ajax b-orange-butt" value="Заказать">
+					<label for="name">Ваше имя</label>
+					<input type="text" name="name" required placeholder="Иван"/>
+					<label for="tel">Ваш телефон</label>
+					<input type="text" name="phone" required placeholder="+7 (___) ___-__-__"/>
+					<input type="hidden" name="subject" value="Обратный звонок"/>
 				</div>
+				<input type="submit" class="ajax b-orange-butt" value="Отправить">
+			</form>
+		</div>
+	</div>
+	<div id="b-popup-buy">
+		<div class="for_all b-popup-small">
+			<h3>Купить товар</h3>
+			<h4>Для покупки позвоните по одному<br>из телефонов:</h4>
+			<h5>+7 (913) 827 57-56<br>57-57-56</h5>
+			<h4>Или оставьте заявку и мы Вам перезвоним в ближайшее время:</h4>
+			<form action="kitsend.php" method="POST"  data-block="#b-popup-2">
+				<div class="b-popup-form">
+					<label for="name">Ваше имя</label>
+					<input type="text" name="name" required placeholder="Иван"/>
+					<label for="tel">Ваш телефон</label>
+					<input type="text" name="phone" required placeholder="+7 (___) ___-__-__"/>
+					<input type="hidden" name="subject" value="Обратный звонок"/>
+				</div>
+				<input type="submit" class="ajax b-orange-butt" value="Отправить">
 			</form>
 		</div>
 	</div>
 	<div id="b-popup-2">
-		<div class="b-thanks b-popup">
-			<h3>Спасибо!</h3>
-			<h4>Ваша заявка успешно отправлена.<br/>Наш менеджер свяжется с Вами в течение часа.</h4>
+		<div class="b-thanks b-popup-small">
+			<h3>Спасибо за заявку!</h3>
+			<h4>Ваша заявка успешно отправлена.<br>Наш менеджер свяжется с Вами<br>в течение 15 минут.</h4>
 			<input type="submit" class="b-orange-butt" onclick="$.fancybox.close(); return false;" value="Закрыть">
 		</div>
 	</div>

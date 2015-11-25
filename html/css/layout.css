@@ -115,12 +115,13 @@ input {
 	font-size: 14px;
 	font-family: 'Roboto';
 	font-weight: 300;
+	color: #414141;
 }
 input::-webkit-input-placeholder {
-	color: #c2c2c2;
+	color: #bdbdbd;
 }
 input:-moz-placeholder {
-	color: #c2c2c2;
+	color: #bdbdbd;
 }
 .gradient-orange{
 	/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ffe57f+0,ffdc1c+5,ff9a00+93,966304+100 */
@@ -174,6 +175,9 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 	cursor: pointer;
 	text-decoration: none;
 	text-align: center;
+	text-transform: uppercase;
+	font-weight: 500;
+	position: relative;	
 	text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.3);
 	color: #181818;
 	/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ffdf25+0,ffb23f+100 */
@@ -203,6 +207,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffda00', endColorstr='#ff9600',GradientType=0 ); /* IE6-8 */
 	}
 	.b-orange-butt:active {/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ff9600+0,ffac00+33,ffbc00+66,ffda00+100 *//* Old browsers *//* IE9 SVG, needs conditional override of 'filter' to 'none' *//* FF3.6+ *//* Chrome,Safari4+ *//* Chrome10+,Safari5.1+ *//* Opera 11.10+ *//* IE10+ *//* W3C *//* IE6-8 */
+		border-bottom: none !important;
 	}
 .b-black-butt{
 	border: none;
@@ -1772,9 +1777,85 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 				#similar-slider .b-sim-nav.b-sim-right {
 					right: 16px;
 				}
+.for-all {
+	box-sizing:border-box;
+	position: relative;
+	box-shadow: 0px 15px 40px 0px rgba(32, 32, 32, 0.004);
+}
+	.for-all:before {
+		position: absolute;
+		font-size: 0;
+		content: "";
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 12px;
+		background: rgb(255,150,0);
+		background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2ZmOTYwMCIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNmZmI0MDAiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
+		background: -moz-linear-gradient(left,  rgba(255,150,0,1) 0%, rgba(255,180,0,1) 100%);
+		background: -webkit-linear-gradient(left,  rgba(255,150,0,1) 0%,rgba(255,180,0,1) 100%);
+		background: linear-gradient(to right,  rgba(255,150,0,1) 0%,rgba(255,180,0,1) 100%);
+		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff9600', endColorstr='#ffb400',GradientType=1 );
+		border-radius: 4px 4px 0 0;
+	}
+	.b-popup-city:before {	
+		height: 7px;
+	}
+.b-popup-small {
+	width: 460px;
+	padding: 57px 85px 55px;
 
-	
-
+}
+	.b-popup-small h3,.b-popup-small h4,.b-popup-small label,.b-popup-city h3 {
+		color: #1f1f1f;
+		font-weight: 500;
+	}
+	.b-popup-small h3 {
+		font-size: 30px;
+		margin-bottom: 20px;
+	}
+	.b-popup-small h4 {
+		line-height: 1.429;
+		margin-bottom: 20px;
+	}
+	.b-popup-small h5 {
+		line-height: 1.6;
+		margin-bottom: 17px;
+		color: #ffba00;
+		font-weight: 500;
+		font-size: 24px;
+	}
+		.b-popup-small .b-popup-form {
+			margin-bottom: 17px;
+		}
+		.b-popup-small .b-popup-form label {
+			display: block;
+			margin-bottom: 10px;
+		}
+		.b-popup-small .b-popup-form input {
+			text-align: center;
+			width: 100%;
+			box-sizing:border-box;
+			padding: 14px;
+			margin-bottom: 12px;
+			border: 1px solid rgb(140, 140, 140);
+			border-radius: 2px;
+			background-color: #f4f4f4;
+		}
+		.b-popup-small input[type=submit] {
+			display: block;
+			width: 100%;
+			padding: 15px 0;
+			border-radius: 2px;
+			border-bottom: 2px solid #f69303;
+		}
+.b-popup-city {
+	text-align: left;
+}
+	.b-popup-city h3 {
+		font-size: 30px;
+		margin-bottom: 20px;
+	}
 
 .icon:before,			
 .b-filters .b-block .filter-cont .tire-type label:before,

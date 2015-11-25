@@ -30,7 +30,6 @@ Class Avito {
     }
 
     public function addAdvert($params,$images = NULL){
-    	print_r($params);
         include_once Yii::app()->basePath.'/extensions/simple_html_dom.php';
         if($images !== NULL) {
         	$params = $this->addImages($params,$images);
@@ -120,7 +119,7 @@ Class Avito {
 	            $quality = rand(65,95);
 	            $resizeObj -> saveImage($filename, $quality);
                 array_push($img, json_decode($this->curl->request("https://www.avito.ru/additem/image",array('image' => new CurlFile($filename))))->id);
-            	// unlink($filename);
+            	unlink($filename);
             }
             shuffle($img);
             foreach ( $img as $i => $image) {
