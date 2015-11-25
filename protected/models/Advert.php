@@ -174,7 +174,7 @@ class Advert extends CActiveRecord
 
 	   	$options['criteria'] = $criteria;
 		$dataProvider = new CActiveDataProvider(Advert::tableName(), $options);
-		return ($select) ? $dataProvider->getData() : $dataProvider;
+		return $dataProvider;
 	}
 
 	/**

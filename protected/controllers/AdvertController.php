@@ -13,13 +13,25 @@ class AdvertController extends Controller
 	{
 		return array(
 			array('allow',
-				'actions'=>array('adminIndex'),
+				'actions'=>array('adminIndex','adminPayAdverts'),
 				'roles'=>array('manager'),
 			),
 			array('deny',
 				'users'=>array('*'),
 			),
 		);
+	}
+
+	public function actionAdminPayAdverts(){
+		if( isset($_GET) ){
+			$adverts = Advert::getAdverts($_GET,array('type','city','place.category'))->getData();
+
+			$interval = isset($_GET["interval"])?intval($_GET["interval"])*60:0;
+			$offset = isset($_GET["offset"])?intval($_GET["offset"])*60:0;
+			Queue::addAll($adverts,"payUp",$offset,$interval);
+
+			$this->redirect('/admin/queue/');
+		}
 	}
 
 	public function actionAdminIndex($partial = false)

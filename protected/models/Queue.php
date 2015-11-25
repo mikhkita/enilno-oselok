@@ -15,7 +15,8 @@ class Queue extends CActiveRecord
 		"add" => 1,
 		"update" => 2,
 		"delete" => 3,
-		"updateImages" => 4
+		"updateImages" => 4,
+		"payUp" => 5
 	);
 
 	public $states = array(
@@ -143,13 +144,18 @@ class Queue extends CActiveRecord
 		}
 	}
 
-	public function addAll($adverts = array(), $code = false){
+	public function addAll($adverts = array(), $code = false, $offset = 0, $interval = 0){
 		if( count($adverts) && $code ){
+			$start = time() + $offset;
+			Log::debug($offset);
+			Log::debug($interval);
 			if( isset(Queue::model()->codes[$code]) ){
 				$values = array();
-				// print_r($adverts);
-				foreach ($adverts as $advert)
-					array_push($values, array("advert_id" => isset($advert->id)?$advert->id:$advert, "action_id" => Queue::model()->codes[$code] ));
+				foreach ($adverts as $advert){
+					array_push($values, array("advert_id" => isset($advert->id)?$advert->id:$advert, "action_id" => Queue::model()->codes[$code], "start" => date("Y-m-d H:i:s", $start) ));
+					$start += $interval;
+					Log::debug($start);
+				}
 				
 				Controller::insertValues(Queue::tableName(),$values);
 				return true;

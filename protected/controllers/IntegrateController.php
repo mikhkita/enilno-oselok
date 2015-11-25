@@ -483,6 +483,12 @@ class IntegrateController extends Controller
                 $result = $drom->updateAdvert($advert->url,$fields,$images);
 
                 break;
+            case 'payUp':
+
+                Log::debug("Обновление фотографий ".$advert->good->fields_assoc[3]->value." в аккаунте ".$account->login);
+                $result = $drom->upPaidAdverts($advert->url);
+
+                break;
         }
 
         if( $result ){

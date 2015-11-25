@@ -2458,7 +2458,35 @@ ul.b-filter-list{
         width: 180px;
         resize: none;
         height: 400px;
+    }{
+
     }
+.b-upadvert-input-cont{
+    width: 500px;
+    display: inline-block;
+    margin-top: 30px;
+}
+    .b-upadvert-input-cont div{
+        margin-right: 10px;
+        text-align: left;
+    }
+        .b-upadvert-input-cont div label{
+
+        }
+        .b-upadvert-input-cont div input{
+            border-radius: 5px;
+            background: #FFF5D1;
+            border: 1px solid #452716;
+            padding: 9px 10px 8px;
+            font-size: 14px;
+            display: block;
+            width: 150px;
+        }
+    .b-upadvert-input-cont a{
+        margin-top: 18px;
+    }
+
+
 @media screen and (max-width: 1500px){
     .b-hide-title{
         opacity: 0;

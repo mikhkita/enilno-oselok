@@ -1242,6 +1242,20 @@ $(document).ready(function(){
         }
     });
 
+    if( $(".b-payadvert").length ){
+        $(".b-payadvert").click(function(){
+            var offset = $(".offset").val(),
+                interval = $(".interval").val();
+
+            $("#adverts-form-hidden").html($(".b-upadvert-input-cont").html());
+            $(".offset").val(offset);
+            $(".interval").val(interval);            
+            
+            $("#adverts-form").attr("action",$(this).attr("href")).submit();
+            return false;
+        });
+    }
+
     if( $(".b-compare button").length ) $(".b-compare button").trigger("click",true);
 
     if( $(".b-kit-switcher").length ){

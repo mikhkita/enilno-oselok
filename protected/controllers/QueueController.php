@@ -44,10 +44,11 @@ class QueueController extends Controller
 		$queue = Queue::model()->with(array("advert"=>array("select"=>array("id","type_id"))))->findAll('state_id = 1 AND advert.type_id=869');
 		$ids = array();
         foreach ($queue as $key => $item) {
-            array_push($ids, $item->id);
+            array_push($ids, "'".$item->id."'");
         }
 
-		Queue::model()->updateAll(['state_id' => 4], 'id IN ('.implode(",", $ids).')');
+        if( count($ids) )
+			Queue::model()->updateAll(['state_id' => 4], "id IN ( ".implode(",", $ids)." )");
 	}
 
 	public function actionAdminUnfreezeAll(){
