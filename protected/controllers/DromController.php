@@ -168,9 +168,8 @@ class DromController extends Controller
         $avito->setUser("vladis1ove81@gmail.com","Friday13");
         // unset($fields["login"]);
         $avito->auth();
-        $fields = $avito->generateFields($fields,2);
+        $fields = $avito->generateFields($fields,1);
         $id = $avito->addAdvert($fields,$images);
-        print_r($id);
         // if( $queue->action->code == "delete" ){
         //     $delete = $avito->deleteAdvert($advert->url);
         //     if($delete){
