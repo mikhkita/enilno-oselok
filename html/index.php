@@ -61,7 +61,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
 				</div>
 				<div class="right">
 					<div class="clearfix contacts">
-						<a href="callto:+79993211122" class="fancy left" data-block="#b-popup-2">+7 (999) 321-11-22</a>
+						<a href="callto:+79993211122" class="fancy left" data-block="#b-popup-buy">+7 (999) 321-11-22</a>
 						<a href="mailto:koleso@yandex.ru" class="left mail">koleso@yandex.ru</a>
 					</div>
 					<form action="#" method="GET">
@@ -851,9 +851,44 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
 <div style="display:none;">
 	<div id="b-popup-buy">
 		<div class="for_all b-popup-city">
-			<h3>Выбор города</h3>
-			<h4>Ф</h4>
-			
+			<div class="city-top">
+				<h3>Выбор города</h3>
+				<h4>Федеральный округ<span>Город</span></h4>
+				<div class="clearfix main-tabs popup-fo">
+					<ul class="left">
+						<li><a href="#sv-fo">Северо-Западный ФО</a></li>
+						<li><a href="#dal-fo">Дальневоссточный ФО</a></li>
+						<li><a href="#centr-fo">Центральный ФО</a></li>
+						<li><a href="#yzn-fo">Южный ФО</a></li>
+						<li class="active"><a href="#sib-fo">Сибирский ФО</a></li>
+						<li><a href="#yral-fo">Уральский ФО</a></li>
+						<li><a href="#privolz-fo">Приволжский ФО</a></li>
+						<li><a href="#sk-fo">Северо-Кавказский ФО</a></li>
+					</ul>
+					<div id="sib-fo" class="popup-cities clearfix left">
+						<ul class="left">
+							<li><a href="#">Кемерово</a></li>
+							<li><a href="#">Новосибирск</a></li>
+							<li><a href="#">Новокузнецк</a></li>
+							<li><a href="#">Ленинск-Кузнецкий</a></li>
+							<li><a href="#">Белово</a></li>
+							<li><a href="#">Юрга</a></li>
+							<li><a href="#">Полысаево</a></li>
+							<li><a href="#">Барнаул</a></li>	
+						</ul>
+						<ul class="left">
+							<li><a href="#">Новокузнецк</a></li>
+							<li><a href="#">Бердск</a></li>
+							<li class="active"><a href="#">Тяжин</a></li>
+							<li><a href="#">Березовский</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<div class="city-input clearfix">
+				<input type="text" class="left" placeholder="Или укажите в поле...">
+				<input type="submit" class="right b-orange-butt" value="Выбрать">
+			</div>
 		</div>
 	</div>
 	<div id="b-popup-callback">
@@ -891,7 +926,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
 		</div>
 	</div>
 	<div id="b-popup-2">
-		<div class="b-thanks b-popup-small">
+		<div class="for_all b-popup-small">
 			<h3>Спасибо за заявку!</h3>
 			<h4>Ваша заявка успешно отправлена.<br>Наш менеджер свяжется с Вами<br>в течение 15 минут.</h4>
 			<input type="submit" class="b-orange-butt" onclick="$.fancybox.close(); return false;" value="Закрыть">
