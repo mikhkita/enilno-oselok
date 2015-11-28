@@ -14,9 +14,7 @@
 			<th style="width: 16%;"><? echo $labels['action_id']; ?></th>
 			<th style="width: 16%;"><? echo $labels['start']; ?></th>
 			<th style="width: 16%;"><? echo $labels['state_id']; ?></th>
-			<? if($this->isRoot()): ?>
 			<th></th>
-			<? endif; ?>
 		</tr>
 		<? if( count($data) ): ?>
 			<? foreach ($data as $i => $item): ?>
@@ -26,13 +24,11 @@
 					<td><?=$item->action->name?></td>
 					<td><?=(($item->start)?date('d-m-Y H:i:s', strtotime($item->start)):"")?></td>
 					<td><span class="live-<?=$item->state->code?>"><?=$item->state->name?></span></td>
-					<? if($this->isRoot()): ?>
 					<td>
-						<a href="<?php echo Yii::app()->createUrl('/good/adminindex',array('deleteAdvert'=>$item->advert->id,'result'=>'false'))?>" class="ajax-form ajax-delete not-result" data-warning="Вы действительно хотите удалить объявление &quot;<?=$item->advert->id." ".$item->advert->place->category->value." ".$item->advert->type->value." ".$item->advert->city->value?>&quot;?">Удалить объявление</a>
+						<? if($this->isRoot()): ?><a href="<?php echo Yii::app()->createUrl('/good/adminindex',array('deleteAdvert'=>$item->advert->id,'result'=>'false'))?>" class="ajax-form ajax-delete not-result" data-warning="Вы действительно хотите удалить объявление &quot;<?=$item->advert->id." ".$item->advert->place->category->value." ".$item->advert->type->value." ".$item->advert->city->value?>&quot;?">Удалить объявление</a><? endif; ?>
 						<a href="<?php echo Yii::app()->createUrl('/queue/admintowaiting',array('id'=>$item->id))?>" class="ajax-request">Вернуть</a>
-						<a href="<?php echo Yii::app()->createUrl('/queue/admindelete',array('id'=>$item->id))?>" class="ajax-request">Удалить из очереди</a>
+						<? if($this->isRoot()): ?><a href="<?php echo Yii::app()->createUrl('/queue/admindelete',array('id'=>$item->id))?>" class="ajax-request">Удалить из очереди</a><? endif; ?>
 					</td>
-					<? endif; ?>
 				</tr>
 			<? endforeach; ?>
 		<? else: ?>

@@ -5,7 +5,8 @@ $(document).ready(function(){
         myHeight,
         title = window.location.href,
         titleVar = ( title.split("localhost").length > 1 )?4:3,
-        progress = new KitProgress("#FFF",3);
+        progress = new KitProgress("#FFF",3),
+        yahooShift = false;
 
     progress.endDuration = 0.3;
 
@@ -162,6 +163,7 @@ $(document).ready(function(){
             ids.push(obj.closest("li").attr("data-id"));
         }
         $("#b-filter-form").append("<input type='hidden' name='delete' value='"+JSON.stringify(ids)+"'>");
+        yahooBeforeAjax();
         $.ajax({
             method: "POST",
             url: document.location.href.replace("#","")+( (document.location.href.indexOf('?') == -1)?"?":"&" )+"partial=1",// Сделать ? или &
@@ -196,7 +198,7 @@ $(document).ready(function(){
             padding: 0,
             content: '<div class="b-popup b-popup-delete"><h1>'+warning+'</h1><div class="row buttons"><input type="button" class="b-delete-yes" value="Да"><input type="button" onclick="$.fancybox.close();" value="Нет"></div></div>'
         });
-        bindDelete($(this).attr("href"),$(this).hasClass("not-ajax-delete"),$(this).hasClass("not-result"));
+        bindDelete($(this).attr("href"),$(this).hasClass("not-ajax-delete"),(!$(this).hasClass("not-result")));
         return false;
     });
 
@@ -209,12 +211,13 @@ $(document).ready(function(){
             bindAutocomplete();
             bindYahoo();
             bindFancy();
+            yahooAfterAjax();
 
             $(".b-refresh").removeClass("b-refresh").addClass("b-refresh-out");
         },100);
     }
 
-    function bindDelete(url,filter,setResult){
+    function bindDelete(url,filter,isSetResult){
         $(document).unbind("keydown");
         $(document).bind("keydown",function( event ) {
             if ( event.which == 13 ) {
@@ -245,7 +248,7 @@ $(document).ready(function(){
                 url: url,
                 success: function(msg){
                     progress.end(function(){
-                        if( setResult )
+                        if( isSetResult )
                             setResult(msg);
                     });
                     $.fancybox.close();
@@ -364,6 +367,8 @@ $(document).ready(function(){
                     }
                 }
 
+                yahooBeforeAjax();
+
                 $.ajax({
                     type: $form.attr("method"),
                     url: url,
@@ -379,9 +384,10 @@ $(document).ready(function(){
                     }
                 });
             }else{
-                $(".fancybox-overlay").animate({
-                    scrollTop : 0
-                },200);
+                if( !$(this).attr("data-not-scroll") )
+                    $(".fancybox-overlay").animate({
+                        scrollTop : 0
+                    },200);
                 $("input.error,textarea.error").focus();
             }
             return false;
@@ -486,6 +492,9 @@ $(document).ready(function(){
                 $(".fancybox-wrap form").trigger("submit",false);
             }
         }
+        if( e.keyCode == 16 ){
+            yahooShift = true;
+        }
         if( e.keyCode == 13 ){
             enterVariantsHandler();
         }
@@ -497,6 +506,9 @@ $(document).ready(function(){
     function up(e){
         if( e.keyCode == 91 || e.keyCode == 17 ){
             ctrldown = false;
+        }
+        if( e.keyCode == 16 ){
+            yahooShift = false;
         }
     }
     // if( $(".ajax-create").length ){
@@ -995,7 +1007,9 @@ $(document).ready(function(){
     /* Auction ------------------------------------- Auction */
 
     /* Yahoo ------------------------------------- Yahoo */
-    var yahooTog = false;
+    var yahooTog = false,
+        prevClick = null,
+        yahooSelected = [];
     function checkDelete(){
         if( $(".yahoo-list li.selected").length ){
             $(".b-delete-selected").show();
@@ -1028,11 +1042,44 @@ $(document).ready(function(){
                     return false;
                 }
                 yahooTog = false;
-                $(this).toggleClass("selected");
+                if( yahooShift && prevClick !== null ){
+                    selectInterval(prevClick,$(this).index());
+                }else{
+                    $(this).toggleClass("selected");
+                }
+                prevClick = $(this).index();
                 checkDelete();
             });
         }
     }
+
+    function selectInterval(left, right){
+        var from = (left < right)?left:right,
+            to = (left > right)?left:right;
+
+        for( var i = from; i <= to; i++ ){
+            $(".yahoo-list li").eq(i).addClass("selected");
+        }
+    }
+
+    function yahooBeforeAjax(){
+        if( $(".yahoo-list").length ){
+            $(".yahoo-list li.selected").each(function(){
+                yahooSelected.push($(this).attr("data-id"));
+                console.log(yahooSelected);
+            });
+        }
+    }
+
+    function yahooAfterAjax(){
+        if( $(".yahoo-list").length ){
+            for( var i = 0; i < yahooSelected.length; i++ ){
+                $(".yahoo-list li[data-id='"+yahooSelected[i]+"']").addClass("selected");
+            }
+            yahooSelected = [];
+        }
+    }
+
     if( $(".yahoo-list").length ){
         bindYahoo();
     }

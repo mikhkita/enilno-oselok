@@ -38,7 +38,8 @@ class YahooLot extends CActiveRecord
 			array('id, title, update_time, cur_price, end_time, category_id, seller_id', 'required'),
 			array('cur_price, bid_price, bids, category_id, seller_id, state', 'numerical', 'integerOnly'=>true),
 			array('id', 'length', 'max'=>11),
-			array('title, image', 'length', 'max'=>255),
+			array('image', 'length', 'max'=>1000),
+			array('title', 'length', 'max'=>255),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('sort, id, title, update_time, image, cur_price, bid_price, bids, end_time, category_id, seller_id, state', 'safe', 'on'=>'search'),

@@ -383,13 +383,37 @@ class Controller extends CController
         return ( isset($this->settings[$category_code][$param_code]) )?$this->settings[$category_code][$param_code]:"";
     }
 
-    public function getDromAccount($login){
+    public function getDromAccount($login = NULL){
         $cols = array(
             46 => "login",
             47 => "password",
             48 => "phone"
         );
-        $cell = DesktopTableCell::model()->with(array("row"))->find("row.table_id=12 AND varchar_value='$login'");
+        $cells = DesktopTableCell::model()->with(array("row.cells"))->findAll("row.table_id=12".(($login)?" AND t.varchar_value='$login'":""));
+        if( $cells ){
+            $out = array();
+            foreach ($cells as $i => $cell) {
+                $one_cell = array();
+                foreach ($cell->row->cells as $key => $cell)
+                    $one_cell[$cols[$cell->col_id]] = $cell->value;
+                $out[$one_cell["login"]] = (object) $one_cell;
+            }
+
+            return ($login)?array_pop($out):$out;
+        }else{
+            return NULL;
+        }
+    }
+
+    public function getAvitoAccount($login){
+        $cols = array(
+            49 => "login",
+            50 => "password",
+            51 => "phone",
+            52 => "name",
+            53 => "proxy"
+        );
+        $cell = DesktopTableCell::model()->with(array("row"))->find("row.table_id=13 AND varchar_value='$login'");
         if( $cell ){
             $row = DesktopTableRow::model()->with(array("cells"))->findByPk($cell->row->id);
             $out = array();

@@ -18,14 +18,14 @@
 <?php $this->renderPartial('_filterList', array('filter_list'=>$filter_list)); ?>
 
 <? if(count($model)): ?>
-<div class="pagination b-filter-pagination">
+<div class="pagination b-filter-pagination" onselectstart="return false;">
     <ul class="yahoo-list">
     	<? foreach ($model as $item): ?>
 			<li class="" data-id="<?=$item->id?>">
                 <div class="image-cont" style="background-image:url('<?=$item->image?>');">
-                    <a href="https://injapan.ru/auction/<?=$item->id?>.html" target="_blank"></a>
+                    <a href="<?php echo Yii::app()->createUrl('/yahoo/admindetail',array('code'=>$item->id))?>" class="ajax-form ajax-update" title="Посмотреть лот"></a>
                     <div class="b-nav clearfix">
-                        <span class="b-nav-delete b-tooltip" title="Не показывать лот"></span>
+                        <span class="b-nav-delete b-tooltip b-delete-<?=$item->id?>" title="Не показывать лот"></span>
                         <a href="<?php echo Yii::app()->createUrl('/'.$this->adminMenu["cur"]->code.'/adminauctioncreate',array('id'=> $item->id ))?>" class="ajax-form ajax-create b-nav-sniper b-tooltip" title="Добавить в снайпер"></a>
                     </div>
                 </div>

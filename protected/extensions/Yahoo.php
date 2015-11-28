@@ -13,7 +13,7 @@ Class Yahoo {
         $this->cur_page = 1;
     }
 
-    public function getNextPage($category_id,$max_price,$order){
+    public function getNextPage($category_id,$order){
         $params = array(
             "appid" => "dj0zaiZpPTFFVXE5clJCTVY3ayZzPWNvbnN1bWVyc2VjcmV0Jng9YzQ-", // ID приложения
             "category" => $category_id, // ID категории
@@ -21,7 +21,7 @@ Class Yahoo {
             "order" => $order, // Порядок сортировки. a - по возрастанию, d - по убыванию
             "item_status" => 2, // Состояние товара, 0 - не важно, 1 - новые, 2 - б/у
             // "timebuf" => 10,
-            "aucmaxprice" => $max_price, // Ограничение текущей цены сверху
+            // "aucmaxprice" => $max_price, // Ограничение текущей цены сверху
             // "seller" => "fix1youki",// Продавец или много продавцов через запятую
             // "page" => 1, // Страница
         );
@@ -31,13 +31,6 @@ Class Yahoo {
         if($this->tog == true){
             $params["page"] = $this->cur_page;
             $page = $this->parseItems($params);
-
-            $file = "";
-            if( isset($page["items"]) )
-            foreach ($page["items"] as $key => $item) {
-                $file .= intval($item->CurrentPrice)." ".$max_price."\n";
-            }
-            file_put_contents('yahoo.txt', $file, FILE_APPEND);
 
             $this->cur_page = $this->cur_page+1;
             $this->tog = ( $this->cur_page*20 < intval($page["result"]["allItems"])+20 )?true:false;

@@ -20,8 +20,12 @@ class YahooController extends Controller
 	{
 		return array(
 			array('allow',
-				'actions'=>array('adminIndex','adminAuctionCreate'),
+				'actions'=>array('adminAuctionCreate','adminDetail'),
 				'roles'=>array('root'),
+			),
+			array('allow',
+				'actions'=>array('adminIndex'),
+				'roles'=>array('manager'),
 			),
 			array('deny',
 				'users'=>array('*'),
@@ -173,6 +177,21 @@ class YahooController extends Controller
 	public function actionCount()
 	{
 		$goods=Good::model()->findAllbyPk($goods_id,$criteria);
+	}
+
+	public function actionAdminDetail($code = NULL){
+		if( $code ){
+			$item = Injapan::getDetail($code);
+
+			$model = new Auction();
+			$model->code = $code;
+
+			$this->renderPartial('adminDetail',array(
+				'item'=>$item,
+				'code'=>$code,
+				'model'=>$model
+			));
+		}
 	}
 
 	public function loadModel($id)

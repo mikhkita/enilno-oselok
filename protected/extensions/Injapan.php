@@ -43,6 +43,18 @@ Class Injapan {
 
         return $result;
     }
+
+    public function getDetail($code){
+        include_once  Yii::app()->basePath.'/extensions/simple_html_dom.php';
+        $html = file_get_html("https://injapan.ru/auction/".$code.".html");
+        
+        return (object) array(
+            "title"=>$html->find('span.small')[0]->innertext,
+            "table"=>$html->find('.auction')[0]->innertext,
+            "text"=>$html->find('#russian')[0]->innertext,
+            "images"=>$html->find('.old_lot_images')[0]->innertext
+        );
+    }
 }
 
 ?>

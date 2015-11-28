@@ -5,18 +5,18 @@ class IntegrateController extends Controller
     private $params = array(
         "TIRE" => array(
             "GOOD_TYPE_ID" => 1,
-            "TITLE_CODE" => 100,
+            "TITLE_CODE" => 65,
             "HEADER" => "HEADER_T",
             "FOOTER" => "FOOTER_T",
             "JOIN" => array(7,8,9),
-            "ADVERT_TITLE_CODE" => 13,
+            "ADVERT_TITLE_CODE" => 30,
             "NAME_ROD" => "Шины",
             "NAME_ROD_MN" => "Шин",
         ),
         "DISC" => array(
             "GOOD_TYPE_ID" => 2,
-            "TITLE_CODE" => 86,
-            "TEXT_CODE" => 87,
+            "TITLE_CODE" => 76,
+            "TEXT_CODE" => 77,
             "NAME_ROD" => "Диска",
             "NAME_ROD_MN" => "Дисков",
         )
@@ -233,13 +233,10 @@ class IntegrateController extends Controller
         $drom = new Drom();
         
 
-        $users = $this->getParam("DROM","USERS");
+        $users = $this->getDromAccount();
 
-        $users = explode("\n", $users);
-
-        foreach ($users as $value) {
-            $user = explode(" ", $value);
-            $drom->setUser($user[0],$user[1]);
+        foreach ($users as $user) {
+            $drom->setUser($user->login,$user->password);
             $drom->upAdverts();
         }
 
@@ -308,13 +305,20 @@ class IntegrateController extends Controller
         $yahoo = new Yahoo();
         $tog = true;
 
-        $page = $yahoo->getNextPage($category->code,intval($category->max_price*$this->courses["USD"]),( ($bids)?"a":"d" ));
+        $page = $yahoo->getNextPage($category->code,( ($bids)?"a":"d" ));
 
         while( $page && $tog ){
             $sellers = array();
+            $delete_ids = array();
 
-            foreach ($page["items"] as $key => $item)
+            foreach ($page["items"] as $key => $item){
+                if( intval($item->CurrentPrice) > intval($category->max_price*$this->courses["USD"]) ){
+                    unset($page["items"][$key]);
+                    array_push($delete_ids, "'".$item->AuctionID."'");
+                    continue;
+                }
                 if( !in_array($item->Seller->Id, $sellers) ) array_push($sellers, $item->Seller->Id);
+            }
 
             $this->updateSellers($sellers);
 
@@ -325,6 +329,7 @@ class IntegrateController extends Controller
             }
 
             $this->updateLots($page["items"],$category->id);
+            YahooLot::model()->deleteAll("id in (".implode(",", $delete_ids).")");
 
             Log::debug($category->name." Страница: ".$yahoo->getLastPage());
 
@@ -337,7 +342,7 @@ class IntegrateController extends Controller
             $page = $yahoo->getNextPage($category->code,intval($category->max_price*$this->courses["USD"]),( ($bids)?"a":"d" ));
         }
         
-        Log::debug($category->name." Парсинг завершен. Количество полученных страниц: ".$yahoo->getLastPage()-1);
+        Log::debug($category->name." Парсинг завершен. Количество полученных страниц: ".($yahoo->getLastPage()-1));
     }
 
     public function getSellersID($sellers){
@@ -442,27 +447,24 @@ class IntegrateController extends Controller
         $fields = Place::getValues(Place::getInters($advert->place->category_id,$advert->good->type->id),$advert->good,$dynamic);
 
         $images = $this->getImages($advert->good);
-
         if( $place_name == "DROM" ){
             $account = $this->getDromAccount($fields["login"]);
             $place = new Drom();
             $fields["contacts"] = $account->phone;
         }else if( $place_name == "AVITO" ){
+            // echo $fields["login"];
             $account = $this->getAvitoAccount($fields["login"]);
-            $place = new Avito();
+            $place = new Avito( (isset($account->proxy) && $account->proxy != "")?$account->proxy:NULL );
             $fields["phone"] = $account->phone;
             $fields["email"] = $account->email;
             $fields["seller_name"] = $account->name;
         }
 
         if( !$account ){
-            Log::error("Не найден пользователь с логином \"$login\"");
+            Log::error("Не найден пользователь с логином \"".$fields["login"]."\"");
             $queue->setState("error");
             return true;
         }
-
-        print_r($fields);
-        die();
 
         $fields = $place->generateFields($fields,$advert->good->good_type_id);
         
@@ -546,6 +548,6 @@ class IntegrateController extends Controller
 
 
     public function actionAdminIndex(){
-        
+        var_dump($this->getDromAccount());
     }
 }

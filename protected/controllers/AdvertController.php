@@ -24,8 +24,7 @@ class AdvertController extends Controller
 
 	public function actionAdminPayAdverts(){
 		if( isset($_GET) ){
-			$adverts = Advert::getAdverts($_GET,array('type','city','place.category'))->getData();
-
+			$adverts = Advert::getAdverts($_GET,array('type','city','place.category'),array("id"))->getData();
 			$interval = isset($_GET["interval"])?intval($_GET["interval"])*60:0;
 			$offset = isset($_GET["offset"])?intval($_GET["offset"])*60:0;
 			Queue::addAll($adverts,"payUp",$offset,$interval);
