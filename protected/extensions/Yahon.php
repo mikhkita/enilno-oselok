@@ -19,8 +19,6 @@ Class Yahon {
         curl_setopt($ch, CURLOPT_POSTFIELDS, array(
             'set_login'=>'svc1',
             'set_pass'=>'kb5e1law',
-        // 'set_login'=>'p_e_a_c_e@mail.ru',
-         // 'set_pass'=>'261192',
             'set_from'=>'',
             'to_remain_here'=>'Y'
         ));
