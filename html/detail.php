@@ -38,6 +38,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
 		<li class="v" style="margin-left:480px"></li>
 		<li class="v" ></li>
 	</ul>
+	<img src="i/logo.jpg" class="b-hidden-logo" alt="">
 	<div class="b b-header">
 		<div class="b b-menu">
 			<div class="b-block">
@@ -67,7 +68,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
 				</div>
 				<div class="right">
 					<div class="clearfix contacts">
-						<a href="#" class="left">+7 (999) 321-11-22</a>
+						<a href="callto:+79993211122" class="fancy left" data-block="#b-popup-buy">+7 (999) 321-11-22</a>
 						<a href="mailto:koleso@yandex.ru" class="left mail">koleso@yandex.ru</a>
 					</div>
 					<form action="#" method="GET">
@@ -79,10 +80,11 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
 			</div>
 		</div>
 		<div class="b b-sub-menu gradient-orange">
-			<div class="b-block">
-				<ul class="clearfix">
-					<li><a href="#">Шины</a></li>
+			<div class="b-block clearfix">
+				<a href="#" class="b-burger icon left"></a>
+				<ul class="clearfix left">
 					<li><a href="#">Диски</a></li>
+					<li><a href="#">Шины</a></li>
 					<li><a href="#">Колеса</a></li>
 				</ul>
 			</div>
