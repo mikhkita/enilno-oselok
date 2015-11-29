@@ -1,5 +1,7 @@
 $(document).ready(function(){	
-    var myWidth,myHeight;
+    var myWidth,myHeight,
+        big = 3,
+        nowBig = 1;
     function resize(){
        if( typeof( window.innerWidth ) == 'number' ) {
             myWidth = window.innerWidth;
@@ -13,7 +15,42 @@ $(document).ready(function(){
             myHeight = document.body.clientHeight;
         }
         $(".b-content").css("min-height",myHeight-$(".b-header").height()-$(".b-footer").height());
+
+        nowBig = ( myWidth > 900 )?5:5;
+        nowBig = ( myWidth > 767 )?nowBig:2;
+        if( $("#similar-slider").length )
+            if( nowBig != big ){
+                big = nowBig;
+                $("#similar-slider").slick("unslick");
+                $('#similar-slider').slick({
+                    slidesToShow: big,
+                    slidesToScroll: 1,
+                    prevArrow: "<span class='b-sim-nav gradient-lightBlack b-sim-left'></span>",
+                    nextArrow: "<span class='b-sim-nav gradient-lightBlack b-sim-right'></span>"
+                });
+            }
     }
+
+    function whenScroll(){
+        if( $(".b-fixed-top").length ){
+            var scroll = ((document.documentElement && document.documentElement.scrollTop) || document.body.scrollTop);
+            if( scroll > $(".b-relative-top").offset().top+$(".b-relative-top").height() ){
+                $(".b-fixed-top").addClass("shown");
+            }else{
+                $(".b-fixed-top").removeClass("shown");
+            }
+        }
+    }
+    $(window).scroll(whenScroll);
+    $('body').bind('touchmove', whenScroll);
+    whenScroll();
+
+    $('#similar-slider').slick({
+        slidesToShow: 5,
+        slidesToScroll: 1,
+        prevArrow: "<span class='b-sim-nav gradient-lightBlack b-sim-left'></span>",
+        nextArrow: "<span class='b-sim-nav gradient-lightBlack b-sim-right'></span>"
+    });
     $(window).resize(resize);
     resize();
     
@@ -226,12 +263,6 @@ $(document).ready(function(){
             closeBubble();
     });
 
-    $('#similar-slider').slick({
-        slidesToShow: 5,
-        slidesToScroll: 1,
-        prevArrow: "<span class='b-sim-nav gradient-lightBlack b-sim-left'></span>",
-        nextArrow: "<span class='b-sim-nav gradient-lightBlack b-sim-right'></span>"
-    });
     $(".filter-cont .ui-slider-handle:eq(0)").prepend("<span class='price-tt tt-min'>"+$(".slider-range").attr("data-min-cur")+"</span>");
     $(".filter-cont .ui-slider-handle:eq(1)").prepend("<span class='price-tt tt-max'>"+$(".slider-range").attr("data-max-cur")+"</span>");
    

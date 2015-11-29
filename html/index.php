@@ -79,7 +79,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
 				
 			</div>
 		</div>
-		<div class="b b-sub-menu gradient-orange">
+		<div class="b b-sub-menu b-relative-top gradient-orange">
 			<div class="b-block clearfix">
 				<a href="#" class="b-burger icon left"></a>
 				<ul class="clearfix left">
@@ -89,18 +89,25 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
 				</ul>
 			</div>
 		</div>
+		<div class="b b-sub-menu b-fixed-top gradient-orange">
+			<div class="b-block clearfix">
+				<a href="#" class="b-burger icon left"></a>
+				<a href="callto:+79993211122" class="b-phone-center left">+7 (999) 321-11-22</a>
+				<a href="#" class="b-search-icon icon right"></a>
+			</div>
+		</div>
 	</div>
 	<div class="b-content">
 	<div class="b b-main-slider">
 		<div class="slide" style="background-image: url('i/back-main.jpg');">
 			<div class="b-block">
-				<h2>ШИРОКИЙ АССОРТИМЕНТ</h2>
+				<h2>Широкий ассортимент</h2>
 				<p>Только в нашем магазине вы найдете именно те колеса, которые вам нужны.</p>
 			</div>
 		</div>
 		<div class="slide" style="background-image: url('i/back-main.jpg');">
 			<div class="b-block">
-				<h2>ШИРОКИЙ АССОРТИМЕНТ</h2>
+				<h2>Широкий ассортимент</h2>
 				<p>Только в нашем магазине вы найдете именно те колеса, которые вам нужны.</p>
 			</div>
 		</div>
@@ -473,7 +480,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
 				</div>
 			</div>
 			<div class="popular-good right main-tabs">
-				<h3 class="category-title">популярные товары</h3>
+				<h3 class="category-title">Популярные товары</h3>
 				<ul class="popular-category clearfix">
 					<li><a href="#popular-disc"><span class="disc-icon icon">Диски</span></a></li>
 					<li><a href="#popular-tire"><span class="tire-icon icon">Шины</span></a></li>
@@ -790,7 +797,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
 				<span class="stamp stamp-right"></span>
 				<ul class="sections clearfix">
 					<li>
-						<h3>О МАГАЗИНЕ</h3>
+						<h3>О магазине</h3>
 						<a href="#" class="footer-logo clearfix">
 							<img class="left" src="i/logo.png">
 							<div class="left">
@@ -812,12 +819,12 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
 						</ul>
 					</li>
 					<li>
-						<h3>КОНТАКТНАЯ ИНФОРМАЦИЯ</h3>
-						<a class="footer-contacts mail" href="mailto:koleso@yandex.ru">koleso@yandex.ru</a>
-						<a class="footer-contacts phone" href="callto:+79993211122">+7-(999)-321-11-22</a>
+						<h3>Контактная информация</h3>
+						<a class="footer-contacts mail" href="#">koleso@yandex.ru</a>
+						<a class="footer-contacts phone" href="#">+7-(999)-321-11-22</a>
 						<span class="footer-contacts map">г. Красноярск, ул. Вавилова, 1а</span>
 						<div class="social">
-							<h3>ПРИСОЕДИНЯЙТЕСЬ К НАМ</h3>
+							<h3>Присоединяйтесь к нам</h3>
 							<div class="social-icon clearfix">
 								<a class="tw" href="#"></a>
 								<a class="yt" href="#"></a>

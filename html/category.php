@@ -450,7 +450,7 @@
 				<span class="stamp stamp-right"></span>
 				<ul class="sections clearfix">
 					<li>
-						<h3>О МАГАЗИНЕ</h3>
+						<h3>О магазине</h3>
 						<a href="#" class="footer-logo clearfix">
 							<img class="left" src="i/logo.png">
 							<div class="left">
@@ -472,12 +472,12 @@
 						</ul>
 					</li>
 					<li>
-						<h3>КОНТАКТНАЯ ИНФОРМАЦИЯ</h3>
+						<h3>Контактная информация</h3>
 						<a class="footer-contacts mail" href="#">koleso@yandex.ru</a>
 						<a class="footer-contacts phone" href="#">+7-(999)-321-11-22</a>
 						<span class="footer-contacts map">г. Красноярск, ул. Вавилова, 1а</span>
 						<div class="social">
-							<h3>ПРИСОЕДИНЯЙТЕСЬ К НАМ</h3>
+							<h3>Присоединяйтесь к нам</h3>
 							<div class="social-icon clearfix">
 								<a class="tw" href="#"></a>
 								<a class="yt" href="#"></a>

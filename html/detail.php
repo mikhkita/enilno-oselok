@@ -7,12 +7,19 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Детальная</title>
-	<meta name="keywords" content=''>
-	<meta name="description" content=''>
+	<title>Зимние Шины Nokian Hakka 7 SUV 265/60/18 Б/у</title>
+	<meta name="keywords" content='Является первой зимней автошиной в которой применяется технология 3D-BIS на всей площади протектора. Данная технология, позволяет увеличить количество используемых ламелей.'>
+	<meta name="description" content='Является первой зимней автошиной в которой применяется технология 3D-BIS на всей площади протектора. Данная технология, позволяет увеличить количество используемых ламелей.'>
 
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="format-detection" content="telephone=no">
+
+	<meta property="og:url" content="http://kitaev.pro/land/koleso6/detail.php">
+	<meta property="og:title" content="Зимние Шины Nokian Hakka 7 SUV 265/60/18 Б/у">
+	<meta property="og:description" content="Является первой зимней автошиной в которой применяется технология 3D-BIS на всей площади протектора. Данная технология, позволяет увеличить количество используемых ламелей.">
+    <meta property="og:image" content="http://kitaev.pro/land/koleso6/i/detail.jpg">
+    <meta property="twitter:image" content="http://kitaev.pro/land/koleso6/i/detail.jpg">
+    <link rel="image_src" href="http://kitaev.pro/land/koleso6/i/detail.jpg">
 
 	<? if( $mobile ): ?>
 		<meta name="viewport" content="width=750, user-scalable=no">
@@ -38,7 +45,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
 		<li class="v" style="margin-left:480px"></li>
 		<li class="v" ></li>
 	</ul>
-	<img src="i/logo.jpg" class="b-hidden-logo" alt="">
+	<!-- <img src="i/8135_03.jpg" class="b-hidden-logo" alt=""> -->
 	<div class="b b-header">
 		<div class="b b-menu">
 			<div class="b-block">
@@ -79,7 +86,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
 				
 			</div>
 		</div>
-		<div class="b b-sub-menu gradient-orange">
+		<div class="b b-sub-menu b-relative-top gradient-orange">
 			<div class="b-block clearfix">
 				<a href="#" class="b-burger icon left"></a>
 				<ul class="clearfix left">
@@ -87,6 +94,13 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
 					<li><a href="#">Шины</a></li>
 					<li><a href="#">Колеса</a></li>
 				</ul>
+			</div>
+		</div>
+		<div class="b b-sub-menu b-fixed-top gradient-orange">
+			<div class="b-block clearfix">
+				<a href="#" class="b-burger icon left"></a>
+				<a href="callto:+79993211122" class="b-phone-center left">+7 (999) 321-11-22</a>
+				<a href="#" class="b-search-icon icon right"></a>
 			</div>
 		</div>
 	</div>
@@ -99,18 +113,25 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
 					<li><a href="#">Шины</a></li>
 					<li><a>Зимние Шины Nokian Hakka 7 SUV 265/60/18 Б/у</a></li>
 				</ul>
-				<h3 class="category-title">Зимние Шины Nokian Hakka 7 SUV 265/60/18 Б/у </h3>
+				<h3 class="category-title">Зимние Шины Nokian Hakka 7 SUV 265/60/18 Б/у</h3>
 				<div class="detail-wrap clearfix">
 					<div class="detail-photo left">
-						<a href="#" class="big" style="background: url('i/mid-photo.jpg');"></a>
+						<a href="#" class="big" style="background-image: url('i/mid-photo.jpg');"></a>
 						<ul class="clearfix">
-							<li data-mid="#" data-big="#" style="background: url('i/thumb-1.jpg');"></li>
-							<li data-mid="#" data-big="#" style="background: url('i/thumb-2.jpg');"></li>
-							<li data-mid="#" data-big="#" style="background: url('i/thumb-3.jpg');"></li>
-							<li data-mid="#" data-big="#" style="background: url('i/thumb-4.jpg');"></li>
-							<li data-mid="#" data-big="#" style="background: url('i/thumb-5.jpg');"></li>
-							<li data-mid="#" data-big="#" style="background: url('i/thumb-6.jpg');"></li>
+							<li data-mid="#" data-big="#" style="background-image: url('i/thumb-1.jpg');"></li>
+							<li data-mid="#" data-big="#" style="background-image: url('i/thumb-2.jpg');"></li>
+							<li data-mid="#" data-big="#" style="background-image: url('i/thumb-3.jpg');"></li>
+							<li data-mid="#" data-big="#" style="background-image: url('i/thumb-4.jpg');"></li>
+							<li data-mid="#" data-big="#" style="background-image: url('i/thumb-5.jpg');"></li>
+							<li data-mid="#" data-big="#" style="background-image: url('i/thumb-6.jpg');"></li>
 						</ul>
+					</div>
+					<div class="detail-price gradient-grey right">
+						<h3>7300 р.<span>+ 800 р.</span></h3>
+						<h4>доставка в г. Томск</h4>
+						<a href="#" class="b-orange-butt">Купить</a>
+						<h5>Доставка и оплата</h5>
+						<h6>Товар: <span class="stock">В наличии</span></h6>
 					</div>
 					<div class="detail-desc left">
 						<h3>Характеристики</h3>
@@ -123,13 +144,6 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
 							<li>Наличие товара:<span>В наличии</span></li>
 							<li>Состояние товара:<span>Б/у</span></li>
 						</ul>
-					</div>
-					<div class="detail-price gradient-grey right">
-						<h3>7300 р.<span>+ 800 р.</span></h3>
-						<h4>доставка в г. Томск</h4>
-						<a href="#" class="b-orange-butt">Купить</a>
-						<h5>Доставка и оплата</h5>
-						<h6>Товар: <span class="stock">В наличии</span></h6>
 					</div>
 				</div>
 				<div class="main-tabs">
@@ -245,7 +259,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
 				<span class="stamp stamp-right"></span>
 				<ul class="sections clearfix">
 					<li>
-						<h3>О МАГАЗИНЕ</h3>
+						<h3>О магазине</h3>
 						<a href="#" class="footer-logo clearfix">
 							<img class="left" src="i/logo.png">
 							<div class="left">
@@ -267,12 +281,12 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
 						</ul>
 					</li>
 					<li>
-						<h3>КОНТАКТНАЯ ИНФОРМАЦИЯ</h3>
+						<h3>Контактная информация</h3>
 						<a class="footer-contacts mail" href="#">koleso@yandex.ru</a>
 						<a class="footer-contacts phone" href="#">+7-(999)-321-11-22</a>
 						<span class="footer-contacts map">г. Красноярск, ул. Вавилова, 1а</span>
 						<div class="social">
-							<h3>ПРИСОЕДИНЯЙТЕСЬ К НАМ</h3>
+							<h3>Присоединяйтесь к нам</h3>
 							<div class="social-icon clearfix">
 								<a class="tw" href="#"></a>
 								<a class="yt" href="#"></a>
