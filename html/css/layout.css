@@ -64,7 +64,7 @@ input.error,textarea.error{
 	box-shadow: 0 0px 0px 1px #F00;
 }
 .ps-lines{
-
+	display: none;
 }
 	.ps-lines li.v{
 		position: fixed;
@@ -85,6 +85,9 @@ input.error,textarea.error{
 		opacity: 0.8;
 		z-index: 9999;
 	}
+.b-hidden-logo{
+	display: none;
+}
 .fancybox-inner{
 	overflow: visible !important;
 }
@@ -415,9 +418,9 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 	}
 		.b-header .b-burger:before{
 			position: absolute;
-			left: 0px;
+			left: 25px;
 			top: 27px;
-			background-position: -296px -81px;
+			background-position: -291px -76px;
 			width: 46px;
 			height: 32px;
 		}
@@ -1266,8 +1269,9 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 					.b-category .b-block .grey-block .filter-block .filter-item .input {
 						width: 195px;
 					}
-				.slider-range {
+				.slider-range-cont{
 					height: 14px;
+					margin-top: 9px;
 					border: 2px solid #d7d7d7;
 					background-color: #fff;
 					border-radius: 10px;
@@ -1275,7 +1279,14 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 				}
 				.slider-range .ui-widget-header {
 					height: 4px;
-					background-color: #ffc200;
+					background: #ffe57f; /* Old browsers */
+					background: -moz-linear-gradient(top,  #ffe57f 0%, #ffdc1c 5%, #ff9a00 93%, #966304 100%); /* FF3.6+ */
+					background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffe57f), color-stop(5%,#ffdc1c), color-stop(93%,#ff9a00), color-stop(100%,#966304)); /* Chrome,Safari4+ */
+					background: -webkit-linear-gradient(top,  #ffe57f 0%,#ffdc1c 5%,#ff9a00 93%,#966304 100%); /* Chrome10+,Safari5.1+ */
+					background: -o-linear-gradient(top,  #ffe57f 0%,#ffdc1c 5%,#ff9a00 93%,#966304 100%); /* Opera 11.10+ */
+					background: -ms-linear-gradient(top,  #ffe57f 0%,#ffdc1c 5%,#ff9a00 93%,#966304 100%); /* IE10+ */
+					background: linear-gradient(to bottom,  #ffe57f 0%,#ffdc1c 5%,#ff9a00 93%,#966304 100%); /* W3C */
+					filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', endColorstr='#966304',GradientType=0 ); /* IE6-9 */
 					top: 5px;
 				}
 				.slider-range .ui-slider-handle {
@@ -1291,6 +1302,34 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 					margin-left: -10px;
 					cursor: pointer;
 				}
+					.filter-cont .slider-range .price-tt {
+						font-size: 14px;
+						font-weight: 500;
+						padding: 6px 7px 4px;
+						position: absolute;
+						top: -40px;
+						left: -15px;
+						background-color: #fff;
+						border: 2px solid #cbcbcb;
+						border-radius: 2px;
+					}
+					.filter-cont .slider-range .price-tt:before {
+						position: absolute;
+						font-size: 0;
+						content: "";
+						background-image: url("../i/price-triangle.png");
+						width: 15px;
+						height: 9px;
+						left: 50%;
+						margin-left: -8px;
+						bottom: -9px;
+					}
+					.slider-range .ui-slider-handle.ui-state-hover .price-tt {
+						left: -12px;
+					}
+					.slider-range .ui-slider-handle.ui-state-active .price-tt {
+						left: -14px;
+					}
 					.slider-range .ui-slider-handle:before {
 						position: absolute;
 						font-size: 0;
@@ -1308,8 +1347,17 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 					border-color: rgb(255, 255, 255);
 					background-color: #ffc200;
 					top: -6px;
-					margin-left: -12px;
+					margin-left: -13px;
+					z-index: 10;
 				}
+					.slider-range .ui-slider-handle.ui-state-hover .price-tt{
+						top: -37px;
+						left: -12px;
+					}
+					.slider-range .ui-slider-handle.ui-state-active .price-tt{
+						top: -39px;
+						left: -14px;
+					}
 					.slider-range .ui-slider-handle.ui-state-hover:before {
 						width: 10px;
 						height: 10px;
@@ -1332,40 +1380,13 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 						left: 6px;
 						background-color: #fff;
 					}
-				.filter-cont .slider-range .price-tt {
-					font-size: 14px;
-					font-weight: 500;
-					padding: 6px 7px 4px;
-					position: absolute;
-					top: -38px;
-					left: -15px;
-					background-color: #fff;
-					border: 2px solid #cbcbcb;
-					border-radius: 2px;
-				}
-				.filter-cont .slider-range .price-tt:before {
-					position: absolute;
-					font-size: 0;
-					content: "";
-					background-image: url("../i/price-triangle.png");
-					width: 15px;
-					height: 9px;
-					left: calc(50% - 8px);
-					bottom: -9px;
-				}
-				.slider-range .ui-slider-handle.ui-state-hover .price-tt {
-					left: -12px;
-				}
-				.slider-range .ui-slider-handle.ui-state-active .price-tt {
-					left: -14px;
-				}
 				.filter-cont .slide-type {
 					margin-top: 22px;
 				}
 				.filter-cont .slide-type .slider-range {
-					margin-top: 25px;
+					margin-top: 0px;
 					margin-left: 45px;
-					margin-bottom: 15px;
+					margin-bottom: 28px;
 					width: 490px;
 				}
 					.slide-type {
@@ -1410,7 +1431,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 			width: 695px;
 		}
 			.navigation {
-				margin-bottom: 13px;
+				margin-bottom: 20px;
 			}
 				.navigation li {
 					position: relative;
@@ -1429,17 +1450,18 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 				}
 					.navigation li a {
 						color: #414141;
-						text-decoration: none;
+						text-decoration: underline;
 					}
 					.navigation li a:hover {
-						text-decoration: underline;
+						text-decoration: none;
 					}
 					.navigation li:last-child a:hover {
 						text-decoration: none;
 						cursor: default;
 					}
 					.navigation li:last-child a {
-						color: #8f8f8f;
+						color: #4D4D4D;
+						text-decoration: none;
 					}
 				.navigation li:first-child {
 					margin-left: 0;
@@ -1524,12 +1546,12 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 
 }
 	.good-detail .b-block {
-		padding: 22px 0;
+		padding: 25px 0;
 	}
 		.good-detail .b-block .category-title {
 			padding-bottom: 0;
 			border-bottom: none;
-			margin-bottom: 16px;
+			margin-bottom: 25px;
 		}
 		.good-detail .b-block .detail-wrap {
 			margin-bottom: 40px;
@@ -1939,6 +1961,9 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 #similar-slider .b-sim-nav:before{
 	background-image: url("../i/sprite.png");
 }
+.mobile-only{
+	display: none;
+}
 
 @media all and (-webkit-min-device-pixel-ratio: 1.5) {
 	.icon:before,
@@ -2064,6 +2089,14 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 	}
 	.b-footer .b-footer-main .b-block .sections > li .social .social-icon a{
 		height: 33px;
+	}
+	.navigation li:first-child a:before{
+		background-position: -164px -98px;
+	    width: 16px;
+	    height: 15px;
+	}
+	.navigation li:first-child:hover a:before{
+		background-position: -181px -98px;
 	}
 }
 

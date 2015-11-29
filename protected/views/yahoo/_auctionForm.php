@@ -31,5 +31,9 @@
 		<input type="hidden" name="id" value="<?=$_GET['id']?>">
 	<? endif; ?>
 
+	<? if(isset($_GET["YahooLot_page"])): ?>
+		<input type="hidden" name="YahooLot_page" value="<?=$_GET['YahooLot_page']?>">
+	<? endif; ?>
+
 <?php $this->endWidget(); ?>
 </div><!-- form -->

@@ -23,10 +23,10 @@
     	<? foreach ($model as $item): ?>
 			<li class="" data-id="<?=$item->id?>">
                 <div class="image-cont" style="background-image:url('<?=$item->image?>');">
-                    <a href="<?php echo Yii::app()->createUrl('/yahoo/admindetail',array('code'=>$item->id))?>" class="ajax-form ajax-update" title="Посмотреть лот"></a>
+                    <a href="<?php echo Yii::app()->createUrl('/yahoo/admindetail',array('code'=>$item->id, 'YahooLot_page'=>( (isset($_GET["YahooLot_page"]))?$_GET["YahooLot_page"]:1 )))?>" class="ajax-form ajax-update" title="Посмотреть лот"></a>
                     <div class="b-nav clearfix">
                         <span class="b-nav-delete b-tooltip b-delete-<?=$item->id?>" title="Не показывать лот"></span>
-                        <a href="<?php echo Yii::app()->createUrl('/'.$this->adminMenu["cur"]->code.'/adminauctioncreate',array('id'=> $item->id ))?>" class="ajax-form ajax-create b-nav-sniper b-tooltip" title="Добавить в снайпер"></a>
+                        <a href="<?php echo Yii::app()->createUrl('/'.$this->adminMenu["cur"]->code.'/adminauctioncreate',array('id'=> $item->id, 'YahooLot_page'=>( (isset($_GET["YahooLot_page"]))?$_GET["YahooLot_page"]:1 ) ))?>" class="ajax-form ajax-create b-nav-sniper b-tooltip" title="Добавить в снайпер"></a>
                     </div>
                 </div>
                 <!-- <h3><?=$item->title?></h3> -->

@@ -7,16 +7,17 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Главная</title>
-	<meta name="keywords" content=''>
-	<meta name="description" content=''>
+	<title>Колесо Онлайн - твой магазин мечты</title>
+	<meta name="keywords" content='Диски, шины, колеса, колесные диски'>
+	<meta name="description" content='Только в нашем магазине вы найдете именно те колеса, которые вам нужны.'>
 
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<meta name="viewport" content="width=device-width, user-scalable=no">
     <meta name="format-detection" content="telephone=no">
 
 	<? if( $mobile ): ?>
-	<meta name="viewport" content="width=750, user-scalable=no">
+		<meta name="viewport" content="width=750, user-scalable=no">
+	<? else: ?>
+		<meta name="viewport" content="width=device-width, user-scalable=no">
 	<? endif; ?>
 
 	<link rel="stylesheet" href="css/reset.css" type="text/css">
@@ -28,6 +29,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
 
 	<link rel="stylesheet" media="screen and (min-width: 240px) and (max-width: 767px)" href="css/layout-mobile.css" />
 	<link rel="stylesheet" media="screen and (min-width: 768px) and (max-width: 1000px)" href="css/layout-tablet.css" />
+
 	<link rel="icon" type="image/vnd.microsoft.icon" href="favicon.ico">
 </head>
 <body>
@@ -36,15 +38,20 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
 		<li class="v" style="margin-left:480px"></li>
 		<li class="v" ></li>
 	</ul>
+	<img src="i/logo.jpg" class="b-hidden-logo" alt="">
 	<div class="b b-header">
 		<div class="b b-menu">
 			<div class="b-block">
-				<ul class="clearfix">
+				<ul class="clearfix not-mobile">
 					<li><a href="#">О магазине</a></li>
 					<li><a href="#">Доставка и оплата</a></li>
 					<li><a href="#">Гарантия</a></li>
 					<li><a href="#">Контакты</a></li>
 				</ul>
+				<div class="clearfix b-mobile-top-line mobile-only">
+					<h2 class="left">Вы находитесь в г. <a href="#" class="icon">Нижний Новгород</a></h2>
+					<a href="#" class="right icon b-mobile-search-top-icon">Поиск</a>
+				</div>
 			</div>  
 		</div>
 		<div class="b b-header-main">
@@ -52,7 +59,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
 				<span class="stamp"></span>
 				<div class="left">
 					<div class="clearfix">
-						<a class="left" href="#"><img src="i/logo.png"></a>
+						<a class="left" href="#"><img src="i/logo-2.png"></a>
 						<div class="right">
 							<h1>Колесо<span>онлайн</span></h1>
 							<h2>Вы находитесь в г. <a href="#">Томск</a></h2>
@@ -152,16 +159,18 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
 					<div class="filter-cont">
 						<div class="slide-type clearfix">
 							<div class="left">
-							<h3>Ценовой диапазон от</h3>
+							<h3>Ценовой диапазон <span>от</span></h3>
 							<input class="min-val price" type="text" maxlength="5" placeholder="Мин.">
 							<span class="dash">до</span>
 							<input class="max-val price" type="text" maxlength="5" placeholder="Макс.">
 							</div>
-							<div data-min="6500" data-max="9000" data-min-cur="6500" data-max-cur="9000" data-step="100" class="slider-range left"></div>
+							<div class="slider-range-cont">
+								<div data-min="6500" data-max="9000" data-min-cur="6500" data-max-cur="9000" data-step="100" class="slider-range left"></div>
+							</div>
 						</div>	
 					</div>
 					<div class="filter-butt-cont">
-						<input type="submit" class="b-black-butt" value="Принять">
+						<input type="submit" class="b-black-butt" value="Найти">
 					</div>
 				</form>
 			</div>
@@ -950,6 +959,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
 <script type="text/javascript" src="js/jquery.validate.min.js"></script>
 <script type="text/javascript" src="js/slick.min.js"></script>
 <script type="text/javascript" src="js/jquery-ui.min.js"></script>
+<script type="text/javascript" src="js/jquery.ui.touch-punch.js"></script>
 <script type="text/javascript" src="js/KitProgress.js"></script>
 <script type="text/javascript" src="js/KitAnimate.js"></script>
 <script type="text/javascript" src="js/device.js"></script>

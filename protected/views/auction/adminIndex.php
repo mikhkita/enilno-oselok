@@ -56,5 +56,5 @@
 			</tr>
 		<? endif; ?>
 	</table>
-<a href="<?php echo $this->createUrl('/'.$this->adminMenu["cur"]->code.'/adminarchiveall')?>" class="right" style="margin-top: 20px; display: block;">Отправить все в архив</a>
+<a href="<?php echo $this->createUrl('/'.$this->adminMenu["cur"]->code.'/adminarchiveall')?>" class="right" style="margin-top: 20px; display: block;">Отправить все завершенные в архив</a>
 <?php $this->endWidget(); ?>

@@ -6,7 +6,13 @@
 	<meta name="description" content=''>
 
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<meta name="viewport" content="width=1000">	
+    <meta name="format-detection" content="telephone=no">
+
+	<? if( $mobile ): ?>
+		<meta name="viewport" content="width=750, user-scalable=no">
+	<? else: ?>
+		<meta name="viewport" content="width=device-width, user-scalable=no">
+	<? endif; ?>
 
 	<link rel="stylesheet" href="css/reset.css" type="text/css">
 	<link rel="stylesheet" href="css/jquery.fancybox.css" type="text/css">
@@ -14,6 +20,10 @@
 	<link rel="stylesheet" href="css/jquery-ui.css" type="text/css">
 	<link rel="stylesheet" href="css/KitAnimate.css" type="text/css">
 	<link rel="stylesheet" href="css/layout.css" type="text/css">
+	
+	<link rel="stylesheet" media="screen and (min-width: 240px) and (max-width: 767px)" href="css/layout-mobile.css" />
+	<link rel="stylesheet" media="screen and (min-width: 768px) and (max-width: 1000px)" href="css/layout-tablet.css" />
+
 	<link rel="icon" type="image/vnd.microsoft.icon" href="favicon.ico">
 	
 	<!--[if gte IE 9]>
@@ -53,7 +63,7 @@
 				<span class="stamp"></span>
 				<div class="left">
 					<div class="clearfix">
-						<a class="left" href="#"><img src="i/logo.png"></a>
+						<a class="left" href="#"><img src="i/logo-2.png"></a>
 						<div class="right">
 							<h1>Колесо<span>онлайн</span></h1>
 							<h2>Вы находитесь в г. <a href="#">Томск</a></h2>
@@ -529,6 +539,7 @@
 <script type="text/javascript" src="js/jquery.validate.min.js"></script>
 <script type="text/javascript" src="js/slick.min.js"></script>
 <script type="text/javascript" src="js/jquery-ui.min.js"></script>
+<script type="text/javascript" src="js/jquery.ui.touch-punch.js"></script>
 <script type="text/javascript" src="js/KitProgress.js"></script>
 <script type="text/javascript" src="js/KitAnimate.js"></script>
 <script type="text/javascript" src="js/device.js"></script>

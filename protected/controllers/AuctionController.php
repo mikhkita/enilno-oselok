@@ -206,7 +206,7 @@ class AuctionController extends Controller
 	}
 
 	public function actionAdminArchiveAll(){
-		$model= Auction::model()->findAll(array("condition" => "archive=0"));
+		$model= Auction::model()->findAll(array("condition" => "archive=0 AND state!=0"));
 
 		foreach ($model as $key => $auction) {
 			$auction->archive = 1;
