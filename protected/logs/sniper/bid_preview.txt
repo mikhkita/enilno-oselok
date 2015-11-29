@@ -6,14 +6,16 @@
 <meta content="text/html; charset=utf-8" http-equiv=Content-Type>
 <meta name="viewport" content="width=device-width, initial-scale=1"><link rel="shortcut icon" href="https://www.yahon.ru/favicon.ico" type="image/x-icon">
 <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css">
-<link rel="stylesheet" type="text/css" href="/assets/body.v505.css">
-<link rel="stylesheet" type="text/css" href="/assets/5cols.v505.css">
+<link rel="stylesheet" type="text/css" href="/assets/body.v506.css">
+<link rel="stylesheet" type="text/css" href="/assets/5cols.v506.css">
 <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
 <script language="javascript" type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 <script language="javascript" type="text/javascript" src="/lib/js/jquery.cookies.js"></script>
-<script language="javascript" type="text/javascript" src="/assets/checks.v505.js"></script>
-<script language="javascript" type="text/javascript" src="/modules/gtranslate/js/translate.v505.js"></script>
+<script language="javascript" type="text/javascript" src="/assets/checks.v506.js"></script>
+<script language="javascript" type="text/javascript" src="/modules/gtranslate/js/translate.v506.js"></script>
 <script language="javascript" type="text/javascript" src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+<script language="javascript" type="text/javascript" src="/lib/js/awesomplete.min.js"></script>
+<script language="javascript" type="text/javascript" src="/lib/js/awesomplete-ajax.js"></script>
 <!--[if lt IE 7]>
 <![if gte IE 5.5]>
 <script type="text/javascript" src="/lib/js/fixpng.js"></script>
@@ -26,6 +28,14 @@
 
 </head>
 <body>
+
+<script>
+window.onload = function() {
+    var searchBox = document.querySelector('.awesomplete input');
+    var ajaxAwesome = new Awesomplete(searchBox);
+    ajaxAwesome.ajaxUrl = '/lib/data_request/autocomplete.php';
+}
+</script>
 
 <nav class="navbar navbar-inverse" role="navigation">
     <div class="container">
@@ -63,26 +73,29 @@
                     </li>
                 </ul>
                 </span>
-                <input type="text" class="form-control" placeholder="Например, iphone 6" name="q" value="">
+                <input type="search" autofocus class="awesomplete form-control" list="mylist" autocomplete="off" data-autofirst placeholder="" name="q" value="">
+                <input type="hidden" name="code" value="0">
                 <span class="input-group-btn">
                 <button class="btn btn-search">Найти</button>
                 </span>
-                </div><!-- /input-group -->
-                            </form>
+                </div>
+            </form>
             <form class="navbar-form navbar-right" role="form">
                 <ul class="nav">
-                                        <li class="dropdown">
+                                    <li>
+                    	<a href="/delivery">Тарифы</a>
+                	</li>
+                    <li class="dropdown">
                         <a href="#" class="dropdown-toggle" id="cabinet-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> Мой кабинет<span class="caret"></span></a>
                         <ul class="dropdown-menu" role="menu">
                             <li><a href="/personal/bids"><i class="fa fa-gavel"></i> Ставки</a></li>
                             <li><a href="/personal/favourites"><i class="fa fa-heart"></i> Избранные лоты</a></li>
                             <li><a href="/personal/orders"><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span> Заказы</a></li>
                             <li><a href="/personal/messages">
-                                <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> Сообщения</a></li>                        <li><a href="/personal/parcels"><i class="fa fa-paper-plane"></i> Посылки</a></li>
+                    <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> Сообщения</a></li>
+                                            <li><a href="/personal/purse"><i class="fa fa-jpy"></i> Кошелек</a></li>
                         <li class="divider"></li>
-                        <li><a href="/personal/purse"><i class="fa fa-jpy"></i> Кошелек</a></li>
-                        <li class="divider"></li>
-                        <li><a href="/personal/pasport"><i class="fa fa-cog"></i> Профиль</a></li>
+                        <li><a href="/personal/pasport"><i class="fa fa-cog"></i> Профиль <small>(svc1)</small></a></li>
                         <li><a href="/request">Заказ доставки</a></li>
                         <li><a href="/requestBuying">Заказ покупки</a></li>
                         <li><a href="/orderParts">Новые запчасти</a></li>
@@ -111,7 +124,7 @@
 
 <div class="container">
 
-<div class="container"><form method="POST" onsubmit="return this.rest.checked;" action="https://www.yahon.ru/yahoo/bid_place"><table border="0" cellpadding="0" cellspacing="0" class="table"><tr><td class="fld">Лот:</td><td class="value">w122643808</td></tr><tr><td class="fld">Название лота:</td><td class="value">прекрасный товар!! Subaru  оригинальный BS производства супер паз205/60R16  Legacy.1000 иен прямые продажи!!</td></tr><tr><td class="fld"><b>Ваша ставка</b>:</td><td class="value"><b>&yen;1501</b></td></tr><tr><td class="fld">Текущая цена:</td><td class="value">&yen; 1<img src="https://www.yahon.ru/lib/res/img/1x1.gif" height="1" width="2" border="0">200</td></tr><tr><td class="fld">Ваши пожелания по данному лоту:</td><td class="value"><textarea cols="50" rows="3" name="comments" id="comments"  tabindex="1"></textarea></td></tr><tr><td class="fld"><b>Кол-во товаров</b>:</td><td class="value"><b>1</b></td></tr><tr><td class="fld">Желаемый способ доставки из Японии:</td><td class="value"><select name="deliveryType" id="deliveryType"  tabindex="2"><option value="2" >Доставка морем</option><option value="1" >Авиапочта EMS</option><option value="3" >Экспресс морем</option></select></td></tr></table><br><table border="0" cellpadding="0" cellspacing="0" width="80%"><tr><td align="center"><button type="submit" name="make" class="btn btn-primary btn-lg"  tabindex="3">Сделать ставку</button><input type="hidden" id="user_rate" name="user_rate" id="user_rate" value="1501"><input type="hidden" id="quantity" name="quantity" id="quantity" value="1"><input type="hidden" id="lot_no" name="lot_no" id="lot_no" value="w122643808"><input type="hidden" id="token" name="token" id="token" value="55acb11cd431a"><input type="hidden" id="signature" name="signature" id="signature" value="7d968583dd498d2f0e70034302dc4db8"></td><td></td></tr></table></form></div>
+<div class="container"><form method="POST" onsubmit="return this.rest.checked;" action="https://www.yahon.ru/yahoo/bid_place"><table border="0" cellpadding="0" cellspacing="0" class="table"><tr><td class="fld">Лот:</td><td class="value">k203504060</td></tr><tr><td class="fld">Название лота:</td><td class="value">AVS Model T7 17×7.5J 215/45R17  гайка есть  шероховатость высота  Legacy*</td></tr><tr><td class="fld"><b>Ваша ставка</b>:</td><td class="value"><b>&yen;1200</b></td></tr><tr><td class="fld">Текущая цена:</td><td class="value">&yen; 1<img src="https://www.yahon.ru/lib/res/img/1x1.gif" height="1" width="2" border="0">100</td></tr><tr><td class="fld">Ваши пожелания по данному лоту:</td><td class="value"><textarea cols="50" rows="3" name="comments" id="comments"  tabindex="1"></textarea></td></tr><tr><td class="fld"><b>Кол-во товаров</b>:</td><td class="value"><b>1</b></td></tr><tr><td class="fld">Желаемый способ доставки из Японии:</td><td class="value"><select name="deliveryType" id="deliveryType"  tabindex="2"><option value="2" >Доставка морем</option><option value="1" >Авиапочта EMS</option><option value="3" >Экспресс морем</option></select></td></tr></table><br><table border="0" cellpadding="0" cellspacing="0" width="80%"><tr><td align="center"><button type="submit" name="make" class="btn btn-primary btn-lg"  tabindex="3">Сделать ставку</button><input type="hidden" id="user_rate" name="user_rate" id="user_rate" value="1200"><input type="hidden" id="quantity" name="quantity" id="quantity" value="1"><input type="hidden" id="lot_no" name="lot_no" id="lot_no" value="k203504060"><input type="hidden" id="token" name="token" id="token" value="565b5f688a3f8"><input type="hidden" id="signature" name="signature" id="signature" value="22d1a2c5048c550c774a9ef82b4e8660"></td><td></td></tr></table></form></div>
     
 </div>
 
@@ -122,14 +135,14 @@
     <footer>
         <div class="row">
             <div class="col-md-4">
-                <address> <span class="phones">8-4232-80-58-80
+                <address> <span class="phones">8-423-254-82-29
                 <br>8-914-326-67-20</span>
                 <br>Владивосток, ул. Шошина, д. 6 (<a href="http://maps.yandex.ru/-/CVeo7X1m">карта</a>)</address>
             </div>
             <div class="col-md-4">
-                    <small><p>100 ¥ — 46.6 ₽<br>
-                    1 $ — 122 ¥</p>
-                    Следующий пароход Ryofu 14 выходит из Японии 22.07.                    </small>
+                    <small><p>100 &yen; — 55 <span class="rur">p<span>уб.</span><br>
+                    1 $ — 120.4 ¥</p>
+                    Следующий пароход пока неизвестен                    </small>
                 
             </div>
             <div class="col-md-4">

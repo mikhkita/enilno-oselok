@@ -6,14 +6,16 @@
 <meta content="text/html; charset=utf-8" http-equiv=Content-Type>
 <meta name="viewport" content="width=device-width, initial-scale=1"><link rel="shortcut icon" href="https://www.yahon.ru/favicon.ico" type="image/x-icon">
 <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css">
-<link rel="stylesheet" type="text/css" href="/assets/body.v505.css">
-<link rel="stylesheet" type="text/css" href="/assets/5cols.v505.css">
+<link rel="stylesheet" type="text/css" href="/assets/body.v506.css">
+<link rel="stylesheet" type="text/css" href="/assets/5cols.v506.css">
 <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
 <script language="javascript" type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 <script language="javascript" type="text/javascript" src="/lib/js/jquery.cookies.js"></script>
-<script language="javascript" type="text/javascript" src="/assets/checks.v505.js"></script>
-<script language="javascript" type="text/javascript" src="/modules/gtranslate/js/translate.v505.js"></script>
+<script language="javascript" type="text/javascript" src="/assets/checks.v506.js"></script>
+<script language="javascript" type="text/javascript" src="/modules/gtranslate/js/translate.v506.js"></script>
 <script language="javascript" type="text/javascript" src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+<script language="javascript" type="text/javascript" src="/lib/js/awesomplete.min.js"></script>
+<script language="javascript" type="text/javascript" src="/lib/js/awesomplete-ajax.js"></script>
 <script language="javascript" type="text/javascript" src="/lib/js/common.js"></script>
 <script language="javascript" type="text/javascript" src="https://www.yahon.ru/modules/yahoo_auction/js/bid_place.v1.5.js"></script>
 <!--[if lt IE 7]>
@@ -28,6 +30,14 @@
 
 </head>
 <body>
+
+<script>
+window.onload = function() {
+    var searchBox = document.querySelector('.awesomplete input');
+    var ajaxAwesome = new Awesomplete(searchBox);
+    ajaxAwesome.ajaxUrl = '/lib/data_request/autocomplete.php';
+}
+</script>
 
 <nav class="navbar navbar-inverse" role="navigation">
     <div class="container">
@@ -65,26 +75,29 @@
                     </li>
                 </ul>
                 </span>
-                <input type="text" class="form-control" placeholder="Например, iphone 6" name="q" value="">
+                <input type="search" autofocus class="awesomplete form-control" list="mylist" autocomplete="off" data-autofirst placeholder="" name="q" value="">
+                <input type="hidden" name="code" value="0">
                 <span class="input-group-btn">
                 <button class="btn btn-search">Найти</button>
                 </span>
-                </div><!-- /input-group -->
-                            </form>
+                </div>
+            </form>
             <form class="navbar-form navbar-right" role="form">
                 <ul class="nav">
-                                        <li class="dropdown">
+                                    <li>
+                    	<a href="/delivery">Тарифы</a>
+                	</li>
+                    <li class="dropdown">
                         <a href="#" class="dropdown-toggle" id="cabinet-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> Мой кабинет<span class="caret"></span></a>
                         <ul class="dropdown-menu" role="menu">
                             <li><a href="/personal/bids"><i class="fa fa-gavel"></i> Ставки</a></li>
                             <li><a href="/personal/favourites"><i class="fa fa-heart"></i> Избранные лоты</a></li>
                             <li><a href="/personal/orders"><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span> Заказы</a></li>
                             <li><a href="/personal/messages">
-                                <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> Сообщения</a></li>                        <li><a href="/personal/parcels"><i class="fa fa-paper-plane"></i> Посылки</a></li>
+                    <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> Сообщения</a></li>
+                                            <li><a href="/personal/purse"><i class="fa fa-jpy"></i> Кошелек</a></li>
                         <li class="divider"></li>
-                        <li><a href="/personal/purse"><i class="fa fa-jpy"></i> Кошелек</a></li>
-                        <li class="divider"></li>
-                        <li><a href="/personal/pasport"><i class="fa fa-cog"></i> Профиль</a></li>
+                        <li><a href="/personal/pasport"><i class="fa fa-cog"></i> Профиль <small>(svc1)</small></a></li>
                         <li><a href="/request">Заказ доставки</a></li>
                         <li><a href="/requestBuying">Заказ покупки</a></li>
                         <li><a href="/orderParts">Новые запчасти</a></li>
@@ -115,12 +128,12 @@
 
 <div id="bid_place_box" align="center"></div>
 <script language="JavaScript">
-var lot_no = "w122643808";
-var user_rate = 1501;
+var lot_no = "k203504060";
+var user_rate = 1200;
 var quantity = 1;
 var deliveryType = 2;
 var comments = "";
-var script_url = "/modules/yahoo_auction/data_request/rate.php?token=55acb11d3916c&signature=203b46f6c2ae4a114ee86b5f71588dfba9ffa006";
+var script_url = "/modules/yahoo_auction/data_request/rate.php?token=565b5f694c9bf&signature=174379d727ec9c4313a41330f1985c1c610f586c";
 
 MakeBid(script_url, lot_no, user_rate, quantity, deliveryType, comments);
 
@@ -147,14 +160,14 @@ function CheckRate(form, max_rate, min_rate, lot_no, quantity) {
     <footer>
         <div class="row">
             <div class="col-md-4">
-                <address> <span class="phones">8-4232-80-58-80
+                <address> <span class="phones">8-423-254-82-29
                 <br>8-914-326-67-20</span>
                 <br>Владивосток, ул. Шошина, д. 6 (<a href="http://maps.yandex.ru/-/CVeo7X1m">карта</a>)</address>
             </div>
             <div class="col-md-4">
-                    <small><p>100 ¥ — 46.6 ₽<br>
-                    1 $ — 122 ¥</p>
-                    Следующий пароход Ryofu 14 выходит из Японии 22.07.                    </small>
+                    <small><p>100 &yen; — 55 <span class="rur">p<span>уб.</span><br>
+                    1 $ — 120.4 ¥</p>
+                    Следующий пароход пока неизвестен                    </small>
                 
             </div>
             <div class="col-md-4">

@@ -37,10 +37,6 @@ Class Injapan {
         $result["main"]["current_price"] = intval(str_replace("&nbsp;", "", strip_tags($query[0]->innertext)));
         $result["main"]["state"] = ( intval($result["main"]["current_price"]) + intval($result["other"]["step"]) > intval($max_price) )?5:0;
 
-        // Уточнение состояния аукциона. Завершен или не завершен
-        $query = $html->find("#bidplace input[name=account]");
-        if( !isset($query[0]) ) $result["main"]["state"] = ( $result["main"]["current_price"] <= $max_price && ($state == 2 || $state == 6) )?6:3;
-
         return $result;
     }
 

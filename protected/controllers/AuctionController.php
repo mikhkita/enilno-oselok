@@ -117,27 +117,24 @@ class AuctionController extends Controller
 		$yahon = new Yahon();
 
 		$model = Auction::model()->findAll(array("condition"=>"state=0 AND archive=0 AND date<'".date("Y-m-d H:i:s", time()+$this->minutes_before*60)."'"));
-		// $model = Auction::model()->findAll(array("condition"=>"state=0 AND date<'".date("Y-m-d H:i:s", strtotime("2015-07-20 19:21:00")+$this->minutes_before*60)."'"));
+		// $model = Auction::model()->findAll(array("condition"=>"state=0 AND archive=0"));
 		foreach ($model as $key => $auction) {
 			$fields = NULL;
 			$fields = Injapan::getFields($auction->code, $auction->price, $auction->state);
 
 			if( intval($fields["main"]["state"]) == 0 ){ // ПОПРАВИТЬ НА 0
 				if( strtotime($fields["main"]["date"]) < time()+$this->minutes_before*60 ){
-				// if( strtotime($fields["main"]["date"]) < strtotime("2015-07-20 19:21:00")+$this->minutes_before*60 ){
 					if( !$yahon->isAuth() ) $yahon->auth();
 
-					$fields = $this->setBid($auction,$fields,$yahon);
+					$this->setBid($auction,$fields,$yahon);
 				}
 			}
-			$auction->attributes = $fields["main"];
-			$auction->save();
 		}
 
-		$model = Auction::model()->findAll(array("condition"=>"state=2 AND archive=0 AND date<'".date("Y-m-d H:i:s", time()+$this->minutes_before*60)."'"));
-		// $model = Auction::model()->findAll(array("condition"=>"state=2 AND date<'".date("Y-m-d H:i:s", strtotime("2015-07-20 19:21:00")+$this->minutes_before*60)."'"));
+		// $model = Auction::model()->findAll(array("condition"=>"state=2 AND archive=0 AND date<'".date("Y-m-d H:i:s", time()+$this->minutes_before*60)."'"));
+		$model = Auction::model()->findAll(array("condition"=>"state=2 AND archive=0"));
 		foreach ($model as $key => $auction) {
-			$this->update($auction);
+			$this->update($auction,NULL,$yahon);
 		}
 		Log::debug("Конец проверки");
 	}
@@ -159,34 +156,13 @@ class AuctionController extends Controller
 	}
 
 	public function setBid($auction,$fields,$yahon){
-		$tog = false;
-		$counter = 0;
-		do{
-			$counter++;
+		$result = $yahon->setBid($auction->code,$fields["main"]["current_price"],$fields["other"]["step"],$auction->price);
 
-			// Если 5 раз пробовали уже ставить ставку, то на 6-й раз ставим максимум
-			$cur_price = ($counter == $this->tryes+1)?(intval($auction->price)-intval($fields["other"]["step"])):$fields["main"]["current_price"];
+		Log::debug("state=".$result["result"]."; cur_price = ".$cur_price);
 			
-			$result = $yahon->setBid($auction->code,$cur_price,$fields["other"]["step"],$auction->price);
-			Log::debug("Первый раз вернуло state=".$result["result"]."; cur_price = ".$cur_price);
-			if( $result["result"] == 2 || $result["result"] == 0 ){
-				$fields = Injapan::getFields($auction->code, $auction->price, $auction->state);
+		$fields["main"]["state"] = $result["result"];
 
-				Log::debug("Ставили: ".$result["price"]."; Сейчас: ".$fields["main"]["current_price"]);
-				if( intval($fields["main"]["current_price"]) <= intval($result["price"]) ){
-					Log::sniper("Лот ".$auction->code.". Поставили ставку ".$result["price"].". Текущая цена ".$fields["main"]["current_price"]);
-					$fields["main"]["state"] = 2;
-					$tog = true;
-				}else{
-					Log::sniper("Лот ".$auction->code.". Нашу ставку в ".$result["price"]." перебили ценой ".$fields["main"]["current_price"]);
-					$tog = ($counter == $this->tryes+1)?true:false;
-				}
-			}else{
-				$fields["main"]["state"] = $result["result"];
-				$tog = true;
-			}
-			Log::debug("Цикл завершился");
-		}while(!$tog);
+		$this->update($auction,NULL,$yahon);
 
 		return $fields;
 	}
@@ -224,7 +200,7 @@ class AuctionController extends Controller
 			$this->actionAdminIndex(true);
 	}
 
-	public function update($auction,$params = NULL){
+	public function update($auction,$params = NULL,$yahon = NULL){
 		$fields = Injapan::getFields($auction->code, ($params==NULL)?$auction->price:$params["price"], $auction->state);
 
 		if( $params !== NULL )
@@ -232,6 +208,18 @@ class AuctionController extends Controller
 
 		if( intval($auction->state) == 2 && intval($fields["main"]["current_price"]) <= intval($auction->current_price) && intval($fields["main"]["state"]) != 6 && intval($fields["main"]["state"]) != 3  )
 			$fields["main"]["state"] = 2;
+
+		if( $yahon !== false ){
+			if( $yahon === NULL ){
+				$yahon = new Yahon();
+				$yahon->auth();
+			}
+
+			$yahon_state = $yahon->getState($auction->code);
+			if( $yahon_state != 0 ){
+				$fields["main"]["state"] = $yahon_state;
+			}
+		}
 
 		$auction->attributes = $fields["main"];
 		return $auction->save();

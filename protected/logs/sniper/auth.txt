@@ -1,60 +1,3 @@
-HTTP/1.1 100 Continue
-
-HTTP/1.1 302 Found
-Server: nginx
-Date: Mon, 20 Jul 2015 08:28:10 GMT
-Content-Type: text/html; charset=utf-8
-Content-Length: 0
-Connection: keep-alive
-Keep-Alive: timeout=1180
-Set-Cookie: session=9HFhp2wzYGTve4y2j90LtZgIm2f; expires=Tue, 21-Jul-2015 08:28:10 GMT; path=/
-Expires: Mon, 26 Jul 1997 05:00:00 GMT
-Cache-Control: no-store, no-cache, must-revalidate
-Pragma: no-cache
-Last-Modified: Mon, 20 Jul 2015 08:28:10 GMT
-Cache-Control: post-check=0, pre-check=0
-Set-Cookie: verify=60d69eb7c7; expires=Tue, 21-Jul-2015 08:28:10 GMT; path=/; secure; httponly
-Location: https://www.yahon.ru
-Vary: Accept-Encoding
-X-Content-Type-Options: nosniff
-X-Frame-Options: SAMEORIGIN
-X-XSS-Protection: 1; mode=block
-
-HTTP/1.1 301 Moved Permanently
-Server: nginx
-Date: Mon, 20 Jul 2015 08:28:11 GMT
-Content-Type: text/html; charset=utf-8
-Content-Length: 20
-Connection: keep-alive
-Keep-Alive: timeout=1180
-Expires: Mon, 20 Jul 2015 09:27:22 GMT
-Last-Modified: Mon, 20 Jul 2015 08:27:22 GMT
-Cache-Control: private, max-age=3600
-Pragma: cache
-Location: http://www.yahon.ru/
-Vary: Accept-Encoding
-Content-Encoding: gzip
-X-Content-Type-Options: nosniff
-X-Frame-Options: SAMEORIGIN
-X-XSS-Protection: 1; mode=block
-
-HTTP/1.1 200 OK
-Server: nginx
-Date: Mon, 20 Jul 2015 08:28:11 GMT
-Content-Type: text/html; charset=utf-8
-Transfer-Encoding: chunked
-Connection: keep-alive
-Keep-Alive: timeout=1180
-Expires: Mon, 26 Jul 1997 05:00:00 GMT
-Last-Modified: Mon, 20 Jul 2015 08:25:01 GMT
-Cache-Control: no-store, no-cache, must-revalidate
-Cache-Control: post-check=0, pre-check=0
-Pragma: no-cache
-Vary: Accept-Encoding
-X-Content-Type-Options: nosniff
-X-Frame-Options: SAMEORIGIN
-X-XSS-Protection: 1; mode=block
-
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd"> 
 <html><head>
 <title>Аукцион Yahoo</title>
@@ -63,12 +6,14 @@ X-XSS-Protection: 1; mode=block
 <meta content="text/html; charset=utf-8" http-equiv=Content-Type>
 <meta name="viewport" content="width=device-width, initial-scale=1"><link rel="shortcut icon" href="http://www.yahon.ru/favicon.ico" type="image/x-icon">
 <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css">
-<link rel="stylesheet" type="text/css" href="/assets/body.v505.css">
-<link rel="stylesheet" type="text/css" href="/assets/5cols.v505.css">
+<link rel="stylesheet" type="text/css" href="/assets/body.v506.css">
+<link rel="stylesheet" type="text/css" href="/assets/5cols.v506.css">
 <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
 <script language="javascript" type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-<script language="javascript" type="text/javascript" src="/assets/checks.v505.js"></script>
+<script language="javascript" type="text/javascript" src="/assets/checks.v506.js"></script>
 <script language="javascript" type="text/javascript" src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+<script language="javascript" type="text/javascript" src="/lib/js/awesomplete.min.js"></script>
+<script language="javascript" type="text/javascript" src="/lib/js/awesomplete-ajax.js"></script>
 <script language="javascript" type="text/javascript" src="/lib/js/elastislide/js/jquery.elastislide.js"></script>
 <script language="javascript" type="text/javascript" src="/lib/js/elastislide/js/jquerypp.custom.js"></script>
 <script language="javascript" type="text/javascript" src="/lib/js/elastislide/js/modernizr.custom.17475.js"></script>
@@ -88,83 +33,80 @@ X-XSS-Protection: 1; mode=block
 </head>
 <body>
 
-<!--[if lt IE 7]>
-            <p class="browsehappy">Вы используете <strong>очень старый</strong> браузер. Заклинаем, <a href="http://browsehappy.com/">обновите браузер</a>. Это действительно сделает вашу жизнь лучше.</p>
-<![endif]-->
-<!-- Modal Login form-->
-<div class="modal" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-body">
-                <form action="https://www.yahon.ru/auth" method="post" class="pre-style" id="loginform">
-                    <input value="Y" name="to_remain_here" type="hidden"><input type="hidden" name="set_from" value="">                    <label for="inputLogin" class="sr-only">Логин</label>
-                    <input type="login" id="set_login" name="set_login" class="form-control" placeholder="Логин" required autofocus>
-                    <label for="inputPassword" class="sr-only">Пароль</label>
-                    <input type="password" id="set_pass" name="set_pass" class="form-control" placeholder="Пароль" required>
-                    <p><a href="/remind">Забыли пароль?</a><br></p>
-                    <button class="btn btn-lg btn-primary btn-block" type="submit">Войти</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-</div>
+<script>
+window.onload = function() {
+    var searchBox = document.querySelector('.awesomplete input');
+    var ajaxAwesome = new Awesomplete(searchBox);
+    ajaxAwesome.ajaxUrl = '/lib/data_request/autocomplete.php';
+}
+</script>
+
 <nav class="navbar navbar-inverse" role="navigation">
-<div class="container">
-    <div class="navbar-header">
-        <a class="navbar-brand" href="/">Yahon.ru</a>
-    </div>
-    <form class="navbar-form navbar-left" role="search" action="/yahoo/search">
-        <div class="input-group" id="search">
-            <span class="input-group-btn">
-            <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-expanded="false">Категории <span class="caret"></span></button>
-            <ul class="dropdown-menu cat-menu" role="menu">
-                <li>
-                    <ul class="list-unstyled col-sm-3 cat">
-                        <li><h4><a href="/yahoo/part_26318.html">Авто мото</a></h4></li>
-                        <li><a href="/yahoo/part_26322.html">Запчасти</a></li>
-                        <li><a href="/yahoo/part_2084300257.html">Шины, колеса</a></li>
-                        <li><a href="/yahoo/part_23852.html">Car Audio</a></li>
-                        <li><a href="/yahoo/part_26320.html">Аксессуары</a></li>
+    <div class="container">
+        <div class="navbar-header">
+                  <a class="navbar-brand" href="/">Yahon.ru</a>
+        </div>
+        <form class="navbar-form navbar-left" role="search" action="/yahoo/search">
+            <div class="input-group" id="search">
+                <span class="input-group-btn">
+                <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-expanded="false">Категории <span class="caret"></span></button>
+                <ul class="dropdown-menu cat-menu" role="menu">
+                    <li>
+                        <ul class="list-unstyled col-sm-3 cat">
+                            <li><h4><a href="/yahoo/part_26318.html">Авто мото</a></h4></li>
+                            <li><a href="/yahoo/part_26322.html">Запчасти</a></li>
+                            <li><a href="/yahoo/part_2084300257.html">Шины, колеса</a></li>
+                            <li><a href="/yahoo/part_23852.html">Car Audio</a></li>
+                            <li><a href="/yahoo/part_26320.html">Аксессуары</a></li>
+                        </ul>
+                        <ul class="list-unstyled col-sm-4 cat">
+                            <li><h4><a href="/yahoo/part_23140.html">Часы, аксессуары</a></h4></li>
+                            <li><a href="/yahoo/part_2084005359.html">Женские аксессуары</a></li>
+                            <li><a href="/yahoo/part_2084005358.html">Мужские аксессуары</a></li>
+                            <li><a href="/yahoo/part_2084006476.html">Детские аксессуары</a></li>
+                            <li><a href="/yahoo/part_23260.html">Брендовые часы</a></li>
+                        </ul>
+                        <ul class="list-unstyled col-sm-4 cat">
+                            <li><h4><a href="/yahoo/part_23632.html">Видео, аудио</a></h4></li>
+                            <li><a href="/yahoo/part_23880.html">Видео</a></li>
+                            <li><a href="/yahoo/part_23764.html">Аудио</a></li>
+                            <li><a href="/yahoo/part_23636.html">Фотоаппараты, оптика</a></li>
+                            <li><a href="/yahoo/part_23960.html">Мобильные телефоны</a></li>
+                            <li><span id="all_cat"><a href="/yahoo/part_0.html">Все категории</a></span></li>
+                        </ul>
+                    </li>
+                </ul>
+                </span>
+                <input type="search" autofocus class="awesomplete form-control" list="mylist" autocomplete="off" data-autofirst placeholder="" name="q" value="">
+                <input type="hidden" name="code" value="0">
+                <span class="input-group-btn">
+                <button class="btn btn-search">Найти</button>
+                </span>
+                </div>
+            </form>
+            <form class="navbar-form navbar-right" role="form">
+                <ul class="nav">
+                                    <li>
+                    	<a href="/delivery">Тарифы</a>
+                	</li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" id="cabinet-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> Мой кабинет<span class="caret"></span></a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a href="/personal/bids"><i class="fa fa-gavel"></i> Ставки</a></li>
+                            <li><a href="/personal/favourites"><i class="fa fa-heart"></i> Избранные лоты</a></li>
+                            <li><a href="/personal/orders"><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span> Заказы</a></li>
+                            <li><a href="/personal/messages">
+                    <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> Сообщения</a></li>
+                                            <li><a href="/personal/purse"><i class="fa fa-jpy"></i> Кошелек</a></li>
+                        <li class="divider"></li>
+                        <li><a href="/personal/pasport"><i class="fa fa-cog"></i> Профиль <small>(svc1)</small></a></li>
+                        <li><a href="/request">Заказ доставки</a></li>
+                        <li><a href="/requestBuying">Заказ покупки</a></li>
+                        <li><a href="/orderParts">Новые запчасти</a></li>
                     </ul>
-                    <ul class="list-unstyled col-sm-4 cat">
-                        <li><h4><a href="/yahoo/part_23140.html">Часы, аксессуары</a></h4></li>
-                        <li><a href="/yahoo/part_2084005359.html">Женские аксессуары</a></li>
-                        <li><a href="/yahoo/part_2084005358.html">Мужские аксессуары</a></li>
-                        <li><a href="/yahoo/part_2084006476.html">Детские аксессуары</a></li>
-                        <li><a href="/yahoo/part_23260.html">Брендовые часы</a></li>
-                    </ul>
-                    <ul class="list-unstyled col-sm-4 cat">
-                        <li><h4><a href="/yahoo/part_23632.html">Видео, аудио</a></h4></li>
-                        <li><a href="/yahoo/part_23880.html">Видео</a></li>
-                        <li><a href="/yahoo/part_23764.html">Аудио</a></li>
-                        <li><a href="/yahoo/part_23636.html">Фотоаппараты, оптика</a></li>
-                        <li><a href="/yahoo/part_23960.html">Мобильные телефоны</a></li>
-                        <li><span id="all_cat"><a href="/yahoo/part_0.html">Все категории</a></span></li>
-                    </ul>
                 </li>
-            </ul>
-            </span>
-            <input type="text" class="form-control" placeholder="" name="q" value="">
-            <span class="input-group-btn">
-            <button class="btn btn-search">Найти</button>
-            </span>
-            </div><!-- /input-group -->
-                    </form>
-        <form class="navbar-form navbar-right" role="form">
-            <ul class="nav">
-                <li>
-                    <a href="/delivery">Тарифы</a>
-                </li>
-                <li>
-                    <a href="/auth">Зарегистрироваться</a>
-                </li>
-                <li>
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#loginModal">
-                    Войти
-                    </button>
-                </li>
-            </ul>
+                <li><a href="/?logout=1"><small>Выйти</small></a></li>
+                            </ul>
         </form>
         </div><!--/.navbar-collapse -->
     </div>
@@ -212,20 +154,25 @@ X-XSS-Protection: 1; mode=block
 </div>
 </div>
 
+<div class="container">
+<div class="row">
+    <h2 class="frontpage-header">Витамины и бады из Японии.</h2>
+</div>
+</div>
 <div style="background: #BBC4C7; width:100%;">
 <div class="container" style="min-height: 200px; padding-bottom:30px;">
 <div class="row">
-    <ul class="nav nav-pills" id="pills">
-        <li><a href="/lib/data_request/ajaxCategories.php?id=instruments" data-target="#instruments" class="media_node span" id="instruments_tab" data-toggle="tabajax" rel="tooltip">Музыкальные инструменты</a></li>
-        <li><a href="/lib/data_request/ajaxCategories.php?id=boatEngines" data-target="#boatEngines" class="media_node span" id="boatEngines_tab" data-toggle="tabajax" rel="tooltip">Лодочные моторы</a></li>
-        <li><a href="/yahoo/part_0.html" rel="tooltip"><big>Все категории</big></a></li>
-       </ul>
     <div class="tab-content">
-        <div class="tab-pane" id="instruments">
-        </div>
-        <div class="tab-pane" id="boatEngines">
-        </div>
-    </div>
+
+<a href="/stock/item?number=17"><div class="frontpageAggregator rakuten"><img src="http://www.yahon.ru/images/stock/1903037237.jpg" alt="Сквален  "><br><p>Сквален<br><br></p><p class="price" style="font-size:18px;">1315 <span class="rur">p<span>уб.</span></p>
+    </div></a><a href="/stock/item?number=18"><div class="frontpageAggregator rakuten"><img src="http://www.yahon.ru/images/stock/2076215271.jpg" alt="Коллаген Фукоидан"><br><p>Коллаген<br>Фукоидан</p><p class="price" style="font-size:18px;">1621 <span class="rur">p<span>уб.</span></p>
+    </div></a><a href="/stock/item?number=20"><div class="frontpageAggregator rakuten"><img src="http://www.yahon.ru/images/stock/1601870318.jpg" alt="Детские витамины"><br><p>Детские<br>витамины</p><p class="price" style="font-size:18px;">347 <span class="rur">p<span>уб.</span></p>
+    </div></a><a href="/stock/item?number=22"><div class="frontpageAggregator rakuten"><img src="http://www.yahon.ru/images/stock/1365417946.jpg" alt="Глюкозамин  "><br><p>Глюкозамин<br><br></p><p class="price" style="font-size:18px;">1695 <span class="rur">p<span>уб.</span></p>
+    </div></a><a href="/stock/item?number=23"><div class="frontpageAggregator rakuten"><img src="http://www.yahon.ru/images/stock/989912265.jpg" alt="Глюкозамин MSM "><br><p>Глюкозамин<br>MSM<br></p><p class="price" style="font-size:18px;">1511 <span class="rur">p<span>уб.</span></p>
+    </div></a><a href="/stock/item?number=24"><div class="frontpageAggregator rakuten"><img src="http://www.yahon.ru/images/stock/224107424.jpg" alt="Мазь Анмеруцу"><br><p>Мазь<br>Анмеруцу</p><p class="price" style="font-size:18px;">338 <span class="rur">p<span>уб.</span></p>
+    </div></a><a href="/stock/item?number=25"><div class="frontpageAggregator rakuten"><img src="http://www.yahon.ru/images/stock/1235073034.jpg" alt="Рыбий жир"><br><p>Рыбий<br>жир</p><p class="price" style="font-size:18px;">991 <span class="rur">p<span>уб.</span></p>
+    </div></a><a href="/stock/item?number=26"><div class="frontpageAggregator rakuten"><img src="http://www.yahon.ru/images/stock/1512862082.jpg" alt="Витамины HelloKitty"><br><p>Витамины<br>HelloKitty</p><p class="price" style="font-size:18px;">348 <span class="rur">p<span>уб.</span></p>
+    </div></a></div>
 </div>
 </div>
 </div>
@@ -247,7 +194,6 @@ X-XSS-Protection: 1; mode=block
 </div>
 </div>
 </div>
-
 
 
 <script type="text/javascript">
@@ -273,20 +219,19 @@ jQuery("#fishingRods_tab").click();
 
 
 
-
 <div class="container">
     <hr>
     <footer>
         <div class="row">
             <div class="col-md-4">
-                <address> <span class="phones">8-4232-80-58-80
+                <address> <span class="phones">8-423-254-82-29
                 <br>8-914-326-67-20</span>
                 <br>Владивосток, ул. Шошина, д. 6 (<a href="http://maps.yandex.ru/-/CVeo7X1m">карта</a>)</address>
             </div>
             <div class="col-md-4">
-                    <small><p>100 ¥ — 46.6 ₽<br>
-                    1 $ — 122 ¥</p>
-                    Следующий пароход Ryofu 14 выходит из Японии 22.07.                    </small>
+                    <small><p>100 &yen; — 55 <span class="rur">p<span>уб.</span><br>
+                    1 $ — 120.4 ¥</p>
+                    Следующий пароход пока неизвестен                    </small>
                 
             </div>
             <div class="col-md-4">

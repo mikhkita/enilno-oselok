@@ -96,7 +96,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
 				</ul>
 			</div>
 		</div>
-		<div class="b b-sub-menu b-fixed-top gradient-orange">
+		<div class="b b-sub-menu b-fixed-top gradient-orange mobile-only">
 			<div class="b-block clearfix">
 				<a href="#" class="b-burger icon left"></a>
 				<a href="callto:+79993211122" class="b-phone-center left">+7 (999) 321-11-22</a>
