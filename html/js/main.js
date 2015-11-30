@@ -263,7 +263,11 @@ $(document).ready(function(){
             closeBubble();
     });
 
-    $(".filter-cont .ui-slider-handle:eq(0)").prepend("<span class='price-tt tt-min'>"+$(".slider-range").attr("data-min-cur")+"</span>");
-    $(".filter-cont .ui-slider-handle:eq(1)").prepend("<span class='price-tt tt-max'>"+$(".slider-range").attr("data-max-cur")+"</span>");
+
+    $(".goods .gradient-grey").click(function(){
+        window.location.assign($(this).attr("data-href"));
+    });
+    $(".filter-cont .ui-slider-handle:eq(0)").prepend("<span class='price-tt tt-min'>"+$(".slider-range").attr("data-min")+"</span>");
+    $(".filter-cont .ui-slider-handle:eq(1)").prepend("<span class='price-tt tt-max'>"+$(".slider-range").attr("data-max")+"</span>");
    
 });
