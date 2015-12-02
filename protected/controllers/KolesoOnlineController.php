@@ -22,7 +22,58 @@ class KolesoOnlineController extends Controller
 				16 => "Модель",
 				28 => "Количество"
 			),
-			
+			"CATEGORY" => array(
+				"AMOUNT" => array(
+					"ID" => 28,
+					"LABEL" => "Количество в комплекте",
+					"UNIT" => "шт."
+				),
+				"PROTECTOR" => array(
+					"ID" => 23,
+					"LABEL" => "Протектор",
+					"UNIT" => ' '
+				),
+				"WEAR" => array(
+					"ID" => 29,
+					"LABEL" => "Износ",
+					"UNIT" => '%'
+				),
+				"DIAMETER" => array(
+					"ID" => 9,
+					"LABEL" => "Диаметр",
+					"UNIT" => '"'
+				),
+				"WIDTH" => array(
+					"ID" => 7,
+					"LABEL" => "Ширина профиля",
+					"UNIT" => 'мм.'
+				),
+				"HEIGHT" => array(
+					"ID" => 8,
+					"LABEL" => "Высота профиля",
+					"UNIT" => '%'
+				),
+				"REST" => array(
+					"ID" => 12,
+					"LABEL" => "Остаток протектора (мм.)",
+					"UNIT" => ' '
+				),
+				"CONDITION" => array(
+					"ID" => 26,
+					"LABEL" => "Состояние товара",
+					"UNIT" => ' '
+				),
+				"YEAR" => array(
+					"ID" => 10,
+					"LABEL" => "Год выпуска",
+					"UNIT" => ' '
+				),
+				"LOCATION" => array(
+					"ID" => 27,
+					"LABEL" => "Местонахождение товара",
+					"UNIT" => ' '
+				),
+			),
 			"PRICE_MIN" => 0,
 			"PRICE_MAX" => 0,
 		),
@@ -336,8 +387,9 @@ class KolesoOnlineController extends Controller
    			}
 	}
 
-	public function actionCategory($countGood = false) {
+	public function actionCategory($partial = false, $countGood = false) {
 		$this->getFilter();
+
 		if(isset($_GET["int"])) {
 			if($_GET["int"][51]["min"] == "") {
 				$_GET["int"][51]["min"] = $this->params[$_GET['type']]["PRICE_MIN"];
@@ -346,6 +398,14 @@ class KolesoOnlineController extends Controller
 				$_GET["int"][51]["max"] = $this->params[$_GET['type']]["PRICE_MAX"];
 			}
 		}
+		$last = 0;
+		if(isset($_GET['GoodFilter_page']) && $partial) {
+			$_GET['GoodFilter_page']++;
+			
+		} elseif($partial) {
+			$_GET['GoodFilter_page'] = 2;
+		}
+
 		$goods = Good::model()->filter(
 			array(
 				"good_type_id"=>$_GET['type'],
@@ -360,17 +420,30 @@ class KolesoOnlineController extends Controller
 		    )
 		);
 
+		if( $_GET['GoodFilter_page'] >= $goods['pages']->pageCount || $goods['pages']->pageCount == 1) {
+			$last = 1;
+		}
+
 		$count = $goods['count'];	
 		$pages = $goods['pages'];	
 		$allCount = $goods["allCount"];
 		$goods = $goods['items'];
 
-		$this->render('category',array(
-			'goods'=>$goods,
-			'filter' =>$this->filter,
-			'pages' => $pages,
-			'params' => $this->params,
-		));
+		if($partial) {
+			$this->renderPartial('_list',array(
+				'goods'=> $goods,
+				'last' => $last
+			));
+		} else {
+			$this->render('category',array(
+				'goods'=>$goods,
+				'filter' =>$this->filter,
+				'pages' => $pages,
+				'params' => $this->params,
+				'last' => $last
+			));
+		}
+
 
 	}
 
@@ -436,8 +509,8 @@ class KolesoOnlineController extends Controller
 
         $email_admin = $this->getParam("KolesoOnline","EMAILS");
 
-        $from = "Koleso Tomsk Ru";
-        $email_from = "koleso@tomsk.ru";
+        $from = "KolesoOnline";
+        $email_from = "robot@koleso.online";
 
         $deafult = array("name"=>"Имя","phone"=>"Телефон", "email"=>"E-mail");
 

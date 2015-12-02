@@ -1,28 +1,32 @@
 <div class="good-detail">
 	<div class="b-block">
 		<ul class="navigation clearfix">
-			<li><a href="#"></a></li>
-			<li><a href="#">Каталог</a></li>
+			<li><a href="<?=Yii::app()->createUrl('/kolesoonline')?>"></a></li>
+			<!-- <li><a href="#">Каталог</a></li> -->
 			<li><a href="#">Шины</a></li>
-			<li><?=Interpreter::generate($this->params[$_GET['type']]["TITLE_CODE"], $good);?></li>
+			<li><a href="#"><?=Interpreter::generate($this->params[$_GET['type']]["TITLE_CODE"], $good);?></a></li>
 		</ul>
-		<h3 class="category-title"><?=Interpreter::generate($this->params[$_GET['type']]["TITLE_CODE"], $good);?></h3>
+		<h3 class="category-title" id="buy-title"><?=Interpreter::generate($this->params[$_GET['type']]["TITLE_CODE"], $good);?></h3>
 		<div class="detail-wrap clearfix">
 			<div class="detail-photo left">
-				<a href="<?=$imgs[0]?>" class="big" style="background-image:url('<?=$imgs[0]?>');"></a>
-				<ul class="clearfix">
+				<div class="detail-slider-for">
+					<? foreach ($imgs as $img): ?>
+						<div><a href="<?=$img?>" class="fancy-img big" style="background-image:url('<?=$img?>');"></a></div>
+					<? endforeach; ?>
+				</div>
+				<div class="detail-slider-nav">
 					<? if (count($imgs)>1): ?>
 						<? foreach ($imgs as $img): ?>
-							<li data-mid="<?=$img?>" data-big="<?=$img?>" style="background-image:url('<?=$img?>');"></li>
+							<div><div class="thumb" data-mid="<?=$img?>" data-big="<?=$img?>" style="background-image:url('<?=$img?>');"></div></div>
 						<? endforeach; ?>
 					<? endif; ?>
-				</ul>
+				</div>
 			</div>
 			<div class="detail-price gradient-grey right">
 				<? $price = 0; $price = ($good->fields_assoc[51])?$good->fields_assoc[51]->value:0; $order = Interpreter::generate($this->params[$_GET['type']]["ORDER"], $good); ?>
 				<h3><?=(!$price )? Yii::app()->params["zeroPrice"] : number_format( $price, 0, ',', ' ' )." р."?><span>+ 800 р.</span></h3>
 				<h4>доставка в г. Томск</h4>
-				<a href="#" class="b-orange-butt">Купить</a>
+				<a href="#" class="fancy b-orange-butt" data-block="#b-popup-buy" data-aftershow="detail_buy">Купить</a>
 				<h5>Доставка и оплата</h5>
 				<h6>Товар: <span class="stock">В наличии</span></h6>
 			</div>

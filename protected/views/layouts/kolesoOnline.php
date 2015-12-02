@@ -59,7 +59,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
                 <span class="stamp"></span>
                 <div class="left">
                     <div class="clearfix">
-                        <a class="left" href="#"><img src="<?php echo Yii::app()->request->baseUrl; ?>/html/i/logo-2.png"></a>
+                        <a class="left" href="<?=Yii::app()->createUrl('/kolesoonline')?>"><img src="<?php echo Yii::app()->request->baseUrl; ?>/html/i/logo-2.png"></a>
                         <div class="right">
                             <h1>Колесо<span>онлайн</span></h1>
                             <h2>Вы находитесь в г. <a href="#">Томск</a></h2>
@@ -175,7 +175,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
         </div>
     </div>
 <div style="display:none;">
-    <div id="b-popup-buy">
+    <div id="b-popup-city">
         <div class="for_all b-popup-city">
             <div class="city-top">
                 <h3>Выбор города</h3>
@@ -239,15 +239,23 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
             <h4>Для покупки позвоните по одному<br>из телефонов:</h4>
             <h5>+7 (913) 827 57-56<br>57-57-56</h5>
             <h4>Или оставьте заявку и мы Вам перезвоним в ближайшее время:</h4>
-            <form action="kitsend.php" method="POST"  data-block="#b-popup-2">
+            <form action="<?=Yii::app()->createUrl('/kolesoonline/mail/')?>" id="b-form-buy" method="POST" data-block="#b-popup-2">
                 <div class="b-popup-form">
                     <label for="name">Ваше имя</label>
                     <input type="text" name="name" required placeholder="Иван"/>
                     <label for="tel">Ваш телефон</label>
                     <input type="text" name="phone" required placeholder="+7 (___) ___-__-__"/>
-                    <input type="hidden" name="subject" value="Обратный звонок"/>
+
+                    <input type="hidden" name="good" id="good" required/>
+                    <input type="hidden" name="good-url" id="good-url" required/>
+                    <!-- <input type="text" name="1" placeholder="Ваш регион" required/>
+                    <input type="hidden" name="1-name" value="Регион" /> -->
+                    <input type="hidden" name="2" value="<?=$_SERVER["REMOTE_ADDR"];?>" />
+                    <input type="hidden" name="2-name" value="IP-адрес" />
+                    <input type="hidden" name="subject" value="Покупка с сайта" />
                 </div>
-                <input type="submit" class="ajax b-orange-butt" value="Отправить">
+                <a href="#" class="ajax b-orange-butt" onclick="$('#b-form-buy').submit(); return false;">Отправить</a>
+                <!-- <input type="submit" class="ajax b-orange-butt" value="Отправить"> -->
             </form>
         </div>
     </div>

@@ -124,9 +124,12 @@
                             <input class="max-val price" type="text" maxlength="6" name="int[51][max]" placeholder="Макс.">
                         </div>
                         <div class="slider-range-cont">
-                            <div data-min="<?=$params[1]['PRICE_MIN']?>" data-max="<?=$params[1]['PRICE_MAX']?>" data-step="100" class="slider-range left"></div>
+                            <div data-min-cur="<?=$params[1]['PRICE_MIN']?>" data-min="<?=$params[1]['PRICE_MIN']?>" data-max-cur="<?=$params[1]['PRICE_MAX']?>" data-max="<?=$params[1]['PRICE_MAX']?>" data-step="100" class="slider-range left"></div>
                         </div>
                     </div>  
+                </div>
+                <div class="filter-butt-cont">
+                    <input type="submit" class="b-black-butt" value="Найти">
                 </div>
             <?php $this->endWidget(); ?>
         </div>
@@ -184,8 +187,8 @@
             <div class="gradient-grey">
                 <h3>Категории товаров</h3>
                 <ul>
-                    <li><a href="#"><span class="disc-icon icon">Диски</span></a></li>
-                    <li><a href="#"><span class="tire-icon icon">Шины</span></a></li>
+                    <li><a href="<?=Yii::app()->createUrl('/kolesoonline/category',array('type' => 2))?>"><span class="disc-icon icon">Диски</span></a></li>
+                    <li><a href="<?=Yii::app()->createUrl('/kolesoonline/category',array('type' => 1))?>"><span class="tire-icon icon">Шины</span></a></li>
                     <li><a href="#"><span class="wheel-icon icon">Колеса</span></a></li>
                 </ul>
             </div>
