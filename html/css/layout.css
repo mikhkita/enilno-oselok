@@ -285,7 +285,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 					}
 	.b-header .b-header-main {
 		background-image: url("../i/back-asphalt.jpg");
-		background-color: #28252C;
+		/*background-color: #28252C;*/
 	}
 	/*.b-header .b-header-main {
 		background-image: url("../i/back-asphalt@2x.jpg");
@@ -710,6 +710,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 						z-index: 500;
 						text-align: left;
 						display: none;
+						min-width: 166px;
 					}
 						.filter-item .variants > div {
 							padding-right: 23px;
@@ -1312,10 +1313,12 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 						padding: 6px 7px 4px;
 						position: absolute;
 						top: -40px;
-						left: -15px;
+						left: -20px;
+						text-align: center;
 						background-color: #fff;
 						border: 2px solid #cbcbcb;
 						border-radius: 2px;
+						min-width: 40px;
 					}
 					.filter-cont .slider-range .price-tt:before {
 						position: absolute;
@@ -1356,11 +1359,11 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 				}
 					.slider-range .ui-slider-handle.ui-state-hover .price-tt{
 						top: -37px;
-						left: -12px;
+						left: -17px;
 					}
 					.slider-range .ui-slider-handle.ui-state-active .price-tt{
 						top: -39px;
-						left: -14px;
+						left: -19px;
 					}
 					.slider-range .ui-slider-handle.ui-state-hover:before {
 						width: 10px;
@@ -1860,8 +1863,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 	}
 .b-popup-small {
 	width: 460px;
-	padding: 57px 85px 55px;
-
+	padding: 50px 85px 50px;
 }
 	.b-popup-small h3,.b-popup-small h4,.b-popup-small label,.b-popup-city h3 {
 		color: #1f1f1f;
@@ -1869,15 +1871,15 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 	}
 	.b-popup-small h3 {
 		font-size: 30px;
-		margin-bottom: 20px;
+		margin-bottom: 18px;
 	}
 	.b-popup-small h4 {
 		line-height: 1.429;
-		margin-bottom: 20px;
+		margin-bottom: 17px;
 	}
 	.b-popup-small h5 {
 		line-height: 1.6;
-		margin-bottom: 17px;
+		margin-bottom: 15px;
 		color: #ffba00;
 		font-weight: 500;
 		font-size: 24px;
