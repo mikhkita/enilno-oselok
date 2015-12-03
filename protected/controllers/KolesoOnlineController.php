@@ -170,6 +170,7 @@ class KolesoOnlineController extends Controller
 		);
 	}
 
+
 	public function actionIndex($countGood = false)
 	{	
 		$start = microtime(true);
@@ -178,6 +179,7 @@ class KolesoOnlineController extends Controller
         $check = $this->getChecked( (isset($_GET["arr"]))?$_GET["arr"]:array() );
         
        	isset($_GET['type']) ? $_GET['type'] : $_GET['type'] = 2;
+
 		// $type = ($_GET['type']==1) ? "tires": "discs";
 
 		// $criteria=new CDbCriteria();
@@ -315,6 +317,7 @@ class KolesoOnlineController extends Controller
 
 			$this->render('index',array(
 				// 'goods'=>$goods,
+				'cities' => $this->getCity(),
 				'filter' =>$this->filter,
 				// 'pages' => $pages,
 				'params' => $this->params,
@@ -440,7 +443,8 @@ class KolesoOnlineController extends Controller
 				'filter' =>$this->filter,
 				'pages' => $pages,
 				'params' => $this->params,
-				'last' => $last
+				'last' => $last,
+				'cities' => $this->getCity()
 			));
 		}
 
@@ -474,17 +478,50 @@ class KolesoOnlineController extends Controller
 				$this->render('detail',array(
 					'good'=>$good,
 					'imgs'=>$imgs,
-					'params' => $this->params
+					'params' => $this->params,
+					'cities' => $this->getCity()
 				));
 			}else{
 				$this->renderPartial('detail',array(
 					'good'=>$good,
 					'imgs'=>$imgs,
-					'params' => $this->params
+					'params' => $this->params,
+					'cities' => $this->getCity(),
 				));
 			}
 		}
 	}
+
+	public function getCity() {
+		if(!isset($_SESSION)) session_start();
+		$city = json_decode(file_get_contents('http://api.sypexgeo.net/json/77.66.180.32'));
+
+		$default_city = "Томск";
+		$city_groups = array();
+       	$city_from_ip = (isset($city->city->name_ru)) ? $city->city->name_ru : $default_city;
+       	$model = Attribute::model()->with("variants")->findAll("folder=1");
+     	
+     	foreach ($model as $key => $group) {
+     		$city_groups[$group->name] = array();
+     		foreach($group->variants as $city) {
+     			$city_groups[$group->name]['name'] = $city->value;
+     			if(mb_strtolower($default_city,'UTF-8') == mb_strtolower($city->value,'UTF-8')) {
+     				$default_variant_id = $city->variant_id;
+     			}
+     			$city_groups[$group->name]['variant_id'] = $city->variant_id;
+     			if( mb_strtolower($city->value,'UTF-8') == mb_strtolower($city_from_ip,'UTF-8')) {
+     				$_SESSION['city']['name'] = $city->value;
+     				$_SESSION['city']['variant_id'] = $city->variant_id;
+     			}
+     		}
+     		$city_groups[$group->name] = $this->splitByRows(8,$city_groups[$group->name]);
+     	}
+     	if(!isset($_SESSION['city']) || !$_SESSION['city']) {
+     		
+     	}
+     	
+	    return $city_groups;
+    }
 
 	public function actionContacts()
 	{

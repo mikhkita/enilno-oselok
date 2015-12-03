@@ -1983,7 +1983,11 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 			padding: 14px 0 13px;
 			border-radius: 2px;
 			border-bottom: 2px solid #f69303;
+			position: relative;
 		}
+			.b-popup-city .city-input .b-orange-butt:active {
+				top: 2px;
+			}
 
 .icon:before,			
 .b-filters .b-block .filter-cont .tire-type label:before,
