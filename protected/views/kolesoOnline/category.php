@@ -103,8 +103,9 @@
                         <span class="list-view view"></span>
                     </div>
                 </div>
-                <?php $this->renderPartial('_list', array('goods' => $goods,'last' => $last)); ?>
-
+                <ul class="goods clearfix">  
+                    <?php $this->renderPartial('_list', array('goods' => $goods)); ?>
+                </ul>
                 <div class="load" style="width:100px; height:100px; background-color: red; display:inline-block;"></div>
             </div>
             <?php $this->endWidget(); ?>            

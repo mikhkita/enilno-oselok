@@ -1955,7 +1955,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 				.b-popup-city ul li a:hover {
 					text-decoration: underline;
 				}
-				.b-popup-city ul li.active a {
+				.b-popup-city ul li.ui-state-active a {
 					color: #ffbb00;
 					text-decoration: underline;
 				}

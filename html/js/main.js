@@ -127,8 +127,11 @@ $(document).ready(function(){
         // fade: true
     });
         
-    $( ".main-tabs" ).tabs({
-        active: 0
+    $( ".main-tabs" ).tabs();
+
+    $( ".city-tabs" ).tabs({
+        active: false,
+        collapsible :true
     });
 
     $('.min-val,.max-val').bind("change keyup input click", function() {
@@ -318,7 +321,7 @@ $(document).ready(function(){
             data:  { partial: true},
             success: function(msg){
                 $('.last-page').remove();
-                $(".goods").after(msg);
+                $(".goods").append(msg);
                 if($('.last-page').val() == 1) {
                     $(".load").hide(); 
                 }

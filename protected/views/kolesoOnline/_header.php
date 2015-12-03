@@ -62,30 +62,23 @@
             <div class="city-top">
                 <h3>Выбор города</h3>
                 <h4>Федеральный округ<span>Город</span></h4>
-                <div class="clearfix main-tabs popup-fo">
+                <div class="clearfix city-tabs popup-fo">
                     <ul class="left">
                         <? $i = 0; foreach ($cities as $name => $group): ?>
                             <li><a href="#fo-<?=$i?>"><?=$name?></a></li>
                         <? $i++; endforeach; ?>
                     </ul>
-                    <div id="sib-fo" class="popup-cities clearfix left">
-                        <ul class="left">
-                            <li><a href="#">Кемерово</a></li>
-                            <li><a href="#">Новосибирск</a></li>
-                            <li><a href="#">Новокузнецк</a></li>
-                            <li><a href="#">Ленинск-Кузнецкий</a></li>
-                            <li><a href="#">Белово</a></li>
-                            <li><a href="#">Юрга</a></li>
-                            <li><a href="#">Полысаево</a></li>
-                            <li><a href="#">Барнаул</a></li>    
-                        </ul>
-                        <ul class="left">
-                            <li><a href="#">Новокузнецк</a></li>
-                            <li><a href="#">Бердск</a></li>
-                            <li class="active"><a href="#">Тяжин</a></li>
-                            <li><a href="#">Березовский</a></li>
-                        </ul>
-                    </div>
+                    <? $i = 0; foreach ($cities as $name => $group): ?>
+                        <div id="fo-<?=$i?>" class="popup-cities clearfix left">
+                            <? foreach ($group as $col): ?>
+                                <ul class="left">
+                                    <? foreach ($col as $city): ?>
+                                        <li><a href="#"><?=$city['name']?></a></li>
+                                    <? endforeach; ?>
+                                </ul>
+                            <? endforeach; ?>
+                        </div>
+                    <? $i++; endforeach; ?>
                 </div>
             </div>
             <div class="city-input clearfix">

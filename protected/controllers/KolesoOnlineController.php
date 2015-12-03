@@ -497,29 +497,27 @@ class KolesoOnlineController extends Controller
 		$city = json_decode(file_get_contents('http://api.sypexgeo.net/json/77.66.180.32'));
 
 		$default_city = "Томск";
+		$default_variant_id = 1081;
+		$_SESSION['city']['name'] = $default_city;
+     	$_SESSION['city']['variant_id'] = $default_variant_id;
 		$city_groups = array();
        	$city_from_ip = (isset($city->city->name_ru)) ? $city->city->name_ru : $default_city;
        	$model = Attribute::model()->with("variants")->findAll("folder=1");
      	
      	foreach ($model as $key => $group) {
      		$city_groups[$group->name] = array();
-     		foreach($group->variants as $city) {
-     			$city_groups[$group->name]['name'] = $city->value;
-     			if(mb_strtolower($default_city,'UTF-8') == mb_strtolower($city->value,'UTF-8')) {
-     				$default_variant_id = $city->variant_id;
-     			}
-     			$city_groups[$group->name]['variant_id'] = $city->variant_id;
+     		foreach($group->variants as $i => $city) {
+     			$city_groups[$group->name][$i]['name'] = $city->value;
+     			$city_groups[$group->name][$i]['variant_id'] = $city->variant_id;
      			if( mb_strtolower($city->value,'UTF-8') == mb_strtolower($city_from_ip,'UTF-8')) {
      				$_SESSION['city']['name'] = $city->value;
      				$_SESSION['city']['variant_id'] = $city->variant_id;
      			}
      		}
+
      		$city_groups[$group->name] = $this->splitByRows(8,$city_groups[$group->name]);
      	}
-     	if(!isset($_SESSION['city']) || !$_SESSION['city']) {
-     		
-     	}
-     	
+     	print_r($city_groups);
 	    return $city_groups;
     }
 
