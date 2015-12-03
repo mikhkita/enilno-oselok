@@ -24,7 +24,7 @@ $(document).ready(function(){
 			}
 		});
 		if( $(this).find("input[name=phone]").length ){
-			$(this).find("input[name=phone]").mask(tePhone,{placeholder:" "});
+			$(this).find("input[name=phone]").mask(tePhone,{placeholder:"_"});
 		}
 	});
 
@@ -43,6 +43,7 @@ $(document).ready(function(){
 		$this.fancybox({
 			padding : 0,
 			content : $popup,
+			fitToView: false,
 			helpers: {
 	         	overlay: {
 	            	locked: true 

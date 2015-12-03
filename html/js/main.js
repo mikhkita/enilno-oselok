@@ -159,27 +159,27 @@ $(document).ready(function(){
                     (ui.values[ 0 ] == min_val) ? min_input.val('') : min_input.val( ui.values[ 0 ] );
                     (ui.values[ 1 ] == max_val) ? max_input.val('') : max_input.val( ui.values[ 1 ] );  
                     min_text.text( ui.values[ 0 ] );
-                    $(".tt-min").text( ui.values[ 0 ] );
+                    obj.closest(".slide-type").find(".tt-min").text( ui.values[ 0 ] );
                     max_text.text( ui.values[ 1 ] );
-                    $(".tt-max").text( ui.values[ 1 ] );
+                    obj.closest(".slide-type").find(".tt-max").text( ui.values[ 1 ] );
 
                 },
                 change: function( event, ui ) {  
                     (ui.values[ 0 ] == min_val) ? min_input.val('') : min_input.val( ui.values[ 0 ] );
                     (ui.values[ 1 ] == max_val) ? max_input.val('') : max_input.val( ui.values[ 1 ] );       
                     min_text.text( ui.values[ 0 ] );
-                    $(".tt-min").text( ui.values[ 0 ] );
+                    obj.closest(".slide-type").find(".tt-min").text( ui.values[ 0 ] );
                     max_text.text( ui.values[ 1 ] );
-                    $(".tt-max").text( ui.values[ 1 ] );
+                    obj.closest(".slide-type").find(".tt-max").text( ui.values[ 1 ] );
 
                 }
             });
             (cur_min_val == min_val) ? min_input.val('') : min_input.val( cur_min_val );
             (cur_max_val == max_val) ? max_input.val('') : max_input.val( cur_max_val );
             min_text.text( cur_min_val );
-            $(".tt-min").text( cur_min_val );
+            obj.closest(".slide-type").find(".tt-min").text( cur_min_val );
             max_text.text( cur_max_val );
-            $(".tt-max").text( cur_max_val );
+            obj.closest(".slide-type").find(".tt-max").text( cur_max_val );
 
             min_input.change(function() {
             if($(this).val()=='' || (($(this).val()*1) <= min_val) )  {
@@ -245,6 +245,8 @@ $(document).ready(function(){
         }        
     });
 
+    $(".variants input").change();
+
     var active,open;
     function closeBubble(active){
         if( typeof active == "undefined" ) active = $(".filter-item.active");
@@ -263,7 +265,78 @@ $(document).ready(function(){
             closeBubble();
     });
 
-    $(".filter-cont .ui-slider-handle:eq(0)").prepend("<span class='price-tt tt-min'>"+$(".slider-range").attr("data-min-cur")+"</span>");
-    $(".filter-cont .ui-slider-handle:eq(1)").prepend("<span class='price-tt tt-max'>"+$(".slider-range").attr("data-max-cur")+"</span>");
-   
+
+    $(".goods .gradient-grey:not(.b-orange-butt)").click(function(){
+        window.location.assign($(this).attr("data-href"));
+    });
+
+    $(".goods .gradient-grey .b-orange-butt").click(function(){
+        return false;
+    });
+
+    $(".b-sort ul li").click(function(){
+        $(this).find("input").prop("checked",true);
+        if($(this).hasClass("active")) {
+            if($(this).hasClass("up")) $("input[name='sort[type]']").val("DESC"); else $("input[name='sort[type]']").val("ASC");
+        } else $("input[name='sort[type]']").val("DESC");
+        $("#filter").submit();
+    });
+
+    $(".filter-cont .ui-slider-handle:eq(0)").prepend("<span class='price-tt tt-min'>"+$(".slider-range:eq(0)").attr("data-min")+"</span>");
+    $(".filter-cont .ui-slider-handle:eq(2)").prepend("<span class='price-tt tt-min'>"+$(".slider-range:eq(1)").attr("data-min")+"</span>");
+    $(".filter-cont .ui-slider-handle:eq(4)").prepend("<span class='price-tt tt-min'>"+$(".slider-range:eq(2)").attr("data-min")+"</span>");
+
+    $(".filter-cont .ui-slider-handle:eq(1)").prepend("<span class='price-tt tt-max'>"+$(".slider-range:eq(0)").attr("data-max")+"</span>");
+    $(".filter-cont .ui-slider-handle:eq(3)").prepend("<span class='price-tt tt-max'>"+$(".slider-range:eq(1)").attr("data-max")+"</span>");
+    $(".filter-cont .ui-slider-handle:eq(5)").prepend("<span class='price-tt tt-max'>"+$(".slider-range:eq(2)").attr("data-max")+"</span>");
+    
+    customHandlers["category_buy"] = function(el){
+        var popup = $(el.attr("data-block"));
+
+        popup.find("input[name='subject']").val("Покупка "+$(el).parent().find("h4").text());
+
+        $("#good").val($(el).parent().find("h4").text());
+        $("#good-url").val(window.location.hostname+$(el).closest("li").attr("data-href"));
+    }
+
+    customHandlers["detail_buy"] = function(el){
+        var popup = $(el.attr("data-block"));
+
+        popup.find("input[name='subject']").val("Покупка "+$("#buy-title").text());
+
+        $("#good").val($("#buy-title").text());
+        $("#good-url").val(window.location.href);
+    }
+
+    if($('.last-page').val() == 1) {
+        $(".load").hide(); 
+    }
+    $(".load").click(function(){
+        $.ajax({
+            type: "GET",
+            url: window.location.href,
+            data:  { partial: true},
+            success: function(msg){
+                $('.last-page').remove();
+                $(".goods").after(msg);
+                if($('.last-page').val() == 1) {
+                    $(".load").hide(); 
+                }
+            }
+        });
+    });
+
+    $('.detail-slider-for').slick({
+      slidesToShow: 1,
+      slidesToScroll: 1,
+      arrows: false,
+      fade: true,
+      asNavFor: '.detail-slider-nav'
+    });
+    $('.detail-slider-nav').slick({
+      slidesToShow: 6,
+      slidesToScroll: 1,
+      asNavFor: '.detail-slider-for',
+      focusOnSelect: true
+    });
 });
