@@ -29,6 +29,11 @@ class Place extends CActiveRecord
 		),
 	);
 
+	public $categories = array(
+		2048 => "AVITO",
+		2047 => "DROM",
+	);
+
 	/**
 	 * @return string the associated database table name
 	 */

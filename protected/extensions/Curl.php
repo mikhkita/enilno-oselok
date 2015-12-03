@@ -61,7 +61,6 @@ Class Curl {
         } while ( !is_object($html) && $i < 5 );
 
         $ip = $html->find('.url',0)->value;
-        echo $i."<br>";
 
         $temp_ip = explode(":", $this->proxy_ip);
         print_r($ip." ".$temp_ip[0]);

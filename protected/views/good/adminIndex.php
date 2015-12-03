@@ -56,6 +56,8 @@
 									<? else: ?>
 										<? if($field->attribute->id == 44 || $field->attribute->id == 53): ?>
 											<div><a href="<?=$item->fields_assoc[$field->attribute->id]->value?>" target="_blank"><?=$this->cutText($item->fields_assoc[$field->attribute->id]->value,30)?></a></div>
+										<? elseif( $field->attribute->id == 69 ): ?>
+											<div><a href="https://injapan.ru/auction/<?=$item->fields_assoc[$field->attribute->id]->value?>.html" target="_blank"><?=$item->fields_assoc[$field->attribute->id]->value?></a></div>
 										<? else: ?>
 											<div><?=$item->fields_assoc[$field->attribute->id]->value?></div>
 										<? endif; ?>

@@ -1,13 +1,18 @@
-<h1><?=$this->adminMenu["cur"]->name?></h1>
+<h1><?=$this->adminMenu["cur"]->name?> "<?=$category->value?>"</h1>
+<? if( $category->id == 2048 ): ?>
+	<a class="b-link-back" href="<?php echo $this->createUrl('/queue/adminindex',array("category_id"=>2047))?>">Дром</a>
+<? else: ?>
+	<a class="b-link-back" href="<?php echo $this->createUrl('/queue/adminindex',array("category_id"=>2048))?>">Авито</a>
+<? endif; ?>
 <div class="b-buttons-left-cont clearfix">
-	<a href="<?php echo $this->createUrl('/queue/adminstart')?>" class="ajax-request b-butt">Старт</a>
-	<a href="<?php echo $this->createUrl('/queue/adminstop')?>" class="ajax-request b-butt">Стоп</a>
-	<a href="<?php echo $this->createUrl('/queue/adminreturnall')?>" class="ajax-request b-butt right">Вернуть все в очередь</a>
-	<a href="<?php echo $this->createUrl('/queue/adminfreezefree')?>" class="ajax-request b-butt right">Отложить бесплатные</a>
+	<a href="<?php echo $this->createUrl('/queue/adminstart',array("category_id"=>$category->id))?>" class="ajax-request b-butt">Старт</a>
+	<a href="<?php echo $this->createUrl('/queue/adminstop',array("category_id"=>$category->id))?>" class="ajax-request b-butt">Стоп</a>
+	<a href="<?php echo $this->createUrl('/queue/adminreturnall',array("category_id"=>$category->id))?>" class="ajax-request b-butt right">Вернуть все в очередь</a>
+	<a href="<?php echo $this->createUrl('/queue/adminfreezefree',array("category_id"=>$category->id))?>" class="ajax-request b-butt right">Отложить бесплатные</a>
 </div>
-<p align="left" style="margin-top: 30px;">Всего объявлений: <?=$count?>. В очереди: <?=$waiting_count?>. С временем: <?=$start_count?>. С ошибкой выполнения: <?=$error_count?> <span class="right">Отложено: <?=$freeze_count?></span><?if($freeze_count):?><a href="<?php echo $this->createUrl('/queue/adminunfreezeall')?>" class="ajax-request right" style="margin-right: 20px;">Вернуть отложенное</a><?endif;?></p>
+<p align="left" style="margin-top: 30px;">Всего объявлений: <?=$count?>. В очереди: <?=$waiting_count?>. С временем: <?=$start_count?>. С ошибкой выполнения: <?=$error_count?> <span class="right">Отложено: <?=$freeze_count?></span><?if($freeze_count):?><a href="<?php echo $this->createUrl('/queue/adminunfreezeall',array("category_id"=>$category->id))?>" class="ajax-request right" style="margin-right: 20px;">Вернуть отложенное</a><?endif;?></p>
 <?php $form=$this->beginWidget('CActiveForm'); ?>
-	<table class="b-table" border="1" id="b-live" data-delay="3" data-url="<?php echo Yii::app()->createUrl('/'.$this->adminMenu["cur"]->code.'/adminindex',array("partial"=>'true'))?>">
+	<table class="b-table" border="1" id="b-live" data-delay="3" data-url="<?php echo Yii::app()->createUrl('/'.$this->adminMenu["cur"]->code.'/adminindex',array("partial"=>'true',"category_id"=>$category->id))?>">
 		<tr>
 			<th style="width: 30px;"><? echo $labels['id']; ?></th>
 			<th><? echo $labels['advert_id']; ?></th>

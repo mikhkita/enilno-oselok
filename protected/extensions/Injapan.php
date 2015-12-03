@@ -32,12 +32,34 @@ Class Injapan {
         $arr = explode("<span", $query[0]->innertext);
         $result["other"]["step"] = intval(preg_replace("/[^0-9]/", '', $arr[0] ));
 
+        // Если ставок ноль, то шаг равен нулю
+        $query = $html->find("#spanInfoBids",0);
+        if( intval($query->innertext) == 0 ) 
+            $result["other"]["step"] = 0;
+
         // Получение текущей цены лота
         $query = $html->find("#spanInfoPrice strong");
         $result["main"]["current_price"] = intval(str_replace("&nbsp;", "", strip_tags($query[0]->innertext)));
         $result["main"]["state"] = ( intval($result["main"]["current_price"]) + intval($result["other"]["step"]) > intval($max_price) )?5:0;
 
         return $result;
+    }
+
+    public function getFieldsToCreate($code){
+        include_once  Yii::app()->basePath.'/extensions/simple_html_dom.php';
+        $html = file_get_html("https://injapan.ru/auction/".$code.".html");
+        $out = array("images"=>array());
+
+        foreach ($html->find('.old_lot_images img') as $i => $img) {
+            array_push($out["images"], $img->getAttribute("src"));
+        }
+
+        $out["category"] = intval(preg_replace("/[^0-9]/", '', $html->find("#breadcrumbs a",5)->plaintext));
+        $out["text"] = $html->find('#russian')[0]->plaintext;
+        $out["price"] = intval(str_replace("&nbsp;", "", strip_tags($html->find("#spanInfoPrice strong",0)->innertext)));
+        $out["seller"] = $html->find('.auinfo strong',0)->plaintext;
+
+        return $out;
     }
 
     public function getDetail($code){

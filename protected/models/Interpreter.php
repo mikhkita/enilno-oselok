@@ -31,13 +31,13 @@ class Interpreter extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('name, template, good_type_id', 'required'),
-			array('width, category_id', 'numerical', 'integerOnly'=>true),
+			array('width, category_id, service, unique', 'numerical', 'integerOnly'=>true),
 			array('name, rule_code', 'length', 'max'=>255),
 			array('template', 'length', 'max'=>20000),
 			array('good_type_id', 'length', 'max'=>10),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, name, template, good_type_id, rule_code, width, category_id', 'safe', 'on'=>'search'),
+			array('id, name, template, good_type_id, rule_code, width, category_id, unique', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -69,6 +69,8 @@ class Interpreter extends CActiveRecord
 			'rule_code' => 'Доступ',
 			'width' => 'Ширина в пикселях',
 			'category_id' => 'Категория',
+			'service' => 'Служебный',
+			'unique' => 'Уникальный',
 		);
 	}
 
@@ -110,6 +112,7 @@ class Interpreter extends CActiveRecord
 		$criteria->compare('rule_code',$this->rule_code,true);
 		$criteria->compare('width',$this->width);
 		$criteria->compare('category_id',$this->category_id);
+		$criteria->compare('service',$this->category_id);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -150,11 +153,28 @@ class Interpreter extends CActiveRecord
         }
     }
 
-    public function generate($interpreter_id,$model,$dynObjects = NULL){
+    public function generateUnique($interpreter_id, $model, $dynObjects = NULL, $advert_id = 0){
+    	$uniq = 1;
+    	while($uniq <= 10){
+    		$result = $this->generate($interpreter_id, $model, $dynObjects, $uniq);
+    		if( $this->isNotIsset($interpreter_id, $result, $advert_id) ) return $result;
+    		$uniq++;
+    	}
+    	return "not unique";
+    }
+
+    public function isNotIsset($interpreter_id, $result, $advert_id = 0){
+    	return ( Uniq::model()->count("value='".stripslashes($result)."' AND interpreter_id=$interpreter_id AND advert_id!=$advert_id") )?false:true;
+    }
+
+    public function generate($interpreter_id, $model, $dynObjects = NULL, $uniq = NULL, $advert_id = 0){
     	$attributes = (isset($model->fields_assoc))?$model->fields_assoc:$model;
     	if( $dynObjects !== NULL ) $attributes = $attributes + $dynObjects;
 
     	if( isset($this->interpreters[(string)$interpreter_id]) ){
+    		if( $this->interpreters[(string)$interpreter_id]->unique && $uniq === NULL )
+    			return $this->generateUnique($interpreter_id, $model, $dynObjects, $advert_id);
+
     		if( $this->interpreters[(string)$interpreter_id]->good_type_id == $model->good_type_id ){
     			$template = $this->interpreters[(string)$interpreter_id]->template;
     			
@@ -234,10 +254,14 @@ class Interpreter extends CActiveRecord
 				}else{
 					throw new CHttpException(500,"Отсутствует параметр \"ATTR\" у интерпретатора с идентификатором ".$interpreter_id);
 				}
+
 				if( isset($params["ITEM"]) ){
 					$items = explode(";", $matches[1][$i]);
-					if( $params["ITEM"] == "RAND" ) 
+					if( $params["ITEM"] == "RAND" ){
 						$params["ITEM"] = rand(1,count($items));
+					}elseif( $params["ITEM"] == "UNIQ" && $uniq !== NULL ){
+						$params["ITEM"] = (intval($uniq)-1)%count($items)+1 ;
+					}
 					$matches[1][$i] = (isset($items[intval($params["ITEM"])-1]))?$items[intval($params["ITEM"])-1]:"";
 				}
 			}

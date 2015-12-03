@@ -20,6 +20,12 @@
 	</div>
 
 	<div class="row">
+		<?php echo $form->CheckBox($model,'service',array("class"=>"b-checkbox","style"=>"width:auto;")); ?>
+		<?php echo $form->labelEx($model,'service',array("style"=>"display:inline-block;")); ?>
+		<?php echo $form->error($model,'service'); ?>
+	</div>
+
+	<div class="row">
 		<?php echo $form->labelEx($model,'template'); ?>
 		<?php echo $form->textArea($model,'template',array('maxlength'=>20000,'required'=>true,'style'=>'height: 300px;')); ?>
 		<?php echo $form->error($model,'template'); ?>

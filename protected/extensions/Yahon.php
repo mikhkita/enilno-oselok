@@ -102,10 +102,12 @@ Class Yahon {
     public function getState($lot_number){
         include_once Yii::app()->basePath.'/extensions/simple_html_dom.php';
 
-        $html = str_get_html( $this->curl->request("http://www.yahon.ru/yahoo/lot_".$lot_number.".html") );
+        $result = $this->curl->request("http://www.yahon.ru/yahoo/lot_".$lot_number.".html");
+        $html = str_get_html( $result );
 
         $str = $html->find('.table',0)->plaintext;
-        $is_end = (trim($html->find('.alert-danger span', 0)->plaintext) == "Торги завершены.");
+        $is_end = ( mb_stripos( trim($html->find('.alert-danger span', 0)->plaintext), "Торги завершены") !== false );
+
         if( mb_substr($str, mb_stripos($str, "Лидер:", NULL, "UTF-8")+6, 2,"UTF-8") == "Вы" ){
             return ($is_end)?6:2;
         }else{

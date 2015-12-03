@@ -634,12 +634,12 @@ h1{
     .fancybox-skin .row{
         position: relative;
         text-align: left;
-        margin-top: 15px;
+        margin-top: 7px;
         padding: 0px 5px;
     }
         .fancybox-skin label{
             display: block;
-            margin-bottom: 5px;
+            margin-bottom: 0px;
         }
         .fancybox-skin input[type="text"],
         .fancybox-skin input[type="number"],
@@ -650,7 +650,7 @@ h1{
             border-radius: 5px;
             background: #FFF5D1;
             border: 1px solid #452716;
-            padding: 9px 10px 8px;
+            padding: 4px 10px 3px;
             font-size: 14px;
             display: block;
             width: 420px;
@@ -659,7 +659,7 @@ h1{
             padding: 4px 10px 6px;
         }
         .fancybox-skin input[type="number"]{
-            padding: 7px 10px;
+            padding: 2px 10px;
         }
         .fancybox-skin select{
             width: auto;
@@ -670,7 +670,7 @@ h1{
             border-radius: 5px;
             background: #FFF5D1;
             border: 1px solid #452716;
-            padding: 7px 10px 6px;
+            padding: 2px 10px 1px;
             font-size: 14px;
             display: block;
             width: 200px;
@@ -822,10 +822,12 @@ h1{
                     display: inline-block;
                 }
     .b-good-form .clearfix{
-        width: 465px;
+        width: 929px;
     }
     .b-good-form .clearfix .row{
         float: left;
+    }.b-good-form .clearfix .double-row{
+        width: 454px;
     }
         .b-good-form .clearfix .row:nth-child(2n){
             /*margin-left: 5px;*/
@@ -840,7 +842,7 @@ h1{
             width: 200px;
         }
         .b-good-form .clearfix .row textarea{
-            height: 100px;
+            height: 115px;
             width: 432px;
         }
             .double-list{
@@ -962,6 +964,7 @@ h1{
                         .b-variant-cont input[type="text"]{
                             width: 350px;
                             display: inline-block;
+                            padding: 7px 10px 7px;
                         }
                         .b-variant-cont textarea{
                             padding: 5px 40px 5px 10px;

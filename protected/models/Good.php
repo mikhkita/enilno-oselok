@@ -332,7 +332,7 @@ class Good extends CActiveRecord
 	}
 
 	public function update(){
-		$newModel = Good::model()->with(array("adverts.queue.action","adverts.queue.state","fields.variant","fields.attribute"))->findByPk($this->id);
+		$newModel = Good::model()->with(array("fields.variant","fields.attribute"))->findByPk($this->id);
 
 		if( !function_exists("compare") ){
 			function compare($a,$b){ 
@@ -407,6 +407,7 @@ class Good extends CActiveRecord
 				foreach ($add as $key => $item)
 					array_push($add_arr, array("good_id"=>$this->id,"place_id"=>$places[$this->good_type_id][$cities[$item->attribute_id]["PLACE"]]->id,"city_id"=>$item->variant_id,"type_id"=>$cities[$item->attribute_id]["TYPE"]));
 
+
 				$new_adverts = Advert::addAll($add_arr);
 				if( $new_adverts )
 					Queue::addAll($new_adverts,"add");
@@ -419,7 +420,7 @@ class Good extends CActiveRecord
 		foreach ($adverts as $i => $advert) {
 			if( isset($advert->queue) )
 				foreach ($advert->queue as $key => $queue)
-					if( in_array($queue->action->code, $actions) && $queue->state->code == "waiting" ){
+					if( in_array($queue->action->code, $actions) && $queue->state_id != 2 ){
 						unset($adverts[$i]);
 						break;
 					}
@@ -499,7 +500,7 @@ class Good extends CActiveRecord
 				}
 			}else{
 				Log::debug("40 ".$value->attribute->id." ".(($value->value != "" || $dynamic)?"true":"false") );
-				return ($value->value != "" || $dynamic);
+				return ($value->value != "" || $value->value != "0" || $dynamic);
 			}
 		}
 		return false;
@@ -609,6 +610,93 @@ class Good extends CActiveRecord
 			array_push($temp, $good->id);
 		}
 		return $temp;
+	}
+
+	public function createFromAuction($auction){
+		$diametres = array(
+			13 => "1317",
+			14 => "1318",
+			15 => "1319",
+			16 => "1320",
+			17 => "1321",
+			18 => "1322",
+			19 => "1323",
+			20 => "1324",
+		);
+		$result = Injapan::getFieldsToCreate($auction->code);
+
+		$good_code = Good::getNewAuctionCode($result["category"]);
+
+		$this->downloadImages($result["images"],$good_code,3);
+
+		$model = new Good;
+		$model->good_type_id = 3;
+		$model->save();
+
+		$fields = array( 
+			array(
+				"good_id" => $model->id,
+				"attribute_id" => 3,
+				"varchar_value" => $good_code,
+				"text_value" => NULL,
+				"variant_id" => NULL,
+			),
+			array(
+				"good_id" => $model->id,
+				"attribute_id" => 35,
+				"varchar_value" => NULL,
+				"text_value" => addslashes($result["text"]),
+				"variant_id" => NULL,
+			),
+			array(
+				"good_id" => $model->id,
+				"attribute_id" => 20,
+				"varchar_value" => $result["price"],
+				"text_value" => NULL,
+				"variant_id" => NULL,
+			),
+			array(
+				"good_id" => $model->id,
+				"attribute_id" => 9,
+				"varchar_value" => NULL,
+				"text_value" => NULL,
+				"variant_id" => $diametres[intval($result["category"])],
+			),
+			array(
+				"good_id" => $model->id,
+				"attribute_id" => 68,
+				"text_value" => NULL,
+				"varchar_value" => $result["seller"],
+				"variant_id" => NULL,
+			),
+			array(
+				"good_id" => $model->id,
+				"attribute_id" => 69,
+				"text_value" => NULL,
+				"varchar_value" => $auction->code,
+				"variant_id" => NULL,
+			),
+		);
+
+		// print_r($fields);
+		// die();
+
+		$this->insertValues(GoodAttribute::tableName(),$fields);
+
+		// print_r($result);
+	}
+
+	public function getNewAuctionCode($diametr){
+		$auction_codes = explode("\n", $this->getParam("OTHER","AUCTION_CODES"));
+
+		foreach ($auction_codes as $i => $code) {
+			if( substr(strval($diametr), -1, 1) == substr($code, 0, 1) ){
+				unset($auction_codes[$i]);
+				$this->setParam("OTHER","AUCTION_CODES",implode("\n", $auction_codes));
+				return trim($code);
+			}
+		}
+		return "Нет кода";
 	}
 
 	public function beforeDelete(){

@@ -235,7 +235,7 @@ html[dir="rtl"] .select2-container .select2-choice .select2-arrow {
     display: block;
     width: 100%;
     height: 100%;
-    background: url('select2.png') no-repeat 0 3px;
+    background: url('select2.png') no-repeat 0 0px;
 }
 
 html[dir="rtl"] .select2-container .select2-choice .select2-arrow b {
@@ -524,7 +524,7 @@ html[dir="rtl"] .select2-container-multi .select2-choices {
 }
 
 .select2-container-multi .select2-choices {
-    min-height: 26px;
+    min-height: 21px;
 }
 
 .select2-container-multi.select2-container-active .select2-choices {
@@ -549,16 +549,15 @@ html[dir="rtl"] .select2-container-multi .select2-choices li
 }
 
 .select2-container-multi .select2-choices .select2-search-field input {
-    padding: 5px;
+    padding: 0px 5px;
     margin: 1px 0;
-
     /*font-family: sans-serif;*/
     /*font-size: 100%;*/
     /*color: #666;*/
     outline: 0;
     border: 0;
     -webkit-box-shadow: none;
-            box-shadow: none;
+    box-shadow: none;
     background: transparent !important;
 }
 
@@ -571,8 +570,8 @@ html[dir="rtl"] .select2-container-multi .select2-choices li
 }
 
 .select2-container-multi .select2-choices .select2-search-choice {
-    padding: 4px 6px 4px 19px;
-    margin: 3px 0 3px 5px;
+    padding: 3px 6px 2px 19px;
+    margin: 1px 0 1px 2px;
     position: relative;
     line-height: 14px;
     color: #F5E9BC;
@@ -606,7 +605,7 @@ html[dir="rtl"] .select2-container-multi .select2-choices .select2-search-choice
     height: 13px;
     position: absolute;
     right: 3px;
-    top: 4px;
+    top: 3px;
     font-size: 1px;
     outline: none;
 }

@@ -53,6 +53,7 @@ class Advert extends CActiveRecord
 			'city' => array(self::BELONGS_TO, 'Variant', 'city_id'),
 			'type' => array(self::BELONGS_TO, 'Variant', 'type_id'),
 			'queue' => array(self::HAS_MANY, 'Queue', 'advert_id'),
+			'unique_fields' => array(self::HAS_MANY, 'Unique', 'advert_id'),
 		);
 	}
 
@@ -106,7 +107,7 @@ class Advert extends CActiveRecord
 	public function addAll($items = array()){
 		if( count($items) ){
 			Controller::insertValues(Advert::tableName(),$items);
-			return Controller::getValues(Advert::model(),$items);
+			return Controller::getValues(Advert::model(),$items,array("place"));
 		}
 	}
 
@@ -134,7 +135,7 @@ class Advert extends CActiveRecord
 		if( $this->place->category_id == 2047 ){
 			return "http://baza.drom.ru/".$this->url.".html";
 		}else if( $this->place->category_id == 2048 ){
-			return $this->url;
+			return "http://avito.ru/".$this->url;
 		}
 	}
 

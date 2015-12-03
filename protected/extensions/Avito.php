@@ -4,6 +4,7 @@ Class Avito {
     private $login = "";
     private $password = "";
     public $curl;
+    public $captcha_curl;
     public $dir_codes = array(
         1 => 10048,
         2 => 10046
@@ -11,6 +12,7 @@ Class Avito {
     
     function __construct($proxy = NULL) {
         $this->curl = new Curl($proxy);
+        $this->captcha_curl = new Curl();
     }
 
     public function setUser($login,$password){
@@ -48,12 +50,15 @@ Class Avito {
 	    $captcha_path = Yii::app()->basePath.'/extensions/captcha.jpg';  
 	    file_put_contents($captcha_path, $out); 
 
-		$captcha = $this->curl->request("http://rucaptcha.com/in.php",array('key'=>'0b07ab2862c1ad044df277cbaf7ceb99','file'=> new CurlFile($captcha_path)));
+		$captcha = $this->captcha_curl->request("http://rucaptcha.com/in.php",array('key'=>'0b07ab2862c1ad044df277cbaf7ceb99','file'=> new CurlFile($captcha_path)));
 		while ($captcha == 'ERROR_NO_SLOT_AVAILABLE') {
+			var_dump($captcha);
 			sleep(5);
-		    $captcha = $this->curl->request("http://rucaptcha.com/in.php",array('key'=>'0b07ab2862c1ad044df277cbaf7ceb99','file'=> new CurlFile($captcha_path)));
+			echo "Вошли 0";
+		    $captcha = $this->captcha_curl->request("http://rucaptcha.com/in.php",array('key'=>'0b07ab2862c1ad044df277cbaf7ceb99','file'=> new CurlFile($captcha_path)));
 		} 
 		if(strpos($captcha, "|") !== false) {
+			echo "Вошли";
 			$captcha = substr($captcha, 3);
 			$url = "http://rucaptcha.com/res.php?";
 					$url_params = array(
@@ -62,23 +67,29 @@ Class Avito {
 				    	'id' => $captcha
 					);
 			$url .= urldecode(http_build_query($url_params));
-
-			$captcha = $this->curl->request($url);
+			echo "Вошли 1";
+			$captcha = $this->captcha_curl->request($url);
 			while ($captcha == 'CAPCHA_NOT_READY') {
 				sleep(2);
-		   		$captcha = $this->curl->request($url);
+		   		$captcha = $this->captcha_curl->request($url);
 			} 
+			echo "Вошли 2";
+			echo $captcha;
 			if(strpos($captcha, "|") !== false) {
+				echo "Вошли 3";
 				$captcha = substr($captcha, 3);
 				$html = str_get_html($this->curl->request("https://www.avito.ru/additem/confirm",array('captcha' => $captcha,'done' => "",'subscribe-position' => '0')));
+				echo "Вошли 4";
 				$id = $html->find('.content-text a[rel="nofollow"]',0)->href;
 				$id = end(explode("_", $id));
 				return $id;
 			} else {
-				return "error";
+				echo "Вошли 5";
+				return false;
 			}
 		} else {
-			return "error";
+			echo "Вошли 6";
+			return false;
 		}
     }
     public function updateAdvert($advert_id,$params,$images = NULL){
@@ -138,6 +149,14 @@ Class Avito {
     }
 
     public function generateFields($fields,$good_type_id){
+    	$multi = array("params[798]","params[801]","params[799]","params[800]");
+    	foreach ($multi as $key => $m) {
+    		if( isset($fields[$m]) ){
+    			$fields[$m] = explode("/", $fields[$m]);
+    			$fields[$m] = $fields[$m][0];
+    		}
+    	}
+
 		$fields['authState'] = 'phone-edit';
 		$fields['private'] =  0;
 		$fields['root_category_id' ] = 1;

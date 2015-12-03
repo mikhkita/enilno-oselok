@@ -150,9 +150,14 @@ class Queue extends CActiveRecord
 			if( isset(Queue::model()->codes[$code]) ){
 				$values = array();
 				foreach ($adverts as $advert){
-					$item = array("advert_id" => isset($advert->id)?$advert->id:$advert, "action_id" => Queue::model()->codes[$code] );
+					$item = array("advert_id" => isset($advert->id)?$advert->id:$advert, "action_id" => Queue::model()->codes[$code], "start" => NULL );
 					if( $offset > 0 || $interval > 0 )
 						$item["start"] = date("Y-m-d H:i:s", $start);
+
+					if( $advert->place->category_id == 2048 ){
+						$last = Queue::model()->with("advert.place")->find(array("limit"=>1,"order"=>"start DESC","condition"=>"place.category_id=2048 AND start IS NOT NULL AND advert.city_id=".$advert->city_id));
+						$item["start"] = date("Y-m-d H:i:s", ($last)?(strtotime($last->start)+rand(33*60,39*60)):$start );
+					}
 					array_push($values, $item);
 					$start += $interval;
 				}
@@ -175,14 +180,14 @@ class Queue extends CActiveRecord
 				foreach ($adverts as $advert){
 					array_push($advert_ids, isset($advert->id)?$advert->id:$advert);
 					if( $advert->url == NULL ){
-						array_push($update_arr, $advert);
-					}else{
 						array_push($add_arr, $advert);
+					}else{
+						array_push($update_arr, $advert);
 					}
 				}
 				
 				$criteria = new CDbCriteria();
-				$criteria->condition = "action_id=".Queue::model()->codes[$code]." AND state_id = 1";
+				$criteria->condition = "action_id=".Queue::model()->codes[$code]." AND state_id != 2";
 	    		$criteria->addInCondition("advert_id", $advert_ids);
 
 	    		Queue::model()->deleteAll($criteria);
@@ -206,10 +211,10 @@ class Queue extends CActiveRecord
 		}
 	}
 
-	public function getNext(){
-		$queue = Queue::model()->with("advert.good.type","advert.place","action")->nextStart()->find();
+	public function getNext($category_id){
+		$queue = Queue::model()->with("advert.good.type","advert.place","action")->nextStart()->find("place.category_id=$category_id");
 		if( !count($queue) ){
-			$queue = Queue::model()->with("advert.good.type","advert.place","action")->next()->find();
+			$queue = Queue::model()->with("advert.good.type","advert.place","action")->next()->find("place.category_id=$category_id");
 		}
 		return $queue;
 	}

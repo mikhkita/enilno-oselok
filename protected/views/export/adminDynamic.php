@@ -3,14 +3,14 @@
 
 <div class="b-choose-dynamic">
 	<div class="clearfix">
-	<? foreach ($data as $key => $value): ?>
+	<? foreach ($data as $key => $attribute): ?>
 		<div class="left b-dynamic b-choosable">
 			<p><label>Пример</label></p>
-			<?php echo CHtml::dropDownList('dynamic['.$value->attribute->id.']', $value->attribute->variants[0]->variant_id, CHtml::listData($value->attribute->variants, 'variant_id', 'value')); ?>
+			<?php echo CHtml::dropDownList('dynamic['.$attribute->id.']', $attribute->variants[0]->variant_id, CHtml::listData($attribute->variants, 'variant_id', 'value')); ?>
 			<input type="hidden" name="dynamic_values[<?=$value->attribute->id?>]" value="">
 			<div class="b-error">Нужно выбрать хотя бы один параметр</div>
 			<ul class="b-dynamic-values b-choosable-values">
-				<? foreach ($value->attribute->variants as $variant): ?>
+				<? foreach ($attribute->variants as $variant): ?>
 					<li data-id="<?=$variant->variant_id?>" class="selected"><?=$variant->value?></li>
 				<? endforeach; ?>
 			</ul>

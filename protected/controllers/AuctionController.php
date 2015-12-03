@@ -2,7 +2,7 @@
 
 class AuctionController extends Controller
 {
-	public $minutes_before = 3;
+	public $minutes_before = 2.2;
 	public $tryes = 9;
 
 	public function filters()
@@ -20,7 +20,7 @@ class AuctionController extends Controller
 				'roles'=>array('root'),
 			),
 			array('allow',
-				'actions'=>array('adminCheck','adminDelete'),
+				'actions'=>array('adminCheck','adminCheckOur','adminDelete'),
 				'users'=>array('*'),
 			),
 			array('deny',
@@ -115,28 +115,44 @@ class AuctionController extends Controller
 	{
 		Log::debug("Начало проверки");
 		$yahon = new Yahon();
+		$yahon->auth();
 
-		$model = Auction::model()->findAll(array("condition"=>"state=0 AND archive=0 AND date<'".date("Y-m-d H:i:s", time()+$this->minutes_before*60)."'"));
+		$model = Auction::model()->findAll(array("condition"=>"state=0 AND archive=0 AND date<'".date("Y-m-d H:i:s", time()+intval($this->minutes_before*60) )."'"));
 		// $model = Auction::model()->findAll(array("condition"=>"state=0 AND archive=0"));
+		Log::debug("Элементов в очереди ".count($model));
 		foreach ($model as $key => $auction) {
 			$fields = NULL;
 			$fields = Injapan::getFields($auction->code, $auction->price, $auction->state);
 
 			if( intval($fields["main"]["state"]) == 0 ){ // ПОПРАВИТЬ НА 0
 				if( strtotime($fields["main"]["date"]) < time()+$this->minutes_before*60 ){
-					if( !$yahon->isAuth() ) $yahon->auth();
+					$result = $yahon->setBid($auction->code,$fields["main"]["current_price"],$fields["other"]["step"],$auction->price);
 
-					$this->setBid($auction,$fields,$yahon);
+					Log::debug("state=".$result["result"]."; cur_price = ".$cur_price);
+						
+					// $fields["main"]["state"] = $result["result"];
 				}
 			}
+
+			$this->update($auction,NULL,$yahon);
 		}
+
+		Log::debug("Конец проверки");
+	}
+
+	public function actionAdminCheckOur($debug = NULL){
+		if( $debug === NULL ) sleep(10);
 
 		// $model = Auction::model()->findAll(array("condition"=>"state=2 AND archive=0 AND date<'".date("Y-m-d H:i:s", time()+$this->minutes_before*60)."'"));
 		$model = Auction::model()->findAll(array("condition"=>"state=2 AND archive=0"));
+
+		if( count($model) ){
+			$yahon = new Yahon();
+			$yahon->auth();
+		}
 		foreach ($model as $key => $auction) {
 			$this->update($auction,NULL,$yahon);
 		}
-		Log::debug("Конец проверки");
 	}
 
 	public function actionAdminLive()
@@ -153,18 +169,6 @@ class AuctionController extends Controller
 			array_push($out, $item);
 		}
 		echo json_encode($out);
-	}
-
-	public function setBid($auction,$fields,$yahon){
-		$result = $yahon->setBid($auction->code,$fields["main"]["current_price"],$fields["other"]["step"],$auction->price);
-
-		Log::debug("state=".$result["result"]."; cur_price = ".$cur_price);
-			
-		$fields["main"]["state"] = $result["result"];
-
-		$this->update($auction,NULL,$yahon);
-
-		return $fields;
 	}
 
 	public function actionAdminRefresh($id){
@@ -216,6 +220,11 @@ class AuctionController extends Controller
 			}
 
 			$yahon_state = $yahon->getState($auction->code);
+
+			if( $auction->state != 6 && $yahon_state == 6 ){
+				Good::createFromAuction($auction);
+			}
+
 			if( $yahon_state != 0 ){
 				$fields["main"]["state"] = $yahon_state;
 			}

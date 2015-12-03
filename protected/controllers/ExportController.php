@@ -217,10 +217,10 @@ class ExportController extends Controller
 		$export = Export::model()->findByPk($id);
 
 		$criteria = new CDbCriteria();
-		$criteria->condition = "good_type_id=".$export->good_type_id." AND attribute.dynamic=1";
-		$criteria->with = array("attribute.variants");
+		$criteria->with = array("variants.variant"=>array("order"=>"variant.sort ASC"));
+		$criteria->condition = "t.id=57 OR t.id=37 OR t.id=38";
 
-        $model = GoodTypeAttribute::model()->findAll($criteria);
+        $model = Attribute::model()->findAll($criteria);
         
 		$this->render('adminDynamic',array(
 			'data'=>$model,
@@ -240,7 +240,7 @@ class ExportController extends Controller
 		$dynObjects = array();
 
 		if( isset($_POST["dynamic"]) ){
-			$dynObjects = $this->getDynObjects($_POST["dynamic"],$export->good_type_id);
+			$dynObjects = $this->getDynObjects($_POST["dynamic"]);
 		}
 
 		$arr = array();
@@ -285,7 +285,7 @@ class ExportController extends Controller
 			'fields' => $arr,
 			'name'=>$export->name,
 			'dynObjects'=>$dynObjects,
-			'dynValues'=>(isset($_POST["dynamic_values"]))?$_POST["dynamic_values"]:array()
+			'dynValues'=>(isset($_POST["dynamic"]))?$_POST["dynamic"]:array()
 		));
 	}
 
@@ -335,7 +335,7 @@ class ExportController extends Controller
 			}
 
 			foreach ($dynamic_values as $dynVal) {
-				$excel = $this->generateFields($excel, $goods, $fields, $this->getDynObjects($dynVal,$export->good_type_id));
+				$excel = $this->generateFields($excel, $goods, $fields, $this->getDynObjects($dynVal));
 			}
 
 		}else{

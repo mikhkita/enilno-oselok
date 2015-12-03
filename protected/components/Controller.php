@@ -38,6 +38,14 @@ class Controller extends CController
     public $render;
     public $debugText = "";
 
+    public $place_states = array();
+
+    public $type_codes = array(
+        1 => "tires",
+        2 => "discs",
+        3 => "wheels",
+    );
+
     public $settings = array();
 
     public $adminMenu = array();
@@ -61,6 +69,9 @@ class Controller extends CController
                 $this->adminMenu["items"][$key] = $this->toLowerCaseModelNames($value);
             }
         }
+
+        $this->place_states[2048] = $this->place_states["AVITO"] = $this->getParam("AVITO","TOGGLE");
+        $this->place_states[2047] = $this->place_states["DROM"] = $this->getParam("DROM","TOGGLE");
 
         $this->adminMenu["cur"] = $this->toLowerCaseModelNames(ModelNames::model()->find(array("condition" => "code = '".Yii::app()->controller->id."'")));
         
@@ -138,7 +149,7 @@ class Controller extends CController
         return Yii::app()->db->createCommand($sql)->execute();
     }
 
-    public function getValues($model,$values){
+    public function getValues($model,$values,$with = NULL){
         $criteria = new CDbCriteria();
         foreach ($values as $key => $value) {
             $tmp = array();
@@ -149,7 +160,7 @@ class Controller extends CController
         }
         $criteria->condition = implode(" OR ", $values);
 
-        return $model->findAll($criteria);
+        return $model->with( ($with!==NULL)?$with:array() )->findAll($criteria);
     }
 
     public function replaceToBr($str){
@@ -449,14 +460,12 @@ class Controller extends CController
     public function getImages($good, $number = NULL)
     {   
         $imgs = array();
-        $path = Yii::app()->params["imageFolder"];
         $code = $good->fields_assoc[3]->value;
-        if($good->good_type_id==1) $path .= "/tires/";
-        if($good->good_type_id==2) $path .= "/discs/";
-        $dir = $path.$code;
+        $path = Yii::app()->params["imageFolder"]."/".$this->type_codes[$good->good_type_id];
+        $dir = $path."/".$code;
         if (is_dir($dir)) {
             $imgs = array_values(array_diff(scandir($dir), array('..', '.', 'Thumbs.db', '.DS_Store')));
-            $dir = Yii::app()->request->baseUrl."/".$path.$code;
+            $dir = Yii::app()->request->baseUrl."/".$path."/".$code;
             if(count($imgs)) {
                 if($number) {
                     for ($i=0; $i < $number; $i++) { 
@@ -553,6 +562,16 @@ class Controller extends CController
         foreach ($items as $item)
             $out[$item->getAttribute($attr)] = $item;
         return $out;
+    }
+
+    public function downloadImages($images,$good_code,$good_type_id){
+        foreach ($images as $img) {
+            $dir = $this->type_codes[$good->good_type_id];
+            $img_name = array_pop(explode("/",$img));
+            $dir = Yii::app()->params["imageFolder"]."/".$this->type_codes[$good_type_id]."/".$good_code;
+            if (!is_dir($dir)) mkdir($dir, 0777, true);
+            copy( $img, $dir."/".$img_name);
+        }
     }
 
     public function getArray($items){

@@ -167,6 +167,7 @@ class GoodController extends Controller
 			foreach ($goods as $i => $good) {
 				$good->update();
 			}
+
 			// list($queryCount, $queryTime) = Yii::app()->db->getStats();
 			// echo "Query count: $queryCount, Total query time: ".sprintf('%0.5f',$queryTime)."s";
 			$this->redirect( Yii::app()->createUrl('good/adminindex',array('goodTypeId'=>$good_type_id,'partial'=>true,'GoodFilter_page' => $_GET["GoodFilter_page"])) );
@@ -304,6 +305,11 @@ class GoodController extends Controller
 					"FILTER_NAMES" => array(43=>41),
 					"SORT" => array(3,20),
 				),
+			3 => array(
+					"FILTER" => array(43,26,23,27,16),
+					"FILTER_NAMES" => array(43=>41),
+					"SORT" => array(3,20),
+				),
 		);
 		$sort_fields = $this->getLabels($params[$goodTypeId]["SORT"]);
 		$attributes = $this->getFilterVariants($params[$goodTypeId]["FILTER"],$params[$goodTypeId]["FILTER_NAMES"],$goodTypeId);
@@ -345,7 +351,7 @@ class GoodController extends Controller
 				$_POST['sort']
 			)->getPage(
 				array(
-			    	'pageSize'=>20,
+			    	'pageSize'=>25,
 			    )
 			);
 		}

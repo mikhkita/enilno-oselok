@@ -58,7 +58,7 @@ class PlaceController extends Controller
 
 		if(isset($_POST['Place']))
 		{
-			$tmp = Place::model()->find("category_id='".$_POST["Place"]["category_id"]."' AND good_type_id='".$_POST["Place"]["good_type_id"]."'");
+			$tmp = Place::model()->with(array("interpreters"))->find("category_id='".$_POST["Place"]["category_id"]."' AND good_type_id='".$_POST["Place"]["good_type_id"]."'");
 			if( !(isset($tmp) && $tmp->id != $id) ){
 				$model->attributes=$_POST['Place'];
 
@@ -73,7 +73,7 @@ class PlaceController extends Controller
 			$this->renderPartial('adminUpdate',array(
 				'model' => $model,
 				'inter' => $model->interpreters,
-				'allInter' => Interpreter::model()->findAll(array("order"=>"name ASC","condition"=>"good_type_id=".$model->good_type_id)),
+				'allInter' => Interpreter::model()->findAll(array("order"=>"name ASC","condition"=>"good_type_id=".$model->good_type_id." AND service=0")),
 			));
 		}
 	}

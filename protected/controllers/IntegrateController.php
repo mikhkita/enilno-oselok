@@ -331,7 +331,7 @@ class IntegrateController extends Controller
             $this->updateLots($page["items"],$category->id);
             YahooLot::model()->deleteAll("id in (".implode(",", $delete_ids).")");
 
-            Log::debug($category->name." Страница: ".$yahoo->getLastPage());
+            // Log::debug($category->name." Страница: ".$yahoo->getLastPage());
 
             if( $bids ){
                 $tog = ( intval(array_pop($page["items"])->Bids) > 0 )?true:false;
@@ -402,34 +402,42 @@ class IntegrateController extends Controller
 // Yahoo ----------------------------------------------------------------- Yahoo
 
 // Выкладка -------------------------------------------------------------- Выкладка
-    public function actionQueueNext($debug = false){
-        if( !$this->checkAccess() && !$debug ) return true;
+    public function actionQueueNextAvito($debug = false){
+        $this->doQueueNext($debug,2048);
+    }
 
-        while( $this->allowed() ){
-            $this->writeTime();
-            if( !$this->getNext() ) sleep(5);
+    public function actionQueueNextDrom($debug = false){
+        $this->doQueueNext($debug,2047);
+    }
+
+    public function doQueueNext($debug = false,$category_id){
+        if( !$this->checkQueueAccess($category_id) && !$debug ) return true;
+
+        while( $this->allowed($category_id) ){
+            $this->writeTime($category_id);
+            if( !$this->getNext($category_id) ) sleep(5);
             if( $debug ) return true;
         }
     }
 
-    public function checkAccess(){
-        $last = file_get_contents(Yii::app()->basePath."/data/queue_time.txt");
+    public function writeTime($category_id){
+        $this->setParam( Place::model()->categories[$category_id], "TIME", time() );
+    }
+
+    public function checkQueueAccess($category_id){
+        $last = $this->getParam( Place::model()->categories[$category_id], "TIME" );
         return ( time() - intval($last) > 120 );
     }
 
-    public function writeTime(){
-        file_put_contents(Yii::app()->basePath."/data/queue_time.txt",time());
+    public function allowed($category_id){
+        $queue = $this->getParam( Place::model()->categories[$category_id], "TOGGLE" );
+        return ( trim($queue) == "on" );
     }
 
-    public function allowed(){
-        $queue = file_get_contents(Yii::app()->basePath."/data/queue.txt");
-        return ( $queue == "1" );
-    }
-
-    public function getNext(){
+    public function getNext($category_id){
         // Log::debug("Start");
         // echo time();
-        $queue = Queue::getNext();
+        $queue = Queue::getNext($category_id);
         // return true;
         if( !$queue ) return false;
         $advert = $queue->advert;
@@ -446,17 +454,19 @@ class IntegrateController extends Controller
 
         $fields = Place::getValues(Place::getInters($advert->place->category_id,$advert->good->type->id),$advert->good,$dynamic);
 
+        // print_r($fields);
+        // die();
+
         $images = $this->getImages($advert->good);
         if( $place_name == "DROM" ){
             $account = $this->getDromAccount($fields["login"]);
             $place = new Drom();
             $fields["contacts"] = $account->phone;
         }else if( $place_name == "AVITO" ){
-            // echo $fields["login"];
             $account = $this->getAvitoAccount($fields["login"]);
             $place = new Avito( (isset($account->proxy) && $account->proxy != "")?$account->proxy:NULL );
             $fields["phone"] = $account->phone;
-            $fields["email"] = $account->email;
+            $fields["email"] = $account->login;
             $fields["seller_name"] = $account->name;
         }
 
@@ -467,9 +477,14 @@ class IntegrateController extends Controller
         }
 
         $fields = $place->generateFields($fields,$advert->good->good_type_id);
+
+        // var_dump($fields);
         
         $place->setUser($account->login, $account->password);
-        $place->auth();
+        $res = $place->auth();
+
+        // print_r($res);
+        // die();
         
         switch ($queue->action->code) {
             case 'delete':
@@ -487,6 +502,7 @@ class IntegrateController extends Controller
                 if( $result )
                     $advert->setUrl($result);
 
+                // var_dump($result);
                 break;
             case 'update':
 
@@ -548,6 +564,15 @@ class IntegrateController extends Controller
 
 
     public function actionAdminIndex(){
-        var_dump($this->getDromAccount());
+        // if (!is_dir(Yii::app()->params["imageFolder"]."/wheela")) mkdir(Yii::app()->params["imageFolder"]."/wheela",0777, true);
+        // $files = array_diff(scandir(Yii::app()->params["imageFolder"]."/wheel/8300"), array('.','..')); 
+        // foreach ($files as $file) { 
+        //   (is_dir(Yii::app()->params["imageFolder"]."/wheel/8300"."/$file")) ? delTree(Yii::app()->params["imageFolder"]."/wheel/8300"."/$file") : unlink(Yii::app()->params["imageFolder"]."/wheel/8300"."/$file"); 
+        // } 
+        // rmdir(Yii::app()->params["imageFolder"]."/wheel/8300");
+        // 
+        // $auction = Auction::model()->find(array("limit"=>1, "order"=>"date DESC"));
+        // // // print_r($auction);
+        // var_dump(Good::createFromAuction($auction));
     }
 }

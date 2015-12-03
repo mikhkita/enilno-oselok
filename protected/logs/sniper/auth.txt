@@ -164,14 +164,14 @@ window.onload = function() {
 <div class="row">
     <div class="tab-content">
 
-<a href="/stock/item?number=17"><div class="frontpageAggregator rakuten"><img src="http://www.yahon.ru/images/stock/1903037237.jpg" alt="Сквален  "><br><p>Сквален<br><br></p><p class="price" style="font-size:18px;">1315 <span class="rur">p<span>уб.</span></p>
-    </div></a><a href="/stock/item?number=18"><div class="frontpageAggregator rakuten"><img src="http://www.yahon.ru/images/stock/2076215271.jpg" alt="Коллаген Фукоидан"><br><p>Коллаген<br>Фукоидан</p><p class="price" style="font-size:18px;">1621 <span class="rur">p<span>уб.</span></p>
-    </div></a><a href="/stock/item?number=20"><div class="frontpageAggregator rakuten"><img src="http://www.yahon.ru/images/stock/1601870318.jpg" alt="Детские витамины"><br><p>Детские<br>витамины</p><p class="price" style="font-size:18px;">347 <span class="rur">p<span>уб.</span></p>
-    </div></a><a href="/stock/item?number=22"><div class="frontpageAggregator rakuten"><img src="http://www.yahon.ru/images/stock/1365417946.jpg" alt="Глюкозамин  "><br><p>Глюкозамин<br><br></p><p class="price" style="font-size:18px;">1695 <span class="rur">p<span>уб.</span></p>
-    </div></a><a href="/stock/item?number=23"><div class="frontpageAggregator rakuten"><img src="http://www.yahon.ru/images/stock/989912265.jpg" alt="Глюкозамин MSM "><br><p>Глюкозамин<br>MSM<br></p><p class="price" style="font-size:18px;">1511 <span class="rur">p<span>уб.</span></p>
-    </div></a><a href="/stock/item?number=24"><div class="frontpageAggregator rakuten"><img src="http://www.yahon.ru/images/stock/224107424.jpg" alt="Мазь Анмеруцу"><br><p>Мазь<br>Анмеруцу</p><p class="price" style="font-size:18px;">338 <span class="rur">p<span>уб.</span></p>
-    </div></a><a href="/stock/item?number=25"><div class="frontpageAggregator rakuten"><img src="http://www.yahon.ru/images/stock/1235073034.jpg" alt="Рыбий жир"><br><p>Рыбий<br>жир</p><p class="price" style="font-size:18px;">991 <span class="rur">p<span>уб.</span></p>
-    </div></a><a href="/stock/item?number=26"><div class="frontpageAggregator rakuten"><img src="http://www.yahon.ru/images/stock/1512862082.jpg" alt="Витамины HelloKitty"><br><p>Витамины<br>HelloKitty</p><p class="price" style="font-size:18px;">348 <span class="rur">p<span>уб.</span></p>
+<a href="/stock/item?number=17"><div class="frontpageAggregator rakuten"><img src="http://www.yahon.ru/images/stock/1903037237.jpg" alt="Сквален  "><br><p>Сквален<br><br></p><p class="price" style="font-size:18px;">1311 <span class="rur">p<span>уб.</span></p>
+    </div></a><a href="/stock/item?number=18"><div class="frontpageAggregator rakuten"><img src="http://www.yahon.ru/images/stock/2076215271.jpg" alt="Коллаген Фукоидан"><br><p>Коллаген<br>Фукоидан</p><p class="price" style="font-size:18px;">1616 <span class="rur">p<span>уб.</span></p>
+    </div></a><a href="/stock/item?number=20"><div class="frontpageAggregator rakuten"><img src="http://www.yahon.ru/images/stock/1601870318.jpg" alt="Детские витамины"><br><p>Детские<br>витамины</p><p class="price" style="font-size:18px;">346 <span class="rur">p<span>уб.</span></p>
+    </div></a><a href="/stock/item?number=22"><div class="frontpageAggregator rakuten"><img src="http://www.yahon.ru/images/stock/1365417946.jpg" alt="Глюкозамин  "><br><p>Глюкозамин<br><br></p><p class="price" style="font-size:18px;">1689 <span class="rur">p<span>уб.</span></p>
+    </div></a><a href="/stock/item?number=23"><div class="frontpageAggregator rakuten"><img src="http://www.yahon.ru/images/stock/989912265.jpg" alt="Глюкозамин MSM "><br><p>Глюкозамин<br>MSM<br></p><p class="price" style="font-size:18px;">1506 <span class="rur">p<span>уб.</span></p>
+    </div></a><a href="/stock/item?number=24"><div class="frontpageAggregator rakuten"><img src="http://www.yahon.ru/images/stock/224107424.jpg" alt="Мазь Анмеруцу"><br><p>Мазь<br>Анмеруцу</p><p class="price" style="font-size:18px;">337 <span class="rur">p<span>уб.</span></p>
+    </div></a><a href="/stock/item?number=25"><div class="frontpageAggregator rakuten"><img src="http://www.yahon.ru/images/stock/1235073034.jpg" alt="Рыбий жир"><br><p>Рыбий<br>жир</p><p class="price" style="font-size:18px;">987 <span class="rur">p<span>уб.</span></p>
+    </div></a><a href="/stock/item?number=26"><div class="frontpageAggregator rakuten"><img src="http://www.yahon.ru/images/stock/1512862082.jpg" alt="Витамины HelloKitty"><br><p>Витамины<br>HelloKitty</p><p class="price" style="font-size:18px;">346 <span class="rur">p<span>уб.</span></p>
     </div></a></div>
 </div>
 </div>
@@ -229,8 +229,8 @@ jQuery("#fishingRods_tab").click();
                 <br>Владивосток, ул. Шошина, д. 6 (<a href="http://maps.yandex.ru/-/CVeo7X1m">карта</a>)</address>
             </div>
             <div class="col-md-4">
-                    <small><p>100 &yen; — 55 <span class="rur">p<span>уб.</span><br>
-                    1 $ — 120.4 ¥</p>
+                    <small><p>100 &yen; — 54.8 <span class="rur">p<span>уб.</span><br>
+                    1 $ — 120.8 ¥</p>
                     Следующий пароход пока неизвестен                    </small>
                 
             </div>

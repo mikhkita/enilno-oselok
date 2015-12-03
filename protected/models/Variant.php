@@ -103,9 +103,9 @@ class Variant extends CActiveRecord
 	{
 		parent::afterFind();
 		 
-		$val = ($this->attributes["int_value"] == NULL)?( ($this->attributes["float_value"] == NULL)?($this->attributes["varchar_value"]):($this->attributes["float_value"]) ):($this->attributes["int_value"]);
+		$val = ($this->attributes["int_value"] === NULL)?( ($this->attributes["float_value"] === NULL)?($this->attributes["varchar_value"]):($this->attributes["float_value"]) ):($this->attributes["int_value"]);
 		
-		$this->setAttribute("value",($val != NULL)?$val:false,true);
+		$this->setAttribute("value",($val !== NULL)?$val:false,true);
 	}
 
 	/**

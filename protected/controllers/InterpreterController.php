@@ -13,7 +13,7 @@ class InterpreterController extends Controller
 	{
 		return array(
 			array('allow',
-				'actions'=>array('adminIndex','adminCreate','adminUpdate','adminDelete','adminPreview'),
+				'actions'=>array('adminIndex','adminCreate','adminUpdate','adminDelete','adminPreview','adminList'),
 				'roles'=>array('manager'),
 			),
 			array('deny',
@@ -31,7 +31,7 @@ class InterpreterController extends Controller
 			$_POST["Interpreter"]["category_id"] = 5;
 			$model->attributes=$_POST['Interpreter'];
 			if($model->save()){
-				$this->actionAdminIndex(true);
+				$this->actionAdminList(true);
 				return true;
 			}
 		}
@@ -52,7 +52,7 @@ class InterpreterController extends Controller
 		{
 			$model->attributes=$_POST['Interpreter'];
 			if($model->save())
-				$this->actionAdminIndex(true);
+				$this->actionAdminList(true);
 		}else{
 			$this->renderPartial('adminUpdate',array(
 				'model'=>$model,
@@ -66,10 +66,10 @@ class InterpreterController extends Controller
 
 		$this->loadModel($id)->delete();
 
-		$this->actionAdminIndex(true);
+		$this->actionAdminList(true);
 	}
 
-	public function actionAdminIndex($partial = false)
+	public function actionAdminList($partial = false)
 	{
 		if( !$partial ){
 			$this->layout='admin';
@@ -91,21 +91,36 @@ class InterpreterController extends Controller
 
         $criteria->order = 'id DESC';
 
-        $model = Interpreter::model()->findAll($criteria);
+        $criteria_inter = clone $criteria;
+        $criteria_inter->addCondition("service=0");
+        $inter = Interpreter::model()->findAll($criteria_inter);
+
+        $criteria->addCondition("service=1");
+        $service = Interpreter::model()->findAll($criteria);
 
 		if( !$partial ){
-			$this->render('adminIndex',array(
-				'data'=>$model,
+			$this->render('adminList',array(
+				'inter'=>$inter,
+				'service'=>$service,
 				'filter'=>$filter,
 				'labels'=>Interpreter::attributeLabels()
 			));
 		}else{
-			$this->renderPartial('adminIndex',array(
-				'data'=>$model,
+			$this->renderPartial('adminList',array(
+				'inter'=>$inter,
+				'service'=>$service,
 				'filter'=>$filter,
 				'labels'=>Interpreter::attributeLabels()
 			));
 		}
+	}
+
+	public function actionAdminIndex(){
+		$model = GoodType::model()->findAll();
+
+		$this->render('adminIndex',array(
+			'model'=>$model,
+		));
 	}
 
 	public function actionAdminPreview($id)

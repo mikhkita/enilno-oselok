@@ -6,7 +6,8 @@ Class Drom {
     public $curl;
     public $dir_codes = array(
         1 => 234,
-        2 => 235
+        2 => 235,
+        3 => 236
     );
     
     function __construct() {
