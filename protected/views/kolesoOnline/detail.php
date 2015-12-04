@@ -5,10 +5,10 @@
 			<ul class="navigation clearfix">
 				<li><a href="<?=Yii::app()->createUrl('/kolesoonline')?>"></a></li>
 				<!-- <li><a href="#">Каталог</a></li> -->
-				<li><a id="go-back" href="#"><?=$this->params[$_GET['type']]["NAME"]?></a></li>
-				<li><a href="#"><?=Interpreter::generate($this->params[$_GET['type']]["TITLE_CODE"], $good);?></a></li>
+				<li><a href="#"><?=$this->params[$_GET['type']]["NAME"]?></a></li>
+				<li><a href="#"><?=$this->title?></a></li>
 			</ul>
-			<h3 class="category-title" id="buy-title"><?=Interpreter::generate($this->params[$_GET['type']]["TITLE_CODE"], $good);?></h3>
+			<h3 class="category-title" id="buy-title"><?=$this->title?></h3>
 			<div class="detail-wrap clearfix">
 				<div class="detail-photo left">
 					<div class="detail-slider-for">
@@ -49,7 +49,7 @@
 					<li class="gradient-grey"><a href="#tabs-shippping">Доставка</a><span></span></li>
 					<li class="gradient-grey"><a href="#tabs-warranty">Гарантия</a><span></span></li>
 				</ul>
-				<div id="tabs-desc"><? if(isset($good->fields_assoc[35]->value)) echo $good->fields_assoc[35]->value.'<br>'; ?><?=$this->replaceToBr(Interpreter::generate($this->params[$_GET['type']]["DESCRIPTION_CODE"], $good));?></div>
+				<div id="tabs-desc"><? if(isset($good->fields_assoc[35]->value)) echo $good->fields_assoc[35]->value.'<br>'; ?><?=$this->replaceToBr($this->description);?></div>
 				<div id="tabs-shippping">
 					2Является первой зимней автошиной в которой применяется технология 3D-BIS на всей площади протектора. Данная технология, позволяет увеличить количество используемых ламелей. Для зимней авторезины высокая плотность ламелей на протекторе создает дополнительное сцепление на льду и снегу, но для движения на мокрой и сухой дороге для эффективного торможения, блоки должны быть жесткими и твердыми.
 				</div>

@@ -2548,7 +2548,35 @@ ul.b-filter-list{
         width: 150px;
         margin-right: 10px;
     }
-    
+.b-place-state{
+    background-color: #391E0F;
+    text-align: left;
+    padding-bottom: 3px;
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.3);
+}
+    .b-place-state span{
+        color: #F5E9BC;
+        font-size: 11px;
+        margin-left: 20px;
+        padding-left: 15px;
+        position: relative;
+    }
+        .b-place-state span:after{
+            position: absolute;
+            content: "s";
+            font-size: 0px;
+            width: 8px;
+            height: 8px;
+            left: 0px;
+            top: 4px;
+            border-radius: 50px;
+        }
+        .b-place-state span.b-red:after{
+            background-color: #F00;
+        }
+        .b-place-state span.b-green:after{
+            background-color: #30C930;
+        }
        
 @media screen and (max-width: 1500px){
     .b-hide-title{

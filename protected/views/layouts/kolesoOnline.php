@@ -7,9 +7,9 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Колесо Онлайн - твой магазин мечты</title>
-    <meta name="keywords" content='Диски, шины, колеса, колесные диски'>
-    <meta name="description" content='Только в нашем магазине вы найдете именно те колеса, которые вам нужны.'>
+    <title><?=$this->title?></title>
+    <meta name="keywords" content='<?=$this->keywords?>'>
+    <meta name="description" content='<?=$this->description?>'>
 
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="format-detection" content="telephone=no">
@@ -30,6 +30,13 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
 
     <link rel="stylesheet" media="screen and (min-width: 240px) and (max-width: 767px)" href="<?php echo Yii::app()->request->baseUrl; ?>/html/css/layout-mobile.css" />
     <link rel="stylesheet" media="screen and (min-width: 768px) and (max-width: 1000px)" href="<?php echo Yii::app()->request->baseUrl; ?>/html/css/layout-tablet.css" />
+
+    <meta property="og:url" content="Yii::app()->request->requestUri">
+    <meta property="og:title" content="Зимние Шины Nokian Hakka 7 SUV 265/60/18 Б/у">
+    <meta property="og:description" content="Является первой зимней автошиной в которой применяется технология 3D-BIS на всей площади протектора. Данная технология, позволяет увеличить количество используемых ламелей.">
+    <meta property="og:image" content="http://kitaev.pro/land/koleso6/i/detail.jpg">
+    <meta property="twitter:image" content="http://kitaev.pro/land/koleso6/i/detail.jpg">
+    <link rel="image_src" href="http://kitaev.pro/land/koleso6/i/detail.jpg">
 
     <link rel="icon" type="image/vnd.microsoft.icon" href="favicon.ico">
 </head>
