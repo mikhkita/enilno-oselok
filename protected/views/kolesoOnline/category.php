@@ -115,7 +115,7 @@
                 <ul class="goods clearfix">  
                     <?php $this->renderPartial('_list', array('goods' => $goods,'last' => $last,'params' => $params,'type' => $_GET['type'])); ?>
                 </ul>
-                <div class="load" style="width:100px; height:100px; background-color: red; display:none;"></div>
+                <div class="load" style="display:none;">Загрузка...</div>
                 <? else: ?>
                     <h3 class="b-no-goods">Товаров не найдено</h3>
                 <? endif; ?>

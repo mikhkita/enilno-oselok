@@ -193,9 +193,12 @@ $(document).ready(function(){
             url: window.location.href,
             data:  { city: city },
             success: function(msg){
-                window.location.replace(window.location.href);
+                
             }
         });
+        setTimeout(function(){
+            window.location.replace(window.location.href);
+        },100);
         return false;
     });
 
