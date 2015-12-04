@@ -31,6 +31,22 @@ $(document).ready(function(){
             }
     }
 
+    
+    
+    // $(".load").click(function(){
+    //     $.ajax({
+    //         type: "GET",
+    //         url: window.location.href,
+    //         data:  { partial: true},
+    //         success: function(msg){
+    //             $(".goods").append(msg);
+    //             if($('.goods li:eq(-1)').attr("data-last") == 1) {
+    //                 $(".load").hide(); 
+    //             }
+    //         }
+    //     });
+    // });
+
     function whenScroll(){
         if( $(".b-fixed-top").length ){
             var scroll = ((document.documentElement && document.documentElement.scrollTop) || document.body.scrollTop);
@@ -40,10 +56,31 @@ $(document).ready(function(){
                 $(".b-fixed-top").removeClass("shown");
             }
         }
+        if($(".b-category .goods").length) {
+            if($("body").scrollTop() > ($(".goods").offset().top+$(".goods").height()-myHeight)) {
+                if($('.goods li:eq(-1)').attr("data-last") == 0) {
+                    $.ajax({
+                        type: "GET",
+                        url: window.location.href,
+                        data:  { partial: true},
+                        success: function(msg){
+                            $(".goods").append(msg);
+                            if($('.goods li:eq(-1)').attr("data-last") == 1) {
+                                $(".load").hide(); 
+                            }
+                        }
+                    });
+                }  
+            }
+        }
     }
     $(window).scroll(whenScroll);
     $('body').bind('touchmove', whenScroll);
     whenScroll();
+
+    if($('.goods li:eq(-1)').attr("data-last") == 1) {
+        $(".load").hide(); 
+    }
 
     $('#similar-slider').slick({
         slidesToShow: 5,
@@ -127,9 +164,50 @@ $(document).ready(function(){
         // fade: true
     });
         
-    $( ".main-tabs" ).tabs({
-        active: 0
+    $( ".main-tabs" ).tabs();
+
+    $( ".city-tabs" ).tabs({
+        active: false,
+        collapsible :true
     });
+
+    $(".city-tabs li").click(function(){
+        if ($(this).hasClass("ui-state-active")) {
+            $(".city-top h4 span").show();
+        } else $(".city-top h4 span").hide();
+    });
+    
+    $(".city-select").select2({
+        language: "ru",
+        placeholder: "Или укажите в поле...",
+        allowClear: true
+    });
+    $(".popup-cities li a").click(function() {
+        var city = $(this).text();
+        $.ajax({
+            type: "POST",
+            url: window.location.href,
+            data:  { city: city },
+            success: function(msg){
+                window.location.replace(window.location.href);
+            }
+        });
+        return false;
+    });
+
+    $("#city-form").submit(function() {
+        var city = $(this).find("select").val();
+        $.ajax({
+            type: "POST",
+            url: window.location.href,
+            data:  { city: city },
+            success: function(msg){
+                window.location.replace(window.location.href);
+            }
+        });
+        return false;
+    });
+
 
     $('.min-val,.max-val').bind("change keyup input click", function() {
         if (this.value.match(/[^0-9]/g)) {
@@ -236,7 +314,7 @@ $(document).ready(function(){
         text=[];
         if(obj.length != 0) {
             obj.each(function(index, item){
-                console.log($(item).siblings("span").text());
+                // console.log($(item).siblings("span").text());
                 text.push($(item).siblings("span").text());
             });
             input.html(text.join(",&nbsp;")+"<span></span>");
@@ -308,35 +386,22 @@ $(document).ready(function(){
         $("#good-url").val(window.location.href);
     }
 
-    if($('.last-page').val() == 1) {
-        $(".load").hide(); 
-    }
-    $(".load").click(function(){
-        $.ajax({
-            type: "GET",
-            url: window.location.href,
-            data:  { partial: true},
-            success: function(msg){
-                $('.last-page').remove();
-                $(".goods").after(msg);
-                if($('.last-page').val() == 1) {
-                    $(".load").hide(); 
-                }
-            }
-        });
-    });
-
     $('.detail-slider-for').slick({
       slidesToShow: 1,
       slidesToScroll: 1,
       arrows: false,
       fade: true,
-      asNavFor: '.detail-slider-nav'
     });
-    $('.detail-slider-nav').slick({
-      slidesToShow: 6,
-      slidesToScroll: 1,
-      asNavFor: '.detail-slider-for',
-      focusOnSelect: true
+
+    $(".detail-thumb li").click(function(){
+        $('.detail-slider-for').slick('slickGoTo',$(this).index(), false);
     });
+
+
+    $(".tire-type input").change(function(){
+        if($(this).prop("checked")) {
+            $(this).parent().addClass("active");
+        } else $(this).parent().removeClass("active");
+    });
+    $(".tire-type input").change();
 });

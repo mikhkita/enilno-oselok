@@ -42,9 +42,9 @@
         <div class="b-block clearfix">
             <a href="#" class="b-burger icon left"></a>
             <ul class="clearfix left">
-                <li><a href="#">Диски</a></li>
-                <li><a href="#">Шины</a></li>
-                <li><a href="#">Колеса</a></li>
+                <li><a href="<?=Yii::app()->createUrl('/kolesoonline/category',array('type' => 2))?>">Диски</a></li>
+                <li><a href="<?=Yii::app()->createUrl('/kolesoonline/category',array('type' => 1))?>">Шины</a></li>
+                <!-- <li><a href="#">Колеса</a></li> -->
             </ul>
         </div>
     </div>
@@ -62,35 +62,45 @@
             <div class="city-top">
                 <h3>Выбор города</h3>
                 <h4>Федеральный округ<span>Город</span></h4>
-                <div class="clearfix main-tabs popup-fo">
+                <div class="clearfix city-tabs popup-fo">
                     <ul class="left">
                         <? $i = 0; foreach ($cities as $name => $group): ?>
                             <li><a href="#fo-<?=$i?>"><?=$name?></a></li>
                         <? $i++; endforeach; ?>
                     </ul>
-                    <div id="sib-fo" class="popup-cities clearfix left">
-                        <ul class="left">
-                            <li><a href="#">Кемерово</a></li>
-                            <li><a href="#">Новосибирск</a></li>
-                            <li><a href="#">Новокузнецк</a></li>
-                            <li><a href="#">Ленинск-Кузнецкий</a></li>
-                            <li><a href="#">Белово</a></li>
-                            <li><a href="#">Юрга</a></li>
-                            <li><a href="#">Полысаево</a></li>
-                            <li><a href="#">Барнаул</a></li>    
-                        </ul>
-                        <ul class="left">
-                            <li><a href="#">Новокузнецк</a></li>
-                            <li><a href="#">Бердск</a></li>
-                            <li class="active"><a href="#">Тяжин</a></li>
-                            <li><a href="#">Березовский</a></li>
-                        </ul>
-                    </div>
+                    <? $i = 0; foreach ($cities as $name => $group): ?>
+                        <div id="fo-<?=$i?>" class="popup-cities clearfix left">
+                            <? foreach ($group as $col): ?>
+                                <ul class="left">
+                                    <? foreach ($col as $city): ?>
+                                        <li><a href="#"><?=$city['name']?></a></li>
+                                    <? endforeach; ?>
+                                </ul>
+                            <? endforeach; ?>
+                        </div>
+                    <? $i++; endforeach; ?>
                 </div>
             </div>
             <div class="city-input clearfix">
-                <input type="text" class="left" placeholder="Или укажите в поле...">
+                <?php $form=$this->beginWidget('CActiveForm', array(
+                    'enableAjaxValidation'=>false,
+                    'method' => 'POST',
+                    'id' => "city-form"
+                )); ?>
+                <select class="city-select left" name="city" required>
+                    <option></option>
+                    <? foreach ($cities as $name => $group): ?>
+                    <optgroup label="<?=$name?>">
+                        <? foreach ($group as $col): ?>
+                            <? foreach ($col as $city): ?>
+                                <option value="<?=$city['name']?>"><?=$city['name']?></option>
+                            <? endforeach; ?>
+                        <? endforeach; ?>
+                    </optgroup>
+                    <? endforeach; ?>
+                </select>
                 <input type="submit" class="right b-orange-butt" value="Выбрать">
+                <?php $this->endWidget(); ?> 
             </div>
         </div>
     </div>

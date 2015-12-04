@@ -25,15 +25,19 @@
                 <div class="gradient-grey">
                     <h3>Фильтры</h3>
                     <div class="filter-block">
-                        
-                        <!-- <h5>Сезонность</h5> -->
                         <div class="tire-type clearfix">    
-                            <input id="tire-winter" type="radio" name="tire-type" value="0">
-                            <label for="tire-winter">Зимние нешипованные</label>
-                            <input id="tire-spike" type="radio" name="tire-type" value="1">
+                            <? foreach ($filter[$params[1]["SEASON"]] as $key => $col): ?>
+                                <? foreach ($col as $item): ?>     
+                                    <label>
+                                        <?=$item['value']?>
+                                        <input type="checkbox" name="arr[<?=$params[1]["SEASON"]?>][]" value="<?=$item['variant_id']?>">
+                                    </label>
+                                <? endforeach; ?>
+                            <? endforeach; ?>
+                            <!-- <input id="tire-spike" type="checkbox" name="arr[23][]" value="762">
                             <label for="tire-spike">Зимние шипованные</label>
-                            <input id="tire-summer" type="radio" name="tire-type" value="2">
-                            <label for="tire-summer">Летние</label>
+                            <input id="tire-summer" type="checkbox" name="arr[23][]" value="463">
+                            <label for="tire-summer">Летние</label> -->
                         </div>
                         <? foreach ($params[$_GET['type']]["FILTER"] as $attr_id => $label): ?>
                             <div class="filter-item">
@@ -71,7 +75,7 @@
                 <ul class="navigation clearfix">
                     <li><a href="<?=Yii::app()->createUrl('/kolesoonline')?>"></a></li>
                     <!-- <li><a href="#">Каталог</a></li> -->
-                    <li><a href="#">Шины</a></li>
+                    <li><a href="#"><?=$this->params[$_GET['type']]["NAME"]?></a></li>
                 </ul>
                 <h3 class="category-title">раздел <?=$this->params[$_GET['type']]["NAME"]?></h3>
                 <div class="b-sort clearfix">
@@ -97,14 +101,15 @@
                             <li>Профилю</li> -->
                         </ul>
                     </div>
-                    <div class="right clearfix">
+                    <!-- <div class="right clearfix">
                         <h4 class="left">Вид:</h4>
                         <span class="active grid-view view"></span>
                         <span class="list-view view"></span>
-                    </div>
+                    </div> -->
                 </div>
-                <?php $this->renderPartial('_list', array('goods' => $goods,'last' => $last)); ?>
-
+                <ul class="goods clearfix">  
+                    <?php $this->renderPartial('_list', array('goods' => $goods,'last' => $last,'params' => $params,'type' => $_GET['type'])); ?>
+                </ul>
                 <div class="load" style="width:100px; height:100px; background-color: red; display:inline-block;"></div>
             </div>
             <?php $this->endWidget(); ?>            

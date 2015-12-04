@@ -13,16 +13,16 @@
 				<div class="detail-photo left">
 					<div class="detail-slider-for">
 						<? foreach ($imgs as $img): ?>
-							<div><a href="<?=$img?>" class="fancy-img big" style="background-image:url('<?=$img?>');"></a></div>
+							<div><a href="<?=$img?>" class="fancy-img big" style="background-image:url('<?=$img?>');" rel="gallery0"></a></div>
 						<? endforeach; ?>
 					</div>
-					<div class="detail-slider-nav">
+					<ul class="detail-thumb">
 						<? if (count($imgs)>1): ?>
 							<? foreach ($imgs as $img): ?>
-								<div><div class="thumb" data-mid="<?=$img?>" data-big="<?=$img?>" style="background-image:url('<?=$img?>');"></div></div>
+								<li class="thumb" style="background-image:url('<?=$img?>');"></li>
 							<? endforeach; ?>
 						<? endif; ?>
-					</div>
+					</ul>
 				</div>
 				<div class="detail-price gradient-grey right">
 					<? $price = 0; $price = ($good->fields_assoc[51])?$good->fields_assoc[51]->value:0; $order = Interpreter::generate($this->params[$_GET['type']]["ORDER"], $good); ?>
@@ -55,93 +55,93 @@
 				</div>
 				<div id="tabs-warranty"><?=$this->replaceToBr(Interpreter::generate($this->params[$_GET['type']]["GARANTY_CODE"], $good));?></div>
 			</div>
-			<h3 class="category-title similar">Похожие товары</h3>
+			<!-- <h3 class="category-title similar">Похожие товары</h3>
 			<div class="goods clearfix" id="similar-slider">
-					<div class="gradient-grey">
-						<div class="good-img" style="background-image: url('i/tire.jpg');"></div>
-						<div class="params-cont">
-							<h4>Yokohama DNA</h4>
-							<h5><span>8900 р.</span> + 800 р.</h5>
-							<h5>доставка в г. Томск</h5>
-							<h6>225/45/17  2 шт.</h6>
-							<h3>Износ: <span>82%</span></h3>
-							<h3>Год выпуска: <span>2013</span></h3>
-							<a href="#" class="b-orange-butt">Купить</a>
-						</div>
+				<div class="gradient-grey">
+					<div class="good-img" style="background-image: url('i/tire.jpg');"></div>
+					<div class="params-cont">
+						<h4>Yokohama DNA</h4>
+						<h5><span>8900 р.</span> + 800 р.</h5>
+						<h5>доставка в г. Томск</h5>
+						<h6>225/45/17  2 шт.</h6>
+						<h3>Износ: <span>82%</span></h3>
+						<h3>Год выпуска: <span>2013</span></h3>
+						<a href="#" class="b-orange-butt">Купить</a>
 					</div>
-					<div class="gradient-grey">
-						<div class="good-img" style="background-image: url('i/tire.jpg');"></div>
-						<div class="params-cont">
-							<h4>Yokohama DNA</h4>
-							<h5><span>8900 р.</span> + 800 р.</h5>
-							<h5>доставка в г. Томск</h5>
-							<h6>225/45/17  2 шт.</h6>
-							<h3>Износ: <span>82%</span></h3>
-							<h3>Год выпуска: <span>2013</span></h3>
-							<a href="#" class="b-orange-butt">Купить</a>
-						</div>
+				</div>
+				<div class="gradient-grey">
+					<div class="good-img" style="background-image: url('i/tire.jpg');"></div>
+					<div class="params-cont">
+						<h4>Yokohama DNA</h4>
+						<h5><span>8900 р.</span> + 800 р.</h5>
+						<h5>доставка в г. Томск</h5>
+						<h6>225/45/17  2 шт.</h6>
+						<h3>Износ: <span>82%</span></h3>
+						<h3>Год выпуска: <span>2013</span></h3>
+						<a href="#" class="b-orange-butt">Купить</a>
 					</div>
-					<div class="gradient-grey">
-						<div class="good-img" style="background-image: url('i/tire.jpg');"></div>
-						<div class="params-cont">
-							<h4>Yokohama DNA</h4>
-							<h5><span>8900 р.</span> + 800 р.</h5>
-							<h5>доставка в г. Томск</h5>
-							<h6>225/45/17  2 шт.</h6>
-							<h3>Износ: <span>82%</span></h3>
-							<h3>Год выпуска: <span>2013</span></h3>
-							<a href="#" class="b-orange-butt">Купить</a>
-						</div>
+				</div>
+				<div class="gradient-grey">
+					<div class="good-img" style="background-image: url('i/tire.jpg');"></div>
+					<div class="params-cont">
+						<h4>Yokohama DNA</h4>
+						<h5><span>8900 р.</span> + 800 р.</h5>
+						<h5>доставка в г. Томск</h5>
+						<h6>225/45/17  2 шт.</h6>
+						<h3>Износ: <span>82%</span></h3>
+						<h3>Год выпуска: <span>2013</span></h3>
+						<a href="#" class="b-orange-butt">Купить</a>
 					</div>
-					<div class="gradient-grey">
-						<div class="good-img" style="background-image: url('i/tire.jpg');"></div>
-						<div class="params-cont">
-							<h4>Yokohama DNA</h4>
-							<h5><span>8900 р.</span> + 800 р.</h5>
-							<h5>доставка в г. Томск</h5>
-							<h6>225/45/17  2 шт.</h6>
-							<h3>Износ: <span>82%</span></h3>
-							<h3>Год выпуска: <span>2013</span></h3>
-							<a href="#" class="b-orange-butt">Купить</a>
-						</div>
+				</div>
+				<div class="gradient-grey">
+					<div class="good-img" style="background-image: url('i/tire.jpg');"></div>
+					<div class="params-cont">
+						<h4>Yokohama DNA</h4>
+						<h5><span>8900 р.</span> + 800 р.</h5>
+						<h5>доставка в г. Томск</h5>
+						<h6>225/45/17  2 шт.</h6>
+						<h3>Износ: <span>82%</span></h3>
+						<h3>Год выпуска: <span>2013</span></h3>
+						<a href="#" class="b-orange-butt">Купить</a>
 					</div>
-					<div class="gradient-grey">
-						<div class="good-img" style="background-image: url('i/tire.jpg');"></div>
-						<div class="params-cont">
-							<h4>Yokohama DNA</h4>
-							<h5><span>8900 р.</span> + 800 р.</h5>
-							<h5>доставка в г. Томск</h5>
-							<h6>225/45/17  2 шт.</h6>
-							<h3>Износ: <span>82%</span></h3>
-							<h3>Год выпуска: <span>2013</span></h3>
-							<a href="#" class="b-orange-butt">Купить</a>
-						</div>
+				</div>
+				<div class="gradient-grey">
+					<div class="good-img" style="background-image: url('i/tire.jpg');"></div>
+					<div class="params-cont">
+						<h4>Yokohama DNA</h4>
+						<h5><span>8900 р.</span> + 800 р.</h5>
+						<h5>доставка в г. Томск</h5>
+						<h6>225/45/17  2 шт.</h6>
+						<h3>Износ: <span>82%</span></h3>
+						<h3>Год выпуска: <span>2013</span></h3>
+						<a href="#" class="b-orange-butt">Купить</a>
 					</div>
-					<div class="gradient-grey">
-						<div class="good-img" style="background-image: url('i/tire.jpg');"></div>
-						<div class="params-cont">
-							<h4>Yokohama DNA</h4>
-							<h5><span>8900 р.</span> + 800 р.</h5>
-							<h5>доставка в г. Томск</h5>
-							<h6>225/45/17  2 шт.</h6>
-							<h3>Износ: <span>82%</span></h3>
-							<h3>Год выпуска: <span>2013</span></h3>
-							<a href="#" class="b-orange-butt">Купить</a>
-						</div>
+				</div>
+				<div class="gradient-grey">
+					<div class="good-img" style="background-image: url('i/tire.jpg');"></div>
+					<div class="params-cont">
+						<h4>Yokohama DNA</h4>
+						<h5><span>8900 р.</span> + 800 р.</h5>
+						<h5>доставка в г. Томск</h5>
+						<h6>225/45/17  2 шт.</h6>
+						<h3>Износ: <span>82%</span></h3>
+						<h3>Год выпуска: <span>2013</span></h3>
+						<a href="#" class="b-orange-butt">Купить</a>
 					</div>
-					<div class="gradient-grey">
-						<div class="good-img" style="background-image: url('i/tire.jpg');"></div>
-						<div class="params-cont">
-							<h4>Yokohama DNA</h4>
-							<h5><span>8900 р.</span> + 800 р.</h5>
-							<h5>доставка в г. Томск</h5>
-							<h6>225/45/17  2 шт.</h6>
-							<h3>Износ: <span>82%</span></h3>
-							<h3>Год выпуска: <span>2013</span></h3>
-							<a href="#" class="b-orange-butt">Купить</a>
-						</div>
+				</div>
+				<div class="gradient-grey">
+					<div class="good-img" style="background-image: url('i/tire.jpg');"></div>
+					<div class="params-cont">
+						<h4>Yokohama DNA</h4>
+						<h5><span>8900 р.</span> + 800 р.</h5>
+						<h5>доставка в г. Томск</h5>
+						<h6>225/45/17  2 шт.</h6>
+						<h3>Износ: <span>82%</span></h3>
+						<h3>Год выпуска: <span>2013</span></h3>
+						<a href="#" class="b-orange-butt">Купить</a>
 					</div>
-				</ul>
+				</div>
+			</div> -->
 		</div>
 	</div>
 </div>
