@@ -1629,6 +1629,10 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 					.b-category .b-block .good-list .b-sort > .right .list-view:before {
 
 					}
+				.b-category .b-no-goods {
+					font-size: 30px;
+   					padding: 50px 0;
+				}
 
 .good-detail {
 

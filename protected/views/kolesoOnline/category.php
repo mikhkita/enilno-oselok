@@ -1,4 +1,4 @@
-<? if(count($goods)): ?>
+
 <?
     $sort_arr = array("51" => "по цене", "9" => "по диаметру");
     if ($_GET['type'] == 1) {
@@ -25,20 +25,22 @@
                 <div class="gradient-grey">
                     <h3>Фильтры</h3>
                     <div class="filter-block">
-                        <div class="tire-type clearfix">    
-                            <? foreach ($filter[$params[1]["SEASON"]] as $key => $col): ?>
-                                <? foreach ($col as $item): ?>     
-                                    <label>
-                                        <?=$item['value']?>
-                                        <input type="checkbox" name="arr[<?=$params[1]["SEASON"]?>][]" value="<?=$item['variant_id']?>">
-                                    </label>
+                        <? if($_GET['type'] == 1): ?>
+                            <div class="tire-type clearfix">    
+                                <? foreach ($filter[$params[1]["SEASON"]] as $key => $col): ?>
+                                    <? foreach ($col as $item): ?>     
+                                        <label>
+                                            <?=$item['value']?>
+                                            <input type="checkbox" name="arr[<?=$params[1]["SEASON"]?>][]" value="<?=$item['variant_id']?>">
+                                        </label>
+                                    <? endforeach; ?>
                                 <? endforeach; ?>
-                            <? endforeach; ?>
-                            <!-- <input id="tire-spike" type="checkbox" name="arr[23][]" value="762">
-                            <label for="tire-spike">Зимние шипованные</label>
-                            <input id="tire-summer" type="checkbox" name="arr[23][]" value="463">
-                            <label for="tire-summer">Летние</label> -->
-                        </div>
+                                <!-- <input id="tire-spike" type="checkbox" name="arr[23][]" value="762">
+                                <label for="tire-spike">Зимние шипованные</label>
+                                <input id="tire-summer" type="checkbox" name="arr[23][]" value="463">
+                                <label for="tire-summer">Летние</label> -->
+                            </div>
+                        <? endif; ?>
                         <? foreach ($params[$_GET['type']]["FILTER"] as $attr_id => $label): ?>
                             <div class="filter-item">
                                 <h5><?=$label?></h5>
@@ -80,6 +82,7 @@
                     <li><a href="#"><?=$this->params[$_GET['type']]["NAME"]?></a></li>
                 </ul>
                 <h3 class="category-title">раздел <?=$this->params[$_GET['type']]["NAME"]?></h3>
+                <? if(count($goods)): ?>
                 <div class="b-sort clearfix">
                     <div class="left clearfix">
                         <h4 class="left">Сортировать по:</h4>
@@ -113,11 +116,12 @@
                     <?php $this->renderPartial('_list', array('goods' => $goods,'last' => $last,'params' => $params,'type' => $_GET['type'])); ?>
                 </ul>
                 <div class="load" style="width:100px; height:100px; background-color: red; display:none;"></div>
+                <? else: ?>
+                    <h3 class="b-no-goods">Товаров не найдено</h3>
+                <? endif; ?>
             </div>
             <?php $this->endWidget(); ?>            
         </div>
+        
     </div>
-    <? else: ?>
-        <h3 class="b-no-goods">Товаров не найдено</h3>
-    <? endif; ?>
 </div>
