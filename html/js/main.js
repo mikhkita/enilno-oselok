@@ -409,13 +409,13 @@ $(document).ready(function(){
     });
     $(".tire-type input").change();
 
-    $("#go-back").click(function(){
-        if(document.referrer) {
-           window.history.back();
-        } else if($(this).text().indexOf('Шины') + 1){
-            window.location.assign("/kolesoonline/category?type=1");
-        } else if ($(this).text().indexOf('Диски') + 1) {
-            window.location.assign("/kolesoonline/category?type=2");
-        }
-    });
+    // $("#go-back").click(function(){
+    //     if(document.referrer) {
+    //        window.history.back();
+    //     } else if($(this).text().indexOf('Шины') + 1){
+    //         window.location.assign("/kolesoonline/category?type=1");
+    //     } else if ($(this).text().indexOf('Диски') + 1) {
+    //         window.location.assign("/kolesoonline/category?type=2");
+    //     }
+    // });
 });
