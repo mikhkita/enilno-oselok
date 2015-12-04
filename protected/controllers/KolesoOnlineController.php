@@ -392,15 +392,20 @@ class KolesoOnlineController extends Controller
 
   //  			list($queryCount, $queryTime) = Yii::app()->db->getStats();
 		// echo "Query count: $queryCount, Total query time: ".sprintf('%0.5f',$queryTime)."s";
-		// printf('<br>Прошло %.4F сек.<br>', microtime(true) - $start);	
+		// printf('<br>Прошло %.4F сек.<br>', microtime(true) - $start);
+			$cities = $this->getCity();	
+   			$dynamic = $this->getDynObjects(array(
+	            38 => $_SESSION['city']['variant_id']
+        	));
 
 			$this->render('index',array(
 				'tires'=> $tires,
 				'discs' => $discs,
-				'cities' => $this->getCity(),
+				'cities' => $cities,
 				'tire_filter' => $this->tire_filter,
 				'disc_filter' => $this->disc_filter,
 				'params' => $this->params,
+				'dynamic' => $dynamic
 			));
 		} else {
 			echo $count;
@@ -541,21 +546,29 @@ class KolesoOnlineController extends Controller
 			$this->filter = $this->disc_filter;
 		}
 
+		if(!$partial) $cities = $this->getCity();
+
+		$dynamic = $this->getDynObjects(array(
+            38 => $_SESSION['city']['variant_id']
+    	));
+
 		if($partial) {
 			$this->renderPartial('_list',array(
 				'goods'=> $goods,
 				'last' => $last,
 				'params' => $this->params,
-				'type' => $_GET['type']
+				'type' => $_GET['type'],
+				'dynamic' => $dynamic
 			));
 		} else {
 			$this->render('category',array(
-				'goods'=>$goods,
-				'filter' =>$this->filter,
+				'goods'=> $goods,
+				'filter' => $this->filter,
 				'pages' => $pages,
 				'params' => $this->params,
 				'last' => $last,
-				'cities' => $this->getCity()
+				'cities' => $cities,
+				'dynamic' => $dynamic
 			));
 		}
 	}
@@ -583,19 +596,28 @@ class KolesoOnlineController extends Controller
 			$this->description = $this->keywords = Interpreter::generate($this->params[$_GET['type']]["DESCRIPTION_CODE"], $good);
 
 			$imgs = $this->getImages($good);
+
+			$cities = $this->getCity();
+			
+			$dynamic = $this->getDynObjects(array(
+	            38 => $_SESSION['city']['variant_id']
+	    	));
+
 			if( !$partial ){
 				$this->render('detail',array(
 					'good'=>$good,
 					'imgs'=>$imgs,
 					'params' => $this->params,
-					'cities' => $this->getCity()
+					'cities' => $cities,
+					'dynamic' => $dynamic
 				));
 			}else{
 				$this->renderPartial('detail',array(
 					'good'=>$good,
 					'imgs'=>$imgs,
 					'params' => $this->params,
-					'cities' => $this->getCity(),
+					'cities' => $cities,
+					'dynamic' => $dynamic
 				));
 			}
 		}

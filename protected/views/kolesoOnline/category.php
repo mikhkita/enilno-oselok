@@ -113,7 +113,7 @@
                     </div> -->
                 </div>
                 <ul class="goods clearfix">  
-                    <?php $this->renderPartial('_list', array('goods' => $goods,'last' => $last,'params' => $params,'type' => $_GET['type'])); ?>
+                    <?php $this->renderPartial('_list', array('goods' => $goods,'last' => $last,'params' => $params,'type' => $_GET['type'],'dynamic'=>$dynamic)); ?>
                 </ul>
                 <div class="load" style="display:none;">Загрузка...</div>
                 <? else: ?>
