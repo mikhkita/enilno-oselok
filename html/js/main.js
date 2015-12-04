@@ -307,7 +307,9 @@ $(document).ready(function(){
     $(".filter-item").click(function(){   
         if(!$(this).hasClass("active")) {
             closeBubble();
-            $(this).find(".variants").css("display","table");
+            // $(this).find(".variants").css("display","table");
+            $(this).find(".variants").addClass("active");
+            // TweenLite.to($(this).find(".variants"), 0.3, { "scaleY" : 1, opacity: 1, ease : Cubic.easeOut } );
             $(this).addClass("active");
             if( $(this).position().left > 480 ) {
                 $(this).find(".variants").css("right","0");
@@ -336,7 +338,7 @@ $(document).ready(function(){
     function closeBubble(active){
         if( typeof active == "undefined" ) active = $(".filter-item.active");
             active.removeClass('active');
-            active.find('.variants').hide();
+            active.find('.variants').removeClass("active");
     }
 
     $("body").on("mouseup",".variants *,.filter-item *",function(){
