@@ -60,17 +60,17 @@ $(document).ready(function(){
         }
         if($(".b-category .goods").length) {
             if($("body").scrollTop() > ($(".goods").offset().top+$(".goods").height()-myHeight)) {
-                if($('.goods li:eq(-1)').attr("data-last") == 0 && !blocked) {
+                if($('.goods li:eq(-1)').attr("data-last") != 0 && !blocked) {
                     blocked = true;
                     $.ajax({
                         type: "GET",
                         url: window.location.href,
-                        data:  { partial: true},
+                        data:  { partial: true, last: $('.goods li:eq(-1)').attr("data-last")},
                         success: function(msg){
                             $(".goods").append(msg);
-                            if($('.goods li:eq(-1)').attr("data-last") == 1) {
+                            if($('.goods li:eq(-1)').attr("data-last") == 0) {
                                 $(".load").hide(); 
-                            }
+                            } 
                             blocked = false;
                         }
                     });
@@ -82,8 +82,8 @@ $(document).ready(function(){
     $('body').bind('touchmove', whenScroll);
     whenScroll();
 
-    if($('.goods li:eq(-1)').attr("data-last") == 1) {
-        $(".load").hide(); 
+    if($('.goods li:eq(-1)').attr("data-last") != 0) {
+        $(".load").css("display","inline-block"); 
     }
 
     $('#similar-slider').slick({
@@ -408,4 +408,14 @@ $(document).ready(function(){
         } else $(this).parent().removeClass("active");
     });
     $(".tire-type input").change();
+
+    $("#go-back").click(function(){
+        if(document.referrer) {
+           window.history.back();
+        } else if($(this).text().indexOf('Шины') + 1){
+            window.location.assign("/kolesoonline/category?type=1");
+        } else if ($(this).text().indexOf('Диски') + 1) {
+            window.location.assign("/kolesoonline/category?type=2");
+        }
+    });
 });

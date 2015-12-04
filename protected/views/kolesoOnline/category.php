@@ -62,7 +62,9 @@
                             <input class="min-val price" type="text" maxlength="6" name="int[51][min]" placeholder="Мин.">
                             <span class="dash">-</span>
                             <input class="max-val price" type="text" maxlength="6" name="int[51][max]" placeholder="Макс.">
-                            <div data-min-cur="<?=$_GET['int'][51]['min']?>" data-min="<?=$params[$_GET['type']]['PRICE_MIN']?>" data-max-cur="<?=$_GET['int'][51]['max']?>" data-max="<?=$params[$_GET['type']]['PRICE_MAX']?>" data-step="100" class="slider-range"></div>
+                            <div class="slider-range-cont">
+                                <div data-min-cur="<?=$_GET['int'][51]['min']?>" data-min="<?=$params[$_GET['type']]['PRICE_MIN']?>" data-max-cur="<?=$_GET['int'][51]['max']?>" data-max="<?=$params[$_GET['type']]['PRICE_MAX']?>" data-step="100" class="slider-range"></div>
+                            </div>
                         </div>  
                         <div class="filter-butt-cont">
                             <input type="submit" class="b-black-butt" value="Принять">
@@ -110,7 +112,7 @@
                 <ul class="goods clearfix">  
                     <?php $this->renderPartial('_list', array('goods' => $goods,'last' => $last,'params' => $params,'type' => $_GET['type'])); ?>
                 </ul>
-                <div class="load" style="width:100px; height:100px; background-color: red; display:inline-block;"></div>
+                <div class="load" style="width:100px; height:100px; background-color: red; display:none;"></div>
             </div>
             <?php $this->endWidget(); ?>            
         </div>

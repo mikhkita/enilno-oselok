@@ -5,7 +5,7 @@
                 <li><a href="#">О магазине</a></li>
                 <li><a href="#">Доставка и оплата</a></li>
                 <li><a href="#">Гарантия</a></li>
-                <li><a href="#">Контакты</a></li>
+                <li><a href="<?=Yii::app()->createUrl('/kolesoonline/contacts')?>">Контакты</a></li>
             </ul>
             <div class="clearfix b-mobile-top-line mobile-only">
                 <h2 class="left">Вы находитесь в г. <a href="#" class="icon"><?=$_SESSION['city']['name']?></a></h2>

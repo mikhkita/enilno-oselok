@@ -1437,6 +1437,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 				.filter-cont .slide-type {
 					margin-top: 22px;
 				}
+
 				.filter-cont .slide-type .slider-range {
 					margin-top: 0px;
 					margin-left: 8px;
@@ -1451,8 +1452,9 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 							font-weight: 500;	
 						}
 						.slide-type .slider-range {
-							width: 190px;	
-							margin-top: 22px;
+							width: 175px;
+						    margin-top: 0px;
+						    margin-left: 8px;
 						}
 
 						.slide-type input{
@@ -1468,6 +1470,18 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 							font-size: 14px;
 							font-weight: 500;	
 						}
+				.b-category .b-block .grey-block .filter-block .slider-range-cont {
+					height: 14px;
+				    margin-top: 22px;
+				    border: 2px solid #d7d7d7;
+				    background-color: #fff;
+				    border-radius: 10px;
+				    cursor: pointer;
+				    display: inline-block;
+				    margin-bottom: 0;
+				    width: 191px;
+				    margin-left: 0;
+				}
 				.b-filters .filter-butt-cont {
 					text-align: right;
 					padding: 18px 29px;
@@ -1513,7 +1527,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 						cursor: default;
 					}
 					.navigation li:last-child a {
-						color: #4D4D4D;
+						color: #8f8f8f;
 						text-decoration: none;
 					}
 				.navigation li:first-child {
@@ -1531,7 +1545,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 						width: 15px;
 						height: 14px;
 						left: 0;
-						top: 0;
+						top: -1px;
 						background-position: -171px -99px;
 					}
 					.navigation li:first-child:hover a:before{
@@ -1629,6 +1643,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 		}
 			.good-detail .b-block .detail-wrap .detail-photo {
 				width: 468px;
+				width: 388px;
 			}
 				.good-detail .b-block .detail-wrap .detail-photo .detail-slider-for {
 					box-shadow: inset 0 0 0 1px #DBE4F6;
@@ -1669,7 +1684,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 							-webkit-transform: scale(1.1);
   							transform: scale(1.1);
 						}
-					.good-detail .b-block .detail-wrap .detail-photo ul li:nth-child(6) {
+					.good-detail .b-block .detail-wrap .detail-photo ul li:nth-child(5) {
 						margin-right: 0;
 					}
 			.good-detail .b-block .detail-wrap .detail-desc {
@@ -2047,7 +2062,36 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 			.b-popup-city .city-input .b-orange-butt:active {
 				top: 2px;
 			}
+.b-contacts {
 
+}
+	.b-contacts .b-block {
+		padding: 25px 0 50px;
+	}
+.b-text {
+	text-align: left;
+}
+	.b-text h1 {
+
+	}
+	.b-text h2 {
+		font-size: 18px;
+		text-transform: uppercase;
+		font-weight: 700;
+		margin-top: 15px;
+	}
+	.b-text h3 {
+		font-size: 16px;
+		margin-top: 10px;
+		font-weight: 500;
+	}
+		.b-text h3 span {
+			font-weight: 300;
+		}
+		.b-text a {
+			display: inline-block;
+			color: #ffba00;
+		}
 .icon:before,			
 .b-filters .b-block .filter-cont .tire-type label:before,
 .b-header .b-header-main .b-block > .left .right h2 a:before,

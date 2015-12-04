@@ -5,7 +5,7 @@
 			<ul class="navigation clearfix">
 				<li><a href="<?=Yii::app()->createUrl('/kolesoonline')?>"></a></li>
 				<!-- <li><a href="#">Каталог</a></li> -->
-				<li><a href="#">Шины</a></li>
+				<li><a href="#"><?=$this->params[$_GET['type']]["NAME"]?></a></li>
 				<li><a href="#"><?=$this->title?></a></li>
 			</ul>
 			<h3 class="category-title" id="buy-title"><?=$this->title?></h3>
