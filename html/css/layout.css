@@ -754,8 +754,11 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 						display: none;
 						min-width: 166px;
 					}
+					.b-category .filter-item .variants{
+						min-width: 161px;
+					}
 						.filter-item .variants > div {
-							padding-right: 23px;
+							padding-right: 17px;
 							display: table-cell;
 						}
 						.filter-item .variants > div:last-child {
@@ -972,7 +975,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 		margin-right: 18px;
 		margin-bottom: 18px;
 		cursor: pointer;
-		height: 239px;
+		height: 232px;
 		overflow: hidden;
 	}	
 
@@ -984,7 +987,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 			height: 110px;
 			background-size: cover;
 			background-position: 50%;
-			margin: 15px 10px 0;
+			margin: 10px 10px 0;
 		}
 		.goods .gradient-grey .params-cont {
 			width: 140px;
@@ -2128,7 +2131,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 	display: none;
 }
 
-@media all and (-webkit-min-device-pixel-ratio: 1.5) {
+@media (-webkit-min-device-pixel-ratio: 1.5) {
 	.icon:before,
 	.b-filters .b-block .filter-cont .tire-type label:before,
 	.b-header .b-header-main .b-block > .left .right h2 a:before,
@@ -2159,6 +2162,18 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 	.b-header .b-header-main .b-block > .right .contacts a.mail:before,
 	.b-footer .b-footer-main .b-block .sections > li .footer-contacts.mail:before {
 	    background-position: -1px -97px;
+	}
+	.popular-category .ui-tabs-active .tire-icon:before,.main-category li:hover .tire-icon:before{
+		background-position: -23px -38px !important;
+		width: 21px;
+	}
+	.popular-category .ui-tabs-active .disc-icon:before,.main-category li:hover .disc-icon:before {
+		background-position: -46px -38px !important;
+		width: 23px;
+	}
+	.popular-category .ui-tabs-active .wheel-icon:before,.main-category li:hover .wheel-icon:before {
+		background-position: -100px -39px !important;
+		width: 24px;
 	}
 	.tire-icon:before,
 	.active a .tire-icon:before,
@@ -2192,18 +2207,6 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 	.tabs .disc-icon:before{
 		background-position: -46px -38px !important;
 	}
-	.popular-category .ui-tabs-active .tire-icon:before,.main-category li:hover .tire-icon:before{
-				background-position: -23px -38px !important;
-				width: 21px;
-			}
-			.popular-category .ui-tabs-active .disc-icon:before,.main-category li:hover .disc-icon:before {
-				background-position: -46px -38px !important;
-				width: 23px;
-			}
-			.popular-category .ui-tabs-active .wheel-icon:before,.main-category li:hover .wheel-icon:before {
-				background-position: -100px -39px !important;
-				width: 24px;
-			}
 	.b-filters .b-block .filter-cont .tire-type label:before {
 	    background-position: -34px -1px;
 	}
@@ -2288,6 +2291,18 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 	}
 	.b-filters .b-block .filter-cont .filter-item.active .input:before {
 		background-position: -89px -98px;
+	}
+	.b-category .b-block .good-list .b-sort ul li.active:after{
+
+	background-position: -100px -97px;}
+	.b-category .b-block .good-list .b-sort ul li.active.up:after{
+		background-position: -90px -97px;
+	}
+	.filter-item .input:before{
+
+	background-position: -99px -97px;}
+	.filter-item.active .input:before{
+		background-position: -89px -97px;
 	}
 }
 
