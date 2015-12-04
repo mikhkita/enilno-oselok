@@ -30,7 +30,15 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
 	<link rel="stylesheet" media="screen and (min-width: 240px) and (max-width: 767px)" href="css/layout-mobile.css" />
 	<link rel="stylesheet" media="screen and (min-width: 768px) and (max-width: 1000px)" href="css/layout-tablet.css" />
 
-	<link rel="icon" type="image/vnd.microsoft.icon" href="favicon.ico">
+	<link rel="icon" type="image/png" href="favicon-32x32.png" sizes="32x32" />
+	<link rel="icon" type="image/png" href="favicon-16x16.png" sizes="16x16" />
+
+	<meta property="og:url" content="http://kitaev.pro/land/koleso6/detail.php">
+	<meta property="og:title" content="Зимние Шины Nokian Hakka 7 SUV 265/60/18 Б/у">
+	<meta property="og:description" content="Является первой зимней автошиной в которой применяется технология 3D-BIS на всей площади протектора. Данная технология, позволяет увеличить количество используемых ламелей.">
+    <meta property="og:image" content="http://kitaev.pro/land/koleso6/i/detail.jpg">
+    <meta property="twitter:image" content="http://kitaev.pro/land/koleso6/i/detail.jpg">
+    <link rel="image_src" href="http://kitaev.pro/land/koleso6/i/detail.jpg">
 </head>
 <body>
 	<ul class="ps-lines">
@@ -38,7 +46,6 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
 		<li class="v" style="margin-left:480px"></li>
 		<li class="v" ></li>
 	</ul>
-	<img src="i/logo.jpg" class="b-hidden-logo" alt="">
 	<div class="b b-header">
 		<div class="b b-menu">
 			<div class="b-block">
@@ -116,7 +123,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
 			<ul class="tabs clearfix">
 				<li class="gradient-lightBlack"><a href="#tabs-disc"><span class="disc-icon icon">Подбор дисков</span></a></li>
 				<li class="gradient-lightBlack"><a href="#tabs-tire"><span class="tire-icon icon">Подбор шин</span></a></li>
-				<li class="gradient-lightBlack"><a href="#tabs-wheel"><span class="wheel-icon icon">Подбор Колес</span></a></li>
+				<!-- <li class="gradient-lightBlack"><a href="#tabs-wheel"><span class="wheel-icon icon">Подбор Колес</span></a></li> -->
 			</ul>
 			<div id="tabs-disc">
 				<form action="#" method="GET">
@@ -413,7 +420,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
 					</div>
 				</form>
 			</div>
-			<div id="tabs-wheel">
+			<!-- <div id="tabs-wheel">
 				<form action="#" method="GET">
 					<div class="filter-cont">
 						<div class="tire-type clearfix">	
@@ -458,7 +465,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
 						</div>
 					</div>
 				</form>
-			</div>
+			</div> -->
 		</div>
 	</div>
 	<div class="b b-popular">
