@@ -2131,6 +2131,9 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 .mobile-only{
 	display: none;
 }
+.select2-selection__clear{
+	display: none;
+}
 
 @media (-webkit-min-device-pixel-ratio: 1.5) {
 	.icon:before,
@@ -2294,16 +2297,21 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 		background-position: -89px -98px;
 	}
 	.b-category .b-block .good-list .b-sort ul li.active:after{
-
-	background-position: -100px -97px;}
-	.b-category .b-block .good-list .b-sort ul li.active.up:after{
 		background-position: -90px -97px;
 	}
+	.b-category .b-block .good-list .b-sort ul li.active.up:after{
+		background-position: -100px -97px;
+	}
 	.filter-item .input:before{
-
-	background-position: -99px -97px;}
+		background-position: -99px -97px;
+	}
 	.filter-item.active .input:before{
 		background-position: -89px -97px;
+	}
+	.fancybox-close {
+	    background-position: -194px -62px;
+	    width: 25px;
+	    height: 25px;
 	}
 }
 
