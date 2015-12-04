@@ -25,7 +25,7 @@
 					</ul>
 				</div>
 				<div class="detail-price gradient-grey right">
-					<? $price = 0; $price = ($good->fields_assoc[51])?$good->fields_assoc[51]->value:0; $order = Interpreter::generate($this->params[$_GET['type']]["ORDER"], $good); ?>
+					<? $price = ($good->fields_assoc[20])?$good->fields_assoc[20]->value:0; $order = Interpreter::generate($this->params[$_GET['type']]["ORDER"], $good); ?>
 					<h3><?=(!$price )? Yii::app()->params["zeroPrice"] : number_format( $price, 0, ',', ' ' )." р."?><span>+ 800 р.</span></h3>
 					<h4>доставка в г. Томск</h4>
 					<a href="#" class="fancy b-orange-butt" data-block="#b-popup-buy" data-aftershow="detail_buy">Купить</a>

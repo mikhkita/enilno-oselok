@@ -197,7 +197,7 @@ class KolesoOnlineController extends Controller
      	if (isset($_POST['city']) && $_POST['city']) {
     		$city_from_ip = $_POST['city'];
     	}
-     	$model = Attribute::model()->with("variants")->findAll("folder=1");
+     	$model = Attribute::model()->with(array("variants.variant"))->findAll(array("order"=>"t.id ASC, variant.sort ASC","condition"=>"folder=1"));
 		
      	foreach ($model as $key => $group) {
      		$city_groups[$group->name] = array();
@@ -210,7 +210,7 @@ class KolesoOnlineController extends Controller
      			}
      		}
 
-     		$city_groups[$group->name] = $this->splitByRows(8,$city_groups[$group->name]);
+     		$city_groups[$group->name] = $this->splitByRows(10,$city_groups[$group->name]);
      	}
 	    return $city_groups;
     }
@@ -510,18 +510,18 @@ class KolesoOnlineController extends Controller
 		$goods = Good::model()->filter(
 			array(
 				"good_type_id"=>$_GET['type'],
-				"attributes"=>$_GET["arr"],
+				"attributes"=>isset($_GET["arr"])?$_GET["arr"]:array(),
 				"int_attributes"=>isset( $_GET["int"])?$_GET["int"]:array(),
 			)
 		)->sort( 
-			$_GET['sort'] 
+			isset($_GET['sort'])?$_GET["sort"]:NULL
 		)->getPage(
 			array(
 		    	'pageSize'=>40,
 		    )
 		);
 
-		if( $_GET['GoodFilter_page'] >= $goods['pages']->pageCount || $goods['pages']->pageCount == 1) {
+		if( isset($_GET['GoodFilter_page']) && ( $_GET['GoodFilter_page'] >= $goods['pages']->pageCount || $goods['pages']->pageCount == 1) ) {
 			$last = 0;
 		}
 
@@ -530,10 +530,10 @@ class KolesoOnlineController extends Controller
 		$allCount = $goods["allCount"];
 		$goods = $goods['items'];
 
-		if($type==1) {
+		if($_GET['type']==1) {
 			$this->filter = $this->tire_filter;
 		}
-		if($type==2) {
+		if($_GET['type']==2) {
 			$this->filter = $this->disc_filter;
 		}
 
@@ -554,8 +554,6 @@ class KolesoOnlineController extends Controller
 				'cities' => $this->getCity()
 			));
 		}
-
-
 	}
 
 	public function getChecked($attributes){
