@@ -10,7 +10,7 @@
                 <h6><?=Interpreter::generate($this->params[$type]["TITLE_2_CODE"], $good);?></h6>
                 <h3>Состояние: <span><?=$good->fields_assoc[26]->value?></span></h3>
                 <h3><?=$good->fields_assoc[$params[$type]["CATEGORY"]["AMOUNT"]['ID']]->value." ".$params[$type]["CATEGORY"]["AMOUNT"]['UNIT']?></h3>
-                <h3>Страна: <span><?=$good->fields_assoc[11]->value?></span></h3>
+                <h3>Страна: <span><?=(($good->fields_assoc[11])?$good->fields_assoc[11]->value:"Не указано")?></span></h3>
                 <!-- <h3>Износ: <span>82%</span></h3> -->
             <? elseif($type == 1): ?>
                 <h4><?=$good->fields_assoc[16]->value." ".$good->fields_assoc[17]->value?></h4>
