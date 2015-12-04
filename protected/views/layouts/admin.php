@@ -43,6 +43,10 @@
         <?php echo $content;?>
     <? else: ?>
         <div class="nav_container">
+            <div class="b-place-state">
+                <span class="<?=(($this->place_states["DROM"] == "on")?("b-green"):("b-red"))?>">Дром</span>
+                <span class="<?=(($this->place_states["AVITO"] == "on")?("b-green"):("b-red"))?>">Авито</span>
+            </div>
             <div class="who_am_i">
                 <div class="b-user clearfix">
                     <div class="b-user-icon"></div>

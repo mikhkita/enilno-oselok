@@ -3,6 +3,9 @@
 class KolesoOnlineController extends Controller
 {
 	public $layout='//layouts/kolesoOnline';
+	public $title = "Колесо Онлайн - Б/у диски, шины из Японии";
+	public $description = "";
+	public $keywords = "";
 
 	public $params = array(
 		1 => array(
@@ -455,6 +458,7 @@ class KolesoOnlineController extends Controller
 	}
 
 	public function actionCategory($partial = false, $countGood = false) {
+		$this->title = "Колесо Онлайн - Б/у ".GoodType::model()->find(array("limit"=>1,"condition"=>"id=".$_GET['type']))->name;
 		$this->getFilter();
 
 		if(isset($_GET["int"])) {
