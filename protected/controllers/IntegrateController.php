@@ -100,7 +100,7 @@ class IntegrateController extends Controller
 
         PdQueue::model()->deleteAll("good_type_id='".$this->params[$good_type_code]["GOOD_TYPE_ID"]."'");
 
-        // $i = 1;
+        $i = 1;
         foreach ($adverts as $advert) {
             $model = new PdQueue();
 
@@ -124,7 +124,7 @@ class IntegrateController extends Controller
     public function getGroups($good_type_code){
         $curParams = $this->params[$good_type_code];
 
-        $model = GoodType::model()->with('goods.fields.variant','goods.fields.attribute')->findByPk($curParams["GOOD_TYPE_ID"])->goods;
+        $model = Good::model()->with(array('type'=>array("select"=>"id"),'fields.variant','fields.attribute'))->findAll("good_type_id=".$curParams["GOOD_TYPE_ID"]);
         $result = array();
 
         foreach ($model as $item) {

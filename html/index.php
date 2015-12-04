@@ -59,9 +59,8 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
 				<span class="stamp"></span>
 				<div class="left">
 					<div class="clearfix">
-						<a class="left" href="#"><img src="i/logo-2.png"></a>
+						<a class="left b-main-logo" href="#"></a>
 						<div class="right">
-							<h1>Колесо<span>онлайн</span></h1>
 							<h2>Вы находитесь в г. <a href="#">Томск</a></h2>
 						</div>
 					</div>
@@ -799,10 +798,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
 					<li>
 						<h3>О магазине</h3>
 						<a href="#" class="footer-logo clearfix">
-							<img class="left" src="i/logo.png">
-							<div class="left">
-								<h4><span>колесо</span> онлайн</h4>
-							</div>
+							<span class="b-footer-logo"></span>
 						</a>
 						<p>Этот магазин сделан специально для оптимального выбора шин, дисков и других аксессуаров для вашего автомобиля.</p>
 						<p>Удобство выбора и простота оформления покупки - вот это очень хорошо.</p>

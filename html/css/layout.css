@@ -286,6 +286,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 	.b-header .b-header-main {
 		background-image: url("../i/back-asphalt.jpg");
 		/*background-color: #28252C;*/
+		overflow: hidden;
 	}
 	/*.b-header .b-header-main {
 		background-image: url("../i/back-asphalt@2x.jpg");
@@ -299,16 +300,22 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 				bottom: 1px;
 				margin-right: -120px;
 				width: 230px;
-				height: 118px;
+				height: 150px;
 				background-position: 0% 100%;
 				background-image: url("../i/tire-stamp.png");
 			}
 			.b-header .b-header-main .b-block > .left{
 
 			}
-				.b-header .b-header-main .b-block > .left img {
-
-				margin-top: 2px;}
+				.b-header .b-header-main .b-block > .left .b-main-logo {
+					margin-top: 2px;
+					width: 220px;
+					height: 64px;
+					background-position: 50% 50%;
+					background-repeat: no-repeat;
+					background-image: url('../i/logo.png');
+					display: block;
+				}
 				.b-header .b-header-main .b-block > .left .right {
 					margin-left: 10px;
 				}
@@ -397,6 +404,8 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 							background: none;
 							padding: 7px 12px 6px;
 							color: #fff;
+							border-radius: 2px 0px 0px 2px;
+							background-color: rgba(36,33,36,.65);
 						}
 						.b-header .b-header-main .b-block > .right form button{
 							font-size: 14px;
@@ -408,6 +417,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 							border:none;
 							width: 103px;
 							padding: 8px 0px 7px;
+							border-radius: 0px 2px 2px 0px;
 						}
 	.b-header .b-burger{
 		display: none;
@@ -431,7 +441,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 		}
 			.b-header .b-sub-menu .b-block ul {
 
-			}
+			margin-left: 28px;}
 				.b-header .b-sub-menu .b-block ul li {
 					float: left;
 					margin-right: 47px;
@@ -1010,6 +1020,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 	}
 .b-footer {
 	text-align: left;
+	overflow: hidden;
 }
 	.b-footer .b-footer-main {
 		background-image: url("../i/back-asphalt.jpg");
@@ -1023,7 +1034,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 				position: absolute;
 				bottom: 0;
 				width: 335px;
-				height: 291px;
+				height: 360px;
 				background-position: 0% 100%;
 				background-image: url("../i/tire-stamp.png");
 			}
@@ -1054,8 +1065,15 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 						border-bottom: 1px solid #bdbcbd;
 						margin-bottom: 10px;
 					}
-						.b-footer .b-footer-main .b-block .sections > li .footer-logo img {
+						.b-footer .b-footer-main .b-block .sections > li .footer-logo .b-footer-logo {
 							margin-top: 7px;
+							width: 180px;
+							display: block;
+							height: 51px;
+							background-position: 50% 50%;
+							background-repeat: no-repeat;
+							background-image: url('../i/logo.png');
+							background-size: 180px;
 							margin-right: 16px;
 						}
 					.b-footer .b-footer-main .b-block .sections > li h3 {
@@ -2149,6 +2167,13 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 		background-position: -23px -98px;
 		left: 1px;
 		top: -2px;
+	}
+	.b-header .b-header-main .b-block > .left .b-main-logo {
+		background-image: url('../i/logo@2x.png');
+		background-size: 220px;
+	}
+	.b-footer .b-footer-main .b-block .sections > li .footer-logo .b-footer-logo {
+		background-image: url('../i/logo@2x.png');
 	}
 }
 
