@@ -756,6 +756,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 					}
 					.b-category .filter-item .variants{
 						min-width: 161px;
+						border-color: #ffad00 !important;
 					}
 						.filter-item .variants > div {
 							padding-right: 17px;
@@ -1320,10 +1321,18 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 					}
 				.b-category .b-block .grey-block .filter-block .filter-item {
 					margin-bottom: 25px;
+					display: inline-block;
 				}
 					.b-category .b-block .grey-block .filter-block .filter-item .input {
 						width: 195px;
 					}
+					.b-category .b-block .grey-block .filter-block .filter-item.active .input {
+						border-color: #ffad00 !important;
+					}
+					.b-category .b-block .grey-block .filter-block .filter-item.active .input:after {
+						border-color: #ffad00 !important;
+					}
+
 				.slider-range-cont{
 					height: 14px;
 					margin-top: 9px;
