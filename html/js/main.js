@@ -359,8 +359,8 @@ $(document).ready(function(){
     $(".b-sort ul li").click(function(){
         $(this).find("input").prop("checked",true);
         if($(this).hasClass("active")) {
-            if($(this).hasClass("up")) $("input[name='sort[type]']").val("DESC"); else $("input[name='sort[type]']").val("ASC");
-        } else $("input[name='sort[type]']").val("DESC");
+            if($(this).hasClass("up")) $("input[name='sort[type]']").val("ASC"); else $("input[name='sort[type]']").val("DESC");
+        } else $("input[name='sort[type]']").val("ASC");
         $("#filter").submit();
     });
 
