@@ -51,7 +51,7 @@
                                             <? foreach ($col as $item): ?>
                                                 <label>
                                                     <input type="checkbox" name="arr[<?=$attr_id?>][]" value="<?=$item['variant_id']?>" <?=$item['checked']?>>
-                                                    <span onselectstart="return false;"><?=$item['value']?></span>
+                                                    <span onselectstart="return false;"><?=str_replace(" ", "&nbsp;", $item['value'])?></span>
                                                 </label>
                                             <? endforeach; ?>
                                         </div>
