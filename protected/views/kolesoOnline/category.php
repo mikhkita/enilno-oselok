@@ -9,7 +9,7 @@
         $sort_arr["31"] = "по ширине";
         $sort_arr["32"] = "по вылету";
     }
-    $sort_type = (isset($_GET['sort']) && isset($_GET['sort']['type']) && $_GET['sort']['type'] != "") ? $_GET['sort']['type'] : "DESC";
+    $sort_type = (isset($_GET['sort']) && isset($_GET['sort']['type']) && $_GET['sort']['type'] != "") ? $_GET['sort']['type'] : "ASC";
 ?>
 <?php $this->renderPartial('_header', array('cities' => $cities)); ?>
 <div class="b-content">
@@ -89,7 +89,7 @@
                         <ul class="left clearfix">
                             <? foreach ($sort_arr as $key => $value): ?>
                             <? if(isset($_GET['sort']['field']) && $_GET['sort']['field']==$key): ?>
-                                    <li class="active <? if($sort_type =='ASC') echo 'up'; ?>">
+                                    <li class="active <? if($sort_type =='DESC') echo 'up'; ?>">
                                     <?=$value?>
                                     <input type="radio" name="sort[field]" value="<?=$key?>" checked>
                                 <? else: ?>
