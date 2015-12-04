@@ -465,12 +465,10 @@ class KolesoOnlineController extends Controller
 				$_GET["int"][51]["max"] = $this->params[$_GET['type']]["PRICE_MAX"];
 			}
 		}
-		$last = 0;
-		if(isset($_GET['GoodFilter_page']) && $partial) {
-			$_GET['GoodFilter_page']++;
-			
-		} elseif($partial) {
-			$_GET['GoodFilter_page'] = 2;
+		$last = isset($_GET['last']) ? $_GET['last'] : 1;
+		if($partial) {
+			$last++;
+			$_GET['GoodFilter_page'] = $last;
 		}
 
 		$goods = Good::model()->filter(
@@ -488,7 +486,7 @@ class KolesoOnlineController extends Controller
 		);
 
 		if( $_GET['GoodFilter_page'] >= $goods['pages']->pageCount || $goods['pages']->pageCount == 1) {
-			$last = 1;
+			$last = 0;
 		}
 
 		$count = $goods['count'];	
@@ -562,7 +560,9 @@ class KolesoOnlineController extends Controller
 
 	public function actionContacts()
 	{
-		$this->render('contacts');
+		$this->render('contacts',array(
+			'cities' => $this->getCity()
+		));
 	}
 
 	public function actionCount()

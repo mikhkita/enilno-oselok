@@ -110,7 +110,7 @@
                 <ul class="goods clearfix">  
                     <?php $this->renderPartial('_list', array('goods' => $goods,'last' => $last,'params' => $params,'type' => $_GET['type'])); ?>
                 </ul>
-                <div class="load" style="width:100px; height:100px; background-color: red; display:inline-block;"></div>
+                <div class="load" style="width:100px; height:100px; background-color: red; display:none;"></div>
             </div>
             <?php $this->endWidget(); ?>            
         </div>
