@@ -2026,10 +2026,11 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 			background-position: -2px 13px;
 		}
 		.b-popup-city .popup-fo ul{
-			margin-right: 139px;
+			
 		}
 			.b-popup-city ul li{
 				margin-bottom: 15px;
+				width: 290px;
 
 			}
 				.b-popup-city ul li a{
