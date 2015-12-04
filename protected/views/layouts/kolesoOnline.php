@@ -50,9 +50,9 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
         <div class="b b-menu">
             <div class="b-block">
                 <ul class="clearfix not-mobile">
-                    <li><a href="#">О магазине</a></li>
-                    <li><a href="#">Доставка и оплата</a></li>
-                    <li><a href="#">Гарантия</a></li>
+                    <!-- <li><a href="#">О магазине</a></li> -->
+                    <!-- <li><a href="#">Доставка и оплата</a></li> -->
+                    <!-- <li><a href="#">Гарантия</a></li> -->
                     <li><a href="<?=Yii::app()->createUrl('/kolesoonline/contacts')?>">Контакты</a></li>
                 </ul>
                 <div class="clearfix b-mobile-top-line mobile-only">
@@ -113,7 +113,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
                 <ul class="sections clearfix">
                     <li>
                         <h3>О магазине</h3>
-                        <a href="#" class="footer-logo clearfix">
+                        <a href="<?=Yii::app()->createUrl('/kolesoonline')?>" class="footer-logo clearfix">
                             <span class="b-footer-logo"></span>
                         </a>
                         <p>Этот магазин сделан специально для оптимального выбора шин, дисков и других аксессуаров для вашего автомобиля.</p>
@@ -126,14 +126,14 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
                             <li><a href="#">Диски</a></li>
                             <!-- <li><a href="#">Колеса</a></li> -->
                             <li><a href="#">Контакты</a></li>
-                            <li><a href="#">Оплата и доставка</a></li>
-                            <li><a href="#">Гарантия</a></li>
+                            <!-- <li><a href="#">Оплата и доставка</a></li> -->
+                            <!-- <li><a href="#">Гарантия</a></li> -->
                         </ul>
                     </li>
                     <li>
                         <h3>Контактная информация</h3>
-                        <a class="footer-contacts mail" href="#">koleso@yandex.ru</a>
-                        <a class="footer-contacts phone" href="#">+7-(999)-321-11-22</a>
+                        <a class="footer-contacts mail" href="mailto:koleso@yandex.ru">koleso@yandex.ru</a>
+                        <a class="footer-contacts phone" href="callto:+79993211122">+7-(999)-321-11-22</a>
                         <span class="footer-contacts map">г. Красноярск, ул. Вавилова, 1а</span>
                         <div class="social">
                             <h3>Присоединяйтесь к нам</h3>
@@ -154,26 +154,6 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
                 <h3 class="left">© 2015 Колесо Онлайн</h3>
                 <h3 class="right">Разработано в <a href="#">True Media</a></h3>
             </div>
-        </div>
-    </div>
-    <div class="b b-6">
-        <div class="b-block">
-            
-        </div>
-    </div>
-    <div class="b b-7">
-        <div class="b-block">
-            
-        </div>
-    </div>
-    <div class="b b-8">
-        <div class="b-block">
-            
-        </div>
-    </div>
-    <div class="b b-9">
-        <div class="b-block">
-            
         </div>
     </div>
 <div style="display:none;">
