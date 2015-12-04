@@ -148,6 +148,8 @@ class KolesoOnlineController extends Controller
 		));
 
 	public $filter = array();
+	public $tire_filter = array();
+	public $disc_filter = array();
 
 	public function filters()
 	{
@@ -372,7 +374,8 @@ class KolesoOnlineController extends Controller
    		// 	foreach ($this->filter as &$attr) {
    		// 		$attr = $this->splitByRows(11,$attr);
    		// 	}
-    		$this->getFilter();
+    		$this->getFilter(1);
+    		$this->getFilter(2);
    			$this->params[1]["FILTER"] = $this->splitByRows(4,$this->params[1]["FILTER"]);
    			$this->params[2]["FILTER"] = $this->splitByRows(4,$this->params[2]["FILTER"]);
 
@@ -384,7 +387,8 @@ class KolesoOnlineController extends Controller
 				'tires'=> $tires,
 				'discs' => $discs,
 				'cities' => $this->getCity(),
-				'filter' =>$this->filter,
+				'tire_filter' => $this->tire_filter,
+				'disc_filter' => $this->disc_filter,
 				'params' => $this->params,
 			));
 		} else {
@@ -468,6 +472,12 @@ class KolesoOnlineController extends Controller
    					$attr = $this->splitByRows(10,$attr);
    				} else $attr = $this->splitByRows(5,$attr);
    			}
+   			if($type==1) {
+   				$this->tire_filter = $this->filter;
+   			}
+   			if($type==2) {
+   				$this->disc_filter = $this->filter;
+   			}
 	}
 
 	public function actionCategory($partial = false, $countGood = false) {
@@ -512,6 +522,13 @@ class KolesoOnlineController extends Controller
 		$pages = $goods['pages'];	
 		$allCount = $goods["allCount"];
 		$goods = $goods['items'];
+
+		if($type==1) {
+			$this->filter = $this->tire_filter;
+		}
+		if($type==2) {
+			$this->filter = $this->disc_filter;
+		}
 
 		if($partial) {
 			$this->renderPartial('_list',array(
