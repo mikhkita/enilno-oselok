@@ -36,6 +36,8 @@ class InterpreterController extends Controller
 			}
 		}
 
+		if(isset($_GET["Interpreter"]) && isset($_GET["Interpreter"]["good_type_id"]) ) $model->good_type_id = $_GET["Interpreter"]["good_type_id"];
+
 		$this->renderPartial('adminCreate',array(
 			'model'=>$model,
 		));
