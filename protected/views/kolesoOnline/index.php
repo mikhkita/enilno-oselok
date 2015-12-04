@@ -45,7 +45,7 @@
                                 <h5><?=$label?></h5>
                                 <div class="input"></div>   
                                 <div class="variants clearfix">
-                                    <? foreach ($filter[$attr_id] as $key => $col): ?>
+                                    <? foreach ($disc_filter[$attr_id] as $key => $col): ?>
                                         <div>
                                             <? foreach ($col as $item): ?>
                                                 <label>
@@ -87,7 +87,7 @@
                 )); ?>
                     <div class="filter-cont">
                         <div class="tire-type clearfix">    
-                            <? foreach ($filter[$params[1]["SEASON"]] as $key => $col): ?>
+                            <? foreach ($tire_filter[$params[1]["SEASON"]] as $key => $col): ?>
                                 <? foreach ($col as $item): ?>     
                                     <label>
                                         <?=$item['value']?>
@@ -108,7 +108,7 @@
                                 <h5><?=$label?></h5>
                                 <div class="input"></div>   
                                 <div class="variants clearfix">
-                                    <? foreach ($filter[$attr_id] as $key => $col): ?>
+                                    <? foreach ($tire_filter[$attr_id] as $key => $col): ?>
                                         <div>
                                             <? foreach ($col as $item): ?>
                                                 <label>
