@@ -47,6 +47,8 @@ $(document).ready(function(){
     //     });
     // });
 
+    var blocked = false;
+
     function whenScroll(){
         if( $(".b-fixed-top").length ){
             var scroll = ((document.documentElement && document.documentElement.scrollTop) || document.body.scrollTop);
@@ -58,7 +60,8 @@ $(document).ready(function(){
         }
         if($(".b-category .goods").length) {
             if($("body").scrollTop() > ($(".goods").offset().top+$(".goods").height()-myHeight)) {
-                if($('.goods li:eq(-1)').attr("data-last") == 0) {
+                if($('.goods li:eq(-1)').attr("data-last") == 0 && !blocked) {
+                    blocked = true;
                     $.ajax({
                         type: "GET",
                         url: window.location.href,
@@ -68,6 +71,7 @@ $(document).ready(function(){
                             if($('.goods li:eq(-1)').attr("data-last") == 1) {
                                 $(".load").hide(); 
                             }
+                            blocked = false;
                         }
                     });
                 }  

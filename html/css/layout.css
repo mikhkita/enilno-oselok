@@ -449,7 +449,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 		}
 			.b-header .b-sub-menu .b-block ul {
 
-			margin-left: 28px;}
+			}
 				.b-header .b-sub-menu .b-block ul li {
 					float: left;
 					margin-right: 47px;
