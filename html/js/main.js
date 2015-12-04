@@ -187,15 +187,18 @@ $(document).ready(function(){
         allowClear: true
     });
     $(".popup-cities li a").click(function() {
-        var city = $(this).text();
-        $.ajax({
-            type: "POST",
-            url: window.location.href,
-            data:  { city: city },
-            success: function(msg){
-                window.location.replace(window.location.href);
-            }
-        });
+        
+        $("select[name='city']").val($(this).text());
+        $("#city-form").submit();
+        // var city = $(this).text();
+        // $.ajax({
+        //     type: "POST",
+        //     url: window.location.href,
+        //     data:  { city: city },
+        //     success: function(msg){
+        //         window.location.replace(window.location.href);
+        //     }
+        // });
         return false;
     });
 
