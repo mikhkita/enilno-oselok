@@ -421,8 +421,7 @@ class KolesoOnlineController extends Controller
         );
 
 		if($type) {
-			$criteria_with['good']['condition'] = 'good_type_id='.$type;
-			$criteria->with = $criteria_with;
+			$criteria_with['good']['condition'] = 'good_type_id='.$type;			
 			$criteria->condition = 't.attribute_id=9 OR t.attribute_id=43 OR t.attribute_id=27 OR t.attribute_id=28 OR ';
             if($type==1) {
             	$criteria->condition .= 't.attribute_id=7 OR t.attribute_id=8 OR t.attribute_id=23 OR t.attribute_id=16';
@@ -434,7 +433,7 @@ class KolesoOnlineController extends Controller
 		} else {
 			$criteria->addInCondition('t.attribute_id',array(9,43,27,28,7,8,23,16,6,5,31,32));
 		}
-		 
+		 	$criteria->with = $criteria_with;
         	$criteria->group = 't.variant_id';
             $criteria->order = 'variant.sort ASC';
 
