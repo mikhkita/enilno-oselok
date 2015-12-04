@@ -18,6 +18,8 @@ class KolesoOnlineController extends Controller
 			"PRICE_CODE" => 73,
 			"ORDER" => 63,
 			"SEASON" => 23,
+			'SHIPPING' => 73,
+			'AVAILABLE' => 112,
 			"FILTER" => array(
 				// 27 => "Город",
 				9 => "Диаметр",
@@ -89,6 +91,8 @@ class KolesoOnlineController extends Controller
 			"GARANTY_CODE" => 69,
 			"PRICE_CODE" => 74,
 			"ORDER" => 64,
+			'SHIPPING' => 74,
+			'AVAILABLE' => 114,
 			"FILTER" => array(
 				9 => "Диаметр",
 				5 => "Сверловка",
