@@ -392,7 +392,7 @@ class KolesoOnlineController extends Controller
 		}		
 	}
 
-	public function getFilter() {
+	public function getFilter($type = NULL) {
 		$check = $this->getChecked( (isset($_GET["arr"]))?$_GET["arr"]:array() );
 
 		$criteria=new CDbCriteria();
@@ -411,17 +411,31 @@ class KolesoOnlineController extends Controller
 		$this->params[2]["PRICE_MAX"] = array_pop($model)->int_value;
 
 		$criteria=new CDbCriteria();
-            $criteria->with = array(
-                // 'good'
-                //  => array(
-                //     'select' => false,
-                //     'condition' => 'good_type_id='.$_GET['type']
-                //     ),
-                'variant'
 
-                );
-            $criteria->addInCondition('t.attribute_id',array(9,43,27,28,7,8,23,16,6,5,31,32));
-        $criteria->group = 't.variant_id';
+		$criteria_with = array(
+            'good'
+             => array(
+                'select' => false
+                ),
+            'variant'
+        );
+
+		if($type) {
+			$criteria_with['good']['condition'] = 'good_type_id='.$type;
+			$criteria->with = $criteria_with;
+			$criteria->condition = 't.attribute_id=9 OR t.attribute_id=43 OR t.attribute_id=27 OR t.attribute_id=28 OR ';
+            if($type==1) {
+            	$criteria->condition .= 't.attribute_id=7 OR t.attribute_id=8 OR t.attribute_id=23 OR t.attribute_id=16';
+        	}	
+        	if($type==2) {
+            	$criteria->condition .= 't.attribute_id=6 OR t.attribute_id=5 OR t.attribute_id=31 OR t.attribute_id=32';
+        	}	
+
+		} else {
+			$criteria->addInCondition('t.attribute_id',array(9,43,27,28,7,8,23,16,6,5,31,32));
+		}
+		 
+        	$criteria->group = 't.variant_id';
             $criteria->order = 'variant.sort ASC';
 
             $model = GoodAttribute::model()->findAll($criteria);
@@ -458,8 +472,10 @@ class KolesoOnlineController extends Controller
 	}
 
 	public function actionCategory($partial = false, $countGood = false) {
+
+		$this->getFilter($_GET['type']);
+
 		$this->title = "Колесо Онлайн - Б/у ".GoodType::model()->find(array("limit"=>1,"condition"=>"id=".$_GET['type']))->name;
-		$this->getFilter();
 
 		if(isset($_GET["int"])) {
 			if($_GET["int"][51]["min"] == "") {
