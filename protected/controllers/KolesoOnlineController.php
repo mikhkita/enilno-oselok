@@ -521,7 +521,7 @@ class KolesoOnlineController extends Controller
 		    )
 		);
 
-		if( isset($_GET['GoodFilter_page']) && ( $_GET['GoodFilter_page'] >= $goods['pages']->pageCount || $goods['pages']->pageCount == 1) ) {
+		if( $_GET['GoodFilter_page'] >= $goods['pages']->pageCount || $goods['pages']->pageCount == 1 ) {
 			$last = 0;
 		}
 
