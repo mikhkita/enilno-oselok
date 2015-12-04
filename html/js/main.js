@@ -214,18 +214,18 @@ $(document).ready(function(){
         return false;
     });
 
-    $("#city-form").submit(function() {
-        var city = $(this).find("select").val();
-        $.ajax({
-            type: "POST",
-            url: window.location.href,
-            data:  { city: city },
-            success: function(msg){
-                window.location.replace(window.location.href);
-            }
-        });
-        return false;
-    });
+    // $("#city-form").submit(function() {
+    //     var city = $(this).find("select").val();
+    //     $.ajax({
+    //         type: "POST",
+    //         url: window.location.href,
+    //         data:  { city: city },
+    //         success: function(msg){
+    //             window.location.replace(window.location.href);
+    //         }
+    //     });
+    //     return false;
+    // });
 
 
     $('.min-val,.max-val').bind("change keyup input click", function() {
