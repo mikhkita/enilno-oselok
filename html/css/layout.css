@@ -1437,6 +1437,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 				.filter-cont .slide-type {
 					margin-top: 22px;
 				}
+
 				.filter-cont .slide-type .slider-range {
 					margin-top: 0px;
 					margin-left: 8px;
@@ -1451,8 +1452,9 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 							font-weight: 500;	
 						}
 						.slide-type .slider-range {
-							width: 190px;	
-							margin-top: 22px;
+							width: 174px;
+						    margin-top: 0px;
+						    margin-left: 8px;
 						}
 
 						.slide-type input{
@@ -1468,6 +1470,18 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 							font-size: 14px;
 							font-weight: 500;	
 						}
+				.b-category .b-block .grey-block .filter-block .slider-range-cont {
+					height: 14px;
+				    margin-top: 22px;
+				    border: 2px solid #d7d7d7;
+				    background-color: #fff;
+				    border-radius: 10px;
+				    cursor: pointer;
+				    display: inline-block;
+				    margin-bottom: 0;
+				    width: 190px;
+				    margin-left: 0;
+				}
 				.b-filters .filter-butt-cont {
 					text-align: right;
 					padding: 18px 29px;
@@ -1531,7 +1545,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 						width: 15px;
 						height: 14px;
 						left: 0;
-						top: 0;
+						top: -1px;
 						background-position: -171px -99px;
 					}
 					.navigation li:first-child:hover a:before{
