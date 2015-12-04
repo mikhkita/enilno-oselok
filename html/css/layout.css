@@ -126,6 +126,14 @@ input::-webkit-input-placeholder {
 input:-moz-placeholder {
 	color: #bdbdbd;
 }
+.fancybox-nav span {
+    visibility: visible;
+    opacity: 0.5;
+}
+
+.fancybox-nav:hover span {
+    opacity: 1;
+}
 .gradient-orange{
 	/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ffe57f+0,ffdc1c+5,ff9a00+93,966304+100 */
 background: #ffe57f; /* Old browsers */
@@ -523,6 +531,27 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 		}
 			.b-filters .b-block .tabs li {
 				float: left;
+				width: 479px;
+				border-right: 1px solid #625f63;
+			}
+			.b-filters .b-block .tabs li:nth-child(2n) {
+				width: 480px;
+				border-right: none;
+			}
+				.b-filters .b-block .tabs li a{
+					font-family: "Roboto";
+					font-weight: 500;
+					color: #fff;
+					text-decoration: none;
+					text-transform: uppercase;
+					padding: 17px 0px 15px;
+					box-sizing: border-box;
+					position: relative;
+					border-bottom: 1px solid #000000;
+				}
+
+			/*.b-filters .b-block .tabs li {
+				float: left;
 				width: 319px;
 				border-right: 1px solid #625f63;
 			}
@@ -540,7 +569,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 					box-sizing: border-box;
 					position: relative;
 					border-bottom: 1px solid #000000;
-				}
+				}*/
 
 .icon {
 	position: relative;
@@ -668,14 +697,14 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 					top: 15px;
 					left: 8px;
 				}
-				.b-filters .b-block .filter-cont .tire-type label[for=tire-spike]:before {
+				.b-filters .b-block .filter-cont .tire-type label:nth-child(2):before {
 					width: 40px;
 					height: 32px;
 					top: 16px;
 					left: -1px;
 					background-position: 42px -3px;
 				}
-				.b-filters .b-block .filter-cont .tire-type label[for=tire-summer]:before {
+				.b-filters .b-block .filter-cont .tire-type label:nth-child(3):before {
 					width: 34px;
 					height: 34px;
 					top: 15px;
@@ -958,6 +987,8 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 				color: #ffbc00;
 				text-decoration: underline;
 				margin-bottom: 12px;
+				height: 16px;
+    			overflow: hidden;
 			}
 			.goods .gradient-grey h5{
 				color: #848383;
@@ -1236,32 +1267,30 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 						top: 8px;
 						left: 0;
 					}
-					.b-category .b-block .grey-block .filter-block .tire-type label[for=tire-spike]:before {
+					.b-category .b-block .grey-block .filter-block .tire-type label:nth-child(2):before {
 						width: 40px;
 						height: 32px;
 						top: 9px;
 						left: 0;
 						background-position: 42px -3px;
 					}
-					.b-category .b-block .grey-block .filter-block .tire-type label[for=tire-summer] {
-					}
-					.b-category .b-block .grey-block .filter-block .tire-type label[for=tire-summer]:before {
+					.b-category .b-block .grey-block .filter-block .tire-type label:nth-child(3):before {
 						width: 34px;
 						height: 34px;
 						top: 9px;
 						left: 0;
 						background-position: 121px -2px;
 					}
-					.tire-type input:checked + label,.tire-type label:hover{
+					.tire-type label.active,.tire-type label:hover{
 						text-decoration: underline;
 					}
-					.tire-type input:checked + label:before,.tire-type label:hover:before{
+					.tire-type label.active:before,.tire-type label:hover:before{
 						background-position: -2px -2px !important;
 					}
-					.tire-type input:checked + label[for=tire-spike]:before,.tire-type label[for=tire-spike]:hover:before {
+					.tire-type label:nth-child(2).active:before,.tire-type label:nth-child(2):hover:before {
 						background-position: 85px -3px !important;
 					}
-					.tire-type input:checked + label[for=tire-summer]:before,.tire-type label[for=tire-summer]:hover:before {
+					.tire-type label:nth-child(3).active:before,.tire-type label:nth-child(3):hover:before {
 						background-position: 157px -2px !important;
 					}
 				.b-category .b-block .grey-block .filter-block .filter-item {
@@ -1497,6 +1526,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 			}
 				.b-category .b-block .good-list .b-sort > .left {
 					margin-top: 13px;
+					margin-bottom: 13px;
 				}
 				.b-category .b-block .good-list .b-sort h4 {
 					font-weight: 500;
@@ -1583,7 +1613,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 				width: 468px;
 			}
 				.good-detail .b-block .detail-wrap .detail-photo .detail-slider-for {
-					margin-bottom: 20px;
+					box-shadow: inset 0 0 0 1px #DBE4F6;
 				}
 				.good-detail .b-block .detail-wrap .detail-photo .big{
 					display: block;
@@ -1592,16 +1622,17 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 					background-size: contain;
 					background-position: 50%;
 					background-repeat: no-repeat;
-					box-shadow: inset 0 0 0 1px #DBE4F6;
 				}
-				.good-detail .b-block .detail-wrap .detail-photo .detail-slider-nav {
+				.good-detail .b-block .detail-wrap .detail-photo ul {
 
 				}
-					.good-detail .b-block .detail-wrap .detail-photo .detail-slider-nav .thumb{
+					.good-detail .b-block .detail-wrap .detail-photo ul li{
 						cursor: pointer;
 						float: left;
 						width: 68px;
 						height: 68px;
+						margin-top: 12px;
+						margin-right: 12px;
 						vertical-align: middle;
 						-webkit-transform: translateZ(0);
 						transform: translateZ(0);
@@ -1616,13 +1647,13 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 						background-size: cover;
     					background-position: 50%;
 					}
-						.good-detail .b-block .detail-wrap .detail-photo .detail-slider-nav .thumb:hover,.good-detail .b-block .detail-wrap .detail-photo .detail-slider-nav .thumb:focus,.good-detail .b-block .detail-wrap .detail-photo .detail-slider-nav .thumb:active {
+						.good-detail .b-block .detail-wrap .detail-photo ul li:hover,.good-detail .b-block .detail-wrap .detail-photo ul li:focus,.good-detail .b-block .detail-wrap .detail-photo ul li:active {
 							-webkit-transform: scale(1.1);
   							transform: scale(1.1);
 						}
-					/*.good-detail .b-block .detail-wrap .detail-photo ul li:nth-child(6) {
+					.good-detail .b-block .detail-wrap .detail-photo ul li:nth-child(6) {
 						margin-right: 0;
-					}*/
+					}
 			.good-detail .b-block .detail-wrap .detail-desc {
 				text-align: left;
 				margin-left: 22px;
@@ -1932,6 +1963,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 		.b-popup-city h4 span {
 			margin-left: 117px;
 			position: relative;
+			display: none;
 		}
 		.b-popup-city h4 span:before {
 			position: absolute;
@@ -1971,14 +2003,21 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 	.b-popup-city .city-input {
 		padding: 45px 30px 45px 38px;
 	}
-		.b-popup-city .city-input input[type=text] {
-			width: 466px;
-			border: 1px solid #c0c0c0;
-			box-sizing:border-box;
-			padding: 13px 13px 14px;
-			background-color: #f4f4f4;
-			border-radius: 2px;
 
+		.select2-container {
+			z-index: 10001;
+			text-align: left;
+		}
+		.select2-container--default .select2-selection--single {
+			width: 466px;
+		    border: 1px solid #c0c0c0;
+		    height: 46px;
+		    padding: 9px;
+		    background-color: #f4f4f4;
+		    border-radius: 2px;
+		}
+		.select2-container--default .select2-selection--single .select2-selection__arrow {
+			padding: 9px 4px;
 		}
 		.b-popup-city .city-input .b-orange-butt {
 			width: 142px;
@@ -2088,15 +2127,25 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 	.b-filters .b-block .filter-cont .tire-type label:before {
 	    background-position: -34px -1px;
 	}
-	.b-filters .b-block .filter-cont .tire-type label[for=tire-spike]:before {
+	.b-filters .b-block .filter-cont .tire-type label:nth-child(2):before {
 	    background-position: 41px -2px;
 	}
-	.b-filters .b-block .filter-cont .tire-type label[for=tire-summer]:before {
+	.b-filters .b-block .filter-cont .tire-type label:nth-child(3):before {
 	    background-position: 119px -1px;
 	}
 	.b-filters .b-block .filter-cont .filter-item .input:before {
 	    background-position: -99px -99px;
 	}
+	.tire-type label.active:before,.tire-type label:hover:before{
+		background-position: -2px -2px !important;
+	}
+	.tire-type label:nth-child(2).active:before,.tire-type label:nth-child(2):hover:before {
+		background-position: 85px -3px !important;
+	}
+	.tire-type label:nth-child(3).active:before,.tire-type label:nth-child(3):hover:before {
+		background-position: 157px -2px !important;
+	}
+
 	.b-header .b-header-main,
 	.b-footer .b-footer-main {
 		background-image: url("../i/back-asphalt@2x.jpg");

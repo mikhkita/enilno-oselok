@@ -42,9 +42,9 @@
         <div class="b-block clearfix">
             <a href="#" class="b-burger icon left"></a>
             <ul class="clearfix left">
-                <li><a href="#">Диски</a></li>
-                <li><a href="#">Шины</a></li>
-                <li><a href="#">Колеса</a></li>
+                <li><a href="<?=Yii::app()->createUrl('/kolesoonline/category',array('type' => 2))?>">Диски</a></li>
+                <li><a href="<?=Yii::app()->createUrl('/kolesoonline/category',array('type' => 1))?>">Шины</a></li>
+                <!-- <li><a href="#">Колеса</a></li> -->
             </ul>
         </div>
     </div>
@@ -82,8 +82,25 @@
                 </div>
             </div>
             <div class="city-input clearfix">
-                <input type="text" class="left" placeholder="Или укажите в поле...">
+                <?php $form=$this->beginWidget('CActiveForm', array(
+                    'enableAjaxValidation'=>false,
+                    'method' => 'POST',
+                    'id' => "city-form"
+                )); ?>
+                <select class="city-select left" name="city" required>
+                    <option></option>
+                    <? foreach ($cities as $name => $group): ?>
+                    <optgroup label="<?=$name?>">
+                        <? foreach ($group as $col): ?>
+                            <? foreach ($col as $city): ?>
+                                <option value="<?=$city['name']?>"><?=$city['name']?></option>
+                            <? endforeach; ?>
+                        <? endforeach; ?>
+                    </optgroup>
+                    <? endforeach; ?>
+                </select>
                 <input type="submit" class="right b-orange-butt" value="Выбрать">
+                <?php $this->endWidget(); ?> 
             </div>
         </div>
     </div>

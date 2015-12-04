@@ -24,6 +24,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
     <link rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/html/css/jquery.fancybox.css" type="text/css">
     <link rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/html/css/slick.css" type="text/css">
     <link rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/html/css/jquery-ui.css" type="text/css">
+    <link rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/html/css/select2.css" type="text/css">
     <link rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/html/css/KitAnimate.css" type="text/css">
     <link rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/html/css/layout.css" type="text/css">
 
@@ -62,7 +63,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
                         <ul>
                             <li><a href="#">Шины</a></li>
                             <li><a href="#">Диски</a></li>
-                            <li><a href="#">Колеса</a></li>
+                            <!-- <li><a href="#">Колеса</a></li> -->
                             <li><a href="#">Контакты</a></li>
                             <li><a href="#">Оплата и доставка</a></li>
                             <li><a href="#">Гарантия</a></li>
@@ -186,6 +187,8 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
 <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/html/js/KitProgress.js"></script>
 <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/html/js/KitAnimate.js"></script>
 <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/html/js/device.js"></script>
+<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/html/js/select2.full.min.js"></script>
+<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/html/js/i18n/ru.js"></script>
 <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/html/js/KitSend.js"></script>
 <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/html/js/main.js"></script>
 

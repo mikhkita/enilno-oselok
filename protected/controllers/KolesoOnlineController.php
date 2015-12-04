@@ -13,9 +13,9 @@ class KolesoOnlineController extends Controller
 			"GARANTY_CODE" => 70,
 			"PRICE_CODE" => 73,
 			"ORDER" => 63,
+			"SEASON" => 23,
 			"FILTER" => array(
-				23 => "Сезонность",
-				27 => "Город",
+				// 27 => "Город",
 				9 => "Диаметр",
 				7 => "Ширина",
 				8 => "Профиль",
@@ -91,7 +91,7 @@ class KolesoOnlineController extends Controller
 				31 => "Ширина",
 				32 => "Вылет",
 				28 => "Количество",
-				27 => "Город"
+				// 27 => "Город"
 			),
 			"CATEGORY" => array(
 				"AMOUNT" => array(
@@ -170,6 +170,39 @@ class KolesoOnlineController extends Controller
 		);
 	}
 
+	public function getCity() {
+		if(!isset($_SESSION)) session_start();
+		$city_groups = array();
+		if( !(isset($_SESSION['city']) && AttributeVariant::model()->count("variant_id=".$_SESSION['city']['variant_id'])) ) {
+			$city = json_decode(file_get_contents('http://api.sypexgeo.net/json/'.$_SERVER["REMOTE_ADDR"]));
+			$default_city = "Томск";
+			$default_variant_id = 1081;
+			$_SESSION['city']['name'] = $default_city;
+	     	$_SESSION['city']['variant_id'] = $default_variant_id;
+	       	$city_from_ip = (isset($city->city->name_ru)) ? $city->city->name_ru : $default_city;
+     	} else $city_from_ip = $_SESSION['city']['name'];
+
+     	if (isset($_POST['city']) && $_POST['city']) {
+    		$city_from_ip = $_POST['city'];
+    	}
+     	$model = Attribute::model()->with("variants")->findAll("folder=1");
+		
+     	foreach ($model as $key => $group) {
+     		$city_groups[$group->name] = array();
+     		foreach($group->variants as $i => $city) {
+     			$city_groups[$group->name][$i]['name'] = $city->value;
+     			$city_groups[$group->name][$i]['variant_id'] = $city->variant_id;
+     			if( mb_strtolower($city->value,'UTF-8') == mb_strtolower($city_from_ip,'UTF-8')) {
+     				$_SESSION['city']['name'] = $city->value;
+     				$_SESSION['city']['variant_id'] = $city->variant_id;
+     			}
+     		}
+
+     		$city_groups[$group->name] = $this->splitByRows(8,$city_groups[$group->name]);
+     	}
+	    return $city_groups;
+    }
+
 
 	public function actionIndex($countGood = false)
 	{	
@@ -180,6 +213,35 @@ class KolesoOnlineController extends Controller
         
        	isset($_GET['type']) ? $_GET['type'] : $_GET['type'] = 2;
 
+       	$tires = Good::model()->filter(
+			array(
+				"good_type_id"=> 1,
+				"attributes"=>$_GET["arr"],
+				"int_attributes"=>isset( $_GET["int"])?$_GET["int"]:array(),
+			)
+		)->sort( 
+			$_GET['sort'] 
+		)->getPage(
+			array(
+		    	'pageSize'=>8,
+		    )
+		);
+		$tires = $tires['items'];
+
+		$discs = Good::model()->filter(
+			array(
+				"good_type_id"=> 2,
+				"attributes"=>$_GET["arr"],
+				"int_attributes"=>isset( $_GET["int"])?$_GET["int"]:array(),
+			)
+		)->sort( 
+			$_GET['sort'] 
+		)->getPage(
+			array(
+		    	'pageSize'=>8,
+		    )
+		);
+		$discs = $discs['items'];
 		// $type = ($_GET['type']==1) ? "tires": "discs";
 
 		// $criteria=new CDbCriteria();
@@ -316,10 +378,10 @@ class KolesoOnlineController extends Controller
 		// printf('<br>Прошло %.4F сек.<br>', microtime(true) - $start);	
 
 			$this->render('index',array(
-				// 'goods'=>$goods,
+				'tires'=> $tires,
+				'discs' => $discs,
 				'cities' => $this->getCity(),
 				'filter' =>$this->filter,
-				// 'pages' => $pages,
 				'params' => $this->params,
 			));
 		} else {
@@ -386,7 +448,9 @@ class KolesoOnlineController extends Controller
    				}
    			}
    			foreach ($this->filter as &$attr) {
-   				$attr = $this->splitByRows(11,$attr);
+   				if(count($attr) > 15) {
+   					$attr = $this->splitByRows(10,$attr);
+   				} else $attr = $this->splitByRows(5,$attr);
    			}
 	}
 
@@ -435,7 +499,9 @@ class KolesoOnlineController extends Controller
 		if($partial) {
 			$this->renderPartial('_list',array(
 				'goods'=> $goods,
-				'last' => $last
+				'last' => $last,
+				'params' => $this->params,
+				'type' => $_GET['type']
 			));
 		} else {
 			$this->render('category',array(
@@ -492,34 +558,7 @@ class KolesoOnlineController extends Controller
 		}
 	}
 
-	public function getCity() {
-		if(!isset($_SESSION)) session_start();
-		$city = json_decode(file_get_contents('http://api.sypexgeo.net/json/77.66.180.32'));
-
-		$default_city = "Томск";
-		$default_variant_id = 1081;
-		$_SESSION['city']['name'] = $default_city;
-     	$_SESSION['city']['variant_id'] = $default_variant_id;
-		$city_groups = array();
-       	$city_from_ip = (isset($city->city->name_ru)) ? $city->city->name_ru : $default_city;
-       	$model = Attribute::model()->with("variants")->findAll("folder=1");
-     	
-     	foreach ($model as $key => $group) {
-     		$city_groups[$group->name] = array();
-     		foreach($group->variants as $i => $city) {
-     			$city_groups[$group->name][$i]['name'] = $city->value;
-     			$city_groups[$group->name][$i]['variant_id'] = $city->variant_id;
-     			if( mb_strtolower($city->value,'UTF-8') == mb_strtolower($city_from_ip,'UTF-8')) {
-     				$_SESSION['city']['name'] = $city->value;
-     				$_SESSION['city']['variant_id'] = $city->variant_id;
-     			}
-     		}
-
-     		$city_groups[$group->name] = $this->splitByRows(8,$city_groups[$group->name]);
-     	}
-     	print_r($city_groups);
-	    return $city_groups;
-    }
+	
 
 	public function actionContacts()
 	{
