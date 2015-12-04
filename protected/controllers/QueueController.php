@@ -27,16 +27,16 @@ class QueueController extends Controller
 			Queue::model()->deleteByPk($id);
 	}
 
-	public function actionAdminStart($category_id = 2048){
+	public function actionAdminStart($category_id = 2047){
 		$this->setParam( Place::model()->categories[$category_id], "TOGGLE", "on" );
 		$this->setParam( Place::model()->categories[$category_id], "TIME", "0" );
 	}
 
-	public function actionAdminStop($category_id = 2048){
+	public function actionAdminStop($category_id = 2047){
 		$this->setParam( Place::model()->categories[$category_id], "TOGGLE", "off" );
 	}
 
-	public function actionAdminReturnAll($category_id = 2048){
+	public function actionAdminReturnAll($category_id = 2047){
 		$ids = $this->getIdsByCondition("state_id = 3 AND place.category_id=$category_id");
 		if( count($ids) )
 			Queue::model()->updateAll(['state_id' => 1], "id IN (".implode(",", $ids).")");
@@ -50,7 +50,7 @@ class QueueController extends Controller
 		return $out;
 	}
 
-	public function actionAdminFreezeFree($category_id = 2048){
+	public function actionAdminFreezeFree($category_id = 2047){
 		$queue = Queue::model()->with(array("advert"=>array("select"=>array("id","type_id")),"advert.place"))->findAll("state_id = 1 AND advert.type_id=869 AND place.category_id=$category_id");
 		$ids = array();
         foreach ($queue as $key => $item) {
@@ -75,7 +75,7 @@ class QueueController extends Controller
 		}
 	}
 
-	public function actionAdminIndex($partial = false, $category_id = 2048)
+	public function actionAdminIndex($partial = false, $category_id = 2047)
 	{
 		// $adverts = Advert::model()->findAll("place_id=10 AND (type_id=2129 OR type_id=868) AND city_id=1059");
 		// foreach ($adverts as $key => $advert)

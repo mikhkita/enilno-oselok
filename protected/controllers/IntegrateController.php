@@ -454,8 +454,8 @@ class IntegrateController extends Controller
 
         $fields = Place::getValues(Place::getInters($advert->place->category_id,$advert->good->type->id),$advert->good,$dynamic);
 
-        // print_r($fields);
-        // die();
+        print_r($fields);
+        die();
 
         $images = $this->getImages($advert->good);
         if( $place_name == "DROM" ){

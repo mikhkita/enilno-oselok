@@ -44,8 +44,8 @@
     <? else: ?>
         <div class="nav_container">
             <div class="b-place-state">
-                <span class="<?=(($this->place_states["DROM"] == "on")?("b-green"):("b-red"))?>">Дром</span>
-                <span class="<?=(($this->place_states["AVITO"] == "on")?("b-green"):("b-red"))?>">Авито</span>
+                <span class="<?=(($this->place_states["DROM"] == "on")?("b-green"):("b-red"))?>" data-id="2047">Дром</span>
+                <span class="<?=(($this->place_states["AVITO"] == "on")?("b-green"):("b-red"))?>" data-id="2048">Авито</span>
             </div>
             <div class="who_am_i">
                 <div class="b-user clearfix">

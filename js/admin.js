@@ -1337,6 +1337,14 @@ $(document).ready(function(){
         $(".b-group-popup").find("input[type='checkbox']").prop("checked",false);
     });
 
+    $("body").on("click",".b-start-queue",function(){
+        $(".b-place-state span[data-id='"+$(this).attr("data-id")+"']").removeClass("b-red").addClass("b-green");
+    });
+
+    $("body").on("click",".b-stop-queue",function(){
+        $(".b-place-state span[data-id='"+$(this).attr("data-id")+"']").removeClass("b-green").addClass("b-red");
+    });
+
     function bindTableForm(){
         if( $("#table-form").length ){
             $("#table-form").submit(function(){
