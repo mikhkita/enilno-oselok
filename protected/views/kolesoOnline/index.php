@@ -215,12 +215,12 @@
                 </ul>
                 <div id="popular-disc">
                     <ul class="goods clearfix">
-                        <?php $this->renderPartial('_list', array('goods' => $discs,'last' => 1,'params' => $params,'type' => 2)); ?>
+                        <?php $this->renderPartial('_list', array('goods' => $discs,'last' => 1,'params' => $params,'type' => 2,'dynamic'=>$dynamic)); ?>
                     </ul>
                 </div>
                 <div id="popular-tire">
                     <ul class="goods clearfix">
-                       <?php $this->renderPartial('_list', array('goods' => $tires,'last' => 1,'params' => $params,'type' => 1)); ?>
+                       <?php $this->renderPartial('_list', array('goods' => $tires,'last' => 1,'params' => $params,'type' => 1,'dynamic'=>$dynamic)); ?>
                     </ul>
                 </div>
                 <!-- <div id="popular-wheel">
