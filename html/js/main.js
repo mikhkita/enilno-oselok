@@ -59,7 +59,7 @@ $(document).ready(function(){
             }
         }
         if($(".b-category .goods").length) {
-            if($("body").scrollTop() > ($(".goods").offset().top+$(".goods").height()-myHeight)) {
+            if($("body").scrollTop() > ($(".goods").offset().top+$(".goods").height()-myHeight*3)) {
                 if($('.goods li:eq(-1)').attr("data-last") != 0 && !blocked) {
                     blocked = true;
                     $.ajax({
@@ -348,7 +348,7 @@ $(document).ready(function(){
     });
 
 
-    $(".goods .gradient-grey:not(.b-orange-butt)").click(function(){
+    $("body").on("click",".goods .gradient-grey:not(.b-orange-butt)",function(){
         window.location.assign($(this).attr("data-href"));
     });
 

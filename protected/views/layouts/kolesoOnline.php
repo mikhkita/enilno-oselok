@@ -31,12 +31,12 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
     <link rel="stylesheet" media="screen and (min-width: 240px) and (max-width: 767px)" href="<?php echo Yii::app()->request->baseUrl; ?>/html/css/layout-mobile.css" />
     <link rel="stylesheet" media="screen and (min-width: 768px) and (max-width: 1000px)" href="<?php echo Yii::app()->request->baseUrl; ?>/html/css/layout-tablet.css" />
 
-    <meta property="og:url" content="Yii::app()->request->requestUri">
-    <meta property="og:title" content="Зимние Шины Nokian Hakka 7 SUV 265/60/18 Б/у">
-    <meta property="og:description" content="Является первой зимней автошиной в которой применяется технология 3D-BIS на всей площади протектора. Данная технология, позволяет увеличить количество используемых ламелей.">
-    <meta property="og:image" content="http://kitaev.pro/land/koleso6/i/detail.jpg">
-    <meta property="twitter:image" content="http://kitaev.pro/land/koleso6/i/detail.jpg">
-    <link rel="image_src" href="http://kitaev.pro/land/koleso6/i/detail.jpg">
+    <meta property="og:url" content="<?=Yii::app()->getBaseUrl(true).Yii::app()->request->requestUri?>">
+    <meta property="og:title" content="<?=$this->title?>">
+    <meta property="og:description" content="<?=$this->description?>">
+    <meta property="og:image" content="<?=$this->image?>">
+    <meta property="twitter:image" content="<?=$this->image?>">
+    <link rel="image_src" href="<?=$this->image?>">
 
     <link rel="icon" type="image/vnd.microsoft.icon" href="favicon.ico">
 </head>
@@ -46,7 +46,6 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
         <li class="v" style="margin-left:480px"></li>
         <li class="v" ></li>
     </ul>
-    <img src="<?php echo Yii::app()->request->baseUrl; ?>/html/i/logo.jpg" class="b-hidden-logo" alt="">
     <div class="b b-header">
         <div class="b b-menu">
             <div class="b-block">
@@ -67,7 +66,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
                 <span class="stamp"></span>
                 <div class="left">
                     <div class="clearfix">
-                        <a class="left" href="<?=Yii::app()->createUrl('/kolesoonline')?>"><img src="<?php echo Yii::app()->request->baseUrl; ?>/html/i/logo-2.png"></a>
+                        <a class="left b-main-logo" href="<?=Yii::app()->createUrl('/kolesoonline')?>"></a>
                         <div class="right">
                             <h1>Колесо<span>онлайн</span></h1>
                             <h2>Вы находитесь в г. <a href="#" class="fancy" data-block="#b-popup-city"><?=$_SESSION['city']['name']?></a></h2>
@@ -115,10 +114,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
                     <li>
                         <h3>О магазине</h3>
                         <a href="#" class="footer-logo clearfix">
-                            <img class="left" src="<?php echo Yii::app()->request->baseUrl; ?>/html/i/logo.png">
-                            <div class="left">
-                                <h4><span>колесо</span> онлайн</h4>
-                            </div>
+                            <span class="b-footer-logo"></span>
                         </a>
                         <p>Этот магазин сделан специально для оптимального выбора шин, дисков и других аксессуаров для вашего автомобиля.</p>
                         <p>Удобство выбора и простота оформления покупки - вот это очень хорошо.</p>

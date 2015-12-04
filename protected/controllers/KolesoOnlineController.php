@@ -6,6 +6,7 @@ class KolesoOnlineController extends Controller
 	public $title = "Колесо Онлайн - Б/у диски, шины из Японии";
 	public $description = "";
 	public $keywords = "";
+	public $image = "";
 
 	public $params = array(
 		1 => array(
@@ -150,6 +151,12 @@ class KolesoOnlineController extends Controller
 	public $filter = array();
 	public $tire_filter = array();
 	public $disc_filter = array();
+
+	public function init() {
+        parent::init();
+
+        $this->image = Yii::app()->getBaseUrl(true)."/html/i/logo-vk.jpg";
+    }
 
 	public function filters()
 	{
@@ -510,7 +517,7 @@ class KolesoOnlineController extends Controller
 			$_GET['sort'] 
 		)->getPage(
 			array(
-		    	'pageSize'=>20,
+		    	'pageSize'=>40,
 		    )
 		);
 
