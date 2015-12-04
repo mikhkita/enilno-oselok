@@ -386,7 +386,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 						font-size: 0;
 						content: "";
 						width: 18px;
-						height: 17px;
+						height: 18px;
 						background-position: -73px -99px;
 						top: 2px;
 						left: 0px;
@@ -398,7 +398,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 					}
 					.b-header .b-header-main .b-block > .right .contacts a.mail:before {
 						width: 21px;
-						height: 13px;
+						height: 14px;
 						left: 0px;
 						background-position: -2px -99px;
 					}
@@ -702,20 +702,20 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 					font-size: 0;
 					content: "";
 					background-position: -37px -2px;
-					width: 31px;
+					width: 33px;
 					height: 35px;
 					top: 15px;
 					left: 8px;
 				}
 				.b-filters .b-block .filter-cont .tire-type label:nth-child(2):before {
-					width: 40px;
+					width: 41px;
 					height: 32px;
 					top: 16px;
 					left: -1px;
 					background-position: 42px -3px;
 				}
 				.b-filters .b-block .filter-cont .tire-type label:nth-child(3):before {
-					width: 34px;
+					width: 35px;
 					height: 34px;
 					top: 15px;
 					left: 6px;
@@ -1154,20 +1154,20 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 							font-size: 0;
 							content: "";
 							width: 21px;
-							height: 13px;
+							height: 14px;
 							left: 0px;
 							top: 2px;
 							background-position: -2px -99px;
 						}
 						.b-footer .b-footer-main .b-block .sections > li .footer-contacts.phone:before {
 							width: 18px;
-							height: 17px;
+							height: 18px;
 							background-position: -73px -99px;
 							top: -1px;
 						}
 						.b-footer .b-footer-main .b-block .sections > li .footer-contacts.map:before {
 						    width: 11px;
-						    height: 16px;
+						    height: 17px;
 						    background-position: -60px -99px;
 						    top: -3px;
 						    left: 5px;
@@ -1302,13 +1302,13 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 					.tire-type label.active,.tire-type label:hover{
 						text-decoration: underline;
 					}
-					.tire-type label.active:before,.tire-type label:hover:before{
+					.tire-type label.active:before{
 						background-position: -2px -2px !important;
 					}
-					.tire-type label:nth-child(2).active:before,.tire-type label:nth-child(2):hover:before {
+					.tire-type label:nth-child(2).active:before {
 						background-position: 85px -3px !important;
 					}
-					.tire-type label:nth-child(3).active:before,.tire-type label:nth-child(3):hover:before {
+					.tire-type label:nth-child(3).active:before {
 						background-position: 157px -2px !important;
 					}
 				.b-category .b-block .grey-block .filter-block .filter-item {
@@ -2132,15 +2132,15 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 	}
 	.b-header .b-header-main .b-block > .left .right h2 a:before,
 	.b-footer .b-footer-main .b-block .sections > li .footer-contacts.map:before {
-		background-position: -58px -98px;
+		background-position: -58px -97px;
 	}
 	.b-header .b-header-main .b-block > .right .contacts a:before,
 	.b-footer .b-footer-main .b-block .sections > li .footer-contacts.phone:before {
-	    background-position: -70px -98px;
+	    background-position: -70px -97px;
 	}
 	.b-header .b-header-main .b-block > .right .contacts a.mail:before,
 	.b-footer .b-footer-main .b-block .sections > li .footer-contacts.mail:before {
-	    background-position: -1px -98px;
+	    background-position: -1px -97px;
 	}
 	.tire-icon:before,
 	.active a .tire-icon:before,
@@ -2174,18 +2174,18 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 	.tabs .disc-icon:before{
 		background-position: -46px -38px !important;
 	}
-/*	.popular-category .ui-tabs-active .tire-icon:before,.main-category li:hover .tire-icon:before{
+	.popular-category .ui-tabs-active .tire-icon:before,.main-category li:hover .tire-icon:before{
 				background-position: -23px -38px !important;
 				width: 21px;
 			}
 			.popular-category .ui-tabs-active .disc-icon:before,.main-category li:hover .disc-icon:before {
-				background-position: -48px -39px !important;
+				background-position: -46px -38px !important;
 				width: 23px;
 			}
 			.popular-category .ui-tabs-active .wheel-icon:before,.main-category li:hover .wheel-icon:before {
 				background-position: -100px -39px !important;
 				width: 24px;
-			}*/
+			}
 	.b-filters .b-block .filter-cont .tire-type label:before {
 	    background-position: -34px -1px;
 	}
@@ -2196,16 +2196,16 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 	    background-position: 119px -1px;
 	}
 	.b-filters .b-block .filter-cont .filter-item .input:before {
-	    background-position: -99px -99px;
+	    background-position: -99px -98px;
 	}
-	.tire-type label.active:before,.tire-type label:hover:before{
-		background-position: -2px -2px !important;
+	.tire-type label.active:before{
+		background-position: -1px -1px !important;
 	}
-	.tire-type label:nth-child(2).active:before,.tire-type label:nth-child(2):hover:before {
-		background-position: 85px -3px !important;
+	.tire-type label:nth-child(2).active:before{
+		background-position: 83px -2px !important;
 	}
-	.tire-type label:nth-child(3).active:before,.tire-type label:nth-child(3):hover:before {
-		background-position: 157px -2px !important;
+	.tire-type label:nth-child(3).active:before{
+		background-position: 155px -1px !important;
 	}
 
 	.b-header .b-header-main,
@@ -2267,6 +2267,9 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 	}
 	.b-footer .b-footer-main .b-block .sections > li .footer-logo .b-footer-logo {
 		background-image: url('../i/logo@2x.png');
+	}
+	.b-filters .b-block .filter-cont .filter-item.active .input:before {
+		background-position: -89px -98px;
 	}
 }
 
