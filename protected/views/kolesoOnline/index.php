@@ -26,7 +26,7 @@
                     'id'=>'filter',
                     'action' => Yii::app()->createUrl('/kolesoOnline/category',array("type" => 2)),
                     'enableAjaxValidation'=>false,
-                    'method' => 'GET'
+                    'method' => 'POST'
                 )); ?>
                     <!-- <div class="filter-cont">
                         <div class="tire-type clearfix">    
@@ -49,7 +49,7 @@
                                         <div>
                                             <? foreach ($col as $item): ?>
                                                 <label>
-                                                    <input type="checkbox" name="arr[<?=$attr_id?>][]" value="<?=$item['variant_id']?>" <?=$item['checked']?>>
+                                                    <input type="checkbox" name="arr[<?=$attr_id?>][]" value="<?=$item['variant_id']?>">
                                                     <span onselectstart="return false;"><?=$item['value']?></span>
                                                 </label>
                                             <? endforeach; ?>
@@ -83,7 +83,7 @@
                     'id'=>'filter',
                     'action' => Yii::app()->createUrl('/kolesoOnline/category',array("type" => 1)),
                     'enableAjaxValidation'=>false,
-                    'method' => 'GET'
+                    'method' => 'POST'
                 )); ?>
                     <div class="filter-cont">
                         <div class="tire-type clearfix">    

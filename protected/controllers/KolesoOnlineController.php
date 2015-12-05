@@ -195,7 +195,11 @@ class KolesoOnlineController extends Controller
 	}
 
 	public function getCity() {
-		if(!isset($_SESSION)) session_start();
+		if (!empty($_POST['city'])) {
+			if(!isset($_SESSION)) session_start();
+			$_SESSION["city_temp"] = $_POST['city'];
+		    header("Location: ".$_SERVER["REQUEST_URI"]);
+	  	}
 		$city_groups = array();
 		if( !(isset($_SESSION['city']) && AttributeVariant::model()->count("variant_id=".$_SESSION['city']['variant_id'])) ) {
 			$city = json_decode(file_get_contents('http://api.sypexgeo.net/json/'.$_SERVER["REMOTE_ADDR"]));
@@ -206,8 +210,8 @@ class KolesoOnlineController extends Controller
 	       	$city_from_ip = (isset($city->city->name_ru)) ? $city->city->name_ru : $default_city;
      	} else $city_from_ip = $_SESSION['city']['name'];
 
-     	if (isset($_POST['city']) && $_POST['city']) {
-    		$city_from_ip = $_POST['city'];
+     	if (isset($_SESSION["city_temp"]) && $_SESSION["city_temp"]) {
+    		$city_from_ip = $_SESSION["city_temp"];
     	}
      	$model = Attribute::model()->with(array("variants.variant"))->findAll(array("order"=>"t.id ASC, variant.sort ASC","condition"=>"folder=1"));
 		
@@ -231,12 +235,21 @@ class KolesoOnlineController extends Controller
 	public function actionIndex($countGood = false)
 	{	
 		$start = microtime(true);
+		if(!isset($_SESSION)) session_start();
 
+		if(isset($_SESSION["FILTER"])) {
+			$temp = $_SESSION["FILTER"];
+			$_SESSION["FILTER"] = array();
+		}
+		$tire_filter = $this->getFilter(1);
+		$disc_filter =  $this->getFilter(2);
        	$tires = $this->getGoods(8,1); 
 		$tires = $tires['items'];
 
 		$discs = $this->getGoods(8,2);
 		$discs = $discs['items'];
+
+		$_SESSION["FILTER"] = $temp;
 
 		$this->params[1]["FILTER"] = $this->splitByRows(4,$this->params[1]["FILTER"]);
 		$this->params[2]["FILTER"] = $this->splitByRows(4,$this->params[2]["FILTER"]);
@@ -253,8 +266,8 @@ class KolesoOnlineController extends Controller
 			'tires'=> $tires,
 			'discs' => $discs,
 			'cities' => $cities,
-			'tire_filter' => $this->getFilter(1),
-			'disc_filter' => $this->getFilter(2),
+			'tire_filter' => $tire_filter,
+			'disc_filter' => $disc_filter,
 			'params' => $this->params,
 			'dynamic' => $dynamic
 		));		
@@ -262,19 +275,18 @@ class KolesoOnlineController extends Controller
 
 	public function actionCategory($partial = false, $countGood = false) {
 
+		if (!empty($_POST)) {
+			if(!isset($_SESSION)) session_start();
+			$_SESSION["FILTER"] = $_POST;
+		    header("Location: ".$_SERVER["REQUEST_URI"]);
+	  	}
+	  	
 		$this->title = "Колесо Онлайн - Б/у ".GoodType::model()->find(array("limit"=>1,"condition"=>"id=".$_GET['type']))->name;
 
 		$filter = $this->getFilter($_GET['type']);
 
-		if(isset($_GET["int"])) {
-			if($_GET["int"][51]["min"] == "") {
-				$_GET["int"][51]["min"] = $this->params[$_GET['type']]["PRICE_MIN"];
-			}
-			if($_GET["int"][51]["max"] == "") {
-				$_GET["int"][51]["max"] = $this->params[$_GET['type']]["PRICE_MAX"];
-			}
-		}
-		$last = isset($_GET['last']) ? $_GET['last'] : 1;
+		$last = isset($_SESSION["FILTER"]['last']) ? $_SESSION["FILTER"]['last'] : 1;
+		
 		if($partial) {
 			$last++;
 			$_GET['GoodFilter_page'] = $last;
@@ -295,7 +307,7 @@ class KolesoOnlineController extends Controller
 		$dynamic = $this->getDynObjects(array(
             38 => $_SESSION['city']['variant_id']
     	));
-    	
+
 		if($partial) {
 			$this->renderPartial('_list',array(
 				'goods'=> $goods,
@@ -317,7 +329,6 @@ class KolesoOnlineController extends Controller
 		}
 	}
 	public function getFilter($type = NULL) {
-		$check = $this->getChecked( (isset($_GET["arr"]))?$_GET["arr"]:array() );
 
 		$criteria=new CDbCriteria();
 		$criteria->with = array('good' => array('select'=> false));
@@ -328,6 +339,18 @@ class KolesoOnlineController extends Controller
 		$model = GoodAttributeFilter::model()->findAll($criteria);
 		$this->params[$type]["PRICE_MIN"] = ($model[0]->int_value) ? $model[0]->int_value : 0;
 		$this->params[$type]["PRICE_MAX"] = array_pop($model)->int_value;
+
+		if(isset($_SESSION["FILTER"]["int"])) {
+			if($_SESSION["FILTER"]["int"][51]["min"] == "") {
+				$_SESSION["FILTER"]["int"][51]["min"] = $this->params[$_GET['type']]["PRICE_MIN"];
+			}
+			if($_POST["int"][51]["max"] == "") {
+				$_SESSION["FILTER"]["int"][51]["max"] = $this->params[$_GET['type']]["PRICE_MAX"];
+			}
+		}
+
+		$arr = isset($_SESSION["FILTER"]['arr']) ? $_SESSION["FILTER"]['arr'] : array();
+		$check = $this->getChecked($arr);
 
 		$criteria=new CDbCriteria();
 		$criteria->with = array(
@@ -399,7 +422,7 @@ class KolesoOnlineController extends Controller
 		return $out;
 	}
 
-	public function actionDetail($id = NULL)
+	public function actionDetail($id = NULL,$type = NULL)
 	{
 		if($id) {
 			$good = Good::model()->with("fields")->find("good_type_id=".$_GET['type']." AND fields.attribute_id=3 AND fields.varchar_value='".$id."'");
@@ -433,11 +456,11 @@ class KolesoOnlineController extends Controller
 		$goods = Good::model()->filter(
 			array(
 				"good_type_id"=>$type,
-				"attributes"=>isset($_GET['arr']) ? $_GET['arr'] : array(),
-				"int_attributes"=>isset($_GET['int']) ? $_GET['int'] : array(),
+				"attributes"=>isset($_SESSION["FILTER"]['arr']) ? $_SESSION["FILTER"]['arr'] : array(),
+				"int_attributes"=>isset($_SESSION["FILTER"]['int']) ?$_SESSION["FILTER"]['int'] : array(),
 			)
 		)->sort( 
-			isset($_GET['sort']) ? $_GET['sort'] : NULL
+			isset($_SESSION["FILTER"]['sort']) ? $_SESSION["FILTER"]['sort'] : NULL
 		)->getPage(
 			array(
 		    	'pageSize'=>$page_size,
