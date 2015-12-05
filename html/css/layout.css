@@ -742,7 +742,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 				margin-right: 0;
 			}
 				.b-filters .b-block .filter-cont .filter-item .variants {
-
+					border-color: #ffad00 !important;
 				}
 					.filter-item .variants {
 						padding: 20px 16px 10px 14px;
@@ -899,7 +899,8 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 					background-position: -93px -99px;
 					top: 12px;
 				}
-				.filter-item .input:hover,.filter-item .input:hover:after,input[type="text"]:hover,input[type="text"]:focus {
+				
+				.filter-item .input:hover,.filter-item .input:hover:after,input[type="text"]:hover,input[type="text"]:focus,.filter-item.active .input,.filter-item.active .input:after {
 					border-color: #ffad00 !important;
 				}
 .b-popular {
@@ -1062,6 +1063,9 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 					font-weight: 500;
 				}
 			.goods .gradient-grey a {
+				text-decoration: none;
+			}
+			.goods .gradient-grey .b-orange-butt {
 				color: #181818;
 				font-size: 12px;
 				text-decoration: none;
@@ -1074,7 +1078,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 				padding: 12px 0 9px;
 				display: inline-block;
 			}
-				.goods .gradient-grey a:active {
+				.goods .gradient-grey .b-orange-butt:active {
 					border-bottom: 0px solid #FFD900;
 					margin-top: 18px;
 				}

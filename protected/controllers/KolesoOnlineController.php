@@ -21,7 +21,6 @@ class KolesoOnlineController extends Controller
 			'SHIPPING' => 73,
 			'AVAILABLE' => 112,
 			"FILTER" => array(
-				// 27 => "Город",
 				9 => "Диаметр",
 				7 => "Ширина",
 				8 => "Профиль",
@@ -98,8 +97,7 @@ class KolesoOnlineController extends Controller
 				5 => "Сверловка",
 				31 => "Ширина",
 				32 => "Вылет",
-				28 => "Количество",
-				// 27 => "Город"
+				28 => "Количество"
 			),
 			"CATEGORY" => array(
 				"ID" => array(
@@ -165,10 +163,6 @@ class KolesoOnlineController extends Controller
 			"PRICE_MIN" => 0,
 			"PRICE_MAX" => 0,
 		));
-
-	public $filter = array();
-	public $tire_filter = array();
-	public $disc_filter = array();
 
 	public function init() {
         parent::init();
@@ -237,284 +231,40 @@ class KolesoOnlineController extends Controller
 	public function actionIndex($countGood = false)
 	{	
 		$start = microtime(true);
-		$count=0;
-        $condition="";
-        $check = $this->getChecked( (isset($_GET["arr"]))?$_GET["arr"]:array() );
-        
-       	isset($_GET['type']) ? $_GET['type'] : $_GET['type'] = 2;
 
-       	$tires = Good::model()->filter(
-			array(
-				"good_type_id"=> 1,
-				"attributes"=>$_GET["arr"],
-				"int_attributes"=>isset( $_GET["int"])?$_GET["int"]:array(),
-			)
-		)->sort( 
-			$_GET['sort'] 
-		)->getPage(
-			array(
-		    	'pageSize'=>8,
-		    )
-		);
+       	$tires = $this->getGoods(8,1); 
 		$tires = $tires['items'];
 
-		$discs = Good::model()->filter(
-			array(
-				"good_type_id"=> 2,
-				"attributes"=>$_GET["arr"],
-				"int_attributes"=>isset( $_GET["int"])?$_GET["int"]:array(),
-			)
-		)->sort( 
-			$_GET['sort'] 
-		)->getPage(
-			array(
-		    	'pageSize'=>8,
-		    )
-		);
+		$discs = $this->getGoods(8,2);
 		$discs = $discs['items'];
-		// $type = ($_GET['type']==1) ? "tires": "discs";
 
-		// $criteria=new CDbCriteria();
-		// $criteria->with = array('good' => array('select'=> false));
-  //       $criteria->condition = 'attribute_id=51 AND good.good_type_id=1';
-  //       $criteria->select = array('int_value');
-  //       $criteria->order = 'int_value ASC';
+		$this->params[1]["FILTER"] = $this->splitByRows(4,$this->params[1]["FILTER"]);
+		$this->params[2]["FILTER"] = $this->splitByRows(4,$this->params[2]["FILTER"]);
 
-		// $model = GoodAttributeFilter::model()->findAll($criteria);
-		// $price_min_tire = ($model[0]->int_value) ? $model[0]->int_value : 0;
-		// $price_max_tire = array_pop($model)->int_value;
-		
-		// $criteria->condition = 'attribute_id=51 AND good.good_type_id=2';
-		// $model = GoodAttributeFilter::model()->findAll($criteria);
-		// $price_min_disc = ($model[0]->int_value) ? $model[0]->int_value : 0;
-		// $price_max_disc = array_pop($model)->int_value;
-		// Поиск айдишников товаров у которых есть фото		
-		// $imgs = array_values(array_diff(scandir(Yii::app()->params["imageFolder"]."/".$type), array('..', '.', 'Thumbs.db','default-big.png','default.jpg')));
-		// $temp = "0";
-		// if(count($imgs)) {
-		// 	$temp = "";
-		// 	foreach ($imgs as $value) {
-		// 		$temp.="'".$value."',";
-		// 	}
-		// 	$temp = substr($temp, 0, -1);	
-		// }
-
-		// $criteria=new CDbCriteria();
-		// $criteria->select = 'id,good_type_id';
-	 //   	$criteria->with = array('fields' => array('select'=> array('attribute_id','varchar_value')));
-		// $criteria->condition = 'good_type_id='.$_GET['type'].' AND (fields.attribute_id=3 AND fields.varchar_value IN('.$temp.'))';
-
-		// $model=GoodFilter::model()->findAll($criteria);
-
-		// $goods_no_photo = array();
-		// foreach ($model as $good) {
-		// 	array_push($goods_no_photo, $good->id); 
-		// }
-		// Поиск айдишников товаров у которых есть фото
-
-		// $goods = Good::model()->filter(
-		// 	array(
-		// 		"good_type_id"=>$_GET['type'],
-		// 		"attributes"=>$_GET["arr"],
-		// 		"int_attributes"=>isset( $_GET["int"] )?$_GET["int"]:array(),
-		// 	)
-		// )->sort( 
-		// 	$_GET['sort'] 
-		// )->getPage(
-		// 	array(
-		//     	'pageSize'=>20,
-		//     )
-		// );
-
-		// $count = $goods['count'];	
-		// $pages = $goods['pages'];	
-		// $allCount = $goods["allCount"];
-		// $goods = $goods['items'];
-
-    	if( !$countGood ) {
-   //  		$criteria=new CDbCriteria();
-			// $criteria->with = array('good' => array('select'=> false));
-	  //       $criteria->condition = 'attribute_id=51 AND good.good_type_id=1';
-	  //       $criteria->select = array('int_value');
-	  //       $criteria->order = 'int_value ASC';
-
-			// $model = GoodAttributeFilter::model()->findAll($criteria);
-			// $price_min_tire = ($model[0]->int_value) ? $model[0]->int_value : 0;
-			// $price_max_tire = array_pop($model)->int_value;
-			
-			// $criteria->condition = 'attribute_id=51 AND good.good_type_id=2';
-			// $model = GoodAttributeFilter::model()->findAll($criteria);
-			// $price_min_disc = ($model[0]->int_value) ? $model[0]->int_value : 0;
-			// $price_max_disc = array_pop($model)->int_value;
-
-   //          $criteria=new CDbCriteria();
-   //          $criteria->with = array(
-   //              // 'good'
-   //              //  => array(
-   //              //     'select' => false,
-   //              //     'condition' => 'good_type_id='.$_GET['type']
-   //              //     ),
-   //              'variant'
-
-   //              );
-   //          $criteria->addInCondition('t.attribute_id',array(9,43,27,28,7,8,23,16,6,5,31,32));
-            // $criteria->condition = 't.attribute_id=9 OR t.attribute_id=43 OR t.attribute_id=27 OR t.attribute_id=28 OR ';
-         //    if($_GET['type']==1) {
-         //    	$criteria->condition .= 't.attribute_id=7 OR t.attribute_id=8 OR t.attribute_id=23 OR t.attribute_id=16';
-        	// }	
-        	// if($_GET['type']==2) {
-         //    	$criteria->condition .= 't.attribute_id=6 OR t.attribute_id=5 OR t.attribute_id=31 OR t.attribute_id=32';
-        	// }	
-
-        	// $criteria->addInCondition("good.id",$goods_no_photo);
-     //        $criteria->group = 't.variant_id';
-     //        $criteria->order = 'variant.sort ASC';
-
-     //        $model = GoodAttribute::model()->findAll($criteria);
-     //        $this->filter = array();
-
-   		// 	foreach ($model as $i => $item) {
-   		// 		if(!isset($this->filter[$item->attribute_id])) {
-   		// 			$this->filter[$item->attribute_id] = array();
-   		// 			$temp = array();
-   		// 		}
-   		// 		$temp['variant_id'] = $item->variant_id;
-	    //                 $temp['value'] = $item->value;
-	    //                 if(isset($check[$item->variant_id])) {
-	    //                 	$temp['checked'] = "checked";
-	    //             	} else {
-	    //             		$temp['checked'] = "";
-	    //             	}
-   		// 		array_push($this->filter[$item->attribute_id], $temp);
-   		// 	}
-
-   		// 	foreach ($this->filter as $attr_id => $attr) {
-   		// 		if( $attr_id == 43 ){
-					// $list = $this->getListValue(41);
-					// foreach ($this->filter[$attr_id] as $i => &$variant) {
-					// 	$variant["value"] = $list[$variant["variant_id"]];
-					// }
-   		// 		}
-   		// 	}
-   		// 	foreach ($this->filter as &$attr) {
-   		// 		$attr = $this->splitByRows(11,$attr);
-   		// 	}
-    		$this->getFilter(1);
-    		$this->getFilter(2);
-   			$this->params[1]["FILTER"] = $this->splitByRows(4,$this->params[1]["FILTER"]);
-   			$this->params[2]["FILTER"] = $this->splitByRows(4,$this->params[2]["FILTER"]);
-
-  //  			list($queryCount, $queryTime) = Yii::app()->db->getStats();
+        // list($queryCount, $queryTime) = Yii::app()->db->getStats();
 		// echo "Query count: $queryCount, Total query time: ".sprintf('%0.5f',$queryTime)."s";
 		// printf('<br>Прошло %.4F сек.<br>', microtime(true) - $start);
-			$cities = $this->getCity();	
-   			$dynamic = $this->getDynObjects(array(
-	            38 => $_SESSION['city']['variant_id']
-        	));
+		$cities = $this->getCity();	
+			$dynamic = $this->getDynObjects(array(
+            38 => $_SESSION['city']['variant_id']
+    	));
 
-			$this->render('index',array(
-				'tires'=> $tires,
-				'discs' => $discs,
-				'cities' => $cities,
-				'tire_filter' => $this->tire_filter,
-				'disc_filter' => $this->disc_filter,
-				'params' => $this->params,
-				'dynamic' => $dynamic
-			));
-		} else {
-			echo $count;
-		}		
-	}
-
-	public function getFilter($type = NULL) {
-		$check = $this->getChecked( (isset($_GET["arr"]))?$_GET["arr"]:array() );
-
-		$criteria=new CDbCriteria();
-		$criteria->with = array('good' => array('select'=> false));
-        $criteria->condition = 'attribute_id=51 AND good.good_type_id=1';
-        $criteria->select = array('int_value');
-        $criteria->order = 'int_value ASC';
-
-		$model = GoodAttributeFilter::model()->findAll($criteria);
-		$this->params[1]["PRICE_MIN"] = ($model[0]->int_value) ? $model[0]->int_value : 0;
-		$this->params[1]["PRICE_MAX"] = array_pop($model)->int_value;
-		
-		$criteria->condition = 'attribute_id=51 AND good.good_type_id=2';
-		$model = GoodAttributeFilter::model()->findAll($criteria);
-		$this->params[2]["PRICE_MIN"] = ($model[0]->int_value) ? $model[0]->int_value : 0;
-		$this->params[2]["PRICE_MAX"] = array_pop($model)->int_value;
-
-		$criteria=new CDbCriteria();
-
-		$criteria_with = array(
-            'good'
-             => array(
-                'select' => false
-                ),
-            'variant'
-        );
-
-		if($type) {
-			$criteria_with['good']['condition'] = 'good_type_id='.$type;			
-			$criteria->condition = 't.attribute_id=9 OR t.attribute_id=43 OR t.attribute_id=27 OR t.attribute_id=28 OR ';
-            if($type==1) {
-            	$criteria->condition .= 't.attribute_id=7 OR t.attribute_id=8 OR t.attribute_id=23 OR t.attribute_id=16';
-        	}	
-        	if($type==2) {
-            	$criteria->condition .= 't.attribute_id=6 OR t.attribute_id=5 OR t.attribute_id=31 OR t.attribute_id=32';
-        	}	
-
-		} else {
-			$criteria->addInCondition('t.attribute_id',array(9,43,27,28,7,8,23,16,6,5,31,32));
-		}
-		 	$criteria->with = $criteria_with;
-        	$criteria->group = 't.variant_id';
-            $criteria->order = 'variant.sort ASC';
-
-            $model = GoodAttribute::model()->findAll($criteria);
-            $this->filter = array();
-
-   			foreach ($model as $i => $item) {
-   				if(!isset($this->filter[$item->attribute_id])) {
-   					$this->filter[$item->attribute_id] = array();
-   					$temp = array();
-   				}
-   				$temp['variant_id'] = $item->variant_id;
-	                    $temp['value'] = $item->value;
-	                    if(isset($check[$item->variant_id])) {
-	                    	$temp['checked'] = "checked";
-	                	} else {
-	                		$temp['checked'] = "";
-	                	}
-   				array_push($this->filter[$item->attribute_id], $temp);
-   			}
-
-   			foreach ($this->filter as $attr_id => $attr) {
-   				if( $attr_id == 43 ){
-					$list = $this->getListValue(41);
-					foreach ($this->filter[$attr_id] as $i => &$variant) {
-						$variant["value"] = $list[$variant["variant_id"]];
-					}
-   				}
-   			}
-   			foreach ($this->filter as &$attr) {
-   				if(count($attr) > 15) {
-   					$attr = $this->splitByRows(10,$attr);
-   				} else $attr = $this->splitByRows(5,$attr);
-   			}
-   			if($type==1) {
-   				$this->tire_filter = $this->filter;
-   			}
-   			if($type==2) {
-   				$this->disc_filter = $this->filter;
-   			}
+		$this->render('index',array(
+			'tires'=> $tires,
+			'discs' => $discs,
+			'cities' => $cities,
+			'tire_filter' => $this->getFilter(1),
+			'disc_filter' => $this->getFilter(2),
+			'params' => $this->params,
+			'dynamic' => $dynamic
+		));		
 	}
 
 	public function actionCategory($partial = false, $countGood = false) {
 
-		$this->getFilter($_GET['type']);
-
 		$this->title = "Колесо Онлайн - Б/у ".GoodType::model()->find(array("limit"=>1,"condition"=>"id=".$_GET['type']))->name;
+
+		$filter = $this->getFilter($_GET['type']);
 
 		if(isset($_GET["int"])) {
 			if($_GET["int"][51]["min"] == "") {
@@ -530,34 +280,14 @@ class KolesoOnlineController extends Controller
 			$_GET['GoodFilter_page'] = $last;
 		}
 
-		$goods = Good::model()->filter(
-			array(
-				"good_type_id"=>$_GET['type'],
-				"attributes"=>isset($_GET["arr"])?$_GET["arr"]:array(),
-				"int_attributes"=>isset( $_GET["int"])?$_GET["int"]:array(),
-			)
-		)->sort( 
-			isset($_GET['sort'])?$_GET["sort"]:NULL
-		)->getPage(
-			array(
-		    	'pageSize'=>40,
-		    )
-		);
-
-		if( $_GET['GoodFilter_page'] >= $goods['pages']->pageCount || $goods['pages']->pageCount == 1 ) {
-			$last = 0;
-		}
-
+		$goods = $this->getGoods(40,$_GET['type']); 
 		$count = $goods['count'];	
 		$pages = $goods['pages'];	
 		$allCount = $goods["allCount"];
 		$goods = $goods['items'];
 
-		if($_GET['type']==1) {
-			$this->filter = $this->tire_filter;
-		}
-		if($_GET['type']==2) {
-			$this->filter = $this->disc_filter;
+		if( $_GET['GoodFilter_page'] >= $pages->pageCount || $pages->pageCount == 1 ) {
+			$last = 0;
 		}
 
 		if(!$partial) $cities = $this->getCity();
@@ -565,7 +295,7 @@ class KolesoOnlineController extends Controller
 		$dynamic = $this->getDynObjects(array(
             38 => $_SESSION['city']['variant_id']
     	));
-
+    	
 		if($partial) {
 			$this->renderPartial('_list',array(
 				'goods'=> $goods,
@@ -577,7 +307,7 @@ class KolesoOnlineController extends Controller
 		} else {
 			$this->render('category',array(
 				'goods'=> $goods,
-				'filter' => $this->filter,
+				'filter' => $filter,
 				'pages' => $pages,
 				'params' => $this->params,
 				'last' => $last,
@@ -586,6 +316,76 @@ class KolesoOnlineController extends Controller
 			));
 		}
 	}
+	public function getFilter($type = NULL) {
+		$check = $this->getChecked( (isset($_GET["arr"]))?$_GET["arr"]:array() );
+
+		$criteria=new CDbCriteria();
+		$criteria->with = array('good' => array('select'=> false));
+        $criteria->condition = 'attribute_id=51 AND good.good_type_id='.$type;
+        $criteria->select = array('int_value');
+        $criteria->order = 'int_value ASC';
+
+		$model = GoodAttributeFilter::model()->findAll($criteria);
+		$this->params[$type]["PRICE_MIN"] = ($model[0]->int_value) ? $model[0]->int_value : 0;
+		$this->params[$type]["PRICE_MAX"] = array_pop($model)->int_value;
+
+		$criteria=new CDbCriteria();
+		$criteria->with = array(
+            'good'
+             => array(
+                'select' => false,
+                'condition' => 'good_type_id='.$type
+                ),
+            'variant'
+        );
+	
+		$criteria->condition = 't.attribute_id=9 OR t.attribute_id=43 OR t.attribute_id=27 OR t.attribute_id=28 OR ';
+        if($type==1) {
+        	$criteria->condition .= 't.attribute_id=7 OR t.attribute_id=8 OR t.attribute_id=23 OR t.attribute_id=16';
+    	}	
+    	if($type==2) {
+        	$criteria->condition .= 't.attribute_id=6 OR t.attribute_id=5 OR t.attribute_id=31 OR t.attribute_id=32';
+    	}	
+    	$criteria->group = 't.variant_id';
+        $criteria->order = 'variant.sort ASC';
+
+        $model = GoodAttribute::model()->findAll($criteria);
+
+        $filter = array();
+
+		foreach ($model as $i => $item) {
+			if(!isset($filter[$item->attribute_id])) {
+				$filter[$item->attribute_id] = array();
+				$temp = array();
+			}
+			$temp['variant_id'] = $item->variant_id;
+                $temp['value'] = $item->value;
+                if(isset($check[$item->variant_id])) {
+                	$temp['checked'] = "checked";
+            	} else {
+            		$temp['checked'] = "";
+            	}
+			array_push($filter[$item->attribute_id], $temp);
+		}
+
+		foreach ($filter as $attr_id => $attr) {
+			if( $attr_id == 43 ){
+				$list = $this->getListValue(41);
+				foreach ($filter[$attr_id] as $i => &$variant) {
+					$variant["value"] = $list[$variant["variant_id"]];
+				}
+			}
+		}
+		foreach ($filter as &$attr) {
+			if(count($attr) > 15) {
+				$attr = $this->splitByRows(10,$attr);
+			} else $attr = $this->splitByRows(5,$attr);
+		}
+
+		return $filter;
+	}
+
+	
 
 	public function getChecked($attributes){
 		$out = array();
@@ -599,7 +399,7 @@ class KolesoOnlineController extends Controller
 		return $out;
 	}
 
-	public function actionDetail($partial = false,$id = NULL)
+	public function actionDetail($id = NULL)
 	{
 		if($id) {
 			$good = Good::model()->with("fields")->find("good_type_id=".$_GET['type']." AND fields.attribute_id=3 AND fields.varchar_value='".$id."'");
@@ -619,27 +419,32 @@ class KolesoOnlineController extends Controller
 	            38 => $_SESSION['city']['variant_id']
 	    	));
 
-			if( !$partial ){
-				$this->render('detail',array(
-					'good'=>$good,
-					'imgs'=>$imgs,
-					'params' => $this->params,
-					'cities' => $cities,
-					'dynamic' => $dynamic
-				));
-			}else{
-				$this->renderPartial('detail',array(
-					'good'=>$good,
-					'imgs'=>$imgs,
-					'params' => $this->params,
-					'cities' => $cities,
-					'dynamic' => $dynamic
-				));
-			}
+			$this->render('detail',array(
+				'good'=>$good,
+				'imgs'=>$imgs,
+				'params' => $this->params,
+				'cities' => $cities,
+				'dynamic' => $dynamic
+			));
 		}
 	}
 
-	
+	public function getGoods($page_size = 8,$type = 2) {
+		$goods = Good::model()->filter(
+			array(
+				"good_type_id"=>$type,
+				"attributes"=>isset($_GET['arr']) ? $_GET['arr'] : array(),
+				"int_attributes"=>isset($_GET['int']) ? $_GET['int'] : array(),
+			)
+		)->sort( 
+			isset($_GET['sort']) ? $_GET['sort'] : NULL
+		)->getPage(
+			array(
+		    	'pageSize'=>$page_size,
+		    )
+		);
+		return $goods;
+	}
 
 	public function actionContacts()
 	{
