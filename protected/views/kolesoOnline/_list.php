@@ -1,5 +1,5 @@
 <? foreach ($goods as $key => $good): ?>   
-    <li  <? unset($_GET['partial'],$_GET['GoodFilter_page'],$_GET['last']); $_GET['id'] = $good->fields_assoc[3]->value; if($key == (count($goods)-1) ) echo "data-last='".$last."'" ?> class="gradient-grey">
+    <li  <? $_GET['type'] = $type; unset($_GET['partial'],$_GET['GoodFilter_page'],$_GET['last']); $_GET['id'] = $good->fields_assoc[3]->value; if($key == (count($goods)-1) ) echo "data-last='".$last."'" ?> class="gradient-grey">
         <div class="good-img" style="background-image: url(<? $images = $this->getImages($good); echo $images[0];?>);"></div>
         <div class="params-cont">
             <a href="<?=Yii::app()->createUrl('/kolesoOnline/detail',$_GET)?>">
