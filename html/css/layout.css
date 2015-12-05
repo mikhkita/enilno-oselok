@@ -1936,6 +1936,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 				margin-top: 20px;
 				text-align: left;
 				font-weight: 500;
+				font-family: Arial;
 				line-height: 1.58;
 			}
 			.good-detail .b-block .category-title.similar {
