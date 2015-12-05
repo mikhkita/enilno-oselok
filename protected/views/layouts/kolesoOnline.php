@@ -75,7 +75,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
                 </div>
                 <div class="right">
                     <div class="clearfix contacts">
-                        <a href="callto:+79095430402" class="fancy left" data-block="#b-popup-callback">+7 (909) 543-04-02</a>
+                        <a href="#" class="fancy left" data-block="#b-popup-callback">+7 (909) 543-04-02</a>
                         <a href="mailto:kolesotomskru@mail.ru" class="left mail">kolesotomskru@mail.ru</a>
                     </div>
                     <form action="#" method="GET">
@@ -132,7 +132,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
                     <li>
                         <h3>Контактная информация</h3>
                         <a class="footer-contacts mail" href="mailto:kolesotomskru@mail.ru">kolesotomskru@mail.ru</a>
-                        <a class="footer-contacts phone" href="callto:+79095430402">+7 (909) 543-04-02</a>
+                        <a class="fancy footer-contacts phone" data-block="#b-popup-callback" href="#">+7 (909) 543-04-02</a>
                         <span class="footer-contacts map">г. Красноярск, ул. Вавилова, 1а</span>
                         <div class="social">
                             <h3>Присоединяйтесь к нам</h3>
@@ -159,7 +159,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
     <div id="b-popup-callback">
         <div class="for_all b-popup-small">
             <h3>Заказать звонок</h3>
-            <h4>Или оставьте заявку и мы Вам перезвоним в ближайшее время:</h4>
+            <h4>Оставьте заявку и мы Вам перезвоним<br>в ближайшее время:</h4>
             <form action="<?=Yii::app()->createUrl('/kolesoOnline/mail/')?>" method="POST"  data-block="#b-popup-2">
                 <div class="b-popup-form">
                     <label for="name">Ваше имя</label>

@@ -1,7 +1,8 @@
 <? foreach ($goods as $key => $good): ?>   
-    <li  <? unset($_GET['partial'],$_GET['GoodFilter_page'],$_GET['last']); $_GET['id'] = $good->fields_assoc[3]->value; if($key == (count($goods)-1) ) echo "data-last='".$last."'" ?> class="gradient-grey" data-href="<?=Yii::app()->createUrl('/kolesoOnline/detail',$_GET)?>">
+    <li  <? unset($_GET['partial'],$_GET['GoodFilter_page'],$_GET['last']); $_GET['id'] = $good->fields_assoc[3]->value; if($key == (count($goods)-1) ) echo "data-last='".$last."'" ?> class="gradient-grey">
         <div class="good-img" style="background-image: url(<? $images = $this->getImages($good); echo $images[0];?>);"></div>
         <div class="params-cont">
+            <a href="<?=Yii::app()->createUrl('/kolesoOnline/detail',$_GET)?>">
             <? if($type == 2): ?>
                 <h4><?=$good->fields_assoc[6]->value?></h4>
                 <? $price = ($good->fields_assoc[20])?$good->fields_assoc[20]->value:0; $order = Interpreter::generate($this->params[$type]["ORDER"], $good); ?>
@@ -21,6 +22,7 @@
                 <h3><?=$params[$type]["CATEGORY"]["WEAR"]["LABEL"]?>: <span><?=$good->fields_assoc[$params[$type]["CATEGORY"]["WEAR"]['ID']]->value?> %</span></h3>
                 <h3><?=$params[$type]["CATEGORY"]["YEAR"]["LABEL"]?>: <span><?=$good->fields_assoc[$params[$type]["CATEGORY"]["YEAR"]['ID']]->value?></h3>
             <? endif; ?>
+            </a>
             <a href="#" class="fancy b-orange-butt" data-block="#b-popup-buy" data-aftershow="category_buy">Купить</a>
         </div>
     </li>

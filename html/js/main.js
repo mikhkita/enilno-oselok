@@ -31,22 +31,6 @@ $(document).ready(function(){
             }
     }
 
-    
-    
-    // $(".load").click(function(){
-    //     $.ajax({
-    //         type: "GET",
-    //         url: window.location.href,
-    //         data:  { partial: true},
-    //         success: function(msg){
-    //             $(".goods").append(msg);
-    //             if($('.goods li:eq(-1)').attr("data-last") == 1) {
-    //                 $(".load").hide(); 
-    //             }
-    //         }
-    //     });
-    // });
-
     var blocked = false;
 
     function whenScroll(){
@@ -189,44 +173,8 @@ $(document).ready(function(){
     $(".popup-cities li a").click(function() {    
         $("select[name='city']").val($(this).text());
         $("#city-form").submit();
-        // var city = $(this).text();
-        // $.ajax({
-        //     type: "POST",
-        //     url: window.location.href,
-        //     data:  { city: city },
-        //     success: function(msg){
-        //         window.location.replace(window.location.href);
-        //     }
-        // });
-
-        // var city = $(this).text();
-        // $.ajax({
-        //     type: "POST",
-        //     url: window.location.href,
-        //     data:  { city: city },
-        //     success: function(msg){
-                
-        //     }
-        // });
-        // setTimeout(function(){
-        //     window.location.replace(window.location.href);
-        // },100);
         return false;
     });
-
-    // $("#city-form").submit(function() {
-    //     var city = $(this).find("select").val();
-    //     $.ajax({
-    //         type: "POST",
-    //         url: window.location.href,
-    //         data:  { city: city },
-    //         success: function(msg){
-    //             window.location.replace(window.location.href);
-    //         }
-    //     });
-    //     return false;
-    // });
-
 
     $('.min-val,.max-val').bind("change keyup input click", function() {
         if (this.value.match(/[^0-9]/g)) {
@@ -335,7 +283,6 @@ $(document).ready(function(){
         text=[];
         if(obj.length != 0) {
             obj.each(function(index, item){
-                // console.log($(item).siblings("span").text());
                 text.push($(item).siblings("span").text());
             });
             input.html(text.join(",&nbsp;")+"<span></span>");
@@ -362,12 +309,6 @@ $(document).ready(function(){
     }).bind("mouseup",function(){
         if( !open )
             closeBubble();
-    });
-
-
-    $("body").on("click",".goods .gradient-grey:not(.b-orange-butt)",function(){
-        // window.open($(this).attr("data-href"));
-        window.location.assign($(this).attr("data-href"));
     });
 
     $(".goods .gradient-grey .b-orange-butt").click(function(){
@@ -427,13 +368,4 @@ $(document).ready(function(){
     });
     $(".tire-type input").change();
 
-    // $("#go-back").click(function(){
-    //     if(document.referrer) {
-    //        window.history.back();
-    //     } else if($(this).text().indexOf('Шины') + 1){
-    //         window.location.assign("/kolesoonline/category?type=1");
-    //     } else if ($(this).text().indexOf('Диски') + 1) {
-    //         window.location.assign("/kolesoonline/category?type=2");
-    //     }
-    // });
 });
