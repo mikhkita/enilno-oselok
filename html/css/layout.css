@@ -44,7 +44,7 @@ body {
 a{
 	text-decoration: underline;
 	display: block;
-	color: inherit;
+	color: #ffbc00;
 }
 	a:hover{
 		text-decoration: none;
@@ -363,8 +363,8 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 								width: 11px;
 								height: 16px;
 								background-position: -60px -99px;
-								top: -3px;
-								left: 1px;
+								top: -2px;
+								left: 2px;
 							}
 			.b-header .b-header-main .b-block > .right{
 
@@ -679,6 +679,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 		}
 			.b-filters .b-block .filter-cont .tire-type{
 				display: inline-block;
+				margin-left: 30px;
 			}
 					/*.b-filters .b-block .filter-cont .tire-type label[for=tire-winter] {
 						width: 400px;
@@ -704,25 +705,25 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 					position: absolute;
 					font-size: 0;
 					content: "";
+					width: 35px;
+					height: 34px;
+					top: 15px;
+					left: 6px;
+					background-position: 121px -2px;
+				}
+				.b-filters .b-block .filter-cont .tire-type label:nth-child(2):before {
 					background-position: -37px -2px;
 					width: 33px;
 					height: 35px;
 					top: 15px;
 					left: 8px;
 				}
-				.b-filters .b-block .filter-cont .tire-type label:nth-child(2):before {
+				.b-filters .b-block .filter-cont .tire-type label:nth-child(3):before {
 					width: 41px;
 					height: 32px;
 					top: 16px;
 					left: -1px;
 					background-position: 42px -3px;
-				}
-				.b-filters .b-block .filter-cont .tire-type label:nth-child(3):before {
-					width: 35px;
-					height: 34px;
-					top: 15px;
-					left: 6px;
-					background-position: 121px -2px;
 				}
 
 				.tire-type input {
@@ -1032,14 +1033,14 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 				font-weight: 500;
 				color: #ffbc00;
 				text-decoration: underline;
-				margin-bottom: 12px;
+				margin-bottom: 10px;
 				height: 16px;
-    			overflow: hidden;
+				overflow: hidden;
 			}
 			.goods .gradient-grey h5{
 				color: #848383;
 				font-size: 12px;
-				margin-bottom: 6px;
+				margin-bottom: 9px;
 			}
 				.goods .gradient-grey h5 span{
 					font-weight: 500;
@@ -1048,7 +1049,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 				}
 			.goods .gradient-grey h6{
 				color: #3c3c3c;
-				margin-top: 10px;
+				margin-top: 8px;
 				font-size: 13px;
 			}
 			.goods .gradient-grey h3{
@@ -1206,7 +1207,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 						    width: 11px;
 						    height: 17px;
 						    background-position: -60px -99px;
-						    top: -3px;
+						    top: -2px;
 						    left: 5px;
 						}
 						.b-footer .b-footer-main .b-block .sections > li a.footer-contacts {
@@ -1316,37 +1317,37 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 						position: absolute;
 						font-size: 0;
 						content: "";
-						background-position: -37px -2px;
-						width: 31px;
-						height: 35px;
-						top: 8px;
-						left: 0;
-					}
-					.b-category .b-block .grey-block .filter-block .tire-type label:nth-child(2):before {
-						width: 40px;
-						height: 32px;
-						top: 9px;
-						left: 0;
-						background-position: 42px -3px;
-					}
-					.b-category .b-block .grey-block .filter-block .tire-type label:nth-child(3):before {
 						width: 34px;
 						height: 34px;
 						top: 9px;
 						left: 0;
 						background-position: 121px -2px;
 					}
+					.b-category .b-block .grey-block .filter-block .tire-type label:nth-child(2):before {
+						background-position: -37px -2px;
+						width: 31px;
+						height: 35px;
+						top: 8px;
+						left: 2px;
+					}
+					.b-category .b-block .grey-block .filter-block .tire-type label:nth-child(3):before {
+						width: 40px;
+						height: 32px;
+						top: 9px;
+						left: 0;
+						background-position: 42px -3px;
+					}
 					.tire-type label.active,.tire-type label:hover{
 						text-decoration: underline;
 					}
 					.tire-type label.active:before{
-						background-position: -2px -2px !important;
+						background-position: 157px -2px !important;
 					}
 					.tire-type label:nth-child(2).active:before {
-						background-position: 85px -3px !important;
+						background-position: -2px -2px !important;
 					}
 					.tire-type label:nth-child(3).active:before {
-						background-position: 157px -2px !important;
+						background-position: 85px -3px !important;
 					}
 				.b-category .b-block .grey-block .filter-block .filter-item {
 					margin-bottom: 25px;
@@ -1590,7 +1591,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 						width: 15px;
 						height: 14px;
 						left: 0;
-						top: -1px;
+						top: 1px;
 						background-position: -171px -99px;
 					}
 					.navigation li:first-child:hover a:before{
@@ -1634,16 +1635,17 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 						}
 						.b-category .b-block .good-list .b-sort ul li.active:after {
 							position: absolute;
-						    font-size: 0;
-						    content: "";
-						    background-position: -93px -99px;
-						    width: 9px;
-						    height: 7px;
-						    top: 5px;
-						    right: -13px;
+							font-size: 0;
+							content: "";
+							background-position: -93px -99px;
+							width: 9px;
+							height: 7px;
+							top: 5px;
+							right: -13px;
 						}
 						.b-category .b-block .good-list .b-sort ul li.active.up:after {
 							background-position: -104px -99px;
+							top: 6px;
 						}
 				.b-category .b-block .good-list .b-sort > .right h4 {
 					margin-top: 13px;
@@ -1672,8 +1674,8 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 
 					}
 				.b-category .b-no-goods {
-					font-size: 30px;
-   					padding: 50px 0;
+					font-size: 22px;
+					padding: 30px 0;
 				}
 
 .good-detail {
@@ -1691,16 +1693,16 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 			margin-bottom: 40px;
 		}
 			.good-detail .b-block .detail-wrap .detail-photo {
-				width: 468px;
-				width: 388px;
+				width: 559px;
 			}
 				.good-detail .b-block .detail-wrap .detail-photo .detail-slider-for {
 					box-shadow: inset 0 0 0 1px #DBE4F6;
+					background-color: #F3F5FA;
 				}
 				.good-detail .b-block .detail-wrap .detail-photo .big{
 					display: block;
 					width: 100%;
-					height: 312px;
+					height: 419px;
 					background-size: contain;
 					background-position: 50%;
 					background-repeat: no-repeat;
@@ -1711,10 +1713,10 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 					.good-detail .b-block .detail-wrap .detail-photo ul li{
 						cursor: pointer;
 						float: left;
-						width: 68px;
-						height: 68px;
-						margin-top: 12px;
-						margin-right: 12px;
+						width: 79px;
+						height: 79px;
+						margin-top: 1px;
+						margin-right: 1px;
 						vertical-align: middle;
 						-webkit-transform: translateZ(0);
 						transform: translateZ(0);
@@ -1727,13 +1729,13 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 						-webkit-transition-property: transform;
 						transition-property: transform;
 						background-size: cover;
-    					background-position: 50%;
+						background-position: 50%;
 					}
 						.good-detail .b-block .detail-wrap .detail-photo ul li:hover,.good-detail .b-block .detail-wrap .detail-photo ul li:focus,.good-detail .b-block .detail-wrap .detail-photo ul li:active {
 							-webkit-transform: scale(1.1);
   							transform: scale(1.1);
 						}
-					.good-detail .b-block .detail-wrap .detail-photo ul li:nth-child(5) {
+					.good-detail .b-block .detail-wrap .detail-photo ul li:nth-child(7n) {
 						margin-right: 0;
 					}
 			.good-detail .b-block .detail-wrap .detail-desc {
@@ -1772,32 +1774,36 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 							margin-left: 4px;
 						}
 			.good-detail .b-block .detail-wrap .detail-price{
-				width: 200px;
+				width: 379px;
 				box-shadow: 0px 0px 4.85px 0.15px rgba(32, 32, 32, 0.3);
 				border-radius: 2px;
 				padding: 13px 25px 17px;
 				box-sizing: border-box;
 				text-align: left;
+				margin-bottom: 25px;
 			}
 				.good-detail .b-block .detail-wrap .detail-price h3{
 					font-size: 24px;
 					font-weight: 700;
-					margin-bottom: 4px;
+					margin-bottom: 9px;
+					display: inline-block;
 				}
 				.good-detail .b-block .detail-wrap .detail-price h3 span,.good-detail .b-block .detail-wrap .detail-price h4 {
-					font-size: 12px;
-					color: #a3a3a3;
+					font-size: 15px;
+					color: #797979;
 					font-weight: 300;
 				}
 				.good-detail .b-block .detail-wrap .detail-price h3 span {
-					top: -3px;
+					top: 0px;
 					left: 5px;
 					position: relative;
 					display: inline-block;
-
 				}
 				.good-detail .b-block .detail-wrap .detail-price h4{
-					margin-bottom: 16px;
+					margin-bottom: 14px;
+					margin-top: -5px;
+					margin-left: 5px;
+					display: inline-block;
 				}
 				.good-detail .b-block .detail-wrap .detail-price a{
 					font-weight: 500;
@@ -1805,42 +1811,56 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 					border-bottom: 2px solid #f69303;
 					padding: 12px 0 10px;
 					text-transform: uppercase;
+					padding: 12px 60px;
+					margin-top: 1px;
+					margin-bottom: 2px;
 				}
 				.good-detail .b-block .detail-wrap .detail-price a:active {
 					position: relative;
 					top: 2px;
-					margin-bottom: 17px;
+					margin-bottom: 4px;
 				}
 				.good-detail .b-block .detail-wrap .detail-price h5,.good-detail .b-block .detail-wrap .detail-price a{
-					margin-bottom: 15px;
+					display: inline-block;
 				}
 				.good-detail .b-block .detail-wrap .detail-price h5 {
 					text-decoration: underline;
 					cursor: pointer;
-					font-size: 12px;	
+					font-size: 13px;
 					font-weight: 500;
+					display: inline-block;
+					margin-left: 20px;
+					margin-bottom: 11px;
 				}
 					.good-detail .b-block .detail-wrap .detail-price h5:hover {
 						text-decoration: none;
 					}
 				.good-detail .b-block .detail-wrap .detail-price h6 {
-					font-size: 12px;	
+					font-size: 13px;
 					font-weight: 500;
+					margin-left: 20px;
 				}
-				.good-detail .b-block .detail-wrap .detail-price h6 span{
-						padding-left: 17px;
+					.good-detail .b-block .detail-wrap .detail-price h6 span{
+						padding-left: 19px;
 						position: relative;
 					}
-					.good-detail .b-block .detail-wrap .detail-price h6 span:before {
-						position: absolute;
-						font-size: 0;
-						content: "";
-						width: 14px;
-						height: 14px;
-						left: -1px;
-						top: -3px;
-						background-position: -25px -99px;
+					.good-detail .b-block .detail-wrap .detail-price h6 span.deliv{
+						padding-left: 22px;
 					}
+						.good-detail .b-block .detail-wrap .detail-price h6 span:before {
+							position: absolute;
+							font-size: 0;
+							content: "";
+							width: 14px;
+							height: 15px;
+							left: 0px;
+							top: -1px;
+							background-position: -25px -99px;
+						}
+						.good-detail .b-block .detail-wrap .detail-price h6 span.deliv:before{
+							background-position: -40px -97px;
+							width: 19px;
+						}
 		.good-detail .b-block .main-tabs {
 			margin-bottom: 25px;
 		}	
@@ -1888,6 +1908,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 					padding: 12px 0 10px;
 					text-transform: uppercase;
 					font-weight: 500;
+					color: #414141;
 				}
 				.good-detail .b-block .main-tabs .desc-tabs li.ui-state-active {
 					margin-top: 2px;
@@ -2252,25 +2273,25 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 		background-position: -46px -38px !important;
 	}
 	.b-filters .b-block .filter-cont .tire-type label:before {
-	    background-position: -34px -1px;
+	    background-position: 119px -1px;
 	}
 	.b-filters .b-block .filter-cont .tire-type label:nth-child(2):before {
-	    background-position: 41px -2px;
+		background-position: -34px -1px;
 	}
 	.b-filters .b-block .filter-cont .tire-type label:nth-child(3):before {
-	    background-position: 119px -1px;
+		background-position: 41px -2px;
 	}
 	.b-filters .b-block .filter-cont .filter-item .input:before {
 	    background-position: -99px -98px;
 	}
 	.tire-type label.active:before{
-		background-position: -1px -1px !important;
+		background-position: 155px -1px !important;
 	}
 	.tire-type label:nth-child(2).active:before{
-		background-position: 83px -2px !important;
+		background-position: -1px -1px !important;
 	}
 	.tire-type label:nth-child(3).active:before{
-		background-position: 155px -1px !important;
+		background-position: 83px -2px !important;
 	}
 
 	.b-header .b-header-main,
@@ -2322,7 +2343,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 		background-position: -181px -98px;
 	}
 	.good-detail .b-block .detail-wrap .detail-price h6 span:before{
-		background-position: -23px -98px;
+		background-position: -23px -97px;
 		left: 1px;
 		top: -2px;
 	}
@@ -2352,6 +2373,21 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 	    background-position: -194px -62px;
 	    width: 25px;
 	    height: 25px;
+	}
+	.good-detail .b-block .detail-wrap .detail-price h6 span.deliv:before{
+		background-position: -39px -96px;
+		width: 19px;
+		top: -1px;
+	}
+	.b-category .b-block .grey-block .filter-block .tire-type label:before{
+		background-position: 119px -1px;
+		width: 35px;
+	}
+	.b-category .b-block .grey-block .filter-block .tire-type label:nth-child(2):before{
+
+	background-position: -34px -1px;}
+	.b-category .b-block .grey-block .filter-block .tire-type label:nth-child(3):before{
+		background-position: 41px -2px;
 	}
 }
 

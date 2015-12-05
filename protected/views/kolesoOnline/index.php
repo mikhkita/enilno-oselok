@@ -7,12 +7,12 @@
                 <p>Только в нашем магазине вы найдете именно те колеса, которые вам нужны.</p>
             </div>
         </div>
-        <div class="slide" style="background-image: url('<?php echo Yii::app()->request->baseUrl; ?>/html/i/back-main.jpg');">
+       <!--  <div class="slide" style="background-image: url('<?php echo Yii::app()->request->baseUrl; ?>/html/i/back-main.jpg');">
             <div class="b-block">
                 <h2>Широкий ассортимент</h2>
                 <p>Только в нашем магазине вы найдете именно те колеса, которые вам нужны.</p>
             </div>
-        </div>
+        </div> -->
     </div>
     <div class="b b-filters">
         <div class="b-block gradient-grey main-tabs">
@@ -195,15 +195,14 @@
                 <div class="gradient-grey">
                     <h3>Категории товаров</h3>
                     <ul>
-                        <li><a href="<?=Yii::app()->createUrl('/kolesoonline/category',array('type' => 2))?>"><span class="disc-icon icon">Диски</span></a></li>
-                        <li><a href="<?=Yii::app()->createUrl('/kolesoonline/category',array('type' => 1))?>"><span class="tire-icon icon">Шины</span></a></li>
+                        <li><a href="<?=Yii::app()->createUrl('/kolesoOnline/category',array('type' => 2))?>"><span class="disc-icon icon">Диски</span></a></li>
+                        <li><a href="<?=Yii::app()->createUrl('/kolesoOnline/category',array('type' => 1))?>"><span class="tire-icon icon">Шины</span></a></li>
                         <!-- <li><a href="#"><span class="wheel-icon icon">Колеса</span></a></li> -->
                     </ul>
                 </div>
                 <div class="gradient-grey">
                     <h3>О нас</h3>
-                    <p>Этот магазин сделан специально для оптимального выбора шин, дисков и других аксессуаров для вашего автомобиля.
-                    <p>Удобство выбора и простота оформления покупки - вот два простых принципа, которые делают наш магазин лучшим.</p>
+                    <p>Лучший выбор автомобильных б/у шин и дисков из Японии. Удобный поиск и выгодные цены, а самое главное честное описание и фото. Мы постоянно работаем над расширением географии наших представительств на территории РФ, что бы доставить товар в максимально короткие сроки и предоставить возможность оплатить покупку удобным для Вас способом.</p>
                 </div>
             </div>
             <div class="popular-good right main-tabs">

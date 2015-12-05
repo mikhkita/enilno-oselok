@@ -77,7 +77,7 @@
             </div>
             <div class="right good-list">
                 <ul class="navigation clearfix">
-                    <li><a href="<?=Yii::app()->createUrl('/kolesoonline')?>"></a></li>
+                    <li><a href="<?=Yii::app()->createUrl('/kolesoOnline')?>"></a></li>
                     <!-- <li><a href="#">Каталог</a></li> -->
                     <li><a href="#"><?=$this->params[$_GET['type']]["NAME"]?></a></li>
                 </ul>

@@ -53,7 +53,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
                     <!-- <li><a href="#">О магазине</a></li> -->
                     <!-- <li><a href="#">Доставка и оплата</a></li> -->
                     <!-- <li><a href="#">Гарантия</a></li> -->
-                    <li><a href="<?=Yii::app()->createUrl('/kolesoonline/contacts')?>">Контакты</a></li>
+                    <li><a href="<?=Yii::app()->createUrl('/kolesoOnline/contacts')?>">Контакты</a></li>
                 </ul>
                 <div class="clearfix b-mobile-top-line mobile-only">
                     <h2 class="left">Вы находитесь в г. <a href="#" class="icon"><?=$_SESSION['city']['name']?></a></h2>
@@ -66,7 +66,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
                 <span class="stamp"></span>
                 <div class="left">
                     <div class="clearfix">
-                        <a class="left b-main-logo" href="<?=Yii::app()->createUrl('/kolesoonline')?>"></a>
+                        <a class="left b-main-logo" href="<?=Yii::app()->createUrl('/kolesoOnline')?>"></a>
                         <div class="right">
                             <h1>Колесо<span>онлайн</span></h1>
                             <h2>Вы находитесь в г. <a href="#" class="fancy" data-block="#b-popup-city"><?=$_SESSION['city']['name']?></a></h2>
@@ -75,8 +75,8 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
                 </div>
                 <div class="right">
                     <div class="clearfix contacts">
-                        <a href="#" class="fancy left" data-block="#b-popup-callback">+7 (999) 321-11-22</a>
-                        <a href="mailto:koleso@yandex.ru" class="left mail">koleso@yandex.ru</a>
+                        <a href="callto:+79095430402" class="fancy left" data-block="#b-popup-callback">+7 (909) 543-04-02</a>
+                        <a href="mailto:kolesotomskru@mail.ru" class="left mail">kolesotomskru@mail.ru</a>
                     </div>
                     <form action="#" method="GET">
                         <input type="text" name="search" placeholder="Поиск">
@@ -90,8 +90,8 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
             <div class="b-block clearfix">
                 <a href="#" class="b-burger icon left"></a>
                 <ul class="clearfix left">
-                    <li><a href="<?=Yii::app()->createUrl('/kolesoonline/category',array('type' => 2))?>">Диски</a></li>
-                    <li><a href="<?=Yii::app()->createUrl('/kolesoonline/category',array('type' => 1))?>">Шины</a></li>
+                    <li><a href="<?=Yii::app()->createUrl('/kolesoOnline/category',array('type' => 2))?>">Диски</a></li>
+                    <li><a href="<?=Yii::app()->createUrl('/kolesoOnline/category',array('type' => 1))?>">Шины</a></li>
                     <!-- <li><a href="#">Колеса</a></li> -->
                 </ul>
             </div>
@@ -113,27 +113,26 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
                 <ul class="sections clearfix">
                     <li>
                         <h3>О магазине</h3>
-                        <a href="<?=Yii::app()->createUrl('/kolesoonline')?>" class="footer-logo clearfix">
+                        <a href="<?=Yii::app()->createUrl('/kolesoOnline')?>" class="footer-logo clearfix">
                             <span class="b-footer-logo"></span>
                         </a>
-                        <p>Этот магазин сделан специально для оптимального выбора шин, дисков и других аксессуаров для вашего автомобиля.</p>
-                        <p>Удобство выбора и простота оформления покупки - вот это очень хорошо.</p>
+                        <p>Лучший выбор автомобильных б/у шин и дисков из Японии. Удобный поиск и выгодные цены, а самое главное честное описание и фото. Мы постоянно работаем над расширением географии наших представительств на территории РФ.</p>
                     </li>
                     <li>
                         <h3>Разделы</h3>
                         <ul>
-                            <li><a href="#">Шины</a></li>
-                            <li><a href="#">Диски</a></li>
+                            <li><a href="<?=Yii::app()->createUrl('/kolesoOnline/category',array('type' => 2))?>">Диски</a></li>
+                            <li><a href="<?=Yii::app()->createUrl('/kolesoOnline/category',array('type' => 1))?>">Шины</a></li>
                             <!-- <li><a href="#">Колеса</a></li> -->
-                            <li><a href="#">Контакты</a></li>
+                            <li><a href="<?=Yii::app()->createUrl('/kolesoOnline/contacts')?>">Контакты</a></li>
                             <!-- <li><a href="#">Оплата и доставка</a></li> -->
                             <!-- <li><a href="#">Гарантия</a></li> -->
                         </ul>
                     </li>
                     <li>
                         <h3>Контактная информация</h3>
-                        <a class="footer-contacts mail" href="mailto:koleso@yandex.ru">koleso@yandex.ru</a>
-                        <a class="footer-contacts phone" href="callto:+79993211122">+7-(999)-321-11-22</a>
+                        <a class="footer-contacts mail" href="mailto:kolesotomskru@mail.ru">kolesotomskru@mail.ru</a>
+                        <a class="footer-contacts phone" href="callto:+79095430402">+7 (909) 543-04-02</a>
                         <span class="footer-contacts map">г. Красноярск, ул. Вавилова, 1а</span>
                         <div class="social">
                             <h3>Присоединяйтесь к нам</h3>
@@ -152,7 +151,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
         <div class="b-footer-sub">
             <div class="b-block clearfix">
                 <h3 class="left">© 2015 Колесо Онлайн</h3>
-                <h3 class="right">Разработано в <a href="#">True Media</a></h3>
+                <!-- <h3 class="right">Разработано в <a href="#">True Media</a></h3> -->
             </div>
         </div>
     </div>
@@ -161,7 +160,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
         <div class="for_all b-popup-small">
             <h3>Заказать звонок</h3>
             <h4>Или оставьте заявку и мы Вам перезвоним в ближайшее время:</h4>
-            <form action="kitsend.php" method="POST"  data-block="#b-popup-2">
+            <form action="<?=Yii::app()->createUrl('/kolesoOnline/mail/')?>" method="POST"  data-block="#b-popup-2">
                 <div class="b-popup-form">
                     <label for="name">Ваше имя</label>
                     <input type="text" name="name" required placeholder="Иван"/>
@@ -179,7 +178,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
             <h4>Для покупки позвоните по одному<br>из телефонов:</h4>
             <h5>+7 (913) 827 57-56<br>57-57-56</h5>
             <h4>Или оставьте заявку и мы Вам перезвоним в ближайшее время:</h4>
-            <form action="<?=Yii::app()->createUrl('/kolesoonline/mail/')?>" id="b-form-buy" method="POST" data-block="#b-popup-2">
+            <form action="<?=Yii::app()->createUrl('/kolesoOnline/mail/')?>" id="b-form-buy" method="POST" data-block="#b-popup-2">
                 <div class="b-popup-form">
                     <label for="name">Ваше имя</label>
                     <input type="text" name="name" required placeholder="Иван"/>
@@ -188,11 +187,10 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
 
                     <input type="hidden" name="good" id="good" required/>
                     <input type="hidden" name="good-url" id="good-url" required/>
-                    <!-- <input type="text" name="1" placeholder="Ваш регион" required/>
-                    <input type="hidden" name="1-name" value="Регион" /> -->
-                    <input type="hidden" name="2" value="<?=$_SERVER["REMOTE_ADDR"];?>" />
-                    <input type="hidden" name="2-name" value="IP-адрес" />
+                    <input type="hidden" name="1" value="<?=$_SERVER["REMOTE_ADDR"];?>" />
+                    <input type="hidden" name="1-name" value="IP-адрес" />
                     <input type="hidden" name="subject" value="Покупка с сайта" />
+                    <input type="submit" style="display:none;">
                 </div>
                 <a href="#" class="ajax b-orange-butt" onclick="$('#b-form-buy').submit(); return false;">Отправить</a>
                 <!-- <input type="submit" class="ajax b-orange-butt" value="Отправить"> -->

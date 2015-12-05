@@ -63,6 +63,7 @@ $(document).ready(function(){
 				if( $this.attr("data-afterShow") && customHandlers[$this.attr("data-afterShow")] ){
 					customHandlers[$this.attr("data-afterShow")]($this);
 				}
+				$('.fancybox-inner input[type="text"]').eq(0).focus();
 			},
 			beforeClose: function(){
 				if( $this.attr("data-beforeClose") && customHandlers[$this.attr("data-beforeClose")] ){
@@ -105,7 +106,7 @@ $(document).ready(function(){
 			  	data:  $this.serialize(),
 				success: function(msg){
 					var $form;
-					if( msg == "1" ){
+					if( msg.trim() == "1" ){
 						$form = $thanks;
 					}else{
 						$form = $("#b-popup-error");

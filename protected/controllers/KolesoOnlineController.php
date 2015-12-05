@@ -3,9 +3,9 @@
 class KolesoOnlineController extends Controller
 {
 	public $layout='//layouts/kolesoOnline';
-	public $title = "Колесо Онлайн - Б/у диски, шины из Японии";
-	public $description = "";
-	public $keywords = "";
+	public $title = "Колесо Онлайн - самый большой выбор б/у шин и дисков в России";
+	public $description = "Лучший выбор автомобильных б/у шин и дисков из Японии. Удобный поиск и выгодные цены, а самое главное честное описание и фото. Мы постоянно работаем над расширением географии наших представительств на территории РФ.";
+	public $keywords = "Лучший выбор автомобильных б/у шин и дисков из Японии. Удобный поиск и выгодные цены, а самое главное честное описание и фото. Мы постоянно работаем над расширением географии наших представительств на территории РФ.";
 	public $image = "";
 
 	public $params = array(
@@ -32,7 +32,7 @@ class KolesoOnlineController extends Controller
 				"AMOUNT" => array(
 					"ID" => 28,
 					"LABEL" => "Количество в комплекте",
-					"UNIT" => "шт."
+					"UNIT" => " шт."
 				),
 				"PROTECTOR" => array(
 					"ID" => 23,
@@ -42,7 +42,7 @@ class KolesoOnlineController extends Controller
 				"WEAR" => array(
 					"ID" => 29,
 					"LABEL" => "Износ",
-					"UNIT" => '%'
+					"UNIT" => ' %'
 				),
 				"DIAMETER" => array(
 					"ID" => 9,
@@ -52,12 +52,12 @@ class KolesoOnlineController extends Controller
 				"WIDTH" => array(
 					"ID" => 7,
 					"LABEL" => "Ширина профиля",
-					"UNIT" => 'мм.'
+					"UNIT" => ' мм.'
 				),
 				"HEIGHT" => array(
 					"ID" => 8,
 					"LABEL" => "Высота профиля",
-					"UNIT" => '%'
+					"UNIT" => ' %'
 				),
 				"REST" => array(
 					"ID" => 12,
@@ -102,45 +102,59 @@ class KolesoOnlineController extends Controller
 				// 27 => "Город"
 			),
 			"CATEGORY" => array(
+				"ID" => array(
+					"ID" => 3,
+					"LABEL" => "Артикул",
+					"UNIT" => ' '
+				),
 				"AMOUNT" => array(
 					"ID" => 28,
 					"LABEL" => "Количество в комплекте",
-					"UNIT" => "шт."
-				),
-				"DIAMETER" => array(
-					"ID" => 9,
-					"LABEL" => "Диаметр",
-					"UNIT" => '"'
-				),
-				"WIDTH" => array(
-					"ID" => 31,
-					"LABEL" => "Ширина диска",
-					"UNIT" => '"'
-				),
-				"VILET" => array(
-					"ID" => 32,
-					"LABEL" => "Вылет",
-					"UNIT" => 'мм.'
-				),
-				"DRILL" => array(
-					"ID" => 5,
-					"LABEL" => "Сверловка",
-					"UNIT" => ' '
+					"UNIT" => " шт."
 				),
 				"CONDITION" => array(
 					"ID" => 26,
 					"LABEL" => "Состояние товара",
 					"UNIT" => ' '
 				),
+				"DIAMETER" => array(
+					"ID" => 9,
+					"LABEL" => "Диаметр",
+					"UNIT" => '"'
+				),
+				"DRILL" => array(
+					"ID" => 117,
+					"LABEL" => "Сверловка",
+					"UNIT" => ' ',
+					"TYPE" => "INTER"
+				),
+				"WIDTH" => array(
+					"ID" => 120,
+					"LABEL" => "Ширина диска",
+					"UNIT" => '"',
+					"TYPE" => "INTER"
+				),
+				"VILET" => array(
+					"ID" => 121,
+					"LABEL" => "Вылет",
+					"UNIT" => ' мм.',
+					"TYPE" => "INTER"
+				),
 				"CENTER" => array(
 					"ID" => 33,
 					"LABEL" => "Центральное отверстие",
-					"UNIT" => 'мм.'
+					"UNIT" => ' мм.'
 				),
 				"YEAR" => array(
 					"ID" => 10,
 					"LABEL" => "Год выпуска",
 					"UNIT" => ' '
+				),
+				"COUNTRY" => array(
+					"ID" => 118,
+					"LABEL" => "Страна изготовитель",
+					"UNIT" => ' ',
+					"TYPE" => "INTER"
 				),
 				"LOCATION" => array(
 					"ID" => 27,
@@ -597,6 +611,8 @@ class KolesoOnlineController extends Controller
 
 			$imgs = $this->getImages($good);
 
+			$this->image = Yii::app()->getBaseUrl(true).$imgs[0];
+
 			$cities = $this->getCity();
 			
 			$dynamic = $this->getDynObjects(array(
@@ -648,10 +664,10 @@ class KolesoOnlineController extends Controller
 	public function actionMail(){
         require_once("phpmail.php");
 
-        $email_admin = $this->getParam("KolesoOnline","EMAILS");
+        $email_admin = $this->getParam("SHOP","EMAILS");
 
-        $from = "KolesoOnline";
-        $email_from = "robot@koleso.online";
+        $from = "Колесо Онлайн";
+        $email_from = "koleso@tomsk.ru";
 
         $deafult = array("name"=>"Имя","phone"=>"Телефон", "email"=>"E-mail");
 
@@ -677,7 +693,10 @@ class KolesoOnlineController extends Controller
                 $message .= "<div><p><b>".$key.": </b>".$value."</p></div>";
             }
 
-            $message .= "<div><p><b>Товар: </b><a target='_blank' href='".$_POST["good-url"]."'>".$_POST["good"]."</a></p></div>";
+            $message .= "<div><p><b>Город: </b>".( (isset($_SESSION['city']))?($_SESSION['city']['name']):("") )."</p></div>";
+
+            if( isset($_POST["good-url"]) )
+            	$message .= "<div><p><b>Товар: </b><a target='_blank' href='".$_POST["good-url"]."'>".$_POST["good"]."</a></p></div>";
                 
             $message .= "</div>";
             

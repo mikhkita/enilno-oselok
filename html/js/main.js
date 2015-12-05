@@ -366,8 +366,8 @@ $(document).ready(function(){
 
 
     $("body").on("click",".goods .gradient-grey:not(.b-orange-butt)",function(){
-        window.open($(this).attr("data-href"),'_blank');
-        // window.location.assign($(this).attr("data-href"));
+        // window.open($(this).attr("data-href"));
+        window.location.assign($(this).attr("data-href"));
     });
 
     $(".goods .gradient-grey .b-orange-butt").click(function(){
