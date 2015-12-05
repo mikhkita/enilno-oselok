@@ -246,9 +246,6 @@ class Good extends CActiveRecord
 				}
 			}
 
-		// $criteria->addCondition('good_type_id='.$options["good_type_id"].' AND fields.attribute_id=3','OR');
-		// $count++;
-
 		if( $count == 0 ){
 			$criteria->condition = 'good_type_id='.$options["good_type_id"].' AND fields.attribute_id=3';
 			$criteria->having = 'COUNT(DISTINCT fields.attribute_id)>='.$count;
@@ -269,23 +266,19 @@ class Good extends CActiveRecord
 
 		if( $attribute->list ){
 			$with = array('fields' => array('select'=> array('attribute_id')),"fields.variant"=> array('select' => array('sort')));
-			// $criteria->order = 'fields.attribute_id DESC';
 			$criteria->order = 'variant.sort '.$options["type"];
 		}else{
 			$with = array('fields' => array('select'=> array('variant_id','attribute_id','varchar_value')));
 			if( $attribute->type->code != "varchar" )
 				array_push($with["fields"]["select"],$attribute->type->code."_value");
-			$criteria->order = 'fields.'.$attribute->type->code.'_value '.$options["type"];
+			$criteria->order = 'fields.'.$attribute->type->code.'_value '.$options["type"].', fields.id '.$options["type"];
 		}
 
 		$criteria->select = "id";
 		$criteria->with = $with;
 		$criteria->together = true;
 		$criteria->group = 't.id';
-    	// $criteria->condition = 'fields.attribute_id='.$attribute->id.' OR fields.attribute_id=3';
     	$criteria->condition = 'fields.attribute_id='.$attribute->id;
-    	// $criteria->order = 'variant.sort '.$options["type"];
-        // $criteria->order = 'fields.varchar_value '.$options["type"];
 	    $criteria->addInCondition("t.id",$goods_id);
 
 		return $criteria;

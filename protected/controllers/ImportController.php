@@ -125,7 +125,7 @@ class ImportController extends Controller
 			$ids[] = $item->good_id;
 		}
 
-		$data = Good::model()->filter(
+		$data = Good::model()->with(array("type","fields.variant","fields.attribute"))->filter(
 			array(
 				"good_type_id"=>$good_type_id,
 			),
