@@ -5,7 +5,7 @@
 			<ul class="navigation clearfix">
 				<li><a href="<?=Yii::app()->createUrl('/kolesoOnline')?>"></a></li>
 				<!-- <li><a href="#">Каталог</a></li> -->
-				<li><a href="<? unset($_GET['id']); echo Yii::app()->createUrl('/kolesoOnline/category',$_GET)?>"><?=$this->params[$_GET['type']]["NAME"]?></a></li>
+				<li><a href="<? echo Yii::app()->createUrl('/kolesoOnline/category',array('type' => $_GET['type']))?>"><?=$this->params[$_GET['type']]["NAME"]?></a></li>
 				<li><a href="#"><?=$this->title?></a></li>
 			</ul>
 			<h3 class="category-title" id="buy-title"><?=$this->title?></h3>

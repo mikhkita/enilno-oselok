@@ -286,7 +286,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 					.b-header .b-menu .b-block ul li a {
 						font-size: 12px;
 						color: rgb(172, 171, 172);
-						padding: 7px 10px 10px;
+						padding: 8px 10px 9px;
 					}
 					.b-header .b-menu .b-block ul li:first-child a {
 						padding-left: 0;
@@ -2378,6 +2378,8 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 	.b-footer .b-footer-sub {
 		background-image: url("../i/back-menu@2x.jpg");
 		background-size: 22px;
+		border-bottom: 1px solid #17141B;
+		border-top: 1px solid #17141B;
 	}
 	.b-footer .b-footer-main .b-block .sections > li .social .social-icon .tw {
 		background-position: -71px -63px;

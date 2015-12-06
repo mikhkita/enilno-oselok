@@ -569,18 +569,16 @@ class IntegrateController extends Controller
         print_r($model);
     }
 // Выкладка -------------------------------------------------------------- Выкладка
-
-
     public function actionAdminIndex(){
-        // if (!is_dir(Yii::app()->params["imageFolder"]."/wheela")) mkdir(Yii::app()->params["imageFolder"]."/wheela",0777, true);
-        // $files = array_diff(scandir(Yii::app()->params["imageFolder"]."/wheel/8300"), array('.','..')); 
-        // foreach ($files as $file) { 
-        //   (is_dir(Yii::app()->params["imageFolder"]."/wheel/8300"."/$file")) ? delTree(Yii::app()->params["imageFolder"]."/wheel/8300"."/$file") : unlink(Yii::app()->params["imageFolder"]."/wheel/8300"."/$file"); 
-        // } 
-        // rmdir(Yii::app()->params["imageFolder"]."/wheel/8300");
-        // 
-        // $auction = Auction::model()->find(array("limit"=>1, "order"=>"date DESC"));
-        // // // print_r($auction);
-        // var_dump(Good::createFromAuction($auction));
+        $criteria = new CDbCriteria();
+        $criteria->with = array("type","fields.variant","fields.attribute");
+        $criteria->order = "field(t.id,6,3,2) DESC, t.id ASC";
+        $criteria->limit = 10000;
+
+        $goods = Good::model()->findAll($criteria);
+
+        foreach ($goods as $key => $good) {
+            echo $good->id."<br>";
+        }
     }
 }

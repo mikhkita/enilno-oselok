@@ -1,4 +1,3 @@
-
 <?
     $sort_arr = array("51" => "по цене", "9" => "по диаметру");
     if ($_GET['type'] == 1) {
@@ -9,7 +8,7 @@
         $sort_arr["31"] = "по ширине";
         $sort_arr["32"] = "по вылету";
     }
-    $sort_type = (isset($_GET['sort']) && isset($_GET['sort']['type']) && $_GET['sort']['type'] != "") ? $_GET['sort']['type'] : "ASC";
+    $sort_type = (isset($_SESSION['FILTER']['sort']) && isset($_SESSION['FILTER']['sort']['type']) && $_SESSION['FILTER']['sort']['type'] != "") ? $_SESSION['FILTER']['sort']['type'] : "ASC";
 ?>
 <?php $this->renderPartial('_header', array('cities' => $cities)); ?>
 <div class="b-content">
@@ -19,7 +18,7 @@
                 'id'=>'filter',
                 'action' => Yii::app()->createUrl('/kolesoOnline/category',array("type" => $_GET['type'])),
                 'enableAjaxValidation'=>false,
-                'method' => 'GET'
+                'method' => 'POST'
             )); ?>
             <div class="grey-block left">
                 <div class="gradient-grey">
@@ -31,7 +30,7 @@
                                     <? foreach ($col as $item): ?>     
                                         <label>
                                             <?=$item['value']?>
-                                            <input type="checkbox" name="arr[<?=$params[1]["SEASON"]?>][]" value="<?=$item['variant_id']?>">
+                                            <input type="checkbox" name="arr[<?=$params[1]["SEASON"]?>][]" value="<?=$item['variant_id']?>" <?=$item['checked']?>>
                                         </label>
                                     <? endforeach; ?>
                                 <? endforeach; ?>
@@ -65,7 +64,7 @@
                             <span class="dash">-</span>
                             <input class="max-val price" type="text" maxlength="6" name="int[51][max]" placeholder="Макс.">
                             <div class="slider-range-cont">
-                                <div data-min-cur="<?=$_GET['int'][51]['min']?>" data-min="<?=$params[$_GET['type']]['PRICE_MIN']?>" data-max-cur="<?=$_GET['int'][51]['max']?>" data-max="<?=$params[$_GET['type']]['PRICE_MAX']?>" data-step="100" class="slider-range"></div>
+                                <div data-min-cur="<?=$_SESSION['FILTER']['int'][51]['min']?>" data-min="<?=$params[$_GET['type']]['PRICE_MIN']?>" data-max-cur="<?=$_SESSION['FILTER']['int'][51]['max']?>" data-max="<?=$params[$_GET['type']]['PRICE_MAX']?>" data-step="100" class="slider-range"></div>
                             </div>
                         </div>  
                         <div class="filter-butt-cont">
@@ -88,7 +87,7 @@
                         <h4 class="left">Сортировать по:</h4>
                         <ul class="left clearfix">
                             <? foreach ($sort_arr as $key => $value): ?>
-                            <? if(isset($_GET['sort']['field']) && $_GET['sort']['field']==$key): ?>
+                            <? if(isset($_SESSION['FILTER']['sort']['field']) && $_SESSION['FILTER']['sort']['field']==$key): ?>
                                     <li class="active <? if($sort_type =='DESC') echo 'up'; ?>">
                                     <?=$value?>
                                     <input type="radio" name="sort[field]" value="<?=$key?>" checked>
