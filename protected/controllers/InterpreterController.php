@@ -135,14 +135,16 @@ class InterpreterController extends Controller
 			)
 		)->sort( 
 			array(
-				"field" => "rand()",
-				"type" => ""
+				"field" => 3,
+				"type" => "DESC"
 			)
 		)->getPage(
 			array(
-		    	'pageSize'=>30,
-		    ),
+		    	'pageSize'=>100,
+		    )
 		);
+
+		$model = $model["items"];
         
         $criteria = new CDbCriteria();
 		$criteria->with = array("goodTypes","variants.variant"=>array("order"=>"variant.sort ASC"));

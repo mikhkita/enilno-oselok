@@ -5,7 +5,7 @@
 </div>
 <div class="b-buttons-right">
 	<a href="#" onclick="$('form').submit(); return false;" class="b-butt">Экспортировать</a>
-	<p class="b-show-count">Показано: <span><?=count($data->goods)?></span></p>
+	<p class="b-show-count">Показано: <span><?=count($goods)?></span></p>
 </div>
 <?php $form=$this->beginWidget('CActiveForm',array("action"=>$this->createUrl('/export/adminexport',array('id'=>$id)))); ?>
 	<table class="b-table b-export-preview" border="1">
@@ -30,8 +30,8 @@
 			</tr>
 		</thead>
 		<tbody id="target">
-			<? if( count($data->goods) ): ?>
-				<? foreach ($data->goods as $i => $item): ?>
+			<? if( count($goods) ): ?>
+				<? foreach ($goods as $i => $item): ?>
 					<? 
 						$attr = $item->fields_assoc;
 						$attr = $attr + $dynObjects;

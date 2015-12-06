@@ -249,6 +249,7 @@ class Good extends GoodFilter
 
 		$criteria = new CDbCriteria();
 	    $criteria->addInCondition("t.id", $this->ids );
+	    $criteria->with = "type";
 	    if( count($this->ids) )
 	    	$criteria->order = "field(t.id,".implode(",", array_reverse($this->ids)).") DESC, t.id DESC";
 
