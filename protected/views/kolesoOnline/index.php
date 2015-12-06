@@ -26,7 +26,7 @@
                     'id'=>'filter',
                     'action' => Yii::app()->createUrl('/kolesoOnline/category',array("type" => 2)),
                     'enableAjaxValidation'=>false,
-                    'method' => 'POST'
+                    'method' => 'GET'
                 )); ?>
                     <!-- <div class="filter-cont">
                         <div class="tire-type clearfix">    
@@ -69,7 +69,7 @@
                                 <input class="max-val price" type="text" maxlength="6" name="int[20][max]" placeholder="Макс.">
                             </div>
                             <div class="slider-range-cont">
-                                <div data-min="<?=$params[2]['PRICE_MIN']?>" data-max="<?=$params[2]['PRICE_MAX']?>" data-step="100" class="slider-range left"></div>
+                                <div data-min-cur="<?=$_SESSION['FILTER'][2]['int'][20]['min']?>" data-min="<?=$params[2]['PRICE_MIN']?>" data-max-cur="<?=$_SESSION['FILTER'][2]['int'][20]['max']?>" data-max="<?=$params[2]['PRICE_MAX']?>" data-step="100" class="slider-range left"></div>
                             </div>
                         </div>  
                     </div>
@@ -83,7 +83,7 @@
                     'id'=>'filter',
                     'action' => Yii::app()->createUrl('/kolesoOnline/category',array("type" => 1)),
                     'enableAjaxValidation'=>false,
-                    'method' => 'POST'
+                    'method' => 'GET'
                 )); ?>
                     <div class="filter-cont">
                         <div class="tire-type clearfix">    
@@ -132,7 +132,7 @@
                                 <input class="max-val price" type="text" maxlength="6" name="int[20][max]" placeholder="Макс.">
                             </div>
                             <div class="slider-range-cont">
-                                <div data-min-cur="<?=$params[1]['PRICE_MIN']?>" data-min="<?=$params[1]['PRICE_MIN']?>" data-max-cur="<?=$params[1]['PRICE_MAX']?>" data-max="<?=$params[1]['PRICE_MAX']?>" data-step="100" class="slider-range left"></div>
+                                <div data-min-cur="<?=$_SESSION['FILTER'][1]['int'][20]['min']?>" data-min="<?=$params[1]['PRICE_MIN']?>" data-max-cur="<?=$_SESSION['FILTER'][1]['int'][20]['max']?>" data-max="<?=$params[1]['PRICE_MAX']?>" data-step="100" class="slider-range left"></div>
                             </div>
                         </div>  
                     </div>
