@@ -577,8 +577,7 @@ class IntegrateController extends Controller
 
         $goods = Good::model()->findAll($criteria);
 
-        foreach ($goods as $key => $good) {
+        foreach ($goods as $key => $good)
             echo $good->id."<br>";
-        }
     }
 }

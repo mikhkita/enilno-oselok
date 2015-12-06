@@ -64,9 +64,9 @@
                         <div class="slide-type clearfix">
                             <div class="left">
                                 <h3>Ценовой диапазон <span>от</span></h3>
-                               <input class="min-val price" type="text" maxlength="6" name="int[51][min]" placeholder="Мин.">
+                               <input class="min-val price" type="text" maxlength="6" name="int[20][min]" placeholder="Мин.">
                                 <span class="dash">до</span>
-                                <input class="max-val price" type="text" maxlength="6" name="int[51][max]" placeholder="Макс.">
+                                <input class="max-val price" type="text" maxlength="6" name="int[20][max]" placeholder="Макс.">
                             </div>
                             <div class="slider-range-cont">
                                 <div data-min="<?=$params[2]['PRICE_MIN']?>" data-max="<?=$params[2]['PRICE_MAX']?>" data-step="100" class="slider-range left"></div>
@@ -127,9 +127,9 @@
                         <div class="slide-type clearfix">
                             <div class="left">
                                 <h3>Ценовой диапазон <span>от</span></h3>
-                                <input class="min-val price" type="text" maxlength="6" name="int[51][min]" placeholder="Мин.">
+                                <input class="min-val price" type="text" maxlength="6" name="int[20][min]" placeholder="Мин.">
                                 <span class="dash">до</span>
-                                <input class="max-val price" type="text" maxlength="6" name="int[51][max]" placeholder="Макс.">
+                                <input class="max-val price" type="text" maxlength="6" name="int[20][max]" placeholder="Макс.">
                             </div>
                             <div class="slider-range-cont">
                                 <div data-min-cur="<?=$params[1]['PRICE_MIN']?>" data-min="<?=$params[1]['PRICE_MIN']?>" data-max-cur="<?=$params[1]['PRICE_MAX']?>" data-max="<?=$params[1]['PRICE_MAX']?>" data-step="100" class="slider-range left"></div>

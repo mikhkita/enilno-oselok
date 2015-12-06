@@ -332,7 +332,7 @@ class KolesoOnlineController extends Controller
 
 		$criteria=new CDbCriteria();
 		$criteria->with = array('good' => array('select'=> false));
-        $criteria->condition = 'attribute_id=51 AND good.good_type_id='.$type;
+        $criteria->condition = 'attribute_id=20 AND good.good_type_id='.$type;
         $criteria->select = array('int_value');
         $criteria->order = 'int_value ASC';
 
@@ -341,11 +341,11 @@ class KolesoOnlineController extends Controller
 		$this->params[$type]["PRICE_MAX"] = array_pop($model)->int_value;
 
 		if(isset($_SESSION["FILTER"]["int"])) {
-			if($_SESSION["FILTER"]["int"][51]["min"] == "") {
-				$_SESSION["FILTER"]["int"][51]["min"] = $this->params[$_GET['type']]["PRICE_MIN"];
+			if($_SESSION["FILTER"]["int"][20]["min"] == "") {
+				$_SESSION["FILTER"]["int"][20]["min"] = $this->params[$_GET['type']]["PRICE_MIN"];
 			}
-			if($_POST["int"][51]["max"] == "") {
-				$_SESSION["FILTER"]["int"][51]["max"] = $this->params[$_GET['type']]["PRICE_MAX"];
+			if($_SESSION["FILTER"]["int"][20]["max"] == "") {
+				$_SESSION["FILTER"]["int"][20]["max"] = $this->params[$_GET['type']]["PRICE_MAX"];
 			}
 		}
 

@@ -1,5 +1,5 @@
 <?
-    $sort_arr = array("51" => "по цене", "9" => "по диаметру");
+    $sort_arr = array("20" => "по цене", "9" => "по диаметру");
     if ($_GET['type'] == 1) {
         $sort_arr["7"] = "по ширине";
         $sort_arr["8"] = "по профилю";
@@ -60,11 +60,11 @@
                         <? endforeach; ?>
                         <h5>Ценовой диапазон</h5>
                         <div class="slide-type">
-                            <input class="min-val price" type="text" maxlength="6" name="int[51][min]" placeholder="Мин.">
+                            <input class="min-val price" type="text" maxlength="6" name="int[20][min]" placeholder="Мин.">
                             <span class="dash">-</span>
-                            <input class="max-val price" type="text" maxlength="6" name="int[51][max]" placeholder="Макс.">
+                            <input class="max-val price" type="text" maxlength="6" name="int[20][max]" placeholder="Макс.">
                             <div class="slider-range-cont">
-                                <div data-min-cur="<?=$_SESSION['FILTER']['int'][51]['min']?>" data-min="<?=$params[$_GET['type']]['PRICE_MIN']?>" data-max-cur="<?=$_SESSION['FILTER']['int'][51]['max']?>" data-max="<?=$params[$_GET['type']]['PRICE_MAX']?>" data-step="100" class="slider-range"></div>
+                                <div data-min-cur="<?=$_SESSION['FILTER']['int'][20]['min']?>" data-min="<?=$params[$_GET['type']]['PRICE_MIN']?>" data-max-cur="<?=$_SESSION['FILTER']['int'][20]['max']?>" data-max="<?=$params[$_GET['type']]['PRICE_MAX']?>" data-step="100" class="slider-range"></div>
                             </div>
                         </div>  
                         <div class="filter-butt-cont">
