@@ -125,11 +125,10 @@ class ImportController extends Controller
 			$ids[] = $item->good_id;
 		}
 
-		$data = Good::model()->with(array("type","fields.variant","fields.attribute"))->filter(
+		$data = Good::model()->filter(
 			array(
 				"good_type_id"=>$good_type_id,
-			),
-			$ids
+			)
 		)->getPage(
 			array(
 		    	'pageSize'=>100000,

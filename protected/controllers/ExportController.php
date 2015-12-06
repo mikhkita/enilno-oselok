@@ -234,7 +234,17 @@ class ExportController extends Controller
 
 		if( $id ){
 			$export = Export::model()->with('fields.attribute','interpreters.interpreter')->findByPk($id);
-			$GoodType = GoodType::model()->with('goods.fields.variant','goods.fields.attribute')->findByPk($export->good_type_id);
+			$GoodType = GoodType::model()->findByPk($export->good_type_id);
+			$goods = Good::model()->filter(
+				array(
+					"good_type_id"=>$export->good_type_id,
+				)
+			)->getPage(
+				array(
+			    	'pageSize'=>10000,
+			    )
+			);
+			$goods = $goods["items"];
 		}
 
 		$dynObjects = array();
@@ -251,7 +261,7 @@ class ExportController extends Controller
 			if( $value->attribute->list && !$value->attribute->dynamic ){
 				$variants = array();
 
-				foreach ($GoodType->goods as $good) {
+				foreach ($goods as $good) {
 					if( isset($good->fields_assoc[$value->attribute->id]) ){
 						$obj = $good->fields_assoc[$value->attribute->id];
 						if( is_array($obj) ){
@@ -282,6 +292,7 @@ class ExportController extends Controller
 		$this->render('adminPreview',array(
 			'id' => $id,
 			'data'=>$GoodType,
+			'goods'=>$goods,
 			'fields' => $arr,
 			'name'=>$export->name,
 			'dynObjects'=>$dynObjects,
@@ -294,7 +305,18 @@ class ExportController extends Controller
 			throw new CHttpException(500,"Не выбран ни один товар");
 
 		$export = Export::model()->with('fields.attribute','interpreters.interpreter')->findByPk($id);
-		$goods = Good::model()->with('fields.attribute')->findAllByPk(explode(",",$_POST["ids"]));
+
+		$goods = Good::model()->filter(
+			array(
+				"good_type_id"=>$export->good_type_id,
+			),
+			explode(",",$_POST["ids"])
+		)->getPage(
+			array(
+		    	'pageSize'=>10000,
+		    )
+		);
+		$goods = $goods["items"];
 
 		$fields = array();
 		$excel = array();
