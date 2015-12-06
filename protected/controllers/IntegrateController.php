@@ -435,10 +435,8 @@ class IntegrateController extends Controller
     }
 
     public function getNext($category_id){
-        // Log::debug("Start");
-        // echo time();
         $queue = Queue::getNext($category_id);
-        // return true;
+
         if( !$queue ) return false;
         $advert = $queue->advert;
 
@@ -452,10 +450,19 @@ class IntegrateController extends Controller
             37 => $advert->type_id
         ));
 
-        $fields = Place::getValues(Place::getInters($advert->place->category_id,$advert->good->type->id),$advert->good,$dynamic);
+        $unique = Place::getInters($advert->place->category_id,$advert->good->type->id,true);
+        $fields = Place::getValues(Place::getInters($advert->place->category_id,$advert->good->type->id),$advert,$dynamic);
 
-        // print_r($fields);
+        // var_dump($unique);
+        // var_dump($fields);
         // die();
+
+        if( $place_name == "AVITO" ){
+            if( $fields["title"] == "not unique" ) $queue->setState("titleNotUnique");
+            if( $fields["description"] == "not unique" ) $queue->setState("textNotUnique");
+
+            if( $fields["title"] == "not unique" || $fields["description"] == "not unique" )return true;
+        }
 
         $images = $this->getImages($advert->good);
         if( $place_name == "DROM" ){
@@ -477,14 +484,9 @@ class IntegrateController extends Controller
         }
 
         $fields = $place->generateFields($fields,$advert->good->good_type_id);
-
-        // var_dump($fields);
         
         $place->setUser($account->login, $account->password);
         $res = $place->auth();
-
-        // print_r($res);
-        // die();
         
         switch ($queue->action->code) {
             case 'delete':
@@ -502,7 +504,6 @@ class IntegrateController extends Controller
                 if( $result )
                     $advert->setUrl($result);
 
-                // var_dump($result);
                 break;
             case 'update':
 
@@ -525,6 +526,14 @@ class IntegrateController extends Controller
         }
 
         if( $result ){
+            if( $place_name == "AVITO" ){
+                $unique_arr = array();
+                foreach ($unique as $i => $u)
+                    $unique_arr[$u] = $fields[$i];
+
+                $advert->replaceUnique($unique_arr);
+            }
+
             Log::debug("Действие над ".$advert->good->fields_assoc[3]->value." в аккаунте ".$account->login." прошло успешно");
             $queue->delete();
         }else{
@@ -533,7 +542,6 @@ class IntegrateController extends Controller
         }
 
         $place->curl->removeCookies();
-        // Log::debug("End");
         return true;
     }
 

@@ -112,31 +112,32 @@ class Place extends CActiveRecord
 		));
 	}
 
-	public function getInters($category_id,$good_type_id)
+	public function getInters($category_id,$good_type_id,$unique = false)
 	{
-		$model = Place::model()->with("interpreters")->find("category_id=$category_id AND good_type_id=$good_type_id");
+		$model = Place::model()->with("interpreters.interpreter")->find("t.category_id=$category_id AND t.good_type_id=$good_type_id");
 
 		if( $model ){
 			$fields = array();
 
 			if( isset($model->interpreters) && count($model->interpreters) )
-				foreach ($model->interpreters as $inter)
-					$fields[$inter->code] = $inter->interpreter_id;
-
+				foreach ($model->interpreters as $inter){
+					if( !$unique || $inter->interpreter->unique )
+						$fields[$inter->code] = $inter->interpreter_id;
+				}
 			return $fields;
 		}
 
 		return NULL;
 	}
 
-	public function getValues($inters, $model, $dynObjects = NULL){
+	public function getValues($inters, $advert, $dynObjects = NULL){
 		if( $inters === NULL ){
 			return Log::error("Пустой inters");
 		}
 
 		$out = $inters;
 		foreach ($out as $code => $inter_id)
-			$out[$code] = Interpreter::generate($inter_id, $model, $dynObjects);
+			$out[$code] = Interpreter::generate($inter_id, $advert->good, $dynObjects, $advert->id);
 
 		return $out;
 	}

@@ -139,6 +139,19 @@ class Advert extends CActiveRecord
 		}
 	}
 
+	public function replaceUnique($array){
+		Unique::model()->deleteAll("advert_id=".$this->id);
+
+		$values = array();
+		foreach ($array as $interpreter_id => $value){
+			$unique = new Unique();
+			$unique->advert_id = $this->id;
+			$unique->interpreter_id = $interpreter_id;
+			$unique->value = $value;
+			$unique->save();
+		}
+	}
+
 	public function getAdverts($params,$with = NULL,$select = NULL){
 
 		$good_type_id = array();

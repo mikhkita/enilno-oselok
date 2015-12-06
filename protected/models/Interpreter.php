@@ -156,24 +156,24 @@ class Interpreter extends CActiveRecord
     public function generateUnique($interpreter_id, $model, $dynObjects = NULL, $advert_id = 0){
     	$uniq = 1;
     	while($uniq <= 10){
-    		$result = $this->generate($interpreter_id, $model, $dynObjects, $uniq);
-    		if( $this->isNotIsset($interpreter_id, $result, $advert_id) ) return $result;
+    		$result = Interpreter::generate($interpreter_id, $model, $dynObjects, 0, $uniq);
+    		if( Interpreter::isNotIsset($interpreter_id, $result, $advert_id) ) return $result;
     		$uniq++;
     	}
     	return "not unique";
     }
 
     public function isNotIsset($interpreter_id, $result, $advert_id = 0){
-    	return ( Uniq::model()->count("value='".stripslashes($result)."' AND interpreter_id=$interpreter_id AND advert_id!=$advert_id") )?false:true;
+    	return ( Unique::model()->count("value='".stripslashes($result)."' AND interpreter_id=$interpreter_id AND advert_id!=$advert_id") )?false:true;
     }
 
-    public function generate($interpreter_id, $model, $dynObjects = NULL, $uniq = NULL, $advert_id = 0){
+    public function generate($interpreter_id, $model, $dynObjects = NULL, $advert_id = 0, $uniq = NULL){
     	$attributes = (isset($model->fields_assoc))?$model->fields_assoc:$model;
     	if( $dynObjects !== NULL ) $attributes = $attributes + $dynObjects;
 
     	if( isset($this->interpreters[(string)$interpreter_id]) ){
     		if( $this->interpreters[(string)$interpreter_id]->unique && $uniq === NULL )
-    			return $this->generateUnique($interpreter_id, $model, $dynObjects, $advert_id);
+    			return Interpreter::generateUnique($interpreter_id, $model, $dynObjects, $advert_id);
 
     		if( $this->interpreters[(string)$interpreter_id]->good_type_id == $model->good_type_id ){
     			$template = $this->interpreters[(string)$interpreter_id]->template;

@@ -22,7 +22,10 @@ class Queue extends CActiveRecord
 	public $states = array(
 		"waiting" => 1,
 		"processing" => 2,
-		"error" => 3
+		"error" => 3,
+		"freeze" => 4,
+		"titleNotUnique" => 5,
+		"textNotUnique" => 6,
 	);
 
 	/**
@@ -212,9 +215,9 @@ class Queue extends CActiveRecord
 	}
 
 	public function getNext($category_id){
-		$queue = Queue::model()->with("advert.good.type","advert.place","action")->nextStart()->find("place.category_id=$category_id");
+		$queue = Queue::model()->with(array("advert.good.type","advert.place","action"))->nextStart()->find("place.category_id=$category_id");
 		if( !count($queue) ){
-			$queue = Queue::model()->with("advert.good.type","advert.place","action")->next()->find("place.category_id=$category_id");
+			$queue = Queue::model()->with(array("advert.good.type","advert.place","action"))->next()->find("place.category_id=$category_id");
 		}
 		return $queue;
 	}

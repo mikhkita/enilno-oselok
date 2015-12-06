@@ -30,6 +30,15 @@ class QueueController extends Controller
 	public function actionAdminStart($category_id = 2047){
 		$this->setParam( Place::model()->categories[$category_id], "TOGGLE", "on" );
 		$this->setParam( Place::model()->categories[$category_id], "TIME", "0" );
+
+		$queue = Queue::model()->with("advert.place")->nextStart()->find("place.category_id=$category_id");
+		if( count($queue) ){
+			$razn = time() - strtotime($queue->start);
+
+			$tableName = Queue::tableName();
+			$sql = "UPDATE `$tableName` SET start = start + INTERVAL $razn SECOND";
+			Yii::app()->db->createCommand($sql)->execute();
+		}
 	}
 
 	public function actionAdminStop($category_id = 2047){
