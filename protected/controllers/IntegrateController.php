@@ -570,14 +570,63 @@ class IntegrateController extends Controller
     }
 // Выкладка -------------------------------------------------------------- Выкладка
     public function actionAdminIndex(){
-        $criteria = new CDbCriteria();
-        $criteria->with = array("type","fields.variant","fields.attribute");
-        $criteria->order = "field(t.id,6,3,2) DESC, t.id ASC";
-        $criteria->limit = 10000;
+        $start = microtime(true);
 
-        $goods = Good::model()->findAll($criteria);
+        $filter_options = array(
+            "good_type_id" => 2,
+            "attributes" => array(
+                9 => array(1318,1319,1320,1321,1322,1323,1324),
+                5 => array(1384,1267,1269,1270,1473),
+                31 => array(1311,1312,1313,1314,1315,1316),
+            ),
+            "int_attributes" => array(
+                20 => array(
+                    "min" => 2000,
+                    "max" => 40000
+                )
+            )
+        );
+        $sort_options = array(
+            "field" => 11,
+            "type" => "ASC"
+        );
+        $page_options = array(
+            'pageSize'=>1300,
+        );
+        $goods = Good::model()->filter($filter_options)->sort($sort_options)->getPage($page_options, array(3,5,9,11), true)["items"];
 
-        foreach ($goods as $key => $good)
-            echo $good->id."<br>";
+        echo " ".count($goods);
+
+        // $criteria = new CDbCriteria();
+        // // $criteria->with = array("type","fields.variant","fields.attribute");
+        // $criteria->order = "field(good_id,6,3,2) DESC, good_id ASC";
+        // $criteria->limit = 10000;
+
+        // $goods = GoodAttributeFilter::model()->findAll($criteria);
+
+        // foreach ($goods as $key => $good)
+        //     echo $good->id."<br>";
+
+        list($queryCount, $queryTime) = Yii::app()->db->getStats();
+                    echo "Кол-во запросов: $queryCount, Общее время запросов: ".sprintf('%0.5f',$queryTime)."s";
+
+            echo "<br>".round(microtime(true) - $this->start,4);
+    }
+
+    public function actionAdminIndex2(){
+        $variants = Variant::model()->findAll();
+
+        $values = array();
+        foreach ($variants as $key => $variant) {
+            $value = ($variant->int_value === NULL)?( ($variant->float_value === NULL)?($variant->varchar_value):($variant->float_value) ):($variant->int_value);
+            array_push($values, array(
+                "id" => $variant->id,
+                "varchar_value" => $value,
+                "sort" => $variant->sort,
+            ));
+        }
+        Variant::model()->deleteAll();
+
+        $this->insertValues(Variant::tableName(),$values);
     }
 }

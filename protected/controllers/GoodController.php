@@ -344,15 +344,17 @@ class GoodController extends Controller
 				array(
 					"good_type_id"=>$goodTypeId,
 					"attributes"=>$filter_values,
-					"int_attributes"=>isset( $_POST[$int_attr_arr] )?$_POST[$int_attr_arr]:array(),
-					"price"=>isset($_POST['price'])?$_POST['price']:NULL
+					"int_attributes"=>isset( $_POST[$int_attr_arr] )?$_POST[$int_attr_arr]:array()
 				)
 			)->sort( 
 				$_POST['sort']
 			)->getPage(
 				array(
-			    	'pageSize'=>25,
-			    )
+			    	'pageSize'=>10000,
+			    ), 
+			    NULL,
+			    // array(3,5,9,11), 
+			    true
 			);
 		}
 

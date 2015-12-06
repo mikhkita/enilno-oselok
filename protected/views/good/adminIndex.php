@@ -36,11 +36,11 @@
 				<? foreach ($data as $i => $item): ?>
 					<tr>
 						<td><input type="checkbox" name="good_id" class="b-sess-checkbox" data-block="#b-sess-checkbox-list" <? if($item->isChecked()): ?>checked="checked"<? endif; ?> value="<?=$item->id?>"></td>
-						<td style="min-width: 135px;">
-							<? if($item->advertsCount()): ?>
-								<a href="<?php echo Yii::app()->createUrl('/good/adminadverts',array('id'=>$item->id,'goodTypeId'=> $_GET["goodTypeId"],'GoodFilter_page' => ($pages->currentPage+1)))?>" class="ajax-form ajax-update b-adverts-link b-tooltip" title="Объявления"><span class="advert-info"><?=$item->advertsCount()?> (<?=$item->advertsCount(true)?>)</span></a>
+						<td style="min-width: 135px;text-align: right;">
+							<? if($item->count_all_adverts): ?>
+								<a href="<?php echo Yii::app()->createUrl('/good/adminadverts',array('id'=>$item->id,'goodTypeId'=> $_GET["goodTypeId"],'GoodFilter_page' => ($pages->currentPage+1)))?>" class="ajax-form ajax-update b-adverts-link b-tooltip" title="Объявления"><span class="advert-info"><?=$item->count_all_adverts?> (<?=$item->count_url_adverts?>)</span></a>
 							<? else: ?>
-								<span class="advert-info b-tooltip" title="Нет объявлений"><?=$item->advertsCount()?> (<?=$item->advertsCount(true)?>)</span>
+								<span class="advert-info b-tooltip" title="Нет объявлений">0 (0)</span>
 							<? endif; ?>
 							<a href="<?php echo Yii::app()->createUrl('/good/adminupdateimages',array('id'=>$item->id))?>" class="ajax-photodoska b-tool b-tool-photo" title="Обновить фотографии"></a>
 							<a href="<?php echo Yii::app()->createUrl('/good/adminupdate',array('id'=>$item->id,'goodTypeId' => $_GET['goodTypeId'],'GoodFilter_page' => ($pages->currentPage+1) ))?>" class="ajax-form ajax-update b-tool b-tool-update" title="Редактировать"></a>

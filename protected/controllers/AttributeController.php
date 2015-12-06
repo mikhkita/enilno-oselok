@@ -200,9 +200,9 @@ class AttributeController extends Controller
 
 			if( isset($_POST["VariantsNew"]) )
 				foreach ($_POST["VariantsNew"] as $key => $value) {
-					$attrs = array($model->type->code."_value"=>$key,"sort"=>$value);
 					$new = new Variant();
-					$new->attributes = $attrs;
+					$new->value = $key;
+					$new->sort = $value;
 					$new->save();
 					$attrVariants[$new->id] = $value;
 				}
@@ -212,7 +212,7 @@ class AttributeController extends Controller
 			$values_attr = array();
 
 			foreach ($attrVariants as $key => $value) {
-				$values[] = array($key,NULL,NULL,NULL,$value);
+				$values[] = array($key,NULL,$value);
 				$values_attr[] = array("attribute_id"=>$model->id,"variant_id"=>$key);
 			}
 
@@ -220,7 +220,7 @@ class AttributeController extends Controller
 
 			if( isset($_POST["Variants"]) )
 				foreach ($_POST["Variants"] as $key => $value) {
-					$values[] = array($key,NULL,NULL,NULL,$value);
+					$values[] = array($key,NULL,$value);
 				}
 
 			$this->updateRows(Variant::tableName(),$values,array("sort"));

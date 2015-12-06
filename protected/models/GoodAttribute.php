@@ -127,9 +127,7 @@ class GoodAttribute extends CActiveRecord
 		
 			$this->setAttribute("value",($val !== NULL)?$val:false,true);
 		}else{
-			$val = ($this->variant->int_value === NULL)?( ($this->variant->float_value === NULL)?($this->variant->varchar_value):($this->variant->float_value) ):($this->variant->int_value);
-
-			$this->setAttribute("value",($val !== NULL)?$val:false,true);
+			$this->setAttribute("value",($this->variant->value !== NULL)?$this->variant->value:false,true);
 		}
 	}
 

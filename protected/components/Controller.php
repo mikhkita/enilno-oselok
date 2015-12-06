@@ -445,7 +445,7 @@ class Controller extends CController
     }
 
     public function getSettings(){
-        $model = Category::model()->findAll();
+        $model = Category::model()->with(array("settings"=>array("select"=>array("code","value"))))->findAll();
 
         foreach ($model as $category) {
             foreach ($category->settings as $param) {
