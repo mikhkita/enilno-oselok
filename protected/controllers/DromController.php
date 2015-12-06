@@ -63,19 +63,15 @@ class DromController extends Controller
         );
     }
     public function actionAdminUsers() {
-        echo date("h:i:s")." ";
         include_once Yii::app()->basePath.'/simple_html_dom.php';
-        include_once  Yii::app()->basePath.'/phpexcel/Classes/PHPExcel.php';
-        include_once  Yii::app()->basePath.'/phpexcel/Classes/PHPExcel/IOFactory.php';
         $html = new simple_html_dom();
         $ch = curl_init($ch);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
-        $count = 7;
-        $data = array();
-        
-        while ( $count < 200) {
-            $temp = array();
+        $file = Yii::app()->basePath.'/drom_user_id.txt';
+        $count = file_get_contents($file);
+               
+        while ( $count && ($count < 5000000) ) {
             $url = "http://baza.drom.ru/user/".$count."/wheel/"; 
             curl_setopt($ch, CURLOPT_URL, $url);
             $html = str_get_html(curl_exec($ch));
@@ -84,44 +80,16 @@ class DromController extends Controller
                 $advert = explode(" ", $advert->plaintext);
                 $advert = $advert[0];
                 if($advert >= 3) {
-                    array_push($temp, $url);
-                    array_push($temp, $advert);
-                    array_push($data, $temp);
+                    $model = new DromUser;
+                    $model->name = $url;
+                    $model->count = $advert;
+                    $model->save();
                 }
             }
             $count++;
-            
-        }
-        if(!empty($data)) {
-            $excelDir = Yii::app()->params['excelDir'];
-            $phpexcel = new PHPExcel(); // Создаём объект PHPExcel
-            $filename = "drom_users.xlsx";
-
-            $phpexcel = PHPExcel_IOFactory::createReader('Excel2007');
-            $phpexcel =  $phpexcel->load($excelDir."/".$filename);
-            $page = $phpexcel->setActiveSheetIndex(0); // Делаем активной первую страницу и получаем её
-            $aSheet = $phpexcel->getActiveSheet();
-            foreach($data as $ar){ // читаем массив
-                $i = $aSheet->getHighestRow()+1;
-                foreach($ar as $j => $val){
-                    $page->setCellValueByColumnAndRow($j,$i,$val); // записываем данные массива в ячейку
-                    $page->getStyleByColumnAndRow($j,$i)->getAlignment()->setWrapText(true);
-                }
-                $i++;
-            }
-            $page->setTitle("Пользователи дрома"); // Заголовок делаем "Example"
-            
-            for($col = 'A'; $col !== 'Z'; $col++) {
-                $page->getColumnDimension($col)->setAutoSize(true);
-            }
-
-            /* Начинаем готовиться к записи информации в xlsx-файл */
-            $objWriter = PHPExcel_IOFactory::createWriter($phpexcel, 'Excel2007');
-            /* Записываем в файл */
-            $objWriter->save($excelDir."/".$filename);
+            file_put_contents($file, $count);         
         }
         curl_close($ch);
-        echo date("h:i:s");
     }
     public function actionAdminLogin() {
 
