@@ -129,13 +129,20 @@ class InterpreterController extends Controller
 	{
 		$inter = Interpreter::model()->findByPk($id);
 
-		$criteria = new CDbCriteria();
-		$criteria->condition = "good_type_id=".$inter->good_type_id;
-		$criteria->order = "rand()";
-		$criteria->limit = 30;
-		// $criteria->with = array("fields.variant");
-
-        $model = Good::model()->findAll($criteria);
+		$model = Good::model()->filter(
+			array(
+				"good_type_id"=>$inter->good_type_id,
+			)
+		)->sort( 
+			array(
+				"field" => "rand()",
+				"type" => ""
+			)
+		)->getPage(
+			array(
+		    	'pageSize'=>30,
+		    ),
+		);
         
         $criteria = new CDbCriteria();
 		$criteria->with = array("goodTypes","variants.variant"=>array("order"=>"variant.sort ASC"));

@@ -86,10 +86,8 @@ class AttributeVariant extends CActiveRecord
 	public function afterFind()
 	{
 		parent::afterFind();
-		 
-		$val = ($this->variant->attributes["int_value"] == NULL)?( ($this->variant->attributes["float_value"] == NULL)?($this->variant->attributes["varchar_value"]):($this->variant->attributes["float_value"]) ):($this->variant->attributes["int_value"]);
 		
-		$this->setAttribute("value",$val,true);
+		$this->setAttribute("value",$this->variant->value,true);
 	}
 
 	/**
