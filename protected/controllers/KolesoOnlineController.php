@@ -276,7 +276,7 @@ class KolesoOnlineController extends Controller
 
 		$filter = $this->getFilter($_GET['type']);
 
-		$last = isset($_SESSION["FILTER"][$_GET['type']]['last']) ? $_SESSION["FILTER"][$_GET['type']]['last'] : 1;
+		$last = isset($_GET['last']) ? $_GET['last'] : 1;
 		
 		if($partial) {
 			$last++;
