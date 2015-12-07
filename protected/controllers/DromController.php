@@ -62,15 +62,18 @@ class DromController extends Controller
             ),
         );
     }
-    public function actionAdminUsers() {
+    public function actionAdminUsers($debug = false) {
+        $this->doQueueNext($debug);
+    }
+
+    public function getUsers() {
         include_once Yii::app()->basePath.'/simple_html_dom.php';
         $html = new simple_html_dom();
         $ch = curl_init($ch);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
-        $file = Yii::app()->basePath.'/drom_user_id.txt';
-        $count = file_get_contents($file);
-               
+        $count = $this->getParam( "OTHER", "DROM_USER_ID", true );
+   
         while ( $count && ($count < 5000000) ) {
             $url = "http://baza.drom.ru/user/".$count."/wheel/"; 
             curl_setopt($ch, CURLOPT_URL, $url);
@@ -79,18 +82,49 @@ class DromController extends Controller
             if($advert) {
                 $advert = explode(" пр", $advert->plaintext);
                 $advert = intval($advert[0]);
-                if($advert >= 3) {
+                if($advert >= 15) { 
                     $model = new DromUser;
-                    $model->name = $url;
+                    $model->id = $count;
+                    $model->name = trim($html->find('.userNick',0)->plaintext);
                     $model->count = $advert;
+                    $city = trim($html->find('.userProfile .middle .item',0)->plaintext);
+                    if(!stripos($city, "рейтинг")) {
+                        $model->city = $city;
+                    }
                     $model->save();
                 }
             }
             $count++;
-            file_put_contents($file, $count);         
+            $this->setParam( "OTHER", "DROM_USER_ID", $count );
+            if($count%5 == 0) {
+                $this->setParam( "OTHER", "DROM_USER_TIME", time() );
+                return true;
+            }
+                     
         }
         curl_close($ch);
     }
+
+    public function doQueueNext($debug = false){
+        if( !$this->checkQueueAccess() && !$debug ) return true;
+
+        while( $this->allowed() || $debug ){
+            $this->getUsers();
+            if( $debug ) return true;
+        }
+    }
+
+    public function checkQueueAccess(){
+        $last = $this->getParam( "OTHER", "DROM_USER_TIME", true );
+        return ( time() - intval($last) > 120 );
+    }
+
+    public function allowed(){
+        $queue = $this->getParam( "OTHER", "DROM_USER_TOGGLE", true );
+        return ( trim($queue) == "on" );
+    }
+
+
     public function actionAdminLogin() {
 
         $criteria = new CDbCriteria();

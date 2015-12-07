@@ -7,6 +7,7 @@
  * @property integer $id
  * @property string $name
  * @property integer $count
+ * @property string $city
  */
 class DromUser extends CActiveRecord
 {
@@ -26,12 +27,13 @@ class DromUser extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('name, count', 'required'),
-			array('count', 'numerical', 'integerOnly'=>true),
+			array('id, name, count', 'required'),
+			array('id, count', 'numerical', 'integerOnly'=>true),
 			array('name', 'length', 'max'=>255),
+			array('city', 'length', 'max'=>50),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, name, count', 'safe', 'on'=>'search'),
+			array('id, name, count, city', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -55,6 +57,7 @@ class DromUser extends CActiveRecord
 			'id' => 'ID',
 			'name' => 'Name',
 			'count' => 'Count',
+			'city' => 'City',
 		);
 	}
 
@@ -79,6 +82,7 @@ class DromUser extends CActiveRecord
 		$criteria->compare('id',$this->id);
 		$criteria->compare('name',$this->name,true);
 		$criteria->compare('count',$this->count);
+		$criteria->compare('city',$this->city,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
