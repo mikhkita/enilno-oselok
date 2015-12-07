@@ -413,7 +413,7 @@ class IntegrateController extends Controller
     public function doQueueNext($debug = false,$category_id){
         if( !$this->checkQueueAccess($category_id) && !$debug ) return true;
 
-        while( $this->allowed($category_id) ){
+        while( $this->allowed($category_id) || $debug ){
             $this->writeTime($category_id);
             if( !$this->getNext($category_id) ) sleep(5);
             if( $debug ) return true;
@@ -425,12 +425,12 @@ class IntegrateController extends Controller
     }
 
     public function checkQueueAccess($category_id){
-        $last = $this->getParam( Place::model()->categories[$category_id], "TIME" );
+        $last = $this->getParam( Place::model()->categories[$category_id], "TIME", true );
         return ( time() - intval($last) > 120 );
     }
 
     public function allowed($category_id){
-        $queue = $this->getParam( Place::model()->categories[$category_id], "TOGGLE" );
+        $queue = $this->getParam( Place::model()->categories[$category_id], "TOGGLE", true );
         return ( trim($queue) == "on" );
     }
 
@@ -464,6 +464,7 @@ class IntegrateController extends Controller
             if( $fields["title"] == "not unique" || $fields["description"] == "not unique" )return true;
         }
 
+
         $images = $this->getImages($advert->good);
         if( $place_name == "DROM" ){
             $account = $this->getDromAccount($fields["login"]);
@@ -476,6 +477,7 @@ class IntegrateController extends Controller
             $fields["email"] = $account->login;
             $fields["seller_name"] = $account->name;
         }
+
 
         if( !$account ){
             Log::error("Не найден пользователь с логином \"".$fields["login"]."\"");
@@ -525,6 +527,9 @@ class IntegrateController extends Controller
                 break;
         }
 
+        // var_dump($fields);
+        // die();
+
         if( $result ){
             if( $place_name == "AVITO" ){
                 $unique_arr = array();
@@ -563,10 +568,12 @@ class IntegrateController extends Controller
         }
     }
 
-    public function deleteAdverts(){
-        $model = Queue::model()->toDelete()->findAll();
+    public function actionDeleteAdverts(){
+        $model = Queue::model()->with("advert.place")->findAll("place.category_id=2048 AND action_id=2");
 
-        print_r($model);
+        $ids = $this->getIds($model);
+        if( count($ids) )
+            Queue::model()->deleteAll("id IN (".implode(",", $ids).")");
     }
 // Выкладка -------------------------------------------------------------- Выкладка
     public function actionAdminIndex(){

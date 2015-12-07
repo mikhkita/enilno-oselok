@@ -23,7 +23,7 @@
             <div class="grey-block left">
                 <div class="gradient-grey">
                     <h3>Фильтры</h3>
-                    <a href="#">Сбросить фильтр</a>
+                    <!-- <a href="#">Сбросить фильтр</a> -->
                     <div class="filter-block">
                         <? if($_GET['type'] == 1): ?>
                             <div class="tire-type clearfix">    

@@ -215,9 +215,9 @@ class Queue extends CActiveRecord
 	}
 
 	public function getNext($category_id){
-		$queue = Queue::model()->with(array("advert.good.type","advert.place","action"))->nextStart()->find("place.category_id=$category_id");
+		$queue = Queue::model()->with(array("advert.good.type","advert.place","action"))->nextStart()->find(array("condition"=>"place.category_id=$category_id","order"=>"t.start ASC"));
 		if( !count($queue) ){
-			$queue = Queue::model()->with(array("advert.good.type","advert.place","action"))->next()->find("place.category_id=$category_id");
+			$queue = Queue::model()->with(array("advert.good.type","advert.place","action"))->next()->find(array("condition"=>"place.category_id=$category_id","order"=>"t.id ASC"));
 		}
 		return $queue;
 	}

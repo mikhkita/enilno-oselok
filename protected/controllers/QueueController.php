@@ -31,13 +31,30 @@ class QueueController extends Controller
 		$this->setParam( Place::model()->categories[$category_id], "TOGGLE", "on" );
 		$this->setParam( Place::model()->categories[$category_id], "TIME", "0" );
 
-		$queue = Queue::model()->with("advert.place")->nextStart()->find("place.category_id=$category_id");
-		if( count($queue) ){
-			$razn = time() - strtotime($queue->start);
+		$this->changeCurTime($category_id);
+	}
 
-			$tableName = Queue::tableName();
-			$sql = "UPDATE `$tableName` SET start = start + INTERVAL $razn SECOND";
-			Yii::app()->db->createCommand($sql)->execute();
+	public function changeCurTime( $category_id ){
+		$queue = Queue::model()->with("advert.place")->nextStart()->findAll(array("group"=>"advert.city_id","together"=>true,"limit"=>10000,"order"=>"advert.city_id ASC, start ASC","condition"=>"place.category_id=$category_id"));
+
+		// foreach ($queue as $key => $item) {
+		// 	echo $item->id." ".$item->start." ".$item->advert->city_id."<br>";
+		// };
+		// die();
+
+		if( count($queue) ){
+			foreach ($queue as $key => $item) {
+				$razn = time() - strtotime($item->start);
+				
+				if( $razn > 0 ){
+					$ids = $this->getIdsByCondition("state_id = 1 AND place.category_id=$category_id AND advert.city_id=".$item->advert->city_id);
+					if( count($ids) ){
+						$tableName = Queue::tableName();
+						$sql = "UPDATE `$tableName` SET start = start + INTERVAL $razn SECOND WHERE id IN (".implode(",", $ids).")";
+						Yii::app()->db->createCommand($sql)->execute();
+					}
+				}
+			}
 		}
 	}
 
@@ -45,14 +62,8 @@ class QueueController extends Controller
 		$this->setParam( Place::model()->categories[$category_id], "TOGGLE", "off" );
 	}
 
-	public function actionAdminReturnAll($category_id = 2047){
-		$ids = $this->getIdsByCondition("state_id = 3 AND place.category_id=$category_id");
-		if( count($ids) )
-			Queue::model()->updateAll(['state_id' => 1], "id IN (".implode(",", $ids).")");
-	}
-
 	public function getIdsByCondition($condition){
-		$queue = Queue::model()->with("advert.place")->findAll(array("limit"=>9999,"condition"=>$condition));
+		$queue = Queue::model()->with("advert.place")->findAll(array("limit"=>999999,"condition"=>$condition));
 		$out = array();
 		foreach ($queue as $key => $item)
 			array_push($out, $item->id);
@@ -76,12 +87,36 @@ class QueueController extends Controller
 			Queue::model()->updateAll(['state_id' => 1], "id IN (".implode(",", $ids).")" );
 	}
 
-	public function actionAdminToWaiting($id = NULL){
+	public function actionAdminToWaiting($id = NULL, $change = true){
 		if( $id ){
-			$item = Queue::model()->findByPk($id);
+			$item = Queue::model()->with("advert.place")->findByPk($id);
+
+			if( $item->start !== NULL ){
+				$category_id = $item->advert->place->category_id;
+				$city_id = $item->advert->city_id;
+
+				$queue = Queue::model()->with("advert.place")->nextStart()->find(array("order"=>"start ASC","condition"=>"place.category_id=$category_id AND advert.city_id=$city_id"));
+
+				$item->start = ( $queue )?date("Y-m-d H:i:s",(strtotime($queue->start)-rand(33*60,39*60))):date("Y-m-d H:i:s",time());
+			}
+
 			$item->state_id = 1;
 			$item->save();
+
+			if( $change )
+				$this->changeCurTime($category_id);
 		}
+	}
+
+	public function actionAdminReturnAll($category_id = 2047){
+		$ids = $this->getIdsByCondition("state_id = 3 AND place.category_id=$category_id");
+		if( count($ids) ){
+			$ids = array_reverse($ids);
+			foreach ($ids as $key => $id) {
+				$this->actionAdminToWaiting($id, false);
+			}
+		}
+		$this->changeCurTime($category_id);
 	}
 
 	public function actionAdminIndex($partial = false, $category_id = 2047)
@@ -99,9 +134,9 @@ class QueueController extends Controller
         $criteria->order = "t.id ASC";
         $criteria->condition = "place.category_id=$category_id";
         $criteria->addCondition("state_id!=4");
-        $criteria->limit = 100;
+        $criteria->limit = 300;
 
-        $model = Queue::model()->with("advert.good.fields.variant","advert.good.fields.attribute","advert.place.category","advert.city","advert.type","state")->findAll($criteria);
+        $model = Queue::model()->with(array("advert.good.fields"=>array("condition"=>"fields.attribute_id=3"),"advert.good.fields.variant","advert.good.fields.attribute","advert.place.category","advert.city","advert.type","state","action"))->findAll($criteria);
 
         $options = array(
 			'data'=>$model,

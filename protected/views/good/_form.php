@@ -18,7 +18,7 @@
 								<a href="#" class="select2-all">Все</a>
 								<?  if($cities): ?>
 									<? foreach ($cities as $key => $city):?>
-										<a href="#" class="select-city-group" data-ids="<?=$city->ids?>"><?=$city->name?></a>
+										<!-- <a href="#" class="select-city-group" data-ids="<?=$city->ids?>"><?=$city->name?></a> -->
 									<? endforeach; ?>
 								<?endif;?>
 								<a href="#" class="select2-none right">Сбросить</a>

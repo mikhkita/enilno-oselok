@@ -140,7 +140,7 @@ class InterpreterController extends Controller
 			)
 		)->getPage(
 			array(
-		    	'pageSize'=>100,
+		    	'pageSize'=>300,
 		    )
 		);
 

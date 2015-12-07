@@ -385,8 +385,8 @@ class Controller extends CController
         return implode("/",$out);
     }
 
-    public function getParam($category,$code){
-        if( $this->settings == NULL ) $this->getSettings();
+    public function getParam($category,$code,$reload = false){
+        if( $this->settings == NULL || $reload ) $this->getSettings();
 
         $category_code = mb_strtoupper($category,"UTF-8");
         $param_code = mb_strtoupper($code,"UTF-8");
@@ -584,6 +584,13 @@ class Controller extends CController
             }
         }
         return $out;
+    }
+
+    public function getIds($model){
+        $ids = array();
+        foreach ($model as $key => $value)
+            array_push($ids, $value->id);
+        return $ids;
     }
 
     public function isRoot(){

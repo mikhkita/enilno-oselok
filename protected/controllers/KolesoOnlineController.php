@@ -283,6 +283,8 @@ class KolesoOnlineController extends Controller
 			$_GET['GoodFilter_page'] = $last;
 		}
 
+		$_SESSION["FILTER"][$_GET['type']]['sort'] = (isset($_SESSION["FILTER"][$_GET['type']]['sort']))?$_SESSION["FILTER"][$_GET['type']]['sort']:array("field"=>9,"type"=>"DESC");
+
 		$goods = $this->getGoods(40,$_GET['type']); 
 		$count = $goods['count'];	
 		$pages = $goods['pages'];	
