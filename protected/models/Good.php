@@ -29,12 +29,11 @@ class Good extends GoodFilter
 		// will receive user inputs.
 		return array(
 			array('good_type_id', 'required'),
-			array('share', 'numerical', 'integerOnly'=>true),
-			array('code', 'length', 'max'=>255),
+			array('archive', 'numerical', 'integerOnly'=>true),
 			array('good_type_id', 'length', 'max'=>10),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, code, good_type_id, share', 'safe', 'on'=>'search'),
+			array('id, date, good_type_id, archive', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -59,9 +58,9 @@ class Good extends GoodFilter
 	{
 		return array(
 			'id' => 'ID',
-			'code' => 'Код',
+			'date' => 'Дата продажи',
 			'good_type_id' => 'Тип товара',
-			'share' => 'Выкладывать',
+			'archive' => 'Продано',
 		);
 	}
 
@@ -77,20 +76,6 @@ class Good extends GoodFilter
 	 * @return CActiveDataProvider the data provider that can return the models
 	 * based on the search/filter conditions.
 	 */
-	public function search()
-	{
-		// @todo Please modify the following code to remove attributes that should not be searched.
-
-		$criteria=new CDbCriteria;
-
-		$criteria->compare('id',$this->id,true);
-		$criteria->compare('code',$this->code,true);
-		$criteria->compare('good_type_id',$this->good_type_id,true);
-
-		return new CActiveDataProvider($this, array(
-			'criteria'=>$criteria,
-		));
-	}
 
 	public function updatePrices($ids = array()){
 		$codes = array(
