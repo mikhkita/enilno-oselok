@@ -47,6 +47,7 @@ class Controller extends CController
     );
 
     public $settings = array();
+    public $user_settings = NULL;
 
     public $adminMenu = array();
 
@@ -392,6 +393,38 @@ class Controller extends CController
         $param_code = mb_strtoupper($code,"UTF-8");
 
         return ( isset($this->settings[$category_code][$param_code]) )?$this->settings[$category_code][$param_code]:"";
+    }
+
+    public function getUserParam($code, $reload = false){
+        if( $this->user_settings == NULL || $reload ) $this->getUserSettings();
+
+        $param_code = mb_strtoupper($code,"UTF-8");
+
+        return ( isset($this->user_settings[$param_code]) )?$this->user_settings[$param_code]:NULL;
+    }
+
+    public function getUserSettings(){
+        $out = array();
+        if( $this->user->settings )
+            foreach ($this->user->settings as $i => $param)
+                $out[$param->code] = json_decode($param->value);
+
+        $this->user_settings = $out;
+    }
+
+    public function setUserParam($code, $value){
+        $param_code = mb_strtoupper($code,"UTF-8");
+
+        if( UserSettings::model()->count("user_id=".$this->user->usr_id." AND code='".$param_code."'") ){
+            $model = UserSettings::model()->find(array("limit"=>1,"condition"=>"user_id=".$this->user->usr_id." AND code='".$param_code."'"));
+            $model->value = json_encode($value);
+            $model->save();
+        }else{
+            $this->insertValues(UserSettings::tableName(),array(array("user_id"=>$this->user->usr_id,"code"=>$param_code,"value"=>json_encode($value))));
+        }
+
+        if( is_array($this->user_settings) )
+            $this->user_settings[$param_code] = $value;
     }
 
     public function getDromAccount($login = NULL){

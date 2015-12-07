@@ -13,7 +13,7 @@ class GoodController extends Controller
 	{
 		return array(
 			array('allow',
-				'actions'=>array('adminIndex','adminTest','updatePrices','updateAuctionLinks','adminCreate','adminUpdate','adminDelete','adminEdit','getAttrType','getAttr','adminAdverts','adminUpdateImages',"adminAddCheckbox","adminRemoveCheckbox","adminAddAllCheckbox","adminRemoveAllCheckbox",'adminUpdateAll','adminAddSomeCheckbox','adminUpdateAdverts'),
+				'actions'=>array('adminIndex','adminTest','updatePrices','updateAuctionLinks','adminCreate','adminUpdate','adminDelete','adminEdit','getAttrType','getAttr','adminAdverts','adminUpdateImages',"adminAddCheckbox","adminRemoveCheckbox","adminAddAllCheckbox","adminRemoveAllCheckbox",'adminUpdateAll','adminAddSomeCheckbox','adminUpdateAdverts','adminViewSettings'),
 				'roles'=>array('manager'),
 			),
 			array('allow',
@@ -26,10 +26,10 @@ class GoodController extends Controller
 		);
 	}
 
-	public function actionAdminCreate($goodTypeId)
+	public function actionAdminCreate($good_type_id)
 	{
 		$model = new Good;
-		$model->good_type_id = $goodTypeId;
+		$model->good_type_id = $good_type_id;
 		$result = array();
 		
 		if(isset($_POST['Good_attr']) && $model->save())
@@ -55,7 +55,7 @@ class GoodController extends Controller
 
 			Good::updatePrices(array($model->id));
 
-			$this->redirect( Yii::app()->createUrl('good/adminindex',array('goodTypeId'=>$goodTypeId,'partial'=>true)) );
+			$this->redirect( Yii::app()->createUrl('good/adminindex',array('good_type_id'=>$good_type_id,'partial'=>true)) );
 
 		}else{
 
@@ -68,7 +68,7 @@ class GoodController extends Controller
 
 	}
 
-	public function actionAdminUpdate($id,$goodTypeId)
+	public function actionAdminUpdate($id,$good_type_id)
 	{
 		$model = $this->loadModel($id);
 		$result = $this->getAttr($model);
@@ -106,7 +106,7 @@ class GoodController extends Controller
 
 			Good::updateAuctionLinks();
 
-			$this->redirect( Yii::app()->createUrl('good/adminindex',array('goodTypeId'=>$goodTypeId,'partial'=>true,'GoodFilter_page' => $_GET["GoodFilter_page"])) );
+			$this->redirect( Yii::app()->createUrl('good/adminindex',array('good_type_id'=>$good_type_id,'partial'=>true,'GoodFilter_page' => $_GET["GoodFilter_page"])) );
 
 		}else{
 			$this->renderPartial('adminUpdate',array(
@@ -170,7 +170,7 @@ class GoodController extends Controller
 
 			// list($queryCount, $queryTime) = Yii::app()->db->getStats();
 			// echo "Query count: $queryCount, Total query time: ".sprintf('%0.5f',$queryTime)."s";
-			$this->redirect( Yii::app()->createUrl('good/adminindex',array('goodTypeId'=>$good_type_id,'partial'=>true,'GoodFilter_page' => $_GET["GoodFilter_page"])) );
+			$this->redirect( Yii::app()->createUrl('good/adminindex',array('good_type_id'=>$good_type_id,'partial'=>true,'GoodFilter_page' => $_GET["GoodFilter_page"])) );
 
 		}else{
 			$this->renderPartial('adminUpdateAll',array(
@@ -210,7 +210,7 @@ class GoodController extends Controller
 		if($shop) echo "1"; else $this->actionAdminIndex(true);
 	}
 
-	public function actionAdminTest($partial = false, $goodTypeId = false)
+	public function actionAdminTest($partial = false, $good_type_id = false)
 	{
 		$start = microtime(true);
 
@@ -270,10 +270,8 @@ class GoodController extends Controller
 		printf('<br>Прошло %.4F сек.<br>', microtime(true) - $start);		
 	}
 
-	public function actionAdminIndex($partial = false, $goodTypeId = false)
+	public function actionAdminIndex($partial = false, $good_type_id = false)
 	{
-		// if(!isset($_SESSION)) session_start();
-		// unset($_SESSION["goods"]);
 		unset($_GET["partial"]);
 
 		if( isset($_GET["delete"]) ){
@@ -290,7 +288,7 @@ class GoodController extends Controller
 			return true;
 		}
 
-		$goodType = GoodType::model()->findByPk($goodTypeId);
+		$goodType = GoodType::model()->with("fields")->findByPk($good_type_id);
 
 		$attr_arr = "filter";
 		$int_attr_arr = "int";
@@ -311,20 +309,20 @@ class GoodController extends Controller
 					"SORT" => array(3,20),
 				),
 		);
-		$sort_fields = $this->getLabels($params[$goodTypeId]["SORT"]);
-		$attributes = $this->getFilterVariants($params[$goodTypeId]["FILTER"],$params[$goodTypeId]["FILTER_NAMES"],$goodTypeId);
-		$labels = $this->getLabels($params[$goodTypeId]["FILTER"]);
+		$sort_fields = $this->getLabels($params[$good_type_id]["SORT"]);
+		$attributes = $this->getFilterVariants($params[$good_type_id]["FILTER"],$params[$good_type_id]["FILTER_NAMES"],$good_type_id);
+		$labels = $this->getLabels($params[$good_type_id]["FILTER"]);
 
 		if(!isset($_SESSION)) session_start();
 		if( !isset($_POST["sort"]) ){
-			if( isset($_SESSION["POST"][$goodTypeId]) ){
-				$_POST = $_SESSION["POST"][$goodTypeId];
+			if( isset($_SESSION["POST"][$good_type_id]) ){
+				$_POST = $_SESSION["POST"][$good_type_id];
 			}else{
 				$_POST["sort"] = array("field"=>20,"type"=>"ASC");
 				$_POST[$attr_arr] = array();
 			}
 		}else{
-			$_SESSION["POST"][$goodTypeId] = $_POST;
+			$_SESSION["POST"][$good_type_id] = $_POST;
 		}
 
 		if( !$partial ){
@@ -333,7 +331,7 @@ class GoodController extends Controller
 
 		// print_r($_POST["int"]);
 
-		if( $goodTypeId ){
+		if( $good_type_id ){
 			unset($_GET["id"]);
 
 			if( isset( $_POST[$attr_arr] ) ){
@@ -342,7 +340,7 @@ class GoodController extends Controller
 
 			$goods = Good::model()->filter(
 				array(
-					"good_type_id"=>$goodTypeId,
+					"good_type_id"=>$good_type_id,
 					"attributes"=>$filter_values,
 					"int_attributes"=>isset( $_POST[$int_attr_arr] )?$_POST[$int_attr_arr]:array()
 				)
@@ -352,15 +350,20 @@ class GoodController extends Controller
 				array(
 			    	'pageSize'=>10000,
 			    ), 
-			    NULL,
-			    // array(3,5,9,11), 
+			    $this->getUserParam("GOOD_TYPE_".$good_type_id),
 			    true
 			);
 		}
 
+		$fields = $goodType->fields;
+
+		if( $this->getUserParam("GOOD_TYPE_".$good_type_id) ){
+			$fields = GoodTypeAttribute::model()->findAll("attribute_id IN (".implode(",", $this->getUserParam("GOOD_TYPE_".$good_type_id)).") AND good_type_id=$good_type_id");
+		}
+
 		$options = array(
 			'data'=>$goods["items"],
-			'fields' => $goodType->fields,
+			'fields' => $fields,
 			'name'=>$goodType->name,
 			'pages' => $goods["pages"],
 			'attributes' => $attributes,
@@ -379,7 +382,7 @@ class GoodController extends Controller
 		}
 	}
 
-	public function getFilterVariants($array,$array_names,$goodTypeId){
+	public function getFilterVariants($array,$array_names,$good_type_id){
 		$result = array();
 
 		foreach ($array as $value) {
@@ -388,7 +391,7 @@ class GoodController extends Controller
 
 		$criteria = new CDbCriteria();
 		$criteria->with = array("good_filter"=>array("select"=>"good_type_id"));
-		$criteria->condition = "good_filter.good_type_id = ".$goodTypeId;
+		$criteria->condition = "good_filter.good_type_id = ".$good_type_id;
 	    $criteria->addInCondition("t.attribute_id",$array);
 	    $criteria->group = "t.variant_id";
 
@@ -427,9 +430,9 @@ class GoodController extends Controller
 		return $result;
 	}
 
-	public function actionAdminIndex2($goodTypeId = false){
-		if( $goodTypeId ){
-			$GoodType = GoodType::model()->with('goods.fields.variant','goods.fields.attribute')->findByPk($goodTypeId);
+	public function actionAdminIndex2($good_type_id = false){
+		if( $good_type_id ){
+			$GoodType = GoodType::model()->with('goods.fields.variant','goods.fields.attribute')->findByPk($good_type_id);
 		}
 
 		$this->render('index',array(
@@ -506,7 +509,7 @@ class GoodController extends Controller
 		if(isset($_POST['Good']['ids']))
 		{
 			Good::addAllCheckbox($good_type_id,$_POST['Good']['ids']);
-			$this->redirect( Yii::app()->createUrl('good/adminindex',array('goodTypeId'=>$good_type_id,'partial'=>true)) );
+			$this->redirect( Yii::app()->createUrl('good/adminindex',array('good_type_id'=>$good_type_id,'partial'=>true)) );
 		}else{
 			$this->renderPartial('adminSomeCheckbox',array());
 		}
@@ -583,5 +586,27 @@ class GoodController extends Controller
 			}
 		}
 		return $cities;
+	}
+
+	public function actionAdminViewSettings($good_type_id = NULL){
+		if( $good_type_id ){
+			if( isset($_POST["view_fields"]) ){
+				$this->setUserParam("GOOD_TYPE_".$good_type_id,$_POST["view_fields"]);
+
+				$this->actionAdminIndex(true,$good_type_id);
+			}else{
+				$good_type = GoodType::model()->with("fields.attribute")->findByPk($good_type_id);
+
+				$attributes = $this->splitByCols(2,CHtml::listData($good_type->fields, 'attribute_id', 'attribute.name'));
+
+				$this->renderPartial('_viewSettings',array(
+					'good_type'=>$good_type,
+					'selected'=>$this->getUserParam("GOOD_TYPE_".$good_type_id),
+					'attributes'=>$attributes
+				));
+			}
+		}else{
+			throw new CHttpException(404,'Не указан тип товара');
+		}
 	}
 }

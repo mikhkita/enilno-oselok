@@ -1,7 +1,7 @@
 <div style="display:none;">
 	<div class="b-popup-filter b-popup-good-filter b-popup">
 		<h1>Фильтр</h1>
-	<?=CHTML::beginForm(Yii::app()->createUrl('/good/adminindex',array('goodTypeId' => $_GET['goodTypeId'],'GoodFilter_page' => 1)),'POST',array('id'=>'b-filter-form'))?>
+	<?=CHTML::beginForm(Yii::app()->createUrl('/good/adminindex',array('good_type_id' => $_GET['good_type_id'],'GoodFilter_page' => 1)),'POST',array('id'=>'b-filter-form'))?>
 		<? foreach ($attributes as $field => $item): ?>
 			<? if( isset($item["VIEW"]) ): ?>
 				<div class="b-filter-block">
