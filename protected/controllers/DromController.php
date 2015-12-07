@@ -77,8 +77,8 @@ class DromController extends Controller
             $html = str_get_html(curl_exec($ch));
             $advert = $html->find('strong',0);
             if($advert) {
-                $advert = explode(" ", $advert->plaintext);
-                $advert = $advert[0];
+                $advert = explode(" пр", $advert->plaintext);
+                $advert = intval($advert[0]);
                 if($advert >= 3) {
                     $model = new DromUser;
                     $model->name = $url;
