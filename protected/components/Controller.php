@@ -48,6 +48,7 @@ class Controller extends CController
 
     public $settings = array();
     public $user_settings = NULL;
+    public $city_settings = NULL;
 
     public $adminMenu = array();
 
@@ -425,6 +426,31 @@ class Controller extends CController
 
         if( is_array($this->user_settings) )
             $this->user_settings[$param_code] = $value;
+    }
+
+    public function getCityParam($id, $reload = false){
+        if( $this->city_settings == NULL || $reload ) $this->getCitySettings();
+
+        return ( isset($this->city_settings[$id]) )?$this->city_settings[$id]:NULL;
+    }
+
+    public function getCitySettings(){
+        $cols = array(
+            55 => "name",
+            56 => "id",
+            57 => "avito_delay"
+        );
+        $out = array();
+        $rows = DesktopTableRow::model()->with(array("cells"))->findAll("table_id=14");
+        if( $rows ){
+            foreach ($rows as $i => $row) {
+                $one_cell = array();
+                foreach ($row->cells as $key => $cell)
+                    $one_cell[$cols[$cell->col_id]] = $cell->value;
+                $out[$one_cell["id"]] = (object) $one_cell;
+            }   
+        }
+        $this->city_settings = $out;
     }
 
     public function getDromAccount($login = NULL){
