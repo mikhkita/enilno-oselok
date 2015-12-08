@@ -75,7 +75,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
                 </div>
                 <div class="right">
                     <div class="clearfix contacts">
-                        <a href="#" class="fancy left" data-block="#b-popup-callback">+7 (909) 543-04-02</a>
+                        <a href="tel:+79095430402" class="mobile-not-fancy fancy left" data-block="#b-popup-callback">+7 (909) 543-04-02</a>
                         <a href="mailto:kolesotomskru@mail.ru" class="left mail">kolesotomskru@mail.ru</a>
                     </div>
                     <form action="#" method="GET">
@@ -99,7 +99,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
         <div class="b b-sub-menu b-fixed-top gradient-orange mobile-only">
             <div class="b-block clearfix">
                 <a href="#" class="b-burger icon left"></a>
-                <a href="callto:+79993211122" class="fancy b-phone-center left" data-block="#b-popup-callback">+7 (999) 321-11-22</a>
+                <a href="tel:+79095430402" class="mobile-not-fancy fancy b-phone-center left" data-block="#b-popup-callback">+7 (909) 543-04-02</a>
                 <a href="#" class="b-search-icon icon right"></a>
             </div>
         </div>
@@ -132,7 +132,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
                     <li>
                         <h3>Контактная информация</h3>
                         <a class="footer-contacts mail" href="mailto:kolesotomskru@mail.ru">kolesotomskru@mail.ru</a>
-                        <a class="fancy footer-contacts phone" data-block="#b-popup-callback" href="#">+7 (909) 543-04-02</a>
+                        <a class="mobile-not-fancy fancy footer-contacts phone" data-block="#b-popup-callback" href="tel:+79095430402">+7 (909) 543-04-02</a>
                         <span class="footer-contacts map">г. Красноярск, ул. Вавилова, 1а</span>
                         <div class="social">
                             <h3>Присоединяйтесь к нам</h3>
@@ -180,7 +180,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
         <div class="for_all b-popup-small">
             <h3>Купить товар</h3>
             <h4>Для покупки позвоните по одному<br>из телефонов:</h4>
-            <h5>+7 (913) 827 57-56<br>57-57-56</h5>
+            <h5><a href='tel:+79138275756'>+7 (913) 827 57-56</a><a href="tel:575756">57-57-56</a></h5>
             <h4>Или оставьте заявку и мы Вам перезвоним в ближайшее время:</h4>
             <form action="<?=Yii::app()->createUrl('/kolesoOnline/mail/')?>" id="b-form-buy" method="POST" data-block="#b-popup-2">
                 <div class="b-popup-form">

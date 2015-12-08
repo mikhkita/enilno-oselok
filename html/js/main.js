@@ -350,10 +350,10 @@ $(document).ready(function(){
     }
 
     $('.detail-slider-for').slick({
-      slidesToShow: 1,
-      slidesToScroll: 1,
-      arrows: false,
-      fade: true,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        arrows: false,
+        fade: (device.mobile())?false:true,
     });
 
     $(".detail-thumb li").click(function(){

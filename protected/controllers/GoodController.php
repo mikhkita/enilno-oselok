@@ -13,7 +13,7 @@ class GoodController extends Controller
 	{
 		return array(
 			array('allow',
-				'actions'=>array('adminIndex','adminTest','updatePrices','updateAuctionLinks','adminCreate','adminUpdate','adminDelete','adminEdit','getAttrType','getAttr','adminAdverts','adminUpdateImages',"adminAddCheckbox","adminRemoveCheckbox","adminAddAllCheckbox","adminRemoveAllCheckbox",'adminUpdateAll','adminAddSomeCheckbox','adminUpdateAdverts','adminViewSettings','adminSold','actionAdminArchive','adminArchive'),
+				'actions'=>array('adminIndex','adminTest','updatePrices','updateAuctionLinks','adminCreate','adminUpdate','adminDelete','adminEdit','getAttrType','getAttr','adminAdverts','adminUpdateImages',"adminAddCheckbox","adminRemoveCheckbox","adminAddAllCheckbox","adminRemoveAllCheckbox",'adminUpdateAll','adminAddSomeCheckbox','adminUpdateAdverts','adminViewSettings','adminSold','adminArchive'),
 				'roles'=>array('manager'),
 			),
 			array('allow',
@@ -56,8 +56,7 @@ class GoodController extends Controller
 		
 		$model->updateAdverts();
 
-		$this->redirect( Yii::app()->createUrl('good/adminindex',array('good_type_id'=>$good_type_id)) );
-
+		$this->redirect( Yii::app()->createUrl('good/adminindex',array('good_type_id'=>$good_type_id,'partial'=>true)) );
 	}
 
 	public function actionAdminCreate($good_type_id)
@@ -566,7 +565,7 @@ class GoodController extends Controller
 		$result['result'] = "error";
 		if($success) {
 			$result['result'] = "success";
-			$result['codes'] = "Выделено всего - ".count($_SESSION['goods'][$good_type_id]).": ".implode(", ",$_SESSION['goods'][$good_type_id]);			
+			$result['codes'] = ((count($_SESSION['goods'][$good_type_id]))?("Выделено всего - ".count($_SESSION['goods'][$good_type_id]).": "):"").implode(", ",$_SESSION['goods'][$good_type_id]);			
 		}
 		return json_encode($result);
 	}

@@ -238,18 +238,21 @@ class KolesoOnlineController extends Controller
 
 		$tire_filter = $this->getFilter(1);
 		$disc_filter =  $this->getFilter(2);
-       	$tires = $this->getGoods(8,1); 
+       	$tires = $this->getGoods(8,1,array(
+			"good_type_id"=>1,
+			"int_attributes"=>array(46=>array("max"=>0))
+		),array("field"=>46,"type"=>"DESC")); 
 		$tires = $tires['items'];
 
-		$discs = $this->getGoods(8,2);
+		$discs = $this->getGoods(8,2,array(
+			"good_type_id"=>2,
+			"int_attributes"=>array(46=>array("max"=>0))
+		),array("field"=>46,"type"=>"DESC"));
 		$discs = $discs['items'];
 
 		$this->params[1]["FILTER"] = $this->splitByRows(4,$this->params[1]["FILTER"]);
 		$this->params[2]["FILTER"] = $this->splitByRows(4,$this->params[2]["FILTER"]);
 
-        // list($queryCount, $queryTime) = Yii::app()->db->getStats();
-		// echo "Query count: $queryCount, Total query time: ".sprintf('%0.5f',$queryTime)."s";
-		// printf('<br>Прошло %.4F сек.<br>', microtime(true) - $start);
 		$cities = $this->getCity();	
 			$dynamic = $this->getDynObjects(array(
             38 => $_SESSION['city']['variant_id']
@@ -444,15 +447,21 @@ class KolesoOnlineController extends Controller
 		}
 	}
 
-	public function getGoods($page_size = 8,$type = 2) {
-		$goods = Good::model()->filter(
-			array(
+	public function getGoods($page_size = 8,$type = 2,$filter = NULL,$sort = NULL) {
+		if( $sort === NULL )
+			$sort = isset($_SESSION["FILTER"][$type]['sort']) ? $_SESSION["FILTER"][$type]['sort'] : NULL;
+
+		if( $filter === NULL )
+			$filter = array(
 				"good_type_id"=>$type,
 				"attributes"=>isset($_SESSION["FILTER"][$type]['arr']) ? $_SESSION["FILTER"][$type]['arr'] : array(),
 				"int_attributes"=>isset($_SESSION["FILTER"][$type]['int']) ? $_SESSION["FILTER"][$type]['int'] : array(),
-			)
+			);
+
+		$goods = Good::model()->filter(
+			$filter
 		)->sort( 
-			isset($_SESSION["FILTER"][$type]['sort']) ? $_SESSION["FILTER"][$type]['sort'] : NULL
+			$sort
 		)->getPage(
 			array(
 		    	'pageSize'=>$page_size,

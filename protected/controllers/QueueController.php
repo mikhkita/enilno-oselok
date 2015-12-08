@@ -91,8 +91,9 @@ class QueueController extends Controller
 		if( $id ){
 			$item = Queue::model()->with("advert.place")->findByPk($id);
 
+			$category_id = $item->advert->place->category_id;
+
 			if( $item->start !== NULL ){
-				$category_id = $item->advert->place->category_id;
 				$city_id = $item->advert->city_id;
 
 				$queue = Queue::model()->with("advert.place")->nextStart()->find(array("order"=>"start ASC","condition"=>"place.category_id=$category_id AND advert.city_id=$city_id"));

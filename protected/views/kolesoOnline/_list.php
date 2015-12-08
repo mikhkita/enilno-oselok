@@ -1,8 +1,8 @@
 <? foreach ($goods as $key => $good): ?>   
     <li  <? unset($_GET['partial'],$_GET['GoodFilter_page']); echo "data-last='".$last."'" ?> class="gradient-grey b-good-type-<?=$good->good_type_id?>">
-        <div class="good-img" style="background-image: url(<? $images = $this->getImages($good); echo $images[0];?>);"></div>
+        <a href="<?=Yii::app()->createUrl('/kolesoOnline/detail',array('id' => $good->fields_assoc[3]->value,'type' => $type))?>"><div class="good-img" style="background-image: url(<? $images = $this->getImages($good); echo $images[0];?>);"></div></a>
         <div class="params-cont">
-            <a href="<?=Yii::app()->createUrl('/kolesoOnline/detail',array('id' => $good->fields_assoc[3]->value,'type' => $type))?>">
+            <a class="params-cont-a" href="<?=Yii::app()->createUrl('/kolesoOnline/detail',array('id' => $good->fields_assoc[3]->value,'type' => $type))?>">
             <? if($type == 2): ?>
                 <h4><?=$good->fields_assoc[6]->value?></h4>
                 <? $price = ($good->fields_assoc[20])?$good->fields_assoc[20]->value:0; $order = Interpreter::generate($this->params[$type]["ORDER"], $good); ?>

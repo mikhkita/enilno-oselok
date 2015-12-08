@@ -16,6 +16,11 @@ $(document).ready(function(){
 		return rePhone.test(value);
 	});
 
+	if( device.mobile() ){
+		$(".mobile-not-fancy").removeClass("fancy");
+		$(".detail-photo .fancy-img").removeClass("fancy-img").removeAttr("href");
+	}
+
 	$(".ajax").parents("form").each(function(){
 		$(this).validate({
 			rules: {
