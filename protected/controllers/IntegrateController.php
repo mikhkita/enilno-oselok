@@ -5,8 +5,8 @@ class IntegrateController extends Controller
     private $params = array(
         "TIRE" => array(
             "GOOD_TYPE_ID" => 1,
-            "TITLE_CODE" => 76,
-            "TEXT_CODE" => 77,
+            "TITLE_CODE" => 130,
+            "TEXT_CODE" => 131,
             "PRICE_CODE" => 9,
             "NAME_ROD" => "Шины",
             "NAME_ROD_MN" => "Шин",
@@ -51,7 +51,7 @@ class IntegrateController extends Controller
         
         $photodoska->deleteAdverts($main_adverts);
 
-        // $this->generatePdQueue($this->getItems("TIRE"),"TIRE");
+        $this->generatePdQueue($this->getItems("TIRE"),"TIRE");
 
         $this->generatePdQueue($this->getItems("DISC"),"DISC");
 
@@ -128,7 +128,7 @@ class IntegrateController extends Controller
                 "good_type_id"=>$curParams["GOOD_TYPE_ID"],
                 "int_attributes"=>array(
                     46 => array(
-                        "min" => 1
+                        "min" => 1,
                     )
                 )
             )
@@ -138,6 +138,7 @@ class IntegrateController extends Controller
             )
         );
         $model = $model["items"];
+        echo count($model);
 
         $result = array();
 
@@ -157,7 +158,6 @@ class IntegrateController extends Controller
                 )
             );
         }
-        print_r($result);
 
         return $result;
     }
@@ -465,6 +465,9 @@ class IntegrateController extends Controller
         }
 
         $fields = $place->generateFields($fields,$advert->good->good_type_id);
+
+        // print_r($fields);
+        // die();
         
         $place->setUser($account->login, $account->password);
         $res = $place->auth();

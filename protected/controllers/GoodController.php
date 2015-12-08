@@ -87,7 +87,7 @@ class GoodController extends Controller
 			}
 			$this->insertValues(GoodAttribute::tableName(),$values);
 
-			Good::updatePrices(array($model->id));
+			// Good::updatePrices(array($model->id));
 
 			$this->redirect( Yii::app()->createUrl('good/adminindex',array('good_type_id'=>$good_type_id,'partial'=>true)) );
 
@@ -136,7 +136,7 @@ class GoodController extends Controller
 
 			$model->updateAdverts();
 
-			Good::updatePrices(array($id));
+			// Good::updatePrices(array($id));
 
 			Good::updateAuctionLinks();
 
@@ -167,7 +167,17 @@ class GoodController extends Controller
 		
 		if(isset($_POST['Good_attr']))
 		{
-			$goods = Good::model()->with(array("type","fields.variant","fields.attribute"))->findAllByPk($good_ids_key);
+			$goods = Good::model()->filter(
+				array(
+					"good_type_id"=>$good_type_id,
+				),
+				$good_ids_key
+			)->getPage(
+				array(
+			    	'pageSize'=>10000,
+			    )
+			);
+			$goods = $goods["items"];
 
 			$attrs_id = array();
 			foreach ($_POST['Good_attr'] as $attr_id => $val) {
@@ -572,7 +582,7 @@ class GoodController extends Controller
 		$result['result'] = "error";
 		if($success) {
 			$result['result'] = "success";
-			$result['codes'] = implode(", ",$_SESSION['goods'][$good_type_id]);			
+			$result['codes'] = "Выделено всего - ".count($_SESSION['goods'][$good_type_id]).": ".implode(", ",$_SESSION['goods'][$good_type_id]);			
 		}
 		return json_encode($result);
 	}

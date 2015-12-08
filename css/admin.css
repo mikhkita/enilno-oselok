@@ -606,10 +606,11 @@ h1{
     border-radius: 5px;
 }
 .fancybox-skin .b-popup-delete{
-    padding: 30px !important;
+    padding: 25px 30px 30px !important;
 }
 .fancybox-skin .b-popup-delete h1{
     width: 340px;
+    margin-bottom: 15px;
 }
 .fancybox-skin .b-popup-delete h1 b{
     font-size: 20px;
@@ -1085,10 +1086,17 @@ h1{
 .b-tool-cont{
     font-size: 0px;
 }
+.b-tool-nav{
+
+}
+    .b-tool-nav span{
+        cursor: pointer;
+    }
     .b-sess-checkbox{
         cursor: pointer;
     }
     .b-tool{
+        cursor: pointer;
         width: 25px;
         height: 25px;
         display: inline-block;
