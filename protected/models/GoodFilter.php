@@ -93,7 +93,7 @@ class GoodFilter extends CActiveRecord
 		));
 	}
 
-	public function update(){
+	public function updateAdverts(){
 		$newModel = Good::model()->with(array("fields.variant","fields.attribute"))->findByPk($this->id);
 
 		if( !function_exists("compare") ){
@@ -112,7 +112,7 @@ class GoodFilter extends CActiveRecord
 		$isDiffAdverts = $this->isDiff($newModel, true);
 		$isDiff = $this->isDiff($newModel);
 
-		if( ($isDiff || $isDiffAdverts) && !$this->share ){
+		if( ($isDiff || $isDiffAdverts) ){
 			$cities = Place::model()->cities;
 			$places = $this->getPlaces();
 			$add_arr = array();

@@ -36,12 +36,13 @@
 				<? foreach ($data as $i => $item): ?>
 					<tr>
 						<td><input type="checkbox" name="good_id" class="b-sess-checkbox" data-block="#b-sess-checkbox-list" <? if($item->isChecked()): ?>checked="checked"<? endif; ?> value="<?=$item->id?>"></td>
-						<td style="min-width: 135px;text-align: right;">
+						<td style="min-width: 161px;text-align: right;">
 							<? if($item->count_all_adverts): ?>
 								<a href="<?php echo Yii::app()->createUrl('/good/adminadverts',array('id'=>$item->id,'good_type_id'=> $_GET["good_type_id"],'GoodFilter_page' => ($pages->currentPage+1)))?>" class="ajax-form ajax-update b-adverts-link b-tooltip" title="Объявления"><span class="advert-info"><?=$item->count_all_adverts?> (<?=$item->count_url_adverts?>)</span></a>
 							<? else: ?>
 								<span class="advert-info b-tooltip" title="Нет объявлений">0 (0)</span>
 							<? endif; ?>
+							<a href="<?php echo Yii::app()->createUrl('/good/adminsold',array('id'=>$item->id,'good_type_id' => $_GET['good_type_id']))?>" class="b-tool b-tool-sale" title="Продано"></a>
 							<a href="<?php echo Yii::app()->createUrl('/good/adminupdateimages',array('id'=>$item->id))?>" class="ajax-photodoska b-tool b-tool-photo" title="Обновить фотографии"></a>
 							<a href="<?php echo Yii::app()->createUrl('/good/adminupdate',array('id'=>$item->id,'good_type_id' => $_GET['good_type_id'],'GoodFilter_page' => ($pages->currentPage+1) ))?>" class="ajax-form ajax-update b-tool b-tool-update" title="Редактировать"></a>
 							<? if($this->user->role->code == "root"): ?><a href="<?php echo Yii::app()->createUrl('/good/adminindex',array('delete'=>$item->id,'partial'=>'true','good_type_id'=>$_GET["good_type_id"],'GoodFilter_page'=>isset($_GET["GoodFilter_page"])?$_GET["GoodFilter_page"]:1))?>" class="ajax-form ajax-delete b-tool b-tool-delete not-ajax-delete" data-warning="Вы действительно хотите удалить товар &quot;<?=$item->fields_assoc[3]->value?>&quot;?" title="Удалить"></a><? endif; ?>

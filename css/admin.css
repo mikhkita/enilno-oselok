@@ -1136,6 +1136,9 @@ h1{
     .b-tool-settings{
         background-image: url("../images/settings.png");
     }
+     .b-tool-sale{
+        background-image: url("../images/sale.png");
+    }
 
     .b-good-table .b-tool-settings{
         margin-top: 0px;
