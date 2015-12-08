@@ -259,7 +259,7 @@ class Good extends GoodFilter
 		$fields = Yii::app()->db->createCommand()
 		    ->select('*')
 		    ->from(GoodAttributeFilter::tableName().' t')
-		    ->where('good_id IN ('.implode(",", $this->getIds($model)).')'.( ( $fields !== NULL && count($fields) )?('AND attribute_id IN ('.implode(",", $fields).')'):("") ))
+		    ->where('good_id IN ('.implode(",", $this->getIds($model)).')'.( ( $fields !== NULL && count($fields) )?(' AND attribute_id IN ('.implode(",", $fields).')'):("") ))
 		    ->queryAll();
 
 		$model = $this->getAssocModel($model);
@@ -269,13 +269,15 @@ class Good extends GoodFilter
 			if( $field["variant_id"] !== NULL )
 				array_push($variants, $field["variant_id"]);
 
-		$variants = Yii::app()->db->createCommand()
-		    ->select('*')
-		    ->from(Variant::tableName().' t')
-		    ->where('id IN ('.implode(",", $variants).')')
-		    ->queryAll();
+		if( count($variants) ){
+			$variants = Yii::app()->db->createCommand()
+			    ->select('*')
+			    ->from(Variant::tableName().' t')
+			    ->where('id IN ('.implode(",", $variants).')')
+			    ->queryAll();
 
-		$variants = $this->getAssocModel($variants);
+			$variants = $this->getAssocModel($variants);
+		}
 
 		if( $with_adverts ){
 			$all_adverts = Yii::app()->db->createCommand()

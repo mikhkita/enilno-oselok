@@ -5,11 +5,9 @@ class IntegrateController extends Controller
     private $params = array(
         "TIRE" => array(
             "GOOD_TYPE_ID" => 1,
-            "TITLE_CODE" => 65,
-            "HEADER" => "HEADER_T",
-            "FOOTER" => "FOOTER_T",
-            "JOIN" => array(7,8,9),
-            "ADVERT_TITLE_CODE" => 30,
+            "TITLE_CODE" => 76,
+            "TEXT_CODE" => 77,
+            "PRICE_CODE" => 9,
             "NAME_ROD" => "Шины",
             "NAME_ROD_MN" => "Шин",
         ),
@@ -17,6 +15,7 @@ class IntegrateController extends Controller
             "GOOD_TYPE_ID" => 2,
             "TITLE_CODE" => 76,
             "TEXT_CODE" => 77,
+            "PRICE_CODE" => 10,
             "NAME_ROD" => "Диска",
             "NAME_ROD_MN" => "Дисков",
         )
@@ -52,7 +51,7 @@ class IntegrateController extends Controller
         
         $photodoska->deleteAdverts($main_adverts);
 
-        $this->generatePdQueue($this->getGroups("TIRE"),"TIRE");
+        // $this->generatePdQueue($this->getItems("TIRE"),"TIRE");
 
         $this->generatePdQueue($this->getItems("DISC"),"DISC");
 
@@ -121,64 +120,44 @@ class IntegrateController extends Controller
         }
     }
 
-    public function getGroups($good_type_code){
-        $curParams = $this->params[$good_type_code];
-
-        $model = Good::model()->with(array('type'=>array("select"=>"id"),'fields.variant','fields.attribute'))->findAll("good_type_id=".$curParams["GOOD_TYPE_ID"]);
-        $result = array();
-
-        foreach ($model as $item) {
-            $tog = true;
-
-            foreach ($curParams["JOIN"] as $field)
-                if( !(isset($item->fields_assoc[intval($field)]) && $item->fields_assoc[intval($field)]->value != 0) ) $tog = false;
-
-            if( $tog && isset($item->fields_assoc[46]) && intval($item->fields_assoc[46]->value) == 1 ){
-                $title = Interpreter::generate($curParams["ADVERT_TITLE_CODE"],$item);
-
-                if( !isset($result[$title]) ) $result[$title] = array();
-                array_push($result[$title], $item);
-            }
-        }
-
-        $header = $this->replaceToBr($this->getParam("PHOTODOSKA",$curParams["HEADER"]));
-        $footer = $this->replaceToBr($this->getParam("PHOTODOSKA",$curParams["FOOTER"]));
-
-        foreach ($result as $key => $group) {
-            $price = $this->findPrice($group);
-            if( $price != false ){
-                $result[$key] = array(
-                    "TEXT" => $header."<br>".$this->generateList($group,$curParams["TITLE_CODE"]).$footer,
-                    "TITLE" => $key,
-                    "PRICE" => $price,
-                    "IMAGE" => substr($this->findImage($group),1)
-                );
-            }else{
-                unset($result[$key]);
-            }
-        }
-
-        return $result;
-    }
-
     public function getItems($good_type_code){
         $curParams = $this->params[$good_type_code];
 
-        $model = GoodType::model()->with('goods.fields.variant','goods.fields.attribute')->findByPk($curParams["GOOD_TYPE_ID"])->goods;
+        $model = Good::model()->filter(
+            array(
+                "good_type_id"=>$curParams["GOOD_TYPE_ID"],
+                "int_attributes"=>array(
+                    46 => array(
+                        "min" => 1
+                    )
+                )
+            )
+        )->getPage(
+            array(
+                'pageSize'=>10000,
+            )
+        );
+        $model = $model["items"];
+
         $result = array();
+
+        $dynamic = $this->getDynObjects(array(
+            57 => 2048,
+            38 => 1081,
+            37 => 869
+        ));
 
         if( $model )
         foreach ($model as $key => $item) {
-            if( isset($item->fields_assoc[46]) && intval($item->fields_assoc[46]->value) == 1 ){
-                array_push($result, array(
-                        "TEXT" => $this->replaceToBr(Interpreter::generate($curParams["TEXT_CODE"],$item)),
-                        "TITLE" => Interpreter::generate($curParams["TITLE_CODE"],$item),
-                        "PRICE" => $item->fields_assoc[51]->value,
-                        "IMAGE" => substr($this->getImages($item)[0],1)
-                    )
-                );
-            }
+            array_push($result, array(
+                    "TEXT" => $this->replaceToBr(Interpreter::generate($curParams["TEXT_CODE"],$item,$dynamic)),
+                    "TITLE" => Interpreter::generate($curParams["TITLE_CODE"],$item,$dynamic),
+                    "PRICE" => Interpreter::generate($curParams["PRICE_CODE"],$item,$dynamic),
+                    "IMAGE" => substr($this->getImages($item)[0],1)
+                )
+            );
         }
+        print_r($result);
 
         return $result;
     }

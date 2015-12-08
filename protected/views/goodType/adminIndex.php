@@ -20,7 +20,7 @@
 			<? foreach ($data as $i => $item): ?>
 				<tr<?if(isset($_GET["id"]) && $item->id == $_GET["id"]):?> class="b-refresh"<?endif;?>>
 					<td><?=$item->id?></td>
-					<td class="align-left"><a href="<?php echo $this->createUrl('/good/adminindex',array('goodTypeId'=>$item->id))?>"><?=$item->name?></a></td>
+					<td class="align-left"><a href="<?php echo $this->createUrl('/good/adminindex',array('good_type_id'=>$item->id))?>"><?=$item->name?></a></td>
 					<td class="b-tool-cont">
 						<a href="<?php echo Yii::app()->createUrl('/'.$this->adminMenu["cur"]->code.'/adminupdate',array('id'=>$item->id))?>" class="ajax-form ajax-update b-tool b-tool-update" title="Редактировать <?=$this->adminMenu["cur"]->vin_name?>"></a>
 						<a href="<?php echo Yii::app()->createUrl('/'.$this->adminMenu["cur"]->code.'/admincodedel',array('id'=>$item->id))?>" class="ajax-form ajax-update b-tool b-tool-list" title="Удаление по списку"></a>

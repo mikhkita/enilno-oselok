@@ -67,7 +67,7 @@ class DromController extends Controller
     }
 
     public function getUsers() {
-        include_once Yii::app()->basePath.'/simple_html_dom.php';
+        include_once Yii::app()->basePath.'/extensions/simple_html_dom.php';
         $html = new simple_html_dom();
         $ch = curl_init($ch);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -96,7 +96,7 @@ class DromController extends Controller
             }
             $count++;
             $this->setParam( "OTHER", "DROM_USER_ID", $count );
-            if($count%5 == 0) {
+            if($count%20 == 0) {
                 $this->setParam( "OTHER", "DROM_USER_TIME", time() );
                 return true;
             }
