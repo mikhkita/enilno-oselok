@@ -1,4 +1,6 @@
+
 <h1><?=$name?></h1>
+<a href="<?=$this->createUrl('/good/adminarchive',array('good_type_id'=> $_GET["good_type_id"]))?>" class="b-link-back">Архив</a>
 <div class="b-buttons-left-cont">
 	<div class="clearfix">
 		<a href="<?php echo $this->createUrl('/good/admincreate',array('good_type_id'=> $_GET["good_type_id"] ))?>" class="ajax-form ajax-create b-butt">Добавить</a>
@@ -23,13 +25,17 @@
 <?php $this->renderPartial('_filter', array('attributes'=>$attributes, 'arr_name' => $arr_name, 'labels' => $labels, 'filter_values' => $filter_values, 'sort_fields' => $sort_fields)); ?>
 <div class="b-filter-pagination">
 	<?php $form=$this->beginWidget('CActiveForm'); ?>
+		<input type="hidden" name="sort[type]" value="<?= isset($sort_type['sort']['type']) ? $sort_type['sort']['type'] : "ASC"?>">
 		<table class="b-table b-good-table b-sess-checkbox-info" data-add-url="<?=Yii::app()->createUrl('/good/adminaddcheckbox')?>" data-remove-url="<?=Yii::app()->createUrl('/good/adminremovecheckbox')?>" border="1">
 			<tr>
 				<? $ids = array(); foreach ($data as $i => $item) array_push($ids, $item->id); ?>
 				<th style="vertical-align:bottom; min-width: 20px;"><input type="checkbox" name="goods_id" class="b-sess-checkbox check-page" data-block="#b-sess-checkbox-list" value="<?=implode(',',$ids)?>"></th>
 				<th style="min-width: 110px;max-width: 110px;width: 110px;"><a href="<?php echo Yii::app()->createUrl('/good/adminviewsettings',array('id'=>$item->id,'good_type_id'=>$_GET["good_type_id"]))?>" class="ajax-form ajax-update b-tool b-tool-settings" title="Настройки отображения"></a></th>
 				<? foreach ($fields as $field): ?>
-					<th <?if($field->attribute_id == 3):?>style="min-width: 55px;"<?endif;?> <? if($field->attribute->alias): ?>class="b-tooltip" title="<?=$field->attribute->name?>"<?endif;?>><?=($field->attribute->alias)?$field->attribute->alias:$field->attribute->name; ?></th>
+					<th <?if($field->attribute_id == 3):?>style="min-width: 55px;"<?endif;?> <? if($field->attribute->alias): ?>class="b-tooltip" title="<?=$field->attribute->name?>"<?endif;?>>
+						<?=($field->attribute->alias)?$field->attribute->alias:$field->attribute->name; ?>
+						<input type="radio" name="sort[field]" value="<?=$field->attribute_id?>">
+					</th>
 				<? endforeach; ?>	
 			</tr>
 			<? if( count($data) ): ?>

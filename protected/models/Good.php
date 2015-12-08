@@ -174,6 +174,8 @@ class Good extends GoodFilter
 		if( $count == 0 )
 			$criteria->condition = 'good_type_id='.$options["good_type_id"].' AND fields.attribute_id=3';
 
+		$options["archive"] = isset($options["archive"]) ? $options["archive"] : 0;
+		$criteria->addCondition('archive='.$options["archive"]);
 		$criteria->having = 'COUNT(DISTINCT fields.attribute_id)'.(( $count == 0 )?'>':'').'='.$count;
 
 		if( $ids ) 
@@ -429,9 +431,10 @@ class Good extends GoodFilter
 				$criteria->with = array("fields");
 				$criteria->condition = "attribute_id=3 AND good_type_id=".$good_type_id;
 				$criteria->addInCondition('fields.varchar_value',$arr); 
+				$criteria->addCondition('archive=0'); 
 				$goods = Good::model()->findAll($criteria);
 				
-			} else $goods = Good::model()->with("fields")->findAll("attribute_id=3 AND good_type_id=".$good_type_id);
+			} else $goods = Good::model()->with("fields")->findAll("attribute_id=3 AND good_type_id=".$good_type_id.' AND archive=0');
 			$_SESSION["goods"][$good_type_id] = array();
 			foreach ($goods as $key => $good) {
 				$_SESSION["goods"][$good->good_type_id][$good->id] = $good->fields[0]->value;
