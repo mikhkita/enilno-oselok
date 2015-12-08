@@ -429,7 +429,7 @@ class Controller extends CController
     }
 
     public function getCityParam($id, $reload = false){
-        if( $this->city_settings == NULL || $reload ) $this->getCitySettings();
+        if( $this->city_settings == NULL || $reload ) $this->city_settings = $this->getCitySettings();
 
         return ( isset($this->city_settings[$id]) )?$this->city_settings[$id]:NULL;
     }
@@ -450,7 +450,7 @@ class Controller extends CController
                 $out[$one_cell["id"]] = (object) $one_cell;
             }   
         }
-        $this->city_settings = $out;
+        return $out;
     }
 
     public function getDromAccount($login = NULL){

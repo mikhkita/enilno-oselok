@@ -243,7 +243,8 @@ class Good extends GoodFilter
 		    'pagination'=>$options,
 		));
 
-		$goods = $this->getGoods( $dataProvider->getData(), $fields, $with_adverts );
+		$data = $dataProvider->getData();
+		$goods = (count($data))?$this->getGoods( $dataProvider->getData(), $fields, $with_adverts ):NULL;
 
 		return array( "items" => $goods, "count" => $dataProvider->getTotalItemCount(), "pages" => $dataProvider->getPagination(), "dataProvider" => $dataProvider, "allCount" => $dataProvider->getTotalItemCount() );
 	}
@@ -300,10 +301,10 @@ class Good extends GoodFilter
 
 			foreach ($model as $i => $good) {
 				if( isset($all_adverts[$good->id]) )
-					$model[$i]->count_all_adverts = $all_adverts[$good->id]["count"];
+					$model[$i]->count_all_adverts = (isset($all_adverts[$good->id]))?$all_adverts[$good->id]["count"]:0;
 
 				if( isset($url_adverts[$good->id]) )
-					$model[$i]->count_url_adverts = $url_adverts[$good->id]["count"];
+					$model[$i]->count_url_adverts = (isset($url_adverts[$good->id]))?$url_adverts[$good->id]["count"]:0;
 			}
 		}
 
