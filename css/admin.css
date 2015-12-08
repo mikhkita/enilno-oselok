@@ -2344,6 +2344,18 @@ ul.b-filter-list{
                     .b-desktop ul li a.link:hover h3{
                         text-decoration: none;
                     }
+.good-sort.active {
+    color: #ffba00;
+    text-decoration: none;
+    padding-right: 15px;
+}
+    .good-sort.active:after {
+        position:absolute;
+        content: "▼";
+    }
+    .good-sort.active.up:after {
+        content: "▲";
+    }
 .b-kit-switcher {
     margin-left: 15px;
     margin-top: -1px;
