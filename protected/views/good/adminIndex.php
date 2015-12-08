@@ -1,4 +1,3 @@
-
 <h1><?=$name?></h1>
 <a href="<?=$this->createUrl('/good/adminarchive',array('good_type_id'=> $_GET["good_type_id"]))?>" class="b-link-back">Архив</a>
 <div class="b-buttons-left-cont">
@@ -25,7 +24,6 @@
 <?php $this->renderPartial('_filter', array('attributes'=>$attributes, 'arr_name' => $arr_name, 'labels' => $labels, 'filter_values' => $filter_values, 'sort_fields' => $sort_fields)); ?>
 <div class="b-filter-pagination">
 	<?php $form=$this->beginWidget('CActiveForm'); ?>
-		<input type="hidden" name="sort[type]" value="<?= isset($sort_type['sort']['type']) ? $sort_type['sort']['type'] : "ASC"?>">
 		<table class="b-table b-good-table b-sess-checkbox-info" data-add-url="<?=Yii::app()->createUrl('/good/adminaddcheckbox')?>" data-remove-url="<?=Yii::app()->createUrl('/good/adminremovecheckbox')?>" border="1">
 			<tr>
 				<? $ids = array(); foreach ($data as $i => $item) array_push($ids, $item->id); ?>
@@ -33,8 +31,12 @@
 				<th style="min-width: 110px;max-width: 110px;width: 110px;"><a href="<?php echo Yii::app()->createUrl('/good/adminviewsettings',array('id'=>$item->id,'good_type_id'=>$_GET["good_type_id"]))?>" class="ajax-form ajax-update b-tool b-tool-settings" title="Настройки отображения"></a></th>
 				<? foreach ($fields as $field): ?>
 					<th <?if($field->attribute_id == 3):?>style="min-width: 55px;"<?endif;?> <? if($field->attribute->alias): ?>class="b-tooltip" title="<?=$field->attribute->name?>"<?endif;?>>
-						<?=($field->attribute->alias)?$field->attribute->alias:$field->attribute->name; ?>
-						<input type="radio" name="sort[field]" value="<?=$field->attribute_id?>">
+						<?if($sort_field==$field->attribute_id):?>
+							<a class="good-sort active <? if($sort_type=='DESC') echo ' up'; ?>" href="<?=$this->createUrl('/good/adminindex',array('sort_type' => $sort_type,'sort_field' => $field->attribute_id,'good_type_id'=> $_GET["good_type_id"]))?>"><?=($field->attribute->alias)?$field->attribute->alias:$field->attribute->name; ?></a>
+						<? else:?>
+							<a href="<?=$this->createUrl('/good/adminindex',array('sort_field' => $field->attribute_id,'good_type_id'=> $_GET["good_type_id"]))?>"><?=($field->attribute->alias)?$field->attribute->alias:$field->attribute->name; ?></a>
+						<? endif;?>
+						
 					</th>
 				<? endforeach; ?>	
 			</tr>

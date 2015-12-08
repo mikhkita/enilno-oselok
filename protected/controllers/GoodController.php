@@ -313,7 +313,7 @@ class GoodController extends Controller
 		printf('<br>Прошло %.4F сек.<br>', microtime(true) - $start);		
 	}
 
-	public function actionAdminIndex($partial = false, $good_type_id = false)
+	public function actionAdminIndex($partial = false, $good_type_id = false,$sort_field = NULL,$sort_type = "ASC")
 	{
 		unset($_GET["partial"]);
 
@@ -374,6 +374,19 @@ class GoodController extends Controller
 
 		// print_r($_POST["int"]);
 
+		$sort = array();
+		if($sort_field) {		
+			$sort['field'] = $sort_field;
+			$sort['type'] = $sort_type;
+			$sort_type = ($sort_type == "ASC") ? "DESC" : "ASC";
+			$this->setUserParam("good_sort_".$good_type_id,$sort);
+		} elseif($this->getUserParam("good_sort_".$good_type_id) ) {
+			$temp = $this->getUserParam("good_sort_".$good_type_id);
+			$sort['field'] = $temp->field;
+			$sort['type'] = $temp->type;
+			$sort_type = ($sort['type'] == "ASC") ? "DESC" : "ASC";
+		}
+
 		if( $good_type_id ){
 			unset($_GET["id"]);
 
@@ -388,7 +401,7 @@ class GoodController extends Controller
 					"int_attributes"=>isset( $_POST[$int_attr_arr] )?$_POST[$int_attr_arr]:array()
 				)
 			)->sort( 
-				$_POST['sort']
+				$sort
 			)->getPage(
 				array(
 			    	'pageSize'=>10000,
@@ -403,6 +416,7 @@ class GoodController extends Controller
 		if( $this->getUserParam("GOOD_TYPE_".$good_type_id) ){
 			$fields = GoodTypeAttribute::model()->findAll("attribute_id IN (".implode(",", $this->getUserParam("GOOD_TYPE_".$good_type_id)).") AND good_type_id=$good_type_id");
 		}
+		
 
 		$options = array(
 			'data'=>$goods["items"],
@@ -415,7 +429,9 @@ class GoodController extends Controller
 			'filter_values' => $filter_values,
 			'good_count' => $goods["count"],
 			'sort_fields' => $sort_fields,
-			'codes' => $codes
+			'codes' => $codes,
+			'sort_field' => $sort['field'],
+			'sort_type' => $sort_type
 		);
 
 		if( !$partial ){
