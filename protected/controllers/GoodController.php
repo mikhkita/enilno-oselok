@@ -13,7 +13,7 @@ class GoodController extends Controller
 	{
 		return array(
 			array('allow',
-				'actions'=>array('adminIndex','adminTest','updatePrices','updateAuctionLinks','adminCreate','adminUpdate','adminDelete','adminEdit','getAttrType','getAttr','adminAdverts','adminUpdateImages',"adminAddCheckbox","adminRemoveCheckbox","adminAddAllCheckbox","adminRemoveAllCheckbox",'adminUpdateAll','adminAddSomeCheckbox','adminUpdateAdverts','adminViewSettings'),
+				'actions'=>array('adminIndex','adminTest','updatePrices','updateAuctionLinks','adminCreate','adminUpdate','adminDelete','adminEdit','getAttrType','getAttr','adminAdverts','adminUpdateImages',"adminAddCheckbox","adminRemoveCheckbox","adminAddAllCheckbox","adminRemoveAllCheckbox",'adminUpdateAll','adminAddSomeCheckbox','adminUpdateAdverts','adminViewSettings','adminSold'),
 				'roles'=>array('manager'),
 			),
 			array('allow',
@@ -24,6 +24,21 @@ class GoodController extends Controller
 				'users'=>array('*'),
 			),
 		);
+	}
+
+	public function actionAdminSold($id,$good_type_id)
+	{
+		$model = $this->loadModel($id);
+		$model->archive = 1;
+		$model->date = time();
+		$model->save();
+		GoodAttribute::model()->deleteAll('good_id='.$id.' AND attribute_id IN (58,59,60,61)');
+
+		
+		$model->updateAdverts();
+
+		$this->redirect( Yii::app()->createUrl('good/adminindex',array('good_type_id'=>$good_type_id)) );
+
 	}
 
 	public function actionAdminCreate($good_type_id)
@@ -100,7 +115,7 @@ class GoodController extends Controller
 			// Log::debug(print_r($values, true));
 			$this->insertValues(GoodAttribute::tableName(),$values);
 
-			$model->update();
+			$model->updateAdverts();
 
 			Good::updatePrices(array($id));
 
@@ -165,7 +180,7 @@ class GoodController extends Controller
 			}
 
 			foreach ($goods as $i => $good) {
-				$good->update();
+				$good->updateAdverts();
 			}
 
 			// list($queryCount, $queryTime) = Yii::app()->db->getStats();
