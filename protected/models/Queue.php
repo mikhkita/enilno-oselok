@@ -159,7 +159,10 @@ class Queue extends CActiveRecord
 
 					if( $advert->place->category_id == 2048 ){
 						$last = Queue::model()->with("advert.place")->find(array("limit"=>1,"order"=>"start DESC","condition"=>"place.category_id=2048 AND start IS NOT NULL AND advert.city_id=".$advert->city_id));
-						$item["start"] = date("Y-m-d H:i:s", ($last)?(strtotime($last->start)+rand(33*60,39*60)):$start );
+						$delay = $this->getCityParam($advert->city_id);
+						$from = (($delay !== NULL)?$delay:30)*0.9;
+						$to = (($delay !== NULL)?$delay:30)*1.1;
+						$item["start"] = date("Y-m-d H:i:s", ($last)?(strtotime($last->start)+rand($from*60,$to*60)):$start );
 					}
 					array_push($values, $item);
 					$start += $interval;
