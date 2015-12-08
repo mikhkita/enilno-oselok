@@ -13,7 +13,7 @@ class GoodController extends Controller
 	{
 		return array(
 			array('allow',
-				'actions'=>array('adminIndex','adminTest','updatePrices','updateAuctionLinks','adminCreate','adminUpdate','adminDelete','adminEdit','getAttrType','getAttr','adminAdverts','adminUpdateImages',"adminAddCheckbox","adminRemoveCheckbox","adminAddAllCheckbox","adminRemoveAllCheckbox",'adminUpdateAll','adminAddSomeCheckbox','adminUpdateAdverts','adminViewSettings','adminSold'),
+				'actions'=>array('adminIndex','adminTest','updatePrices','updateAuctionLinks','adminCreate','adminUpdate','adminDelete','adminEdit','getAttrType','getAttr','adminAdverts','adminUpdateImages',"adminAddCheckbox","adminRemoveCheckbox","adminAddAllCheckbox","adminRemoveAllCheckbox",'adminUpdateAll','adminAddSomeCheckbox','adminUpdateAdverts','adminViewSettings','adminSold','actionAdminArchive','adminArchive'),
 				'roles'=>array('manager'),
 			),
 			array('allow',
@@ -26,11 +26,30 @@ class GoodController extends Controller
 		);
 	}
 
+	public function actionAdminArchive($id = NULL, $good_type_id) 
+	{
+		$goodType = GoodType::model()->with("fields")->findByPk($good_type_id);
+		if($id) {
+			$model = $this->loadModel($id);
+			$model->archive = 0;
+			$model->date = NULL;
+			$model->save();
+		}
+		$goods = Good::model()->findAll("good_type_id=".$good_type_id." AND archive=1");
+		$options = array(
+			'data'=>$goods,
+			'name'=>$goodType->name
+		);
+
+		$this->render('adminArchive',$options);
+
+	}
+
 	public function actionAdminSold($id,$good_type_id)
 	{
 		$model = $this->loadModel($id);
 		$model->archive = 1;
-		$model->date = time();
+		$model->date = date("Y-m-d H:i:s", time());
 		$model->save();
 		GoodAttribute::model()->deleteAll('good_id='.$id.' AND attribute_id IN (58,59,60,61)');
 
