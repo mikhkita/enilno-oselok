@@ -436,6 +436,22 @@ class Good extends GoodFilter
 				$goods = Good::model()->findAll($criteria);
 				
 			} else $goods = Good::model()->with("fields")->findAll("attribute_id=3 AND good_type_id=".$good_type_id.' AND archive=0');
+
+			$goods = Good::model()->filter(
+				array(
+					"good_type_id"=>$good_type_id,
+					"attributes"=>$filter_values,
+					"int_attributes"=>isset( $_POST[$int_attr_arr] )?$_POST[$int_attr_arr]:array()
+				)
+			)->sort( 
+				$this->getUserParam("good_sort_".$good_type_id) ? $this->getUserParam("good_sort_".$good_type_id) : array()
+			)->getPage(
+				array(
+			    	'pageSize'=>10000,
+			    ), 
+			    array(3)
+			);
+
 			$_SESSION["goods"][$good_type_id] = array();
 			foreach ($goods as $key => $good) {
 				$_SESSION["goods"][$good->good_type_id][$good->id] = $good->fields[0]->value;

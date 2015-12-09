@@ -333,7 +333,7 @@ class GoodController extends Controller
 
 		$goodType = GoodType::model()->with("fields")->findByPk($good_type_id);
 
-		$attr_arr = "filter";
+		$attr_arr = 'filter';
 		$int_attr_arr = "int";
 		$params = array(
 			1 => array(
@@ -342,7 +342,7 @@ class GoodController extends Controller
 					"SORT" => array(3,20),
 				),
 			2 => array(
-					"FILTER" => array(43,26,27),
+					"FILTER" => array(43,26,27,70),
 					"FILTER_NAMES" => array(43=>41),
 					"SORT" => array(3,20),
 				),
@@ -356,23 +356,21 @@ class GoodController extends Controller
 		$attributes = $this->getFilterVariants($params[$good_type_id]["FILTER"],$params[$good_type_id]["FILTER_NAMES"],$good_type_id);
 		$labels = $this->getLabels($params[$good_type_id]["FILTER"]);
 
-		if(!isset($_SESSION)) session_start();
-		if( !isset($_POST["sort"]) ){
-			if( isset($_SESSION["POST"][$good_type_id]) ){
-				$_POST = $_SESSION["POST"][$good_type_id];
-			}else{
-				$_POST["sort"] = array("field"=>20,"type"=>"ASC");
-				$_POST[$attr_arr] = array();
-			}
-		}else{
-			$_SESSION["POST"][$good_type_id] = $_POST;
-		}
+		// if(!isset($_SESSION)) session_start();
+		// if( !isset($_POST["sort"]) ){
+		// 	if( isset($_SESSION["POST"][$good_type_id]) ){
+		// 		$_POST = $_SESSION["POST"][$good_type_id];
+		// 	}else{
+		// 		$_POST["sort"] = array("field"=>20,"type"=>"ASC");
+		// 		$_POST["filter"] = array();
+		// 	}
+		// }else{
+		// 	$_SESSION["POST"][$good_type_id] = $_POST;
+		// }
 
 		if( !$partial ){
 			$this->layout='admin';
 		}
-
-		// print_r($_POST["int"]);
 
 		$sort = array();
 		if($sort_field) {		
@@ -392,6 +390,9 @@ class GoodController extends Controller
 
 			if( isset( $_POST[$attr_arr] ) ){
 				$filter_values = $_POST[$attr_arr];
+				$this->setUserParam("good_filter_".$good_type_id,$filter_values);
+			} else {
+				$filter_values = $this->getUserParam("good_filter_".$good_type_id) ? $this->getUserParam("good_filter_".$good_type_id) : array();
 			}
 
 			$goods = Good::model()->filter(

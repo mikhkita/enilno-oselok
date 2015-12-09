@@ -285,7 +285,10 @@ $(document).ready(function(){
             });
         }
     }
-
+    $(".select2-filter").select2({
+            placeholder: "",
+            allowClear: true
+        });
     function bindForm($form){
 
         $(".select2").select2({
