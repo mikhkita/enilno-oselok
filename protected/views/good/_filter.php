@@ -9,7 +9,8 @@
 					<div class="clearfix">
 						<? if( $item["VIEW"] == "CHECKBOX" ): ?>	
 							<?if( count($item["VARIANTS"]) > 10):?>
-								<?=Chtml::dropDownList($arr_name."[$field]", (isset($filter_values[$field]))?$filter_values[$field]:"", $item["VARIANTS"],array('class'=> 'select2-filter','multiple' => 'true')); ?>	
+								<? $selected = array(); if(!empty($filter_values[$field])) foreach ($filter_values[$field] as $multi) $selected[$multi] = array('selected' => 'selected'); ?>
+								<?=Chtml::dropDownList($arr_name."[$field]", "", $item["VARIANTS"],array('class'=> 'select2-filter','multiple' => 'true','options' => $selected)); ?>	
 							<? else: ?>
 								<?=CHTML::checkBoxList($arr_name."[$field]", (isset($filter_values[$field]))?$filter_values[$field]:"", $item["VARIANTS"], array("separator"=>"","template"=>"<div class='b-filter-checkbox'>{input}{label}</div>")); ?>
 							<? endif;?>

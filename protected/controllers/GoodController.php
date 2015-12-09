@@ -392,7 +392,9 @@ class GoodController extends Controller
 				$filter_values = $_POST[$attr_arr];
 				$this->setUserParam("good_filter_".$good_type_id,$filter_values);
 			} else {
-				$filter_values = $this->getUserParam("good_filter_".$good_type_id) ? $this->getUserParam("good_filter_".$good_type_id) : array();
+
+				$filter_values = $this->getUserParam("good_filter_".$good_type_id) ? (array)$this->getUserParam("good_filter_".$good_type_id) : array();
+				print_r($filter_values);
 			}
 
 			$goods = Good::model()->filter(
