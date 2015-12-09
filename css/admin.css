@@ -2198,7 +2198,7 @@ ul.b-filter-list{
     display: inline-block;
 }
 .b-popup-good-filter{
-    width: 620px;
+    width: 660px;
 }
 .b-filter-checkbox{
     float: left;
@@ -2367,6 +2367,12 @@ ul.b-filter-list{
     .good-sort.active.up:after {
         content: "▲";
     }
+.b-popup-good-filter .select2-container {
+    width: 655px;
+}
+.b-popup-good-filter .select2-choices {
+    min-width: 653px;
+}
 .b-kit-switcher {
     margin-left: 15px;
     margin-top: -1px;

@@ -23,9 +23,7 @@
             </ul>
             <div id="tabs-disc">
                 <?php $form=$this->beginWidget('CActiveForm', array(
-                    'id'=>'filter',
                     'action' => Yii::app()->createUrl('/kolesoOnline/category',array("type" => 2)),
-                    'enableAjaxValidation'=>false,
                     'method' => 'GET'
                 )); ?>
                     <!-- <div class="filter-cont">
@@ -80,9 +78,7 @@
             </div>
             <div id="tabs-tire">
                 <?php $form=$this->beginWidget('CActiveForm', array(
-                    'id'=>'filter',
                     'action' => Yii::app()->createUrl('/kolesoOnline/category',array("type" => 1)),
-                    'enableAjaxValidation'=>false,
                     'method' => 'GET'
                 )); ?>
                     <div class="filter-cont">
@@ -95,10 +91,6 @@
                                     </label>
                                 <? endforeach; ?>
                             <? endforeach; ?>
-                            <!-- <input id="tire-spike" type="checkbox" name="arr[23][]" value="762">
-                            <label for="tire-spike">Зимние шипованные</label>
-                            <input id="tire-summer" type="checkbox" name="arr[23][]" value="463">
-                            <label for="tire-summer">Летние</label> -->
                         </div>
                     </div>
                     <? foreach ($params[1]["FILTER"] as $filters): ?>
@@ -142,50 +134,61 @@
                 <?php $this->endWidget(); ?>
             </div>
             <!-- <div id="tabs-wheel">
-                <form action="#" method="GET">
+                <?php $form=$this->beginWidget('CActiveForm', array(
+                    'action' => Yii::app()->createUrl('/kolesoOnline/category',array("type" => 3)),
+                    'method' => 'GET'
+                )); ?>
                     <div class="filter-cont">
                         <div class="tire-type clearfix">    
-                            <input id="tire-winter" type="radio" name="tire-type" value="0">
-                            <label for="tire-winter">Зимние нешипованные</label>
-                            <input id="tire-spike" type="radio" name="tire-type" value="1">
-                            <label for="tire-spike">Зимние шипованные</label>
-                            <input id="tire-summer" type="radio" name="tire-type" value="2">
-                            <label for="tire-summer">Летние</label>
+                            <? foreach ($tire_filter[$params[1]["SEASON"]] as $key => $col): ?>
+                                <? foreach ($col as $item): ?>     
+                                    <label>
+                                        <?=$item['value']?>
+                                        <input type="checkbox" name="arr[<?=$params[1]["SEASON"]?>][]" value="<?=$item['variant_id']?>">
+                                    </label>
+                                <? endforeach; ?>
+                            <? endforeach; ?>
                         </div>
                     </div>
+                    <? foreach ($params[3]["FILTER"] as $filters): ?>
                     <div class="filter-cont clearfix">
-                        <div class="filter-item">
-                            <h5>Производитель</h5>
-                            <div class="input"></div>   
-                        </div>
-                        <div class="filter-item">
-                            <h5>Тип</h5>
-                            <div class="input"></div>   
-                        </div>
-                        <div class="filter-item">
-                            <h5>Состояние</h5>
-                            <div class="input"></div>   
-                        </div>
-                        <div class="filter-item">
-                            <h5>Посадочный диаметр</h5>
-                            <div class="input"></div>   
-                        </div>
+                        <? foreach ($filters as $attr_id => $label): ?>
+                            <div class="filter-item">
+                                <h5><?=$label?></h5>
+                                <div class="input"></div>   
+                                <div class="variants clearfix">
+                                    <? foreach ($wheel_filter[$attr_id] as $key => $col): ?>
+                                        <div>
+                                            <? foreach ($col as $item): ?>
+                                                <label>
+                                                    <input type="checkbox" name="arr[<?=$attr_id?>][]" value="<?=$item['variant_id']?>">
+                                                    <span onselectstart="return false;"><?=str_replace(" ", "&nbsp;", $item['value'])?></span>
+                                                </label>
+                                            <? endforeach; ?>
+                                        </div>
+                                    <? endforeach; ?>
+                                </div>
+                            </div>
+                        <? endforeach; ?>
                     </div>
-                    <div class="filter-cont clearfix">
-                        <div class="filter-item">
-                            <h5>Сверловка</h5>
-                            <div class="input"></div>   
-                        </div>
-                        <div class="filter-item">
-                            <h5>Ширина диска</h5>
-                            <div class="input"></div>   
-                        </div>
-                        <div class="filter-item">
-                            <h5>Вылет</h5>
-                            <div class="input"></div>   
-                        </div>
+                    <? endforeach; ?>
+                    <div class="filter-cont">
+                        <div class="slide-type clearfix">
+                            <div class="left">
+                                <h3>Ценовой диапазон <span>от</span></h3>
+                               <input class="min-val price" type="text" maxlength="6" name="int[20][min]" placeholder="Мин.">
+                                <span class="dash">до</span>
+                                <input class="max-val price" type="text" maxlength="6" name="int[20][max]" placeholder="Макс.">
+                            </div>
+                            <div class="slider-range-cont">
+                                <div data-min-cur="<?=$_SESSION['FILTER'][3]['int'][20]['min']?>" data-min="<?=$params[3]['PRICE_MIN']?>" data-max-cur="<?=$_SESSION['FILTER'][3]['int'][20]['max']?>" data-max="<?=$params[3]['PRICE_MAX']?>" data-step="100" class="slider-range left"></div>
+                            </div>
+                        </div>  
                     </div>
-                </form>
+                    <div class="filter-butt-cont">
+                        <input type="submit" class="b-black-butt" value="Найти">
+                    </div>
+                <?php $this->endWidget(); ?>
             </div> -->
         </div>
     </div>

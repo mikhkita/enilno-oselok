@@ -1,12 +1,18 @@
 <?
-    $sort_arr = array("20" => "по цене", "9" => "по диаметру");
+    $sort_arr = array("20" => "цене", "9" => "диаметру");
     if ($_GET['type'] == 1) {
-        $sort_arr["7"] = "по ширине";
-        $sort_arr["8"] = "по профилю";
+        $sort_arr["7"] = "ширине";
+        $sort_arr["8"] = "профилю";
     }
     if ($_GET['type'] == 2) {
-        $sort_arr["31"] = "по ширине";
-        $sort_arr["32"] = "по вылету";
+        $sort_arr["31"] = "ширине";
+        $sort_arr["32"] = "вылету";
+    }
+    if ($_GET['type'] == 3) {
+        $sort_arr["7"] = "ширине шины";
+        $sort_arr["8"] = "профилю";
+        $sort_arr["31"] = "ширине диска";
+        $sort_arr["32"] = "вылету";
     }
     $sort_type = (isset($_SESSION['FILTER'][$_GET['type']]['sort']) && isset($_SESSION['FILTER'][$_GET['type']]['sort']['type']) && $_SESSION['FILTER'][$_GET['type']]['sort']['type'] != "") ? $_SESSION['FILTER'][$_GET['type']]['sort']['type'] : "ASC";
 ?>

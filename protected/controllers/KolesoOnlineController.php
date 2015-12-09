@@ -162,6 +162,90 @@ class KolesoOnlineController extends Controller
 			),
 			"PRICE_MIN" => 0,
 			"PRICE_MAX" => 0,
+		),
+		3 => array(
+			"NAME" => "Колеса",
+			"TITLE_CODE" => 67,
+			"TITLE_2_CODE" => 68,
+			"DESCRIPTION_CODE" => 71,
+			"GARANTY_CODE" => 69,
+			"PRICE_CODE" => 74,
+			"ORDER" => 64,
+			'SHIPPING' => 74,
+			'AVAILABLE' => 114,
+			"FILTER" => array(
+				9 => "Диаметр",
+				7 => "Ширина шины",
+				8 => "Профиль",
+				16 => "Модель шины",
+				5 => "Сверловка",
+				31 => "Ширина диска",
+				32 => "Вылет",
+				28 => "Количество"
+			),
+			"CATEGORY" => array(
+				"ID" => array(
+					"ID" => 3,
+					"LABEL" => "Артикул",
+					"UNIT" => ' '
+				),
+				"AMOUNT" => array(
+					"ID" => 28,
+					"LABEL" => "Количество в комплекте",
+					"UNIT" => " шт."
+				),
+				"CONDITION" => array(
+					"ID" => 26,
+					"LABEL" => "Состояние товара",
+					"UNIT" => ' '
+				),
+				"DIAMETER" => array(
+					"ID" => 9,
+					"LABEL" => "Диаметр",
+					"UNIT" => '"'
+				),
+				"DRILL" => array(
+					"ID" => 117,
+					"LABEL" => "Сверловка",
+					"UNIT" => ' ',
+					"TYPE" => "INTER"
+				),
+				"WIDTH" => array(
+					"ID" => 120,
+					"LABEL" => "Ширина диска",
+					"UNIT" => '"',
+					"TYPE" => "INTER"
+				),
+				"VILET" => array(
+					"ID" => 121,
+					"LABEL" => "Вылет",
+					"UNIT" => ' мм.',
+					"TYPE" => "INTER"
+				),
+				"CENTER" => array(
+					"ID" => 33,
+					"LABEL" => "Центральное отверстие",
+					"UNIT" => ' мм.'
+				),
+				"YEAR" => array(
+					"ID" => 10,
+					"LABEL" => "Год выпуска",
+					"UNIT" => ' '
+				),
+				"COUNTRY" => array(
+					"ID" => 118,
+					"LABEL" => "Страна изготовитель",
+					"UNIT" => ' ',
+					"TYPE" => "INTER"
+				),
+				"LOCATION" => array(
+					"ID" => 27,
+					"LABEL" => "Местонахождение товара",
+					"UNIT" => ' '
+				),
+			),
+			"PRICE_MIN" => 0,
+			"PRICE_MAX" => 0,
 		));
 
 	public function init() {
@@ -238,6 +322,7 @@ class KolesoOnlineController extends Controller
 
 		$tire_filter = $this->getFilter(1);
 		$disc_filter =  $this->getFilter(2);
+		$wheel_filter =  $this->getFilter(3);
        	$tires = $this->getGoods(8,1,array(
 			"good_type_id"=>1,
 			"int_attributes"=>array(46=>array("max"=>0))
@@ -252,6 +337,7 @@ class KolesoOnlineController extends Controller
 
 		$this->params[1]["FILTER"] = $this->splitByRows(4,$this->params[1]["FILTER"]);
 		$this->params[2]["FILTER"] = $this->splitByRows(4,$this->params[2]["FILTER"]);
+		$this->params[3]["FILTER"] = $this->splitByRows(4,$this->params[3]["FILTER"]);
 
 		$cities = $this->getCity();	
 			$dynamic = $this->getDynObjects(array(
@@ -264,6 +350,7 @@ class KolesoOnlineController extends Controller
 			'cities' => $cities,
 			'tire_filter' => $tire_filter,
 			'disc_filter' => $disc_filter,
+			'wheel_filter' => $wheel_filter,
 			'params' => $this->params,
 			'dynamic' => $dynamic
 		));		
@@ -363,6 +450,9 @@ class KolesoOnlineController extends Controller
     	}	
     	if($type==2) {
         	$criteria->condition .= 't.attribute_id=6 OR t.attribute_id=5 OR t.attribute_id=31 OR t.attribute_id=32';
+    	}	
+    	if($type==3) {
+        	$criteria->condition .= 't.attribute_id=7 OR t.attribute_id=8 OR t.attribute_id=23 OR t.attribute_id=16 OR t.attribute_id=6 OR t.attribute_id=5 OR t.attribute_id=31 OR t.attribute_id=32';
     	}	
     	$criteria->group = 't.variant_id';
         $criteria->order = 'variant.sort ASC';

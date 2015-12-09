@@ -8,7 +8,11 @@
 					<h3><?=$labels[$field]?></h3>
 					<div class="clearfix">
 						<? if( $item["VIEW"] == "CHECKBOX" ): ?>	
-							<?=CHTML::checkBoxList($arr_name."[$field]", (isset($filter_values[$field]))?$filter_values[$field]:"", $item["VARIANTS"], array("separator"=>"","template"=>"<div class='b-filter-checkbox'>{input}{label}</div>")); ?>
+							<?if( count($item["VARIANTS"]) > 10):?>
+								<?=Chtml::dropDownList($arr_name."[$field]", (isset($filter_values[$field]))?$filter_values[$field]:"", $item["VARIANTS"],array('class'=> 'select2-filter','multiple' => 'true')); ?>	
+							<? else: ?>
+								<?=CHTML::checkBoxList($arr_name."[$field]", (isset($filter_values[$field]))?$filter_values[$field]:"", $item["VARIANTS"], array("separator"=>"","template"=>"<div class='b-filter-checkbox'>{input}{label}</div>")); ?>
+							<? endif;?>
 						<? elseif( $item["VIEW"] == "FROMTO" ): ?>
 							<?=CHTML::numberField($arr_name."[$field][FROM]", $filter_values[$field]["FROM"]); ?> - 
 							<?=CHTML::numberField($arr_name."[$field][TO]", $filter_values[$field]["TO"]); ?>
