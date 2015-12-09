@@ -42,46 +42,8 @@ $(document).ready(function(){
 	$(window).scroll(whenScroll);
 	whenScroll();
 
-	$(".fancy").each(function(){
-		var $popup = $($(this).attr("data-block")),
-			$this = $(this);
-		$this.fancybox({
-			padding : 0,
-			content : $popup,
-			fitToView: false,
-			helpers: {
-	         	overlay: {
-	            	locked: true 
-	         	}
-	      	},
-			beforeShow: function(){
-				$popup.find(".custom-field").remove();
-				if( $this.attr("data-value") ){
-					var name = getNextField($popup.find("form"));
-					$popup.find("form").append("<input type='hidden' class='custom-field' name='"+name+"' value='"+$this.attr("data-value")+"'/><input type='hidden' class='custom-field' name='"+name+"-name' value='"+$this.attr("data-name")+"'/>");
-				}
-				if( $this.attr("data-beforeShow") && customHandlers[$this.attr("data-beforeShow")] ){
-					customHandlers[$this.attr("data-beforeShow")]($this);
-				}
-			},
-			afterShow: function(){
-				if( $this.attr("data-afterShow") && customHandlers[$this.attr("data-afterShow")] ){
-					customHandlers[$this.attr("data-afterShow")]($this);
-				}
-				$('.fancybox-inner input[type="text"]').eq(0).focus();
-			},
-			beforeClose: function(){
-				if( $this.attr("data-beforeClose") && customHandlers[$this.attr("data-beforeClose")] ){
-					customHandlers[$this.attr("data-beforeClose")]($this);
-				}
-			},
-			afterClose: function(){
-				if( $this.attr("data-afterClose") && customHandlers[$this.attr("data-afterClose")] ){
-					customHandlers[$this.attr("data-afterClose")]($this);
-				}
-			}
-		});
-	});
+	
+	fancyInit();
 
 	$(".b-go").click(function(){
 		var block = $( $(this).attr("data-block") ),
@@ -140,3 +102,45 @@ $(document).ready(function(){
   		return false;
   	});
 });
+function fancyInit() {
+	$(".fancy").each(function(){
+		var $popup = $($(this).attr("data-block")),
+			$this = $(this);
+		$this.fancybox({
+			padding : 0,
+			content : $popup,
+			fitToView: false,
+			helpers: {
+	         	overlay: {
+	            	locked: true 
+	         	}
+	      	},
+			beforeShow: function(){
+				$popup.find(".custom-field").remove();
+				if( $this.attr("data-value") ){
+					var name = getNextField($popup.find("form"));
+					$popup.find("form").append("<input type='hidden' class='custom-field' name='"+name+"' value='"+$this.attr("data-value")+"'/><input type='hidden' class='custom-field' name='"+name+"-name' value='"+$this.attr("data-name")+"'/>");
+				}
+				if( $this.attr("data-beforeShow") && customHandlers[$this.attr("data-beforeShow")] ){
+					customHandlers[$this.attr("data-beforeShow")]($this);
+				}
+			},
+			afterShow: function(){
+				if( $this.attr("data-afterShow") && customHandlers[$this.attr("data-afterShow")] ){
+					customHandlers[$this.attr("data-afterShow")]($this);
+				}
+				$('.fancybox-inner input[type="text"]').eq(0).focus();
+			},
+			beforeClose: function(){
+				if( $this.attr("data-beforeClose") && customHandlers[$this.attr("data-beforeClose")] ){
+					customHandlers[$this.attr("data-beforeClose")]($this);
+				}
+			},
+			afterClose: function(){
+				if( $this.attr("data-afterClose") && customHandlers[$this.attr("data-afterClose")] ){
+					customHandlers[$this.attr("data-afterClose")]($this);
+				}
+			}
+		});
+	});
+}
