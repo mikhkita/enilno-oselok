@@ -4,12 +4,6 @@
 	<div class="clearfix">
 		<a href="<?php echo $this->createUrl('/good/admincreate',array('good_type_id'=> $_GET["good_type_id"] ))?>" class="ajax-form ajax-create b-butt">Добавить</a>
 		<a href="#" class="fancy left b-butt" data-block=".b-popup-filter">Фильтр</a>
-		<div class="b-sort-cont left">
-	        <label for="sort">Сортировать: </label>
-	        <?=CHTML::dropDownList("sort[field]", $_POST["sort"]["field"], $sort_fields,array('id'=>'b-sort-1')); ?>
-	        <label for="sort">Порядок: </label>
-	        <?=CHTML::dropDownList("sort[type]", $_POST["sort"]["type"], array("ASC"=>"По возрастанию", "DESC"=>"По убыванию"),array('id'=>'b-order-1')); ?>
-	    </div>
 	    <a href="<?php echo $this->createUrl('/good/adminupdateall',array('good_type_id'=> $_GET["good_type_id"],'GoodFilter_page' => ($pages->currentPage+1) ))?>" class="ajax-form ajax-create b-butt" data-block=".b-popup-filter">Редактировать города</a>
 		<a href="<?php echo $this->createUrl('/good/adminaddsomecheckbox',array('good_type_id'=> $_GET["good_type_id"]))?>" class="ajax-form ajax-update right b-butt">Выделить по кодам</a>
 		<a href="<?php echo $this->createUrl('/good/adminremoveallcheckbox',array('good_type_id'=> $_GET["good_type_id"]))?>" class="right b-sess-allcheckbox b-butt">Сбросить все выделение</a>
