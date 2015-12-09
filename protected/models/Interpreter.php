@@ -164,7 +164,7 @@ class Interpreter extends CActiveRecord
     }
 
     public function isNotIsset($interpreter_id, $result, $advert_id = 0){
-    	return ( Unique::model()->count("value='".stripslashes($result)."' AND interpreter_id=$interpreter_id AND advert_id!=$advert_id") )?false:true;
+    	return ( Unique::model()->count("value='".stripslashes(trim($result))."' AND interpreter_id=$interpreter_id AND advert_id!=$advert_id") )?false:true;
     }
 
     public function generate($interpreter_id, $model, $dynObjects = NULL, $advert_id = 0, $uniq = NULL){

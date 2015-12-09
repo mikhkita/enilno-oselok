@@ -603,7 +603,7 @@ padding-top: 30px;}
 				
 			}
 				.grey-block > div h3{
-					font-size: 18px;
+					font-size: 30px;
 					font-weight: 700;
 					padding: 15px;
 				}
@@ -917,15 +917,16 @@ width: 700px;margin-left: 0px;}
 	}
 		.b-category .b-block .grey-block {
 
-		}
+		width: 700px;margin-top: 20px;}
 			.b-category .b-block .grey-block .filter-block {
-				padding: 17px 25px 30px;
+				padding: 30px 30px 30px;
 				padding-right: 0;
 				text-align: left;
 			}
 				.b-category .b-block .grey-block .filter-block h5 {
-					font-weight: 500;	
+					font-weight: 500;
 					margin-bottom: 10px;
+					color: #414141;
 				}
 				.b-category .b-block .grey-block .filter-block .tire-type {
 					text-align: left;
@@ -972,9 +973,13 @@ width: 700px;margin-left: 0px;}
 					}
 				.b-category .b-block .grey-block .filter-block .filter-item {
 					margin-bottom: 25px;
+					margin-right: 27px;
+				}
+				.b-category .b-block .grey-block .filter-block .filter-item:nth-child(2n){
+					margin-right: 0px;
 				}
 					.b-category .b-block .grey-block .filter-block .filter-item .input {
-						width: 195px;
+						width: 304px;
 					}
 				.b-filters .filter-butt-cont{
 					padding: 10px 29px 35px;
@@ -1128,6 +1133,7 @@ width: 700px;margin-left: 0px;}
 						float: left;
 						font-weight: 300;
 						margin-left: 12px;
+						font-size: 28px;
 					}
 						.b-category .b-block .good-list .b-sort ul li:hover {
 						}

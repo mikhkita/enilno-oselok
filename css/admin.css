@@ -424,7 +424,7 @@ h1{
     }
     .b-table tr.b-exist{
         /*border: 4px solid #452716;*/
-        background-color: #FFC9B5 !important;
+        background-color: #B5FFBB !important;
     }
         .b-table tr.b-filter td select,
         .b-table tr.b-filter td input{
@@ -464,6 +464,9 @@ h1{
         }
         .b-table td.b-empty{
             background-color: #B27C5E;
+        }
+        .b-table td.b-equal{
+            background-color: #FFC9B5;
         }
         .b-table td.b-not-valid{
             background-color: #FD0101;

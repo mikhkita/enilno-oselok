@@ -147,7 +147,7 @@ class Advert extends CActiveRecord
 			$unique = new Unique();
 			$unique->advert_id = $this->id;
 			$unique->interpreter_id = $interpreter_id;
-			$unique->value = stripslashes($value);
+			$unique->value = stripslashes(trim($value));
 			$unique->save();
 		}
 	}

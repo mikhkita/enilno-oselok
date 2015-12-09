@@ -198,7 +198,9 @@ class ImportController extends Controller
 
 			foreach ($tmpValues as $key => $item) {
 				$item = trim($item);
-				if( $item != "" && $item != NULL ){
+				if( $item == "-" ){
+					$values[] = $item;
+				}elseif( $item != "" && $item != NULL ){
 					$v = $this->validate($type, $item);
 					$isNotValid = (!$isNotValid)?(!$v):true;
 					$values[] = ( $type == "int" )?round($item):$item;
@@ -224,7 +226,7 @@ class ImportController extends Controller
 
 		if( is_array($variants) && is_array($value) ){
 			foreach ($value as $i => $item) {
-				if( !isset($variants[mb_strtolower($item,'UTF-8')]) ) $highlight = "new-variant";
+				if( $item != "-" && !isset($variants[mb_strtolower($item,'UTF-8')]) ) $highlight = "new-variant";
 			}
 		}
 		

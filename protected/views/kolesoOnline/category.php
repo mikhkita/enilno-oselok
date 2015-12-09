@@ -22,7 +22,7 @@
             )); ?>
             <div class="grey-block left">
                 <div class="gradient-grey">
-                    <h3>Фильтры</h3>
+                    <h3>Фильтр</h3>
                     <!-- <a href="#">Сбросить фильтр</a> -->
                     <div class="filter-block">
                         <? if($_GET['type'] == 1): ?>
@@ -81,7 +81,7 @@
                     <!-- <li><a href="#">Каталог</a></li> -->
                     <li><a href="#"><?=$this->params[$_GET['type']]["NAME"]?></a></li>
                 </ul>
-                <h3 class="category-title">раздел <?=$this->params[$_GET['type']]["NAME"]?></h3>
+                <h3 class="category-title"><?=$this->params[$_GET['type']]["NAME"]?></h3>
                 <? if(count($goods)): ?>
                 <div class="b-sort clearfix">
                     <div class="left clearfix">

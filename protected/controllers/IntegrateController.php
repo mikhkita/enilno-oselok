@@ -512,6 +512,8 @@ class IntegrateController extends Controller
         // var_dump($fields);
         // die();
 
+        // $result = 1;
+
         if( $result ){
             if( $place_name == "AVITO" ){
                 $unique_arr = array();
@@ -603,19 +605,31 @@ class IntegrateController extends Controller
     }
 
     public function actionAdminIndex2(){
-        $variants = Variant::model()->findAll();
+        include_once Yii::app()->basePath.'/extensions/simple_html_dom.php';
+        $adverts = Advert::model()->with("place")->findAll("place.category_id=2048 AND url IS NOT NULL");
 
-        $values = array();
-        foreach ($variants as $key => $variant) {
-            $value = ($variant->int_value === NULL)?( ($variant->float_value === NULL)?($variant->varchar_value):($variant->float_value) ):($variant->int_value);
-            array_push($values, array(
-                "id" => $variant->id,
-                "varchar_value" => $value,
-                "sort" => $variant->sort,
+        $curl = new Curl();
+
+        // echo count($adverts);
+        // $advert = array_pop($adverts);
+        $i = 0;
+        foreach ($adverts as $key => $advert) {
+            $html = str_get_html($curl->request("http://avito.ru/".$advert->url));
+
+            $title = str_replace("&quot;", '"',$html->find("h1.h1",0)->innertext);
+            $text = array();
+            foreach ($html->find("#desc_text p") as $key => $p) {
+                array_push($text, str_replace("<br />", "\n", $p->innertext));   
+            }
+            $text = implode("\n\n", $text);
+
+            $advert->replaceUnique(array(
+                138 => $title,
+                139 => $text
             ));
-        }
-        Variant::model()->deleteAll();
 
-        $this->insertValues(Variant::tableName(),$values);
+            $i++;
+            echo $i."<br>";
+        }
     }
 }
