@@ -16,7 +16,6 @@
     }
     $sort_type = (isset($_SESSION['FILTER'][$_GET['type']]['sort']) && isset($_SESSION['FILTER'][$_GET['type']]['sort']['type']) && $_SESSION['FILTER'][$_GET['type']]['sort']['type'] != "") ? $_SESSION['FILTER'][$_GET['type']]['sort']['type'] : "ASC";
 ?>
-<?php $this->renderPartial('_header', array('cities' => $cities)); ?>
 <div class="b-content">
     <div class="b-category">
         <div class="b-block clearfix">

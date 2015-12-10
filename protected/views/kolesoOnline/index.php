@@ -1,4 +1,3 @@
-<?php $this->renderPartial('_header', array('cities' => $cities)); ?>
 <div class="b-content">
     <div class="b b-main-slider">
         <div class="slide" style="background-image: url('<?php echo Yii::app()->request->baseUrl; ?>/html/i/back-main.jpg');">
