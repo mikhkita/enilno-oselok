@@ -157,6 +157,7 @@ class Good extends GoodFilter
         $criteria->with = array('fields' => array('select'=> array('variant_id','attribute_id')));
 
         $count = 0;
+
         if(isset($options["attributes"]) && count($options["attributes"]))
 			foreach ($options["attributes"] as $id => $attribute_vals) {
 				if( !is_array($attribute_vals) ) $attribute_vals = array($attribute_vals);

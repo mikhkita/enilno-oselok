@@ -313,7 +313,7 @@ class GoodController extends Controller
 		printf('<br>Прошло %.4F сек.<br>', microtime(true) - $start);		
 	}
 
-	public function actionAdminIndex($partial = false, $good_type_id = false,$sort_field = NULL,$sort_type = "ASC",$filter = 0)
+	public function actionAdminIndex($partial = false, $good_type_id = false,$sort_field = NULL,$sort_type = "ASC")
 	{
 		unset($_GET["partial"]);
 
@@ -388,14 +388,13 @@ class GoodController extends Controller
 		if( $good_type_id ){
 			unset($_GET["id"]);
 
-			if($filter) {
+			if(isset($_POST['filter-active'])) {
 				$this->setUserParam("good_filter_".$good_type_id,array());
 			}
 			if(isset($_POST[$attr_arr])) $this->setUserParam("good_filter_".$good_type_id,$_POST[$attr_arr]);
 
 			$filter_values = $this->getUserParam("good_filter_".$good_type_id) ? (array)$this->getUserParam("good_filter_".$good_type_id) : array();
 			
-
 			$goods = Good::model()->filter(
 				array(
 					"good_type_id"=>$good_type_id,
@@ -418,7 +417,6 @@ class GoodController extends Controller
 		if( $this->getUserParam("GOOD_TYPE_".$good_type_id) ){
 			$fields = GoodTypeAttribute::model()->findAll("attribute_id IN (".implode(",", $this->getUserParam("GOOD_TYPE_".$good_type_id)).") AND good_type_id=$good_type_id");
 		}
-		
 
 		$options = array(
 			'data'=>$goods["items"],
