@@ -179,10 +179,13 @@ class Good extends GoodFilter
 		$criteria->addCondition('archive='.$options["archive"]);
 		$criteria->having = 'COUNT(DISTINCT fields.attribute_id)'.(( $count == 0 )?'>':'').'='.$count;
 
-		if( $ids ) 
+		if( $ids ){
 			$criteria->addInCondition("fields.good_id", $ids);
+			$criteria->order = "field(fields.good_id,".implode(",", array_reverse($ids)).") DESC, t.id DESC";
+		}
 
 		$this->ids = $this->getIds( GoodFilter::model()->findAll($criteria) );
+
 		// print_r(count($this->ids));
 
     	return $this;

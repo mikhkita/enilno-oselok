@@ -526,7 +526,7 @@ class IntegrateController extends Controller
             Log::debug("Действие над ".$advert->good->fields_assoc[3]->value." в аккаунте ".$account->login." прошло успешно");
             $queue->delete();
         }else{
-            Log::debug("Действие над ".$advert->good->fields_assoc[3]->value." в аккаунте ".$account->login." прошло с ОШБИКОЙ");
+            Log::debug("Действие над ".$advert->good->fields_assoc[3]->value." в аккаунте ".$account->login." прошло с ОШИБКОЙ");
             $queue->setState("error");
         }
 
