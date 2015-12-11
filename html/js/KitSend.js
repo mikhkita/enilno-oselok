@@ -98,10 +98,16 @@ $(document).ready(function(){
 					});	
 				}
 			});
+  		}else{
+  			$(this).find("input.error").eq(0).focus();
   		}
   		return false;
   	});
 });
+function applePie() {
+    return ( navigator.userAgent.match(/(iPhone|iPod|iPad)/i) );
+}
+
 function fancyInit() {
 	$(".fancy").each(function(){
 		var $popup = $($(this).attr("data-block")),
@@ -110,6 +116,8 @@ function fancyInit() {
 			padding : 0,
 			content : $popup,
 			fitToView: false,
+			scrolling   : 'no',
+			autoDimensions : 'true',
 			helpers: {
 	         	overlay: {
 	            	locked: true 
@@ -129,7 +137,8 @@ function fancyInit() {
 				if( $this.attr("data-afterShow") && customHandlers[$this.attr("data-afterShow")] ){
 					customHandlers[$this.attr("data-afterShow")]($this);
 				}
-				$('.fancybox-inner input[type="text"]').eq(0).focus();
+				if ( applePie() ) { $('body,html').css({'overflow': 'hidden'}); } 
+				// $('.fancybox-inner input[type="text"]').eq(0).focus();
 			},
 			beforeClose: function(){
 				if( $this.attr("data-beforeClose") && customHandlers[$this.attr("data-beforeClose")] ){
@@ -140,6 +149,7 @@ function fancyInit() {
 				if( $this.attr("data-afterClose") && customHandlers[$this.attr("data-afterClose")] ){
 					customHandlers[$this.attr("data-afterClose")]($this);
 				}
+        		if ( applePie() ) { $('body,html').css({'overflow': 'auto'}); }
 			}
 		});
 	});

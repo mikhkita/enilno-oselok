@@ -330,13 +330,12 @@ class KolesoOnlineController extends Controller
 		$wheel_filter =  $this->getFilter(3);
        	$tires = $this->getGoods(8,1,array(
 			"good_type_id"=>1,
-			"int_attributes"=>array(46=>array("max"=>0))
 		),array("field"=>46,"type"=>"DESC")); 
 		$tires = $tires['items'];
 
 		$discs = $this->getGoods(8,2,array(
 			"good_type_id"=>2,
-			"int_attributes"=>array(46=>array("max"=>0))
+			"attributes"=>array(78=>2486,77=>array(2478,2479,2480,2481,2482))
 		),array("field"=>46,"type"=>"DESC"));
 		$discs = $discs['items'];
 

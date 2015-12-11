@@ -33,6 +33,8 @@ $(document).ready(function(){
 
     var blocked = false;
 
+    // new FastClick(document.body);
+
     function whenScroll(){
         if( $(".b-fixed-top").length ){
             var scroll = ((document.documentElement && document.documentElement.scrollTop) || document.body.scrollTop);
@@ -312,7 +314,7 @@ $(document).ready(function(){
             active.find('.variants').removeClass("active");
     }
 
-    $("body").on("mouseup",".variants *,.filter-item *",function(){
+    $("body").on("mouseup",".variants *,.filter-item .input",function(){
         open = true;
     });
 

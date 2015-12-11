@@ -2470,6 +2470,9 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 		background-position: 41px -2px;
 	}
 }
+.fancybox-inner{
+	margin-bottom: 20px;
+}
 
 @media screen and (max-width: 1250px){
 	

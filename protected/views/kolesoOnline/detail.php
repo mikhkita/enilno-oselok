@@ -25,8 +25,9 @@
 				</div>
 				<div class="detail-price gradient-grey right">
 					<div class="clearfix">
-						<? $price = ($good->fields_assoc[20])?$good->fields_assoc[20]->value:0; $order = Interpreter::generate($this->params[$_GET['type']]["ORDER"], $good,$dynamic); ?>
-						<h3><?=(!$price )? Yii::app()->params["zeroPrice"] : number_format( $price, 0, ',', ' ' )." р."?><span> <?=Interpreter::generate($this->params[$_GET['type']]["SHIPPING"], $good,$dynamic);?></span></h3>
+						<? $price = number_format(($good->fields_assoc[20])?$good->fields_assoc[20]->value:0, 0, ',', ' ' )." р."; $order = Interpreter::generate($this->params[$_GET['type']]["ORDER"], $good,$dynamic); ?>
+						<? $price = ($good->archive)?"Продано":$price; ?>
+						<h3><?=( !$good->fields_assoc[20]->value || $good->fields_assoc[20]->value == 0 )? Yii::app()->params["zeroPrice"] : $price ?><span> <?=Interpreter::generate($this->params[$_GET['type']]["SHIPPING"], $good,$dynamic);?></span></h3>
 						<? $is_available = Interpreter::generate($this->params[$_GET['type']]["AVAILABLE"], $good,$dynamic); ?>
 						<? if($is_available != "В наличии"): ?>
 							<h4><?=$is_available?></h4>
