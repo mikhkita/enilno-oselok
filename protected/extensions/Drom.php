@@ -261,12 +261,42 @@ Class Drom {
         include_once Yii::app()->basePath.'/extensions/simple_html_dom.php';
         // $pages = $this->parseAllItems('http://baza.drom.ru/user/Mikhail60/disc',false);
         // foreach ($pages as $key => $page) {
-        $page = "http://baza.drom.ru/vladivostok/wheel/disc/9916-rasprodazha-predlagajte-ceny-diski-zeus-line-r19-5-114.3-40512216.html";
-            $html = str_get_html(iconv('windows-1251', 'utf-8', $this->curl->request($page)));
-            $title = $html->find("span[data-field=subject]",0)->plaintext;
-            $city_title = $html->find("span[data-field=subject] nobr",0)->plaintext;
-            $title = str_ireplace($city_title,"", $title);
-            print_r($title);
+        $params = array();
+        $page = "http://baza.drom.ru/vladivostok/wheel/disc/8895-diski-81-motorsport-r18-5-100-5-114.3-7.5-j-42-b-p-rf-40509769.html";
+        $html = str_get_html(iconv('windows-1251', 'utf-8', $this->curl->request($page)));
+        $params['goodPresentState'] = trim($html->find("span[data-field=goodPresentState]",0)->plaintext);
+        if($params['goodPresentState'] == "В наличии") {
+
+        }
+
+        $title = $html->find("span[data-field=subject]",0)->plaintext;
+        $city_title = $html->find("span[data-field=subject] nobr",0)->plaintext;
+        $params['title'] = str_ireplace($city_title,"", $title);
+        
+        $params['price'] = $html->find("div[itemprop=price]",0)->getAttribute ('content');
+        $params['mark'] = $html->find("span[data-field=model]",0)->plaintext;
+        $params['inSetQuantity'] = array_shift(explode(" ш", $html->find("span[data-field=inSetQuantity]",0)->plaintext));
+        $params['quantity'] = array_shift(explode(" ш", $html->find("span[data-field=quantity]",0)->plaintext));
+        $params['wheelDiameter'] = array_shift(explode(' "', $html->find("span[data-field=wheelDiameter]",0)->plaintext));
+        $params['width'] = str_replace('"',"", trim($html->find("div[data-field=discParameters] .value span",0)->plaintext));
+        $params['width'] = explode("/", $params['width']);
+        $params['vilet'] = array_shift(explode(" м", $html->find("div[data-field=discParameters] .value span",-1)->plaintext));
+        $params['wheelPcd'] = explode(", ",trim($html->find("span[data-field=wheelPcd]",0)->plaintext));
+        $params['diskHoleDiameter'] = array_shift(explode(" м", $html->find("span[data-field=diskHoleDiameter]",0)->plaintext));
+        $params['condition'] = $html->find("span[data-field=condition]",0)->plaintext;
+
+        $params['desc'] = str_replace('<br />',"\n", trim($html->find("p[data-field=text]",0)->innertext));
+        $params['guarantee'] = str_replace('<br />',"\n", trim($html->find("p[data-field=guarantee]",0)->innertext));
+        $params['delivery'] = str_replace('<br />',"\n", trim($html->find("div[data-field=delivery] p",0)->innertext));
+        foreach ($params as &$value) {
+            if(!is_array($value)) $value = trim($value);
+        }
+        foreach ($html->find(".bulletinImages img") as $key => $img) {
+            $params['images'][$key] = $img->src;
+            $file = file_get_contents('http://xmltv.s-tv.ru/loadimage.php?id=127233');
+            file_put_contents('1.jpg',$file);
+        }
+        print_r($params['images']);
         // }
     }
 
