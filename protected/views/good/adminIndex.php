@@ -1,20 +1,28 @@
-<h1><?=$name?></h1>
-<a href="<?=$this->createUrl('/good/adminarchive',array('good_type_id'=> $_GET["good_type_id"]))?>" class="b-link-back">Архив</a>
-<div class="b-buttons-left-cont">
-	<div class="clearfix">
-		<a href="<?php echo $this->createUrl('/good/admincreate',array('good_type_id'=> $_GET["good_type_id"] ))?>" class="ajax-form ajax-create b-butt">Добавить</a>
-		<a href="#" class="fancy left b-butt" data-block=".b-popup-filter">Фильтр</a>
-	    <a href="<?php echo $this->createUrl('/good/adminupdateall',array('good_type_id'=> $_GET["good_type_id"],'GoodFilter_page' => ($pages->currentPage+1) ))?>" class="ajax-form ajax-create b-butt" data-block=".b-popup-filter">Редактировать города</a>
-		<a href="<?php echo $this->createUrl('/good/adminaddsomecheckbox',array('good_type_id'=> $_GET["good_type_id"]))?>" class="ajax-form ajax-update right b-butt">Выделить по кодам</a>
-		<a href="<?php echo $this->createUrl('/good/adminremoveallcheckbox',array('good_type_id'=> $_GET["good_type_id"]))?>" class="right b-sess-allcheckbox b-butt">Сбросить все выделение</a>
-		<a href="<?php echo $this->createUrl('/good/adminaddallcheckbox',array('good_type_id'=> $_GET["good_type_id"]))?>" class="right b-sess-allcheckbox b-butt">Выделить все <?=$name?></a>
-		<a href="<?php echo $this->createUrl('/advert/adminindex',array('good_type_id'=> $_GET["good_type_id"]))?>" class="right b-butt">Показать объявления</a>
-	<!-- </div> -->
-	<!-- <div class="clearfix"> -->
-		<a href="<?php echo $this->createUrl('/good/adminupdateadverts',array('good_type_id'=> $_GET["good_type_id"]))?>" class="ajax-update-prices b-butt">Обновить объявления</a>
-		<a href="<?php echo $this->createUrl('/good/adminupdateadverts',array('good_type_id'=> $_GET["good_type_id"], 'images' => '1'))?>" class="ajax-update-prices b-butt">Обновить фотографии</a>
+<div class="b-section-nav clearfix">
+	<div class="b-section-nav-back clearfix">
+		<a href="<?=$this->createUrl('/good/adminarchive',array('good_type_id'=> $_GET["good_type_id"]))?>" class="b-link left">Архив</a>
+			<ul class="b-section-menu clearfix left">
+				<li><a href="#" class="fancy" data-block=".b-popup-filter">Фильтр</a></li>
+				<li><a href="<?php echo $this->createUrl('/good/admincreate',array('good_type_id'=> $_GET["good_type_id"] ))?>" class="ajax-form ajax-create">Добавить</a></li>
+				<li><a>Выделить</a>
+					<ul class="b-section-submenu">
+						<li><a href="<?php echo $this->createUrl('/good/adminaddallcheckbox',array('good_type_id'=> $_GET["good_type_id"]))?>" class="b-sess-allcheckbox">Все&nbsp;<?=mb_strtolower($name,"UTF-8")?></a></li>
+						<li><a href="<?php echo $this->createUrl('/good/adminaddsomecheckbox',array('good_type_id'=> $_GET["good_type_id"]))?>" class="ajax-form ajax-update">По&nbsp;кодам</a></li>
+						<li><a href="<?php echo $this->createUrl('/good/adminremoveallcheckbox',array('good_type_id'=> $_GET["good_type_id"]))?>" class="b-sess-allcheckbox">Сбросить&nbsp;выделение</a></li>
+					</ul>
+				</li>
+				<!-- <li><a>Действия</a> -->
+					<!-- <ul class="b-section-submenu"> -->
+						<li><a href="<?php echo $this->createUrl('/good/adminupdateall',array('good_type_id'=> $_GET["good_type_id"],'GoodFilter_page' => ($pages->currentPage+1) ))?>" class="ajax-form ajax-create" data-block=".b-popup-filter">Редактировать&nbsp;города</a></li>
+						<li><a href="<?php echo $this->createUrl('/advert/adminindex',array('good_type_id'=> $_GET["good_type_id"]))?>">Объявления</a></li>
+						<!-- <li><a href="<?php echo $this->createUrl('/good/adminupdateadverts',array('good_type_id'=> $_GET["good_type_id"]))?>" class="ajax-update-prices">Обновить&nbsp;объявления</a></li> -->
+						<!-- <li><a href="<?php echo $this->createUrl('/good/adminupdateadverts',array('good_type_id'=> $_GET["good_type_id"], 'images' => '1'))?>" class="ajax-update-prices">Обновить&nbsp;фотографии</a></li> -->
+					<!-- </ul> -->
+				<!-- </li> -->
+			</ul>
 	</div>
 </div>
+<h1 class="b-with-nav"><?=$name?></h1>
 
 <?php $this->renderPartial('_filter', array('attributes'=>$attributes, 'arr_name' => $arr_name, 'labels' => $labels, 'filter_values' => $filter_values, 'sort_fields' => $sort_fields)); ?>
 <div class="b-filter-pagination">
