@@ -8,6 +8,7 @@
 		<a href="<?php echo $this->createUrl('/good/adminaddsomecheckbox',array('good_type_id'=> $_GET["good_type_id"]))?>" class="ajax-form ajax-update right b-butt">Выделить по кодам</a>
 		<a href="<?php echo $this->createUrl('/good/adminremoveallcheckbox',array('good_type_id'=> $_GET["good_type_id"]))?>" class="right b-sess-allcheckbox b-butt">Сбросить все выделение</a>
 		<a href="<?php echo $this->createUrl('/good/adminaddallcheckbox',array('good_type_id'=> $_GET["good_type_id"]))?>" class="right b-sess-allcheckbox b-butt">Выделить все <?=$name?></a>
+		<a href="<?php echo $this->createUrl('/advert/adminindex',array('good_type_id'=> $_GET["good_type_id"]))?>" class="right b-butt">Показать объявления</a>
 	<!-- </div> -->
 	<!-- <div class="clearfix"> -->
 		<a href="<?php echo $this->createUrl('/good/adminupdateadverts',array('good_type_id'=> $_GET["good_type_id"]))?>" class="ajax-update-prices b-butt">Обновить объявления</a>

@@ -2473,6 +2473,7 @@ ul.b-filter-list{
 
 .b-advert-filter {
     margin-top: 20px;
+    display: inline-block;
 } 
     .b-advert-filter .b-advert-block{
         
@@ -2504,7 +2505,7 @@ ul.b-filter-list{
         border: 1px solid #452716;
         padding: 5px 10px;
         font-size: 14px;
-        width: 180px;
+        width: 340px;
         resize: none;
         height: 400px;
     }{

@@ -33,8 +33,12 @@ class AdvertController extends Controller
 		}
 	}
 
-	public function actionAdminIndex($partial = false)
+	public function actionAdminIndex($partial = false, $good_type_id = false)
 	{
+		if( $good_type_id !== false ){
+			$_GET["Codes"] = implode("\n", Good::getCheckboxes($good_type_id));
+			unset($_GET["good_type_id"]);
+		}
 		
 		$model = Place::model()->with('category','goodType')->findAll();
 		$data = array();
@@ -49,7 +53,7 @@ class AdvertController extends Controller
 				$data['Attr'][$variant->attribute_id][$variant->variant_id] = $variant->value;		
 			}
 		}
-		$data['Attr'][58] = $this->splitByRows(5,$data['Attr'][58]);
+		$data['Attr'][58] = $this->splitByCols(5,$data['Attr'][58]);
 		
 		if($_GET) {
 			$dataProvider = Advert::getAdverts($_GET,array('type','city','place.category'));

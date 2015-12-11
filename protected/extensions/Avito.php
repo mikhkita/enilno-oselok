@@ -33,10 +33,13 @@ Class Avito {
 
     public function addAdvert($params,$images = NULL){
         include_once Yii::app()->basePath.'/extensions/simple_html_dom.php';
+        Log::debug("Шаг 1");
         if($images !== NULL) {
         	$params = $this->addImages($params,$images);
 		}
+		Log::debug("Шаг 2");
 		$html = str_get_html($this->curl->request("https://www.avito.ru/additem"));
+		Log::debug("Шаг 3");
 	    $token = array();
 	    $token['name'] = $html->find('input[name^=token]',0)->name;
 	    $token['value'] = $html->find('input[name^=token]',0)->value;
@@ -44,21 +47,24 @@ Class Avito {
 	    $params['source'] = "add";
 
 		$html = str_get_html($this->curl->request("https://www.avito.ru/additem",$params));
+		Log::debug("Шаг 4");
 		$captcha = $html->find('.form-captcha-image',0)->src;
 
         $out = $this->curl->request('https://www.avito.ru'.$captcha);
+        Log::debug("Шаг 5");
 	    $captcha_path = Yii::app()->basePath.'/extensions/captcha.jpg';  
 	    file_put_contents($captcha_path, $out); 
 
 		$captcha = $this->captcha_curl->request("http://rucaptcha.com/in.php",array('key'=>'0b07ab2862c1ad044df277cbaf7ceb99','file'=> new CurlFile($captcha_path)));
+		Log::debug("Шаг 6");
 		while ($captcha == 'ERROR_NO_SLOT_AVAILABLE') {
 			var_dump($captcha);
 			sleep(5);
-			echo "Вошли 0";
+			Log::debug("Вошли 0");
 		    $captcha = $this->captcha_curl->request("http://rucaptcha.com/in.php",array('key'=>'0b07ab2862c1ad044df277cbaf7ceb99','file'=> new CurlFile($captcha_path)));
 		} 
 		if(strpos($captcha, "|") !== false) {
-			echo "Вошли";
+			Log::debug("Вошли");
 			$captcha = substr($captcha, 3);
 			$url = "http://rucaptcha.com/res.php?";
 					$url_params = array(
@@ -67,28 +73,31 @@ Class Avito {
 				    	'id' => $captcha
 					);
 			$url .= urldecode(http_build_query($url_params));
-			echo "Вошли 1";
+			Log::debug("Вошли 1");
 			$captcha = $this->captcha_curl->request($url);
 			while ($captcha == 'CAPCHA_NOT_READY') {
 				sleep(2);
 		   		$captcha = $this->captcha_curl->request($url);
 			} 
-			echo "Вошли 2";
-			echo $captcha;
+			Log::debug("Вошли 2");
+			Log::debug($captcha);
 			if(strpos($captcha, "|") !== false) {
-				echo "Вошли 3";
+				Log::debug("Вошли 3");
 				$captcha = substr($captcha, 3);
-				$html = str_get_html($this->curl->request("https://www.avito.ru/additem/confirm",array('captcha' => $captcha,'done' => "",'subscribe-position' => '0')));
-				echo "Вошли 4";
+				$result = $this->curl->request("https://www.avito.ru/additem/confirm",array('captcha' => $captcha,'done' => "",'subscribe-position' => '0'));
+				$html = str_get_html($result);
+				Log::debug("Вошли 4");
 				$id = $html->find('.content-text a[rel="nofollow"]',0)->href;
+				Log::debug($id);
+				file_put_contents(Yii::app()->basePath."/logs/avito.txt", $result);
 				$id = end(explode("_", $id));
 				return $id;
 			} else {
-				echo "Вошли 5";
+				Log::debug("Вошли 5");
 				return false;
 			}
 		} else {
-			echo "Вошли 6";
+			Log::debug("Вошли 6");
 			return false;
 		}
     }
