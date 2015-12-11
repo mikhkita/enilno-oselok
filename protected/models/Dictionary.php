@@ -63,11 +63,8 @@ class Dictionary extends CActiveRecord
 		);
 	}
 
-	public function beforeSave(){
-		parent::beforeSave();
-		$this->rule_code = ( !isset($this->rule_code) )?Yii::app()->params['defaultRule']:$this->rule_code;
-		return true;
-	}
+	
+
 
 	/**
 	 * Retrieves a list of models based on the current search/filter conditions.
@@ -97,6 +94,16 @@ class Dictionary extends CActiveRecord
 		));
 	}
 
+	public function add() {
+
+	}
+
+	public function beforeSave(){
+		parent::beforeSave();
+		$this->rule_code = ( !isset($this->rule_code) )?Yii::app()->params['defaultRule']:$this->rule_code;
+		return true;
+	}
+	
 	/**
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!

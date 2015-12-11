@@ -85,6 +85,17 @@ class Variant extends CActiveRecord
 		));
 	}
 
+	public function add($attribute_id,$value) {
+		$variant = new Variant;
+		$variant->value = $value;
+		$variant->sort = 9999;
+		if($variant->save()) {
+			$attribute_variant = new AttributeVariant;
+			$attribute_variant->attribute_id = $attribute_id;
+			$attribute_variant->variant_id = $attribute_id;
+		}
+	}
+
 	public function beforeDelete(){
  		GoodAttribute::model()->deleteAll("variant_id=".$this->id);
  		AttributeVariant::model()->deleteAll("variant_id=".$this->id);
