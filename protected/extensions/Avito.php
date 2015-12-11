@@ -84,7 +84,24 @@ Class Avito {
 			if(strpos($captcha, "|") !== false) {
 				Log::debug("Вошли 3");
 				$captcha = substr($captcha, 3);
-				$result = $this->curl->request("https://www.avito.ru/additem/confirm",array('captcha' => $captcha,'done' => "",'subscribe-position' => '0'));
+				$result_array = array(
+					'captcha' => $captcha,
+					// 'done' => "",
+					'subscribe-position' => '0'
+					// 'inn' => "",
+					// 'kpp' => "",
+					// 'companyName' => "",
+					// 'legalAddress' => "",
+					// 'postalAddress' => "",
+					// 'companyManager' => "",
+					// 'companyPhone' => "",
+					// 'bookkeeperAddress' => "",
+    	// 			bookkeeperName:""
+    	// 			bookkeeperEmail:""
+    	// 			bookkeeperPhone:""
+    				'action' => "company_info"
+				);
+				$result = $this->curl->request("https://www.avito.ru/additem/confirm",$result_array);
 				$html = str_get_html($result);
 				Log::debug("Вошли 4");
 				$id = $html->find('.content-text a[rel="nofollow"]',0)->href;
@@ -164,7 +181,6 @@ Class Avito {
     			$fields[$m] = explode("/", $fields[$m]);
     			$fields[$m] = $fields[$m][0];
     		}
-    	}
 
 		$fields['authState'] = 'phone-edit';
 		$fields['private'] =  0;
