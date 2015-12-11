@@ -94,7 +94,7 @@ class Dictionary extends CActiveRecord
 		));
 	}
 
-	public function add() {
+	public function add($dictionary_id,$variant_id,$value) {
 
 	}
 

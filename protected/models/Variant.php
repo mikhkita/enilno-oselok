@@ -92,8 +92,10 @@ class Variant extends CActiveRecord
 		if($variant->save()) {
 			$attribute_variant = new AttributeVariant;
 			$attribute_variant->attribute_id = $attribute_id;
-			$attribute_variant->variant_id = $attribute_id;
+			$attribute_variant->variant_id = $variant->id;
+			if($attribute_variant->save()) return $attribute_variant->variant_id;		
 		}
+		return false;
 	}
 
 	public function beforeDelete(){
