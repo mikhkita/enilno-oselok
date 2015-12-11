@@ -400,12 +400,20 @@ class Controller extends CController
         return ( isset($this->settings[$category_code][$param_code]) )?$this->settings[$category_code][$param_code]:"";
     }
 
-    public function getUserParam($code, $reload = false){
+    public function getUserParam($code, $reload = false, $int_assoc = false){
         if( $this->user_settings == NULL || $reload ) $this->getUserSettings();
 
         $param_code = mb_strtoupper($code,"UTF-8");
 
-        return ( isset($this->user_settings[$param_code]) )?$this->user_settings[$param_code]:NULL;
+        if( isset($this->user_settings[$param_code]) ){
+            $out = array();
+            foreach ($this->user_settings[$param_code] as $key => $value)
+                $out[intval($key)] = $value;
+
+            return $out;
+        }else{
+            return NULL;
+        }
     }
 
     public function getUserSettings(){

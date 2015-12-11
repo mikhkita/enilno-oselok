@@ -393,11 +393,7 @@ class GoodController extends Controller
 			}
 			if(isset($_POST[$attr_arr])) $this->setUserParam("GOOD_FILTER_".$good_type_id,$_POST[$attr_arr]);
 
-			$filter_val = $this->getUserParam("GOOD_FILTER_".$good_type_id) ? (array)$this->getUserParam("GOOD_FILTER_".$good_type_id) : array();
-
-			$filter_values = array();
-			foreach ($filter_val as $key => &$value)
-				$filter_values[intval($key)] = $value;
+			$filter_values = $this->getUserParam("GOOD_FILTER_".$good_type_id) ? $this->getUserParam("GOOD_FILTER_".$good_type_id,false,true) : array();
 			
 			$goods = Good::model()->filter(
 				array(
@@ -415,9 +411,6 @@ class GoodController extends Controller
 			    true
 			);
 		}
-
-		// var_dump($filter_values);
-		// die();
 
 		$fields = $goodType->fields;
 
