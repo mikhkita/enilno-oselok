@@ -69,6 +69,37 @@ $(document).ready(function(){
     $('body').bind('touchmove', whenScroll);
     whenScroll();
 
+    $(window).load(function() {
+        $.ajax({
+            type: "GET",
+            url: '/kolesoonline/getcities',
+            success: function(msg){
+                $("#b-popup-city").append(msg);
+                $( ".city-tabs" ).tabs({
+                    active: false,
+                    collapsible :true
+                });
+                $(".city-tabs li").click(function(){
+                    if ($(this).hasClass("ui-state-active")) {
+                        $(".city-top h4 span").show();
+                    } else $(".city-top h4 span").hide();
+                });
+                
+                $(".city-select").select2({
+                    language: "ru",
+                    placeholder: "Или укажите в поле...",
+                    allowClear: true
+                });
+                $("#city-form input[name='url']").val(window.location.href);
+                $(".popup-cities li a").click(function() {    
+                    $("select[name='city']").val($(this).text());
+                    $("#city-form").submit();
+                    return false;
+                });
+            }
+        });
+    });
+
     if($('.goods li:eq(-1)').attr("data-last") != 0) {
         $(".load").css("display","inline-block"); 
     }
@@ -157,27 +188,6 @@ $(document).ready(function(){
         
     $( ".main-tabs" ).tabs();
 
-    $( ".city-tabs" ).tabs({
-        active: false,
-        collapsible :true
-    });
-
-    $(".city-tabs li").click(function(){
-        if ($(this).hasClass("ui-state-active")) {
-            $(".city-top h4 span").show();
-        } else $(".city-top h4 span").hide();
-    });
-    
-    $(".city-select").select2({
-        language: "ru",
-        placeholder: "Или укажите в поле...",
-        allowClear: true
-    });
-    $(".popup-cities li a").click(function() {    
-        $("select[name='city']").val($(this).text());
-        $("#city-form").submit();
-        return false;
-    });
 
     $('.min-val,.max-val').bind("change keyup input click", function() {
         if (this.value.match(/[^0-9]/g)) {

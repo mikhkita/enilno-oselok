@@ -269,7 +269,7 @@ class KolesoOnlineController extends Controller
 				'roles'=>array('manager'),
 			),
 			array('allow',
-				'actions'=>array('index', 'index2', 'detail','contacts','mail','category'),
+				'actions'=>array('index', 'index2', 'detail','contacts','mail','category','getCities','setCity'),
 				'users'=>array('*'),
 			),
 			array('deny',
@@ -278,41 +278,46 @@ class KolesoOnlineController extends Controller
 		);
 	}
 
-	public function getCity() {
-		if (!empty($_POST['city'])) {
-			if(!isset($_SESSION)) session_start();
-			$_SESSION["city_temp"] = $_POST['city'];
-		    header("Location: ".$_SERVER["REQUEST_URI"]);
-	  	}
-		$city_groups = array();
-		if( !(isset($_SESSION['city']) && AttributeVariant::model()->count("variant_id=".$_SESSION['city']['variant_id'])) ) {
-			$city = json_decode(file_get_contents('http://api.sypexgeo.net/json/'.$_SERVER["REMOTE_ADDR"]));
+	public function actionSetCity() {
+
+		if(!isset($_SESSION)) session_start();
+		if( !( isset($_SESSION['city']) && AttributeVariant::model()->count("variant_id=".$_SESSION['city']['variant_id'] ) ) || isset($_POST['city']) ) {
 			$default_city = "Томск";
 			$default_variant_id = 1081;
 			$_SESSION['city']['name'] = $default_city;
 	     	$_SESSION['city']['variant_id'] = $default_variant_id;
-	       	$city_from_ip = (isset($city->city->name_ru)) ? $city->city->name_ru : $default_city;
-     	} else $city_from_ip = $_SESSION['city']['name'];
 
-     	if (isset($_SESSION["city_temp"]) && $_SESSION["city_temp"]) {
-    		$city_from_ip = $_SESSION["city_temp"];
-    	}
+			if(isset($_POST['city']) && $_POST['city']) {
+				$city = $_POST['city'];
+			} else {
+				$city = json_decode(file_get_contents('http://api.sypexgeo.net/json/'.$_SERVER["REMOTE_ADDR"]));
+	       		$city = (isset($city->city->name_ru)) ? $city->city->name_ru : $default_city;
+	       	}
+	       	$model = Attribute::model()->with(array("variants.variant"))->find("value='".$city."' AND folder=1");
+	       	if($model) {
+	       		$_SESSION['city']['name'] = $model->variants[0]->value;
+	     		$_SESSION['city']['variant_id'] = $model->variants[0]->variant_id;
+	       	}
+	       	if(isset($_POST['city'])) header("Location: ".$_POST['url']);
+     	}
+	    
+    }
+
+    public function actionGetCities() {
+     	$city_groups = array();
      	$model = Attribute::model()->with(array("variants.variant"))->findAll(array("order"=>"t.id ASC, variant.sort ASC","condition"=>"folder=1"));
-		
      	foreach ($model as $key => $group) {
      		$city_groups[$group->name] = array();
      		foreach($group->variants as $i => $city) {
      			$city_groups[$group->name][$i]['name'] = $city->value;
      			$city_groups[$group->name][$i]['variant_id'] = $city->variant_id;
-     			if( mb_strtolower($city->value,'UTF-8') == mb_strtolower($city_from_ip,'UTF-8')) {
-     				$_SESSION['city']['name'] = $city->value;
-     				$_SESSION['city']['variant_id'] = $city->variant_id;
-     			}
      		}
-
      		$city_groups[$group->name] = $this->splitByRows(10,$city_groups[$group->name]);
      	}
-	    return $city_groups;
+
+	    $this->renderPartial('_cities',array(
+			'cities' => $city_groups
+		));	
     }
 
 
@@ -338,15 +343,14 @@ class KolesoOnlineController extends Controller
 		$this->params[2]["FILTER"] = $this->splitByRows(4,$this->params[2]["FILTER"]);
 		$this->params[3]["FILTER"] = $this->splitByRows(4,$this->params[3]["FILTER"]);
 
-		$cities = $this->getCity();	
-			$dynamic = $this->getDynObjects(array(
+		$this->actionSetCity();	
+		$dynamic = $this->getDynObjects(array(
             38 => $_SESSION['city']['variant_id']
     	));
 
 		$this->render('index',array(
 			'tires'=> $tires,
 			'discs' => $discs,
-			'cities' => $cities,
 			'tire_filter' => $tire_filter,
 			'disc_filter' => $disc_filter,
 			'wheel_filter' => $wheel_filter,
@@ -384,7 +388,7 @@ class KolesoOnlineController extends Controller
 			$last = 0;
 		}
 
-		if(!$partial) $cities = $this->getCity();
+		$this->actionSetCity();
 
 		$dynamic = $this->getDynObjects(array(
             38 => $_SESSION['city']['variant_id']
@@ -405,7 +409,6 @@ class KolesoOnlineController extends Controller
 				'pages' => $pages,
 				'params' => $this->params,
 				'last' => $last,
-				'cities' => $cities,
 				'dynamic' => $dynamic
 			));
 		}
@@ -520,7 +523,7 @@ class KolesoOnlineController extends Controller
 
 			$this->image = Yii::app()->getBaseUrl(true).$imgs[0];
 
-			$cities = $this->getCity();
+			$this->actionSetCity();
 			
 			$dynamic = $this->getDynObjects(array(
 	            38 => $_SESSION['city']['variant_id']
@@ -530,7 +533,6 @@ class KolesoOnlineController extends Controller
 				'good'=>$good,
 				'imgs'=>$imgs,
 				'params' => $this->params,
-				'cities' => $cities,
 				'dynamic' => $dynamic
 			));
 		}
@@ -561,9 +563,7 @@ class KolesoOnlineController extends Controller
 
 	public function actionContacts()
 	{
-		$this->render('contacts',array(
-			'cities' => $this->getCity()
-		));
+		$this->render('contacts');
 	}
 
 	public function actionCount()

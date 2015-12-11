@@ -424,38 +424,33 @@ class Good extends GoodFilter
 		if( $good_type_id ){
 			if( !is_array($_SESSION["goods"]) ) $_SESSION["goods"] = array();
 			if($ids) {
-				$arr = explode(PHP_EOL,$ids);
-				foreach ($arr as $key => $value) {
-					$arr[$key] = trim($value);
-				}
 
-				$criteria = new CDbCriteria();
-				$criteria->with = array("fields");
-				$criteria->condition = "attribute_id=3 AND good_type_id=".$good_type_id;
-				$criteria->addInCondition('fields.varchar_value',$arr); 
-				$criteria->addCondition('archive=0'); 
-				$goods = Good::model()->findAll($criteria);
-				
-			} else $goods = Good::model()->with("fields")->findAll("attribute_id=3 AND good_type_id=".$good_type_id.' AND archive=0');
+				$arr = explode(PHP_EOL,$ids);
+				foreach ($arr as &$value) {
+					$value = trim($value);
+				}
+				$ids = Good::getIdbyCode($arr,array($good_type_id));
+
+			}
 
 			$goods = Good::model()->filter(
 				array(
 					"good_type_id"=>$good_type_id,
-					"attributes"=>$filter_values,
-					"int_attributes"=>isset( $_POST[$int_attr_arr] )?$_POST[$int_attr_arr]:array()
-				)
+					"attributes"=>$this->getUserParam("good_filter_".$good_type_id) ? (array)$this->getUserParam("good_filter_".$good_type_id) : array(),
+					"int_attributes"=>array()
+				),$ids
 			)->sort( 
-				$this->getUserParam("good_sort_".$good_type_id) ? $this->getUserParam("good_sort_".$good_type_id) : array()
+				$this->getUserParam("good_sort_".$good_type_id) ? (array)$this->getUserParam("good_sort_".$good_type_id) : array()
 			)->getPage(
 				array(
 			    	'pageSize'=>10000,
-			    ), 
+			    ),
 			    array(3)
 			);
 
 			$_SESSION["goods"][$good_type_id] = array();
-			foreach ($goods as $key => $good) {
-				$_SESSION["goods"][$good->good_type_id][$good->id] = $good->fields[0]->value;
+			foreach ($goods['items'] as $key => $good) {
+				$_SESSION["goods"][$good->good_type_id][$good->id] = $good->fields_assoc[3]->value;
 			}
 
 			return true;

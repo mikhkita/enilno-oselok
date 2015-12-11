@@ -1,4 +1,3 @@
-<?php $this->renderPartial('_header', array('cities' => $cities)); ?>
 <div class="b-content">
 	<div class="good-detail">
 		<div class="b-block">

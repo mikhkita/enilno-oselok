@@ -66,6 +66,10 @@ class DromController extends Controller
         $this->doQueueNext($debug);
     }
 
+    public function actionAdminParse() {
+        $drom = new Drom();
+        $drom->parseDetailPage();
+    }
     public function getUsers() {
         include_once Yii::app()->basePath.'/extensions/simple_html_dom.php';
         $html = new simple_html_dom();

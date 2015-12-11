@@ -1,7 +1,7 @@
 <div style="display:none;">
 	<div class="b-popup-filter b-popup-good-filter b-popup">
 		<h1>Фильтр</h1>
-	<?=CHTML::beginForm(Yii::app()->createUrl('/good/adminindex',array('good_type_id' => $_GET['good_type_id'],'GoodFilter_page' => 1)),'POST',array('id'=>'b-filter-form'))?>
+	<?=CHTML::beginForm(Yii::app()->createUrl('/good/adminindex',array('good_type_id' => $_GET['good_type_id'],'filter' => 1)),'POST',array('id'=>'b-filter-form'))?>
 		<? foreach ($attributes as $field => $item): ?>
 			<? if( isset($item["VIEW"]) ): ?>
 				<div class="b-filter-block">
@@ -9,7 +9,8 @@
 					<div class="clearfix">
 						<? if( $item["VIEW"] == "CHECKBOX" ): ?>	
 							<?if( count($item["VARIANTS"]) > 10):?>
-								<?=Chtml::dropDownList($arr_name."[$field]", (isset($filter_values[$field]))?$filter_values[$field]:"", $item["VARIANTS"],array('class'=> 'select2-filter','multiple' => 'true')); ?>	
+								<? $selected = array(); if(!empty($filter_values[$field])) foreach ($filter_values[$field] as $multi) $selected[$multi] = array('selected' => 'selected'); ?>
+								<?=Chtml::dropDownList($arr_name."[$field]", "", $item["VARIANTS"],array('class'=> 'select2-filter','multiple' => 'true','options' => $selected)); ?>	
 							<? else: ?>
 								<?=CHTML::checkBoxList($arr_name."[$field]", (isset($filter_values[$field]))?$filter_values[$field]:"", $item["VARIANTS"], array("separator"=>"","template"=>"<div class='b-filter-checkbox'>{input}{label}</div>")); ?>
 							<? endif;?>

@@ -160,6 +160,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
         // echo "Кол-во запросов: $queryCount, Общее время запросов: ".sprintf('%0.5f',$queryTime)."s";
     ?>
 <div style="display:none;">
+    <div id="b-popup-city"></div>
     <div id="b-popup-callback">
         <div class="for_all b-popup-small">
             <h3>Заказать звонок</h3>
