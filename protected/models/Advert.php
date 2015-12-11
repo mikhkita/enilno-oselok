@@ -152,7 +152,7 @@ class Advert extends CActiveRecord
 		}
 	}
 
-	public function getAdverts($params,$with = NULL,$select = NULL){
+	public function filter($params, $with = NULL, $select = NULL, $good_ids = NULL){
 
 		$good_type_id = array();
 		$criteria = new CDbCriteria();
@@ -177,7 +177,10 @@ class Advert extends CActiveRecord
 			foreach ($arr as $key => $value) {
 				$arr[$key] = trim($value);
 			}
-			$criteria->addInCondition("good_id",Good::getIdbyCode($arr,$good_type_id));
+			$good_ids = Good::getIdbyCode($arr,$good_type_id);
+			$criteria->addInCondition("good_id", $good_ids);
+			if( count($good_ids) )
+				$criteria->order = "field(good_id,".implode(",", array_reverse($good_ids)).") DESC, t.id DESC";
 		}
 		if(isset($params['Attr'][37])) {
 	    	$criteria->addInCondition("type_id",$_GET['Attr'][37]);

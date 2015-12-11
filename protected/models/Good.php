@@ -497,6 +497,7 @@ class Good extends GoodFilter
 		$criteria->condition = "fields.attribute_id=3";
 		if($good_type_id && !empty($good_type_id)) $criteria->addInCondition('good_type_id',$good_type_id); 
 		$criteria->addInCondition('fields.varchar_value',$good_codes); 
+		$criteria->order = "field(fields.varchar_value,".implode(",", array_reverse($good_codes)).") DESC, t.id DESC";
 		$temp = array();
 		$model = GoodFilter::model()->findAll($criteria);
 		foreach($model as $good) {

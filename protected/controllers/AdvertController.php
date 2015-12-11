@@ -24,7 +24,7 @@ class AdvertController extends Controller
 
 	public function actionAdminPayAdverts(){
 		if( isset($_GET) ){
-			$adverts = Advert::getAdverts($_GET,array('type','city','place.category'),array("id"))->getData();
+			$adverts = Advert::filter($_GET,array('type','city','place.category'),array("good_id","id"))->getData();
 			$interval = isset($_GET["interval"])?intval($_GET["interval"])*60:0;
 			$offset = isset($_GET["offset"])?intval($_GET["offset"])*60:0;
 			Queue::addAll($adverts,"payUp",$offset,$interval);
@@ -56,7 +56,7 @@ class AdvertController extends Controller
 		$data['Attr'][58] = $this->splitByCols(5,$data['Attr'][58]);
 		
 		if($_GET) {
-			$dataProvider = Advert::getAdverts($_GET,array('type','city','place.category'));
+			$dataProvider = Advert::filter($_GET,array('type','city','place.category'));
 			$pages = $dataProvider->getPagination();
 			$temp = array();
 			foreach ($dataProvider->getData() as $advert) {
