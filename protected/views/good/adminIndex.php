@@ -29,7 +29,7 @@
 	<?php $form=$this->beginWidget('CActiveForm'); ?>
 		<table class="b-table b-good-table b-sess-checkbox-info" data-add-url="<?=Yii::app()->createUrl('/good/adminaddcheckbox')?>" data-remove-url="<?=Yii::app()->createUrl('/good/adminremovecheckbox')?>" border="1">
 			<tr>
-				<? $ids = array(); foreach ($data as $i => $item) array_push($ids, $item->id); ?>
+				<? $ids = array(); if( count($data) ) foreach ($data as $i => $item) array_push($ids, $item->id); ?>
 				<th style="vertical-align:bottom; min-width: 20px;"><input type="checkbox" name="goods_id" class="b-sess-checkbox check-page" data-block="#b-sess-checkbox-list" value="<?=implode(',',$ids)?>"></th>
 				<th style="min-width: 110px;max-width: 110px;width: 110px;"><a href="<?php echo Yii::app()->createUrl('/good/adminviewsettings',array('id'=>$item->id,'good_type_id'=>$_GET["good_type_id"]))?>" class="ajax-form ajax-update b-tool b-tool-settings" title="Настройки отображения"></a></th>
 				<? foreach ($fields as $field): ?>
@@ -81,7 +81,7 @@
 				<? endforeach; ?>
 			<? else: ?>
 				<tr>
-					<td colspan=<?=(count($fields)+1)?>>Пусто</td>
+					<td colspan=<?=(count($fields)+2)?>>Пусто</td>
 				</tr>
 			<? endif; ?>
 		</table>
