@@ -158,7 +158,8 @@ class Good extends GoodFilter
 
         $count = 0;
         if(isset($options["attributes"]) && count($options["attributes"]))
-			foreach ($options["attributes"] as $id => $attribute_vals) {		
+			foreach ($options["attributes"] as $id => $attribute_vals) {
+				if( !is_array($attribute_vals) ) $attribute_vals = array($attribute_vals);
 				foreach ($attribute_vals as $variant_id)
 					$criteria->addCondition('good_type_id='.$options["good_type_id"].' AND fields.variant_id='.$variant_id,'OR');
 				$count++;
@@ -536,7 +537,14 @@ class Good extends GoodFilter
 			),
 			array(
 				"good_id" => $model->id,
-				"attribute_id" => 35,
+				"attribute_id" => 97,
+				"varchar_value" => date("d-m-Y", time()),
+				"text_value" => NULL,
+				"variant_id" => NULL,
+			),
+			array(
+				"good_id" => $model->id,
+				"attribute_id" => 96,
 				"varchar_value" => NULL,
 				"text_value" => addslashes($result["text"]),
 				"variant_id" => NULL,

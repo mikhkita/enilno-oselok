@@ -56,7 +56,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
                     <li><a href="<?=Yii::app()->createUrl('/kolesoOnline/contacts')?>">Контакты</a></li>
                 </ul>
                 <div class="clearfix b-mobile-top-line mobile-only">
-                    <h2 class="left">Вы находитесь в г. <a href="#" class="icon"><?=$_SESSION['city']['name']?></a></h2>
+                    <h2 class="left">Вы находитесь в г. <a href="#" class="icon fancy" data-block="#b-popup-city"><?=$_SESSION['city']['name']?></a></h2>
                     <a href="#" class="right icon b-mobile-search-top-icon">Поиск</a>
                 </div>
             </div>  
@@ -221,6 +221,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
 <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/html/js/jquery.fancybox.js"></script>
 <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/html/js/TweenMax.min.js"></script>
 <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/html/js/swipe.js"></script>
+<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/html/js/fastclick.js"></script>
 <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/html/js/css3-mediaqueries.js"></script>
 <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/html/js/jquery.maskedinput.min.js"></script>
 <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/html/js/jquery.validate.min.js"></script>

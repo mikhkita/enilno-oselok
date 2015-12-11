@@ -1126,6 +1126,9 @@ h1{
     .b-tool-delete{
         background-image: url("../images/delete.png");
     }
+    .b-tool-wheel{
+        background-image: url("../images/wheel.png");
+    }
     .b-tool-edit{
         background-image: url("../images/menu.png");
     }

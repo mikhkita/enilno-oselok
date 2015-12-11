@@ -26,6 +26,13 @@
                 'enableAjaxValidation'=>false,
                 'method' => 'GET'
             )); ?>
+            <div class="mobile-only">
+                <ul class="navigation clearfix">
+                    <li><a href="<?=Yii::app()->createUrl('/kolesoOnline')?>"></a></li>
+                    <li><a href="#"><?=$this->params[$_GET['type']]["NAME"]?></a></li>
+                </ul>
+                <h3 class="category-title"><?=$this->params[$_GET['type']]["NAME"]?></h3>
+            </div>
             <div class="grey-block left">
                 <div class="gradient-grey">
                     <h3>Фильтр</h3>
@@ -46,11 +53,12 @@
                                 <input id="tire-summer" type="checkbox" name="arr[23][]" value="463">
                                 <label for="tire-summer">Летние</label> -->
                             </div>
+                            <div></div>
                         <? endif; ?>
                         <? foreach ($params[$_GET['type']]["FILTER"] as $attr_id => $label): ?>
                             <div class="filter-item">
                                 <h5><?=$label?></h5>
-                                <div class="input"></div>   
+                                <div class="input">&nbsp;</div>   
                                 <div class="variants clearfix">
                                     <? foreach ($filter[$attr_id] as $key => $col): ?>
                                         <div>
@@ -75,19 +83,20 @@
                             </div>
                         </div>  
                         <div class="filter-butt-cont">
-                            <input type="submit" class="b-black-butt" value="Принять">
+                            <input type="submit" class="b-black-butt" value="Найти">
                         </div>
                           
                     </div>
                 </div>
             </div>
             <div class="right good-list">
-                <ul class="navigation clearfix">
-                    <li><a href="<?=Yii::app()->createUrl('/kolesoOnline')?>"></a></li>
-                    <!-- <li><a href="#">Каталог</a></li> -->
-                    <li><a href="#"><?=$this->params[$_GET['type']]["NAME"]?></a></li>
-                </ul>
-                <h3 class="category-title"><?=$this->params[$_GET['type']]["NAME"]?></h3>
+                <div class="not-mobile">
+                    <ul class="navigation clearfix">
+                        <li><a href="<?=Yii::app()->createUrl('/kolesoOnline')?>"></a></li>
+                        <li><a href="#"><?=$this->params[$_GET['type']]["NAME"]?></a></li>
+                    </ul>
+                    <h3 class="category-title"><?=$this->params[$_GET['type']]["NAME"]?></h3>
+                </div>
                 <? if(count($goods)): ?>
                 <div class="b-sort clearfix">
                     <div class="left clearfix">

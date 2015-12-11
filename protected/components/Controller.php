@@ -58,6 +58,10 @@ class Controller extends CController
         parent::init();
 
         date_default_timezone_set("Asia/Novosibirsk");
+
+        if( $_SERVER["HTTP_HOST"] == "koleso.tomsk.ru" ){
+            header("Location: http://koleso.online".$_SERVER["REQUEST_URI"]);
+        }
         
         $this->user = User::model()->with("role")->findByPk(Yii::app()->user->id);
 
