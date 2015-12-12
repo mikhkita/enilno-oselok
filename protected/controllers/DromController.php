@@ -67,9 +67,14 @@ class DromController extends Controller
     }
 
     public function actionAdminParse() {
+
         $drom = new Drom();
-        $drom->parseDetailPage();
+        $last_code = $this->getParam( "OTHER", "PARTNERS_LAST_CODE", true);
+        $last_code = $drom->parseUser("BAlFe",array(1,2,3), $last_code);
+        $this->setParam( "OTHER", "PARTNERS_LAST_CODE", $last_code );
+
     }
+
     public function getUsers() {
         include_once Yii::app()->basePath.'/extensions/simple_html_dom.php';
         $html = new simple_html_dom();

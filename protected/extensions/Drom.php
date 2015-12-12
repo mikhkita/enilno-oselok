@@ -82,11 +82,10 @@ Class Drom {
         $links = array();
         $pageLinks = $html->find('.bulletinLink');
         $page = 1;
-        while(count($pageLinks)){
+        while(count($pageLinks) && ($links[0] != $pageLinks[0]->getAttribute("href")) ){
             foreach($pageLinks as $element){
                 array_push($links, $element->getAttribute("href"));
             }
-
             $page++;
             $html = str_get_html(iconv('windows-1251', 'utf-8', $this->curl->request($link."?page=".$page)));
             $pageLinks = $html->find('.bulletinLink');
@@ -257,48 +256,96 @@ Class Drom {
         return $fields;
     }
 
-    public function parseDetailPage($pages = array()) {
+    public function parseUser($user,$good_types,$good_code) {
         include_once Yii::app()->basePath.'/extensions/simple_html_dom.php';
-        // $pages = $this->parseAllItems('http://baza.drom.ru/user/Mikhail60/disc',false);
-        // foreach ($pages as $key => $page) {
-        $params = array();
-        $page = "http://baza.drom.ru/vladivostok/wheel/disc/8895-diski-81-motorsport-r18-5-100-5-114.3-7.5-j-42-b-p-rf-40509769.html";
-        $html = str_get_html(iconv('windows-1251', 'utf-8', $this->curl->request($page)));
-        $params['goodPresentState'] = trim($html->find("span[data-field=goodPresentState]",0)->plaintext);
-        if($params['goodPresentState'] == "В наличии") {
+        $user = trim($user);
+        foreach ($good_types as $good_type_id) {
+        	if ($good_type_id == 1) $type = "tire";
+        	if ($good_type_id == 2) $type = "disc";
+        	if ($good_type_id == 3) $type = "wheel";
+        	$html = str_get_html(iconv('windows-1251', 'utf-8', 'http://baza.drom.ru/user/'.$user));
+	        $user_id = $html->find(".userProfile",0) ? $html->find(".userProfile",0)->getAttribute('data-view-dir-user-id') : NULL;
+	        if($user_id) {
+		        $pages = $this->parseAllItems('http://baza.drom.ru/user/'.$user_id.'/wheel/'.$type,false);   
+		        $user_name = trim($html->find("span .userNick",0)->plaintext);
+		        $model = Attribute::model()->with('variants.variant')->find("attribute_id=43 AND value=".$user_id);
+		        if($model) {
+		        	$variant_id = $model->variants->variant_id;
+		        } else {
+		        	if($variant_id = Variant::add(43,$user_id)) {
+		        		if(!Dictionary::add(41,$variant_id,$user_name)) return false;
+		        	} else return false;
+		        }
 
-        }
+		        foreach ($pages as $key => $page) {
+			        $params = array();
+			        $html = str_get_html(iconv('windows-1251', 'utf-8', $this->curl->request($page)));
+			        $goodPresentState = trim($html->find("span[data-field=goodPresentState]",0)->plaintext);
+			        if($goodPresentState == "В наличии") {
 
-        $title = $html->find("span[data-field=subject]",0)->plaintext;
-        $city_title = $html->find("span[data-field=subject] nobr",0)->plaintext;
-        $params['title'] = str_ireplace($city_title,"", $title);
-        
-        $params['price'] = $html->find("div[itemprop=price]",0)->getAttribute ('content');
-        $params['mark'] = $html->find("span[data-field=model]",0)->plaintext;
-        $params['inSetQuantity'] = array_shift(explode(" ш", $html->find("span[data-field=inSetQuantity]",0)->plaintext));
-        $params['quantity'] = array_shift(explode(" ш", $html->find("span[data-field=quantity]",0)->plaintext));
-        $params['wheelDiameter'] = array_shift(explode(' "', $html->find("span[data-field=wheelDiameter]",0)->plaintext));
-        $params['width'] = str_replace('"',"", trim($html->find("div[data-field=discParameters] .value span",0)->plaintext));
-        $params['width'] = explode("/", $params['width']);
-        $params['vilet'] = array_shift(explode(" м", $html->find("div[data-field=discParameters] .value span",-1)->plaintext));
-        $params['wheelPcd'] = explode(", ",trim($html->find("span[data-field=wheelPcd]",0)->plaintext));
-        $params['diskHoleDiameter'] = array_shift(explode(" м", $html->find("span[data-field=diskHoleDiameter]",0)->plaintext));
-        $params['condition'] = $html->find("span[data-field=condition]",0)->plaintext;
+				        $params['title'] = str_ireplace($html->find("span[data-field=subject] nobr",0)->plaintext,"",  $html->find("span[data-field=subject]",0)->plaintext);
+				        $params['price'] = $html->find("div[itemprop=price]",0) ? $html->find("div[itemprop=price]",0)->getAttribute('content') : NULL;
+				        $params['inSetQuantity'] = $html->find("span[data-field=inSetQuantity]",0) ? array_shift(explode(" ш", $html->find("span[data-field=inSetQuantity]",0)->plaintext)) : NULL;   
+				        $params['quantity'] = array_shift(explode(" ш", $html->find("span[data-field=quantity]",0)->plaintext));
 
-        $params['desc'] = str_replace('<br />',"\n", trim($html->find("p[data-field=text]",0)->innertext));
-        $params['guarantee'] = str_replace('<br />',"\n", trim($html->find("p[data-field=guarantee]",0)->innertext));
-        $params['delivery'] = str_replace('<br />',"\n", trim($html->find("div[data-field=delivery] p",0)->innertext));
-        foreach ($params as &$value) {
-            if(!is_array($value)) $value = trim($value);
-        }
-        foreach ($html->find(".bulletinImages img") as $key => $img) {
-            $params['images'][$key] = $img->src;
-            $file = file_get_contents('http://xmltv.s-tv.ru/loadimage.php?id=127233');
-            file_put_contents('1.jpg',$file);
-        }
-        print_r($params['images']);
-        // }
-    }
+				        if($good_type_id == 2) {
+				        	$params['model'] = $html->find("span[data-field=model]",0)->plaintext;
+				        	$params['wheelDiameter'] = str_replace('"',"", $html->find("span[data-field=wheelDiameter]",0)->plaintext);
+				        	$params['condition'] = $html->find("span[data-field=condition]",0) ? $html->find("span[data-field=condition]",0)->plaintext : NULL;
+				        }
+
+				        if($good_type_id != 1) {
+					        $params['wheelWeight'] = $html->find("span[data-field=wheelWeight]",0) ? str_replace('кг.',"", $html->find("span[data-field=wheelWeight]",0)->plaintext) : NULL;
+					        $params['wheelWidth'] = $html->find("div[data-field=discParameters] .value span",0) ? explode("/",str_replace('"',"", trim($html->find("div[data-field=discParameters] .value span",0)->plaintext))) : NULL;
+					        $params['wheelVilet'] = $html->find("div[data-field=discParameters] .value span",1) ? explode("/",str_replace(' мм.',"", trim($html->find("div[data-field=discParameters] .value span",1)->plaintext))) : NULL;
+					        $params['wheelPcd'] = $html->find("span[data-field=wheelPcd]",0) ? explode(", ",trim($html->find("span[data-field=wheelPcd]",0)->plaintext)) : NULL;
+					        $params['diskType'] = $html->find("span[data-field=diskType]",0) ? $html->find("span[data-field=diskType]",0)->plaintext : NULL;
+					        $params['diskHoleDiameter'] = $html->find("span[data-field=diskHoleDiameter]",0) ? array_shift(explode(" м", $html->find("span[data-field=diskHoleDiameter]",0)->plaintext)) : NULL;
+					    }
+
+				        if($good_type_id == 1) {
+				        	$params['model'] =  str_ireplace($html->find("span[data-field=model] div",0)->plaintext,"",$html->find("span[data-field=model]",0)->plaintext);
+				        	$params['tireDiameter'] = $html->find("span[data-field=marking] a",0)->plaintext;
+				        } 
+
+				        if($good_type_id != 2) {
+					        $params['year'] = $html->find("span[data-field=year]",0) ? $html->find("span[data-field=year]",0)->plaintext : NULL;
+					        $params['wheelSeason'] = $html->find("span[data-field=wheelSeason]",0) ? $html->find("span[data-field=wheelSeason]",0)->plaintext : NULL;
+					        $params['wheelTireWear'] = $html->find("span[data-field=wheelTireWear]",0) ? str_replace('%',"",$html->find("span[data-field=wheelTireWear]",0)->plaintext) : NULL;
+					        $params['tireHeight'] = str_replace('"',"",$html->find("span[data-field=marking]",1)->plaintext);
+					        $params['tireWidth'] = str_replace(array('мм.','"'),"",$html->find("span[data-field=marking]",2)->plaintext);
+					        $params['tireСarcase'] = str_replace(array('%','"'),"",$html->find("span[data-field=marking]",3)->plaintext);
+					        $params['predestination'] = $html->find("span[data-field=predestination]",0)->plaintext;
+				    	}
+
+				    	if($good_type_id == 3) {
+					        $params['tireFirmAndModel'] =  $html->find("span[data-field=tireFirmAndModel]",1)->plaintext;
+					        $params['discFirmAndModel'] =  $html->find("span[data-field=discFirmAndModel]",0)->plaintext;
+					        $params['wheelDiameter'] = str_replace('"',"",$html->find("span[data-field=marking]",1)->plaintext);
+					    }
+
+				        $params['desc'] = str_replace('<br />',"\n", trim($html->find("p[data-field=text]",0)->innertext));
+				        $params['guarantee'] = $html->find("p[data-field=guarantee]",0) ? str_replace('<br />',"\n", trim($html->find("p[data-field=guarantee]",0)->innertext)) : NULL;
+				        $params['delivery'] = $html->find("div[data-field=delivery] p",0) ? str_replace('<br />',"\n", trim($html->find("div[data-field=delivery] p",0)->innertext)) : NULL;
+
+				        foreach ($params as  $key => &$value) {
+				            if(!is_array($value)) $value = trim($value);
+				        }
+				        print_r($params);
+				        $dir = Yii::app()->params["imageFolder"]."/".$type."s/".$good_code."p"; 
+				        if (!is_dir($dir)) mkdir($dir, 0777, true);
+				        foreach ($html->find(".bulletinImages img") as $i => $img) 
+							copy( $img->src, $dir."/".$good_code."p_".sprintf("%'.02d", $i).".jpg");
+						$good_code++;
+
+						
+					}
+				}
+			}
+		}
+		$this->curl->removeCookies();
+		return $good_code;
+	}
 
     public function self(){
         return new Drom();

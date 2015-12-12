@@ -505,6 +505,32 @@ class Good extends GoodFilter
 		return $temp;
 	}
 
+	public function addAttributes($params,$good_type_id)
+	{
+		$model = new Good;
+		$model->good_type_id = $good_type_id;
+		$model->save();
+		$fields = array();
+		foreach ($params as $attr_id => $value) {
+			$temp = array(
+				"good_id" => $model->id,
+				"attribute_id" => $attr_id,
+				'int_value' => NULL,
+				"varchar_value" => NULL,
+				"text_value" => NULL,
+				'float_value' => NULL,
+				"variant_id" => NULL
+			);
+			$attr_type = Attribute::model()->with("type")->findByPk($attr_id);
+			if($attr_type->list) {
+				$model = Attribute::model()->with('variants.variant')->find("attribute_id=43 AND value=".$user_id);
+			} else $temp[$attr_type->type->code."_value"] = $value;
+			array_push($fields, $temp);
+		}
+
+		$this->insertValues(GoodAttribute::tableName(),$fields);
+	}
+
 	public function createFromAuction($auction){
 		$diametres = array(
 			13 => "1317",
