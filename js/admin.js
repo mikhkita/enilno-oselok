@@ -31,6 +31,7 @@ $(document).ready(function(){
         }
         $("body,html").css("height",myHeight);
         $(".main").css("height",myHeight-50);
+        sectionNavResize();
     }
     $(window).resize(whenResize);
     whenResize();
@@ -305,7 +306,8 @@ $(document).ready(function(){
             var element = $(this).siblings("select.select2");
             var selected = [];
             element.find("option").each(function(i,e){
-                selected[selected.length]=$(e).attr("value");
+                if( $(e).attr("value") != "-" )
+                    selected[selected.length]=$(e).attr("value");
             });
             element.select2("val", selected);
         });
@@ -1201,6 +1203,21 @@ $(document).ready(function(){
     
 
     /* Session Checkboxes ------------------------ Session Checkboxes */
+
+    if( $(".b-section-nav").length ){
+        $(".main").scroll(function(){
+            sectionNavResize();            
+        });
+    }
+
+    function sectionNavResize(){
+        if( $(".b-section-nav").length ){
+            // $(".b-section-nav").css({
+            //     "left" : $(".b-table").eq(0).offset().left,
+            //     "width" : $(".b-table").width()
+            // });
+        }
+    }
 
     $(".ajax-update-prices").click(function(){
         progress.setColor("#D26A44");

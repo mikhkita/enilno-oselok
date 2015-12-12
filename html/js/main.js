@@ -72,7 +72,7 @@ $(document).ready(function(){
     $(window).load(function() {
         $.ajax({
             type: "GET",
-            url: '/kolesoonline/getcities',
+            url: '/kolesoOnline/getcities',
             success: function(msg){
                 $("#b-popup-city").append(msg);
                 $( ".city-tabs" ).tabs({

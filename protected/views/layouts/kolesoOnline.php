@@ -165,7 +165,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
         <div class="for_all b-popup-small">
             <h3>Заказать звонок</h3>
             <h4>Оставьте заявку и мы Вам перезвоним<br>в ближайшее время:</h4>
-            <form action="<?=Yii::app()->createUrl('/kolesoOnline/mail/')?>" method="POST"  data-block="#b-popup-2">
+            <form action="<?=Yii::app()->createUrl('/kolesoOnline/mail/')?>" id="b-form-call" method="POST"  data-block="#b-popup-2">
                 <div class="b-popup-form">
                     <label for="name">Ваше имя</label>
                     <input type="text" name="name" required placeholder="Иван"/>
@@ -236,6 +236,8 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
 <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/html/js/i18n/ru.js"></script>
 <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/html/js/KitSend.js"></script>
 <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/html/js/main.js"></script>
+<? if(isset(Yii::app()->params['server']) && Yii::app()->params['server'] === true): ?>
 <!-- Yandex.Metrika counter --><script type="text/javascript"> (function (d, w, c) { (w[c] = w[c] || []).push(function() { try { w.yaCounter34102235 = new Ya.Metrika({ id:34102235, clickmap:true, trackLinks:true, accurateTrackBounce:true, webvisor:true }); } catch(e) { } }); var n = d.getElementsByTagName("script")[0], s = d.createElement("script"), f = function () { n.parentNode.insertBefore(s, n); }; s.type = "text/javascript"; s.async = true; s.src = "https://mc.yandex.ru/metrika/watch.js"; if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); } })(document, window, "yandex_metrika_callbacks");</script><noscript><div><img src="https://mc.yandex.ru/watch/34102235" style="position:absolute; left:-9999px;" alt="" /></div></noscript><!-- /Yandex.Metrika counter -->
+<? endif; ?>
 </body>
 </html>

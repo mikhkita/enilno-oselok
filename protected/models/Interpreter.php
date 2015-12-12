@@ -171,12 +171,18 @@ class Interpreter extends CActiveRecord
     	$attributes = (isset($model->fields_assoc))?$model->fields_assoc:$model;
     	if( $dynObjects !== NULL ) $attributes = $attributes + $dynObjects;
 
-    	if( isset($this->interpreters[(string)$interpreter_id]) ){
-    		if( $this->interpreters[(string)$interpreter_id]->unique && $uniq === NULL )
+    	if( !isset($this->interpreters) ){
+    		$interpreters = array($interpreter_id => Interpreter::model()->findByPk($interpreter_id));
+    	}else{
+    		$interpreters = $this->interpreters;
+    	}
+
+    	if( isset($interpreters[(string)$interpreter_id]) ){
+    		if( $interpreters[(string)$interpreter_id]->unique && $uniq === NULL )
     			return Interpreter::generateUnique($interpreter_id, $model, $dynObjects, $advert_id);
 
-    		if( $this->interpreters[(string)$interpreter_id]->good_type_id == $model->good_type_id ){
-    			$template = $this->interpreters[(string)$interpreter_id]->template;
+    		if( $interpreters[(string)$interpreter_id]->good_type_id == $model->good_type_id ){
+    			$template = $interpreters[(string)$interpreter_id]->template;
     			
     		}else{
     			throw new CHttpException(500,'У типа товара "'.$model->type->name.'" нет интерпретатора с идентификатором '.$interpreter_id);

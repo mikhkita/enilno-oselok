@@ -163,6 +163,7 @@ h2{
     height: 100%;
     box-shadow: 0 0 20px rgba(0,0,0,0.5);
     overflow: auto;
+    z-index: 1000;
 }
 .who_am_i
 {
@@ -312,6 +313,9 @@ h2{
     }
 h1{
     font-size: 20px;
+}
+h1.b-with-nav{
+    margin-top: 30px;
 }
 .b-tables .b-table:nth-child(n+2){
     display: none;
@@ -2199,6 +2203,7 @@ ul.b-filter-list{
 .b-lot-count{
     margin-left: 10px;
     display: inline-block;
+    margin-top: 20px;
 }
 .b-popup-good-filter{
     width: 660px;
@@ -2620,6 +2625,75 @@ ul.b-filter-list{
         .b-place-state span.b-green:after{
             background-color: #30C930;
         }
+.b-section-nav{
+    position: fixed;
+    top: 0px;   
+    left: 0px;
+    padding-left: 250px;
+    box-sizing: border-box;
+    width: 100%;
+    min-width: 1113px;
+    z-index: 999;
+    padding-right: 30px;
+}
+    .b-section-nav-back{
+        background-color: #FFF5D1;
+        box-shadow: 0px 3px 5px rgba(0,0,0,0.2);
+        border: 1px solid #937868;
+        border-top: 0px;
+    }
+    .b-section-nav .b-link,
+    .b-section-nav span{
+        display: block;
+        padding: 5px 20px 6px;
+    }
+    .b-section-menu{
+        border-left: 1px solid #E8DEB8;
+    }
+        .b-section-menu>li{
+            float: left;
+            list-style: none;
+            position: relative;
+        }
+            .b-section-menu>li>a{
+                cursor: pointer;
+                /*color: #F5E9BC;*/
+                display: block;
+                padding: 5px 20px 6px;
+                text-decoration: none;
+                border-right: 1px solid #E8DEB8;
+            }
+            .b-section-menu>li:last-child>a{
+                /*border-right: 0;*/
+            }
+            .b-section-menu>li:hover>a,
+            .b-section-menu>li:hover .b-section-submenu li:hover a{
+                background-color: #D26A44;
+                color: #F5E9BC;
+                text-shadow: 1px 1px 1px rgba(0,0,0,0.3);
+            }
+            .b-section-menu .b-section-submenu{
+                text-align: left;
+                display: none;
+                position: absolute;
+                left: 0px;
+                top: 30px;
+                background-color: #FFF5D1;
+                /*border: 1px solid #E8DEB8;*/
+                box-shadow: 0px 5px 7px rgba(0,0,0,0.3);
+            }
+            .b-section-menu>li:hover .b-section-submenu{
+                display: block;
+            }
+                .b-section-menu .b-section-submenu li{
+                    list-style: none;
+                }
+                    .b-section-menu .b-section-submenu li a{
+                        padding: 5px 20px;
+                        display: block;
+                        border-top: 1px solid #E8DEB8;
+                        text-decoration: none;
+                    }
        
 @media screen and (max-width: 1500px){
     .b-hide-title{

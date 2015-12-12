@@ -1,5 +1,5 @@
 <div class="b-popup">
-    <h1>Выбор по списку</h1>
+    <h1>Выделение по кодам</h1>
     <div class="form">
 
     <?php $form=$this->beginWidget('CActiveForm', array(

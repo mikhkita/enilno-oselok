@@ -53,7 +53,6 @@ class GoodController extends Controller
 		$model->save();
 		GoodAttribute::model()->deleteAll('good_id='.$id.' AND attribute_id IN (58,59,60,61)');
 
-		
 		$model->updateAdverts();
 
 		$this->redirect( Yii::app()->createUrl('good/adminindex',array('good_type_id'=>$good_type_id,'partial'=>true)) );
@@ -85,8 +84,6 @@ class GoodController extends Controller
 				}
 			}
 			$this->insertValues(GoodAttribute::tableName(),$values);
-
-			// Good::updatePrices(array($model->id));
 
 			$this->redirect( Yii::app()->createUrl('good/adminindex',array('good_type_id'=>$good_type_id,'partial'=>true)) );
 
@@ -133,9 +130,8 @@ class GoodController extends Controller
 			// Log::debug(print_r($values, true));
 			$this->insertValues(GoodAttribute::tableName(),$values);
 
+			// $this->checkAdverts($model);
 			$model->updateAdverts();
-
-			// Good::updatePrices(array($id));
 
 			Good::updateAuctionLinks();
 
@@ -189,25 +185,27 @@ class GoodController extends Controller
 
 			if( isset($_POST['Good_attr']) ){
 				$values = array();
+				$delete_variants = array();
 				foreach ($good_ids as $key => $id) {
-					$delete_variants = array();
 					foreach ($_POST['Good_attr'] as $attr_id => $value) {
-						if( isset($value[0]) && $value[0] == "-" ) {
+						if( array_search("-", $value) !== false )
 							GoodAttribute::model()->deleteAll("good_id=".$key." AND (".implode(" OR ", $attrs_id).")");
-							continue;
-						}
-						if(!empty($value))
+
+						if(count($value))
 							foreach ($value as $variant) {
+								if( $variant == "-" ) continue;
 								$values[] = array("good_id"=>$key,"attribute_id"=>$attr_id,"int_value"=>NULL,"varchar_value"=>NULL,"float_value"=>NULL,"text_value"=>NULL,"variant_id"=>$variant);
-								array_push($delete_variants, $variant);
+								$delete_variants[] = "(good_id=$key AND attribute_id=$attr_id AND variant_id=$variant)";
 							}
 					}
-					GoodAttribute::model()->deleteAll("good_id=".$key." AND (".implode(" OR ", $attrs_id).") AND variant_id IN (".implode(",", $delete_variants).")");
 				}
+				if( count($delete_variants) )
+					GoodAttribute::model()->deleteAll(implode(" OR ", $delete_variants));
 				$this->insertValues(GoodAttribute::tableName(),$values);
 			}
 
 			foreach ($goods as $i => $good) {
+				// $this->checkAdverts($good);
 				$good->updateAdverts();
 			}
 
@@ -339,20 +337,20 @@ class GoodController extends Controller
 			1 => array(
 					"FILTER" => array(43,26,23,27,16),
 					"FILTER_NAMES" => array(43=>41),
-					"SORT" => array(3,20),
+					// "SORT" => array(3,20),
 				),
 			2 => array(
 					"FILTER" => array(43,26,27,70),
 					"FILTER_NAMES" => array(43=>41),
-					"SORT" => array(3,20),
+					// "SORT" => array(3,20),
 				),
 			3 => array(
 					"FILTER" => array(43,26,23,27,16),
 					"FILTER_NAMES" => array(43=>41),
-					"SORT" => array(3,20),
+					// "SORT" => array(3,20),
 				),
 		);
-		$sort_fields = $this->getLabels($params[$good_type_id]["SORT"]);
+		// $sort_fields = $this->getLabels($params[$good_type_id]["SORT"]);
 		$attributes = $this->getFilterVariants($params[$good_type_id]["FILTER"],$params[$good_type_id]["FILTER_NAMES"],$good_type_id);
 		$labels = $this->getLabels($params[$good_type_id]["FILTER"]);
 
@@ -377,9 +375,9 @@ class GoodController extends Controller
 			$sort['field'] = $sort_field;
 			$sort['type'] = $sort_type;
 			$sort_type = ($sort_type == "ASC") ? "DESC" : "ASC";
-			$this->setUserParam("good_sort_".$good_type_id,$sort);
-		} elseif($this->getUserParam("good_sort_".$good_type_id) ) {
-			$temp = $this->getUserParam("good_sort_".$good_type_id);
+			$this->setUserParam("GOOD_SORT_".$good_type_id,$sort);
+		} elseif($this->getUserParam("GOOD_SORT_".$good_type_id) ) {
+			$temp = $this->getUserParam("GOOD_SORT_".$good_type_id);
 			$sort['field'] = $temp->field;
 			$sort['type'] = $temp->type;
 			$sort_type = ($sort['type'] == "ASC") ? "DESC" : "ASC";
@@ -389,11 +387,11 @@ class GoodController extends Controller
 			unset($_GET["id"]);
 
 			if(isset($_POST['filter-active'])) {
-				$this->setUserParam("good_filter_".$good_type_id,array());
+				$this->setUserParam("GOOD_FILTER_".$good_type_id,array());
 			}
-			if(isset($_POST[$attr_arr])) $this->setUserParam("good_filter_".$good_type_id,$_POST[$attr_arr]);
+			if(isset($_POST[$attr_arr])) $this->setUserParam("GOOD_FILTER_".$good_type_id,$_POST[$attr_arr]);
 
-			$filter_values = $this->getUserParam("good_filter_".$good_type_id) ? (array)$this->getUserParam("good_filter_".$good_type_id) : array();
+			$filter_values = $this->getUserParam("GOOD_FILTER_".$good_type_id) ? $this->getUserParam("GOOD_FILTER_".$good_type_id,false,true) : array();
 			
 			$goods = Good::model()->filter(
 				array(

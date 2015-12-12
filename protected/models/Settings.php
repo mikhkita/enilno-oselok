@@ -103,6 +103,15 @@ class Settings extends CActiveRecord
 		));
 	}
 
+	public function getParam($category_code = NULL,$param_code = NULL){
+		if( $category_code && $param_code ){
+			$param = Settings::model()->with("category")->find(array("limit"=>1,"condition"=>"category.code='$category_code' AND t.code='$param_code'"));
+			if( $param ) 
+				return $param->value;
+		}
+		return NULL;
+	}
+
 	/**
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!

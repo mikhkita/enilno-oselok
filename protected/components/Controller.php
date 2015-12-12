@@ -290,12 +290,13 @@ class Controller extends CController
     }
 
     public function getDynObjects($dynamic,$good_type_id = NULL){
+        $dynObjects = array();
+
         if( $good_type_id != NULL ){
             $criteria = new CDbCriteria();
             $criteria->with = array("goodTypes","variants");
             $criteria->condition = "goodTypes.good_type_id=".$good_type_id." AND dynamic=1";
             $modelDyn = Attribute::model()->findAll($criteria);
-            $dynObjects = array();
 
             foreach ($modelDyn as $key => $value) {
                 $curObj = Variant::model()->findByPk($dynamic[$value->id]);
@@ -400,12 +401,24 @@ class Controller extends CController
         return ( isset($this->settings[$category_code][$param_code]) )?$this->settings[$category_code][$param_code]:"";
     }
 
-    public function getUserParam($code, $reload = false){
+    public function getUserParam($code, $reload = false, $int_assoc = false){
         if( $this->user_settings == NULL || $reload ) $this->getUserSettings();
 
         $param_code = mb_strtoupper($code,"UTF-8");
 
-        return ( isset($this->user_settings[$param_code]) )?$this->user_settings[$param_code]:NULL;
+        if( isset($this->user_settings[$param_code]) ){
+            if( $int_assoc ){
+                $out = array();
+                foreach ($this->user_settings[$param_code] as $key => $value)
+                    $out[intval($key)] = $value;
+            }else{
+                $out = $this->user_settings[$param_code];
+            }
+
+            return $out;
+        }else{
+            return NULL;
+        }
     }
 
     public function getUserSettings(){
@@ -654,6 +667,42 @@ class Controller extends CController
         foreach ($model as $key => $value)
             array_push($ids, $value->id);
         return $ids;
+    }
+
+    public function checkAdverts($model){
+        $model = Good::model()->with(array("fields.variant","fields.attribute"))->findByPk($model->id);
+
+        $check_param_id = $this->getParam("SERVICE",mb_strtoupper($model->type->code,"UTF-8")."_PARAM_ID");
+        $check_city_id = $this->getParam("SERVICE",mb_strtoupper($model->type->code,"UTF-8")."_CITY_ID");
+
+        if( intval(Interpreter::generate($check_param_id,$model)) == 1 ){
+            $delete_ids = array();
+            $cities = Place::model()->cities;
+            foreach ($model->fields_assoc as $code => $field) {
+                $code = explode("-d", $code);
+                if( count($code) == 2 && count($field) )
+                    foreach ($model->getArray($field) as $i => $city) {
+                        $dynamic = $this->getDynObjects(array(
+                            57 => $cities[intval($code[0])]["PLACE"],
+                            38 => $city->variant_id,
+                            37 => $cities[intval($code[0])]["TYPE"]
+                        ));
+                        
+                        if( intval(Interpreter::generate($check_city_id,$model,$dynamic)) != 1 )
+                            array_push($delete_ids, $city->id);
+                    }
+            }
+            // print_r($delete_ids);
+            if( count($delete_ids) )
+                GoodAttribute::model()->deleteAll("id IN (".implode(",", $delete_ids).")");
+        }else{
+            $city_field_ids = array();
+            foreach (Place::model()->cities as $i => $value)
+                array_push($city_field_ids, $i);
+
+            if( count($city_field_ids) )
+                GoodAttribute::model()->deleteAll("attribute_id IN (".implode(",", $city_field_ids).") AND good_id=".$model->id);
+        }
     }
 
     public function isRoot(){
