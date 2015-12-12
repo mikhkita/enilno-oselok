@@ -96,6 +96,13 @@ $(document).ready(function(){
 				            },100);
 				        }
 					});	
+					if( msg.trim() == "1" ){
+						if( $this.attr("id") == "b-form-call" ){
+							yaCounter34102235.reachGoal('CALL_REQUEST');
+						}else if( $this.attr("id") == "b-form-buy" ){
+							yaCounter34102235.reachGoal('BUY_REQUEST');
+						}
+					}
 				}
 			});
   		}else{
@@ -137,6 +144,12 @@ function fancyInit() {
 				if( $this.attr("data-afterShow") && customHandlers[$this.attr("data-afterShow")] ){
 					customHandlers[$this.attr("data-afterShow")]($this);
 				}
+				if( $(".fancybox-inner>div").attr("id") == "b-popup-callback" ){
+					yaCounter34102235.reachGoal('CALL_BUTTON');
+				}else if( $(".fancybox-inner>div").attr("id") == "b-popup-buy" ){
+					yaCounter34102235.reachGoal('BUY_BUTTON');
+				}
+
 				if ( applePie() ) { $('body,html').css({'overflow': 'hidden'}); } 
 				// $('.fancybox-inner input[type="text"]').eq(0).focus();
 			},

@@ -14,6 +14,12 @@
 		<?php echo $form->error($model,'name'); ?>
 	</div>
 
+    <div class="row">
+        <?php echo $form->labelEx($model,'code'); ?>
+        <?php echo $form->textField($model,'code',array('maxlength'=>50,'required'=>true,'style'=>'width:622px;')); ?>
+        <?php echo $form->error($model,'code'); ?>
+    </div>
+
 	<div class="row double-list clearfix">
         <div class="left">
             <label for="">Все атрибуты</label>

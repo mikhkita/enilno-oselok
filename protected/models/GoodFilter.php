@@ -94,7 +94,7 @@ class GoodFilter extends CActiveRecord
 	}
 
 	public function updateAdverts(){
-		$newModel = Good::model()->with(array("fields.variant","fields.attribute"))->findByPk($this->id);
+		$newModel = Good::model()->with(array("fields.variant","fields.attribute"))->findByPk($this->id);		
 
 		if( !function_exists("compare") ){
 			function compare($a,$b){ 

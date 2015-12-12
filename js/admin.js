@@ -306,7 +306,8 @@ $(document).ready(function(){
             var element = $(this).siblings("select.select2");
             var selected = [];
             element.find("option").each(function(i,e){
-                selected[selected.length]=$(e).attr("value");
+                if( $(e).attr("value") != "-" )
+                    selected[selected.length]=$(e).attr("value");
             });
             element.select2("val", selected);
         });

@@ -6,6 +6,7 @@
  * The followings are the available columns in table 'good_type':
  * @property integer $id
  * @property string $name
+ * @property string $code
  */
 class GoodType extends CActiveRecord
 {
@@ -26,10 +27,10 @@ class GoodType extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('name', 'required'),
-			array('name', 'length', 'max'=>255),
+			array('name, code', 'length', 'max'=>255),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, name', 'safe', 'on'=>'search'),
+			array('id, name, code', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -59,6 +60,7 @@ class GoodType extends CActiveRecord
 		return array(
 			'id' => 'ID',
 			'name' => 'Название',
+			'code' => 'Код',
 		);
 	}
 
@@ -82,6 +84,7 @@ class GoodType extends CActiveRecord
 
 		$criteria->compare('id',$this->id);
 		$criteria->compare('name',$this->name,true);
+		$criteria->compare('code',$this->code,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

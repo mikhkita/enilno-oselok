@@ -382,7 +382,7 @@ class IntegrateController extends Controller
 
 // Выкладка -------------------------------------------------------------- Выкладка
     public function actionQueueNextAvito($debug = false){
-        if( !$this->allowed($category_id) && !$debug ) return true;
+        if( !$this->allowed(2048) && !$debug ) return true;
 
         $this->getNext(2048);
     }
