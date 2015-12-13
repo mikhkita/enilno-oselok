@@ -13,7 +13,9 @@
 				</li>
 				<li><a href="<?php echo $this->createUrl('/good/adminupdateall',array('good_type_id'=> $_GET["good_type_id"],'GoodFilter_page' => ($pages->currentPage+1) ))?>" class="ajax-form ajax-create" data-block=".b-popup-filter">Города</a></li>
 				<li><a href="<?php echo $this->createUrl('/advert/adminindex',array('good_type_id'=> $_GET["good_type_id"]))?>">Объявления</a></li>
-				<li><a href="<?php echo $this->createUrl('/good/adminjoin')?>">Склеить</a></li>
+				<? if($_GET["good_type_id"] == 1 || $_GET["good_type_id"] == 2): ?>
+					<li><a href="<?php echo $this->createUrl('/good/adminjoin')?>">Склеить</a></li>
+				<? endif; ?>
 				<!-- <li><a href="<?php echo $this->createUrl('/good/adminupdateadverts',array('good_type_id'=> $_GET["good_type_id"], 'images' => '1'))?>" class="ajax-update-prices">Обновить&nbsp;фотографии</a></li> -->
 			</ul>
 	</div>

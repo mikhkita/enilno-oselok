@@ -225,8 +225,12 @@ class GoodController extends Controller
 	public function actionAdminJoin()
 	{
 		$good_ids = Good::getCheckboxes(2);
+		$good_type_attr = array();
+		foreach (GoodTypeAttribute::model()->findAll("good_type_id=3") as $i => $attr)
+			array_push($good_type_attr, $attr->attribute_id);
+
 		$to_join = array();
-		if( !count($good_ids) ) return false;
+		if( !count($good_ids) ) return true;
 
 		foreach ($good_ids as $key => $value)
 			$good_ids[$key] = array_shift(explode("-", $value));
@@ -258,11 +262,12 @@ class GoodController extends Controller
 		}
 
 		foreach ($to_join as $code => $array) {
-			if( count($array >= 2) ){
+			if( count($array >= 2) && !GoodFilter::model()->with("fields")->count("fields.varchar_value='$code' AND good_type_id=3") ){
 				$params = array();
+				$images = array();
 				foreach ($array as $i => $good) {
 					foreach ($good->fields_assoc as $key => $value) {
-						if( strpos($key, "-d") === false ){
+						if( strpos($key, "-d") === false && in_array($key, $good_type_attr) ){
 							if( is_array($value) ){
 								$val = array();
 								foreach ($value as $index => $v)
@@ -290,10 +295,16 @@ class GoodController extends Controller
 						}else
 							$params[99] = $marking;
 					}
+					$images = array_merge($images, $this->getImages($good, NULL, false));
 				}
+
+				foreach ($images as $i => $image)
+					$images[$i] = substr($image, 1);
+
+				Good::addAttributes($params,3,$images);
 			}
 		}
-		var_dump($params);
+		$this->redirect( Yii::app()->createUrl('good/adminindex',array('good_type_id'=>3)) );
 	}
 
 	public function getAttr($model) {

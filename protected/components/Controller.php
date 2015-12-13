@@ -533,7 +533,7 @@ class Controller extends CController
         }
     }
 
-    public function getImages($good, $number = NULL)
+    public function getImages($good, $number = NULL, $get_default = true)
     {   
         $imgs = array();
         $code = $good->fields_assoc[3]->value;
@@ -553,11 +553,13 @@ class Controller extends CController
                     }
                 }           
             } else {
-                array_push($imgs, Yii::app()->request->baseUrl."/".$path."/default.jpg");
+                if( $get_default )
+                    array_push($imgs, Yii::app()->request->baseUrl."/".$path."/default.jpg");
             }
         }
         else {
-            array_push($imgs, Yii::app()->request->baseUrl."/".$path."/default.jpg");    
+            if( $get_default )
+                array_push($imgs, Yii::app()->request->baseUrl."/".$path."/default.jpg");    
         }
         return $imgs;
     }
@@ -702,6 +704,18 @@ class Controller extends CController
 
             if( count($city_field_ids) )
                 GoodAttribute::model()->deleteAll("attribute_id IN (".implode(",", $city_field_ids).") AND good_id=".$model->id);
+        }
+    }
+
+    public function cleanDir($dir) {
+        $files = glob($dir."/*");
+        $c = count($files);
+        if (count($files) > 0) {
+            foreach ($files as $file) {      
+                if (file_exists($file)) {
+                unlink($file);
+                }   
+            }
         }
     }
 

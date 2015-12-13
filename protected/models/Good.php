@@ -162,7 +162,7 @@ class Good extends GoodFilter
 			foreach ($options["attributes"] as $id => $attribute_vals) {
 				if( !is_array($attribute_vals) ) $attribute_vals = array($attribute_vals);
 				foreach ($attribute_vals as $variant_id)
-					$criteria->addCondition('good_type_id='.$options["good_type_id"].' AND fields.variant_id='.$variant_id,'OR');
+					$criteria->addCondition('(good_type_id='.$options["good_type_id"].' AND fields.variant_id=\''.$variant_id.'\')','OR');
 				$count++;
 			}
 
@@ -514,7 +514,7 @@ class Good extends GoodFilter
 		return $temp;
 	}
 
-	public function addAttributes($params,$good_type_id)
+	public function addAttributes($params,$good_type_id,$images = NULL)
 	{
 		$model = new Good;
 		$model->good_type_id = $good_type_id;
@@ -533,10 +533,24 @@ class Good extends GoodFilter
 			$attr_type = Attribute::model()->with("type")->findByPk($attr_id);
 			if(is_array($value)) {
 				foreach ($value as $key => $item) {
-					$fields = $this->addAttribute($model->id,$attr_id,$attr_type,$item,$fields);
+					$fields = Good::addAttribute($model->id,$attr_id,$attr_type,$item,$fields);
 				}
-			} else $fields = $this->addAttribute($model->id,$attr_id,$attr_type,$value,$fields);
+			} else $fields = Good::addAttribute($model->id,$attr_id,$attr_type,$value,$fields);
 		}
+
+		if( $images !== NULL && isset($params[3]) ){
+			$good_code = $params[3];
+			$type_code = GoodType::model()->findByPk($good_type_id)->code;
+			$dir = Yii::app()->params["imageFolder"]."/".$type_code."s/".$good_code; 
+	        if (!is_dir($dir)){
+	        	mkdir($dir, 0777, true);
+	        }else{
+	        	$this->cleanDir($dir);
+	        }
+	        foreach ($images as $i => $link)
+				copy( $link, $dir."/".$good_code."_".sprintf("%'.02d", $i).".jpg");
+		}
+
 		$this->insertValues(GoodAttribute::tableName(),$fields);
 	}
 
@@ -552,9 +566,9 @@ class Good extends GoodFilter
 		);
 	
 		if($attr_type->list) {
-			$model = Attribute::model()->with('variants.variant')->find("attribute_id=".$attr_id." AND variant.value=".$value);
+			$model = Attribute::model()->with('variants.variant')->find("attribute_id=".$attr_id." AND value='".$value."'");
 			if($model)  {
-				$temp["variant_id"] = $model->variants->variant_id; 
+				$temp["variant_id"] = $model->variants[0]->variant_id; 
 			} else {
 				$model = Attribute::model()->findbyPk($attr_id);
 				$fields[0]["text_value"].= $model->name." ".$value." ";
