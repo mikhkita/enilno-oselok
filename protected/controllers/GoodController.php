@@ -13,7 +13,7 @@ class GoodController extends Controller
 	{
 		return array(
 			array('allow',
-				'actions'=>array('adminIndex','adminTest','updatePrices','updateAuctionLinks','adminCreate','adminUpdate','adminDelete','adminEdit','getAttrType','getAttr','adminAdverts','adminUpdateImages',"adminAddCheckbox","adminRemoveCheckbox","adminAddAllCheckbox","adminRemoveAllCheckbox",'adminUpdateAll','adminAddSomeCheckbox','adminUpdateAdverts','adminViewSettings','adminSold','adminArchive'),
+				'actions'=>array('adminIndex','adminTest','updatePrices','updateAuctionLinks','adminCreate','adminUpdate','adminDelete','adminEdit','getAttrType','getAttr','adminAdverts','adminUpdateImages',"adminAddCheckbox","adminRemoveCheckbox","adminAddAllCheckbox","adminRemoveAllCheckbox",'adminUpdateAll','adminAddSomeCheckbox','adminUpdateAdverts','adminViewSettings','adminSold','adminArchive','adminJoin'),
 				'roles'=>array('manager'),
 			),
 			array('allow',
@@ -220,6 +220,80 @@ class GoodController extends Controller
 				'cities' => $this->cityGroup()
 			));
 		}
+	}
+
+	public function actionAdminJoin()
+	{
+		$good_ids = Good::getCheckboxes(2);
+		$to_join = array();
+		if( !count($good_ids) ) return false;
+
+		foreach ($good_ids as $key => $value)
+			$good_ids[$key] = array_shift(explode("-", $value));
+
+		$goods = Good::model()
+			->filter( array("good_type_id"=>2, "varchar_attributes"=>array(3 => $good_ids)) )
+			->getPage( array('pageSize'=>10000) );
+		$goods = $goods["items"];
+
+		if(count($goods)){
+			foreach ($goods as $i => $good) {
+				$code = explode("-", $good->fields_assoc[3]->value);
+				$to_join[$code[0]] = array($good);
+			}
+
+			$goods = Good::model()
+				->filter( array("good_type_id"=>1, "varchar_attributes"=>array(3 => $good_ids)) )
+				->getPage( array('pageSize'=>10000) );
+
+			$goods = $goods["items"];
+
+			if( count($goods) ){
+				foreach ($goods as $i => $good) {
+					$code = explode("-", $good->fields_assoc[3]->value);
+					if( isset($to_join[$code[0]]) && is_array($to_join[$code[0]]) )
+						array_push($to_join[$code[0]], $good);
+				}
+			}
+		}
+
+		foreach ($to_join as $code => $array) {
+			if( count($array >= 2) ){
+				$params = array();
+				foreach ($array as $i => $good) {
+					foreach ($good->fields_assoc as $key => $value) {
+						if( strpos($key, "-d") === false ){
+							if( is_array($value) ){
+								$val = array();
+								foreach ($value as $index => $v)
+									array_push($val, $v->value);
+							}else{
+								$val = $value->value;
+							}
+							if( isset($params[$key]) ){
+								if( $key != 3 && $key != 20 && $key != 35 && $key != 7 && $key != 8 && $key != 9 ){
+									$params[$key] = ($params[$key]==$val)?$val:NULL;
+								}elseif( $key == 20 ){
+									$params[$key] = intval($params[$key])+intval($val);
+								}elseif( $key == 35 ){
+									$params[$key] = $params[$key]."\n".$val;
+								}
+							}else{
+								$params[$key] = $val;
+							}
+						}
+					}
+					if( $good->good_type_id == 1 ){
+						$marking = Interpreter::generate(30,$good);
+						if( isset($params[99]) ){
+							$params[99] = $params[99]."\n".$marking;
+						}else
+							$params[99] = $marking;
+					}
+				}
+			}
+		}
+		var_dump($params);
 	}
 
 	public function getAttr($model) {

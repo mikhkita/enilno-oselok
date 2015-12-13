@@ -173,6 +173,14 @@ class Good extends GoodFilter
 					$count++;
 				}
 
+		if(isset($options["varchar_attributes"]) && count($options["varchar_attributes"]))
+			foreach ($options["varchar_attributes"] as $id => $attribute_vals){
+				if( !is_array($attribute_vals) ) $attribute_vals = array($attribute_vals);
+				foreach ($attribute_vals as $str)
+					$criteria->addCondition('(good_type_id='.$options["good_type_id"].' AND fields.attribute_id='.$id.' AND fields.varchar_value LIKE \''.$str.'%\' )','OR');
+				$count++;
+			}
+
 		if( $count == 0 )
 			$criteria->condition = 'good_type_id='.$options["good_type_id"].' AND fields.attribute_id=3';
 
