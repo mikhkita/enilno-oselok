@@ -325,8 +325,8 @@ Class Drom {
 					    }
 
 				        $params['desc'] = str_replace('<br />',"\n", trim($html->find("p[data-field=text]",0)->innertext));
-				        $params['guarantee'] = $html->find("p[data-field=guarantee]",0) ? str_replace('<br />',"\n", trim($html->find("p[data-field=guarantee]",0)->innertext)) : NULL;
-				        $params['delivery'] = $html->find("div[data-field=delivery] p",0) ? str_replace('<br />',"\n", trim($html->find("div[data-field=delivery] p",0)->innertext)) : NULL;
+				        // $params['guarantee'] = $html->find("p[data-field=guarantee]",0) ? str_replace('<br />',"\n", trim($html->find("p[data-field=guarantee]",0)->innertext)) : NULL;
+				        // $params['delivery'] = $html->find("div[data-field=delivery] p",0) ? str_replace('<br />',"\n", trim($html->find("div[data-field=delivery] p",0)->innertext)) : NULL;
 
 				        foreach ($params as  $key => &$value) {
 				            if(!is_array($value)) $value = trim($value);

@@ -512,24 +512,48 @@ class Good extends GoodFilter
 		$model->good_type_id = $good_type_id;
 		$model->save();
 		$fields = array();
+		array_push($fields,array(
+			"good_id" => $model->id,
+			"attribute_id" => 98,
+			'int_value' => NULL,
+			"varchar_value" => NULL,
+			"text_value" => "",
+			'float_value' => NULL,
+			"variant_id" => NULL
+		));
 		foreach ($params as $attr_id => $value) {
-			$temp = array(
-				"good_id" => $model->id,
-				"attribute_id" => $attr_id,
-				'int_value' => NULL,
-				"varchar_value" => NULL,
-				"text_value" => NULL,
-				'float_value' => NULL,
-				"variant_id" => NULL
-			);
 			$attr_type = Attribute::model()->with("type")->findByPk($attr_id);
-			if($attr_type->list) {
-				$model = Attribute::model()->with('variants.variant')->find("attribute_id=43 AND value=".$user_id);
-			} else $temp[$attr_type->type->code."_value"] = $value;
-			array_push($fields, $temp);
+			if(is_array($value)) {
+				foreach ($value as $key => $item) {
+					$fields = $this->addAttribute($model->id,$attr_id,$attr_type,$item,$fields);
+				}
+			} else $fields = $this->addAttribute($model->id,$attr_id,$attr_type,$value,$fields);
 		}
-
 		$this->insertValues(GoodAttribute::tableName(),$fields);
+	}
+
+	public function addAttribute($good_id,$attr_id,$attr_type,$value,$fields) {
+		$temp = array(
+			"good_id" => $good_id,
+			"attribute_id" => $attr_id,
+			'int_value' => NULL,
+			"varchar_value" => NULL,
+			"text_value" => NULL,
+			'float_value' => NULL,
+			"variant_id" => NULL
+		);
+	
+		if($attr_type->list) {
+			$model = Attribute::model()->with('variants.variant')->find("attribute_id=".$attr_id." AND value=".$value);
+			if($model)  {
+				$temp["variant_id"] = $model->variants->variant_id; 
+			} else {
+				$model = Attribute::model()->findbyPk($attr_id);
+				$fields[0]["text_value"].= $model->name." ".$value." ";
+			}
+		} else $temp[$attr_type->type->code."_value"] = $value;
+		array_push($fields, $temp);
+		return $fields;
 	}
 
 	public function createFromAuction($auction){
