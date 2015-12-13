@@ -552,7 +552,7 @@ class Good extends GoodFilter
 		);
 	
 		if($attr_type->list) {
-			$model = Attribute::model()->with('variants.variant')->find("attribute_id=".$attr_id." AND value=".$value);
+			$model = Attribute::model()->with('variants.variant')->find("attribute_id=".$attr_id." AND variant.value=".$value);
 			if($model)  {
 				$temp["variant_id"] = $model->variants->variant_id; 
 			} else {
