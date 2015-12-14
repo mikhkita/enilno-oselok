@@ -555,6 +555,7 @@ class Good extends GoodFilter
 	}
 
 	public function addAttribute($good_id,$attr_id,$attr_type,$value,$fields) {
+
 		$temp = array(
 			"good_id" => $good_id,
 			"attribute_id" => $attr_id,
@@ -569,12 +570,17 @@ class Good extends GoodFilter
 			$model = Attribute::model()->with('variants.variant')->find("attribute_id=".$attr_id." AND value='".$value."'");
 			if($model)  {
 				$temp["variant_id"] = $model->variants[0]->variant_id; 
+				array_push($fields, $temp);
 			} else {
 				$model = Attribute::model()->findbyPk($attr_id);
-				$fields[0]["text_value"].= $model->name." ".$value." ";
+				$fields[0]["text_value"].= $model->name." ".$value."\n\r";
 			}
-		} else $temp[$attr_type->type->code."_value"] = $value;
-		array_push($fields, $temp);
+		} else {
+			if($attr_id != 98) {
+				$temp[$attr_type->type->code."_value"] = $value; 
+				array_push($fields, $temp);
+			} else $fields[0]["text_value"].= $value."\n\r";
+		}		
 		return $fields;
 	}
 

@@ -70,8 +70,9 @@ class DromController extends Controller
 
         $drom = new Drom();
         $last_code = $this->getParam( "OTHER", "PARTNERS_LAST_CODE", true);
-        $last_code = $drom->parseUser("BAlFe",array(1,2,3), $last_code);
-        $this->setParam( "OTHER", "PARTNERS_LAST_CODE", $last_code );
+        $last_code = $drom->parseUser("kitaev123",array(2), $last_code);
+        Good::addAttributes($last_code,2);
+        // $this->setParam( "OTHER", "PARTNERS_LAST_CODE", $last_code );
 
     }
 
