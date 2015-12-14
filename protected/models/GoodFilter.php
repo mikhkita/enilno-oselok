@@ -243,7 +243,7 @@ class GoodFilter extends CActiveRecord
 						return true;
 					}
 					// Log::debug(count(array_udiff($model2->fields_assoc[$key], $value, function ($a,$b){return $a->value == $b->value ? 1 : -1;}))." ".count(array_udiff($value, $model2->fields_assoc[$key], function ($a,$b){return $a->value > $b->value ? 1 : -1;})));
-					if( $value->attribute->dynamic ){
+					if( isset($value->attribute) && $value->attribute->dynamic ){
 						if( count(array_udiff($model2->fields_assoc[$key], $value, function ($a,$b){return $a->value == $b->value ? 1 : -1;})) || count(array_udiff($value, $model2->fields_assoc[$key], function ($a,$b){return $a->value > $b->value ? 1 : -1;})) ){
 							Log::debug("20 ".$key);
 							return true;

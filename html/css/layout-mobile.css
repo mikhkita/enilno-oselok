@@ -528,7 +528,7 @@ input:-moz-placeholder {
 								}
 								.filter-item .variants input:checked + span:after {
 								}
-				.filter-item h5 {
+				.filter-cont h5 {
 					font-size: 28px;
 					font-weight: 500;
 					text-align: left;
@@ -590,7 +590,7 @@ input:-moz-placeholder {
 					box-sizing: border-box;
 					font-size: 28px;
 					text-align: left;
-					width: 304px;
+					width: 304px !important;
 					padding: 10px 28px 10px 15px;
 					text-overflow: ellipsis;
 					overflow: hidden;
@@ -1023,6 +1023,7 @@ width: 700px;margin-left: 0px;}
 						margin-top: 20px;
 						height: 28px;
 						border-radius: 50px;
+						margin-bottom: 28px;
 					}
 					.filter-cont .slide-type .slider-range{
 						width: 604px;

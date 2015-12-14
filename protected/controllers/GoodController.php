@@ -315,8 +315,8 @@ class GoodController extends Controller
 				if($attr->attribute_id == $item->attribute_id) {
 					if($item->attribute->list) {
 						if($item->attribute->multi) {
-							$result[$attr->attribute_id][] = $item->variant->id;
-						} else $result[$attr->attribute_id] = $item->variant->id;
+							$result[$attr->attribute_id][] = $item->variant_id;
+						} else $result[$attr->attribute_id] = $item->variant_id;
 					} else $result[$attr->attribute_id] = $item->value;
 				}
 			}
@@ -511,8 +511,6 @@ class GoodController extends Controller
 			'arr_name' => $attr_arr,
 			'filter_values' => $filter_values,
 			'good_count' => $goods["count"],
-			'sort_fields' => $sort_fields,
-			'codes' => $codes,
 			'sort_field' => $sort['field'],
 			'sort_type' => $sort_type
 		);

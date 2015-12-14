@@ -847,7 +847,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 								.filter-item .variants input:checked + span:after {
 									display: block;
 								}
-				.filter-item h5 {
+				.filter-cont h5{
 					font-size: 14px;
 					font-family: "Roboto";
 					font-weight: 500;
@@ -1502,7 +1502,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 				.filter-cont .slide-type .slider-range {
 					margin-top: 0px;
 					margin-left: 8px;
-					width: 490px;
+					width: 414px;
 				}
 					.slide-type {
 						text-align: left;
@@ -1524,12 +1524,14 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 							border: 2px solid #d7d7d7;
 							padding: 7px 0 6px;
 							text-align: center;
+							border-radius: 2px;
+							box-shadow: inset 0px 0px 10px 1px rgba(96,96,96,0.14);
 						}
 						.slide-type .dash {
-							margin: 0 12px;
+							margin: 0 12px 0px 11px;
 							color: #1c1c1c;
 							font-size: 14px;
-							font-weight: 500;	
+							font-weight: 500;
 						}
 				.b-category .b-block .grey-block .filter-block .slider-range-cont {
 					height: 14px;
@@ -1555,6 +1557,18 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 				.b-category .b-block .grey-block .filter-block .b-black-butt {		
 					
 				}
+				.slide-type.b-third{
+
+				float: left;}
+					.slide-type.b-third input{
+
+					width: 86px;}
+					.slide-type.b-third .slider-range-cont{
+
+					width: 430px;margin-bottom: 10px;margin-top: 33px;}
+						.slide-type.b-third .slider-range{
+
+						}
 		.b-category .b-block .good-list {
 			width: 695px;
 		}
