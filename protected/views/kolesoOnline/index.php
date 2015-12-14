@@ -35,7 +35,7 @@
                             <label for="tire-summer">Летние</label>
                         </div>
                     </div> -->
-                    <? foreach ($params[2]["FILTER"] as $filters): ?>
+                    <? $ind = 0; foreach ($params[2]["FILTER"] as $filters): ?>
                     <div class="filter-cont clearfix">
                         <? foreach ($filters as $attr_id => $label): ?>
                             <div class="filter-item">
@@ -55,9 +55,22 @@
                                 </div>
                             </div>
                         <? endforeach; ?>
+                        <? if($ind == 1): ?>
+                            <div class="slide-type b-third clearfix">
+                                <div class="left">
+                                    <h5>Ценовой диапазон</h5>
+                                    <input class="min-val price" type="text" maxlength="6" name="int[20][min]" placeholder="Мин.">
+                                    <span class="dash">-</span>
+                                    <input class="max-val price" type="text" maxlength="6" name="int[20][max]" placeholder="Макс.">
+                                </div>
+                                <div class="slider-range-cont">
+                                    <div data-min-cur="<?=$_SESSION['FILTER'][2]['int'][20]['min']?>" data-min="<?=$params[2]['PRICE_MIN']?>" data-max-cur="<?=$_SESSION['FILTER'][2]['int'][20]['max']?>" data-max="<?=$params[2]['PRICE_MAX']?>" data-step="100" class="slider-range left"></div>
+                                </div>
+                            </div>  
+                        <? endif; ?>
                     </div>
-                    <? endforeach; ?>
-                    <div class="filter-cont">
+                    <? $ind++; endforeach; ?>
+                    <!-- <div class="filter-cont">
                         <div class="slide-type clearfix">
                             <div class="left">
                                 <h3>Ценовой диапазон <span>от</span></h3>
@@ -69,7 +82,7 @@
                                 <div data-min-cur="<?=$_SESSION['FILTER'][2]['int'][20]['min']?>" data-min="<?=$params[2]['PRICE_MIN']?>" data-max-cur="<?=$_SESSION['FILTER'][2]['int'][20]['max']?>" data-max="<?=$params[2]['PRICE_MAX']?>" data-step="100" class="slider-range left"></div>
                             </div>
                         </div>  
-                    </div>
+                    </div> -->
                     <div class="filter-butt-cont">
                         <input type="submit" class="b-black-butt" value="Найти">
                     </div>
@@ -92,7 +105,7 @@
                             <? endforeach; ?>
                         </div>
                     </div>
-                    <? foreach ($params[1]["FILTER"] as $filters): ?>
+                    <? $ind = 0; foreach ($params[1]["FILTER"] as $filters): ?>
                     <div class="filter-cont clearfix">
                         <? foreach ($filters as $attr_id => $label): ?>
                             <div class="filter-item">
@@ -112,9 +125,22 @@
                                 </div>
                             </div>
                         <? endforeach; ?>
+                        <? if($ind == 1): ?>
+                        <div class="slide-type b-third clearfix">
+                            <div class="left">
+                                <h5>Ценовой диапазон</h5>
+                                <input class="min-val price" type="text" maxlength="6" name="int[20][min]" placeholder="Мин.">
+                                <span class="dash">-</span>
+                                <input class="max-val price" type="text" maxlength="6" name="int[20][max]" placeholder="Макс.">
+                            </div>
+                            <div class="slider-range-cont">
+                                <div data-min-cur="<?=$_SESSION['FILTER'][1]['int'][20]['min']?>" data-min="<?=$params[1]['PRICE_MIN']?>" data-max-cur="<?=$_SESSION['FILTER'][1]['int'][20]['max']?>" data-max="<?=$params[1]['PRICE_MAX']?>" data-step="100" class="slider-range left"></div>
+                            </div>
+                        </div> 
+                        <? endif; ?>
                     </div>
-                    <? endforeach; ?>
-                    <div class="filter-cont">
+                    <? $ind++; endforeach; ?>
+                    <!-- <div class="filter-cont">
                         <div class="slide-type clearfix">
                             <div class="left">
                                 <h3>Ценовой диапазон <span>от</span></h3>
@@ -126,7 +152,7 @@
                                 <div data-min-cur="<?=$_SESSION['FILTER'][1]['int'][20]['min']?>" data-min="<?=$params[1]['PRICE_MIN']?>" data-max-cur="<?=$_SESSION['FILTER'][1]['int'][20]['max']?>" data-max="<?=$params[1]['PRICE_MAX']?>" data-step="100" class="slider-range left"></div>
                             </div>
                         </div>  
-                    </div>
+                    </div> -->
                     <div class="filter-butt-cont">
                         <input type="submit" class="b-black-butt" value="Найти">
                     </div>
