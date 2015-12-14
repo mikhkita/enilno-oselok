@@ -71,6 +71,7 @@ class DromController extends Controller
         $curl = new Curl;
         $html = str_get_html(iconv('windows-1251', 'utf-8',$curl->request('http://baza.drom.ru/user/'.trim($user))));
         $user_id = $html->find(".userProfile",0) ? $html->find(".userProfile",0)->getAttribute('data-view-dir-user-id') : NULL;
+        $curl->removeCookies();
         if($user_id) {
             $user_name = trim($html->find("span .userNick",0)->plaintext);
             $model = Attribute::model()->with('variants.variant')->find("attribute_id=43 AND value=".$user_id);

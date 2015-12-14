@@ -575,7 +575,7 @@ class Good extends GoodFilter
 				array_push($fields, $temp);
 			} else {
 				$model = Attribute::model()->findbyPk($attr_id);
-				$fields[0]["text_value"].= $model->name." ".$value."\n\r";
+				$fields[0]["text_value"].= $model->name.": ".$value."\n\r";
 			}
 		} else {
 			if($attr_id != 98) {
