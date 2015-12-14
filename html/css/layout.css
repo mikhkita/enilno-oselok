@@ -544,11 +544,11 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 		}
 			.b-filters .b-block .tabs li {
 				float: left;
-				width: 479px;
+				width: 319px;
 				border-right: 1px solid #625f63;
 			}
-			.b-filters .b-block .tabs li:nth-child(2n) {
-				width: 480px;
+			.b-filters .b-block .tabs li:nth-child(3n) {
+				width: 320px;
 				border-right: none;
 			}
 				.b-filters .b-block .tabs li a{

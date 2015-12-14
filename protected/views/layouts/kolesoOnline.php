@@ -108,7 +108,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
                 <ul class="clearfix left">
                     <li><a href="<?=Yii::app()->createUrl('/kolesoOnline/category',array('type' => 2))?>">Диски</a></li>
                     <li><a href="<?=Yii::app()->createUrl('/kolesoOnline/category',array('type' => 1))?>">Шины</a></li>
-                    <!--<li><a href="<?=Yii::app()->createUrl('/kolesoOnline/category',array('type' => 3))?>">Колеса</a></li>-->
+                    <li><a href="<?=Yii::app()->createUrl('/kolesoOnline/category',array('type' => 3))?>">Колеса</a></li>
                 </ul>
             </div>
         </div>
@@ -139,7 +139,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
                         <ul>
                             <li><a href="<?=Yii::app()->createUrl('/kolesoOnline/category',array('type' => 2))?>">Диски</a></li>
                             <li><a href="<?=Yii::app()->createUrl('/kolesoOnline/category',array('type' => 1))?>">Шины</a></li>
-                            <!-- <li><a href="#">Колеса</a></li> -->
+                            <li><a href="<?=Yii::app()->createUrl('/kolesoOnline/category',array('type' => 3))?>">Колеса</a></li>
                             <li><a href="<?=Yii::app()->createUrl('/kolesoOnline/contacts')?>">Контакты</a></li>
                             <!-- <li><a href="#">Оплата и доставка</a></li> -->
                             <!-- <li><a href="#">Гарантия</a></li> -->

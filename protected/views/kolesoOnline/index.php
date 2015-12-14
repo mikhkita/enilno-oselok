@@ -18,7 +18,7 @@
             <ul class="tabs clearfix">
                 <li class="gradient-lightBlack"><a href="#tabs-disc"><span class="disc-icon icon">Подбор дисков</span></a></li>
                 <li class="gradient-lightBlack"><a href="#tabs-tire"><span class="tire-icon icon">Подбор шин</span></a></li>
-                <!-- <li class="gradient-lightBlack"><a href="#tabs-wheel"><span class="wheel-icon icon">Подбор Колес</span></a></li> -->
+                <li class="gradient-lightBlack"><a href="#tabs-wheel"><span class="wheel-icon icon">Подбор Колес</span></a></li>
             </ul>
             <div id="tabs-disc">
                 <?php $form=$this->beginWidget('CActiveForm', array(
@@ -158,7 +158,7 @@
                     </div>
                 <?php $this->endWidget(); ?>
             </div>
-            <!-- <div id="tabs-wheel">
+            <div id="tabs-wheel">
                 <?php $form=$this->beginWidget('CActiveForm', array(
                     'action' => Yii::app()->createUrl('/kolesoOnline/category',array("type" => 3)),
                     'method' => 'GET'
@@ -197,7 +197,7 @@
                         <? endforeach; ?>
                     </div>
                     <? endforeach; ?>
-                    <div class="filter-cont">
+                    <div class="filter-cont">  
                         <div class="slide-type clearfix">
                             <div class="left">
                                 <h3>Ценовой диапазон <span>от</span></h3>
@@ -208,13 +208,13 @@
                             <div class="slider-range-cont">
                                 <div data-min-cur="<?=$_SESSION['FILTER'][3]['int'][20]['min']?>" data-min="<?=$params[3]['PRICE_MIN']?>" data-max-cur="<?=$_SESSION['FILTER'][3]['int'][20]['max']?>" data-max="<?=$params[3]['PRICE_MAX']?>" data-step="100" class="slider-range left"></div>
                             </div>
-                        </div>  
+                        </div> 
                     </div>
                     <div class="filter-butt-cont">
                         <input type="submit" class="b-black-butt" value="Найти">
                     </div>
                 <?php $this->endWidget(); ?>
-            </div> -->
+            </div>
         </div>
     </div>
     <div class="b b-popular">
@@ -225,7 +225,7 @@
                     <ul>
                         <li><a href="<?=Yii::app()->createUrl('/kolesoOnline/category',array('type' => 2))?>"><span class="disc-icon icon">Диски</span></a></li>
                         <li><a href="<?=Yii::app()->createUrl('/kolesoOnline/category',array('type' => 1))?>"><span class="tire-icon icon">Шины</span></a></li>
-                        <!-- <li><a href="#"><span class="wheel-icon icon">Колеса</span></a></li> -->
+                        <li><a href="<?=Yii::app()->createUrl('/kolesoOnline/category',array('type' => 3))?>"><span class="wheel-icon icon">Колеса</span></a></li>
                     </ul>
                 </div>
                 <div class="gradient-grey">
@@ -238,7 +238,7 @@
                 <ul class="popular-category clearfix">
                     <li><a href="#popular-disc"><span class="disc-icon icon">Диски</span></a></li>
                     <li><a href="#popular-tire"><span class="tire-icon icon">Шины</span></a></li>
-                    <!-- <li><a href="#popular-wheel"><span class="wheel-icon icon">Колеса</span></a></li> -->
+                    <li><a href="#popular-wheel"><span class="wheel-icon icon">Колеса</span></a></li>
                 </ul>
                 <div id="popular-disc">
                     <ul class="goods clearfix">
@@ -250,22 +250,11 @@
                        <?php $this->renderPartial('_list', array('goods' => $tires,'last' => 1,'params' => $params,'type' => 1,'dynamic'=>$dynamic)); ?>
                     </ul>
                 </div>
-                <!-- <div id="popular-wheel">
+                <div id="popular-wheel">
                     <ul class="goods clearfix">
-                        <li class="gradient-grey">
-                            <div class="good-img" style="background-image: url('<?php echo Yii::app()->request->baseUrl; ?>/html/i/tire.jpg');"></div>
-                            <div class="params-cont">
-                                <h4>Yokohama DNA</h4>
-                                <h5><span>8900 р.</span> + 800 р.</h5>
-                                <h5>доставка в г. Томск</h5>
-                                <h6>225/45/17  2 шт.</h6>
-                                <h3>Износ: <span>82%</span></h3>
-                                <h3>Год выпуска: <span>2013</span></h3>
-                                <a href="#" class="b-orange-butt">Купить</a>
-                            </div>
-                        </li>
+                       <?php $this->renderPartial('_list', array('goods' => $wheel,'last' => 1,'params' => $params,'type' => 3,'dynamic'=>$dynamic)); ?>
                     </ul>
-                </div> -->
+                </div>
             </div>
         </div>
     </div>
