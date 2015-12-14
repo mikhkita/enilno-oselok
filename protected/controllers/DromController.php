@@ -66,14 +66,35 @@ class DromController extends Controller
         $this->doQueueNext($debug);
     }
 
-    public function actionAdminParse() {
-
-        $drom = new Drom();
-        $last_code = $this->getParam( "OTHER", "PARTNERS_LAST_CODE", true);
-        $last_code = $drom->parseUser("kitaev123",array(2), $last_code);
-        Good::addAttributes($last_code,2);
-        // $this->setParam( "OTHER", "PARTNERS_LAST_CODE", $last_code );
-
+    public function actionAdminParse($user = "kitaev123",$good_types = array(1)) {
+        include_once Yii::app()->basePath.'/extensions/simple_html_dom.php';
+        $curl = new Curl;
+        $html = str_get_html(iconv('windows-1251', 'utf-8',$curl->request('http://baza.drom.ru/user/'.trim($user))));
+        $user_id = $html->find(".userProfile",0) ? $html->find(".userProfile",0)->getAttribute('data-view-dir-user-id') : NULL;
+        if($user_id) {
+            $user_name = trim($html->find("span .userNick",0)->plaintext);
+            $model = Attribute::model()->with('variants.variant')->find("attribute_id=43 AND value=".$user_id);
+            if($model) {
+                $variant_id = $model->variants->variant_id;
+            } else {
+                if($variant_id = Variant::add(43,$user_id)) {
+                    Dictionary::add(41,intval($variant_id),$user_name); //хуйня какая-то
+                } else return false;
+            }
+            $drom = new Drom();
+            foreach ($good_types as $good_type_id) {
+                $type = GoodType::model()->findByPk($good_type_id)->code;
+                $pages = $drom->parseAllItems('http://baza.drom.ru/user/'.$user_id.'/wheel/'.$type,false);   
+                foreach ($pages as $page) {
+                    $last_code = $this->getParam( "OTHER", "PARTNERS_LAST_CODE", true);
+                    $params = $drom->parseAdvert($page,$user_id,$good_type_id,$last_code);
+                    if($params) {
+                        if(Good::addAttributes($params,$good_type_id) === true) $this->setParam( "OTHER", "PARTNERS_LAST_CODE",($last_code+1));
+                    }
+                }
+                
+            }
+        }
     }
 
     public function getUsers() {
