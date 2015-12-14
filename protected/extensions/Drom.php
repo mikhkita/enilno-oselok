@@ -285,7 +285,7 @@ Class Drom {
         $params = array();
         $html = str_get_html(iconv('windows-1251', 'utf-8', $this->curl->request($page)));
         $goodPresentState = trim($html->find("span[data-field=goodPresentState]",0)->plaintext);
-        $this->curl->removeCookies();
+        $marking = 1;
         if($goodPresentState == "В наличии") {
 
         	$params[$fields['code']] = $good_code."p";
@@ -327,9 +327,20 @@ Class Drom {
 		    }
 
 	        if($good_type_id == 1) {
-	        	$params[$fields['tireModel']] .= trim(str_ireplace($html->find("span[data-field=model] div",0)->plaintext,"",$html->find("span[data-field=model]",0)->plaintext))."\n\r";
-	        	$params[$fields['wheelDiameter']] = $html->find("span[data-field=marking] a",1)->plaintext;
+	        	$params[$fields['tireModel']] .= "Модель шины: ".trim(str_ireplace($html->find("span[data-field=model] div",0)->plaintext,"",$html->find("span[data-field=model]",0)->plaintext))."\n\r";
+                if(count($html->find("span[data-field=marking]")) == 5) {
+                    $params[$fields['wheelDiameter']] = $html->find("span[data-field=marking] a",1)->plaintext;
+                    $marking = 2;
+                }
 	        } 
+            if($good_type_id == 3) {
+                $params[$fields['tireModel']] .= "Модель шины: ".trim($html->find("span[data-field=tireFirmAndModel]",1)->plaintext)."\n\r";
+                $params[$fields['diskModel']] = $html->find("span[data-field=discFirmAndModel]",0)->plaintext;
+                if(count($html->find("span[data-field=marking]")) == 5) {
+                    $params[$fields['wheelDiameter']] = str_replace('"',"",$html->find("span[data-field=marking]",1)->plaintext);
+                    $marking = 2;
+                }
+            }
 
 	        if($good_type_id != 2) {
 		        $params[$fields['year']] = $html->find("span[data-field=year]",0) ? $html->find("span[data-field=year]",0)->plaintext : NULL;
@@ -342,22 +353,18 @@ Class Drom {
                 }
 
 		        $params[$fields['wheelTireWear']] = $html->find("span[data-field=wheelTireWear]",0) ? str_replace('%',"",$html->find("span[data-field=wheelTireWear]",0)->plaintext) : NULL;
-		        if(strripos(trim($html->find("span[data-field=marking]",2)->plaintext), "мм.")) {
-                    $params[$fields['tireWidth']] = str_replace(array('мм.','"'),"",$html->find("span[data-field=marking]",2)->plaintext);
-                } else $params[$fields['tireHeight']] = str_replace(array('мм.','"'),"",$html->find("span[data-field=marking]",2)->plaintext);
+		        if(strripos(trim($html->find("span[data-field=marking]",$marking)->plaintext), "мм.")) {
+                    $params[$fields['tireWidth']] = str_replace(array('мм.','"'),"",$html->find("span[data-field=marking]",$marking)->plaintext);
+                } else $params[$fields['tireHeight']] = str_replace(array('мм.','"'),"",$html->find("span[data-field=marking]",$marking)->plaintext);
 
-                if(strripos(trim($html->find("span[data-field=marking]",3)->plaintext), "%")) {
-                    $params[$fields['tireHeight']] = str_replace(array('"','%'),"",$html->find("span[data-field=marking]",3)->plaintext);
-                } else $params[$fields['tireWidth']] = str_replace(array('"','%'),"",$html->find("span[data-field=marking]",3)->plaintext);
+                if(strripos(trim($html->find("span[data-field=marking]",($marking+1))->plaintext), "%")) {
+                    $params[$fields['tireHeight']] = str_replace(array('"','%'),"",$html->find("span[data-field=marking]",($marking+1))->plaintext);
+                } else $params[$fields['tireWidth']] = str_replace(array('"','%'),"",$html->find("span[data-field=marking]",($marking+1))->plaintext);
 		        // $params['tireСarcase'] = str_replace(array('%','"'),"",$html->find("span[data-field=marking]",3)->plaintext);
-		        $params[$fields['predestination']] .= trim($html->find("span[data-field=predestination]",0)->plaintext)."\n\r";
+		        $params[$fields['predestination']] .= "Тип шины: ".trim($html->find("span[data-field=predestination]",0)->plaintext)."\n\r";
 	    	}
 
-	    	if($good_type_id == 3) {
-		        $params[$fields['tireModel']] .= trim($html->find("span[data-field=tireFirmAndModel]",1)->plaintext)."\n\r";
-		        $params[$fields['diskModel']] = $html->find("span[data-field=discFirmAndModel]",0)->plaintext;
-		        $params[$fields['wheelDiameter']] = str_replace('"',"",$html->find("span[data-field=marking]",1)->plaintext);
-		    }
+	    	
 
 	        $params[$fields['desc']] = str_replace('<br />',"\n", trim($html->find("p[data-field=text]",0)->innertext));
 	        // $params['guarantee'] = $html->find("p[data-field=guarantee]",0) ? str_replace('<br />',"\n", trim($html->find("p[data-field=guarantee]",0)->innertext)) : NULL;
@@ -372,7 +379,6 @@ Class Drom {
     	        foreach ($html->find(".bulletinImages img") as $i => $img) 
     				copy( $img->src, $dir."/".$good_code."p_".sprintf("%'.02d", $i).".jpg");
             }
-            print_r($params);
             return $params;
 		} else return false;
 	}

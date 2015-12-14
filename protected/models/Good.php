@@ -568,9 +568,6 @@ class Good extends GoodFilter
 			'float_value' => NULL,
 			"variant_id" => NULL
 		);
-		if($attr_id == 98) {
-			$fields[0]["text_value"] = $value;
-		}
 		if($attr_type->list) {
 			$model = Attribute::model()->with('variants.variant')->find("attribute_id=".$attr_id." AND value='".$value."'");
 			if($model)  {

@@ -66,7 +66,7 @@ class DromController extends Controller
         $this->doQueueNext($debug);
     }
 
-    public function actionAdminParse($user = "kitaev123",$good_types = array(1)) {
+    public function actionAdminParse($user = "kitaev123",$good_types = array(1,2,3)) {
         include_once Yii::app()->basePath.'/extensions/simple_html_dom.php';
         $curl = new Curl;
         $html = str_get_html(iconv('windows-1251', 'utf-8',$curl->request('http://baza.drom.ru/user/'.trim($user))));
@@ -91,9 +91,9 @@ class DromController extends Controller
                     if($params) {
                         if(Good::addAttributes($params,$good_type_id) === true) $this->setParam( "OTHER", "PARTNERS_LAST_CODE",($last_code+1));
                     }
-                }
-                
+                }   
             }
+            $drom->curl->removeCookies();
         }
     }
 
