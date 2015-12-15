@@ -37,13 +37,13 @@
                     <h3>Фильтр</h3>
                     <!-- <a href="#">Сбросить фильтр</a> -->
                     <div class="filter-block">
-                        <? if($_GET['type'] == 1): ?>
+                        <? if($_GET['type'] == 1 || $_GET['type'] == 3): ?>
                             <div class="tire-type clearfix">    
-                                <? foreach ($filter[$params[1]["SEASON"]] as $key => $col): ?>
+                                <? foreach ($filter[$params[$_GET['type']]["SEASON"]] as $key => $col): ?>
                                     <? foreach ($col as $item): ?>     
                                         <label>
                                             <?=$item['value']?>
-                                            <input type="checkbox" name="arr[<?=$params[1]["SEASON"]?>][]" value="<?=$item['variant_id']?>" <?=$item['checked']?>>
+                                            <input type="checkbox" name="arr[<?=$params[$_GET['type']]["SEASON"]?>][]" value="<?=$item['variant_id']?>" <?=$item['checked']?>>
                                         </label>
                                     <? endforeach; ?>
                                 <? endforeach; ?>

@@ -165,12 +165,13 @@ class KolesoOnlineController extends Controller
 		),
 		3 => array(
 			"NAME" => "Колеса",
-			"TITLE_CODE" => 67,
+			"TITLE_CODE" => 146,
 			"TITLE_2_CODE" => 68,
 			"DESCRIPTION_CODE" => 71,
 			"GARANTY_CODE" => 69,
 			"PRICE_CODE" => 74,
 			"ORDER" => 64,
+			"SEASON" => 23,
 			'SHIPPING' => 74,
 			'AVAILABLE' => 114,
 			"FILTER" => array(

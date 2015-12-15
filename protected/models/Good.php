@@ -530,12 +530,14 @@ class Good extends GoodFilter
 			"variant_id" => NULL
 		));
 		foreach ($params as $attr_id => $value) {
-			$attr_type = Attribute::model()->with("type")->findByPk($attr_id);
-			if(is_array($value)) {
-				foreach ($value as $key => $item) {
-					$fields = Good::addAttribute($model->id,$attr_id,$attr_type,$item,$fields);
-				}
-			} else $fields = Good::addAttribute($model->id,$attr_id,$attr_type,$value,$fields);
+			if($value) {
+				$attr_type = Attribute::model()->with("type")->findByPk($attr_id);
+				if(is_array($value)) {
+					foreach ($value as $key => $item) {
+						$fields = Good::addAttribute($model->id,$attr_id,$attr_type,$item,$fields);
+					}
+				} else $fields = Good::addAttribute($model->id,$attr_id,$attr_type,$value,$fields);
+			}
 		}
 
 		if( $images !== NULL && isset($params[3]) ){
@@ -552,6 +554,7 @@ class Good extends GoodFilter
 		}
 
 		$this->insertValues(GoodAttribute::tableName(),$fields);
+		return true;
 	}
 
 	public function addAttribute($good_id,$attr_id,$attr_type,$value,$fields) {
@@ -565,7 +568,6 @@ class Good extends GoodFilter
 			'float_value' => NULL,
 			"variant_id" => NULL
 		);
-	
 		if($attr_type->list) {
 			$model = Attribute::model()->with('variants.variant')->find("attribute_id=".$attr_id." AND value='".$value."'");
 			if($model)  {
@@ -573,7 +575,7 @@ class Good extends GoodFilter
 				array_push($fields, $temp);
 			} else {
 				$model = Attribute::model()->findbyPk($attr_id);
-				$fields[0]["text_value"].= $model->name." ".$value."\n\r";
+				$fields[0]["text_value"].= $model->name.": ".$value."\n\r";
 			}
 		} else {
 			if($attr_id != 98) {
