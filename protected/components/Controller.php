@@ -470,6 +470,30 @@ class Controller extends CController
         return $out;
     }
 
+    public function getPage($code){
+        $cols = array(
+            69 => "title",
+            70 => "description",
+            71 => "keywords",
+            72 => "content",
+            73 => "code",
+        );
+        $cells = DesktopTableCell::model()->with(array("row.cells"))->findAll("row.table_id=16 AND t.col_id=73 AND t.varchar_value='$code'");
+        if( $cells ){
+            $out = NULL;
+            foreach ($cells as $i => $cell) {
+                $one_cell = array();
+                foreach ($cell->row->cells as $key => $cell)
+                    $one_cell[$cols[$cell->col_id]] = $cell->value;
+                $out = (object) $one_cell;
+            }
+
+            return $out;
+        }else{
+            return NULL;
+        }
+    }
+
     public function getDromAccount($login = NULL){
         $cols = array(
             46 => "login",

@@ -269,7 +269,7 @@ class KolesoOnlineController extends Controller
 				'roles'=>array('manager'),
 			),
 			array('allow',
-				'actions'=>array('index', 'index2', 'detail','contacts','mail','category','getCities','setCity'),
+				'actions'=>array('index', 'index2', 'detail','page','mail','category','getCities','setCity'),
 				'users'=>array('*'),
 			),
 			array('deny',
@@ -325,6 +325,9 @@ class KolesoOnlineController extends Controller
 	{	
 		$start = microtime(true);
 
+		$this->keywords = $this->getParam("SHOP","MAIN_KEYWORDS");
+		$this->description = $this->getParam("SHOP","MAIN_DESCRIPTION");
+
 		$tire_filter = $this->getFilter(1);
 		$disc_filter =  $this->getFilter(2);
 		$wheel_filter =  $this->getFilter(3);
@@ -362,6 +365,11 @@ class KolesoOnlineController extends Controller
 	public function actionCategory($partial = false, $countGood = false) {
 
 		if(!isset($_SESSION)) session_start();
+
+		$good_type = GoodType::model()->findByPk($_GET["type"]);
+
+		$this->keywords = $this->getParam("SHOP", $good_type->code."_KEYWORDS");
+		$this->description = $this->getParam("SHOP", $good_type->code."_DESCRIPTION");
 
 		$_GET['type'] = isset($_GET['type']) ? $_GET['type'] : 2;
 	  	
@@ -413,6 +421,7 @@ class KolesoOnlineController extends Controller
 			));
 		}
 	}
+
 	public function getFilter($type = NULL) {
 
 		$criteria=new CDbCriteria();
@@ -561,9 +570,21 @@ class KolesoOnlineController extends Controller
 		return $goods;
 	}
 
-	public function actionContacts()
+	public function actionPage($page = NULL)
 	{
-		$this->render('contacts');
+		if( $page ){
+			$page = $this->getPage($page);
+
+			if ($page) {
+				$this->keywords = $page->keywords;
+				$this->description = $page->description;
+				$this->title = "Колесо Онлайн - ".$page->title;
+				
+				$this->render('page',array(
+					"page" => $page
+				));	
+			}
+		}
 	}
 
 	public function actionCount()
