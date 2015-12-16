@@ -304,7 +304,7 @@ input:-moz-placeholder {
 		}
 			.b-filters .b-block .tabs li {
 				float: left;
-				width: 50% !important;
+				width: 33.33% !important;
 				box-sizing: border-box;
 			}
 			.b-filters .b-block .tabs li:nth-child(3n) {
@@ -694,6 +694,9 @@ width: 700px;margin-left: 0px;}
 	.goods .gradient-grey:nth-child(2n) {
 		margin-right: 0px;
 	}
+		.goods .gradient-grey.b-good-type-2 h6, .goods .gradient-grey.b-good-type-3 h6{
+			height: 64px;
+		}
 		.goods .gradient-grey .good-img{
 			width: 286px;
 			height: 230px;
@@ -723,7 +726,7 @@ width: 700px;margin-left: 0px;}
 			.goods .gradient-grey h6{
 				margin-top: 14px;
 				font-size: 28px;
-				height: 58px;
+				height: 42px;
 			}
 			.goods .gradient-grey h3{
 				font-size: 28px;
@@ -927,13 +930,16 @@ width: 700px;margin-left: 0px;}
 .b-category	{
 
 }	
-.b-category .navigation{
+.b-category .navigation,
+.b-contacts .navigation{
 	margin-bottom: 0px;
 	display: block !Important;
 	margin-top: 5px;
 }	
 .b-category .navigation li:last-child,
-.b-category .navigation li:last-child a{
+.b-category .navigation li:last-child a,
+.b-contacts .navigation li:last-child,
+.b-contacts .navigation li:last-child a{
 	display: block !important;
 }
 	.b-category .b-block {
@@ -1025,7 +1031,8 @@ width: 700px;margin-left: 0px;}
 						border-radius: 50px;
 						margin-bottom: 28px;
 					}
-					.filter-cont .slide-type .slider-range{
+					.filter-cont .slide-type .slider-range,
+					.filter-cont .slide-type.b-third .slider-range{
 						width: 604px;
 						margin-left: 18px;
 						margin-bottom: 0px;
@@ -1165,15 +1172,15 @@ width: 700px;margin-left: 0px;}
 			}
 				.b-category .b-block .good-list .b-sort > .left {
 					margin-top: 13px;
-					margin: 22px 0px 20px;
+					margin: 22px 0px 12px;
 				}
 				.b-category .b-block .good-list .b-sort h4 {
 					font-weight: 500;
 					font-size: 26px;
 				}
 				.b-category .b-block .good-list .b-sort ul {
-	
-				}
+	width: 497px;
+	}
 				.b-category .b-block .good-list .b-sort ul li.active:after{
 					background-position: -141px -152px;
 					width: 14px;
@@ -1198,6 +1205,7 @@ width: 700px;margin-left: 0px;}
 						margin-left: 12px;
 						font-size: 26px;
 						margin: 0 14px;
+						margin-bottom: 15px;
 					}
 						.b-category .b-block .good-list .b-sort ul li:hover {
 						}
@@ -1295,7 +1303,7 @@ width: 700px;margin-left: 0px;}
 						font-weight: 300;
 						line-height: 2.143;
 						position: relative;
-						font-size: 32px;
+						font-size: 28px;
 					}
 					.good-detail .b-block .detail-wrap .detail-desc ul li:before {
 						position: absolute;
@@ -1364,7 +1372,7 @@ width: 700px;margin-left: 0px;}
 					font-weight: 500;
 					display: inline-block;
 					margin-left: 20px;
-					width: 300px;
+					width: 330px;
 				}
 				.good-detail .b-block .detail-wrap .detail-price h5 {
 					display: inline-block;
@@ -1447,6 +1455,7 @@ width: 700px;margin-left: 0px;}
 				font-weight: 300;
 				font-size: 28px;
 				max-height: 10000px;
+				font-family: Roboto;
 			}
 			.good-detail .b-block .category-title.similar {
 
@@ -1745,7 +1754,7 @@ width: 700px;margin-left: 0px;}
 	width: 638px;
 	text-align: right;
 }
-.b-header .b-header-main .b-block > .left .b-main-logo {
+.b-main-logo {
     background-image: url('../i/logo@2x.png');
     background-size: 300px;
     width: 300px;
@@ -1788,6 +1797,66 @@ width: 700px;margin-left: 0px;}
     left: 0px;
     height: 31px;
 }
+.b-mobile-menu{
+	background-color: rgba(0,0,0,0.8);
+	position: fixed;
+	left: 0px;
+	top: 0px;
+	width: 100%;
+	height: 100%;
+	box-sizing: border-box;
+	z-index: 99999;
+	text-align: center;
+}
+	.b-mobile-menu ul{
+		margin-top: 20px;
+		border-top: 2px solid rgba(255, 255, 255, 0.53);
+		width: 600px;
+		display: inline-block;
+		padding-top: 20px;
+	}
+		.b-mobile-menu ul li{
+			/*margin-bottom: 30px;*/
+		}
+			.b-mobile-menu ul li a{
+				display: inline-block;
+				padding: 25px 0px;
+				width: 600px;
+				color: #FFF;
+				font-size: 60px;
+				text-decoration: none;
+				position: relative;
+			}
+				.b-mobile-menu ul li a:hover,
+				.b-mobile-menu ul li a:active{
+					color: #FFB800;
+				}
+			.b-mobile-menu ul li:last-child a{
+				border-bottom: 0px;
+			}
+.b-mobile-menu .b-main-logo{
+	width: 400px;
+	height: 200px;
+	background-size: 400px;
+	display: inline-block !important;
+	float: none !important;
+	margin-top: 60px;
+	/* border-top: 2px solid #FFF; */
+}
+
+.b-text h2{
+	font-size: 34px;
+	margin-bottom: 15px;
+}
+	.b-text h3{
+		font-size: 28px;
+		line-height: 40px;
+	}
+	.b-text p{
+		font-size: 28px;
+		line-height: 45px;
+		margin-bottom: 35px;
+	}
 
 @media screen and (max-width: 1250px){
 	

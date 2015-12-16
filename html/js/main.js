@@ -382,6 +382,29 @@ $(document).ready(function(){
         $('.detail-slider-for').slick('slickGoTo',$(this).index(), false);
     });
 
+    $(".b-burger").click(openMenu);
+    $(".b-mobile-menu, .b-mobile-menu a").click(closeMenu).on('touchmove', function(e){ e.preventDefault(); });
+
+    function openMenu(){
+        $("body").addClass("mobile-menu-opened");
+        TweenLite.to($(".b-mobile-menu li"), 0, { y : 150, opacity: 0, ease : Cubic.easeOut } );
+        $(".b-mobile-menu").fadeIn(200);
+        $(".b-mobile-menu li").each(function(){
+            TweenLite.to($(this), 0.4, { y : 0, opacity: 1, delay: 0.08*$(this).index()+0.1, ease : Cubic.easeOut } );
+        });
+        return false;
+    }
+
+    var togLink = false;
+    function closeMenu(){
+        $("body").removeClass("mobile-menu-opened");
+        $(".b-mobile-menu").fadeOut(300);
+        if( !$(this).hasClass("b-mobile-menu-a") && togLink == false ){
+            return false;
+        }else{
+            togLink = true;
+        }
+    }
 
     $(".tire-type input").change(function(){
         if($(this).prop("checked")) {
