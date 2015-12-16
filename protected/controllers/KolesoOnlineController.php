@@ -212,7 +212,7 @@ class KolesoOnlineController extends Controller
 					"UNIT" => ' ',
 					"TYPE" => "INTER"
 				),
-				"WIDTH" => array(
+				"DISC_WIDTH" => array(
 					"ID" => 175,
 					"LABEL" => "Ширина диска",
 					"UNIT" => '"',
@@ -229,9 +229,44 @@ class KolesoOnlineController extends Controller
 					"LABEL" => "Центральное отверстие",
 					"UNIT" => ' мм.'
 				),
+				"PROTECTOR" => array(
+					"ID" => 23,
+					"LABEL" => "Протектор",
+					"UNIT" => ' '
+				),
+				"WEAR" => array(
+					"ID" => 29,
+					"LABEL" => "Износ",
+					"UNIT" => ' %'
+				),
+				"TIRE_WIDTH" => array(
+					"ID" => 7,
+					"LABEL" => "Ширина профиля",
+					"UNIT" => ' мм.'
+				),
+				"HEIGHT" => array(
+					"ID" => 8,
+					"LABEL" => "Высота профиля",
+					"UNIT" => ' %'
+				),
+				"REST" => array(
+					"ID" => 12,
+					"LABEL" => "Остаток протектора (мм.)",
+					"UNIT" => ' '
+				),
+				"CONDITION" => array(
+					"ID" => 26,
+					"LABEL" => "Состояние товара",
+					"UNIT" => ' '
+				),
 				"YEAR" => array(
 					"ID" => 10,
 					"LABEL" => "Год выпуска",
+					"UNIT" => ' '
+				),
+				"LOCATION" => array(
+					"ID" => 27,
+					"LABEL" => "Местонахождение товара",
 					"UNIT" => ' '
 				),
 				"COUNTRY" => array(
@@ -239,11 +274,6 @@ class KolesoOnlineController extends Controller
 					"LABEL" => "Страна изготовитель",
 					"UNIT" => ' ',
 					"TYPE" => "INTER"
-				),
-				"LOCATION" => array(
-					"ID" => 27,
-					"LABEL" => "Местонахождение товара",
-					"UNIT" => ' '
 				),
 			),
 			"PRICE_MIN" => 0,
@@ -344,6 +374,9 @@ class KolesoOnlineController extends Controller
 		),array("field"=>46,"type"=>"DESC"));
 		$discs = $discs['items'];
 
+		$wheels = $this->getGoods(8,3);
+		$wheels = $wheels['items'];
+
 		$this->params[1]["FILTER"] = $this->splitByRows(4,$this->params[1]["FILTER"]);
 		$this->params[2]["FILTER"] = $this->splitByRows(4,$this->params[2]["FILTER"]);
 		$this->params[3]["FILTER"] = $this->splitByRows(4,$this->params[3]["FILTER"]);
@@ -356,6 +389,7 @@ class KolesoOnlineController extends Controller
 		$this->render('index',array(
 			'tires'=> $tires,
 			'discs' => $discs,
+			'wheels' => $wheels,
 			'tire_filter' => $tire_filter,
 			'disc_filter' => $disc_filter,
 			'wheel_filter' => $wheel_filter,

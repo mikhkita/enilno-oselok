@@ -252,7 +252,7 @@
                 </div>
                 <div id="popular-wheel">
                     <ul class="goods clearfix">
-                       <?php $this->renderPartial('_list', array('goods' => $wheel,'last' => 1,'params' => $params,'type' => 3,'dynamic'=>$dynamic)); ?>
+                       <?php $this->renderPartial('_list', array('goods' => $wheels,'last' => 1,'params' => $params,'type' => 3,'dynamic'=>$dynamic)); ?>
                     </ul>
                 </div>
             </div>
