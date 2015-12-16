@@ -205,6 +205,7 @@ $(document).ready(function(){
 
     function setResult(html){
         $(".b-main-center").html(html);
+        $(".qtip").remove();
 
         setTimeout(function(){
             bindFilter();
@@ -1327,18 +1328,18 @@ $(document).ready(function(){
 
     if( $(".b-kit-switcher").length ){
         $("body").on("click",".b-kit-switcher",function(){
-            toggleMode(!$(this).hasClass("checked"));
+            toggleMode(!$(this).hasClass("checked"),$(this));
             return false;
         });
-        function toggleMode(tog){
+        function toggleMode(tog,el){
             if( tog ){
                 $(".b-kit-switcher").addClass("checked");
-                $(".b-kit-not-update").removeClass("b-kit-not-update").addClass("b-kit-update");
-                if( $(".b-kit-switcher").attr("data-on") ) customHandlers[$(".b-kit-switcher").attr("data-on")]();
+                $(".b-kit-off").removeClass("b-kit-off").addClass("b-kit-on");
+                if( $(".b-kit-switcher").attr("data-on") ) customHandlers[$(".b-kit-switcher").attr("data-on")](el);
             }else{
                 $(".b-kit-switcher").removeClass("checked");
-                $(".b-kit-update").removeClass("b-kit-update").addClass("b-kit-not-update");
-                if( $(".b-kit-switcher").attr("data-off") ) customHandlers[$(".b-kit-switcher").attr("data-off")]();
+                $(".b-kit-on").removeClass("b-kit-on").addClass("b-kit-off");
+                if( $(".b-kit-switcher").attr("data-off") ) customHandlers[$(".b-kit-switcher").attr("data-off")](el);
             }
         }
         customHandlers["setEditable"] = function(){
@@ -1346,6 +1347,20 @@ $(document).ready(function(){
         }
         customHandlers["unsetEditable"] = function(){
             $(".b-desktop").removeClass("b-editable");
+        }
+
+        customHandlers["goTo"] = function($this){
+            progress.setColor("#D26A44");
+            progress.start(3);
+            var href = $this.attr("data-"+(($this.hasClass("checked"))?"on":"off")+"-href");
+            $.ajax({
+                url: href,
+                success: function(msg){
+                    progress.end(function(){
+                        setResult(msg);
+                    });
+                }
+            });
         }
     }
 

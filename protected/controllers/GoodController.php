@@ -399,7 +399,7 @@ class GoodController extends Controller
 		printf('<br>Прошло %.4F сек.<br>', microtime(true) - $start);		
 	}
 
-	public function actionAdminIndex($partial = false, $good_type_id = false,$sort_field = NULL,$sort_type = "ASC")
+	public function actionAdminIndex($partial = false, $good_type_id = false,$sort_field = NULL,$sort_type = "ASC",$with_photos = NULL)
 	{
 		unset($_GET["partial"]);
 
@@ -423,40 +423,30 @@ class GoodController extends Controller
 		$int_attr_arr = "int";
 		$params = array(
 			1 => array(
-					"FILTER" => array(43,26,23,27,16),
-					"FILTER_NAMES" => array(43=>41),
-					// "SORT" => array(3,20),
-				),
+				"FILTER" => array(43,26,23,27,16),
+				"FILTER_NAMES" => array(43=>41),
+			),
 			2 => array(
-					"FILTER" => array(43,26,27,70),
-					"FILTER_NAMES" => array(43=>41),
-					// "SORT" => array(3,20),
-				),
+				"FILTER" => array(43,26,27,70),
+				"FILTER_NAMES" => array(43=>41),
+			),
 			3 => array(
-					"FILTER" => array(43,26,23,27,16),
-					"FILTER_NAMES" => array(43=>41),
-					// "SORT" => array(3,20),
-				),
+				"FILTER" => array(43,26,23,27,16),
+				"FILTER_NAMES" => array(43=>41),
+			),
 		);
-		// $sort_fields = $this->getLabels($params[$good_type_id]["SORT"]);
+
 		$attributes = $this->getFilterVariants($params[$good_type_id]["FILTER"],$params[$good_type_id]["FILTER_NAMES"],$good_type_id);
 		$labels = $this->getLabels($params[$good_type_id]["FILTER"]);
-
-		// if(!isset($_SESSION)) session_start();
-		// if( !isset($_POST["sort"]) ){
-		// 	if( isset($_SESSION["POST"][$good_type_id]) ){
-		// 		$_POST = $_SESSION["POST"][$good_type_id];
-		// 	}else{
-		// 		$_POST["sort"] = array("field"=>20,"type"=>"ASC");
-		// 		$_POST["filter"] = array();
-		// 	}
-		// }else{
-		// 	$_SESSION["POST"][$good_type_id] = $_POST;
-		// }
 
 		if( !$partial ){
 			$this->layout='admin';
 		}
+
+		if( $with_photos !== NULL )
+			$this->setUserParam("GOOD_PHOTOS_".$good_type_id,(($with_photos == "1")?true:false));
+		
+		$with_photos = $this->getUserParam("GOOD_PHOTOS_".$good_type_id);
 
 		$sort = array();
 		if($sort_field) {		
@@ -515,7 +505,8 @@ class GoodController extends Controller
 			'filter_values' => $filter_values,
 			'good_count' => $goods["count"],
 			'sort_field' => $sort['field'],
-			'sort_type' => $sort_type
+			'sort_type' => $sort_type,
+			'with_photos' => $with_photos
 		);
 
 		if( !$partial ){
