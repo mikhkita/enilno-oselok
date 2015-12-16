@@ -57,7 +57,7 @@
                         <? foreach ($params[$_GET['type']]["FILTER"] as $attr_id => $label): ?>
                             <div class="filter-item">
                                 <h5><?=$label?></h5>
-                                <div class="input <? if( $mobile ) echo "mobile"; ?>">&nbsp;</div>  
+                                <div class="input <? if( $mobile ) echo 'mobile'; ?>">&nbsp;</div>  
                                 <? if( $mobile ): ?>
                                     <select name="arr[<?=$attr_id?>][]" multiple>
                                     <? foreach ($filter[$attr_id] as $key => $col): ?>

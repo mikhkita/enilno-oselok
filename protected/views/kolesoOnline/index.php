@@ -40,7 +40,7 @@
                         <? foreach ($filters as $attr_id => $label): ?>     
                             <div class="filter-item">
                                 <h5><?=$label?></h5>
-                                <div class="input <? if( $mobile ) echo "mobile"; ?>"></div>   
+                                <div class="input <? if( $mobile ) echo 'mobile'; ?>"></div>   
                                 <? if( $mobile ): ?>
                                     <select name="arr[<?=$attr_id?>][]" multiple>
                                     <? foreach ($disc_filter[$attr_id] as $key => $col): ?>
@@ -122,10 +122,10 @@
                         <? foreach ($filters as $attr_id => $label): ?>
                             <div class="filter-item">
                                 <h5><?=$label?></h5>
-                                <div class="input <? if( $mobile ) echo "mobile"; ?>"></div> 
+                                <div class="input <? if( $mobile ) echo 'mobile'; ?>"></div> 
                                 <? if( $mobile ): ?>
                                     <select name="arr[<?=$attr_id?>][]" multiple>
-                                    <? foreach ($disc_filter[$attr_id] as $key => $col): ?>
+                                    <? foreach ($tire_filter[$attr_id] as $key => $col): ?>
                                             <? foreach ($col as $item): ?>
                                                 <option value="<?=$item['variant_id']?>"><?=str_replace(" ", "&nbsp;", $item['value'])?></option>
                                             <? endforeach; ?>
@@ -202,10 +202,10 @@
                         <? foreach ($filters as $attr_id => $label): ?>
                             <div class="filter-item">
                                 <h5><?=$label?></h5>
-                                <div class="input <? if( $mobile ) echo "mobile"; ?>"></div> 
+                                <div class="input <? if( $mobile ) echo 'mobile'; ?>"></div> 
                                 <? if( $mobile ): ?>
                                     <select name="arr[<?=$attr_id?>][]" multiple>
-                                    <? foreach ($disc_filter[$attr_id] as $key => $col): ?>
+                                    <? foreach ($wheel_filter[$attr_id] as $key => $col): ?>
                                             <? foreach ($col as $item): ?>
                                                 <option value="<?=$item['variant_id']?>"><?=str_replace(" ", "&nbsp;", $item['value'])?></option>
                                             <? endforeach; ?>
