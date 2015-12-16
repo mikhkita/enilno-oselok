@@ -173,8 +173,8 @@ class KolesoOnlineController extends Controller
 			"PRICE_CODE" => 74,
 			"ORDER" => 166,
 			"SEASON" => 23,
-			'SHIPPING' => 158,
-			'AVAILABLE' => 152,
+			'SHIPPING' => 174,
+			'AVAILABLE' => 172,
 			"FILTER" => array(
 				9 => "Диаметр",
 				7 => "Ширина шины",
@@ -207,44 +207,44 @@ class KolesoOnlineController extends Controller
 					"UNIT" => '"'
 				),
 				"DRILL" => array(
-					"ID" => 104,
+					"ID" => 176,
 					"LABEL" => "Сверловка",
 					"UNIT" => ' ',
 					"TYPE" => "INTER"
 				),
 				"WIDTH" => array(
-					"ID" => 173,
+					"ID" => 175,
 					"LABEL" => "Ширина диска",
 					"UNIT" => '"',
 					"TYPE" => "INTER"
 				),
 				"VILET" => array(
-					"ID" => 174,
+					"ID" => 177,
 					"LABEL" => "Вылет",
 					"UNIT" => ' мм.',
 					"TYPE" => "INTER"
 				),
 				"CENTER" => array(
-					"ID" => 105,
+					"ID" => 33,
 					"LABEL" => "Центральное отверстие",
 					"UNIT" => ' мм.'
 				),
 				"YEAR" => array(
-					"ID" => 95,
+					"ID" => 10,
 					"LABEL" => "Год выпуска",
 					"UNIT" => ' '
 				),
-				// "COUNTRY" => array(
-				// 	"ID" => 118,
-				// 	"LABEL" => "Страна изготовитель",
-				// 	"UNIT" => ' ',
-				// 	"TYPE" => "INTER"
-				// ),
-				// "LOCATION" => array(
-				// 	"ID" => 27,
-				// 	"LABEL" => "Местонахождение товара",
-				// 	"UNIT" => ' '
-				// ),
+				"COUNTRY" => array(
+					"ID" => 179,
+					"LABEL" => "Страна изготовитель",
+					"UNIT" => ' ',
+					"TYPE" => "INTER"
+				),
+				"LOCATION" => array(
+					"ID" => 27,
+					"LABEL" => "Местонахождение товара",
+					"UNIT" => ' '
+				),
 			),
 			"PRICE_MIN" => 0,
 			"PRICE_MAX" => 0,
