@@ -65,13 +65,11 @@
 			<div class="main-tabs">
 				<ul class="desc-tabs clearfix">
 					<li class="active gradient-grey"><a href="#tabs-desc">Описание</a><span></span></li>
-					<!-- <li class="gradient-grey"><a href="#tabs-shippping">Доставка</a><span></span></li> -->
+					<li class="gradient-grey"><a href="#tabs-shippping">Доставка</a><span></span></li>
 					<li class="gradient-grey"><a href="#tabs-warranty">Гарантия</a><span></span></li>
 				</ul>
-				<div id="tabs-desc"><? if(isset($good->fields_assoc[35]->value)) echo $good->fields_assoc[35]->value.'<br>'; ?><?=$this->replaceToBr($this->description);?></div>
-				<!-- <div id="tabs-shippping">
-					2Является первой зимней автошиной в которой применяется технология 3D-BIS на всей площади протектора. Данная технология, позволяет увеличить количество используемых ламелей. Для зимней авторезины высокая плотность ламелей на протекторе создает дополнительное сцепление на льду и снегу, но для движения на мокрой и сухой дороге для эффективного торможения, блоки должны быть жесткими и твердыми.
-				</div> -->
+				<div id="tabs-desc"><?=$this->replaceToBr(Interpreter::generate($this->params[$_GET['type']]["DESCRIPTION_CODE"], $good,$dynamic));?></div>
+				<div id="tabs-shippping"><?=$this->replaceToBr(Interpreter::generate($this->params[$_GET['type']]["ORDER"], $good,$dynamic));?></div>
 				<div id="tabs-warranty"><?=$this->replaceToBr(Interpreter::generate($this->params[$_GET['type']]["GARANTY_CODE"], $good,$dynamic));?></div>
 			</div>
 			<!-- <h3 class="category-title similar">Похожие товары</h3>

@@ -214,8 +214,10 @@ $(document).ready(function(){
                 max: max_val,
                 values: [ cur_min_val, cur_max_val ],
                 slide: function( event, ui ) {
-                    (ui.values[ 0 ] == min_val) ? min_input.val('') : min_input.val( ui.values[ 0 ] );
-                    (ui.values[ 1 ] == max_val) ? max_input.val('') : max_input.val( ui.values[ 1 ] );  
+                    // (ui.values[ 0 ] == min_val) ? min_input.val('') : min_input.val( ui.values[ 0 ] );
+                    // (ui.values[ 1 ] == max_val) ? max_input.val('') : max_input.val( ui.values[ 1 ] );
+                    min_input.val( ui.values[ 0 ] );  
+                    max_input.val( ui.values[ 1 ] );
                     min_text.text( ui.values[ 0 ] );
                     obj.closest(".slide-type").find(".tt-min").text( ui.values[ 0 ] );
                     max_text.text( ui.values[ 1 ] );
@@ -223,8 +225,11 @@ $(document).ready(function(){
 
                 },
                 change: function( event, ui ) {  
-                    (ui.values[ 0 ] == min_val) ? min_input.val('') : min_input.val( ui.values[ 0 ] );
-                    (ui.values[ 1 ] == max_val) ? max_input.val('') : max_input.val( ui.values[ 1 ] );       
+                    // (ui.values[ 0 ] == min_val) ? min_input.val('') : min_input.val( ui.values[ 0 ] );
+                    // (ui.values[ 1 ] == max_val) ? max_input.val('') : max_input.val( ui.values[ 1 ] );   
+                    min_input.val( ui.values[ 0 ] );    
+                    max_input.val( ui.values[ 1 ] ); 
+                    
                     min_text.text( ui.values[ 0 ] );
                     obj.closest(".slide-type").find(".tt-min").text( ui.values[ 0 ] );
                     max_text.text( ui.values[ 1 ] );
@@ -232,8 +237,11 @@ $(document).ready(function(){
 
                 }
             });
-            (cur_min_val == min_val) ? min_input.val('') : min_input.val( cur_min_val );
-            (cur_max_val == max_val) ? max_input.val('') : max_input.val( cur_max_val );
+            // (cur_min_val == min_val) ? min_input.val('') : min_input.val( cur_min_val );
+            // (cur_max_val == max_val) ? max_input.val('') : max_input.val( cur_max_val );
+            min_input.val( cur_min_val );
+            max_input.val( cur_max_val );
+
             min_text.text( cur_min_val );
             obj.closest(".slide-type").find(".tt-min").text( cur_min_val );
             max_text.text( cur_max_val );
@@ -241,7 +249,7 @@ $(document).ready(function(){
 
             min_input.change(function() {
             if($(this).val()=='' || (($(this).val()*1) <= min_val) )  {
-                $(this).val('');
+                // $(this).val('');
                 obj.slider( "values", 0, min_val );
                 return true;
             }
@@ -258,7 +266,7 @@ $(document).ready(function(){
             });
             max_input.change(function() {
                 if($(this).val()=='' || (($(this).val()*1) >= max_val) ) {
-                    $(this).val('');
+                    // $(this).val('');
                     obj.slider( "values", 1, max_val );
                     return true;
                 }

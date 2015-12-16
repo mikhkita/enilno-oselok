@@ -16,7 +16,7 @@ class KolesoOnlineController extends Controller
 			"DESCRIPTION_CODE" => 72,
 			"GARANTY_CODE" => 70,
 			"PRICE_CODE" => 73,
-			"ORDER" => 63,
+			"ORDER" => 165,
 			"SEASON" => 23,
 			'SHIPPING' => 73,
 			'AVAILABLE' => 112,
@@ -89,7 +89,7 @@ class KolesoOnlineController extends Controller
 			"DESCRIPTION_CODE" => 71,
 			"GARANTY_CODE" => 69,
 			"PRICE_CODE" => 74,
-			"ORDER" => 64,
+			"ORDER" => 164,
 			'SHIPPING' => 74,
 			'AVAILABLE' => 114,
 			"FILTER" => array(
