@@ -1500,8 +1500,10 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 				.filter-cont .slide-type {
 					margin-top: 22px;
 				}
-
 				.filter-cont .slide-type .slider-range {
+					width: 490px;
+				}
+				.filter-cont .slide-type.b-third .slider-range {
 					margin-top: 0px;
 					margin-left: 8px;
 					width: 414px;
