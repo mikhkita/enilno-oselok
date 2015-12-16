@@ -37,6 +37,7 @@
                     <h3>Фильтр</h3>
                     <!-- <a href="#">Сбросить фильтр</a> -->
                     <div class="filter-block">
+                        <div class="clearfix">
                         <? if($_GET['type'] == 1 || $_GET['type'] == 3): ?>
                             <div class="tire-type clearfix">    
                                 <? foreach ($filter[$params[$_GET['type']]["SEASON"]] as $key => $col): ?>
@@ -82,15 +83,18 @@
                                 <? endif; ?>
                             </div>
                         <? endforeach; ?>
-                        <h5>Ценовой диапазон</h5>
-                        <div class="slide-type">
-                            <input class="min-val price" type="text" maxlength="6" name="int[20][min]" placeholder="Мин.">
-                            <span class="dash">-</span>
-                            <input class="max-val price" type="text" maxlength="6" name="int[20][max]" placeholder="Макс.">
-                            <div class="slider-range-cont">
-                                <div data-min-cur="<?=$_SESSION['FILTER'][$_GET['type']]['int'][20]['min']?>" data-min="<?=$params[$_GET['type']]['PRICE_MIN']?>" data-max-cur="<?=$_SESSION['FILTER'][$_GET['type']]['int'][20]['max']?>" data-max="<?=$params[$_GET['type']]['PRICE_MAX']?>" class="slider-range"></div>
-                            </div>
-                        </div>  
+                        </div>
+                        <div class="clearfix">
+                            <h5>Ценовой диапазон</h5>
+                            <div class="slide-type">
+                                <input class="min-val price" type="text" maxlength="6" name="int[20][min]" placeholder="Мин.">
+                                <span class="dash">-</span>
+                                <input class="max-val price" type="text" maxlength="6" name="int[20][max]" placeholder="Макс.">
+                                <div class="slider-range-cont">
+                                    <div data-min-cur="<?=$_SESSION['FILTER'][$_GET['type']]['int'][20]['min']?>" data-min="<?=$params[$_GET['type']]['PRICE_MIN']?>" data-max-cur="<?=$_SESSION['FILTER'][$_GET['type']]['int'][20]['max']?>" data-max="<?=$params[$_GET['type']]['PRICE_MAX']?>" class="slider-range"></div>
+                                </div>
+                            </div>  
+                        </div>
                         <div class="filter-butt-cont">
                             <input type="submit" class="b-black-butt" value="Найти">
                         </div>
@@ -107,6 +111,14 @@
                     <h3 class="category-title"><?=$this->params[$_GET['type']]["NAME"]?></h3>
                 </div>
                 <? if(count($goods)): ?>
+                <?php $this->widget('CLinkPager', array(
+                    'header' => '',
+                    'firstPageLabel' => '1', 
+                    'lastPageLabel' => $pages->getPageCount(), 
+                    'maxButtonCount' => 100,
+                    'pages' => $pages,
+                    'htmlOptions' => array("class"=>"b-category-pages")
+                )) ?>
                 <div class="b-sort clearfix">
                     <div class="left clearfix">
                         <h4 class="left">Сортировать по:</h4>

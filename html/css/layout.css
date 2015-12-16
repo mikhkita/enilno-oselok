@@ -1375,7 +1375,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 					}
 				.b-category .b-block .grey-block .filter-block .filter-item {
 					margin-bottom: 25px;
-					display: inline-block;
+					float: left;
 				}
 					.b-category .b-block .grey-block .filter-block .filter-item .input {
 						width: 195px;
@@ -2503,6 +2503,9 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 }
 .fancybox-inner{
 	margin-bottom: 20px;
+}
+.b-category-pages{
+	display: none;
 }
 
 .b-mobile-menu{
