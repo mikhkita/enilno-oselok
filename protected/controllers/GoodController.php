@@ -183,6 +183,9 @@ class GoodController extends Controller
 			// 	array_push($goods_id, "good_id='".$key."'");
 			// }	
 
+			// print_r(end($goods)->fields_assoc);
+			// die();
+
 			if( isset($_POST['Good_attr']) ){
 				$values = array();
 				$delete_variants = array();
