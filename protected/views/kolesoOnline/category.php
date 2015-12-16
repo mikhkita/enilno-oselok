@@ -57,19 +57,29 @@
                         <? foreach ($params[$_GET['type']]["FILTER"] as $attr_id => $label): ?>
                             <div class="filter-item">
                                 <h5><?=$label?></h5>
-                                <div class="input">&nbsp;</div>   
-                                <div class="variants clearfix">
+                                <div class="input <? if( $mobile ) echo "mobile"; ?>">&nbsp;</div>  
+                                <? if( $mobile ): ?>
+                                    <select name="arr[<?=$attr_id?>][]" multiple>
                                     <? foreach ($filter[$attr_id] as $key => $col): ?>
-                                        <div>
                                             <? foreach ($col as $item): ?>
-                                                <label>
-                                                    <input type="checkbox" name="arr[<?=$attr_id?>][]" value="<?=$item['variant_id']?>" <?=$item['checked']?>>
-                                                    <span onselectstart="return false;"><?=str_replace(" ", "&nbsp;", $item['value'])?></span>
-                                                </label>
+                                                <option value="<?=$item['variant_id']?>" <? if($item['checked'] == "checked") echo "selected"; ?> ><?=str_replace(" ", "&nbsp;", $item['value'])?></option>
                                             <? endforeach; ?>
-                                        </div>
                                     <? endforeach; ?>
-                                </div>
+                                    </select>
+                                <? else: ?>
+                                    <div class="variants clearfix">
+                                        <? foreach ($filter[$attr_id] as $key => $col): ?>
+                                            <div>
+                                                <? foreach ($col as $item): ?>
+                                                    <label>
+                                                        <input type="checkbox" name="arr[<?=$attr_id?>][]" value="<?=$item['variant_id']?>" <?=$item['checked']?>>
+                                                        <span onselectstart="return false;"><?=str_replace(" ", "&nbsp;", $item['value'])?></span>
+                                                    </label>
+                                                <? endforeach; ?>
+                                            </div>
+                                        <? endforeach; ?>
+                                    </div>
+                                <? endif; ?>
                             </div>
                         <? endforeach; ?>
                         <h5>Ценовой диапазон</h5>
@@ -78,7 +88,7 @@
                             <span class="dash">-</span>
                             <input class="max-val price" type="text" maxlength="6" name="int[20][max]" placeholder="Макс.">
                             <div class="slider-range-cont">
-                                <div data-min-cur="<?=$_SESSION['FILTER'][$_GET['type']]['int'][20]['min']?>" data-min="<?=$params[$_GET['type']]['PRICE_MIN']?>" data-max-cur="<?=$_SESSION['FILTER'][$_GET['type']]['int'][20]['max']?>" data-max="<?=$params[$_GET['type']]['PRICE_MAX']?>" data-step="100" class="slider-range"></div>
+                                <div data-min-cur="<?=$_SESSION['FILTER'][$_GET['type']]['int'][20]['min']?>" data-min="<?=$params[$_GET['type']]['PRICE_MIN']?>" data-max-cur="<?=$_SESSION['FILTER'][$_GET['type']]['int'][20]['max']?>" data-max="<?=$params[$_GET['type']]['PRICE_MAX']?>" class="slider-range"></div>
                             </div>
                         </div>  
                         <div class="filter-butt-cont">

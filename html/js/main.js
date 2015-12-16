@@ -205,19 +205,17 @@ $(document).ready(function(){
             min_val = $(this).attr("data-min")*1,
             max_val = $(this).attr("data-max")*1,
             cur_min_val = $(this).attr("data-min-cur") ? $(this).attr("data-min-cur")*1 : min_val,
-            cur_max_val = $(this).attr("data-max-cur") ? $(this).attr("data-max-cur")*1 : max_val,
-            data_step = $(this).attr("data-step") ? $(this).attr("data-step")*1 : 1;
+            cur_max_val = $(this).attr("data-max-cur") ? $(this).attr("data-max-cur")*1 : max_val;
             obj.slider({
-                step: data_step,
                 range: true,
                 min: min_val,
                 max: max_val,
                 values: [ cur_min_val, cur_max_val ],
                 slide: function( event, ui ) {
-                    // (ui.values[ 0 ] == min_val) ? min_input.val('') : min_input.val( ui.values[ 0 ] );
-                    // (ui.values[ 1 ] == max_val) ? max_input.val('') : max_input.val( ui.values[ 1 ] );
-                    min_input.val( ui.values[ 0 ] );  
-                    max_input.val( ui.values[ 1 ] );
+                    (ui.values[ 0 ] == min_val) ? min_input.val('') : min_input.val( Math.round(ui.values[ 0 ]/100)*100 );
+                    (ui.values[ 1 ] == max_val) ? max_input.val('') : max_input.val( Math.round(ui.values[ 1 ]/100)*100 );  
+                    ui.values[ 0 ] = Math.round(ui.values[ 0 ]/100)*100;
+                    ui.values[ 1 ] = Math.round(ui.values[ 1 ]/100)*100;
                     min_text.text( ui.values[ 0 ] );
                     obj.closest(".slide-type").find(".tt-min").text( ui.values[ 0 ] );
                     max_text.text( ui.values[ 1 ] );
@@ -225,11 +223,10 @@ $(document).ready(function(){
 
                 },
                 change: function( event, ui ) {  
-                    // (ui.values[ 0 ] == min_val) ? min_input.val('') : min_input.val( ui.values[ 0 ] );
-                    // (ui.values[ 1 ] == max_val) ? max_input.val('') : max_input.val( ui.values[ 1 ] );   
-                    min_input.val( ui.values[ 0 ] );    
-                    max_input.val( ui.values[ 1 ] ); 
-                    
+                    (ui.values[ 0 ] == min_val) ? min_input.val('') : min_input.val( Math.round(ui.values[ 0 ]/100)*100 );
+                    (ui.values[ 1 ] == max_val) ? max_input.val('') : max_input.val( Math.round(ui.values[ 1 ]/100)*100 ); 
+                    ui.values[ 0 ] = Math.round(ui.values[ 0 ]/100)*100;
+                    ui.values[ 1 ] = Math.round(ui.values[ 1 ]/100)*100;      
                     min_text.text( ui.values[ 0 ] );
                     obj.closest(".slide-type").find(".tt-min").text( ui.values[ 0 ] );
                     max_text.text( ui.values[ 1 ] );
@@ -237,11 +234,10 @@ $(document).ready(function(){
 
                 }
             });
-            // (cur_min_val == min_val) ? min_input.val('') : min_input.val( cur_min_val );
-            // (cur_max_val == max_val) ? max_input.val('') : max_input.val( cur_max_val );
-            min_input.val( cur_min_val );
-            max_input.val( cur_max_val );
-
+            (cur_min_val == min_val) ? min_input.val('') : min_input.val(Math.round(cur_min_val/100)*100);
+            (cur_max_val == max_val) ? max_input.val('') : max_input.val(Math.round(cur_max_val/100)*100);
+            cur_min_val = Math.round(cur_min_val/100)*100;
+            cur_max_val = Math.round(cur_max_val/100)*100;
             min_text.text( cur_min_val );
             obj.closest(".slide-type").find(".tt-min").text( cur_min_val );
             max_text.text( cur_max_val );
@@ -249,7 +245,7 @@ $(document).ready(function(){
 
             min_input.change(function() {
             if($(this).val()=='' || (($(this).val()*1) <= min_val) )  {
-                // $(this).val('');
+                $(this).val('');
                 obj.slider( "values", 0, min_val );
                 return true;
             }
@@ -266,7 +262,7 @@ $(document).ready(function(){
             });
             max_input.change(function() {
                 if($(this).val()=='' || (($(this).val()*1) >= max_val) ) {
-                    // $(this).val('');
+                    $(this).val('');
                     obj.slider( "values", 1, max_val );
                     return true;
                 }
@@ -286,17 +282,21 @@ $(document).ready(function(){
     if ($(".slider-range").length) range_init();
     
     $(".filter-item .input").click(function(){
-        $this = $(this).parent();   
-        if(!$this.hasClass("active")) {
-            closeBubble();
-            // $(this).find(".variants").css("display","table");
-            $this.find(".variants").addClass("active");
-            // TweenLite.to($(this).find(".variants"), 0.3, { "scaleY" : 1, opacity: 1, ease : Cubic.easeOut } );
-            $this.addClass("active");
-            if( $this.position().left > 480 ) {
-                $this.find(".variants").css("right","0");
-            } else $this.find(".variants").css("left","0");
-        } else closeBubble();
+        if($(this).hasClass("mobile")) {
+            $(this).parent().find("select").focus();
+        } else {
+            $this = $(this).parent();   
+            if(!$this.hasClass("active")) {
+                closeBubble();
+                // $(this).find(".variants").css("display","table");
+                $this.find(".variants").addClass("active");
+                // TweenLite.to($(this).find(".variants"), 0.3, { "scaleY" : 1, opacity: 1, ease : Cubic.easeOut } );
+                $this.addClass("active");
+                if( $this.position().left > 480 ) {
+                    $this.find(".variants").css("right","0");
+                } else $this.find(".variants").css("left","0");
+            } else closeBubble();
+        }
     });
 
     $(".variants input").change(function(){
@@ -313,7 +313,22 @@ $(document).ready(function(){
         }        
     });
 
+    $(".filter-item select").change(function(){
+        var obj = $(this).closest(".filter-item").find("option:selected"),
+        input = $(this).closest(".filter-item").find(".input"),
+        text=[];
+        if(obj.length != 0) {
+            obj.each(function(index, item){
+                text.push($(item).text());
+            });
+            input.html(text.join(",&nbsp;")+"<span></span>");
+        } else {
+            input.html("<span></span>");
+        }        
+    });
+
     $(".variants input").change();
+    $(".filter-item select").change();
 
     var active,open;
     function closeBubble(active){
@@ -345,13 +360,13 @@ $(document).ready(function(){
         $("#filter").submit();
     });
 
-    $(".filter-cont .ui-slider-handle:eq(0)").prepend("<span class='price-tt tt-min'>"+$(".slider-range:eq(0)").attr("data-min")+"</span>");
-    $(".filter-cont .ui-slider-handle:eq(2)").prepend("<span class='price-tt tt-min'>"+$(".slider-range:eq(1)").attr("data-min")+"</span>");
-    $(".filter-cont .ui-slider-handle:eq(4)").prepend("<span class='price-tt tt-min'>"+$(".slider-range:eq(2)").attr("data-min")+"</span>");
+    $(".filter-cont .ui-slider-handle:eq(0)").prepend("<span class='price-tt tt-min'>"+(Math.round($(".slider-range:eq(0)").attr("data-min-cur")/100)*100)+"</span>");
+    $(".filter-cont .ui-slider-handle:eq(2)").prepend("<span class='price-tt tt-min'>"+(Math.round($(".slider-range:eq(1)").attr("data-min-cur")/100)*100)+"</span>");
+    $(".filter-cont .ui-slider-handle:eq(4)").prepend("<span class='price-tt tt-min'>"+(Math.round($(".slider-range:eq(2)").attr("data-min-cur")/100)*100)+"</span>");
 
-    $(".filter-cont .ui-slider-handle:eq(1)").prepend("<span class='price-tt tt-max'>"+$(".slider-range:eq(0)").attr("data-max")+"</span>");
-    $(".filter-cont .ui-slider-handle:eq(3)").prepend("<span class='price-tt tt-max'>"+$(".slider-range:eq(1)").attr("data-max")+"</span>");
-    $(".filter-cont .ui-slider-handle:eq(5)").prepend("<span class='price-tt tt-max'>"+$(".slider-range:eq(2)").attr("data-max")+"</span>");
+    $(".filter-cont .ui-slider-handle:eq(1)").prepend("<span class='price-tt tt-max'>"+(Math.round($(".slider-range:eq(0)").attr("data-max-cur")/100)*100)+"</span>");
+    $(".filter-cont .ui-slider-handle:eq(3)").prepend("<span class='price-tt tt-max'>"+(Math.round($(".slider-range:eq(1)").attr("data-max-cur")/100)*100)+"</span>");
+    $(".filter-cont .ui-slider-handle:eq(5)").prepend("<span class='price-tt tt-max'>"+(Math.round($(".slider-range:eq(2)").attr("data-max-cur")/100)*100)+"</span>");
     
     customHandlers["category_buy"] = function(el){
         var popup = $(el.attr("data-block"));
@@ -389,5 +404,25 @@ $(document).ready(function(){
         } else $(this).parent().removeClass("active");
     });
     $(".tire-type input").change();
+
+
+    $(".detail-price h5").click(function() {
+        $( ".main-tabs" ).tabs( "option", "active", 1 );
+    });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 });

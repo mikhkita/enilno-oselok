@@ -784,6 +784,10 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 					    		transform: scaleY(1);
 					    opacity: 1;
 					}
+					.filter-item select {
+						position: absolute;
+						opacity: 0;
+					}
 					.b-category .filter-item .variants{
 						min-width: 161px;
 						border-color: #ffad00 !important;
@@ -1072,6 +1076,11 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 				.goods .gradient-grey h3 span {
 					font-weight: 500;
 				}
+
+			.goods .gradient-grey h3.last {
+				display: block;
+			}
+
 			.goods .gradient-grey a {
 				text-decoration: none;
 			}
@@ -1720,7 +1729,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 			margin-bottom: 25px;
 		}
 		.good-detail .b-block .detail-wrap {
-			margin-bottom: 40px;
+			
 		}
 			.good-detail .b-block .detail-wrap .detail-photo {
 				width: 559px;
@@ -1895,6 +1904,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 							width: 19px;
 						}
 		.good-detail .b-block .main-tabs {
+			padding-top: 40px;
 			margin-bottom: 25px;
 		}	
 			.good-detail .b-block .main-tabs .desc-tabs li{

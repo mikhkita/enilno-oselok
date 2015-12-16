@@ -38,7 +38,7 @@
 							<a href="#" class="fancy b-orange-butt" data-block="#b-popup-buy" data-aftershow="detail_buy">Купить</a>
 						</div>
 						<div class="left">
-							<h5>Доставка и оплата</h5>
+							<h5 class="b-go" data-block="#shipping">Доставка и оплата</h5>
 							<? if( $is_available == "В наличии" ): ?>
 								<h6>Товар: <span class="stock">В наличии</span></h6>
 							<? else: ?>
@@ -62,7 +62,7 @@
 					</ul>
 				</div>
 			</div>
-			<div class="main-tabs">
+			<div class="main-tabs" id="shipping">
 				<ul class="desc-tabs clearfix">
 					<li class="active gradient-grey"><a href="#tabs-desc">Описание</a><span></span></li>
 					<li class="gradient-grey"><a href="#tabs-shippping">Доставка</a><span></span></li>
