@@ -63,13 +63,23 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
         <li class="v" ></li>
     </ul>
     <div class="b b-header">
+        <div class="b-mobile-menu">
+            <a class="left b-main-logo b-mobile-menu-a" href="<?=Yii::app()->createUrl('/kolesoOnline')?>"></a>
+            <ul>
+                <!-- <li><a href="<?=Yii::app()->createUrl('/about')?>" class="b-mobile-menu-a">О магазине</a></li> -->
+                <li><a href="<?=Yii::app()->createUrl('/delivery')?>" class="b-mobile-menu-a">Доставка</a></li>
+                <li><a href="<?=Yii::app()->createUrl('/garanty')?>" class="b-mobile-menu-a">Гарантия</a></li>
+                <li><a href="<?=Yii::app()->createUrl('/payment')?>" class="b-mobile-menu-a">Оплата</a></li>
+                <li><a href="<?=Yii::app()->createUrl('/contacts')?>" class="b-mobile-menu-a">Контакты</a></li>
+            </ul>
+        </div>
         <div class="b b-menu">
             <div class="b-block">
                 <ul class="clearfix not-mobile">
-                    <!-- <li><a href="#">О магазине</a></li> -->
-                    <!-- <li><a href="#">Доставка и оплата</a></li> -->
-                    <!-- <li><a href="#">Гарантия</a></li> -->
-                    <li><a href="<?=Yii::app()->createUrl('/kolesoOnline/contacts')?>">Контакты</a></li>
+                    <li><a href="<?=Yii::app()->createUrl('/delivery')?>">Доставка</a></li>
+                    <li><a href="<?=Yii::app()->createUrl('/garanty')?>">Гарантия</a></li>
+                    <li><a href="<?=Yii::app()->createUrl('/payment')?>">Оплата</a></li>
+                    <li><a href="<?=Yii::app()->createUrl('/contacts')?>">Контакты</a></li>
                 </ul>
                 <div class="clearfix b-mobile-top-line mobile-only">
                     <h2 class="left">Вы находитесь в г. <a href="#" class="icon fancy" data-block="#b-popup-city"><?=$_SESSION['city']['name']?></a></h2>
@@ -149,7 +159,11 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
                         <h3>Контактная информация</h3>
                         <a class="footer-contacts mail" href="mailto:kolesotomskru@mail.ru">kolesotomskru@mail.ru</a>
                         <a class="mobile-not-fancy fancy footer-contacts phone" data-block="#b-popup-callback" href="tel:+79095430402">+7 (909) 543-04-02</a>
-                        <span class="footer-contacts map">г. Красноярск, ул. Вавилова, 1а</span>
+                        <? if($_SESSION['city']['variant_id'] == 1081): ?>
+                            <span class="footer-contacts map">г. Томск, улица Мокрушина, 9 ст. 42</span>
+                        <? else: ?>
+                            <br>
+                        <? endif; ?>
                         <div class="social">
                             <h3>Присоединяйтесь к нам</h3>
                             <div class="social-icon clearfix">

@@ -315,7 +315,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 			.b-header .b-header-main .b-block > .left{
 
 			}
-				.b-header .b-header-main .b-block > .left .b-main-logo {
+				.b-main-logo {
 					margin-top: 2px;
 					width: 220px;
 					height: 64px;
@@ -1735,8 +1735,8 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 				width: 559px;
 			}
 				.good-detail .b-block .detail-wrap .detail-photo .detail-slider-for {
-					box-shadow: inset 0 0 0 1px #DBE4F6;
-					background-color: #F3F5FA;
+					box-shadow: inset 0 0 0 1px #E2E2E2;
+					background-color: #F6F6F6;
 				}
 				.good-detail .b-block .detail-wrap .detail-photo .big{
 					display: block;
@@ -2265,8 +2265,13 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 	}
 	.b-text h3 {
 		font-size: 16px;
-		margin-top: 10px;
 		font-weight: 300;
+	}
+	.b-text p{
+		font-size: 14px;
+		line-height: 25px;
+		margin-bottom: 20px;
+		margin-top: 10px;
 	}
 		.b-text h3 span {
 			font-weight: 300;
@@ -2453,7 +2458,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 		left: 1px;
 		top: -2px;
 	}
-	.b-header .b-header-main .b-block > .left .b-main-logo {
+	.b-main-logo {
 		background-image: url('../i/logo@2x.png');
 		background-size: 220px;
 	}
@@ -2498,6 +2503,10 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 }
 .fancybox-inner{
 	margin-bottom: 20px;
+}
+
+.b-mobile-menu{
+	display: none;
 }
 
 @media screen and (max-width: 1250px){
