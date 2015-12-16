@@ -323,7 +323,7 @@ class KolesoOnlineController extends Controller
 				$city = $_POST['city'];
 			} else {
 				$city = json_decode(file_get_contents('http://api.sypexgeo.net/json/'.$_SERVER["REMOTE_ADDR"]));
-	       		$city = (isset($city->city->name_ru)) ? $city->city->name_ru : $default_city;
+	       		$city = (isset($city->city->name_ru)) ? $city->city->name_ru : $default_city;	
 	       	}
 	       	$model = Attribute::model()->with(array("variants.variant"))->find("value='".$city."' AND folder=1");
 	       	if($model) {
