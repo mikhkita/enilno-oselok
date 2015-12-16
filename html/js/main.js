@@ -33,7 +33,7 @@ $(document).ready(function(){
 
     var blocked = false;
 
-    // new FastClick(document.body);
+    new FastClick(document.body);
 
     function whenScroll(){
         if( $(".b-fixed-top").length ){
