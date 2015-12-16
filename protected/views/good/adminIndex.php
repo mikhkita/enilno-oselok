@@ -1,23 +1,33 @@
 <div class="b-section-nav clearfix">
 	<div class="b-section-nav-back clearfix">
 		<a href="<?=$this->createUrl('/good/adminarchive',array('good_type_id'=> $_GET["good_type_id"]))?>" class="b-link left">Архив</a>
-			<ul class="b-section-menu clearfix left">
-				<li><a href="#" class="fancy" data-block=".b-popup-filter">Фильтр</a></li>
-				<li><a href="<?php echo $this->createUrl('/good/admincreate',array('good_type_id'=> $_GET["good_type_id"] ))?>" class="ajax-form ajax-create">Добавить</a></li>
-				<li><a>Выделить</a>
-					<ul class="b-section-submenu">
-						<li><a href="<?php echo $this->createUrl('/good/adminaddallcheckbox',array('good_type_id'=> $_GET["good_type_id"]))?>" class="b-sess-allcheckbox">Все</a></li>
-						<li><a href="<?php echo $this->createUrl('/good/adminaddsomecheckbox',array('good_type_id'=> $_GET["good_type_id"]))?>" class="ajax-form ajax-update">По&nbsp;кодам</a></li>
-						<li><a href="<?php echo $this->createUrl('/good/adminremoveallcheckbox',array('good_type_id'=> $_GET["good_type_id"]))?>" class="b-sess-allcheckbox">Сбросить&nbsp;выделение</a></li>
-					</ul>
-				</li>
-				<li><a href="<?php echo $this->createUrl('/good/adminupdateall',array('good_type_id'=> $_GET["good_type_id"],'GoodFilter_page' => ($pages->currentPage+1) ))?>" class="ajax-form ajax-create" data-block=".b-popup-filter">Города</a></li>
-				<li><a href="<?php echo $this->createUrl('/advert/adminindex',array('good_type_id'=> $_GET["good_type_id"]))?>">Объявления</a></li>
-				<? if($_GET["good_type_id"] == 1 || $_GET["good_type_id"] == 2): ?>
-					<li><a href="<?php echo $this->createUrl('/good/adminjoin')?>">Склеить</a></li>
-				<? endif; ?>
-				<!-- <li><a href="<?php echo $this->createUrl('/good/adminupdateadverts',array('good_type_id'=> $_GET["good_type_id"], 'images' => '1'))?>" class="ajax-update-prices">Обновить&nbsp;фотографии</a></li> -->
-			</ul>
+		<div class="left b-kit-switcher-cont clearfix">
+			<span>Фото: </span>
+			<a href="#" class="b-kit-switcher right<?if($with_photos) echo" checked";?>" data-on="goTo" data-off="goTo" data-on-href="<?=$this->createUrl('/good/adminindex',array('good_type_id'=> $_GET["good_type_id"],'partial'=>'true','with_photos'=>1))?>" data-off-href="<?=$this->createUrl('/good/adminindex',array('good_type_id'=> $_GET["good_type_id"],'partial'=>'true','with_photos'=>0))?>" >
+			    <div class="b-kit-rail">
+			        <div class="b-kit-state1">Вкл.</div>
+			        <div class="b-kit-slider"></div>
+			        <div class="b-kit-state2">Выкл.</div>
+			    </div>
+			</a>
+		</div>
+		<ul class="b-section-menu clearfix left">
+			<li><a href="#" class="fancy" data-block=".b-popup-filter">Фильтр</a></li>
+			<li><a href="<?php echo $this->createUrl('/good/admincreate',array('good_type_id'=> $_GET["good_type_id"] ))?>" class="ajax-form ajax-create">Добавить</a></li>
+			<li><a>Выделить</a>
+				<ul class="b-section-submenu">
+					<li><a href="<?php echo $this->createUrl('/good/adminaddallcheckbox',array('good_type_id'=> $_GET["good_type_id"]))?>" class="b-sess-allcheckbox">Все</a></li>
+					<li><a href="<?php echo $this->createUrl('/good/adminaddsomecheckbox',array('good_type_id'=> $_GET["good_type_id"]))?>" class="ajax-form ajax-update">По&nbsp;кодам</a></li>
+					<li><a href="<?php echo $this->createUrl('/good/adminremoveallcheckbox',array('good_type_id'=> $_GET["good_type_id"]))?>" class="b-sess-allcheckbox">Сбросить&nbsp;выделение</a></li>
+				</ul>
+			</li>
+			<li><a href="<?php echo $this->createUrl('/good/adminupdateall',array('good_type_id'=> $_GET["good_type_id"],'GoodFilter_page' => ($pages->currentPage+1) ))?>" class="ajax-form ajax-create" data-block=".b-popup-filter">Города</a></li>
+			<li><a href="<?php echo $this->createUrl('/advert/adminindex',array('good_type_id'=> $_GET["good_type_id"]))?>">Объявления</a></li>
+			<? if($_GET["good_type_id"] == 1 || $_GET["good_type_id"] == 2): ?>
+				<li><a href="<?php echo $this->createUrl('/good/adminjoin')?>">Склеить</a></li>
+			<? endif; ?>
+			<!-- <li><a href="<?php echo $this->createUrl('/good/adminupdateadverts',array('good_type_id'=> $_GET["good_type_id"], 'images' => '1'))?>" class="ajax-update-prices">Обновить&nbsp;фотографии</a></li> -->
+		</ul>
 	</div>
 </div>
 <h1 class="b-with-nav"><?=$name?></h1>
@@ -31,6 +41,9 @@
 				<th style="vertical-align:bottom; min-width: 20px;">
 					<!-- <input type="checkbox" name="goods_id" class="b-sess-checkbox check-page" data-block="#b-sess-checkbox-list" value="<?=implode(',',$ids)?>"> -->
 				</th>
+				<? if($with_photos): ?>
+					<th>Фотографии</th>
+				<? endif; ?>
 				<th style="min-width: 110px;max-width: 110px;width: 110px;"><a href="<?php echo Yii::app()->createUrl('/good/adminviewsettings',array('id'=>$item->id,'good_type_id'=>$_GET["good_type_id"]))?>" class="ajax-form ajax-update b-tool b-tool-settings" title="Настройки отображения"></a></th>
 				<? foreach ($fields as $field): ?>
 					<th <?if($field->attribute_id == 3):?>style="min-width: 55px;"<?endif;?> <? if($field->attribute->alias): ?>class="b-tooltip" title="<?=$field->attribute->name?>"<?endif;?>>
@@ -47,6 +60,15 @@
 				<? foreach ($data as $i => $item): ?>
 					<tr>
 						<td><input type="checkbox" name="good_id" class="b-sess-checkbox" data-block="#b-sess-checkbox-list" <? if($item->isChecked()): ?>checked="checked"<? endif; ?> value="<?=$item->id?>"></td>
+						<? if($with_photos): ?>
+							<? $images = $this->getImages($item); $first_image = array_shift($images); ?>
+							<td class="b-photo-td">
+								<a href="<?=$first_image?>" class="fancy-img" rel="<?=$item->id?>"><img src="<?=$first_image?>" alt=""></a>
+								<? foreach ($images as $key => $img): ?>
+									<a href="<?=$img?>" class="fancy-img" rel="<?=$item->id?>"></a>
+								<? endforeach; ?>
+							</td>
+						<? endif; ?>
 						<td style="min-width: 161px;text-align: right;" class="b-tool-nav">
 							<? if($item->count_all_adverts): ?>
 								<span href="<?php echo Yii::app()->createUrl('/good/adminadverts',array('id'=>$item->id,'good_type_id'=> $_GET["good_type_id"],'GoodFilter_page' => ($pages->currentPage+1)))?>" class="ajax-form ajax-update b-adverts-link b-tooltip" title="Объявления"><p class="advert-info"><?=$item->count_all_adverts?> (<?=(!$item->count_url_adverts)?0:$item->count_url_adverts?>)</p></span>

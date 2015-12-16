@@ -349,6 +349,15 @@ h1.b-with-nav{
 .b-export-preview #target tr{
     cursor: pointer;
 }
+td.b-photo-td{
+    font-size: 0px;
+}
+    td.b-photo-td a{
+        
+    }
+        td.b-photo-td a img{
+            max-height: 80px;    
+        }
 .b-export-preview #target tr.selected{
     background-color: #D26A44 !important;
     color: #F5E9BC !important;
@@ -2381,6 +2390,18 @@ ul.b-filter-list{
 .b-popup-good-filter .select2-choices {
     min-width: 653px;
 }
+.b-kit-switcher-cont{
+    padding-right: 19px;
+}
+    .b-kit-switcher-cont span{
+        padding-left: 5px !important;
+        float: left;
+        padding-right: 5px !important;
+    }
+        .b-kit-switcher-cont .b-kit-switcher{
+            margin-top: 4px;
+            margin-left: 5px;
+        }
 .b-kit-switcher {
     margin-left: 15px;
     margin-top: -1px;
@@ -2659,7 +2680,7 @@ ul.b-filter-list{
                 cursor: pointer;
                 /*color: #F5E9BC;*/
                 display: block;
-                padding: 5px 20px 6px;
+                padding: 5px 19px 6px;
                 text-decoration: none;
                 border-right: 1px solid #E8DEB8;
             }

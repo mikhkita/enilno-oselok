@@ -1011,7 +1011,8 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 		overflow: hidden;
 	}	
 
-	.goods .gradient-grey.b-good-type-2{
+	.goods .gradient-grey.b-good-type-2,
+	.goods .gradient-grey.b-good-type-3{
 		height: 238px;
 	}
 
@@ -1060,7 +1061,8 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 				margin-top: 8px;
 				font-size: 13px;
 			}
-			.goods .b-good-type-2 h6{
+			.goods .b-good-type-2 h6,
+			.goods .b-good-type-3 h6{
 				height: 27px;
 			}
 			.goods .gradient-grey h3{

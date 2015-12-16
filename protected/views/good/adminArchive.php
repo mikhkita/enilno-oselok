@@ -14,7 +14,7 @@
 				<td style="width:55px; text-align: center;">
 					<div><?=$item->fields_assoc[3]->value?></div>
 				</td>
-				<td style="text-align: center;">
+				<td style="text-align: center; font-size: 0px;">
 					<? $images = $this->getImages($item);?>
 					<? foreach ($images as $i => $item): ?>
 						<img src="<?=$item;?>" style="max-height: 100px;" alt="">
