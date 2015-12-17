@@ -469,7 +469,7 @@ class IntegrateController extends Controller
         $fields = $place->generateFields($fields,$advert->good->good_type_id);
 
         print_r($fields);
-        die();
+        // die();
         
         $place->setUser($account->login, $account->password);
         $res = $place->auth();
@@ -526,7 +526,7 @@ class IntegrateController extends Controller
             }
 
             Log::debug("Действие над ".$advert->good->fields_assoc[3]->value." в аккаунте ".$account->login." прошло успешно");
-            $queue->delete();
+            // $queue->delete();
         }else{
             Log::debug("Действие над ".$advert->good->fields_assoc[3]->value." в аккаунте ".$account->login." прошло с ОШИБКОЙ");
             $queue->setState("error");
