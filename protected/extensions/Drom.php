@@ -226,7 +226,7 @@ Class Drom {
 
     public function generateFields($fields,$good_type_id){
         $fields['dirId'] = $this->dir_codes[intval($good_type_id)];
-        $fields['model'] = array($fields["model"],0,0);
+        if( isset($fields['model']) ) $fields['model'] = array($fields["model"],0,0);
         $fields['price'] = array($fields["price"],"RUB");
         $fields['quantity'] = 1;
         $fields['contacts'] =  array("email" => "","is_email_hidden" => false,"contactInfo" => $fields['contacts']);
@@ -250,7 +250,7 @@ Class Drom {
             unset($fields['disc_width'],$fields['disc_et'],$disc_width,$disc_et);
         }
 
-        if( $good_type_id == 1 ){
+        if( $good_type_id == 1 || $good_type_id == 3 ){
             $fields['predestination'] = "regular";
         }
         return $fields;
