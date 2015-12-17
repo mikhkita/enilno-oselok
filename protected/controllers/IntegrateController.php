@@ -423,7 +423,7 @@ class IntegrateController extends Controller
 
         $place_name = $this->getPlaceName($advert->place->category_id);
 
-        $queue->setState("processing");
+        // $queue->setState("processing");
 
         $dynamic = $this->getDynObjects(array(
             57 => $advert->place->category_id,
@@ -468,8 +468,8 @@ class IntegrateController extends Controller
 
         $fields = $place->generateFields($fields,$advert->good->good_type_id);
 
-        // print_r($fields);
-        // die();
+        print_r($fields);
+        die();
         
         $place->setUser($account->login, $account->password);
         $res = $place->auth();

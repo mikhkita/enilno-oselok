@@ -43,7 +43,7 @@
                                 <div class="input <? if( $mobile ) echo 'mobile'; ?>"></div>   
                                 <? if( $mobile ): ?>
                                     <select name="arr[<?=$attr_id?>][]" multiple>
-                                        <option selected disabled hidden>&nbsp;</option>
+                                        <!-- <option selected disabled>&nbsp;</option> -->
                                     <? foreach ($disc_filter[$attr_id] as $key => $col): ?>
                                             <? foreach ($col as $item): ?>
                                                 <option value="<?=$item['variant_id']?>"><?=str_replace(" ", "&nbsp;", $item['value'])?></option>
