@@ -42,8 +42,7 @@
                                 <h5><?=$label?></h5>
                                 <div class="input <? if( $mobile ) echo 'mobile'; ?>"></div>   
                                 <? if( $mobile ): ?>
-                                    <select name="arr[<?=$attr_id?>][]" multiple>
-                                        <!-- <option selected disabled>&nbsp;</option> -->
+                                    <select name="arr[<?=$attr_id?>][]" multiple selectedIndex="0">
                                     <? foreach ($disc_filter[$attr_id] as $key => $col): ?>
                                             <? foreach ($col as $item): ?>
                                                 <option value="<?=$item['variant_id']?>"><?=str_replace(" ", "&nbsp;", $item['value'])?></option>
