@@ -58,16 +58,7 @@
                         <? foreach ($params[$_GET['type']]["FILTER"] as $attr_id => $label): ?>
                             <div class="filter-item">
                                 <h5><?=$label?></h5>
-                                <div class="input <? if( $mobile ) echo 'mobile'; ?>">&nbsp;</div>  
-                                <? if( $mobile ): ?>
-                                    <select name="arr[<?=$attr_id?>][]" multiple>
-                                    <? foreach ($filter[$attr_id] as $key => $col): ?>
-                                            <? foreach ($col as $item): ?>
-                                                <option value="<?=$item['variant_id']?>" <? if($item['checked'] == "checked") echo "selected"; ?> ><?=str_replace(" ", "&nbsp;", $item['value'])?></option>
-                                            <? endforeach; ?>
-                                    <? endforeach; ?>
-                                    </select>
-                                <? else: ?>
+                                <div class="input">&nbsp;</div>  
                                     <div class="variants clearfix">
                                         <? foreach ($filter[$attr_id] as $key => $col): ?>
                                             <div>

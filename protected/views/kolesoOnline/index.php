@@ -40,21 +40,11 @@
                         <? foreach ($filters as $attr_id => $label): ?>     
                             <div class="filter-item">
                                 <h5><?=$label?></h5>
-                                <div class="input <? if( $mobile ) echo 'mobile'; ?>"></div>   
-                                <? if( !$mobile ): ?>
-                                    <select name="arr[<?=$attr_id?>][]" multiple="multiple" data-native-menu="false">
-                                    <? foreach ($disc_filter[$attr_id] as $key => $col): ?>
-                                            <? foreach ($col as $item): ?>
-                                                <option value="<?=$item['variant_id']?>"><?=str_replace(" ", "&nbsp;", $item['value'])?></option>
-                                            <? endforeach; ?>
-                                    <? endforeach; ?>
-                                    </select>
-                                <? else: ?>
+                                <div class="input"></div>   
                                     <div class="variants clearfix">
                                         <? foreach ($disc_filter[$attr_id] as $key => $col): ?>
                                             <div>
                                                 <? foreach ($col as $item): ?>
-                                                <option value="<?=$item['variant_id']?>"><?=$item['value']?></option>
                                                     <label>
                                                         <input type="checkbox" name="arr[<?=$attr_id?>][]" value="<?=$item['variant_id']?>">
                                                         <span onselectstart="return false;"><?=str_replace(" ", "&nbsp;", $item['value'])?></span>
@@ -63,7 +53,6 @@
                                             </div>
                                         <? endforeach; ?>
                                     </div>
-                                <? endif; ?>
                             </div>
                         <? endforeach; ?>
 
@@ -122,16 +111,7 @@
                         <? foreach ($filters as $attr_id => $label): ?>
                             <div class="filter-item">
                                 <h5><?=$label?></h5>
-                                <div class="input <? if( $mobile ) echo 'mobile'; ?>"></div> 
-                                <? if( $mobile ): ?>
-                                    <select name="arr[<?=$attr_id?>][]" multiple>
-                                    <? foreach ($tire_filter[$attr_id] as $key => $col): ?>
-                                            <? foreach ($col as $item): ?>
-                                                <option value="<?=$item['variant_id']?>"><?=str_replace(" ", "&nbsp;", $item['value'])?></option>
-                                            <? endforeach; ?>
-                                    <? endforeach; ?>
-                                    </select>
-                                <? else: ?>              
+                                <div class="input"></div>             
                                     <div class="variants clearfix">
                                         <? foreach ($tire_filter[$attr_id] as $key => $col): ?>
                                             <div>
@@ -202,16 +182,7 @@
                         <? foreach ($filters as $attr_id => $label): ?>
                             <div class="filter-item">
                                 <h5><?=$label?></h5>
-                                <div class="input <? if( $mobile ) echo 'mobile'; ?>"></div> 
-                                <? if( $mobile ): ?>
-                                    <select name="arr[<?=$attr_id?>][]" multiple>
-                                    <? foreach ($wheel_filter[$attr_id] as $key => $col): ?>
-                                            <? foreach ($col as $item): ?>
-                                                <option value="<?=$item['variant_id']?>"><?=str_replace(" ", "&nbsp;", $item['value'])?></option>
-                                            <? endforeach; ?>
-                                    <? endforeach; ?>
-                                    </select>
-                                <? else: ?>       
+                                <div class="input"></div>    
                                     <div class="variants clearfix">
                                         <? foreach ($wheel_filter[$attr_id] as $key => $col): ?>
                                             <div>
