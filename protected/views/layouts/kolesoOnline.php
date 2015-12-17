@@ -24,6 +24,8 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
     <link rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/html/css/slick.css" type="text/css">
     <link rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/html/css/jquery-ui.css" type="text/css">
     <link rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/html/css/select2.css" type="text/css">
+    <link rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/html/css/jquery.mobile.custom.structure.css" type="text/css">
+    <link rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/html/css/jquery.mobile.custom.theme.css" type="text/css">
     <link rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/html/css/KitAnimate.css" type="text/css">
     <link rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/html/css/layout.css" type="text/css">
 
@@ -258,6 +260,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
 <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/html/js/slick.min.js"></script>
 <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/html/js/jquery-ui.min.js"></script>
 <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/html/js/jquery.ui.touch-punch.js"></script>
+<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/html/js/jquery.mobile.custom.min.js"></script>
 <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/html/js/KitProgress.js"></script>
 <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/html/js/KitAnimate.js"></script>
 <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/html/js/device.js"></script>

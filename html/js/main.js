@@ -311,22 +311,22 @@ $(document).ready(function(){
         }        
     });
 
-    $(".filter-item select").change(function(){
-        var obj = $(this).closest(".filter-item").find("option:selected"),
-        input = $(this).closest(".filter-item").find(".input"),
-        text=[];
-        if(obj.length != 0) {
-            obj.each(function(index, item){
-                text.push($(item).text());
-            });
-            input.html(text.join(",&nbsp;")+"<span></span>");
-        } else {
-            input.html("<span></span>");
-        }        
-    });
+    // $(".filter-item select").change(function(){
+    //     var obj = $(this).closest(".filter-item").find("option:selected"),
+    //     input = $(this).closest(".filter-item").find(".input"),
+    //     text=[];
+    //     if(obj.length != 0) {
+    //         obj.each(function(index, item){
+    //             text.push($(item).text());
+    //         });
+    //         input.html(text.join(",&nbsp;")+"<span></span>");
+    //     } else {
+    //         input.html("<span></span>");
+    //     }        
+    // });
 
     $(".variants input").change();
-    $(".filter-item select").change();
+    // $(".filter-item select").change();
 
     var active,open;
     function closeBubble(active){

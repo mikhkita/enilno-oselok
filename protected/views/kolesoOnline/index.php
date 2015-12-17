@@ -41,8 +41,8 @@
                             <div class="filter-item">
                                 <h5><?=$label?></h5>
                                 <div class="input <? if( $mobile ) echo 'mobile'; ?>"></div>   
-                                <? if( $mobile ): ?>
-                                    <select name="arr[<?=$attr_id?>][]" multiple selectedIndex="0">
+                                <? if( !$mobile ): ?>
+                                    <select name="arr[<?=$attr_id?>][]" multiple="multiple" data-native-menu="false">
                                     <? foreach ($disc_filter[$attr_id] as $key => $col): ?>
                                             <? foreach ($col as $item): ?>
                                                 <option value="<?=$item['variant_id']?>"><?=str_replace(" ", "&nbsp;", $item['value'])?></option>
