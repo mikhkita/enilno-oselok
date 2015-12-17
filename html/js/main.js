@@ -281,21 +281,19 @@ $(document).ready(function(){
     }
     if ($(".slider-range").length) range_init();
     
-    if( !device.mobile() ){
-        $(".filter-item .input").click(function(){
-            $this = $(this).parent();   
-            if(!$this.hasClass("active")) {
-                closeBubble();
-                // $(this).find(".variants").css("display","table");
-                $this.find(".variants").addClass("active");
-                // TweenLite.to($(this).find(".variants"), 0.3, { "scaleY" : 1, opacity: 1, ease : Cubic.easeOut } );
-                $this.addClass("active");
-                if( $this.position().left > 480 ) {
-                    $this.find(".variants").css("right","0");
-                } else $this.find(".variants").css("left","0");
-            } else closeBubble();
-        });
-    }
+    $(".filter-item .input").click(function(){
+        $this = $(this).parent();   
+        if(!$this.hasClass("active")) {
+            closeBubble();
+            // $(this).find(".variants").css("display","table");
+            $this.find(".variants").addClass("active");
+            // TweenLite.to($(this).find(".variants"), 0.3, { "scaleY" : 1, opacity: 1, ease : Cubic.easeOut } );
+            $this.addClass("active");
+            if( $this.position().left > 480 ) {
+                $this.find(".variants").css("right","0");
+            } else $this.find(".variants").css("left","0");
+        } else closeBubble();
+    });
 
     $(".variants input").change(function(){
         var obj = $(this).closest(".filter-item").find("input:checked"),
