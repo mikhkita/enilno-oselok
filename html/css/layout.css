@@ -1141,8 +1141,9 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 				margin-right: -120px;
 			}
 			.b-footer .b-footer-main .b-block .sections {
-
-			position: relative;}
+				max-height: 10000px;
+				position: relative;
+			}
 				.b-footer .b-footer-main .b-block .sections > li {
 					float: left;
 				}
@@ -1176,11 +1177,13 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 						margin-bottom: 18px;
 						text-transform: uppercase;
 						letter-spacing: 1px;
+						max-height: 10000px;
 					}
 					.b-footer .b-footer-main .b-block .sections > li h4 {
 						font-family: "museo_sans_cyrl300";
 						font-size: 29px;
 						color: #fff;
+						max-height: 10000px;
 					}
 						.b-footer .b-footer-main .b-block .sections > li h4 span {
 							font-family: "museo_sans_cyrl700";
@@ -1189,6 +1192,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 						color: rgba(255, 255, 255, 0.902);
 						line-height: 1.6;
 						margin-bottom: 22px;
+						max-height: 10000px;
 					}
 					.b-footer .b-footer-main .b-block .sections > li ul {
 
@@ -2254,6 +2258,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 	}
 .b-text {
 	text-align: left;
+	max-height: 10000px;
 }
 	.b-text h1 {
 
