@@ -787,9 +787,10 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 					.filter-item select {
 						position: absolute;
 						opacity: 0;
-						top: 44px;
-    					left: 0;
-    					width: 100%;
+						top: 41px;
+						left: 0;
+						width: 100%;
+						height: 61px;
 					}
 					.b-category .filter-item .variants{
 						min-width: 161px;
