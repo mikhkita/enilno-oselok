@@ -137,7 +137,7 @@ class QueueController extends Controller
         $criteria->addCondition("state_id!=4");
         $criteria->limit = 300;
 
-        $model = Queue::model()->with(array("advert.good.fields"=>array("condition"=>"fields.attribute_id=3"),"advert.good.fields.variant","advert.good.fields.attribute","advert.place.category","advert.city","advert.type","state","action"))->findAll($criteria);
+        $model = Queue::model()->with(array("advert.good.type"=>array("select"=>"good_type.name","alias"=>"good_type"),"advert.good.fields"=>array("condition"=>"fields.attribute_id=3"),"advert.good.fields.variant","advert.good.fields.attribute","advert.place.category","advert.city","advert.type","state","action"))->findAll($criteria);
 
         $options = array(
 			'data'=>$model,

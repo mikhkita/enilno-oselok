@@ -153,10 +153,16 @@ class Queue extends CActiveRecord
 			$start = time() + $offset;
 			if( isset(Queue::model()->codes[$code]) ){
 				$values = array();
+				$toDelete = array();
 				foreach ($adverts as $advert){
 					$item = array("advert_id" => isset($advert->id)?$advert->id:$advert, "action_id" => Queue::model()->codes[$code], "start" => NULL );
 					if( $offset > 0 || $interval > 0 )
 						$item["start"] = date("Y-m-d H:i:s", $start);
+
+					if( $code == "delete" && $advert->url === NULL ){
+						array_push($toDelete, $advert);	
+						continue;
+					}
 
 					if( $advert->place->category_id == 2048 ){
 						$last = Queue::model()->with("advert.place")->find(array("limit"=>1,"order"=>"start DESC","condition"=>"place.category_id=2048 AND start IS NOT NULL AND advert.city_id=".$advert->city_id));
@@ -164,9 +170,12 @@ class Queue extends CActiveRecord
 						$to = (( isset($city_settings[$advert->city_id]) )?$city_settings[$advert->city_id]->avito_delay:30)*1.1;
 						$item["start"] = date("Y-m-d H:i:s", ($last)?(strtotime($last->start)+rand($from*60,$to*60)):$start );
 					}
+
 					array_push($values, $item);
 					$start += $interval;
 				}
+
+				Advert::delAll($toDelete);
 				
 				Controller::insertValues(Queue::tableName(),$values);
 				return true;

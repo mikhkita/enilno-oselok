@@ -423,7 +423,7 @@ class IntegrateController extends Controller
 
         $place_name = $this->getPlaceName($advert->place->category_id);
 
-        // $queue->setState("processing");
+        $queue->setState("processing");
 
         $dynamic = $this->getDynObjects(array(
             57 => $advert->place->category_id,
@@ -468,7 +468,7 @@ class IntegrateController extends Controller
 
         $fields = $place->generateFields($fields,$advert->good->good_type_id);
 
-        print_r($fields);
+        // print_r($fields);
         // die();
         
         $place->setUser($account->login, $account->password);
@@ -526,7 +526,7 @@ class IntegrateController extends Controller
             }
 
             Log::debug("Действие над ".$advert->good->fields_assoc[3]->value." в аккаунте ".$account->login." прошло успешно");
-            // $queue->delete();
+            $queue->delete();
         }else{
             Log::debug("Действие над ".$advert->good->fields_assoc[3]->value." в аккаунте ".$account->login." прошло с ОШИБКОЙ");
             $queue->setState("error");

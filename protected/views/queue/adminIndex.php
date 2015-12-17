@@ -25,7 +25,7 @@
 			<? foreach ($data as $i => $item): ?>
 				<tr<?if(isset($_GET["id"]) && $item->id == $_GET["id"]):?> class="b-refresh"<?endif;?>>
 					<td><?=$item->id?></td>
-					<td class="align-left">#<?=$item->advert->good->fields_assoc[3]->value?> <?=$item->advert->place->category->value?> <b><?=$item->advert->city->value?></b> <?=$item->advert->type->value?></td>
+					<td class="align-left">#<?=$item->advert->good->fields_assoc[3]->value?> <?=$item->advert->place->category->value?> <?=$item->advert->good->type->name?> <b><?=$item->advert->city->value?></b> <?=$item->advert->type->value?></td>
 					<td><?=$item->action->name?></td>
 					<td><?=(($item->start)?date('d-m-Y H:i:s', strtotime($item->start)):"")?></td>
 					<td><span class="live-<?=$item->state->code?>"><?=$item->state->name?></span></td>

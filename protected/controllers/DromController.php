@@ -189,42 +189,38 @@ class DromController extends Controller
     }
 
     public function actionAdminUpload() {
-        $arr = array();
-        $i = 0;
-        $handle = @fopen(Yii::app()->basePath.'/disc.txt', "r");
+        $insertAdverts = array();
+        $insertCities = array();
+        $handle = @fopen(Yii::app()->basePath.'/txt_adv.txt', "r");
         if ($handle) {
             while (($buffer = trim(fgets($handle))) != "") {
                 $temp = explode(" ", $buffer);
-                $url = end(explode("-", $temp[3]));
-                $arr[$i]['url'] = substr($url,0, -5);
-                $arr[$i]['place_id'] = 10;
-                $arr[$i]['good_id'] = $temp[0];
-                $arr[$i]['city_id'] = $temp[1];
-                $arr[$i]['type_id'] = $temp[2];
-                $i++;
+
+                array_push($insertAdverts, array(
+                    'url' => end(explode("_", $temp[3])),
+                    'place_id' => 12,
+                    'good_id' => $temp[0],
+                    'city_id' => $temp[1],
+                    'type_id' => $temp[2],
+                ));
+
+                array_push($insertCities, array(
+                    "attribute_id" => 60,
+                    "good_id" => $temp[0],
+                    "variant_id" => $temp[1],
+                ));
             }
+
+            var_dump($insertCities);
+            var_dump($insertAdverts);
+
             if (!feof($handle)) {
                 echo "Error: unexpected fgets() fail\n";
             }
             fclose($handle);
-        }
-        $handle = @fopen(Yii::app()->basePath.'/tire.txt', "r");
-        if ($handle) {
-            while (($buffer = trim(fgets($handle))) != "") {
-                $temp = explode(" ", $buffer);
-                $url = end(explode("-", $temp[3]));
-                $arr[$i]['url'] = substr($url,0, -5);
-                $arr[$i]['place_id'] = 9;
-                $arr[$i]['good_id'] = $temp[0];
-                $arr[$i]['city_id'] = $temp[1];
-                $arr[$i]['type_id'] = $temp[2];
-                $i++;
-            }  
-            if (!feof($handle)) {
-                echo "Error: unexpected fgets() fail\n";
-            }
-            fclose($handle);
-            $this->insertValues(Advert::tableName(),$arr);
+
+            $this->insertValues(Advert::tableName(),$insertAdverts);
+            $this->insertValues(GoodAttribute::tableName(),$insertCities);
         }
     }
     public function actionAdminIndex(){
