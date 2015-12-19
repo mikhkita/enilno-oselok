@@ -569,9 +569,11 @@ class Good extends GoodFilter
 			"variant_id" => NULL
 		);
 		if($attr_type->list) {
-			$model = Attribute::model()->with('variants.variant')->find("attribute_id=".$attr_id." AND value='".$value."'");
-			if($model)  {
-				$temp["variant_id"] = $model->variants[0]->variant_id; 
+			if($attr_id == 27) {
+				$model = DictionaryVariant::model()->find("dictionary_id=117 AND value='".$value."'");
+			} else $model = Attribute::model()->with('variants.variant')->find("attribute_id=".$attr_id." AND value='".$value."'");
+			if($model) {
+				$temp["variant_id"] = ($attr_id == 27) ? $model->attribute_1 : $model->variants[0]->variant_id; 
 				array_push($fields, $temp);
 			} else {
 				$model = Attribute::model()->findbyPk($attr_id);
