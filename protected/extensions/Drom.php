@@ -263,6 +263,7 @@ Class Drom {
         $fields = array(
     		'code' => 3,
     		'realisation' => 43,
+            'city' => 27,
     		'price' => 20,
     		'inSetQuantity' => 28,
     		'quantity' => 98,
@@ -292,7 +293,7 @@ Class Drom {
 
         	$params[$fields['code']] = $good_code."p";
         	$params[$fields['realisation']] = $user_id;
-	        // $params['title'] = str_ireplace($html->find("span[data-field=subject] nobr",0)->plaintext,"",  $html->find("span[data-field=subject]",0)->plaintext);
+	        $params[$fields['city']] = str_ireplace(array('в','во'," "),"", $html->find("span[data-field=subject] nobr",0)->plaintext);
 	        $params[$fields['price']] = $html->find("div[itemprop=price]",0) ? $html->find("div[itemprop=price]",0)->getAttribute('content') : NULL;
 	        $params[$fields['inSetQuantity']] = $html->find("span[data-field=inSetQuantity]",0) ? array_shift(explode(" ш", $html->find("span[data-field=inSetQuantity]",0)->plaintext)) : NULL;   
 	        $params[$fields['quantity']] = "Количество комплектов: ".trim(array_shift(explode(" ш", $html->find("span[data-field=quantity]",0)->plaintext)))."\n\r";
@@ -331,7 +332,7 @@ Class Drom {
 	        if($good_type_id == 1) {
 	        	$params[$fields['tireModel']] .= "Модель шины: ".trim(str_ireplace($html->find("span[data-field=model] div",0)->plaintext,"",$html->find("span[data-field=model]",0)->plaintext))."\n\r";
                 if(count($html->find("span[data-field=marking]")) == 5) {
-                    $params[$fields['wheelDiameter']] = $html->find("span[data-field=marking] a",1)->plaintext;
+                    $params[$fields['wheelDiameter']] = $html->find("span[data-field=marking] a",0)->plaintext;
                     $marking = 2;
                 }
 	        } 
@@ -353,9 +354,9 @@ Class Drom {
                         if($params[$fields['wheelSeason']] == "Без шипов") $params[$fields['wheelSeason']] = "Нешипованные";
                     }
                 }
-
-		        $params[$fields['wheelTireWear']] = $html->find("span[data-field=wheelTireWear]",0) ? str_replace('%',"",$html->find("span[data-field=wheelTireWear]",0)->plaintext) : NULL;
-		        if(strripos(trim($html->find("span[data-field=marking]",$marking)->plaintext), "мм.")) {
+		        $params[$fields['wheelTireWear']] = $html->find("span[data-field=wheelTireWear]",0) ? trim(str_replace('%',"",$html->find("span[data-field=wheelTireWear]",0)->plaintext)) : NULL;
+		        if($params[$fields['wheelTireWear']] || $params[$fields['wheelTireWear']] == 0) $params[$fields['condition']] = ($params[$fields['wheelTireWear']] == 0) ? "Новые" : "Б/у";
+                if(strripos(trim($html->find("span[data-field=marking]",$marking)->plaintext), "мм.")) {
                     $params[$fields['tireWidth']] = str_replace(array('мм.','"'),"",$html->find("span[data-field=marking]",$marking)->plaintext);
                 } else $params[$fields['tireHeight']] = str_replace(array('мм.','"'),"",$html->find("span[data-field=marking]",$marking)->plaintext);
 
