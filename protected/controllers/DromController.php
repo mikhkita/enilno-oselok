@@ -191,14 +191,14 @@ class DromController extends Controller
     public function actionAdminUpload() {
         $insertAdverts = array();
         $insertCities = array();
-        $handle = @fopen(Yii::app()->basePath.'/txt_adv.txt', "r");
+        $handle = @fopen(Yii::app()->basePath.'/txt_adv_tire.txt', "r");
         if ($handle) {
             while (($buffer = trim(fgets($handle))) != "") {
                 $temp = explode(" ", $buffer);
 
                 array_push($insertAdverts, array(
                     'url' => end(explode("_", $temp[3])),
-                    'place_id' => 12,
+                    'place_id' => 11,
                     'good_id' => $temp[0],
                     'city_id' => $temp[1],
                     'type_id' => $temp[2],

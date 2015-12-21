@@ -26,6 +26,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
     <link rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/html/css/select2.css" type="text/css">
     <link rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/html/css/jquery.mobile.custom.structure.css" type="text/css">
     <link rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/html/css/jquery.mobile.custom.theme.css" type="text/css">
+    <link rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/html/css/stroll.css" type="text/css">
     <link rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/html/css/KitAnimate.css" type="text/css">
     <link rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/html/css/layout.css" type="text/css">
 
@@ -73,6 +74,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
                 <li><a href="<?=Yii::app()->createUrl('/payment')?>" class="b-mobile-menu-a">Оплата</a></li>
                 <li><a href="<?=Yii::app()->createUrl('/contacts')?>" class="b-mobile-menu-a">Контакты</a></li>
             </ul>
+            <a href="tel:+79095430402" class="b-menu-call b-orange-butt">Позвонить</a>
         </div>
         <div class="b b-menu">
             <div class="b-block">
@@ -186,10 +188,6 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
             </div>
         </div>
     </div>
-    <? 
-        // list($queryCount, $queryTime) = Yii::app()->db->getStats();
-        // echo "Кол-во запросов: $queryCount, Общее время запросов: ".sprintf('%0.5f',$queryTime)."s";
-    ?>
 <div style="display:none;">
     <div id="b-popup-city"></div>
     <div id="b-popup-callback">
@@ -265,6 +263,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
 <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/html/js/KitAnimate.js"></script>
 <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/html/js/device.js"></script>
 <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/html/js/select2.full.min.js"></script>
+<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/html/js/stroll.js"></script>
 <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/html/js/i18n/ru.js"></script>
 <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/html/js/KitSend.js"></script>
 <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/html/js/main.js"></script>

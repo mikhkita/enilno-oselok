@@ -401,6 +401,12 @@ class GoodController extends Controller
 
 	public function actionAdminIndex($partial = false, $good_type_id = false,$sort_field = NULL,$sort_type = "ASC",$with_photos = NULL)
 	{
+		$attr_arr = 'filter';
+		$int_attr_arr = "int";
+
+		if( isset($_POST["clear"]) )
+			$_POST = array($attr_arr=>array(),$int_attr_arr=>array());
+
 		unset($_GET["partial"]);
 
 		if( isset($_GET["delete"]) ){
@@ -419,19 +425,17 @@ class GoodController extends Controller
 
 		$goodType = GoodType::model()->with("fields")->findByPk($good_type_id);
 
-		$attr_arr = 'filter';
-		$int_attr_arr = "int";
 		$params = array(
 			1 => array(
-				"FILTER" => array(43,26,23,27,16),
+				"FILTER" => array(43,36,26,23,27,16),
 				"FILTER_NAMES" => array(43=>41),
 			),
 			2 => array(
-				"FILTER" => array(43,26,27,70),
+				"FILTER" => array(43,36,26,27,70,66,67),
 				"FILTER_NAMES" => array(43=>41),
 			),
 			3 => array(
-				"FILTER" => array(43,26,23,27,16),
+				"FILTER" => array(43,36,26,23,27,16),
 				"FILTER_NAMES" => array(43=>41),
 			),
 		);
@@ -468,14 +472,20 @@ class GoodController extends Controller
 				$this->setUserParam("GOOD_FILTER_".$good_type_id,array());
 			}
 			if(isset($_POST[$attr_arr])) $this->setUserParam("GOOD_FILTER_".$good_type_id,$_POST[$attr_arr]);
+			if(isset($_POST[$int_attr_arr])) $this->setUserParam("GOOD_FILTER_INT_".$good_type_id,$_POST[$int_attr_arr]);
 
 			$filter_values = $this->getUserParam("GOOD_FILTER_".$good_type_id) ? $this->getUserParam("GOOD_FILTER_".$good_type_id,false,true) : array();
+			$filter_values_int = $this->getUserParam("GOOD_FILTER_INT_".$good_type_id) ? $this->getUserParam("GOOD_FILTER_INT_".$good_type_id,false,true) : array();
+
+			foreach ($filter_values_int as $key => $value) {
+				$filter_values_int[$key] = (array)$value;
+			}			
 			
 			$goods = Good::model()->filter(
 				array(
 					"good_type_id"=>$good_type_id,
 					"attributes"=>$filter_values,
-					"int_attributes"=>isset( $_POST[$int_attr_arr] )?$_POST[$int_attr_arr]:array()
+					"int_attributes"=>$filter_values_int
 				)
 			)->sort( 
 				$sort
@@ -502,7 +512,9 @@ class GoodController extends Controller
 			'attributes' => $attributes,
 			'labels' => $labels,
 			'arr_name' => $attr_arr,
+			'arr_name_int' => $int_attr_arr,
 			'filter_values' => $filter_values,
+			'filter_values_int' => $filter_values_int,
 			'good_count' => $goods["count"],
 			'sort_field' => $sort['field'],
 			'sort_type' => $sort_type,
@@ -524,10 +536,11 @@ class GoodController extends Controller
 		}
 
 		$criteria = new CDbCriteria();
-		$criteria->with = array("good_filter"=>array("select"=>"good_type_id"));
+		$criteria->with = array("good_filter"=>array("select"=>"good_type_id"),"variant"=>array("select"=>"variant.sort"));
 		$criteria->condition = "good_filter.good_type_id = ".$good_type_id;
 	    $criteria->addInCondition("t.attribute_id",$array);
 	    $criteria->group = "t.variant_id";
+	    $criteria->order = "variant.sort ASC";
 
 		$model = GoodAttribute::model()->with(array("attribute","variant"))->findAll($criteria);
 
@@ -547,6 +560,12 @@ class GoodController extends Controller
 						$variant = $list[$i];
 					}
 			}
+		}
+
+		if( count($array) ){
+			$fromto = Attribute::model()->findAll(array("condition"=>"list!=1 AND id IN (".implode(",", $array).")"));
+			foreach ($fromto as $key => $attr)
+				$result[$attr->id] = array("VIEW"=>"FROMTO");
 		}
 
 		return $result;

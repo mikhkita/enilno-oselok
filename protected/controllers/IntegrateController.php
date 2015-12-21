@@ -500,6 +500,12 @@ class IntegrateController extends Controller
             case 'updateImages':
 
                 Log::debug("Обновление фотографий ".$advert->good->fields_assoc[3]->value." в аккаунте ".$account->login);
+                $result = $place->updateAdvert($advert->url,$fields,$images,true);
+
+                break;
+            case 'updateWithImages':
+
+                Log::debug("Обновление с фотографиями ".$advert->good->fields_assoc[3]->value." в аккаунте ".$account->login);
                 $result = $place->updateAdvert($advert->url,$fields,$images);
 
                 break;

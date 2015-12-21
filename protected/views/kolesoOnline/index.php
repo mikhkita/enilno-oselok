@@ -42,16 +42,24 @@
                                 <h5><?=$label?></h5>
                                 <div class="input"></div>   
                                     <div class="variants clearfix">
+                                        <? if($mobile): ?>
+                                        <h4><?=$label?></h4>
+                                        <? endif; ?>
                                         <? foreach ($disc_filter[$attr_id] as $key => $col): ?>
-                                            <div>
+                                            <ul class="wave">
                                                 <? foreach ($col as $item): ?>
-                                                    <label>
-                                                        <input type="checkbox" name="arr[<?=$attr_id?>][]" value="<?=$item['variant_id']?>">
+                                                <li>
+                                                    <div>
+                                                        <input type="checkbox" id="disc_<?=$item['variant_id']?>" name="arr[<?=$attr_id?>][]" value="<?=$item['variant_id']?>">
                                                         <span onselectstart="return false;"><?=str_replace(" ", "&nbsp;", $item['value'])?></span>
-                                                    </label>
+                                                    </div>
+                                                </li>
                                                 <? endforeach; ?>
-                                            </div>
+                                            </ul>
                                         <? endforeach; ?>
+                                        <? if($mobile): ?>
+                                        <a href="#" class="b-variants-close b-orange-butt">Закрыть</a>
+                                        <? endif; ?>
                                     </div>
                             </div>
                         <? endforeach; ?>
@@ -112,19 +120,26 @@
                             <div class="filter-item">
                                 <h5><?=$label?></h5>
                                 <div class="input"></div>             
-                                    <div class="variants clearfix">
-                                        <? foreach ($tire_filter[$attr_id] as $key => $col): ?>
-                                            <div>
-                                                <? foreach ($col as $item): ?>
-                                                    <label>
-                                                        <input type="checkbox" name="arr[<?=$attr_id?>][]" value="<?=$item['variant_id']?>">
+                                <div class="variants clearfix">
+                                    <? if($mobile): ?>
+                                    <h4><?=$label?></h4>
+                                    <? endif; ?>
+                                    <? foreach ($tire_filter[$attr_id] as $key => $col): ?>
+                                        <ul class="wave">
+                                            <? foreach ($col as $item): ?>
+                                                <li>
+                                                    <div>
+                                                        <input type="checkbox" id="tire_<?=$item['variant_id']?>" type="checkbox" name="arr[<?=$attr_id?>][]" value="<?=$item['variant_id']?>">
                                                         <span onselectstart="return false;"><?=str_replace(" ", "&nbsp;", $item['value'])?></span>
-                                                    </label>
-                                                <? endforeach; ?>
-                                            </div>
-                                        <? endforeach; ?>
-                                    </div>
-                                <? endif; ?>
+                                                    </div>
+                                                </li>
+                                            <? endforeach; ?>
+                                        </ul>
+                                    <? endforeach; ?>
+                                    <? if($mobile): ?>
+                                    <a href="#" class="b-variants-close b-orange-butt">Закрыть</a>
+                                    <? endif; ?>
+                                </div>
                             </div>  
                         <? endforeach; ?>
                         <? if($ind == 1): ?>
@@ -183,19 +198,26 @@
                             <div class="filter-item">
                                 <h5><?=$label?></h5>
                                 <div class="input"></div>    
-                                    <div class="variants clearfix">
-                                        <? foreach ($wheel_filter[$attr_id] as $key => $col): ?>
-                                            <div>
-                                                <? foreach ($col as $item): ?>
-                                                    <label>
-                                                        <input type="checkbox" name="arr[<?=$attr_id?>][]" value="<?=$item['variant_id']?>">
+                                <div class="variants clearfix">
+                                    <? if($mobile): ?>
+                                    <h4><?=$label?></h4>
+                                    <? endif; ?>
+                                    <? foreach ($wheel_filter[$attr_id] as $key => $col): ?>
+                                        <ul class="wave">
+                                            <? foreach ($col as $item): ?>
+                                                <li>
+                                                    <div>
+                                                        <input type="checkbox" id="wheel_<?=$item['variant_id']?>" type="checkbox" name="arr[<?=$attr_id?>][]" value="<?=$item['variant_id']?>">
                                                         <span onselectstart="return false;"><?=str_replace(" ", "&nbsp;", $item['value'])?></span>
-                                                    </label>
-                                                <? endforeach; ?>
-                                            </div>
-                                        <? endforeach; ?>
-                                    </div>
-                                <? endif; ?>
+                                                    </div>
+                                                </li>
+                                            <? endforeach; ?>
+                                        </ul>
+                                    <? endforeach; ?>
+                                    <? if($mobile): ?>
+                                    <a href="#" class="b-variants-close b-orange-butt">Закрыть</a>
+                                    <? endif; ?>
+                                </div>
                             </div>
                         <? endforeach; ?>
                     </div>

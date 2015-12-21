@@ -1,5 +1,19 @@
-<h1><?=$this->adminMenu["cur"]->name?></h1>
-
+<div class="b-section-nav clearfix">
+	<div class="b-section-nav-back clearfix">
+		<ul style="border-left: 0px;" class="b-section-menu clearfix left">
+			<li><a href="<?php echo $this->createUrl('/advert/adminupdrom')?>" class="ajax-form ajax-update">Поднять</a></li>
+			<li><a>Обновить</a>
+				<ul class="b-section-submenu">
+					<li><a href="<?php echo $this->createUrl('/advert/adminaction', array('action'=> "update"))?>" class="ajax-form ajax-update">Без&nbsp;фотографий</a></li>
+					<li><a href="<?php echo $this->createUrl('/advert/adminaction', array('action'=> "updateWithImages"))?>" class="ajax-form ajax-update">С&nbsp;фотографиями</a></li>
+					<li><a href="<?php echo $this->createUrl('/advert/adminaction', array('action'=> "updateImages"))?>" class="ajax-form ajax-update">Только&nbsp;Фотографии</a></li>
+				</ul>
+			</li>
+			<li><a href="<?php echo $this->createUrl('/advert/adminaction', array('action'=> "delete"))?>" class="ajax-form ajax-update">Удалить</a></li>
+		</ul>
+	</div>
+</div>
+<h1 class="b-with-nav"><?=$this->adminMenu["cur"]->name?></h1>
 <?php $htmlopt = array("separator"=>"","template"=>"<div class='b-advert-checkbox'>{input}{label}</div>");  
 $form=$this->beginWidget('CActiveForm',array('id'=>'adverts-form',"action" => $this->createUrl('/advert/adminindex'),"method" => "GET")); ?>
 <div class="b-advert-filter clearfix">
@@ -33,6 +47,7 @@ $form=$this->beginWidget('CActiveForm',array('id'=>'adverts-form',"action" => $t
 	<?php echo CHtml::submitButton("Поиск",array("class"=> "b-butt advert-butt")); ?>
 </div>
 <div id="adverts-form-hidden" style="display:none;"></div>
+<p><br>Найдено объявлений: <?=$advert_count?></p>
 <?php $this->endWidget(); ?>
 	<table class="b-table b-advert-table" border=1>
 		<tr>
@@ -66,17 +81,6 @@ $form=$this->beginWidget('CActiveForm',array('id'=>'adverts-form',"action" => $t
 			</tr>
 		<? endif; ?>
 	</table>
-	<div class="b-upadvert-input-cont clearfix">
-		<div class="left">
-			<label for="offset">Задержка</label>
-			<input type="number" id="offset" class="offset" name="offset" placeholder="В минутах">
-		</div>
-		<div class="left">
-			<label for="interval">Интервал</label>
-			<input type="number" id="interval" class="interval" name="interval" placeholder="В минутах">
-		</div>
-		<a href="<?php echo $this->createUrl('/advert/adminpayadverts')?>" class="b-payadvert b-butt left">Поднять</a>
-	</div>
 	<div class="b-pagination-cont clearfix">
         <?php $this->widget('CLinkPager', array(
 	        'header' => '',
@@ -86,7 +90,7 @@ $form=$this->beginWidget('CActiveForm',array('id'=>'adverts-form',"action" => $t
 	        'prevPageLabel' => '< назад',
 	        'nextPageLabel' => 'далее >'
 	    )) ?>
-
-        <!-- <div class="b-lot-count">Всего товаров: <?=$good_count?></div> -->
+	
+        <div class="b-lot-count">Найдено объявлений: <?=$advert_count?></div>
     </div>
    

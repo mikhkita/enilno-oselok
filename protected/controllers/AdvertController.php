@@ -13,7 +13,7 @@ class AdvertController extends Controller
 	{
 		return array(
 			array('allow',
-				'actions'=>array('adminIndex','adminPayAdverts'),
+				'actions'=>array('adminIndex','adminUpDrom','adminAction'),
 				'roles'=>array('manager'),
 			),
 			array('deny',
@@ -22,15 +22,75 @@ class AdvertController extends Controller
 		);
 	}
 
-	public function actionAdminPayAdverts(){
-		if( isset($_GET) ){
-			$adverts = Advert::filter($_GET,array('type','city','place.category'),array("good_id","id"))->getData();
-			$interval = isset($_GET["interval"])?intval($_GET["interval"])*60:0;
-			$offset = isset($_GET["offset"])?intval($_GET["offset"])*60:0;
+	public function actionAdminUpDrom(){
+		if( !isset($_SESSION["advert_filter"]) ) $_SESSION["advert_filter"] = array();
+
+		$filter = $_SESSION["advert_filter"];
+
+		$model = Attribute::model()->with('variants')->findByPk(37);
+		$allowed = array();
+		foreach ($model->variants as $variant)
+			if( $variant->variant_id != 869 )
+				array_push($allowed, $variant->variant_id);
+
+		if(isset($filter["Attr"])){
+			if( isset($filter["Attr"][37]) ){
+				foreach ($filter["Attr"][37] as $i => $val)
+					if( $val == "869" ) 
+						unset($filter["Attr"][37][$i]);
+			}else
+				$filter["Attr"][37] = $allowed;
+		}else
+			$filter["Attr"] = array(37 => $allowed);
+
+		
+		if( isset($_POST["data"]) ){
+			$adverts = Advert::filter($filter,array('type','city','place.category'),array("good_id","id"))->getData();
+			$interval = isset($_POST["interval"])?intval($_POST["interval"])*60:0;
+			$offset = isset($_POST["offset"])?intval($_POST["offset"])*60:0;
+
 			Queue::addAll($adverts,"payUp",$offset,$interval);
 
-			$this->redirect('/admin/queue/');
+			$this->actionAdminIndex(true);
+		}else{
+			$advert_count = Advert::filter($filter,array('type','city','place.category'),array("good_id","id"))->totalItemCount;
+
+			$this->renderPartial('adminUpDrom',array(
+				'advert_count' => $advert_count
+			));
 		}
+	}
+
+	public function actionAdminAction($action){
+		if( !isset($_SESSION["advert_filter"]) ) $_SESSION["advert_filter"] = array();
+
+		$action_model = Action::model()->find("code='$action'");
+		if( !$action_model ) return false;
+		
+		if( isset($_POST["data"]) ){
+			$adverts = Advert::filter($_SESSION["advert_filter"],array('type','city','place.category'),array("*"))->getData();
+			$random_offset = isset($_POST["random_offset"])?intval($_POST["random_offset"]):24;
+			$offset = isset($_POST["offset"])?intval($_POST["offset"]):0;
+
+			if( $action == "delete" ){
+				if( count($adverts) )
+    				Queue::model()->deleteAll("action_id!=".Queue::model()->codes[$action]." AND state_id != 2 AND advert_id IN (".implode(",", $this->getIds($adverts)).")");
+			}
+
+			$adverts = Queue::checkExist($adverts, $action);
+
+			Queue::addAll($adverts, $action, 0, 0, $offset, $random_offset);
+			
+			$this->actionAdminIndex(true);
+		}else{
+			$advert_count = Advert::filter($_SESSION["advert_filter"],array('type','city','place.category'),array("good_id","id"))->totalItemCount;
+
+			$this->renderPartial('adminAction',array(
+				'advert_count' => $advert_count,
+				'action' => $action_model
+			));
+		}
+
 	}
 
 	public function actionAdminIndex($partial = false, $good_type_id = false)
@@ -56,6 +116,7 @@ class AdvertController extends Controller
 		$data['Attr'][58] = $this->splitByCols(5,$data['Attr'][58]);
 		
 		if($_GET) {
+			$_SESSION["advert_filter"] = $_GET;
 			$dataProvider = Advert::filter($_GET,array('type','city','place.category'));
 			$pages = $dataProvider->getPagination();
 			$temp = array();
@@ -63,19 +124,22 @@ class AdvertController extends Controller
 				array_push($temp, $advert->good_id);
 			}
 			$temp = GoodAttribute::getCodeById($temp);
+			$advert_count = $dataProvider->totalItemCount;
 			foreach ($dataProvider->getData() as $i => $advert) {
 				if( !isset($adverts_arr[$advert->place->category->value]) ) $adverts_arr[$advert->place->category->value] = array();
 				if( !isset($adverts_arr[$advert->place->category->value][$temp[$advert->good_id]]) ) $adverts_arr[$advert->place->category->value][$temp[$advert->good_id]] = array();
 				array_push($adverts_arr[$advert->place->category->value][$temp[$advert->good_id]], $advert);
 			}
-			
-
+		}else{
+			$_SESSION["advert_filter"] = array();
 		}
+
 		if( !$partial ){
 			$this->render('adminIndex',array(
 				'adverts_arr' => $adverts_arr,
 				'data'=>$data,
 				"pages" => $pages,
+				'advert_count' => $advert_count,
 				'labels'=> Advert::attributeLabels()
 			));
 		}else{
@@ -83,6 +147,7 @@ class AdvertController extends Controller
 				'adverts_arr' => $adverts_arr,
 				'data'=>$data,
 				"pages" => $pages,
+				'advert_count' => $advert_count,
 				'labels'=> Advert::attributeLabels()
 			));
 		}

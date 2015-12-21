@@ -173,14 +173,14 @@ Class Drom {
         return false;
     }
 
-    public function updateAdvert($advert_id,$params,$images = NULL) {
+    public function updateAdvert($advert_id,$params,$images = NULL,$only_images = false) {
         if($images) {
             foreach ($images as &$image_path) {
                 $image_path = json_decode($this->curl->request("http://baza.drom.ru/upload-image-jquery",array('up[]' => new CurlFile(Yii::app()->basePath.DIRECTORY_SEPARATOR.'..'.$image_path))))->id;
             }
             $params['images'] = array('images' => $images);
         }
-        $options = $this->setOptions($params,$advert_id);    
+        $options = $this->setOptions($params,$advert_id,$only_images);    
         $result = json_decode($this->curl->request("http://baza.drom.ru/api/1.0/save/bulletin",$options));
         return $result->id;
     }
@@ -205,13 +205,15 @@ Class Drom {
         return ( $html->find('.bulletin_expired_notification h2',0) && $html->find('.bulletin_expired_notification h2',0)->plaintext == "Вы удалили объявление" );
     }
 
-    public function setOptions($params,$advert_id = NULL) {
+    public function setOptions($params,$advert_id = NULL,$only_images = false) {
         $options = array(
             'cityId' => $params['cityId'],
             'bulletinType'=>'bulletinRegular',
             'directoryId'=> $params['dirId'],
-            'fields'=> $params
         );
+
+        if( !$only_images )
+            $options["fields"] = $params;
        
         if($advert_id) {
             if(isset($params['images'])) {

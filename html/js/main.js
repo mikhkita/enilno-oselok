@@ -1,7 +1,10 @@
 $(document).ready(function(){	
     var myWidth,myHeight,
         big = 3,
-        nowBig = 1;
+        nowBig = 1,
+        isMobile = device.mobile();
+
+    // isMobile = true;
     function resize(){
        if( typeof( window.innerWidth ) == 'number' ) {
             myWidth = window.innerWidth;
@@ -14,6 +17,9 @@ $(document).ready(function(){
             myWidth = document.body.clientWidth;
             myHeight = document.body.clientHeight;
         }
+
+        if( isMobile )
+            $(".variants ul").css("height",myHeight-280);
         $(".b-content").css("min-height",myHeight-$(".b-header").height()-$(".b-footer").height());
 
         nowBig = ( myWidth > 900 )?5:5;
@@ -285,15 +291,47 @@ $(document).ready(function(){
         $this = $(this).parent();   
         if(!$this.hasClass("active")) {
             closeBubble();
-            // $(this).find(".variants").css("display","table");
-            $this.find(".variants").addClass("active");
-            // TweenLite.to($(this).find(".variants"), 0.3, { "scaleY" : 1, opacity: 1, ease : Cubic.easeOut } );
+
+            if( isMobile ){
+                $this.find(".variants").addClass("active").fadeIn(300);
+                TweenLite.to($this.find("h3,.variants ul,a.b-variants-close"), 0, { y : 150, opacity: 0, ease : Cubic.easeOut } );
+                TweenLite.to($this.find("h3"), 0.4, { y : 0, opacity: 1, delay: 0.1, ease : Cubic.easeOut } );
+                TweenLite.to($this.find(".variants ul"), 0.4, { y : 0, opacity: 1, delay: 0.2, ease : Cubic.easeOut } );
+                TweenLite.to($this.find("a.b-variants-close"), 0.4, { y : 0, opacity: 1, delay: 0.3, ease : Cubic.easeOut } );
+            }else{
+                $this.find(".variants").addClass("active");
+            }
+
             $this.addClass("active");
             if( $this.position().left > 480 ) {
                 $this.find(".variants").css("right","0");
             } else $this.find(".variants").css("left","0");
+            stroll.bind( $this.find(".variants ul") );
         } else closeBubble();
     });
+
+    if( isMobile ){
+        var touchstart = null,
+            touchmove = 0;
+        $(".variants ul li").on("touchstart",function(){
+            touchstart = $(this).find("input").attr("id");
+        }).on("touchend",function(){
+            if( touchstart == $(this).find("input").attr("id") && touchmove < 3 ) $(this).find("input").click();
+        });
+
+        $(".filter-item .variants").on('touchmove', function(e){ 
+            touchmove++;
+            e.preventDefault(); 
+        });
+
+        $("body").on("touchend",function(){
+            touchmove = 0;
+        });
+    }else{
+        $(".variants ul li").on("click",function(){
+            $(this).find("input").click();
+        })
+    }
 
     $(".variants input").change(function(){
         var obj = $(this).closest(".filter-item").find("input:checked"),
@@ -329,8 +367,12 @@ $(document).ready(function(){
     var active,open;
     function closeBubble(active){
         if( typeof active == "undefined" ) active = $(".filter-item.active");
-            active.removeClass('active');
+        active.removeClass('active');
+        if( isMobile ){
+            active.find('.variants').fadeOut(300).removeClass("active");
+        }else{
             active.find('.variants').removeClass("active");
+        }
     }
 
     $("body").on("mouseup",".variants *,.filter-item .input",function(){
@@ -342,6 +384,11 @@ $(document).ready(function(){
     }).bind("mouseup",function(){
         if( !open )
             closeBubble();
+    });
+
+    $(".b-variants-close").on("click touchstart",function(){
+        closeBubble();
+        return false;
     });
 
     $(".goods .gradient-grey .b-orange-butt").click(function(){
@@ -386,7 +433,7 @@ $(document).ready(function(){
         slidesToShow: 1,
         slidesToScroll: 1,
         arrows: false,
-        fade: (device.mobile())?false:true,
+        fade: (isMobile)?false:true,
     });
 
     $(".detail-thumb li").click(function(){
@@ -398,11 +445,12 @@ $(document).ready(function(){
 
     function openMenu(){
         $("body").addClass("mobile-menu-opened");
-        TweenLite.to($(".b-mobile-menu li"), 0, { y : 150, opacity: 0, ease : Cubic.easeOut } );
+        TweenLite.to($(".b-mobile-menu li,.b-menu-call"), 0, { y : 150, opacity: 0, ease : Cubic.easeOut } );
         $(".b-mobile-menu").fadeIn(200);
         $(".b-mobile-menu li").each(function(){
             TweenLite.to($(this), 0.4, { y : 0, opacity: 1, delay: 0.08*$(this).index()+0.1, ease : Cubic.easeOut } );
         });
+        TweenLite.to($(".b-menu-call"), 0.4, { y : 0, opacity: 1, delay: 0.08*($(".b-mobile-menu li").length+1)+0.1, ease : Cubic.easeOut } );
         return false;
     }
 
@@ -410,7 +458,7 @@ $(document).ready(function(){
     function closeMenu(){
         $("body").removeClass("mobile-menu-opened");
         $(".b-mobile-menu").fadeOut(300);
-        if( !$(this).hasClass("b-mobile-menu-a") && togLink == false ){
+        if( !$(this).hasClass("b-mobile-menu-a") && !$(this).hasClass("b-menu-call") && togLink == false ){
             return false;
         }else{
             togLink = true;

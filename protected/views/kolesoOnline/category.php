@@ -59,19 +59,26 @@
                             <div class="filter-item">
                                 <h5><?=$label?></h5>
                                 <div class="input">&nbsp;</div>  
-                                    <div class="variants clearfix">
-                                        <? foreach ($filter[$attr_id] as $key => $col): ?>
-                                            <div>
-                                                <? foreach ($col as $item): ?>
-                                                    <label>
-                                                        <input type="checkbox" name="arr[<?=$attr_id?>][]" value="<?=$item['variant_id']?>" <?=$item['checked']?>>
+                                <div class="variants clearfix">
+                                    <? if($mobile): ?>
+                                    <h4><?=$label?></h4>
+                                    <? endif; ?>
+                                    <? foreach ($filter[$attr_id] as $key => $col): ?>
+                                        <ul class="wave">
+                                            <? foreach ($col as $item): ?>
+                                                <li>
+                                                    <div>
+                                                            <input type="checkbox" id="var_<?=$item['variant_id']?>" name="arr[<?=$attr_id?>][]" value="<?=$item['variant_id']?>" <?=$item['checked']?>>
                                                         <span onselectstart="return false;"><?=str_replace(" ", "&nbsp;", $item['value'])?></span>
-                                                    </label>
-                                                <? endforeach; ?>
-                                            </div>
-                                        <? endforeach; ?>
-                                    </div>
-                                <? endif; ?>
+                                                    </div>
+                                                </li>
+                                            <? endforeach; ?>
+                                        </ul>
+                                    <? endforeach; ?>
+                                    <? if($mobile): ?>
+                                    <a href="#" class="b-variants-close b-orange-butt">Закрыть</a>
+                                    <? endif; ?>
+                                </div>
                             </div>
                         <? endforeach; ?>
                         </div>

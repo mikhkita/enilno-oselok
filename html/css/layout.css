@@ -797,15 +797,15 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 						min-width: 161px;
 						border-color: #ffad00 !important;
 					}
-						.filter-item .variants > div {
+						.filter-item .variants ul {
 							padding-right: 17px;
 							display: table-cell;
 						}
-						.filter-item .variants > div:last-child {
+						.filter-item .variants ul:last-child {
 							padding-right: 0;
 						}
 
-							.filter-item .variants label {
+							.filter-item .variants ul li {
 								display: block;
 								cursor: pointer;
 								margin-bottom: 10px;
@@ -842,7 +842,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 								left: 2px;
 								display: none;
 							}
-							.filter-item .variants label:hover span{
+							.filter-item .variants ul li:hover span{
 								text-decoration: underline;
 							}
 							.filter-item .variants input:checked + span {
@@ -939,7 +939,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 				.grey-block > div ul{
 				
 				}
-					.grey-block > div ul li{
+					.main-category.grey-block > div ul li{
 						border-bottom: 1px solid #e1e1e1;
 					}
 
