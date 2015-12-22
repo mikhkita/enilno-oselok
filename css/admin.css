@@ -499,10 +499,10 @@ td.b-photo-td{
             margin: 5px 3px 0px;
             vertical-align: top;
         }
-            .b-adverts-link span{
+            span.b-adverts-link p{
                 text-decoration: underline !important;
             }
-            .b-adverts-link:hover span{
+            span.b-adverts-link:hover p{
                 text-decoration: none !important;
             }
             .b-import-preview-table tr td{
@@ -724,6 +724,7 @@ td.b-photo-td{
         }
     .fancybox-skin .buttons{
         text-align: center;
+        margin-top: 15px;
     }
         .fancybox-skin .buttons input[type='submit'],
         .fancybox-skin .buttons input[type='button']{

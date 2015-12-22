@@ -60,16 +60,24 @@
                                 <h5><?=$label?></h5>
                                 <div class="input">&nbsp;</div>  
                                 <div class="variants clearfix">
+                                    <? if($mobile): ?>
+                                    <h4><?=$label?></h4>
+                                    <? endif; ?>
                                     <? foreach ($filter[$attr_id] as $key => $col): ?>
-                                        <div>
+                                        <ul class="wave">
                                             <? foreach ($col as $item): ?>
-                                                <label>
-                                                    <input type="checkbox" name="arr[<?=$attr_id?>][]" value="<?=$item['variant_id']?>" <?=$item['checked']?>>
-                                                    <span onselectstart="return false;"><?=str_replace(" ", "&nbsp;", $item['value'])?></span>
-                                                </label>
+                                                <li>
+                                                    <div>
+                                                            <input type="checkbox" id="var_<?=$item['variant_id']?>" name="arr[<?=$attr_id?>][]" value="<?=$item['variant_id']?>" <?=$item['checked']?>>
+                                                        <span onselectstart="return false;"><?=str_replace(" ", "&nbsp;", $item['value'])?></span>
+                                                    </div>
+                                                </li>
                                             <? endforeach; ?>
-                                        </div>
+                                        </ul>
                                     <? endforeach; ?>
+                                    <? if($mobile): ?>
+                                    <a href="#" class="b-variants-close b-orange-butt">Закрыть</a>
+                                    <? endif; ?>
                                 </div>
                             </div>
                         <? endforeach; ?>

@@ -15,8 +15,8 @@
 								<?=CHTML::checkBoxList($arr_name."[$field]", (isset($filter_values[$field]))?$filter_values[$field]:"", $item["VARIANTS"], array("separator"=>"","template"=>"<div class='b-filter-checkbox'>{input}{label}</div>")); ?>
 							<? endif;?>
 						<? elseif( $item["VIEW"] == "FROMTO" ): ?>
-							<?=CHTML::numberField($arr_name."[$field][FROM]", $filter_values[$field]["FROM"]); ?> - 
-							<?=CHTML::numberField($arr_name."[$field][TO]", $filter_values[$field]["TO"]); ?>
+							<?=CHTML::numberField($arr_name_int."[$field][min]", $filter_values_int[$field]["min"]); ?> - 
+							<?=CHTML::numberField($arr_name_int."[$field][max]", $filter_values_int[$field]["max"]); ?>
 						<? endif; ?>
 					</div>
 				</div>
@@ -26,6 +26,7 @@
 		<div class="row buttons">
 			<?=CHTML::submitButton('Применить')?>
 			<input type="hidden" name="filter-active" value="1">
+			<input type="button" class="b-good-clear-filter" value="Сбросить">
 			<input type="button" onclick="$.fancybox.close(); return false;" value="Закрыть">
 		</div>
 	<?=CHTML::endForm()?>

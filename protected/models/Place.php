@@ -112,6 +112,13 @@ class Place extends CActiveRecord
 		));
 	}
 
+	public function getFieldByPlaceAndType($place,$type){
+		foreach ($this->cities as $i => $arr) {
+			if( $arr["PLACE"] == $place && $arr["TYPE"] == $type ) return $i;
+		}
+		return NULL;
+	}
+
 	public function getInters($category_id,$good_type_id,$unique = false)
 	{
 		$model = Place::model()->with("interpreters.interpreter")->find("t.category_id=$category_id AND t.good_type_id=$good_type_id");

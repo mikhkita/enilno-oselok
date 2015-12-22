@@ -120,7 +120,9 @@ class Advert extends CActiveRecord
 
 			$criteria = new CDbCriteria();
     		$criteria->addInCondition("id", $delete_arr);
-    		Advert::model()->deleteAll($criteria);		
+    		$adverts = Advert::model()->findAll($criteria);		
+    		foreach ($adverts as $i => $advert)
+    			$advert->delete();
     			
 			return true;
 		}
@@ -166,7 +168,7 @@ class Advert extends CActiveRecord
 		}
 
 		if(isset($params['Place'])) {
-	    	$criteria->addInCondition("place_id",$_GET['Place']);
+	    	$criteria->addInCondition("place_id",$params['Place']);
 	    	$model = Place::model()->findAll('id IN ('.implode(",", $params['Place']).')');
 			foreach ($model as $key => $place) {
 				$good_type_id[$place->goodType->id] = $place->goodType->id;
@@ -183,10 +185,10 @@ class Advert extends CActiveRecord
 				$criteria->order = "field(good_id,".implode(",", array_reverse($good_ids)).") DESC, t.id DESC";
 		}
 		if(isset($params['Attr'][37])) {
-	    	$criteria->addInCondition("type_id",$_GET['Attr'][37]);
+	    	$criteria->addInCondition("type_id",$params['Attr'][37]);
 	    }
 		if(isset($params['Attr'][58])) {
-	    	$criteria->addInCondition("city_id",$_GET['Attr'][58]);
+	    	$criteria->addInCondition("city_id",$params['Attr'][58]);
 	   	}
 
 	   	$options['criteria'] = $criteria;
@@ -206,9 +208,15 @@ class Advert extends CActiveRecord
 	}
 	
 	public function beforeDelete(){
-  		foreach ($this->queue as $key => $queue) {
+  		foreach ($this->queue as $key => $queue)
   			$queue->delete();
-  		}
+  		
+  		$place = Place::model()->findByPk($this->place_id);
+  		$field = Place::model()->getFieldByPlaceAndType($place->category_id,$this->type_id);
+
+  		if( $field !== NULL )
+  			GoodAttribute::model()->deleteAll("good_id=".$this->good_id." AND attribute_id=$field AND variant_id=".$this->city_id);
+
   		return parent::beforeDelete();
  	}
 }

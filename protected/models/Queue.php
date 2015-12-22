@@ -16,7 +16,8 @@ class Queue extends CActiveRecord
 		"update" => 2,
 		"delete" => 3,
 		"updateImages" => 4,
-		"payUp" => 5
+		"payUp" => 5,
+		"updateWithImages" => 6
 	);
 
 	public $states = array(
@@ -147,7 +148,7 @@ class Queue extends CActiveRecord
 		}
 	}
 
-	public function addAll($adverts = array(), $code = false, $offset = 0, $interval = 0){
+	public function addAll($adverts = array(), $code = false, $offset = 0, $interval = 0, $offset_avito = 0, $random_offset = 24){
 		if( count($adverts) && $code ){
 			$city_settings = Controller::getCitySettings();
 			$start = time() + $offset;
@@ -165,10 +166,18 @@ class Queue extends CActiveRecord
 					}
 
 					if( $advert->place->category_id == 2048 ){
-						$last = Queue::model()->with("advert.place")->find(array("limit"=>1,"order"=>"start DESC","condition"=>"place.category_id=2048 AND start IS NOT NULL AND advert.city_id=".$advert->city_id));
-						$from = (( isset($city_settings[$advert->city_id]) )?$city_settings[$advert->city_id]->avito_delay:30)*0.9;
-						$to = (( isset($city_settings[$advert->city_id]) )?$city_settings[$advert->city_id]->avito_delay:30)*1.1;
-						$item["start"] = date("Y-m-d H:i:s", ($last)?(strtotime($last->start)+rand($from*60,$to*60)):$start );
+						switch ( $code ) {
+							case 'add':
+								$last = Queue::model()->with("advert.place")->find(array("limit"=>1,"order"=>"start DESC","condition"=>"place.category_id=2048 AND start IS NOT NULL AND advert.city_id=".$advert->city_id));
+								$from = (( isset($city_settings[$advert->city_id]) )?$city_settings[$advert->city_id]->avito_delay:30)*0.9;
+								$to = (( isset($city_settings[$advert->city_id]) )?$city_settings[$advert->city_id]->avito_delay:30)*1.1;
+								$item["start"] = date("Y-m-d H:i:s", ($last)?(strtotime($last->start)+rand($from*60,$to*60)):$start );
+								break;
+							
+							default:
+								$item["start"] = date("Y-m-d H:i:s", intval(rand(intval($offset_avito*60*60), intval($random_offset*60*60))) + time() );
+								break;
+						}
 					}
 
 					array_push($values, $item);
@@ -183,6 +192,37 @@ class Queue extends CActiveRecord
 				return Log::error("Не найдено действие с кодом \"".$code."\" для добавления в очередь");
 			}
 		}
+	}
+
+	public function checkExist($adverts, $action){
+		$adverts_id = $this->getIds($adverts);
+		$action_id = Queue::model()->codes[$action];
+		$actions = array(Queue::model()->codes["delete"]);
+
+		if( !count($adverts_id) ) return array();
+
+		if( $action != "delete" )
+			array_push($actions, Queue::model()->codes["add"]);
+
+		if( !in_array($action_id, $actions) )
+			array_push($actions, $action_id);
+
+		if( $action == "updateImages" || $action == "update" )
+			array_push($actions, Queue::model()->codes["updateWithImages"]);
+
+		$queue = Yii::app()->db->createCommand()
+            ->select('*')
+            ->from(Queue::tableName().' t')
+            ->where("advert_id IN (".implode(",", $adverts_id).") AND action_id IN (".implode(",", $actions).")")
+            ->queryAll();
+
+        $queue = $this->getIds($queue, "advert_id");
+
+       	foreach ($adverts as $i => $advert)
+       		if( in_array($advert->id, $queue) )
+       			unset($adverts[$i]);
+
+       	return $adverts;
 	}
 
 	public function delAll($adverts = array(), $code = false){

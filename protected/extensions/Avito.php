@@ -106,7 +106,7 @@ Class Avito {
 			return false;
 		}
     }
-    public function updateAdvert($advert_id,$params,$images = NULL){
+    public function updateAdvert($advert_id,$params,$images = NULL,$only_images = false){
     	include_once Yii::app()->basePath.'/extensions/simple_html_dom.php';
 		$html = str_get_html($this->curl->request("https://www.avito.ru/".$advert_id));
 		$href = $html->find('.item_change',0)->href;

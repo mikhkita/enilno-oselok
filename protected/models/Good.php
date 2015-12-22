@@ -169,7 +169,7 @@ class Good extends GoodFilter
 		if(isset($options["int_attributes"]) && count($options["int_attributes"]))
 			foreach ($options["int_attributes"] as $id => $attribute)
 				if( count($attribute) ){
-					$criteria->addCondition('(good_type_id='.$options["good_type_id"].' AND fields.attribute_id='.$id.' '.(isset($attribute["min"])?(' AND fields.int_value>='.$attribute["min"]):'').(isset($attribute["max"])?' AND fields.int_value<='.$attribute["max"]:'').')','OR');
+					$criteria->addCondition('(good_type_id='.$options["good_type_id"].' AND fields.attribute_id='.$id.' '.((isset($attribute["min"]) && $attribute["min"] != "")?(' AND fields.int_value>='.$attribute["min"]):'').((isset($attribute["max"]) && $attribute["max"] != "")?' AND fields.int_value<='.$attribute["max"]:'').')','OR');
 					$count++;
 				}
 

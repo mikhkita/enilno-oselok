@@ -1380,6 +1380,12 @@ $(document).ready(function(){
         $(".b-place-state span[data-id='"+$(this).attr("data-id")+"']").removeClass("b-green").addClass("b-red");
     });
 
+    $("body").on("click",".b-good-clear-filter",function(){
+        $(this).parents("form").append("<input type='hidden' name='clear' value='1'>");
+        $(this).parents("form").submit();
+        return false;
+    });
+
     function bindTableForm(){
         if( $("#table-form").length ){
             $("#table-form").submit(function(){
