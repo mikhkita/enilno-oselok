@@ -2715,7 +2715,24 @@ ul.b-filter-list{
                         border-top: 1px solid #E8DEB8;
                         text-decoration: none;
                     }
-       
+.drom-user-parse {
+    margin: 20px auto;
+} 
+    .drom-user-parse .b-butt {
+        float: none;
+    }
+        .drom-user-parse label {
+            padding-left: 5px;
+            margin-right: 10px;
+        }
+        .drom-user-parse input[type=text] {
+            border-radius: 5px;
+            background: #FFF5D1;
+            border: 1px solid #452716;
+            padding: 4px 10px 3px;
+            font-size: 14px;
+            margin-right: 10px;
+        }
 @media screen and (max-width: 1500px){
     .b-hide-title{
         opacity: 0;

@@ -55,7 +55,6 @@
                                     </div>
                             </div>
                         <? endforeach; ?>
-
                         <? if($ind == 1): ?>
                             <div class="slide-type b-third clearfix">
                                 <div class="left">
@@ -112,19 +111,18 @@
                             <div class="filter-item">
                                 <h5><?=$label?></h5>
                                 <div class="input"></div>             
-                                    <div class="variants clearfix">
-                                        <? foreach ($tire_filter[$attr_id] as $key => $col): ?>
-                                            <div>
-                                                <? foreach ($col as $item): ?>
-                                                    <label>
-                                                        <input type="checkbox" name="arr[<?=$attr_id?>][]" value="<?=$item['variant_id']?>">
-                                                        <span onselectstart="return false;"><?=str_replace(" ", "&nbsp;", $item['value'])?></span>
-                                                    </label>
-                                                <? endforeach; ?>
-                                            </div>
-                                        <? endforeach; ?>
-                                    </div>
-                                <? endif; ?>
+                                <div class="variants clearfix">
+                                    <? foreach ($tire_filter[$attr_id] as $key => $col): ?>
+                                        <div>
+                                            <? foreach ($col as $item): ?>
+                                                <label>
+                                                    <input type="checkbox" name="arr[<?=$attr_id?>][]" value="<?=$item['variant_id']?>">
+                                                    <span onselectstart="return false;"><?=str_replace(" ", "&nbsp;", $item['value'])?></span>
+                                                </label>
+                                            <? endforeach; ?>
+                                        </div>
+                                    <? endforeach; ?>
+                                </div>
                             </div>  
                         <? endforeach; ?>
                         <? if($ind == 1): ?>
@@ -183,19 +181,18 @@
                             <div class="filter-item">
                                 <h5><?=$label?></h5>
                                 <div class="input"></div>    
-                                    <div class="variants clearfix">
-                                        <? foreach ($wheel_filter[$attr_id] as $key => $col): ?>
-                                            <div>
-                                                <? foreach ($col as $item): ?>
-                                                    <label>
-                                                        <input type="checkbox" name="arr[<?=$attr_id?>][]" value="<?=$item['variant_id']?>">
-                                                        <span onselectstart="return false;"><?=str_replace(" ", "&nbsp;", $item['value'])?></span>
-                                                    </label>
-                                                <? endforeach; ?>
-                                            </div>
-                                        <? endforeach; ?>
-                                    </div>
-                                <? endif; ?>
+                                <div class="variants clearfix">
+                                    <? foreach ($wheel_filter[$attr_id] as $key => $col): ?>
+                                        <div>
+                                            <? foreach ($col as $item): ?>
+                                                <label>
+                                                    <input type="checkbox" name="arr[<?=$attr_id?>][]" value="<?=$item['variant_id']?>">
+                                                    <span onselectstart="return false;"><?=str_replace(" ", "&nbsp;", $item['value'])?></span>
+                                                </label>
+                                            <? endforeach; ?>
+                                        </div>
+                                    <? endforeach; ?>
+                                </div>
                             </div>
                         <? endforeach; ?>
                     </div>

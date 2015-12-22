@@ -59,19 +59,18 @@
                             <div class="filter-item">
                                 <h5><?=$label?></h5>
                                 <div class="input">&nbsp;</div>  
-                                    <div class="variants clearfix">
-                                        <? foreach ($filter[$attr_id] as $key => $col): ?>
-                                            <div>
-                                                <? foreach ($col as $item): ?>
-                                                    <label>
-                                                        <input type="checkbox" name="arr[<?=$attr_id?>][]" value="<?=$item['variant_id']?>" <?=$item['checked']?>>
-                                                        <span onselectstart="return false;"><?=str_replace(" ", "&nbsp;", $item['value'])?></span>
-                                                    </label>
-                                                <? endforeach; ?>
-                                            </div>
-                                        <? endforeach; ?>
-                                    </div>
-                                <? endif; ?>
+                                <div class="variants clearfix">
+                                    <? foreach ($filter[$attr_id] as $key => $col): ?>
+                                        <div>
+                                            <? foreach ($col as $item): ?>
+                                                <label>
+                                                    <input type="checkbox" name="arr[<?=$attr_id?>][]" value="<?=$item['variant_id']?>" <?=$item['checked']?>>
+                                                    <span onselectstart="return false;"><?=str_replace(" ", "&nbsp;", $item['value'])?></span>
+                                                </label>
+                                            <? endforeach; ?>
+                                        </div>
+                                    <? endforeach; ?>
+                                </div>
                             </div>
                         <? endforeach; ?>
                         </div>
