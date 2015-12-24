@@ -106,12 +106,15 @@ Class Avito {
 			return false;
 		}
     }
+
     public function updateAdvert($advert_id,$params,$images = NULL,$only_images = false){
     	include_once Yii::app()->basePath.'/extensions/simple_html_dom.php';
-		$html = str_get_html($this->curl->request("https://www.avito.ru/".$advert_id));
-		$href = $html->find('.item_change',0)->href;
-		$href = "https://www.avito.ru".substr($href, 0, -3)."/edit";
+    	$result = $this->curl->request("https://www.avito.ru/".$advert_id);
+		$html = str_get_html($result);
+		$href = $html->find('meta[property="og:url"]',0)->getAttribute('content');
+		$href = $href."/edit";
 
+		$result = $this->curl->request($href);
 		$html = str_get_html( $this->curl->request($href));
 		$version = $html->find('input[name="version"]',0)->value;
 		if($images !== NULL) {
@@ -124,10 +127,13 @@ Class Avito {
 		
 		$params['version'] = $version;
 		$params['source'] = 'edit';	
+		$params['private'] = '1';	
 
 		$this->curl->request($href,$params);
    
-		$html = str_get_html($this->curl->request($href."/confirm",array('done' => "",'subscribe-position' => '1')));
+   		$result = $this->curl->request($href."/confirm",array('done' => "",'subscribe-position' => '1'));
+   		// print_r($result);
+		$html = str_get_html($result);
 		$id = $html->find('.content-text a[rel="nofollow"]',0)->href;
 		$id = end(explode("_", $id));
 		return $id;
