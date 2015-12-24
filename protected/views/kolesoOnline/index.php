@@ -63,7 +63,6 @@
                                     </div>
                             </div>
                         <? endforeach; ?>
-
                         <? if($ind == 1): ?>
                             <div class="slide-type b-third clearfix">
                                 <div class="left">
