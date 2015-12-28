@@ -58,7 +58,7 @@
                                             </ul>
                                         <? endforeach; ?>
                                         <? if($mobile): ?>
-                                        <a href="#" class="b-variants-close b-orange-butt">Закрыть</a>
+                                        <a href="#" class="b-variants-close b-orange-butt">Выбрать</a>
                                         <? endif; ?>
                                     </div>
                             </div>
@@ -136,7 +136,7 @@
                                         </ul>
                                     <? endforeach; ?>
                                     <? if($mobile): ?>
-                                    <a href="#" class="b-variants-close b-orange-butt">Закрыть</a>
+                                    <a href="#" class="b-variants-close b-orange-butt">Выбрать</a>
                                     <? endif; ?>
                                 </div>
                             </div>  
@@ -214,7 +214,7 @@
                                         </ul>
                                     <? endforeach; ?>
                                     <? if($mobile): ?>
-                                    <a href="#" class="b-variants-close b-orange-butt">Закрыть</a>
+                                    <a href="#" class="b-variants-close b-orange-butt">Выбрать</a>
                                     <? endif; ?>
                                 </div>
                             </div>

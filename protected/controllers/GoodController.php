@@ -130,7 +130,7 @@ class GoodController extends Controller
 			// Log::debug(print_r($values, true));
 			$this->insertValues(GoodAttribute::tableName(),$values);
 
-			// $this->checkAdverts($model);
+			$this->checkAdverts($model);
 			$model->updateAdverts();
 
 			Good::updateAuctionLinks();
@@ -208,7 +208,7 @@ class GoodController extends Controller
 			}
 
 			foreach ($goods as $i => $good) {
-				// $this->checkAdverts($good);
+				$this->checkAdverts($good);
 				$good->updateAdverts();
 			}
 

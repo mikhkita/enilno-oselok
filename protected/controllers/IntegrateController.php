@@ -473,6 +473,7 @@ class IntegrateController extends Controller
         
         $place->setUser($account->login, $account->password);
         $res = $place->auth();
+        // die();
         
         switch ($queue->action->code) {
             case 'delete':
