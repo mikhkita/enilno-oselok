@@ -13,7 +13,7 @@
                     <? foreach ($group as $col): ?>
                         <ul class="left">
                             <? foreach ($col as $city): ?>
-                                <li><a href="#"><?=$city['name']?></a></li>
+                                <li><a href="http://<?=$city['code']?>.<?=Yii::app()->params["host"]?><?=$_SERVER["REQUEST_URI"]?>"><?=$city['name']?></a></li>
                             <? endforeach; ?>
                         </ul>
                     <? endforeach; ?>
@@ -22,26 +22,18 @@
         </div>
     </div>
     <div class="city-input clearfix">
-        <?php $form=$this->beginWidget('CActiveForm', array(
-            'enableAjaxValidation'=>false,
-            'action' => Yii::app()->createUrl('/kolesoOnline/setcity'),
-            'method' => 'POST',
-            'id' => "city-form"
-        )); ?>
         <select class="city-select left" name="city" required>
             <option></option>
             <? foreach ($cities as $name => $group): ?>
             <optgroup label="<?=$name?>">
                 <? foreach ($group as $col): ?>
                     <? foreach ($col as $city): ?>
-                        <option value="<?=$city['name']?>"><?=$city['name']?></option>
+                        <option value="http://<?=$city['code']?>.<?=Yii::app()->params["host"]?><?=$_SERVER["REQUEST_URI"]?>"><?=$city['name']?></option>
                     <? endforeach; ?>
                 <? endforeach; ?>
             </optgroup>
             <? endforeach; ?>
         </select>
-        <input type="hidden" name="url">
-        <input type="submit" class="right b-orange-butt" value="Выбрать">
-        <?php $this->endWidget(); ?> 
+        <a class="right b-orange-butt b-city-link">Выбрать</a>
     </div>
 </div>

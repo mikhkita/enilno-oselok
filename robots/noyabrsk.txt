@@ -1,0 +1,3 @@
+User-agent: *
+Disallow: 
+Sitemap: http://noyabrsk.koleso.online/sitemap.xml

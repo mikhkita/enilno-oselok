@@ -1,0 +1,3 @@
+User-agent: *
+Disallow: 
+Sitemap: http://bratsk.koleso.online/sitemap.xml

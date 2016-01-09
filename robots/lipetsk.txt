@@ -1,0 +1,3 @@
+User-agent: *
+Disallow: 
+Sitemap: http://lipetsk.koleso.online/sitemap.xml

@@ -1,0 +1,3 @@
+User-agent: *
+Disallow: 
+Sitemap: http://ioshkar-ola.koleso.online/sitemap.xml

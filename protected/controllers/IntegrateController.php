@@ -248,6 +248,7 @@ class IntegrateController extends Controller
 
 // Yahoo ----------------------------------------------------------------- Yahoo
     public function actionYahooBids(){
+        return true;
         $model = YahooCategory::model()->findAll(array("order"=>"id ASC"));
         foreach ($model as $item)
             $this->parseCategory($item,true);
@@ -255,6 +256,7 @@ class IntegrateController extends Controller
     }
 
     public function actionYahooAll(){
+        return true;
         $category = $this->getNextCategory();
         
         $this->parseCategory($category);
@@ -468,7 +470,7 @@ class IntegrateController extends Controller
 
         $fields = $place->generateFields($fields,$advert->good->good_type_id);
 
-        // print_r($fields);
+        print_r($fields);
         // die();
         
         $place->setUser($account->login, $account->password);
@@ -569,6 +571,71 @@ class IntegrateController extends Controller
             Queue::model()->deleteAll("id IN (".implode(",", $ids).")");
     }
 // Выкладка -------------------------------------------------------------- Выкладка
+
+// Магазин --------------------------------------------------------------- Магазин
+    public function actionGoodCodes(){
+        for ($i = 1; $i <= 3; $i++) {
+            $data = Good::model()->filter(
+                array(
+                    "good_type_id"=>$i,
+                )
+            )->getPage(
+                array(
+                    'pageSize'=>99999,
+                )
+            );
+
+            $goods = $data["items"];
+
+            $good_type = GoodType::model()->findByPk($i);
+
+            $values = array();
+            foreach ($goods as $key => $good) {
+                array_push($values, array($good->id,NULL,$good->good_type_id,0,Translit::get(Interpreter::generate($this->getParam("SHOP", $good_type->code."_CODE"),$good))));
+            }
+
+            $this->updateRows(Good::tableName(),$values,array("code"));
+            // echo $i."<br>";
+        }
+    }
+
+    public function actionCityCodes($debug=false){
+        if( $debug!=1 ) return false;
+        DictionaryVariant::model()->deleteAll("dictionary_id=125");
+        $attribute = Attribute::model()->with(array("variants.variant"=>array("order"=>"sort ASC")))->findByPk(38);
+        foreach ($attribute->variants as $key => $variant)
+            Dictionary::add(125,$variant->variant_id,Translit::get($variant->variant->value));
+    }
+
+    public function actionSitemap(){
+        $filename = "temp.xml";
+        $city_code = "tomsk";
+        $sitemap = "";
+        $header = "";
+        $cities = DictionaryVariant::model()->findAll("dictionary_id=125");
+        if( file_exists($filename) ) {
+            $lines = explode("\n", file_get_contents($filename));
+
+            foreach ($cities as $key => $city){
+                if( $city->value != "" ){
+                    foreach ($lines as $line){
+                        if( strpos($line, $city_code.".") === false ){
+                            $sitemap .= $line."\n";
+                        }else{
+                            $sitemap .= (str_replace($city_code.".", $city->value.".", $line)."\n");
+                        }   
+                    }
+                }
+                file_put_contents("sitemap/".$city->value.".xml", $sitemap);
+                $robots = "User-agent: *\nDisallow: \nSitemap: http://".$city->value.".koleso.online/sitemap.xml";
+                file_put_contents("robots/".$city->value.".txt", $robots);
+                $sitemap = "";
+            }
+            // unlink($filename);
+        }
+    }
+// Магазин --------------------------------------------------------------- Магазин
+
     public function actionAdminIndex(){
         $start = microtime(true);
 

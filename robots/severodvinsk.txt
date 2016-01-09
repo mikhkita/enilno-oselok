@@ -1,0 +1,3 @@
+User-agent: *
+Disallow: 
+Sitemap: http://severodvinsk.koleso.online/sitemap.xml

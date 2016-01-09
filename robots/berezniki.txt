@@ -1,0 +1,3 @@
+User-agent: *
+Disallow: 
+Sitemap: http://berezniki.koleso.online/sitemap.xml

@@ -1,0 +1,3 @@
+User-agent: *
+Disallow: 
+Sitemap: http://borisoglebsk.koleso.online/sitemap.xml

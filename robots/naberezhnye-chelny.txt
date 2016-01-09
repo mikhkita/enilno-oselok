@@ -1,0 +1,3 @@
+User-agent: *
+Disallow: 
+Sitemap: http://naberezhnye-chelny.koleso.online/sitemap.xml

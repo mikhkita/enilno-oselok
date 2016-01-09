@@ -1,0 +1,3 @@
+User-agent: *
+Disallow: 
+Sitemap: http://almaty.koleso.online/sitemap.xml

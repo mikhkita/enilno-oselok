@@ -1,0 +1,3 @@
+User-agent: *
+Disallow: 
+Sitemap: http://sochi.koleso.online/sitemap.xml

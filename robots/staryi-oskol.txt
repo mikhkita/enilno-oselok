@@ -1,0 +1,3 @@
+User-agent: *
+Disallow: 
+Sitemap: http://staryi-oskol.koleso.online/sitemap.xml

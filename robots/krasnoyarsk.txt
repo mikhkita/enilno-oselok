@@ -1,0 +1,3 @@
+User-agent: *
+Disallow: 
+Sitemap: http://krasnoyarsk.koleso.online/sitemap.xml

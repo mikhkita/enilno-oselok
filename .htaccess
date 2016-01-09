@@ -10,4 +10,12 @@ RewriteCond %{REQUEST_FILENAME} !-d
 
 RewriteRule . index.php
 
+RewriteCond %{REQUEST_URI} (sitemap).xml
+RewriteCond %{HTTP_HOST} (www\.)?(.*)\.koleso\.dev
+RewriteRule ^(.*)$ sitemap/%2.xml
+
+RewriteCond %{REQUEST_URI} (robots).txt
+RewriteCond %{HTTP_HOST} (www\.)?(.*)\.koleso\.dev
+RewriteRule ^(.*)$ robots/%2.txt
+
 php_value mbstring.func_overload 0

@@ -6,9 +6,9 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
 <!DOCTYPE html>
 <html>
 <head>
-    <title><?=$this->title?></title>
-    <meta name="keywords" content='<?=$this->keywords?>'>
-    <meta name="description" content='<?=$this->description?>'>
+    <title><?=$this->cityReplace($this->title)?></title>
+    <meta name="keywords" content='<?=$this->cityReplace($this->keywords)?>'>
+    <meta name="description" content='<?=$this->cityReplace($this->description)?>'>
 
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="format-detection" content="telephone=no">
@@ -34,8 +34,8 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
     <link rel="stylesheet" media="screen and (min-width: 768px) and (max-width: 1000px)" href="<?php echo Yii::app()->request->baseUrl; ?>/html/css/layout-tablet.css" />
 
     <meta property="og:url" content="<?=Yii::app()->getBaseUrl(true).Yii::app()->request->requestUri?>">
-    <meta property="og:title" content="<?=$this->title?>">
-    <meta property="og:description" content="<?=$this->description?>">
+    <meta property="og:title" content="<?=$this->cityReplace($this->title)?>">
+    <meta property="og:description" content="<?=$this->cityReplace($this->description)?>">
     <meta property="og:image" content="<?=$this->image?>">
     <meta property="twitter:image" content="<?=$this->image?>">
     <link rel="image_src" href="<?=$this->image?>">
@@ -56,7 +56,18 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
     <meta name="msapplication-TileColor" content="#FFFFFF" />
     <meta name="msapplication-TileImage" content="<?php echo Yii::app()->request->baseUrl; ?>/html/icon/mstile-144x144.png" />
     <meta name="msapplication-square70x70logo" content="<?php echo Yii::app()->request->baseUrl; ?>/html/icon/mstile-70x70.png" />
+    <? if(isset(Yii::app()->params['server']) && Yii::app()->params['server'] === true): ?>
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
+      ga('create', 'UA-71817799-1', 'auto');
+      ga('send', 'pageview');
+
+    </script>
+    <? endif; ?>
 </head>
 <body>
     <ul class="ps-lines">
@@ -69,23 +80,23 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
             <a class="left b-main-logo b-mobile-menu-a" href="<?=Yii::app()->createUrl('/kolesoOnline')?>"></a>
             <ul>
                 <!-- <li><a href="<?=Yii::app()->createUrl('/about')?>" class="b-mobile-menu-a">О магазине</a></li> -->
-                <li><a href="<?=Yii::app()->createUrl('/delivery')?>" class="b-mobile-menu-a">Доставка</a></li>
-                <li><a href="<?=Yii::app()->createUrl('/garanty')?>" class="b-mobile-menu-a">Гарантия</a></li>
-                <li><a href="<?=Yii::app()->createUrl('/payment')?>" class="b-mobile-menu-a">Оплата</a></li>
-                <li><a href="<?=Yii::app()->createUrl('/contacts')?>" class="b-mobile-menu-a">Контакты</a></li>
+                <li><a href="<?=Yii::app()->createUrl('/dostavka.html')?>" class="b-mobile-menu-a">Доставка</a></li>
+                <li><a href="<?=Yii::app()->createUrl('/garantiya.html')?>" class="b-mobile-menu-a">Гарантия</a></li>
+                <li><a href="<?=Yii::app()->createUrl('/oplata.html')?>" class="b-mobile-menu-a">Оплата</a></li>
+                <li><a href="<?=Yii::app()->createUrl('/contacts.html')?>" class="b-mobile-menu-a">Контакты</a></li>
             </ul>
             <a href="tel:+79095430402" class="b-menu-call b-orange-butt">Позвонить</a>
         </div>
         <div class="b b-menu">
             <div class="b-block">
                 <ul class="clearfix not-mobile">
-                    <li><a href="<?=Yii::app()->createUrl('/delivery')?>">Доставка</a></li>
-                    <li><a href="<?=Yii::app()->createUrl('/garanty')?>">Гарантия</a></li>
-                    <li><a href="<?=Yii::app()->createUrl('/payment')?>">Оплата</a></li>
-                    <li><a href="<?=Yii::app()->createUrl('/contacts')?>">Контакты</a></li>
+                    <li><a href="<?=Yii::app()->createUrl('/dostavka.html')?>">Доставка</a></li>
+                    <li><a href="<?=Yii::app()->createUrl('/garantiya.html')?>">Гарантия</a></li>
+                    <li><a href="<?=Yii::app()->createUrl('/oplata.html')?>">Оплата</a></li>
+                    <li><a href="<?=Yii::app()->createUrl('/contacts.html')?>">Контакты</a></li>
                 </ul>
                 <div class="clearfix b-mobile-top-line mobile-only">
-                    <h2 class="left">Вы находитесь в г. <a href="#" class="icon fancy" data-block="#b-popup-city"><?=$_SESSION['city']['name']?></a></h2>
+                    <h2 class="left">Вы находитесь в г. <a href="#" class="icon fancy" data-block="#b-popup-city"><?=Yii::app()->params["city"]->name?></a></h2>
                     <a href="#" class="right icon b-mobile-search-top-icon">Поиск</a>
                 </div>
             </div>  
@@ -98,7 +109,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
                         <a class="left b-main-logo" href="<?=Yii::app()->createUrl('/kolesoOnline')?>"></a>
                         <div class="right">
                             <h1>Колесо<span>онлайн</span></h1>
-                            <h2>Вы находитесь в г. <a href="#" class="fancy" data-block="#b-popup-city"><?=$_SESSION['city']['name']?></a></h2>
+                            <h2>Вы находитесь в г. <a href="#" class="fancy" data-block="#b-popup-city"><?=Yii::app()->params["city"]->name?></a></h2>
                         </div>
                     </div>
                 </div>
@@ -145,7 +156,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
                         <a href="<?=Yii::app()->createUrl('/kolesoOnline')?>" class="footer-logo clearfix">
                             <span class="b-footer-logo"></span>
                         </a>
-                        <p>Лучший выбор автомобильных б/у шин и дисков из Японии. Удобный поиск и выгодные цены, а самое главное честное описание и фото. Мы постоянно работаем над расширением географии наших представительств на территории РФ.</p>
+                        <p>Лучший выбор автомобильных б/у шин и дисков из Японии <?=Yii::app()->params["city"]->in?>. Удобный поиск и выгодные цены, а самое главное честное описание и фото. Мы постоянно работаем над расширением географии наших представительств на территории РФ.</p>
                     </li>
                     <li>
                         <h3>Разделы</h3>
@@ -153,16 +164,16 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
                             <li><a href="<?=Yii::app()->createUrl('/kolesoOnline/category',array('type' => 2))?>">Диски</a></li>
                             <li><a href="<?=Yii::app()->createUrl('/kolesoOnline/category',array('type' => 1))?>">Шины</a></li>
                             <li><a href="<?=Yii::app()->createUrl('/kolesoOnline/category',array('type' => 3))?>">Колеса</a></li>
-                            <li><a href="<?=Yii::app()->createUrl('/kolesoOnline/contacts')?>">Контакты</a></li>
-                            <!-- <li><a href="#">Оплата и доставка</a></li> -->
-                            <!-- <li><a href="#">Гарантия</a></li> -->
+                            <li><a href="<?=Yii::app()->createUrl('/dostavka.html')?>">Доставка</a></li>
+                            <li><a href="<?=Yii::app()->createUrl('/garantiya.html')?>">Гарантия</a></li>
+                            <li><a href="<?=Yii::app()->createUrl('/oplata.html')?>">Оплата</a></li>
                         </ul>
                     </li>
                     <li>
                         <h3>Контактная информация</h3>
                         <a class="footer-contacts mail" href="mailto:kolesotomskru@mail.ru">kolesotomskru@mail.ru</a>
                         <a class="mobile-not-fancy fancy footer-contacts phone" data-block="#b-popup-callback" href="tel:+79095430402">+7 (909) 543-04-02</a>
-                        <? if($_SESSION['city']['variant_id'] == 1081): ?>
+                        <? if(Yii::app()->params["city"]->id == 1081): ?>
                             <span class="footer-contacts map">г. Томск, улица Мокрушина, 9 ст. 42</span>
                         <? else: ?>
                             <br>
@@ -189,7 +200,9 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
         </div>
     </div>
 <div style="display:none;">
-    <div id="b-popup-city"></div>
+    <div id="b-popup-city">
+        <?php $this->renderPartial('_cities', array('cities' => $this->getCityGroups())); ?>
+    </div>
     <div id="b-popup-callback">
         <div class="for_all b-popup-small">
             <h3>Заказать звонок</h3>
@@ -249,18 +262,15 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
 
 <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/html/js/jquery-2.1.1.min.js"></script>
 <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/html/js/jquery.fancybox.js"></script>
+<? if( $mobile ): ?>
 <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/html/js/TweenMax.min.js"></script>
-<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/html/js/swipe.js"></script>
 <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/html/js/fastclick.js"></script>
-<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/html/js/css3-mediaqueries.js"></script>
+<? endif; ?>
 <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/html/js/jquery.maskedinput.min.js"></script>
 <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/html/js/jquery.validate.min.js"></script>
 <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/html/js/slick.min.js"></script>
 <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/html/js/jquery-ui.min.js"></script>
 <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/html/js/jquery.ui.touch-punch.js"></script>
-<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/html/js/jquery.mobile.custom.min.js"></script>
-<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/html/js/KitProgress.js"></script>
-<script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/html/js/KitAnimate.js"></script>
 <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/html/js/device.js"></script>
 <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/html/js/select2.full.min.js"></script>
 <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/html/js/stroll.js"></script>

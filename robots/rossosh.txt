@@ -1,0 +1,3 @@
+User-agent: *
+Disallow: 
+Sitemap: http://rossosh.koleso.online/sitemap.xml

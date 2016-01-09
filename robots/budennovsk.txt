@@ -1,0 +1,3 @@
+User-agent: *
+Disallow: 
+Sitemap: http://budennovsk.koleso.online/sitemap.xml

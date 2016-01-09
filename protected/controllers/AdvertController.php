@@ -62,6 +62,7 @@ class AdvertController extends Controller
 	}
 
 	public function actionAdminAction($action){
+		$start = microtime(true);
 		if( !isset($_SESSION["advert_filter"]) ) $_SESSION["advert_filter"] = array();
 
 		$action_model = Action::model()->find("code='$action'");
@@ -69,6 +70,8 @@ class AdvertController extends Controller
 		
 		if( isset($_POST["data"]) ){
 			$adverts = Advert::filter($_SESSION["advert_filter"],array('type','city','place.category'),array("*"))->getData();
+			// print_r(count($adverts));
+			// echo "<br>".(microtime(true) - $start);
 			$random_offset = isset($_POST["random_offset"])?intval($_POST["random_offset"]):24;
 			$offset = isset($_POST["offset"])?intval($_POST["offset"]):0;
 
@@ -102,36 +105,34 @@ class AdvertController extends Controller
 		
 		$model = Place::model()->with('category','goodType')->findAll();
 		$data = array();
-		$pages;
 		foreach ($model as $key => $item) {
 			$data['Place'][$item->id] = $item->category->value." ".$item->goodType->name;
 		}
-		$model = Attribute::model()->with('variants')->findAllByPk(array(37,58));
+		$model = Attribute::model()->with(array('variants.variant'=>array("order"=>"variant.sort ASC")))->findAllByPk(array(37,58,59,60,61));
+		$keys = array(37=>37,58=>58,59=>58,60=>58,61=>58);
 		foreach ($model as $key => $item) {
 			$data['AttrName'][$item->id] = $item->name;
 			foreach ($item->variants as $variant) {
-				$data['Attr'][$variant->attribute_id][$variant->variant_id] = $variant->value;		
+				$data['Attr'][$keys[$variant->attribute_id]][$variant->variant_id] = $variant->value;		
 			}
 		}
-		$data['Attr'][58] = $this->splitByCols(5,$data['Attr'][58]);
+		// $data['Attr'][58] = $this->splitByCols(5,$data['Attr'][58]);
 		
-		if($_GET) {
-			$_SESSION["advert_filter"] = $_GET;
-			$dataProvider = Advert::filter($_GET,array('type','city','place.category'));
-			$pages = $dataProvider->getPagination();
-			$temp = array();
-			foreach ($dataProvider->getData() as $advert) {
-				array_push($temp, $advert->good_id);
-			}
-			$temp = GoodAttribute::getCodeById($temp);
-			$advert_count = $dataProvider->totalItemCount;
-			foreach ($dataProvider->getData() as $i => $advert) {
-				if( !isset($adverts_arr[$advert->place->category->value]) ) $adverts_arr[$advert->place->category->value] = array();
-				if( !isset($adverts_arr[$advert->place->category->value][$temp[$advert->good_id]]) ) $adverts_arr[$advert->place->category->value][$temp[$advert->good_id]] = array();
-				array_push($adverts_arr[$advert->place->category->value][$temp[$advert->good_id]], $advert);
-			}
-		}else{
-			$_SESSION["advert_filter"] = array();
+		if(!$_GET) 
+			$_GET = array();
+		$_SESSION["advert_filter"] = $_GET;
+		$dataProvider = Advert::filter($_GET,array('type','city','place.category','place.goodType'));
+		$pages = $dataProvider->getPagination();
+		$temp = array();
+		foreach ($dataProvider->getData() as $advert) {
+			array_push($temp, $advert->good_id);
+		}
+		$temp = GoodAttribute::getCodeById($temp);
+		$advert_count = $dataProvider->totalItemCount;
+		foreach ($dataProvider->getData() as $i => $advert) {
+			if( !isset($adverts_arr[$advert->place->category->value]) ) $adverts_arr[$advert->place->category->value] = array();
+			if( !isset($adverts_arr[$advert->place->category->value][$temp[$advert->good_id]]) ) $adverts_arr[$advert->place->category->value][$temp[$advert->good_id]] = array();
+			array_push($adverts_arr[$advert->place->category->value][$temp[$advert->good_id]], $advert);
 		}
 
 		if( !$partial ){

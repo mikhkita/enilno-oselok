@@ -1,0 +1,3 @@
+User-agent: *
+Disallow: 
+Sitemap: http://bryansk.koleso.online/sitemap.xml

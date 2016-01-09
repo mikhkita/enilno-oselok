@@ -1,0 +1,3 @@
+User-agent: *
+Disallow: 
+Sitemap: http://artem.koleso.online/sitemap.xml

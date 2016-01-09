@@ -1,0 +1,3 @@
+User-agent: *
+Disallow: 
+Sitemap: http://velikii-novgorod.koleso.online/sitemap.xml

@@ -1,0 +1,3 @@
+User-agent: *
+Disallow: 
+Sitemap: http://ulyanovsk.koleso.online/sitemap.xml

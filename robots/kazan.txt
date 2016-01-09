@@ -1,0 +1,3 @@
+User-agent: *
+Disallow: 
+Sitemap: http://kazan.koleso.online/sitemap.xml

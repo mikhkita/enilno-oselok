@@ -1,0 +1,3 @@
+User-agent: *
+Disallow: 
+Sitemap: http://novocheboksarsk.koleso.online/sitemap.xml

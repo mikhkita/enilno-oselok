@@ -1,0 +1,3 @@
+User-agent: *
+Disallow: 
+Sitemap: http://irkutsk.koleso.online/sitemap.xml

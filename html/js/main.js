@@ -39,7 +39,8 @@ $(document).ready(function(){
 
     var blocked = false;
 
-    new FastClick(document.body);
+    if( device.mobile() )
+        new FastClick(document.body);
 
     function whenScroll(){
         if( $(".b-fixed-top").length ){
@@ -76,35 +77,46 @@ $(document).ready(function(){
     whenScroll();
 
     $(window).load(function() {
-        $.ajax({
-            type: "GET",
-            url: '/kolesoOnline/getcities',
-            success: function(msg){
-                $("#b-popup-city").append(msg);
-                $( ".city-tabs" ).tabs({
-                    active: false,
-                    collapsible :true
-                });
-                $(".city-tabs li").click(function(){
-                    if ($(this).hasClass("ui-state-active")) {
-                        $(".city-top h4 span").show();
-                    } else $(".city-top h4 span").hide();
-                });
-                
-                $(".city-select").select2({
-                    language: "ru",
-                    placeholder: "Или укажите в поле...",
-                    allowClear: true
-                });
-                $("#city-form input[name='url']").val(window.location.href);
-                $(".popup-cities li a").click(function() {    
-                    $("select[name='city']").val($(this).text());
-                    $("#city-form").submit();
-                    return false;
-                });
-            }
+        var i = 0;
+        $(".after-load-back").each(function(){
+            var $this = $(this);
+            setTimeout(function(){
+                $this.attr("style",$this.attr("data-style"));
+            },10*i);
+            i++;
         });
+        $(".after-load").fadeIn(300);
+        // $(".after-load").removeClass("after-load");
+
+        $(".b-content").css("min-height",myHeight-$(".b-header").height()-$(".b-footer").height());
     });
+
+    $( ".city-tabs" ).tabs({
+        active: false,
+        collapsible :true
+    });
+    $(".city-tabs>ul.ui-corner-all li").click(function(){
+        if ($(this).hasClass("ui-state-active")) {
+            $(".city-top h4 span").show();
+        } else $(".city-top h4 span").hide();
+    });
+    
+    $(".city-select").select2({
+        language: "ru",
+        placeholder: "Или укажите в поле...",
+        allowClear: true
+    });
+
+    $(".city-select").change(function(){
+        $(".b-city-link").attr("href",$(this).val());
+    });
+
+    // $("#city-form input[name='url']").val(window.location.href);
+    // $(".popup-cities li a").click(function() {    
+    //     $("select[name='city']").val($(this).text());
+    //     $("#city-form").submit();
+    //     return false;
+    // });
 
     if($('.goods li:eq(-1)').attr("data-last") != 0) {
         $(".load").css("display","inline-block"); 
@@ -118,10 +130,6 @@ $(document).ready(function(){
     });
     $(window).resize(resize);
     resize();
-    
-    $(window).load(function(){
-        $(".b-content").css("min-height",myHeight-$(".b-header").height()-$(".b-footer").height());
-    });
     
     $.fn.placeholder = function() {
         if(typeof document.createElement("input").placeholder == 'undefined') {

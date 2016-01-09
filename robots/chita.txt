@@ -1,0 +1,3 @@
+User-agent: *
+Disallow: 
+Sitemap: http://chita.koleso.online/sitemap.xml

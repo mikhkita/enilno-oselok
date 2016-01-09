@@ -1,0 +1,3 @@
+User-agent: *
+Disallow: 
+Sitemap: http://vologda.koleso.online/sitemap.xml

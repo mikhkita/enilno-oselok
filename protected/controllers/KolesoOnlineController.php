@@ -3,7 +3,7 @@
 class KolesoOnlineController extends Controller
 {
 	public $layout='//layouts/kolesoOnline';
-	public $title = "Колесо Онлайн - самый большой выбор б/у шин и дисков в России";
+	public $title = "Купить колеса, шины и диски [+IN+] в магазине Колесо.Онлайн";
 	public $description = "Лучший выбор автомобильных б/у шин и дисков из Японии. Удобный поиск и выгодные цены, а самое главное честное описание и фото. Мы постоянно работаем над расширением географии наших представительств на территории РФ.";
 	public $keywords = "Лучший выбор автомобильных б/у шин и дисков из Японии. Удобный поиск и выгодные цены, а самое главное честное описание и фото. Мы постоянно работаем над расширением географии наших представительств на территории РФ.";
 	public $image = "";
@@ -28,6 +28,11 @@ class KolesoOnlineController extends Controller
 				28 => "Количество"
 			),
 			"CATEGORY" => array(
+				"ID" => array(
+					"ID" => 3,
+					"LABEL" => "Артикул",
+					"UNIT" => ' '
+				),
 				"AMOUNT" => array(
 					"ID" => 28,
 					"LABEL" => "Количество в комплекте",
@@ -310,52 +315,32 @@ class KolesoOnlineController extends Controller
 		);
 	}
 
-	public function actionSetCity() {
-
-		if(!isset($_SESSION)) session_start();
-		if( !( isset($_SESSION['city']) && AttributeVariant::model()->count("variant_id=".$_SESSION['city']['variant_id'] ) ) || isset($_POST['city']) ) {
-			$default_city = "Томск";
-			$default_variant_id = 1081;
-			$_SESSION['city']['name'] = $default_city;
-	     	$_SESSION['city']['variant_id'] = $default_variant_id;
-
-			if(isset($_POST['city']) && $_POST['city']) {
-				$city = $_POST['city'];
-			} else {
-				$city = json_decode(file_get_contents('http://api.sypexgeo.net/json/'.$_SERVER["REMOTE_ADDR"]));
-	       		$city = (isset($city->city->name_ru)) ? $city->city->name_ru : $default_city;	
-	       	}
-	       	$model = Attribute::model()->with(array("variants.variant"))->find("value='".$city."' AND folder=1");
-	       	if($model) {
-	       		$_SESSION['city']['name'] = $model->variants[0]->value;
-	     		$_SESSION['city']['variant_id'] = $model->variants[0]->variant_id;
-	       	}
-	       	if(isset($_POST['city'])) 
-	       		header("Location: ".$_POST['url']);
-     	}
-	    
-    }
-
-    public function actionGetCities() {
+    public function getCityGroups() {
      	$city_groups = array();
      	$model = Attribute::model()->with(array("variants.variant"))->findAll(array("order"=>"t.id ASC, variant.sort ASC","condition"=>"folder=1"));
+     	$dictionary_tmp = DictionaryVariant::model()->findAll("dictionary_id=125");
+     	$dictionary = array();
+     	foreach ($dictionary_tmp as $key => $dic)
+     		$dictionary[$dic->attribute_1] = $dic->value;
+
      	foreach ($model as $key => $group) {
      		$city_groups[$group->name] = array();
      		foreach($group->variants as $i => $city) {
      			$city_groups[$group->name][$i]['name'] = $city->value;
      			$city_groups[$group->name][$i]['variant_id'] = $city->variant_id;
+     			$city_groups[$group->name][$i]['code'] = $dictionary[$city->variant_id];
      		}
      		$city_groups[$group->name] = $this->splitByRows(10,$city_groups[$group->name]);
      	}
 
-	    $this->renderPartial('_cities',array(
-			'cities' => $city_groups
-		));	
+     	return $city_groups;
     }
 
 
 	public function actionIndex($countGood = false)
 	{	
+		$this->checkCity();
+		// var_dump($_GET);
 		$start = microtime(true);
 
 		// $this->is_mobile = true;
@@ -384,9 +369,8 @@ class KolesoOnlineController extends Controller
 		$this->params[2]["FILTER"] = $this->splitByRows(4,$this->params[2]["FILTER"]);
 		$this->params[3]["FILTER"] = $this->splitByRows(4,$this->params[3]["FILTER"]);
 
-		$this->actionSetCity();	
 		$dynamic = $this->getDynObjects(array(
-            38 => $_SESSION['city']['variant_id']
+            38 => Yii::app()->params["city"]->id
     	));
 
 		$this->render('index',array(
@@ -403,6 +387,7 @@ class KolesoOnlineController extends Controller
 	}
 
 	public function actionCategory($partial = false, $countGood = false) {
+		$this->checkCity();
 
 		$start = microtime(true);	
 		if(!isset($_SESSION)) session_start();
@@ -416,7 +401,7 @@ class KolesoOnlineController extends Controller
 
 		$_GET['type'] = isset($_GET['type']) ? $_GET['type'] : 2;
 	  	
-		$this->title = "Колесо Онлайн - Б/у ".GoodType::model()->find(array("limit"=>1,"condition"=>"id=".$_GET['type']))->name;
+		$this->title = "Купить ".mb_strtolower(GoodType::model()->find(array("limit"=>1,"condition"=>"id=".$_GET['type']))->name, "UTF-8")." [+IN+] в магазине Колесо.Онлайн";
 
 		$filter = $this->getFilter($_GET['type']);
 
@@ -439,10 +424,8 @@ class KolesoOnlineController extends Controller
 			$last = 0;
 		}
 
-		$this->actionSetCity();
-
 		$dynamic = $this->getDynObjects(array(
-            38 => $_SESSION['city']['variant_id']
+            38 => Yii::app()->params["city"]->id
     	));
 
 		$mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino/i',$_SERVER['HTTP_USER_AGENT'])||preg_match('/1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i',substr($_SERVER['HTTP_USER_AGENT'],0,4)));
@@ -455,7 +438,8 @@ class KolesoOnlineController extends Controller
 				'params' => $this->params,
 				'type' => $_GET['type'],
 				'dynamic' => $dynamic,
-				'pages' => $pages
+				'pages' => $pages,
+				'partial' => true
 			));
 		} else {
 			$this->render('category',array(
@@ -467,7 +451,8 @@ class KolesoOnlineController extends Controller
 				'dynamic' => $dynamic,
 				'mobile' => $this->is_mobile,
 				'pages' => $pages,
-				'start' => $start
+				'start' => $start,
+				'partial' => false
 			));
 		}
 		// list($queryCount, $queryTime) = Yii::app()->db->getStats();
@@ -578,33 +563,56 @@ class KolesoOnlineController extends Controller
 
 	public function actionDetail($id = NULL,$type = NULL)
 	{
+		$this->checkCity();
+
 		if($id) {
+			$url = $id;
+			$id = $this->getCodeFromUrl($id);
+
 			$good = Good::model()->with("fields")->find("good_type_id=".$_GET['type']." AND fields.attribute_id=3 AND fields.varchar_value='".$id."'");
+			if( !$good ) throw new CHttpException(404,'site');
+			if( $good->code != $url && $good->code !== NULL ){
+				header("HTTP/1.1 301 Moved Permanently"); 
+				header("Location: http://".$_SERVER["SERVER_NAME"].Yii::app()->createUrl('/kolesoOnline/detail',array('id' => $good->code,'type' => $type))); 
+				exit(); 
+			}
+
+			$dynamic = $this->getDynObjects(array(
+	            38 => Yii::app()->params["city"]->id
+	    	));
+
 			$good = Good::model()->with("type","fields.variant","fields.attribute")->findByPk($good->id);
 
-			$this->title = Interpreter::generate($this->params[$_GET['type']]["TITLE_CODE"], $good);
-
-			$this->description = Interpreter::generate($this->params[$_GET['type']]["DESCRIPTION_CODE"], $good);
-
-			$this->keywords = Interpreter::generate($this->getParam("SHOP",$good->type->code."_KEYWORDS_CODE"), $good);
+			$good_title = Interpreter::generate($this->params[$_GET['type']]["TITLE_CODE"], $good, $dynamic);
+			$this->title = "Купить ".mb_strtolower(mb_substr($good_title, 0, 1, "UTF-8"),"UTF-8").mb_substr($good_title, 1, strlen($good_title), "UTF-8")." [+IN+]";
+			$this->description = Interpreter::generate($this->params[$_GET['type']]["DESCRIPTION_CODE"], $good, $dynamic);
+			$this->keywords = Interpreter::generate($this->getParam("SHOP",$good->type->code."_KEYWORDS_CODE"), $good, $dynamic);
 
 			$imgs = $this->getImages($good);
 
 			$this->image = Yii::app()->getBaseUrl(true).$imgs[0];
 
-			$this->actionSetCity();
-			
-			$dynamic = $this->getDynObjects(array(
-	            38 => $_SESSION['city']['variant_id']
-	    	));
-
 			$this->render('detail',array(
 				'good'=>$good,
 				'imgs'=>$imgs,
 				'params' => $this->params,
-				'dynamic' => $dynamic
+				'dynamic' => $dynamic,
+				'good_title' => $good_title
 			));
 		}
+	}
+
+	public function getCodeFromUrl($url){
+		$arr = explode("-", $url);
+		if(!count($arr)) return NULL;
+
+		$last = array_pop($arr);
+		if( strlen($last) == 1 ){
+			if( !count($arr) ) return NULL;
+			$prev = array_pop($arr);
+			return $prev."-".$last;
+		}
+		return $last;
 	}
 
 	public function getGoods($page_size = 8,$type = 2,$filter = NULL,$sort = NULL) {
@@ -633,9 +641,9 @@ class KolesoOnlineController extends Controller
 	public function actionPage($page = NULL)
 	{
 		if( $page ){
-			$page = $this->getPage($page);
+			$this->checkCity();
 
-			$this->actionSetCity();
+			$page = $this->getPage($page);
 
 			if ($page) {
 				$this->keywords = $page->keywords;
@@ -645,6 +653,8 @@ class KolesoOnlineController extends Controller
 				$this->render('page',array(
 					"page" => $page
 				));	
+			}else{
+				throw new CHttpException(404,'site');
 			}
 		}
 	}
@@ -664,6 +674,8 @@ class KolesoOnlineController extends Controller
 
 	public function actionMail(){
         require_once("phpmail.php");
+
+        $this->checkCity();
 
         $email_admin = $this->getParam("SHOP","EMAILS");
 
@@ -694,7 +706,7 @@ class KolesoOnlineController extends Controller
                 $message .= "<div><p><b>".$key.": </b>".$value."</p></div>";
             }
 
-            $message .= "<div><p><b>Город: </b>".( (isset($_SESSION['city']))?($_SESSION['city']['name']):("") )."</p></div>";
+            $message .= "<div><p><b>Город: </b>".Yii::app()->params["city"]->name."</p></div>";
 
             if( isset($_POST["good-url"]) )
             	$message .= "<div><p><b>Товар: </b><a target='_blank' href='".$_POST["good-url"]."'>".$_POST["good"]."</a></p></div>";

@@ -12,6 +12,7 @@ return array(
 	'defaultAdminRedirect'=>'/admin/desktop',
 	'excelDir'=>'upload/excel',
 	'defaultRule'=>'managerActions',
+	'host'=>'koleso.dev',
 	// the copyright information displayed in the footer section
 	'copyrightInfo'=>'Copyright &copy; 2009 by My Company.',
 	'debug' => true,

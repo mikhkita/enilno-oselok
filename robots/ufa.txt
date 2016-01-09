@@ -1,0 +1,3 @@
+User-agent: *
+Disallow: 
+Sitemap: http://ufa.koleso.online/sitemap.xml

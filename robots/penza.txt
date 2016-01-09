@@ -1,0 +1,3 @@
+User-agent: *
+Disallow: 
+Sitemap: http://penza.koleso.online/sitemap.xml

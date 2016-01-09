@@ -1,0 +1,3 @@
+User-agent: *
+Disallow: 
+Sitemap: http://cherepovets.koleso.online/sitemap.xml

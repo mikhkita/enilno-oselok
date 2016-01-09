@@ -1,0 +1,3 @@
+User-agent: *
+Disallow: 
+Sitemap: http://magnitogorsk.koleso.online/sitemap.xml

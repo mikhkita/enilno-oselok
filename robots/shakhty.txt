@@ -1,0 +1,3 @@
+User-agent: *
+Disallow: 
+Sitemap: http://shakhty.koleso.online/sitemap.xml

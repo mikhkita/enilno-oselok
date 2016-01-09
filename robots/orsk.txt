@@ -1,0 +1,3 @@
+User-agent: *
+Disallow: 
+Sitemap: http://orsk.koleso.online/sitemap.xml

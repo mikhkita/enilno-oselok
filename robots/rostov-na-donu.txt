@@ -1,0 +1,3 @@
+User-agent: *
+Disallow: 
+Sitemap: http://rostov-na-donu.koleso.online/sitemap.xml

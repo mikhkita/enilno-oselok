@@ -1,0 +1,3 @@
+User-agent: *
+Disallow: 
+Sitemap: http://khabarovsk.koleso.online/sitemap.xml

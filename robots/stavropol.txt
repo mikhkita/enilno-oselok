@@ -1,0 +1,3 @@
+User-agent: *
+Disallow: 
+Sitemap: http://stavropol.koleso.online/sitemap.xml

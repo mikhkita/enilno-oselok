@@ -1,0 +1,3 @@
+User-agent: *
+Disallow: 
+Sitemap: http://nizhnii-tagil.koleso.online/sitemap.xml

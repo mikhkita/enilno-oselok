@@ -489,12 +489,13 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 			padding-top: 45px;     
 			box-sizing: border-box;
 		}
-			.b-main-slider .slide .b-block h2 {
-				font-size: 40px;
+			.b-main-slider .slide .b-block h2,
+			.b-main-slider .slide .b-block h1 {
+				font-size: 38px;
 				font-family: "museo_sans_cyrl700";
 				color: rgb(255, 255, 255);
 				line-height: 1.073;
-				width: 540px;
+				width: 960px;
 				margin-bottom: 14px;
 			}
 			.b-main-slider .slide .b-block p {
@@ -1891,9 +1892,14 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 					font-weight: 500;
 					margin-left: 20px;
 				}
+					.good-detail .b-block .detail-wrap .detail-price h6 p{
+						float: left;
+						margin-right: 4px;
+					}
 					.good-detail .b-block .detail-wrap .detail-price h6 span{
 						padding-left: 19px;
 						position: relative;
+						float: left;
 					}
 					.good-detail .b-block .detail-wrap .detail-price h6 span.deliv{
 						padding-left: 22px;
@@ -1966,68 +1972,8 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 					margin-top: 0px;
 					background: rgb(83,79,89);
 					background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzUzNGY1OSIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMzNzM0M2IiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
-					background: 
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					-moz-linear-gradient(top,  rgba(83,79,89,1) 0%, rgba(55,52,59,1) 100%);
-					background: 
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					-webkit-linear-gradient(top,  rgba(83,79,89,1) 0%,rgba(55,52,59,1) 100%);
+					background:-moz-linear-gradient(top,  rgba(83,79,89,1) 0%, rgba(55,52,59,1) 100%);
+					background: -webkit-linear-gradient(top,  rgba(83,79,89,1) 0%,rgba(55,52,59,1) 100%);
 					background: linear-gradient(to bottom,  rgba(83,79,89,1) 0%,rgba(55,52,59,1) 100%);
 					filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#534f59', endColorstr='#37343b',GradientType=0 );
 					border-bottom: 2px solid #38353D;
@@ -2235,12 +2181,12 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 			text-align: left;
 		}
 		.select2-container--default .select2-selection--single {
-			width: 466px;
-		    border: 1px solid #c0c0c0;
-		    height: 46px;
-		    padding: 9px;
-		    background-color: #f4f4f4;
-		    border-radius: 2px;
+			width: 515px;
+			border: 1px solid #c0c0c0;
+			height: 46px;
+			padding: 9px;
+			background-color: #f4f4f4;
+			border-radius: 2px;
 		}
 		.select2-container--default .select2-selection--single .select2-selection__arrow {
 			padding: 9px 4px;
@@ -2314,6 +2260,41 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 .select2-selection__clear{
 	display: none;
 }
+.after-load{
+	display: none;
+}
+
+.b-not-found{
+	width: 540px;
+    display: inline-block;
+    text-align: left;
+    padding-top: 60px;
+    padding-bottom: 80px;
+}
+	.b-not-found h1{
+		font-size: 70px;
+	    font-weight: 700;
+	    color: #FFB31D;
+	}
+	.b-not-found h2{
+		font-size: 40px;
+    	font-weight: 300;
+	}
+	.b-not-found h3{
+		margin-top: 20px;
+    	font-size: 16px;
+	}
+		.b-not-found h3 a{
+			color: #FFB31D;
+    		text-decoration: underline;
+    		display: inline-block;
+		}
+			.b-not-found h3 a:hover{
+				text-decoration: none;
+			}
+/*.after-load-back{
+	display: none;
+}*/
 
 @media (-webkit-min-device-pixel-ratio: 1.5) {
 	.icon:before,

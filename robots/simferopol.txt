@@ -1,0 +1,3 @@
+User-agent: *
+Disallow: 
+Sitemap: http://simferopol.koleso.online/sitemap.xml

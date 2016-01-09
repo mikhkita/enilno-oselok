@@ -3,6 +3,7 @@
 class SiteController extends Controller
 {
 	public $layout='column1';
+    public $image = "";
 
 	/**
 	 * Declares class-based actions.
@@ -28,13 +29,19 @@ class SiteController extends Controller
 	 */
 	public function actionError()
 	{
-        $this->layout='service';
 	    if($error=Yii::app()->errorHandler->error)
 	    {
-	    	if(Yii::app()->request->isAjaxRequest)
-	    		echo $error['message'];
-	    	else
-	        	$this->render('error', $error);
+            if( strpos($_SERVER["REDIRECT_URL"], "admin") === false && strpos($_SERVER["REDIRECT_URL"], "integrate") === false && $error["code"] == 404 ){
+                $this->layout='kolesoOnline';
+                $this->render('/kolesoOnline/404', $error);
+            }else{
+                $this->layout='service';
+
+                if(Yii::app()->request->isAjaxRequest)
+                    echo $error['message'];
+                else
+                    $this->render('error', $error);
+            }
 	    }
 	}
 

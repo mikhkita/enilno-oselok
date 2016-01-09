@@ -1,0 +1,3 @@
+User-agent: *
+Disallow: 
+Sitemap: http://balakovo.koleso.online/sitemap.xml

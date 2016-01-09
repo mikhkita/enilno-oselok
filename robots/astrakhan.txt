@@ -1,0 +1,3 @@
+User-agent: *
+Disallow: 
+Sitemap: http://astrakhan.koleso.online/sitemap.xml

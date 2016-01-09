@@ -1,0 +1,3 @@
+User-agent: *
+Disallow: 
+Sitemap: http://moskva.koleso.online/sitemap.xml

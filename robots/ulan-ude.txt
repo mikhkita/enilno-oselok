@@ -1,0 +1,3 @@
+User-agent: *
+Disallow: 
+Sitemap: http://ulan-ude.koleso.online/sitemap.xml

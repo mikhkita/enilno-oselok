@@ -1,0 +1,3 @@
+User-agent: *
+Disallow: 
+Sitemap: http://arkhangelsk.koleso.online/sitemap.xml

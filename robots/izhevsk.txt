@@ -1,0 +1,3 @@
+User-agent: *
+Disallow: 
+Sitemap: http://izhevsk.koleso.online/sitemap.xml

@@ -17,6 +17,9 @@
 <?php $htmlopt = array("separator"=>"","template"=>"<div class='b-advert-checkbox'>{input}{label}</div>");  
 $form=$this->beginWidget('CActiveForm',array('id'=>'adverts-form',"action" => $this->createUrl('/advert/adminindex'),"method" => "GET")); ?>
 <div class="b-advert-filter clearfix">
+	<div class="b-advert-textarea">
+		<textarea name="Codes" placeholder="Список кодов"><?=$_GET['Codes']?></textarea>
+	</div>
 	<div class="left">
 		<div class="b-advert-block">
 			<h3>Площадка</h3>
@@ -30,17 +33,12 @@ $form=$this->beginWidget('CActiveForm',array('id'=>'adverts-form',"action" => $t
 			<?=CHtml::checkBoxList("Attr[37]", $_GET['Attr'][37], $data['Attr'][37],$htmlopt);?>
 			</div>
 		</div>
-		<h3><?=$data['AttrName'][58]?></h3>
-		<div class="b-group-vars">
-	        <? foreach ($data['Attr'][58] as $key => $vars): ?>
-	            <div class="b-group-col">
-	                <?=CHTML::checkBoxList("Attr[58]", $_GET['Attr'][58], $vars, array("separator"=>"","baseID"=>"arr".$key,"template"=>"<div>{input}{label}</div>")); ?>
-	            </div>
-	        <? endforeach; ?>
-	    </div>
-	</div>
-	<div class="b-advert-textarea">
-		<textarea name="Codes"><?=$_GET['Codes']?></textarea>
+		<div class="b-advert-block">
+			<h3><?=$data['AttrName'][58]?></h3>
+			<div class="clearfix">
+			<?=CHtml::checkBoxList("Attr[58]", $_GET['Attr'][58], $data['Attr'][58],$htmlopt);?>
+			</div>
+		</div>
 	</div>
 </div>	
 <div class="clearfix">
@@ -52,6 +50,7 @@ $form=$this->beginWidget('CActiveForm',array('id'=>'adverts-form',"action" => $t
 	<table class="b-table b-advert-table" border=1>
 		<tr>
 			<th>Код</th>
+			<th>Тип товара</th>
 			<th><?=$labels["place_id"]?></th>
 			<th><?=$labels["type_id"]?></th>
 			<th><?=$labels["city_id"]?></th>
@@ -63,6 +62,7 @@ $form=$this->beginWidget('CActiveForm',array('id'=>'adverts-form',"action" => $t
 					<? foreach ($adverts as $advert): ?>
 					<tr>
 						<td><?=$code?></td>
+						<td><?=$advert->place->goodType->name?></td>
 						<td><?=$name?></td>
 						<td><?=$advert->type->value?></td>
 						<td><?=$advert->city->value?></td>
@@ -77,7 +77,7 @@ $form=$this->beginWidget('CActiveForm',array('id'=>'adverts-form',"action" => $t
 			<? endforeach; ?>
 		<? else:?>
 			<tr>
-				<td colspan="5">Пусто</td>
+				<td colspan="10">Пусто</td>
 			</tr>
 		<? endif; ?>
 	</table>

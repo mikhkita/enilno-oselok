@@ -1,0 +1,3 @@
+User-agent: *
+Disallow: 
+Sitemap: http://ryazan.koleso.online/sitemap.xml

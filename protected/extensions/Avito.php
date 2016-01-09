@@ -111,6 +111,7 @@ Class Avito {
     	include_once Yii::app()->basePath.'/extensions/simple_html_dom.php';
     	$result = $this->curl->request("https://www.avito.ru/".$advert_id);
 		$html = str_get_html($result);
+		if( !$html->find('meta[property="og:url"]',0) ) return NULL;
 		$href = $html->find('meta[property="og:url"]',0)->getAttribute('content');
 		$href = $href."/edit";
 
@@ -127,15 +128,23 @@ Class Avito {
 		
 		$params['version'] = $version;
 		$params['source'] = 'edit';	
-		$params['private'] = '1';	
+		// $params['private'] = '1';	
 
-		$this->curl->request($href,$params);
+		$result = $this->curl->request($href,$params);
+		print_r($result);
    
    		$result = $this->curl->request($href."/confirm",array('done' => "",'subscribe-position' => '1'));
-   		// print_r($result);
+   		print_r($result);
 		$html = str_get_html($result);
+
 		$id = $html->find('.content-text a[rel="nofollow"]',0)->href;
 		$id = end(explode("_", $id));
+		
+		if( $html->find(".alert-warning-big a",0) && $html->find(".alert-warning-big a",0)->plaintext == "активировать его" ){
+			$result = $this->curl->request("https://www.avito.ru/profile/items/old?item_id[]=$advert_id&start");
+			// print_r($result);
+		}
+
 		return $id;
     }
    				
@@ -164,10 +173,10 @@ Class Avito {
 
     public function deleteAdvert($advert_id) {
         include_once Yii::app()->basePath.'/extensions/simple_html_dom.php';
-        $this->curl->request("https://www.avito.ru/profile",array('item_id[]' => $advert_id,'delete' => 'Снять объявление с публикации'));
+        $result = $this->curl->request("https://www.avito.ru/profile",array('item_id[]' => $advert_id,'delete' => 'Снять объявление с публикации'));
 		$html = str_get_html($this->curl->request("https://www.avito.ru/".$advert_id));
 		$delete = $html->find('.has-bold',0)->plaintext;
-		return ($delete == "Вы закрыли это объявление");
+		return ($delete == "Срок размещения этого объявления истёк" || $delete == "Вы закрыли это объявление");
     }
 
     public function generateFields($fields,$good_type_id){

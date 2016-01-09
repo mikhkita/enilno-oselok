@@ -1,0 +1,3 @@
+User-agent: *
+Disallow: 
+Sitemap: http://kursk.koleso.online/sitemap.xml

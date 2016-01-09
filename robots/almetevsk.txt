@@ -1,0 +1,3 @@
+User-agent: *
+Disallow: 
+Sitemap: http://almetevsk.koleso.online/sitemap.xml

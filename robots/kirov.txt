@@ -1,0 +1,3 @@
+User-agent: *
+Disallow: 
+Sitemap: http://kirov.koleso.online/sitemap.xml

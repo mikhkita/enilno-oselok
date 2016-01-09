@@ -4,21 +4,23 @@
 			<ul class="navigation clearfix">
 				<li><a href="<?=Yii::app()->createUrl('/kolesoOnline')?>"></a></li>
 				<!-- <li><a href="#">Каталог</a></li> -->
-				<li><a href="<? echo Yii::app()->createUrl('/kolesoOnline/category',array('type' => $_GET['type']))?>"><?=$this->params[$_GET['type']]["NAME"]?></a></li>
-				<li><a href="#"><?=$this->title?></a></li>
+				<li><a href="<? echo Yii::app()->createUrl('/kolesoOnline/category',array('type' => $_GET['type']))?>"><?=($this->params[$_GET['type']]["NAME"]." ".Yii::app()->params["city"]->in)?></a></li>
+				<li><a href="#"><?=$good_title?></a></li>
 			</ul>
-			<h3 class="category-title" id="buy-title"><?=$this->title?></h3>
+			<h1 class="category-title" id="buy-title"><?=$good_title?></h1>
 			<div class="detail-wrap clearfix">
 				<div class="detail-photo left">
 					<div class="detail-slider-for">
+						<?$i=0;?>
 						<? foreach ($imgs as $img): ?>
-							<div><a href="<?=$img?>" class="fancy-img big" style="background-image:url('<?=$img?>');" rel="gallery0"></a></div>
+							<div><a href="<?=$img?>" class="fancy-img big<?=(($i==0)?"":" after-load-back")?>" <?=(($i==0)?"":"data-")?>style="background-image:url('<?=$img?>');" rel="gallery0"></a></div>
+							<?$i++;?>
 						<? endforeach; ?>
 					</div>
 					<ul class="detail-thumb">
 						<? if (count($imgs)>1): ?>
 							<? foreach ($imgs as $img): ?>
-								<li class="thumb" style="background-image:url('<?=$img?>');"></li>
+								<li class="thumb after-load-back" data-style="background-image:url('<?=$img?>');"></li>
 							<? endforeach; ?>
 						<? endif; ?>
 					</ul>
@@ -40,9 +42,9 @@
 						<div class="left">
 							<h5 class="b-go" data-block="#shipping">Доставка и оплата</h5>
 							<? if( $is_available == "В наличии" ): ?>
-								<h6>Товар: <span class="stock">В наличии</span></h6>
+								<h6><p>Товар: </p><span class="stock">В&nbsp;наличии</span></h6>
 							<? else: ?>
-								<h6>Товар: <span class="deliv">Под заказ</span></h6>
+								<h6><p>Товар: </p><span class="deliv">Под&nbsp;заказ</span></h6>
 							<? endif; ?>
 						</div>
 					</div>

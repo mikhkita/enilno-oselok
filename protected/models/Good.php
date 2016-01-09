@@ -33,7 +33,7 @@ class Good extends GoodFilter
 			array('good_type_id', 'length', 'max'=>10),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, date, good_type_id, archive', 'safe', 'on'=>'search'),
+			array('id, date, good_type_id, archive, code', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -61,6 +61,7 @@ class Good extends GoodFilter
 			'date' => 'Дата продажи',
 			'good_type_id' => 'Тип товара',
 			'archive' => 'Продано',
+			'code' => 'Символьный код',
 		);
 	}
 

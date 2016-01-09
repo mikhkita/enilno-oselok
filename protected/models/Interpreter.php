@@ -263,10 +263,17 @@ class Interpreter extends CActiveRecord
 
 				if( isset($params["ITEM"]) ){
 					$items = preg_split('/[|;]/u', $matches[1][$i], -1, PREG_SPLIT_NO_EMPTY);
-					if( $params["ITEM"] == "RAND" ){
-						$params["ITEM"] = rand(1,count($items));
-					}elseif( $params["ITEM"] == "UNIQ" && $uniq !== NULL ){
-						$params["ITEM"] = (intval($uniq)-1)%count($items)+1 ;
+					switch ($params["ITEM"]) {
+						case 'RAND':
+							$params["ITEM"] = rand(1,count($items));
+							break;
+						case 'UNIQ':
+							if( $uniq !== NULL )
+								$params["ITEM"] = (intval($uniq)-1)%count($items)+1 ;
+							break;
+						case 'LAST':
+							$params["ITEM"] = count($items);
+							break;
 					}
 					$matches[1][$i] = (isset($items[intval($params["ITEM"])-1]))?$items[intval($params["ITEM"])-1]:"";
 				}

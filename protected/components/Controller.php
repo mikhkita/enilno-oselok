@@ -62,8 +62,9 @@ class Controller extends CController
 
         date_default_timezone_set("Asia/Novosibirsk");
 
-        if( $_SERVER["HTTP_HOST"] == "koleso.tomsk.ru" ){
+        if( $_SERVER["HTTP_HOST"] == "koleso.tomsk.ru" || $_SERVER["HTTP_HOST"] == "xn--e1ajdlcr.xn--80asehdb" ){
             header("Location: http://koleso.online".$_SERVER["REQUEST_URI"]);
+            die();
         }
         
         $this->user = User::model()->with("role")->findByPk(Yii::app()->user->id);
@@ -614,7 +615,7 @@ class Controller extends CController
         $result = true;
 
         if( count($values) ){
-            $query = Yii::app()->db->createCommand("SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = '".$table_name."'")->query();
+            $query = Yii::app()->db->createCommand("SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE `table_name` = '".$table_name."' AND `table_schema` = 'koleso'")->query();
 
             $structure = array();
             $primary_keys = array();
@@ -776,5 +777,44 @@ class Controller extends CController
     public function printTimer($str = ""){
         // list($queryCount, $queryTime) = Yii::app()->db->getStats();
         echo $str.": Прошло ".sprintf('%0.5f',microtime(true) - $this->timer)." сек. Запросов: $queryCount, Время работы с БД: ".sprintf('%0.5f',$queryTime)."s<br>";
+    }
+
+    public function checkCity(){
+        if( isset(Yii::app()->params["city"]) ) return true;
+        $city_id = 1081;
+        if( !(isset($_GET['city']) && $_GET['city'] != "") ) {
+            $curl = new Curl();
+            $city = json_decode($curl->request('http://194.28.132.219/json/'.$_SERVER["REMOTE_ADDR"]));
+            $city = (isset($city->city->name_ru)) ? $city->city->name_ru : "Томск";   
+
+            $city = Variant::model()->with(array("attribute"))->find("value='".$city."' AND attribute.attribute_id=38");
+
+            if( !$city )
+                $city = Variant::model()->with(array("attribute"))->find("value='Томск' AND attribute.attribute_id=38");
+
+            $city_id = $city->id;
+            $dictionary = DictionaryVariant::model()->find("attribute_1='$city_id' AND dictionary_id=125");
+            $city_code = (!$dictionary)?"tomsk":$dictionary->value;
+
+            header("Location: http://".$city_code.".".$_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"]);
+        }else{
+            $dictionary = DictionaryVariant::model()->find("value='".$_GET["city"]."' AND dictionary_id=125");
+            $city_id = (!$dictionary)?"1081":$dictionary->attribute_1;
+            $city = Variant::model()->with(array("attribute"))->find("id=$city_id AND attribute.attribute_id=38");
+        }
+
+        $in = DictionaryVariant::model()->find("attribute_1='$city_id' AND dictionary_id=126");
+
+        Yii::app()->params["city"] = (object) array(
+            "id" => $city_id,
+            "code" => $dictionary->value,
+            "name" => $city->value,
+            "in" => ($in)?$in->value:""
+        );
+        unset($_GET['city']);
+    }
+
+    public function cityReplace($str){
+        return str_replace(array("[+CITY+]","[+IN+]"), array(Yii::app()->params["city"]->name,Yii::app()->params["city"]->in), $str);
     }
 }

@@ -1,0 +1,3 @@
+User-agent: *
+Disallow: 
+Sitemap: http://pyatigorsk.koleso.online/sitemap.xml

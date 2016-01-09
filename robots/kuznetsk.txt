@@ -1,0 +1,3 @@
+User-agent: *
+Disallow: 
+Sitemap: http://kuznetsk.koleso.online/sitemap.xml

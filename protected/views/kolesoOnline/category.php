@@ -28,9 +28,9 @@
             <div class="mobile-only">
                 <ul class="navigation clearfix">
                     <li><a href="<?=Yii::app()->createUrl('/kolesoOnline')?>"></a></li>
-                    <li><a href="#"><?=$this->params[$_GET['type']]["NAME"]?></a></li>
+                    <li><a href="#"><?=($this->params[$_GET['type']]["NAME"]." ".Yii::app()->params["city"]->in)?></a></li>
                 </ul>
-                <h3 class="category-title"><?=$this->params[$_GET['type']]["NAME"]?></h3>
+                <h1 class="category-title"><?=($this->params[$_GET['type']]["NAME"]." ".Yii::app()->params["city"]->in)?></h1>
             </div>
             <div class="grey-block left">
                 <div class="gradient-grey">
@@ -104,9 +104,9 @@
                 <div class="not-mobile">
                     <ul class="navigation clearfix">
                         <li><a href="<?=Yii::app()->createUrl('/kolesoOnline')?>"></a></li>
-                        <li><a href="#"><?=$this->params[$_GET['type']]["NAME"]?></a></li>
+                        <li><a href="#"><?=($this->params[$_GET['type']]["NAME"]." ".Yii::app()->params["city"]->in)?></a></li>
                     </ul>
-                    <h3 class="category-title"><?=$this->params[$_GET['type']]["NAME"]?></h3>
+                    <h1 class="category-title"><?=($this->params[$_GET['type']]["NAME"]." ".Yii::app()->params["city"]->in)?></h1>
                 </div>
                 <? if(count($goods)): ?>
                 <?php $this->widget('CLinkPager', array(

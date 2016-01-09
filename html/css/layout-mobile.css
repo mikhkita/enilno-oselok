@@ -261,7 +261,8 @@ input:-moz-placeholder {
 	}
 		.b-main-slider .slide .b-block {
 		}
-			.b-main-slider .slide .b-block h2 {
+			.b-main-slider .slide .b-block h2,
+			.b-main-slider .slide .b-block h1 {
 				font-size: 50px;
 				line-height: 1.073;
 				width: 710px;
@@ -272,7 +273,7 @@ input:-moz-placeholder {
 				font-size: 28px;
 				font-weight: 300;
 				line-height: 1.667;
-				width: 540px;
+				width: 700px;
 			}
 	.b-main-slider .slick-dots {
 		font-size: 0;
@@ -1945,6 +1946,35 @@ width: 700px;margin-left: 0px;}
 		line-height: 45px;
 		margin-bottom: 35px;
 	}
+.b-not-found{
+	width: 700px;
+    display: inline-block;
+    text-align: left;
+    padding-top: 80px;
+    padding-bottom: 100px;
+}
+	.b-not-found h1{
+		font-size: 150px;
+	    font-weight: 700;
+	    color: #FFB31D;
+	}
+	.b-not-found h2{
+		font-size: 45px;
+    	font-weight: 300;
+	}
+	.b-not-found h3{
+		margin-top: 50px;
+    	font-size: 32px;
+    	line-height: 45px;
+	}
+		.b-not-found h3 a{
+			color: #FFB31D;
+    		text-decoration: underline;
+    		display: inline-block;
+		}
+			.b-not-found h3 a:hover{
+				text-decoration: none;
+			}
 
 @media screen and (max-width: 1250px){
 	
