@@ -636,6 +636,48 @@ class IntegrateController extends Controller
     }
 // Магазин --------------------------------------------------------------- Магазин
 
+// Планировщик ----------------------------------------------------------- Планировщик
+    public function actionDoNextTask($debug = false){
+        if( !$this->checkTaskAccess() && !$debug ) return true;
+
+        while( $this->allowedTask() || $debug ){
+            
+            $this->setParam( "SERVICE", "TASK_TIME", time() );
+
+            if( !$this->doTask() ) sleep(5);
+            if( $debug ) return true;
+        }
+    }
+
+    public function doTask(){
+        $task = Cron::getNext();
+
+        if( !$task ) return false;
+
+        $result = file_get_contents($task->link);
+        $json = json_decode($result);
+        if( $json->result == "success" ){
+            $task->delete();
+        }else{
+            $task->state_id = Cron::model()->states["error"];
+            if( isset($json->message) )
+                $task->error = $json->message;
+            
+            $task->save();
+        }
+    }
+
+    public function checkTaskAccess(){
+        $last = $this->getParam( "SERVICE", "TASK_TIME", true );
+        return ( time() - intval($last) > 120 );
+    }
+
+    public function allowedTask(){
+        $toggle = $this->getParam( "SERVICE", "TASK_TOGGLE", true );
+        return ( trim($toggle) == "on" );
+    }
+// Планировщик ----------------------------------------------------------- Планировщик
+
     public function actionAdminIndex(){
         $start = microtime(true);
 
