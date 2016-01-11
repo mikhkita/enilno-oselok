@@ -30,7 +30,7 @@ class DromUserParseController extends Controller
         $this->doQueueNext($debug);
     }
 
-    public function actionAdminIndex() {
+    public function actionAdminIndex($alert = false) {
         if($_POST['user']) {
             include_once Yii::app()->basePath.'/extensions/simple_html_dom.php';
             $curl = new Curl;
@@ -54,11 +54,13 @@ class DromUserParseController extends Controller
 		            $type = GoodType::model()->findByPk($good_type_id)->code;
 		            $pages = $drom->parseAllItems('http://baza.drom.ru/user/'.$user_id.'/wheel/'.$type,false);   
 		            foreach ($pages as $page) {
-		            	array_push($links, $this->createUrl('/dromuserparse/parse',array('page'=> $page,'user_id' => $user_id, 'good_type_id' => $good_type_id)));
+		            	array_push($links, "http://".Yii::app()->params['host'].$this->createUrl('/dromuserparse/parse',array('page'=> $page,'user_id' => $user_id, 'good_type_id' => $good_type_id)));
 		            }
                     Cron::addAll($links);
 		        }
 		        $drom->curl->removeCookies();
+                Yii::app()->user->setFlash('message','Товары пользователя добавлены в очередь');
+                $this->refresh();
 		    }
         } else {
             $this->render('adminIndex');
@@ -73,11 +75,11 @@ class DromUserParseController extends Controller
         if($params) {
             if(Good::addAttributes($params,$good_type_id) === true) {
                 $this->setParam( "OTHER", "PARTNERS_LAST_CODE",($last_code+1));
-            }
-            return json_encode(array("result" => "success","message" => "Товар добавлен"));
-        } else if($params === false) 
-            return json_encode(array("result" => "warning","message" => "Товара нет в наличии")); 
-            else return json_encode(array("result" => "error","message" => "Товара нет в наличии")); 
+                echo json_encode(array("result" => "success"));
+            } else echo json_encode(array("result" => "error","message" => "Ошибка при добавлении товара"));
+        } else if($params === false) {
+                echo json_encode(array("result" => "success")); 
+            } else echo json_encode(array("result" => "error","message" => "Ошибка при парсинге товара")); 
 
     }
 

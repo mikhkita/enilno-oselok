@@ -1,3 +1,6 @@
+<? if(Yii::app()->user->hasFlash('message')): ?>
+    <script>alert("<?=Yii::app()->user->getFlash('message');?>");</script>
+<? endif; ?>
 <h1><?=$this->adminMenu["cur"]->name?></h1>
 <div class="drom-user-parse">
 

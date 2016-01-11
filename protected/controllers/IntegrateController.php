@@ -637,7 +637,7 @@ class IntegrateController extends Controller
 // Магазин --------------------------------------------------------------- Магазин
 
 // Планировщик ----------------------------------------------------------- Планировщик
-    public function actionDoNextTask($debug = 1){
+    public function actionDoNextTask($debug = false){
         if( !$this->checkTaskAccess() && !$debug ) return true;
 
         while( $this->allowedTask() || $debug ){
@@ -654,7 +654,7 @@ class IntegrateController extends Controller
 
         if( !$task ) return false;
 
-        $result = file_get_contents($task->link);
+        $result = file_get_contents(urldecode($task->link));
         $json = json_decode($result);
         if( $json->result == "success" ){
             $task->delete();
