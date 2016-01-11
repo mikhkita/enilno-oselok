@@ -139,6 +139,44 @@ class QueueController extends Controller
 
         $model = Queue::model()->with(array("advert.good.type"=>array("select"=>"good_type.name","alias"=>"good_type"),"advert.good.fields"=>array("condition"=>"fields.attribute_id=3"),"advert.good.fields.variant","advert.good.fields.attribute","advert.place.category","advert.city","advert.type","state","action"))->findAll($criteria);
 
+  		//  if( $good_type_id !== false ){
+		// 	$_GET["Codes"] = implode("\n", Good::getCheckboxes($good_type_id));
+		// 	unset($_GET["good_type_id"]);
+		// }
+		
+		$model_filter = Place::model()->with('category','goodType')->findAll();
+		$data = array();
+		foreach ($model_filter as $key => $item) {
+			$data['Place'][$item->id] = $item->category->value." ".$item->goodType->name;
+		}
+		$model_filter = Attribute::model()->with(array('variants.variant'=>array("order"=>"variant.sort ASC")))->findAllByPk(array(37,58,59,60,61));
+		$keys = array(37=>37,58=>58,59=>58,60=>58,61=>58);
+		foreach ($model_filter as $key => $item) {
+			$data['AttrName'][$item->id] = $item->name;
+			foreach ($item->variants as $variant) {
+				$data['Attr'][$keys[$variant->attribute_id]][$variant->variant_id] = $variant->value;		
+			}
+		}
+		// $data['Attr'][58] = $this->splitByCols(5,$data['Attr'][58]);
+		
+		if(!$_GET) 
+			$_GET = array();
+		$_SESSION["advert_filter"] = $_GET;
+		$dataProvider = Advert::filter($_GET,array('type','city','place.category','place.goodType'));
+		$pages = $dataProvider->getPagination();
+		$temp = array();
+		foreach ($dataProvider->getData() as $advert) {
+			array_push($temp, $advert->good_id);
+		}
+
+		$temp = GoodAttribute::getCodeById($temp);
+		$advert_count = $dataProvider->totalItemCount;
+		foreach ($dataProvider->getData() as $i => $advert) {
+			if( !isset($adverts_arr[$advert->place->category->value]) ) $adverts_arr[$advert->place->category->value] = array();
+			if( !isset($adverts_arr[$advert->place->category->value][$temp[$advert->good_id]]) ) $adverts_arr[$advert->place->category->value][$temp[$advert->good_id]] = array();
+			array_push($adverts_arr[$advert->place->category->value][$temp[$advert->good_id]], $advert);
+		}
+
         $options = array(
 			'data'=>$model,
 			'filter'=>$filter,
@@ -148,7 +186,11 @@ class QueueController extends Controller
 			'waiting_count'=>Queue::model()->with("advert.place")->count("place.category_id=$category_id AND state_id=1"),
 			'error_count'=>Queue::model()->with("advert.place")->count("place.category_id=$category_id AND state_id=3"),
 			'freeze_count'=>Queue::model()->with("advert.place")->count("place.category_id=$category_id AND state_id=4"),
-			'start_count'=>Queue::model()->with("advert.place")->count("place.category_id=$category_id AND start IS NOT NULL")
+			'start_count'=>Queue::model()->with("advert.place")->count("place.category_id=$category_id AND start IS NOT NULL"),
+			'adverts_arr' => $adverts_arr,
+			'data_filter'=>$data,
+			"pages" => $pages,
+			'advert_count' => $advert_count
 		);
 
 		if( !$partial ){

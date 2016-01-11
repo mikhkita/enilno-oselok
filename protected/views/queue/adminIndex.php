@@ -4,6 +4,38 @@
 <? else: ?>
 	<a class="b-link-back" href="<?php echo $this->createUrl('/queue/adminindex',array("category_id"=>2048))?>">Авито</a>
 <? endif; ?>
+<?php $htmlopt = array("separator"=>"","template"=>"<div class='b-advert-checkbox'>{input}{label}</div>");  
+$form=$this->beginWidget('CActiveForm',array('id'=>'queue-form',"action" => $this->createUrl('/queue/adminindex',array('partial' => true)),"method" => "GET")); ?>
+<div class="b-advert-filter clearfix">
+	<div class="b-advert-textarea">
+		<textarea name="Codes" placeholder="Список кодов"><?=$_GET['Codes']?></textarea>
+	</div>
+	<div class="left">
+		<div class="b-advert-block">
+			<h3>Площадка</h3>
+			<div class="clearfix">
+			<?=CHtml::checkBoxList("Place[]", $_GET['Place'], $data['Place'],$htmlopt); ?>
+			</div>
+		</div>
+		<div class="b-advert-block">
+			<h3><?=$data['AttrName'][37]?></h3>
+			<div class="clearfix">
+			<?=CHtml::checkBoxList("Attr[37]", $_GET['Attr'][37], $data['Attr'][37],$htmlopt);?>
+			</div>
+		</div>
+		<div class="b-advert-block">
+			<h3><?=$data['AttrName'][58]?></h3>
+			<div class="clearfix">
+			<?=CHtml::checkBoxList("Attr[58]", $_GET['Attr'][58], $data['Attr'][58],$htmlopt);?>
+			</div>
+		</div>
+	</div>
+</div>	
+
+<div id="adverts-form-hidden" style="display:none;"></div>
+<p><br>Найдено объявлений: <?=$advert_count?></p>
+<?php $this->endWidget(); ?>
+
 <div class="b-buttons-left-cont clearfix">
 	<a href="<?php echo $this->createUrl('/queue/adminstart',array("category_id"=>$category->id))?>" class="ajax-request b-butt b-start-queue" data-id="<?=$category->id?>">Старт</a>
 	<a href="<?php echo $this->createUrl('/queue/adminstop',array("category_id"=>$category->id))?>" class="ajax-request b-butt b-stop-queue" data-id="<?=$category->id?>">Стоп</a>
