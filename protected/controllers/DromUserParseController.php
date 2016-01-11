@@ -17,6 +17,10 @@ class DromUserParseController extends Controller
                 'actions'=>array('adminIndex'),
                 'roles'=>array('manager'),
             ),
+            array('allow',
+                'actions'=>array('parse'),
+                'users'=>array('*'),
+            ),
             array('deny',
                 'users'=>array('*'),
             )
@@ -43,34 +47,38 @@ class DromUserParseController extends Controller
                         Dictionary::add(41,intval($variant_id),$user_name); //хуйня какая-то
                     } else return false;
                 }
-               	$drom = new Drom();
-               	$links = array();
+               	$drom = new Drom(); 	
                	$_POST['good_types'] = isset($_POST['good_types']) ? $_POST['good_types'] : array(1,2,3);
 		        foreach ($_POST['good_types'] as $good_type_id) {
+                    $links = array();
 		            $type = GoodType::model()->findByPk($good_type_id)->code;
 		            $pages = $drom->parseAllItems('http://baza.drom.ru/user/'.$user_id.'/wheel/'.$type,false);   
 		            foreach ($pages as $page) {
-		            	array_push($links, $this->createUrl('/dromuserparse/adminparse',array('page'=> $page,'user_id' => $user_id, 'good_type_id' => $good_type_id)));
+		            	array_push($links, $this->createUrl('/dromuserparse/parse',array('page'=> $page,'user_id' => $user_id, 'good_type_id' => $good_type_id)));
 		            }
+                    Cron::addAll($links);
 		        }
 		        $drom->curl->removeCookies();
-		        return $links;
 		    }
         } else {
             $this->render('adminIndex');
         }
     }
-    public function actionAdminParse($page,$user_id,$good_type_id) {
+    public function actionParse($page,$user_id,$good_type_id) {
     	$page = urldecode($page);	
     	$drom = new Drom();
         $last_code = $this->getParam( "OTHER", "PARTNERS_LAST_CODE", true);
         $params = $drom->parseAdvert($page,$user_id,$good_type_id,$last_code);
+        $drom->curl->removeCookies();
         if($params) {
             if(Good::addAttributes($params,$good_type_id) === true) {
                 $this->setParam( "OTHER", "PARTNERS_LAST_CODE",($last_code+1));
             }
-        }
-        $drom->curl->removeCookies();
+            return json_encode(array("result" => "success","message" => "Товар добавлен"));
+        } else if($params === false) 
+            return json_encode(array("result" => "warning","message" => "Товара нет в наличии")); 
+            else return json_encode(array("result" => "error","message" => "Товара нет в наличии")); 
+
     }
 
 }

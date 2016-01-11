@@ -290,7 +290,6 @@ Class Drom {
         $goodPresentState = trim($html->find("span[data-field=goodPresentState]",0)->plaintext);
         $marking = 1;
         if($goodPresentState == "В наличии") {
-
         	$params[$fields['code']] = $good_code."p";
         	$params[$fields['realisation']] = $user_id;
 	        $params[$fields['city']] = str_ireplace(array('в','во'," "),"", $html->find("span[data-field=subject] nobr",0)->plaintext);

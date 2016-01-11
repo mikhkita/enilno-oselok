@@ -93,7 +93,7 @@ class Cron extends CActiveRecord
 			if( $time !== NULL )
 				$model->time = $time;
 
-			$model->state_id = $this->states["waiting"];
+			$model->state_id = Cron::model()->states["waiting"];
 			$model->save();
 			return $model;
 		}else{
@@ -106,14 +106,14 @@ class Cron extends CActiveRecord
 		if( $values ){
 			foreach ($values as $key => $value) {
 				if( !is_array($value) ){
-					$value = array("link"=>$value, "state_id"=>$this->states["waiting"]);
+					$value = array("link"=>$value, "state_id"=>Cron::model()->states["waiting"]);
 				}else if( !isset($value["state_id"]) )
-					$value["state_id"] = $this->states["waiting"];
+					$value["state_id"] = Cron::model()->states["waiting"];
 
 				$values[$key] = $value;
 			}
 
-			Controller::insertValues($this->tableName(), $values);
+			Controller::insertValues(Cron::model()->tableName(), $values);
 		}
 	}
 
