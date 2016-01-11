@@ -129,22 +129,8 @@ class QueueController extends Controller
 		if( !$partial ){
 			$this->layout='admin';
 		}
-		$filter = new Queue('filter');
-		$criteria = new CDbCriteria();
 
-        $criteria->order = "t.id ASC";
-        $criteria->condition = "place.category_id=$category_id";
-        $criteria->addCondition("state_id!=4");
-        $criteria->limit = 300;
-
-        $model = Queue::model()->with(array("advert.good.type"=>array("select"=>"good_type.name","alias"=>"good_type"),"advert.good.fields"=>array("condition"=>"fields.attribute_id=3"),"advert.good.fields.variant","advert.good.fields.attribute","advert.place.category","advert.city","advert.type","state","action"))->findAll($criteria);
-
-  		//  if( $good_type_id !== false ){
-		// 	$_GET["Codes"] = implode("\n", Good::getCheckboxes($good_type_id));
-		// 	unset($_GET["good_type_id"]);
-		// }
-		
-		$model_filter = Place::model()->with('category','goodType')->findAll();
+		$model_filter = Place::model()->with('category','goodType')->findAll("category_id=$category_id");
 		$data = array();
 		foreach ($model_filter as $key => $item) {
 			$data['Place'][$item->id] = $item->category->value." ".$item->goodType->name;
@@ -157,46 +143,66 @@ class QueueController extends Controller
 				$data['Attr'][$keys[$variant->attribute_id]][$variant->variant_id] = $variant->value;		
 			}
 		}
+		$queue_action = Action::model()->findAll();
+		foreach ($queue_action as $item) {
+			$data['Attr']['action'][$item->id] = $item->name;
+		}
+		$queue_state = QueueState::model()->findAll();
+		foreach ($queue_state as $item) {
+			$data['Attr']['state'][$item->id] = $item->name;
+		}
 		// $data['Attr'][58] = $this->splitByCols(5,$data['Attr'][58]);
 		
 		if(!$_GET) 
 			$_GET = array();
-		$_SESSION["advert_filter"] = $_GET;
-		$dataProvider = Advert::filter($_GET,array('type','city','place.category','place.goodType'));
-		$pages = $dataProvider->getPagination();
+		// $_SESSION["advert_filter"] = $_GET;
+		$dataProvider = Advert::filter($_GET,array('type','city','place.category','place.goodType'),array("id"));
 		$temp = array();
 		foreach ($dataProvider->getData() as $advert) {
-			array_push($temp, $advert->good_id);
+			array_push($temp, $advert->id);
 		}
 
-		$temp = GoodAttribute::getCodeById($temp);
-		$advert_count = $dataProvider->totalItemCount;
-		foreach ($dataProvider->getData() as $i => $advert) {
-			if( !isset($adverts_arr[$advert->place->category->value]) ) $adverts_arr[$advert->place->category->value] = array();
-			if( !isset($adverts_arr[$advert->place->category->value][$temp[$advert->good_id]]) ) $adverts_arr[$advert->place->category->value][$temp[$advert->good_id]] = array();
-			array_push($adverts_arr[$advert->place->category->value][$temp[$advert->good_id]], $advert);
-		}
+		$filter = new Queue('filter');
+		$criteria = new CDbCriteria();
 
+        $criteria->order = "t.id ASC";
+        $criteria->condition = "place.category_id=$category_id";
+        $criteria->addCondition("state_id!=4");
+
+        if(isset($_GET['Attr']['state'])) {
+        	$criteria->addInCondition("state_id",$_GET['Attr']['state']);
+        }
+    	if(isset($_GET['Attr']['action'])) {
+    		$criteria->addInCondition("action_id",$_GET['Attr']['action']);
+    	}
+        $criteria->addInCondition("advert_id",$temp);
+        $criteria->limit = 300;
+
+        $model = Queue::model()->with(array("advert.good.type"=>array("select"=>"good_type.name","alias"=>"good_type"),"advert.good.fields"=>array("condition"=>"fields.attribute_id=3"),"advert.good.fields.variant","advert.good.fields.attribute","advert.place.category","advert.city","advert.type","state","action"))->findAll($criteria);
+
+  		//  if( $good_type_id !== false ){
+		// 	$_GET["Codes"] = implode("\n", Good::getCheckboxes($good_type_id));
+		// 	unset($_GET["good_type_id"]);
+		// }
+		
         $options = array(
 			'data'=>$model,
 			'filter'=>$filter,
 			'labels'=>Queue::attributeLabels(),
 			'category'=>Variant::model()->findByPk($category_id),
+			'count_filter' => count($model),
 			'count'=>Queue::model()->with("advert.place")->count("place.category_id=$category_id"),
 			'waiting_count'=>Queue::model()->with("advert.place")->count("place.category_id=$category_id AND state_id=1"),
 			'error_count'=>Queue::model()->with("advert.place")->count("place.category_id=$category_id AND state_id=3"),
 			'freeze_count'=>Queue::model()->with("advert.place")->count("place.category_id=$category_id AND state_id=4"),
 			'start_count'=>Queue::model()->with("advert.place")->count("place.category_id=$category_id AND start IS NOT NULL"),
-			'adverts_arr' => $adverts_arr,
-			'data_filter'=>$data,
-			"pages" => $pages,
-			'advert_count' => $advert_count
+			'data_filter'=>$data
 		);
 
 		if( !$partial ){
 			$this->render('adminIndex',$options);
 		}else{
-			$this->renderPartial('adminIndex',$options);
+			$this->renderPartial('_table',$options);
 		}
 	}
 
