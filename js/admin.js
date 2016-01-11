@@ -1115,15 +1115,17 @@ $(document).ready(function(){
 
     /* Live -------------------------------------- Live */
 
-    if( $("#b-live").length ){
-        var liveDelay = $("#b-live").attr("data-delay")*1000,
-            liveUrl = $("#b-live").attr("data-url");
+    if( $("#filter-form").length ){
+        $this = $("#filter-form");
+        var liveDelay = $this.attr("data-delay")*1000;
         function liveUpdate(){
             $.ajax({
-                url: liveUrl,
+                url: $this.attr("action"),
+                data: $this.serialize(),
+                method: $this.attr("method"),
                 success: function(msg){
                     console.log("success");
-                    $(".b-main-center").html(msg);
+                    $(".ajax-content").html(msg);
                 },
                 error: function(){
                     
