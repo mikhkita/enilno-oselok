@@ -96,7 +96,7 @@ class Dictionary extends CActiveRecord
 
 	public function add($dictionary_id,$variant_id,$value) {
 		$dictionary_variant = new DictionaryVariant;
-		$dictionary_variant->dictionary_id = $dictionary_id;
+		$dictionary_variant->dictionary_id = intval($dictionary_id);
 		$dictionary_variant->attribute_1 = intval($variant_id);
 		$dictionary_variant->value = $value;
 		if($dictionary_variant->save()) return true;

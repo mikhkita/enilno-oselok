@@ -38,13 +38,11 @@ class DromUserParseController extends Controller
             $user_id = $html->find(".userProfile",0) ? $html->find(".userProfile",0)->getAttribute('data-view-dir-user-id') : NULL;
             $curl->removeCookies();
             if($user_id) {
-                $user_name = trim($html->find("span .userNick",0)->plaintext);
+                $user_name = trim($html->find("span.userNick",0)->plaintext);
                 $model = Attribute::model()->with('variants.variant')->find("attribute_id=43 AND value=".$user_id);
-                if($model) {
-                    $variant_id = $model->variants->variant_id;
-                } else {
+                if(!$model) {
                     if($variant_id = Variant::add(43,$user_id)) {
-                        Dictionary::add(41,intval($variant_id),$user_name); //хуйня какая-то
+                        Dictionary::add(41,$variant_id,$user_name);
                     } else return false;
                 }
                	$drom = new Drom(); 	
