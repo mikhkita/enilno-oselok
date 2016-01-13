@@ -353,16 +353,20 @@ class KolesoOnlineController extends Controller
 		$wheel_filter =  $this->getFilter(3);
        	$tires = $this->getGoods(8,1,array(
 			"good_type_id"=>1,
+			"attributes"=>array( 43 => array(1418,1419,1857,1860))
 		),array("field"=>46,"type"=>"DESC")); 
 		$tires = $tires['items'];
 
 		$discs = $this->getGoods(8,2,array(
 			"good_type_id"=>2,
-			"attributes"=>array(78=>2486,77=>array(2478,2479,2480,2481,2482))
+			"attributes"=>array(78=>2486,77=>array(2478,2479,2480,2481,2482), 43 => array(1418,1419,1857,1860))
 		),array("field"=>46,"type"=>"DESC"));
 		$discs = $discs['items'];
 
-		$wheels = $this->getGoods(8,3);
+		$wheels = $this->getGoods(8,3,array(
+			"good_type_id"=>3,
+			"attributes"=>array( 43 => array(1418,1419,1857,1860))
+		));
 		$wheels = $wheels['items'];
 
 		$this->params[1]["FILTER"] = $this->splitByRows(4,$this->params[1]["FILTER"]);
@@ -414,6 +418,7 @@ class KolesoOnlineController extends Controller
 
 		$_SESSION["FILTER"][$_GET['type']]['sort'] = (isset($_SESSION["FILTER"][$_GET['type']]['sort']))?$_SESSION["FILTER"][$_GET['type']]['sort']:array("field"=>9,"type"=>"DESC");
 
+		$_SESSION["FILTER"][$_GET['type']]["arr"][43] = array(1418,1419,1857,1860);
 		$goods = $this->getGoods(40,$_GET['type']); 
 		$count = $goods['count'];	
 		$pages = $goods['pages'];	
