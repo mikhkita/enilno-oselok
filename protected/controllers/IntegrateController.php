@@ -129,7 +129,8 @@ class IntegrateController extends Controller
                 "int_attributes"=>array(
                     46 => array(
                         "min" => 1,
-                    )
+                    ),
+                    43 => array(1418,1419,1857,1860)
                 )
             )
         )->getPage(
