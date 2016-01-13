@@ -28,7 +28,7 @@ class LeadController extends Controller
 		$model->date = date("d.m.Y", time());
 		if(isset($_POST['Lead']))
 		{
-			$_POST['Lead']['date'] = date_format(date_create_from_format('m.d.Y',$_POST['Lead']['date']), 'Y-m-d H:i:s');
+			$_POST['Lead']['date'] = date_format(date_create_from_format('d.m.Y',$_POST['Lead']['date']), 'Y-m-d H:i:s');
 			$model->attributes=$_POST['Lead'];
 			if($model->save()){
 				$this->actionAdminIndex(true);
@@ -45,10 +45,10 @@ class LeadController extends Controller
 	{
 		$model=$this->loadModel($id);
 		$date = date_create($model->date);
-		$model->date = date_format($date, 'm.d.Y');
+		$model->date = date_format($date, 'd.m.Y');
 		if(isset($_POST['Lead']))
 		{
-			$_POST['Lead']['date'] = date_format(date_create_from_format('m.d.Y',$_POST['Lead']['date']), 'Y-m-d H:i:s');
+			$_POST['Lead']['date'] = date_format(date_create_from_format('d.m.Y',$_POST['Lead']['date']), 'Y-m-d H:i:s');
 			$model->attributes=$_POST['Lead'];
 			if($model->save()){
 				$this->actionAdminIndex(true);
@@ -96,10 +96,16 @@ class LeadController extends Controller
 
         $model = Lead::model()->findAll($criteria);
 
+        $cities = AttributeVariant::model()->with("variant")->findAll("attribute_id=27");
+        foreach ($cities as &$item) {
+        	$item = $item->value;
+        }
+        $cities = json_encode($cities);
 		if( !$partial ){
 			$this->render('adminIndex',array(
 				'data'=>$model,
 				'filter'=>$filter,
+				'cities' => $cities,
 				'labels'=>Lead::attributeLabels()
 			));
 		}else{

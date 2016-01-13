@@ -340,6 +340,13 @@ $(document).ready(function(){
         $( "#datepicker" ).datepicker( $.datepicker.regional[ "ru" ] );
         $( "#datepicker" ).datepicker();
 
+        // if($("#autocomplete").length) {
+            
+        // }
+        // $( "#autocomplete" ).autocomplete({
+        //     source: availableTags
+        // });
+
         $(".numeric").numericInput({ allowFloat: true, allowNegative: true });
 
         $form.submit(function(e,a){

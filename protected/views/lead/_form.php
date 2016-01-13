@@ -18,6 +18,11 @@
         <?php echo $form->error($model,'first_phone'); ?>
     </div>
     <div class="row">
+        <?php echo $form->labelEx($model,'first_city'); ?>
+        <?php echo $form->textField($model,'first_city',array('id' => 'autocomplete')); ?>
+        <?php echo $form->error($model,'first_city'); ?>
+    </div>
+    <div class="row">
         <?php echo $form->labelEx($model,'date'); ?>
         <?php echo $form->textField($model,'date',array("id" => 'datepicker','required' => true)); ?>
         <?php echo $form->error($model,'date'); ?>

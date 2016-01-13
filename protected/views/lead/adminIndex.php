@@ -20,7 +20,7 @@
 			<? foreach ($data as $i => $item): ?>
 				<tr>
 					<td><?=$item->id?></td>
-					<td class="align-left"><a href="<?php echo Yii::app()->createUrl('/'.$this->adminMenu["cur"]->code.'/adminupdate',array('id'=>$item->id))?>"><?=$item->name?></a></td>
+					<td class="align-left"><?=$item->name?></td>
 					<td class="align-left"><?=$item->first_phone?></td>
 					<td class="align-left"><?=DesktopTableCell::model()->find("row_id=".$item->state_id)->value;?></td>
 					<td class="b-tool-cont">
@@ -36,3 +36,6 @@
 		<? endif; ?>
 	</table>
 <?php $this->endWidget(); ?>
+<? foreach ($variable as $key => $value) {
+	# code...
+}?>
