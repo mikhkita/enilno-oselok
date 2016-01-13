@@ -48,7 +48,7 @@ class DesktopTableCol extends CActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
 			'table' => array(self::BELONGS_TO, 'DesktopTable', 'table_id'),
-			'cells' => array(self::HAS_MANY, 'DesktopTableCell', 'row_id'),
+			'cells' => array(self::HAS_MANY, 'DesktopTableCell', 'col_id'),
 			'type' => array(self::BELONGS_TO, 'DesktopTableColType', 'type_id'),
 		);
 	}

@@ -335,6 +335,17 @@ $(document).ready(function(){
         });
 
         $form.find("input.phone").mask('+7 (999) 999-99-99',{placeholder:"_"});
+        $form.find("#datepicker").mask('99.99.9999',{placeholder:"_"});
+
+        $( "#datepicker" ).datepicker( $.datepicker.regional[ "ru" ] );
+        $( "#datepicker" ).datepicker();
+
+        // if($("#autocomplete").length) {
+            
+        // }
+        // $( "#autocomplete" ).autocomplete({
+        //     source: availableTags
+        // });
 
         $(".numeric").numericInput({ allowFloat: true, allowNegative: true });
 

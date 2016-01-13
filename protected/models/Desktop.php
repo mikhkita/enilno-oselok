@@ -98,6 +98,12 @@ class Desktop extends CActiveRecord
  		return parent::beforeDelete();
  	}
 
+ 	public function getList($table_col){
+ 		$model = DesktopTableCol::model()->with('cells')->findByPk($table_col);
+ 		return $model->cells;
+ 	}
+
+
 	/**
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!

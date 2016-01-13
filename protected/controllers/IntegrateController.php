@@ -637,7 +637,7 @@ class IntegrateController extends Controller
 // Магазин --------------------------------------------------------------- Магазин
 
 // Планировщик ----------------------------------------------------------- Планировщик
-    public function actionDoNextTask($debug = false){
+    public function actionDoNextTask($debug = 1){
         if( !$this->checkTaskAccess() && !$debug ) return true;
 
         while( $this->allowedTask() || $debug ){
