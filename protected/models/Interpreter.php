@@ -281,6 +281,10 @@ class Interpreter extends CActiveRecord
 			$template = str_replace($matches[0], $matches[1], $template);
 
 			preg_match_all("~\[\+([^\+\]]+)\+\]~", $template, $matches);
+
+			// preg_match_all("~\{([^\}]+)\}~", $template, $matches);
+			// print_r($matches);
+			// die();
 		}
 
 		$template = Interpreter::calculateAll($template);
