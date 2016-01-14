@@ -258,7 +258,7 @@ Class Drom {
         return $fields;
     }
 
-    public function parseAdvert($page,$user_id,$good_type_id,$good_code) {
+    public function parseAdvert($page,$user_id,$good_code) {
         include_once Yii::app()->basePath.'/extensions/simple_html_dom.php';
         $fields = array(
             'link' => 104,
@@ -291,6 +291,7 @@ Class Drom {
         $params = array();
         $marking = 1;
         $html = str_get_html(iconv('windows-1251', 'utf-8', $this->curl->request($page)));
+        die($html->find("span.itemListElement",2)->plaintext);
         $params[$fields['link']] = "http://baza.drom.ru/".array_pop(explode("-", $page));
         $params[$fields['title']] = "Заголовок: ".trim(str_ireplace($html->find("span[data-field=subject] nobr",0)->plaintext,"",$html->find("span[data-field=subject]",0)->plaintext))."\n\r";
         $params[$fields['state']] .= "Наличие товара: ".trim($html->find("span[data-field=goodPresentState]",0)->plaintext)."\n\r";

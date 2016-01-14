@@ -100,7 +100,7 @@ class LeadController extends Controller
         foreach ($cities as &$item) {
         	$item = $item->value;
         }
-        $cities = json_encode($cities);
+        // $cities = json_encode($cities);
 		if( !$partial ){
 			$this->render('adminIndex',array(
 				'data'=>$model,
