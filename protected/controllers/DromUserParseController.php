@@ -74,8 +74,9 @@ class DromUserParseController extends Controller
     	$page = urldecode($page);	
     	$drom = new Drom();
         $good_code = ($code === NULL) ? $this->getParam( "OTHER", "PARTNERS_LAST_CODE", true) : $code;
-        $params = $drom->parseAdvert($page,$user_id,$good_code);
+        $params = $drom->parseAdvert($page,$good_code,$user_id);
         $drom->curl->removeCookies();
+
         if($params) {
             if(Good::addAttributes($params,$params[0]) === true) {
                 if($code === NULL) $this->setParam( "OTHER", "PARTNERS_LAST_CODE",($good_code+1));

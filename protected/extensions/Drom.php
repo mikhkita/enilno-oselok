@@ -260,10 +260,10 @@ Class Drom {
 
     public function parseAdvert($page,$good_code,$user_id) {
         $link = "http://baza.drom.ru/".array_pop(explode("-", $page));
-        if(!GoodAttribute::model()->find("attribute_id=106 AND varchar_value=".$link)) {
+        if(!GoodAttribute::model()->find("attribute_id=106 AND varchar_value='".$link."'")) {
             include_once Yii::app()->basePath.'/extensions/simple_html_dom.php';
             $fields = array(
-                'good_type_id' => 0,
+                'type' => 0,
                 'link' => 106,
         		'code' => 3,
         		'realisation' => 43,
@@ -293,7 +293,9 @@ Class Drom {
                 'tireWidth' => 7,
                 'predestination' => 98,
                 'made' => 11,
+                
         	);
+
             $params = array();
             $marking = 1;
             $html = str_get_html(iconv('windows-1251', 'utf-8', $this->curl->request($page)));
@@ -305,20 +307,19 @@ Class Drom {
                     if(!Variant::add(43,$user_id)) return false;
                 }
             }
-            
-            switch (trim($html->find("span.itemListElement",2)->plaintext)) {
+
+            switch (trim($html->find("#breadcrumbs span",3)->plaintext)) {
                 case "Шины":
-                    $good_type_id = 1;
+                    $params[$fields['type']] = 1;
                     break;
                 case "Диски":
-                    $good_type_id = 2;
+                    $params[$fields['type']] = 2;
                     break;
                 case "Колёса":
-                    $good_type_id = 3;
+                    $params[$fields['type']] = 3;
                     break;
             }
 
-            
             $params[$fields['title']] = "Заголовок: ".trim(str_ireplace($html->find("span[data-field=subject] nobr",0)->plaintext,"",$html->find("span[data-field=subject]",0)->plaintext))."\n\r";
             $params[$fields['state']] .= "Наличие товара: ".trim($html->find("span[data-field=goodPresentState]",0)->plaintext)."\n\r";
         	$params[$fields['code']] = $good_code;
@@ -328,14 +329,14 @@ Class Drom {
             $params[$fields['inSetQuantity']] = $html->find("span[data-field=inSetQuantity]",0) ? array_shift(explode(" ш", $html->find("span[data-field=inSetQuantity]",0)->plaintext)) : NULL;   
             $params[$fields['quantity']] .= "Количество комплектов: ".trim(array_shift(explode(" ш", $html->find("span[data-field=quantity]",0)->plaintext)))."\n\r";
 
-            if($good_type_id == 2) {
+            if($params[$fields['type']] == 2) {
             	$params[$fields['diskModel']] = $html->find("span[data-field=model]",0)->plaintext;
             	$params[$fields['wheelDiameter']] = str_replace('"',"", $html->find("span[data-field=wheelDiameter]",0)->plaintext);
             	$params[$fields['condition']] = $html->find("span[data-field=condition]",0) ? trim($html->find("span[data-field=condition]",0)->plaintext) : NULL;
             	$params[$fields['condition']] = ($params[$fields['condition']]=="Новый") ? "Новые": $params[$fields['condition']];
             }
 
-            if($good_type_id != 1) {
+            if($params[$fields['type']] != 1) {
     	        $params[$fields['wheelWeight']] = $html->find("span[data-field=wheelWeight]",0) ? str_replace(',','.',str_replace('кг.',"", $html->find("span[data-field=wheelWeight]",0)->plaintext)) : NULL;
     	        $params[$fields['wheelWidth']] = $html->find("div[data-field=discParameters] .value span",0) ? explode("/",str_replace('"',"", trim($html->find("div[data-field=discParameters] .value span",0)->plaintext))) : NULL;
     	        if($params[$fields['wheelWidth']]) {
@@ -362,14 +363,14 @@ Class Drom {
     	    	if($params[$fields['diskHoleDiameter']]) $params[$fields['diskHoleDiameter']] = floatval(str_replace(',', '.', $params[$fields['diskHoleDiameter']]));
     	    }
 
-            if($good_type_id == 1) {
+            if($params[$fields['type']] == 1) {
             	$params[$fields['tireModel']] .= "Модель шины: ".trim(str_ireplace($html->find("span[data-field=model] div",0)->plaintext,"",$html->find("span[data-field=model]",0)->plaintext))."\n\r";
                 if(count($html->find("span[data-field=marking]")) == 5) {
                     $params[$fields['wheelDiameter']] = $html->find("span[data-field=marking] a",0)->plaintext;
                     $marking = 2;
                 }
             } 
-            if($good_type_id == 3) {
+            if($params[$fields['type']] == 3) {
                 $params[$fields['tireModel']] .= "Модель шины: ".trim($html->find("span[data-field=tireFirmAndModel]",1)->plaintext)."\n\r";
                 $params[$fields['diskModel']] = $html->find("span[data-field=discFirmAndModel]",0)->plaintext;
                 if(count($html->find("span[data-field=marking]")) == 5) {
@@ -378,7 +379,7 @@ Class Drom {
                 }
             }
 
-            if($good_type_id != 2) {
+            if($params[$fields['type']] != 2) {
     	        $params[$fields['year']] = $html->find("span[data-field=year]",0) ? $html->find("span[data-field=year]",0)->plaintext : NULL;
     	        $params[$fields['wheelSeason']] = $html->find("span[data-field=wheelSeason]",0) ? trim($html->find("span[data-field=wheelSeason]",0)->plaintext) : NULL;
                 if($params[$fields['wheelSeason']] == "Зимние") {
@@ -411,7 +412,7 @@ Class Drom {
                 if(!is_array($value)) $value = trim($value);
             }
             if(!empty($html->find(".bulletinImages img"))) {
-    	        $dir = Yii::app()->params["imageFolder"]."/".GoodType::model()->findByPk($good_type_id)->code."s/".$good_code; 
+    	        $dir = Yii::app()->params["imageFolder"]."/".GoodType::model()->findByPk($params[$fields['type']])->code."s/".$good_code; 
     	        if (!is_dir($dir)) mkdir($dir, 0777, true);
     	        foreach ($html->find(".bulletinImages img") as $i => $img) {
                     if($img->getAttribute("data-zoom-image")) {
