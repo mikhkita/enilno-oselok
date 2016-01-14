@@ -36,6 +36,8 @@
 		<? endif; ?>
 	</table>
 <?php $this->endWidget(); ?>
-<? foreach ($variable as $key => $value) {
-	# code...
-}?>
+<div style="display:none;" id="cities">
+	<? foreach ($cities as $city):?>
+		<p><?=$city?></p>
+	<? endforeach; ?>
+</div>

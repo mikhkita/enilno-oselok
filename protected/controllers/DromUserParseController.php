@@ -60,15 +60,18 @@ class DromUserParseController extends Controller
                 Yii::app()->user->setFlash('message','Товары пользователя добавлены в очередь');
                 $this->refresh();
 		    }
-        } else {
-            $this->render('adminIndex');
-        }
+        } else if($_POST['links']){
+            $arr = explode(PHP_EOL,$_POST['links']);
+            foreach ($arr as $key => &$value) {
+                $value = "http://".Yii::app()->params['host'].$this->createUrl('/dromuserparse/parse',array('page'=> $page,'user_id' => $user_id))  trim($value);
+            }
+        } else $this->render('adminIndex');
     }
-    public function actionParse($page,$user_id,$good_type_id) {
+    public function actionParse($page,$user_id) {
     	$page = urldecode($page);	
     	$drom = new Drom();
         $last_code = $this->getParam( "OTHER", "PARTNERS_LAST_CODE", true);
-        $params = $drom->parseAdvert($page,$user_id,$good_type_id,$last_code);
+        $params = $drom->parseAdvert($page,$user_id,$last_code);
         $drom->curl->removeCookies();
         if($params) {
             if(Good::addAttributes($params,$good_type_id) === true) {
