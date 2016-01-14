@@ -169,7 +169,7 @@ class Good extends GoodFilter
 
 		if(isset($options["int_attributes"]) && count($options["int_attributes"]))
 			foreach ($options["int_attributes"] as $id => $attribute)
-				if( count($attribute) ){
+				if( count($attribute) && !( !(isset($attribute["min"]) && $attribute["min"] != "") || !(isset($attribute["max"]) && $attribute["max"] != "") ) ){
 					$criteria->addCondition('(good_type_id='.$options["good_type_id"].' AND fields.attribute_id='.$id.' '.((isset($attribute["min"]) && $attribute["min"] != "")?(' AND fields.int_value>='.$attribute["min"]):'').((isset($attribute["max"]) && $attribute["max"] != "")?' AND fields.int_value<='.$attribute["max"]:'').')','OR');
 					$count++;
 				}
@@ -571,8 +571,8 @@ class Good extends GoodFilter
 		);
 		if($attr_type->list) {
 			if($attr_id == 27) {
-				$model = DictionaryVariant::model()->find("dictionary_id=117 AND value='".$value."'");
-			} else $model = Attribute::model()->with('variants.variant')->find("attribute_id=".$attr_id." AND value='".$value."'");
+				$model = DictionaryVariant::model()->find("dictionary_id=117 AND value='".addslashes($value)."'");
+			} else $model = Attribute::model()->with('variants.variant')->find("attribute_id=".$attr_id." AND value='".addslashes($value)."'");
 			if($model) {
 				$temp["variant_id"] = ($attr_id == 27) ? $model->attribute_1 : $model->variants[0]->variant_id; 
 				array_push($fields, $temp);

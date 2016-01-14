@@ -645,7 +645,10 @@ class IntegrateController extends Controller
             
             $this->setParam( "SERVICE", "TASK_TIME", time() );
 
-            if( !$this->doTask() ) sleep(5);
+            if( !$this->doTask() ){
+                $this->setParam( "SERVICE", "TASK_TIME", 0 );
+                return true;
+            }
             if( $debug ) return true;
         }
     }
@@ -666,11 +669,12 @@ class IntegrateController extends Controller
             
             $task->save();
         }
+        return true;
     }
 
     public function checkTaskAccess(){
         $last = $this->getParam( "SERVICE", "TASK_TIME", true );
-        return ( time() - intval($last) > 120 );
+        return ( time() - intval($last) > 180 );
     }
 
     public function allowedTask(){

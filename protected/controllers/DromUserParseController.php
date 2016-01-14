@@ -52,7 +52,7 @@ class DromUserParseController extends Controller
 		            $type = GoodType::model()->findByPk($good_type_id)->code;
 		            $pages = $drom->parseAllItems('http://baza.drom.ru/user/'.$user_id.'/wheel/'.$type,false);   
 		            foreach ($pages as $page) {
-		            	array_push($links, "http://".Yii::app()->params['host'].$this->createUrl('/dromuserparse/parse',array('page'=> $page,'user_id' => $user_id)));
+		            	array_push($links, "http://".Yii::app()->params['host'].$this->createUrl('/dromUserParse/parse',array('page'=> $page,'user_id' => $user_id, 'good_type_id' => $good_type_id)));
 		            }
                     Cron::addAll($links);
 		        }
