@@ -410,7 +410,7 @@ class GoodController extends Controller
 		unset($_GET["partial"]);
 
 		if( isset($_GET["delete"]) ){
-			$this->loadModel($_GET["delete"])->delete();
+			Good::model()->findByPk($_GET["delete"])->delete();
 			unset($_GET["delete"]);
 		}
 

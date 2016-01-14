@@ -261,7 +261,7 @@ Class Drom {
     public function parseAdvert($page,$user_id,$good_type_id,$good_code) {
         include_once Yii::app()->basePath.'/extensions/simple_html_dom.php';
         $fields = array(
-            'link' => 104,
+            'link' => 106,
     		'code' => 3,
     		'realisation' => 43,
             'title' => 98,
@@ -286,7 +286,8 @@ Class Drom {
             'wheelTireWear' => 29,
             'tireHeight' => 8,
             'tireWidth' => 7,
-            'predestination' => 98
+            'predestination' => 98,
+            'made' => 11,
     	);
         $params = array();
         $marking = 1;
@@ -373,6 +374,7 @@ Class Drom {
     	
 
         $params[$fields['desc']] = str_replace('<br />',"\n", trim($html->find("p[data-field=text]",0)->innertext));
+        $params[$fields['made']] = "Не указано";
         // $params['guarantee'] = $html->find("p[data-field=guarantee]",0) ? str_replace('<br />',"\n", trim($html->find("p[data-field=guarantee]",0)->innertext)) : NULL;
         // $params['delivery'] = $html->find("div[data-field=delivery] p",0) ? str_replace('<br />',"\n", trim($html->find("div[data-field=delivery] p",0)->innertext)) : NULL;
 
