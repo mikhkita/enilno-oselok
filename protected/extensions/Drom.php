@@ -293,6 +293,8 @@ Class Drom {
                 'tireWidth' => 7,
                 'predestination' => 98,
                 'made' => 11,
+                'tireWidthMore' => 98,
+                'tireHeightMore' => 98
                 
         	);
 
@@ -303,9 +305,10 @@ Class Drom {
             if($user_id === NULL) {
                 $user_id = $html->find("div.ownerInfoInner",0)->getAttribute("data-id");
                 $model = Attribute::model()->with('variants.variant')->find("attribute_id=43 AND value=".$user_id);
-                if(!$model) {
-                    if(!Variant::add(43,$user_id)) return false;
-                }
+                if($variant_id = Variant::add(43,$user_id)) {
+                    $user_name = trim($html->find("span.userNick",0)->plaintext);
+                    if($user_id != $user_name) Dictionary::add(41,$variant_id,$user_name);
+                } else return false;
             }
 
             switch (trim($html->find("#breadcrumbs span",3)->plaintext)) {
@@ -389,13 +392,31 @@ Class Drom {
                     }
                 }
     	        $params[$fields['wheelTireWear']] = $html->find("span[data-field=wheelTireWear]",0) ? trim(str_replace('%',"",$html->find("span[data-field=wheelTireWear]",0)->plaintext)) : NULL;
+                if($params[$fields['wheelTireWear']] == "Без износа") $params[$fields['wheelTireWear']] = 0;
     	        if($params[$fields['wheelTireWear']] || $params[$fields['wheelTireWear']] == 0) $params[$fields['condition']] = ($params[$fields['wheelTireWear']] == 0) ? "Новые" : "Б/у";
                 if(strripos(trim($html->find("span[data-field=marking]",$marking)->plaintext), "мм.")) {
-                    $params[$fields['tireWidth']] = str_replace(array('мм.','"'),"",$html->find("span[data-field=marking]",$marking)->plaintext);
+                    $params[$fields['tireWidth']] = explode("/",trim(str_replace(array('мм.','"'),"",$html->find("span[data-field=marking]",$marking)->plaintext)));
+                    if(count($params[$fields['tireWidth']]) > 1) {
+                        $params[$fields['tireWidthMore']] .= "Полная ширина шин:";
+                        foreach ($params[$fields['tireWidth']] as $key => $value) {
+                            $params[$fields['tireWidthMore']] .= " ".$value;
+                        }
+                        $params[$fields['tireWidthMore']] .= "\n\r";
+                    }
+                    $params[$fields['tireWidth']] = $params[$fields['tireWidth']][0];
                 } else $params[$fields['tireHeight']] = str_replace(array('мм.','"'),"",$html->find("span[data-field=marking]",$marking)->plaintext);
 
+
                 if(strripos(trim($html->find("span[data-field=marking]",($marking+1))->plaintext), "%")) {
-                    $params[$fields['tireHeight']] = str_replace(array('"','%'),"",$html->find("span[data-field=marking]",($marking+1))->plaintext);
+                    $params[$fields['tireHeight']] = explode("/",trim(str_replace(array('"','%'),"",$html->find("span[data-field=marking]",($marking+1))->plaintext)));
+                    if(count($params[$fields['tireHeight']]) > 1) {
+                        $params[$fields['tireHeightMore']] .= "Полная высота профиля:";
+                        foreach ($params[$fields['tireHeight']] as $key => $value) {
+                            $params[$fields['tireHeightMore']] .= " ".$value;
+                        }
+                        $params[$fields['tireHeightMore']] .= "\n\r";
+                    }
+                    $params[$fields['tireHeight']] = $params[$fields['tireHeight']][0];
                 } else $params[$fields['tireWidth']] = str_replace(array('"','%'),"",$html->find("span[data-field=marking]",($marking+1))->plaintext);
     	        // $params['tireСarcase'] = str_replace(array('%','"'),"",$html->find("span[data-field=marking]",3)->plaintext);
     	        $params[$fields['predestination']] .= "Тип шины: ".trim($html->find("span[data-field=predestination]",0)->plaintext)."\n\r";
