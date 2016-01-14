@@ -2743,12 +2743,21 @@ ul.b-filter-list{
             margin-right: 10px;
             cursor: pointer;
         }
-        .drom-user-parse input[type=text] {
+        .drom-user-parse input[type=text],textarea {
             border-radius: 5px;
             background: #FFF5D1;
             border: 1px solid #452716;
             padding: 4px 10px 3px;
             font-size: 14px;
+            
+        }
+        .drom-user-parse textarea {
+            display: block;
+            margin: 20px auto;
+            width: 387px;
+            height: 200px;
+        }
+        .drom-user-parse input[type=text] {
             margin-right: 10px;
         }
         .drom-user-parse input[type=checkbox] {

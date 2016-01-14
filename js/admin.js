@@ -285,12 +285,14 @@ $(document).ready(function(){
                 $(".main form select,.main form input").eq(0).trigger("change");
                 return false;
             });
+            
         }
-    }
-    $(".select2-filter").select2({
+        $(".select2-filter").select2({
             placeholder: "",
             allowClear: true
         });
+    }
+
     function bindForm($form){
 
         $(".select2").select2({
@@ -340,13 +342,15 @@ $(document).ready(function(){
         $( "#datepicker" ).datepicker( $.datepicker.regional[ "ru" ] );
         $( "#datepicker" ).datepicker();
 
-        if($("#autocomplete").length) {
-                
-        }
+        // if($("#autocomplete").length) {
+        //     $("#cities p").each(function() {
 
-        $( "#autocomplete" ).autocomplete({
-            source: availableTags
-        });
+        //     });    
+        // }
+
+        // $( "#autocomplete" ).autocomplete({
+        //     source: availableTags
+        // });
 
         $(".numeric").numericInput({ allowFloat: true, allowNegative: true });
 
