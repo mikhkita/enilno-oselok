@@ -531,7 +531,7 @@ class Good extends GoodFilter
 			"variant_id" => NULL
 		));
 		foreach ($params as $attr_id => $value) {
-			if($value) {
+			if($value && $attr_id != 0) {
 				$attr_type = Attribute::model()->with("type")->findByPk($attr_id);
 				if(is_array($value)) {
 					foreach ($value as $key => $item) {

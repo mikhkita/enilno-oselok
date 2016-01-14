@@ -6,13 +6,14 @@
 
 	<form class="clearfix" action="<?=Yii::app()->createUrl('/dromUserParse/adminindex')?>" method="POST">
 		<div>
-			<input type="text" name="user" required>
-			<input id="tire_inp" type="checkbox" name="good_types[]" value="1" checked>
+			<input type="text" name="user">
+			<input id="tire_inp" type="checkbox" name="good_types[]" value="1">
 			<label for="tire_inp">Шины</label>
 			<input id="disc_inp" type="checkbox" name="good_types[]" value="2" checked>
 			<label for="disc_inp">Диски</label>
-			<input id="wheel_inp" type="checkbox" name="good_types[]" value="3" checked>
+			<input id="wheel_inp" type="checkbox" name="good_types[]" value="3">
 			<label for="wheel_inp">Колеса</label>
+			<textarea name="links"></textarea>
 		</div>
 		<input class="b-butt" type="submit" value="Начать парсинг">
 	</form>
