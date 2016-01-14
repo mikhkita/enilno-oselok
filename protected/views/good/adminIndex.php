@@ -26,6 +26,7 @@
 			<? if($_GET["good_type_id"] == 1 || $_GET["good_type_id"] == 2): ?>
 				<li><a href="<?php echo $this->createUrl('/good/adminjoin')?>">Склеить</a></li>
 			<? endif; ?>
+			<li><a href="<?php echo $this->createUrl('/good/adminindex',array('good_type_id'=> $_GET["good_type_id"],'partial'=>"true",'deleteAll'=>"true",'GoodFilter_page' => ($pages->currentPage+1) ))?>" class="ajax-form ajax-delete" data-warning="Вы действительно хотите удалить выделенные товары?">Удалить</a></li>
 			<!-- <li><a href="<?php echo $this->createUrl('/good/adminupdateadverts',array('good_type_id'=> $_GET["good_type_id"], 'images' => '1'))?>" class="ajax-update-prices">Обновить&nbsp;фотографии</a></li> -->
 		</ul>
 	</div>
@@ -120,5 +121,5 @@
 	    )) ?>
         <div class="b-lot-count">Всего товаров: <?=$good_count?></div>
     </div>
-    <div style="text-align:left;" id="b-sess-checkbox-list">Выделено всего - <? $codes = Good::getCheckboxes($_GET["good_type_id"]); echo count($codes).":";?> <?=implode(", ",$codes)?></div>
+    <div style="text-align:left;" id="b-sess-checkbox-list">Выделено всего - <? $checked_codes = Good::getCheckboxes($_GET["good_type_id"]); echo count($checked_codes).":";?> <?=implode(", ",$checked_codes)?></div>
 </div>
