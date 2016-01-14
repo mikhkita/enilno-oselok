@@ -13,7 +13,7 @@ class GoodController extends Controller
 	{
 		return array(
 			array('allow',
-				'actions'=>array('adminIndex','adminTest','updatePrices','updateAuctionLinks','adminCreate','adminUpdate','adminDelete','adminEdit','getAttrType','getAttr','adminAdverts','adminUpdateImages',"adminAddCheckbox","adminRemoveCheckbox","adminAddAllCheckbox","adminRemoveAllCheckbox",'adminUpdateAll','adminAddSomeCheckbox','adminUpdateAdverts','adminViewSettings','adminSold','adminArchive','adminJoin'),
+				'actions'=>array('adminIndex','adminTest','updatePrices','updateAuctionLinks','adminCreate','adminUpdate','adminDelete','adminEdit','getAttrType','getAttr','adminAdverts','adminUpdateImages',"adminAddCheckbox","adminRemoveCheckbox","adminAddAllCheckbox","adminRemoveAllCheckbox",'adminUpdateAll','adminAddSomeCheckbox','adminUpdateAdverts','adminViewSettings','adminSold','adminArchive','adminJoin','adminDeleteAll'),
 				'roles'=>array('manager'),
 			),
 			array('allow',
@@ -144,6 +144,23 @@ class GoodController extends Controller
 				'cities' => $this->cityGroup()
 			));
 		}
+	}
+
+	public function actionAdminDeleteAll($good_type_id){
+		$good_ids = Good::getCheckboxes($good_type_id);
+		$good_ids_key = array();
+		if( !count($good_ids) ) return false;
+
+		foreach ($good_ids as $key => $value) {
+			$tmp = $key;
+			array_push($good_ids_key, $key);
+		}
+		$goods = Good::model()->with(array("type","fields.variant","fields.attribute"))->findAllByPk($good_ids_key);
+		foreach ($goods as $key => $good) {
+			$good->delete();
+		}
+		Good::removeAllCheckbox($good_type_id);
+		return true;
 	}
 
 	public function actionAdminUpdateAll($good_type_id)
@@ -412,6 +429,11 @@ class GoodController extends Controller
 		if( isset($_GET["delete"]) ){
 			Good::model()->findByPk($_GET["delete"])->delete();
 			unset($_GET["delete"]);
+		}
+
+		if( isset($_GET["deleteAll"]) ){
+			$this->actionAdminDeleteAll($good_type_id);
+			unset($_GET["deleteAll"]);
 		}
 
 		if( isset($_GET["deleteAdvert"]) ){
