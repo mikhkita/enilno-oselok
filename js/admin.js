@@ -1404,6 +1404,13 @@ $(document).ready(function(){
         return false;
     });
 
+    $("body").on("click",".b-filter-sort",function(){
+        $("input[name='sort_type']").val($(this).attr("data-type"));
+        $("input[name='sort_field']").val($(this).attr("data-field"));
+        $("input[name='sort_type']").trigger("change");
+        return false;
+    });
+
     function bindTableForm(){
         if( $("#table-form").length ){
             $("#table-form").submit(function(){

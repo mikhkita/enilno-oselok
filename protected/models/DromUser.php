@@ -54,10 +54,10 @@ class DromUser extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'id' => 'ID',
-			'name' => 'Name',
-			'count' => 'Count',
-			'city' => 'City',
+			'id' => 'ID на дроме',
+			'name' => 'Логин',
+			'count' => 'Количество объявлений',
+			'city' => 'Город',
 		);
 	}
 
