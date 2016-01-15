@@ -259,7 +259,7 @@ Class Drom {
     }
 
     public function parseAdvert($page,$good_code,$user_id) {
-        $link = "http://baza.drom.ru/".array_pop(explode("-", $page));
+        $link = "http://baza.drom.ru/".array_pop(explode("-",array_pop(explode("/", $page))));
         if(!GoodAttribute::model()->find("attribute_id=106 AND varchar_value='".$link."'")) {
             include_once Yii::app()->basePath.'/extensions/simple_html_dom.php';
             $fields = array(
