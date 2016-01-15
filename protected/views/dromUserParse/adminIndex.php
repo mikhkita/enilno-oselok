@@ -13,7 +13,7 @@
 			<label for="disc_inp">Диски</label>
 			<input id="wheel_inp" type="checkbox" name="good_types[]" value="3">
 			<label for="disc_inp">Диски</label>
-			<p><br>Строка для парсинга должна быть представлена в следующем виде: ссылка на объявление на дроме + @ + код товара.<br>Пример: "http://baza.drom.ru/petropavlovsk-kamchatskii/wheel/tire/dsaf-41562222.html@29999"</p>
+			<p><br>Строка для парсинга должна быть представлена в следующем виде: ссылка на объявление на дроме + пробел + код товара.<br>Пример: "http://baza.drom.ru/petropavlovsk-kamchatskii/wheel/tire/dsaf-41562222.html 29999"</p>
 			<textarea id="links" name="links"></textarea>
 		</div>
 		<input class="b-butt" type="submit" value="Начать парсинг">
