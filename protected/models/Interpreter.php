@@ -281,11 +281,20 @@ class Interpreter extends CActiveRecord
 			$template = str_replace($matches[0], $matches[1], $template);
 
 			preg_match_all("~\[\+([^\+\]]+)\+\]~", $template, $matches);
-
-			// preg_match_all("~\{([^\}]+)\}~", $template, $matches);
-			// print_r($matches);
-			// die();
 		}
+
+		// Вставка случайного слова из диапазона {1|2|3} - например.
+		preg_match_all("~\{([^\}]+)\}~", $template, $matches);
+		foreach ($matches[1] as $key => $value) {
+			$vars = explode("|", $value);
+			$matches[1][$key] = $vars[rand(1,count($vars))-1];
+		}
+		$template = str_replace($matches[0], $matches[1], $template);
+
+		// Перемешивание [#1#] [#2#] [#3#] - например.
+		preg_match_all("~\[\#([^\#\]]+)\#\]~", $template, $matches);
+		shuffle($matches[1]);
+		$template = str_replace($matches[0], $matches[1], $template);
 
 		$template = Interpreter::calculateAll($template);
 
