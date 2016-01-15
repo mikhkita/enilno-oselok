@@ -19,8 +19,28 @@
     </div>
     <div class="row">
         <?php echo $form->labelEx($model,'first_city'); ?>
-        <?php echo $form->textField($model,'first_city',array('id' => 'autocomplete')); ?>
+        <?php echo $form->textField($model,'first_city',array('class' => 'autocomplete-input')); ?>
         <?php echo $form->error($model,'first_city'); ?>
+    </div>
+    <div class="row">
+        <?php echo $form->labelEx($model,'second_city'); ?>
+        <?php echo $form->textField($model,'second_city',array('class' => 'autocomplete-input')); ?>
+        <?php echo $form->error($model,'second_city'); ?>
+    </div>
+    <div class="row">
+        <?php echo $form->labelEx($model,'tk_id'); ?>
+        <?php echo $form->dropDownList($model,'tk_id',CHtml::listData(Desktop::getList(80), 'row_id', 'value'),array('class'=> 'select2',"empty" => "Не задано")); ?>
+        <?php echo $form->error($model,'tk_id'); ?>
+    </div>
+    <div class="row">
+        <?php echo $form->labelEx($model,'tk_pay_id'); ?>
+        <?php echo $form->dropDownList($model,'tk_pay_id',CHtml::listData(Desktop::getList(81), 'row_id', 'value'),array('class'=> 'select2',"empty" => "Не задано","id" => "tk-pay")); ?>
+        <?php echo $form->error($model,'tk_pay_id'); ?>
+    </div>
+    <div class="row">
+        <?php echo $form->labelEx($model,'tk_price'); ?>
+        <?php echo $form->textField($model,'tk_price',array("disabled" => true, 'id' => 'tk-price')); ?>
+        <?php echo $form->error($model,'tk_price'); ?>
     </div>
     <div class="row">
         <?php echo $form->labelEx($model,'date'); ?>
@@ -44,5 +64,9 @@
 	</div>
 
 <?php $this->endWidget(); ?>
-
+<div style="display:none;" id="cities">
+    <? foreach ($cities as $city):?>
+        <p><?=$city?></p>
+    <? endforeach; ?>
+</div>
 </div><!-- form -->

@@ -105,24 +105,24 @@ class DromController extends Controller
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
         $count = $this->getParam( "OTHER", "DROM_USER_ID", true );
-   
-        while ( $count && ($count < 5000000) ) {
+        while ( $count && ($count < 4650000) ) {
             $url = "http://baza.drom.ru/user/".$count."/wheel/"; 
             curl_setopt($ch, CURLOPT_URL, $url);
             $html = str_get_html(curl_exec($ch));
             $advert = $html->find('strong',0);
             if($advert) {
                 $advert = explode(" пр", $advert->plaintext);
-                $advert = intval($advert[0]);
-                if($advert >= 15) { 
+                $advert = intval(str_replace(" ", "", $advert[0]));
+                if($advert >= 10) { 
                     $model = new DromUser;
                     $model->id = $count;
                     $model->name = trim($html->find('.userNick',0)->plaintext);
                     $model->count = $advert;
                     $city = trim($html->find('.userProfile .middle .item',0)->plaintext);
-                    if(!stripos($city, "рейтинг")) {
+                    if(stripos($city, "рейтинг") == false) {
                         $model->city = $city;
                     }
+                    $model->rating = $html->find('.item.userRating a',0)->plaintext;
                     $model->save();
                 }
             }
@@ -131,10 +131,10 @@ class DromController extends Controller
             if($count%20 == 0) {
                 $this->setParam( "OTHER", "DROM_USER_TIME", time() );
                 return true;
-            }
-                     
+            }                  
         }
         curl_close($ch);
+        return true;
     }
 
     public function doQueueNext($debug = false){
@@ -224,7 +224,6 @@ class DromController extends Controller
         }
     }
     public function actionAdminIndex(){
-
         // $queue = Queue::model()->with("advert.good.type","advert.place","action")->findByPk(198);
         $advert = Advert::model()->findByPk(1);
 
