@@ -530,6 +530,7 @@ class Good extends GoodFilter
 			'float_value' => NULL,
 			"variant_id" => NULL
 		));
+
 		foreach ($params as $attr_id => $value) {
 			if($value && $attr_id != 0) {
 				$attr_type = Attribute::model()->with("type")->findByPk($attr_id);
@@ -586,6 +587,7 @@ class Good extends GoodFilter
 				array_push($fields, $temp);
 			} else $fields[0]["text_value"].= $value."\n\r";
 		}		
+
 		return $fields;
 	}
 
