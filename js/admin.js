@@ -342,15 +342,16 @@ $(document).ready(function(){
         $( "#datepicker" ).datepicker( $.datepicker.regional[ "ru" ] );
         $( "#datepicker" ).datepicker();
 
-        // if($("#autocomplete").length) {
-        //     $("#cities p").each(function() {
+        if($(".autocomplete-input").length) {
+            var cities = [];
+            $("#cities p").each(function() {
+                cities.push($(this).text());
+            }); 
 
-        //     });    
-        // }
-
-        // $( "#autocomplete" ).autocomplete({
-        //     source: availableTags
-        // });
+            $( ".autocomplete-input" ).autocomplete({
+                source: cities
+            });  
+        }
 
         $(".numeric").numericInput({ allowFloat: true, allowNegative: true });
 

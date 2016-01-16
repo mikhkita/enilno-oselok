@@ -36,8 +36,3 @@
 		<? endif; ?>
 	</table>
 <?php $this->endWidget(); ?>
-<div style="display:none;" id="cities">
-	<? foreach ($cities as $city):?>
-		<p><?=$city?></p>
-	<? endforeach; ?>
-</div>

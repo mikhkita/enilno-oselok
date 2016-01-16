@@ -2768,7 +2768,9 @@ ul.b-filter-list{
         .drom-user-parse input[type=checkbox] {
             cursor: pointer;
         }
-
+input[disabled="disabled"] {
+    background: #E0E0E0 !important;
+}
 @media screen and (max-width: 1500px){
     .b-hide-title{
         opacity: 0;

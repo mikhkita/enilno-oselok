@@ -13,7 +13,7 @@ class LeadController extends Controller
 	{
 		return array(
 			array('allow',
-				'actions'=>array('adminIndex','adminCreate','adminUpdate'),
+				'actions'=>array('adminIndex','adminCreate','adminUpdate','adminDelete'),
 				'roles'=>array('manager'),
 			),
 			array('deny',
@@ -26,6 +26,10 @@ class LeadController extends Controller
 	{
 		$model=new Lead;
 		$model->date = date("d.m.Y", time());
+		$cities = AttributeVariant::model()->with("variant")->findAll("attribute_id=27");
+        foreach ($cities as &$item) {
+        	$item = $item->value;
+        }
 		if(isset($_POST['Lead']))
 		{
 			$_POST['Lead']['date'] = date_format(date_create_from_format('d.m.Y',$_POST['Lead']['date']), 'Y-m-d H:i:s');
@@ -38,6 +42,7 @@ class LeadController extends Controller
 
 		$this->renderPartial('adminCreate',array(
 			'model'=>$model,
+			'cities' => $cities
 		));
 	}
 
@@ -46,6 +51,10 @@ class LeadController extends Controller
 		$model=$this->loadModel($id);
 		$date = date_create($model->date);
 		$model->date = date_format($date, 'd.m.Y');
+		$cities = AttributeVariant::model()->with("variant")->findAll("attribute_id=27");
+        foreach ($cities as &$item) {
+        	$item = $item->value;
+        }
 		if(isset($_POST['Lead']))
 		{
 			$_POST['Lead']['date'] = date_format(date_create_from_format('d.m.Y',$_POST['Lead']['date']), 'Y-m-d H:i:s');
@@ -58,6 +67,7 @@ class LeadController extends Controller
 
 		$this->renderPartial('adminUpdate',array(
 			'model'=>$model,
+			'cities' => $cities
 		));
 	}
 
@@ -96,16 +106,10 @@ class LeadController extends Controller
 
         $model = Lead::model()->findAll($criteria);
 
-        $cities = AttributeVariant::model()->with("variant")->findAll("attribute_id=27");
-        foreach ($cities as &$item) {
-        	$item = $item->value;
-        }
-        // $cities = json_encode($cities);
 		if( !$partial ){
 			$this->render('adminIndex',array(
 				'data'=>$model,
 				'filter'=>$filter,
-				'cities' => $cities,
 				'labels'=>Lead::attributeLabels()
 			));
 		}else{

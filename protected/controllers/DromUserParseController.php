@@ -62,7 +62,7 @@ class DromUserParseController extends Controller
         } else if($_POST['links']){
             $arr = explode(PHP_EOL,$_POST['links']);
             foreach ($arr as $key => &$value) {
-                $item = explode("@", $value); 
+                $item = explode(" ", $value); 
                 $value = "http://".Yii::app()->params['host'].$this->createUrl('/dromUserParse/parse',array('page'=> trim($item[0]),'code' => trim($item[1])));
             }
             Cron::addAll($arr);
@@ -76,7 +76,6 @@ class DromUserParseController extends Controller
         $good_code = ($code === NULL) ? $this->getParam( "OTHER", "PARTNERS_LAST_CODE", true) : $code;
         $params = $drom->parseAdvert($page,$good_code,$user_id);
         $drom->curl->removeCookies();
-
         if($params) {
             if(Good::addAttributes($params,$params[0]) === true) {
                 if($code === NULL) $this->setParam( "OTHER", "PARTNERS_LAST_CODE",($good_code+1));
