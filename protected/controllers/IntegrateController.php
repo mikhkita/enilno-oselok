@@ -683,6 +683,35 @@ class IntegrateController extends Controller
     }
 // Планировщик ----------------------------------------------------------- Планировщик
 
+    public function actionPercent(){
+        $start = microtime(true);
+        $unique = Yii::app()->db->createCommand()
+            ->select('value')
+            ->from(Unique::tableName().' t')
+            ->where('interpreter_id=139')
+            ->queryAll();
+        
+        $max = 0;
+        // $txt = "";
+
+        $text = 'Возможна отправка по России. Предоставлю доп. фото Поставляется на заказ с нашего склада, доставка 9 - 12 дней, включена в цену.
+диаметр 17, cверловка 5-114.3, ширина 7,вылет 38, 
+Возможна отправка по России. Предоставлю доп. фото';
+
+        foreach ($unique as $key => $item) {
+            similar_text($item["value"], $text, $percent);
+            // echo $item["value"]."<br>";
+            if( $percent > $max ){
+                $max = $percent;
+                // $txt = $item["value"];
+            }
+        }
+        echo round($max);
+        printf('<br>Прошло %.4F сек.<br>', microtime(true) - $start);
+
+        // print_r($unique);
+    }
+
     public function actionAdminIndex(){
         $start = microtime(true);
 
