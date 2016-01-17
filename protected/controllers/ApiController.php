@@ -9,7 +9,9 @@ class ApiController extends Controller
 
         $model=new LoginForm;
 
-        if( $login === NULL || $password === NULL )
+        header("Access-Control-Allow-Origin: *");
+
+        if( $login === NULL || $password === NULL || $login == "" || $password == "" )
             $this->answer(array("result" => "error", "message" => "Не указан логин или пароль"));
 
         $model->attributes = array("username" => $login, "password" => $password);
