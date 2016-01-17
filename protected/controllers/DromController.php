@@ -112,10 +112,14 @@ class DromController extends Controller
             curl_setopt($ch, CURLOPT_URL, $url);
             $html = str_get_html(curl_exec($ch));
             $advert = $html->find('strong',0);
-            if($advert) {
+            if($advert) {   
+                
                 $advert = explode(" пр", $advert->plaintext);
+                
+                
                 $advert = intval(str_replace(" ", "", $advert[0]));
-                if($advert >= 10) { 
+
+                if($advert >= 10) {
                     $model = new DromUser;
                     $model->id = $count;
                     $model->name = trim($html->find('.userNick',0)->plaintext);
@@ -124,7 +128,7 @@ class DromController extends Controller
                     if(stripos($city, "рейтинг") == false) {
                         $model->city = $city;
                     }
-                    $model->rating = $html->find('.item.userRating a',0)->plaintext;
+                    $model->rating = $html->find('.userRating a',0)->plaintext;
                     $model->save();
                 }
             }

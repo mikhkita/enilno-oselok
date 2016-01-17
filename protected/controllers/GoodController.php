@@ -13,7 +13,7 @@ class GoodController extends Controller
 	{
 		return array(
 			array('allow',
-				'actions'=>array('adminIndex','adminTest','updatePrices','updateAuctionLinks','adminCreate','adminUpdate','adminDelete','adminEdit','getAttrType','getAttr','adminAdverts','adminUpdateImages',"adminAddCheckbox","adminRemoveCheckbox","adminAddAllCheckbox","adminRemoveAllCheckbox",'adminUpdateAll','adminAddSomeCheckbox','adminUpdateAdverts','adminViewSettings','adminSold','adminArchive','adminJoin','adminDeleteAll'),
+				'actions'=>array('adminIndex','adminTest','updatePrices','updateAuctionLinks','adminCreate','adminUpdate','adminDelete','adminEdit','getAttrType','getAttr','adminAdverts','adminUpdateImages',"adminAddCheckbox","adminRemoveCheckbox","adminAddAllCheckbox","adminRemoveAllCheckbox",'adminUpdateAll','adminAddSomeCheckbox','adminUpdateAdverts','adminViewSettings','adminSold','adminArchive','adminJoin','adminDeleteAll','adminSale'),
 				'roles'=>array('manager'),
 			),
 			array('allow',
@@ -35,7 +35,7 @@ class GoodController extends Controller
 			$model->date = NULL;
 			$model->save();
 		}
-		$goods = Good::model()->findAll("good_type_id=".$good_type_id." AND archive=1");
+		$goods = Good::model()->with('sale')->findAll("good_type_id=".$good_type_id." AND archive=1");
 		$options = array(
 			'data'=>$goods,
 			'name'=>$goodType->name
@@ -47,15 +47,29 @@ class GoodController extends Controller
 
 	public function actionAdminSold($id,$good_type_id)
 	{
-		$model = $this->loadModel($id);
-		$model->archive = 1;
-		$model->date = date("Y-m-d H:i:s", time());
-		$model->save();
-		GoodAttribute::model()->deleteAll('good_id='.$id.' AND attribute_id IN (58,59,60,61)');
-
-		$model->updateAdverts();
-
-		$this->redirect( Yii::app()->createUrl('good/adminindex',array('good_type_id'=>$good_type_id,'partial'=>true)) );
+		$model = new Sale;
+		if($_POST['Sale']) {
+			$_POST['Sale']['date'] = date_format(date_create_from_format('d.m.Y',$_POST['Sale']['date']), 'Y-m-d H:i:s');
+			$model->attributes = $_POST['Sale'];
+			$model->good_id = $id;
+			$good = $this->loadModel($id);
+			$good->archive = 1;
+			if($model->save() && $good->save()){
+				GoodAttribute::model()->deleteAll('good_id='.$id.' AND attribute_id IN (58,59,60,61)');
+				$good->updateAdverts();	
+				$this->redirect( Yii::app()->createUrl('good/adminindex',array('good_type_id'=>$good_type_id,'partial'=>true)) );
+			}		
+		} else {	
+			$model->date = date("d.m.Y", time());
+			$cities = AttributeVariant::model()->with("variant")->findAll("attribute_id=27");
+	        foreach ($cities as &$item) {
+	        	$item = $item->value;
+	        }
+			$this->renderPartial('adminSale',array(
+					'model'=>$model,
+					'cities' => $cities
+				));
+		}
 	}
 
 	public function actionAdminCreate($good_type_id)
