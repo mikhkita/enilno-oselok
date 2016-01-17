@@ -63,7 +63,8 @@ class DromController extends Controller
         );
     }
     public function actionAdminUsers($debug = false) {
-        $this->doQueueNext($debug);
+        $this->getUsers();
+        // $this->doQueueNext($debug);
     }
 
     public function actionAdminParse($user = "kitaev123",$good_types = array(1,2,3)) {
@@ -104,16 +105,21 @@ class DromController extends Controller
         $ch = curl_init($ch);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
-        $count = $this->getParam( "OTHER", "DROM_USER_ID", true );
+        // $count = $this->getParam( "OTHER", "DROM_USER_ID", true );
+        $count = 848235;
         while ( $count && ($count < 4650000) ) {
             $url = "http://baza.drom.ru/user/".$count."/wheel/"; 
             curl_setopt($ch, CURLOPT_URL, $url);
             $html = str_get_html(curl_exec($ch));
             $advert = $html->find('strong',0);
-            if($advert) {
+            if($advert) {   
+                
                 $advert = explode(" пр", $advert->plaintext);
+                
+                
                 $advert = intval(str_replace(" ", "", $advert[0]));
-                if($advert >= 10) { 
+
+                if($advert >= 10) {
                     $model = new DromUser;
                     $model->id = $count;
                     $model->name = trim($html->find('.userNick',0)->plaintext);
@@ -122,7 +128,7 @@ class DromController extends Controller
                     if(stripos($city, "рейтинг") == false) {
                         $model->city = $city;
                     }
-                    $model->rating = $html->find('.item.userRating a',0)->plaintext;
+                    $model->rating = $html->find('.userRating a',0)->plaintext;
                     $model->save();
                 }
             }
