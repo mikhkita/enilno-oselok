@@ -62,9 +62,6 @@ class DromController extends Controller
             ),
         );
     }
-    public function actionAdminUsers($debug = false) {
-        $this->doQueueNext($debug);
-    }
 
     public function actionAdminParse($user = "kitaev123",$good_types = array(1,2,3)) {
         include_once Yii::app()->basePath.'/extensions/simple_html_dom.php';
@@ -98,14 +95,19 @@ class DromController extends Controller
         }
     }
 
-    public function getUsers() {
+    public function getUsers($num) {
         include_once Yii::app()->basePath.'/extensions/simple_html_dom.php';
         $html = new simple_html_dom();
         $ch = curl_init($ch);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
-        $count = $this->getParam( "OTHER", "DROM_USER_ID", true );
-        while ( $count && ($count < 4650000) ) {
+        $count = $this->getParam( "OTHER", "DROM_USER_ID_$num", true );
+        $maxs = array(
+            1 => 1550001,
+            2 => 3100001,
+            3 => 4650001
+        );
+        while ( $count && ($count < $maxs[intval($num)]) ) {
             $url = "http://baza.drom.ru/user/".$count."/wheel/"; 
             curl_setopt($ch, CURLOPT_URL, $url);
             $html = str_get_html(curl_exec($ch));
@@ -127,9 +129,9 @@ class DromController extends Controller
                 }
             }
             $count++;
-            $this->setParam( "OTHER", "DROM_USER_ID", $count );
+            $this->setParam( "OTHER", "DROM_USER_ID_$num", $count );
             if($count%20 == 0) {
-                $this->setParam( "OTHER", "DROM_USER_TIME", time() );
+                $this->setParam( "OTHER", "DROM_USER_TIME_$num", time() );
                 return true;
             }                  
         }
@@ -137,22 +139,23 @@ class DromController extends Controller
         return true;
     }
 
-    public function doQueueNext($debug = false){
-        if( !$this->checkQueueAccess() && !$debug ) return true;
+    public function actionQueueNext($num = NULL,$debug = false){
+        if( $num === NULL ) return true;
+        if( !$this->checkQueueAccess($num) && !$debug ) return true;
 
-        while( $this->allowed() || $debug ){
-            $this->getUsers();
+        while( $this->allowed($num) || $debug ){
+            $this->getUsers($num);
             if( $debug ) return true;
         }
     }
 
-    public function checkQueueAccess(){
-        $last = $this->getParam( "OTHER", "DROM_USER_TIME", true );
+    public function checkQueueAccess($num){
+        $last = $this->getParam( "OTHER", "DROM_USER_TIME_$num", true );
         return ( time() - intval($last) > 120 );
     }
 
-    public function allowed(){
-        $queue = $this->getParam( "OTHER", "DROM_USER_TOGGLE", true );
+    public function allowed($num){
+        $queue = $this->getParam( "OTHER", "DROM_USER_TOGGLE_$num", true );
         return ( trim($queue) == "on" );
     }
 
