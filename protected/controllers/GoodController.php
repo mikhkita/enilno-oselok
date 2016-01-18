@@ -13,7 +13,7 @@ class GoodController extends Controller
 	{
 		return array(
 			array('allow',
-				'actions'=>array('adminIndex','adminTest','updatePrices','updateAuctionLinks','adminCreate','adminUpdate','adminDelete','adminEdit','getAttrType','getAttr','adminAdverts','adminUpdateImages',"adminAddCheckbox","adminRemoveCheckbox","adminAddAllCheckbox","adminRemoveAllCheckbox",'adminUpdateAll','adminAddSomeCheckbox','adminUpdateAdverts','adminViewSettings','adminSold','adminArchive','adminJoin','adminDeleteAll','adminSale'),
+				'actions'=>array('adminIndex','adminTest','updatePrices','updateAuctionLinks','adminCreate','adminUpdate','adminDelete','adminEdit','getAttrType','getAttr','adminAdverts','adminUpdateImages',"adminAddCheckbox","adminRemoveCheckbox","adminAddAllCheckbox","adminRemoveAllCheckbox",'adminUpdateAll','adminAddSomeCheckbox','adminUpdateAdverts','adminViewSettings','adminSold','adminArchive','adminJoin','adminDeleteAll','adminSale','adminCustomer'),
 				'roles'=>array('manager'),
 			),
 			array('allow',
@@ -70,6 +70,14 @@ class GoodController extends Controller
 					'cities' => $cities
 				));
 		}
+	}
+
+	public function actionAdminCustomer($phone) {
+		$model = Customer::model()->find("phone='".$phone."'");
+		$model = ($model) ? $model : new Customer;
+		$this->renderPartial('adminCustomer',array(
+			'model'=>$model
+		));
 	}
 
 	public function actionAdminCreate($good_type_id)

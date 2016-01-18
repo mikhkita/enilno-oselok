@@ -2771,6 +2771,9 @@ ul.b-filter-list{
 input[disabled="disabled"] {
     background: #E0E0E0 !important;
 }
+.small-textarea {
+    height: 100px !important;
+}
 @media screen and (max-width: 1500px){
     .b-hide-title{
         opacity: 0;

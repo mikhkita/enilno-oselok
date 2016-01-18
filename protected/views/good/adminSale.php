@@ -35,10 +35,14 @@
             </div>
             <div class="row">
                 <?php echo $form->labelEx($model,'comment'); ?>
-                <?php echo $form->textArea($model,'comment'); ?>
+                <?php echo $form->textArea($model,'comment',array('class' => 'small-textarea')); ?>
                 <?php echo $form->error($model,'comment'); ?>
             </div>
-
+            <div class="row">
+                <label for="Customer_phone">Телефон клиента</label>
+                <?=Chtml::textField("Customer[phone]","",array('maxlength'=>25,'class' => 'phone','id' => 'Customer_phone')); ?>
+            </div>
+            <div id="Customer-form" data-url="<?=$this->createUrl('/good/admincustomer')?>"></div>
         	<div class="row buttons">
         		<?php echo CHtml::submitButton($model->isNewRecord ? 'Добавить' : 'Сохранить'); ?>
         		<input type="button" onclick="$.fancybox.close(); return false;" value="Отменить">
