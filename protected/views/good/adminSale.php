@@ -25,8 +25,18 @@
             </div>
             <div class="row">
                 <?php echo $form->labelEx($model,'channel_id'); ?>
-                <?php echo $form->dropDownList($model,'channel_id',CHtml::listData(Desktop::getList(80), 'row_id', 'value'),array('class'=> 'select2',"empty" => "Не задано")); ?>
+                <?php echo $form->dropDownList($model,'channel_id',CHtml::listData(Desktop::getList(86), 'row_id', 'value'),array("empty" => "Не задано")); ?>
                 <?php echo $form->error($model,'channel_id'); ?>
+            </div>
+            <div class="row">
+                <?php echo $form->labelEx($model,'tk_id'); ?>
+                <?php echo $form->dropDownList($model,'tk_id',CHtml::listData(Desktop::getList(80), 'row_id', 'value'),array("empty" => "Не задано")); ?>
+                <?php echo $form->error($model,'tk_id'); ?>
+            </div>
+            <div class="row">
+                <?php echo $form->labelEx($model,'order_number'); ?>
+                <?php echo $form->textField($model,'order_number',array('class' => 'autocomplete-input')); ?>
+                <?php echo $form->error($model,'order_number'); ?>
             </div>
             <div class="row">
                 <?php echo $form->labelEx($model,'city'); ?>

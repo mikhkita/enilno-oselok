@@ -10,7 +10,10 @@
  * @property string $date
  * @property integer $channel_id
  * @property string $city
+ * @property string $order_number
+ * @property integer $tk_id
  * @property string $comment
+ * @property string $photo
  * @property string $customer_id
  */
 class Sale extends CActiveRecord
@@ -32,14 +35,16 @@ class Sale extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('good_id, summ', 'required'),
-			array('summ, extra, channel_id', 'numerical', 'integerOnly'=>true),
+			array('summ, extra, channel_id, tk_id', 'numerical', 'integerOnly'=>true),
 			array('good_id', 'length', 'max'=>11),
 			array('city', 'length', 'max'=>50),
+			array('order_number', 'length', 'max'=>25),
+			array('photo', 'length', 'max'=>255),
 			array('customer_id', 'length', 'max'=>10),
 			array('date, comment', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('good_id, summ, extra, date, channel_id, city, comment, customer_id', 'safe', 'on'=>'search'),
+			array('good_id, summ, extra, date, channel_id, city, order_number, tk_id, comment, photo, customer_id', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -52,6 +57,7 @@ class Sale extends CActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
 			'good' => array(self::BELONGS_TO, 'Good', 'good_id'),
+			'customer' => array(self::BELONGS_TO, 'Customer', 'customer_id'),
 		);
 	}
 
@@ -65,10 +71,13 @@ class Sale extends CActiveRecord
 			'summ' => 'Сумма',
 			'extra' => 'Доп. издержки',
 			'date' => 'Дата',
-			'channel_id' => 'Канал продажи',
+			'channel_id' => 'Канал',
 			'city' => 'Город',
+			'order_number' => 'Номер накладной',
+			'tk_id' => 'ТК',
 			'comment' => 'Комментарий',
-			'customer_id' => 'Покупатель'
+			'photo' => 'Фото накладной',
+			'customer_id' => 'customer_id',
 		);
 	}
 
@@ -96,7 +105,10 @@ class Sale extends CActiveRecord
 		$criteria->compare('date',$this->date,true);
 		$criteria->compare('channel_id',$this->channel_id);
 		$criteria->compare('city',$this->city,true);
+		$criteria->compare('order_number',$this->order_number,true);
+		$criteria->compare('tk_id',$this->tk_id);
 		$criteria->compare('comment',$this->comment,true);
+		$criteria->compare('photo',$this->photo,true);
 		$criteria->compare('customer_id',$this->customer_id,true);
 
 		return new CActiveDataProvider($this, array(
