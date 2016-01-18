@@ -55,9 +55,9 @@ class Notification extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'title' => 'Title',
-			'category_id' => 'Category',
-			'data' => 'Data',
+			'title' => 'Заголовок',
+			'category_id' => 'Категория',
+			'data' => 'Данные',
 		);
 	}
 
