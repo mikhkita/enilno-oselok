@@ -35,7 +35,7 @@ class GoodController extends Controller
 			$model->date = NULL;
 			$model->save();
 		}
-		$goods = Good::model()->with('sale')->findAll("good_type_id=".$good_type_id." AND archive=1");
+		$goods = Good::model()->with('sale')->findAll(array("condition" => "good_type_id=".$good_type_id." AND archive=1","order" => "sale.date DESC"));
 		$options = array(
 			'data'=>$goods,
 			'name'=>$goodType->name
@@ -49,11 +49,19 @@ class GoodController extends Controller
 	{
 		$model = new Sale;
 		if($_POST['Sale']) {
+			if($_POST['Customer']['phone']) {
+				$customer = Customer::model()->find("phone='".$_POST['Customer']['phone']."'");
+				$customer = ($customer) ? $customer : new Customer;
+				$customer->attributes = $_POST['Customer'];
+				$customer->save();		
+				$_POST['Sale']['customer_id'] = $customer->id;
+			}
 			$_POST['Sale']['date'] = date_format(date_create_from_format('d.m.Y',$_POST['Sale']['date']), 'Y-m-d H:i:s');
 			$model->attributes = $_POST['Sale'];
 			$model->good_id = $id;
 			$good = $this->loadModel($id);
 			$good->archive = 1;
+
 			if($model->save() && $good->save()){
 				GoodAttribute::model()->deleteAll('good_id='.$id.' AND attribute_id IN (58,59,60,61)');
 				$good->updateAdverts();	

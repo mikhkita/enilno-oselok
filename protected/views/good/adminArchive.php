@@ -16,13 +16,13 @@
 				</td>
 				<td style="text-align: center; font-size: 0px;">
 					<? $images = $this->getImages($item);?>
-					<? foreach ($images as $i => $item): ?>
-						<img src="<?=$item;?>" style="max-height: 100px;" alt="">
+					<? foreach ($images as $i => $image): ?>
+						<img src="<?=$image;?>" style="max-height: 100px;" alt="">
 						<? if($i == 3) break; ?>
 					<? endforeach; ?>
 				</td>
 				<td style="min-width: 100px; text-align: center;">
-					<div><?=$item->date;?></div>
+					<div><? if($item->sale->date) echo date_format(date_create($item->sale->date), 'd.m.Y H:i:s');?></div>
 				</td>
 			</tr>
 		<? endforeach; ?>

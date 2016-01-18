@@ -354,16 +354,14 @@ $(document).ready(function(){
         }
 
         $("#Customer_phone").focusout(function() {
-            if($("#Customer_phone").val()) {
-                $.ajax({
-                    type: "GET",
-                    url: $("#Customer-form").attr("data-url"),
-                    data: {phone: $("#Customer_phone").val()},
-                    success: function(msg){
-                        $("#Customer-form").html(msg);
-                    }
-                });
-            }
+            $.ajax({
+                type: "GET",
+                url: $("#Customer-form").attr("data-url"),
+                data: {phone: $("#Customer_phone").val()},
+                success: function(msg){
+                    $("#Customer-form").html(msg);
+                }
+            });
         });
 
         $(".numeric").numericInput({ allowFloat: true, allowNegative: true });
