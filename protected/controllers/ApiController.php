@@ -23,7 +23,7 @@ class ApiController extends Controller
             $user->usr_token = md5(time()."Olololo".rand());
             $user->save();
 
-            $this->answer(array("result" => "success", "token" => $user->usr_token));
+            $this->answer(array("result" => "success", "user" => array("id" => $user->usr_id, "login" => $user->usr_login, "name" => $user->usr_name, "email" => $user->usr_email, "role" => $user->role->code)));
         }else{
             $this->answer(array("result" => "error", "message" => "Неправильная пара логин-пароль"));
         }
