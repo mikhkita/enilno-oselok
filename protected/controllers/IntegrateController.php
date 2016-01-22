@@ -660,6 +660,7 @@ class IntegrateController extends Controller
 
         $result = file_get_contents(urldecode($task->link));
         $json = json_decode($result);
+        var_dump($result);
         if( $json->result == "success" ){
             $task->delete();
         }else{

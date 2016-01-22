@@ -1,0 +1,22 @@
+DROP TABLE sale;
+
+CREATE TABLE `sale` (
+  `good_id` int(11) unsigned NOT NULL,
+  `summ` int(6) NOT NULL,
+  `extra` int(6) NOT NULL DEFAULT '0',
+  `date` timestamp NULL DEFAULT NULL,
+  `channel_id` int(11) DEFAULT NULL,
+  `city` varchar(50) DEFAULT NULL,
+  `order_number` varchar(25) DEFAULT NULL,
+  `tk_id` int(10) unsigned DEFAULT NULL,
+  `comment` text,
+  `photo` varchar(255) DEFAULT NULL,
+  `customer_id` int(10) unsigned DEFAULT NULL,
+  PRIMARY KEY (`good_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+INSERT INTO sale VALUES("107","19900","0","2016-01-19 13:16:47","","","","0","8121 ???? ??????? ????? ?????????? ????? ? ???????, ?? ????? ?? ????????","","");
+INSERT INTO sale VALUES("122","37000","0","2016-01-19 13:15:06","173","?????-?????????","","0","?????????? 15000","","3");
+
+
+

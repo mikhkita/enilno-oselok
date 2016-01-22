@@ -672,6 +672,15 @@ class Good extends GoodFilter
 		// print_r($result);
 	}
 
+	public function sold(){
+		$this->archive = 1;
+
+		GoodAttribute::model()->deleteAll('good_id='.$this->id.' AND attribute_id IN (58,59,60,61)');
+		$this->updateAdverts();
+
+		return $this->save();
+	}
+
 	public function getNewAuctionCode($diametr){
 		$auction_codes = explode("\n", $this->getParam("OTHER","AUCTION_CODES"));
 

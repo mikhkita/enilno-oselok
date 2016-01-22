@@ -9,8 +9,6 @@ class ApiController extends Controller
 
         $model=new LoginForm;
 
-        header("Access-Control-Allow-Origin: *");
-
         if( $login === NULL || $password === NULL || $login == "" || $password == "" )
             $this->answer(array("result" => "error", "message" => "Не указан логин или пароль"));
 
@@ -23,14 +21,90 @@ class ApiController extends Controller
             $user->usr_token = md5(time()."Olololo".rand());
             $user->save();
 
-            $this->answer(array("result" => "success", "user" => array("id" => $user->usr_id, "login" => $user->usr_login, "name" => $user->usr_name, "email" => $user->usr_email, "role" => $user->role->code)));
+            $this->answer(array("result" => "success", "user" => array("id" => $user->usr_id, "login" => $user->usr_login, "name" => $user->usr_name, "email" => $user->usr_email, "role" => $user->role->code, "token" => $user->usr_token)));
         }else{
             $this->answer(array("result" => "error", "message" => "Неправильная пара логин-пароль"));
         }
     }
 
+    public function actionSale($token = NULL)
+    {
+        // $this->auth($token);
+
+        $sale = Yii::app()->db->createCommand()
+            ->select('s.good_id, s.summ, s.extra, s.date, s.channel_id, s.city, s.order_number, s.tk_id, s.comment, s.photo, s.customer_id, g.good_type_id, f.varchar_value')
+            ->from(Sale::tableName().' s')
+            ->join(Good::tableName().' g', 's.good_id=g.id')
+            ->join(GoodAttributeFilter::tableName().' f', 'g.id=f.good_id')
+            ->where("f.attribute_id=3")
+            ->order("s.date DESC")
+            ->queryAll();
+
+        $customers = array();
+        foreach ($sale as $i => $item) {
+            $date = date_format(date_create_from_format('Y-m-d H:i:s', $sale[$i]['date']), 'd.m.Y');
+            $date = explode(".", $date);
+            $sale[$i]["date"] = $date[0]." ".$this->getRussianMonth($date[1])." ".$date[2];
+
+            $images = $this->getImages(array("code"=>$sale[$i]["varchar_value"], "good_type_id"=>$sale[$i]["good_type_id"]));
+            foreach ($images as $key => $image) {
+                $images[$key] = "http://".Yii::app()->params["host"].$image;
+            }
+            $sale[$i]["images"] = $images;
+            if( $sale[$i]["customer_id"] )
+                array_push($customers, $sale[$i]["customer_id"]);
+        }
+
+        if( count($customers) ){
+            $customers = Yii::app()->db->createCommand()
+                ->select('*')
+                ->from(Customer::tableName().' c')
+                ->where("id in (".implode(",", $customers).")")
+                ->queryAll();
+
+            $customers = $this->getAssocByAssoc($customers,"id");
+        }
+
+        $channels = DesktopTable::getTable(23,array(
+            86 => "name"
+        ));
+
+        $tks = DesktopTable::getTable(19,array(
+            80 => "name"
+        ));
+
+        foreach ($sale as $i => $item) {
+            if( $sale[$i]["customer_id"] )
+                $sale[$i]["customer"] = $customers[$sale[$i]["customer_id"]];
+
+            if( $sale[$i]["channel_id"] )
+                $sale[$i]["channel"] = $channels[$sale[$i]["channel_id"]]["name"];
+
+            if( $sale[$i]["tk_id"] )
+                $sale[$i]["tk"] = $tks[$sale[$i]["tk_id"]]["name"];
+
+            unset($sale[$i]["customer_id"]);
+            unset($sale[$i]["channel_id"]);
+            unset($sale[$i]["tk_id"]);
+        }
+
+        $this->answer(array("result" => "success", "sale" => $sale));
+    }
+
     public function answer($array){
+        header("Access-Control-Allow-Origin: *");
+
         echo json_encode($array);
         die();
+    }
+
+    public function auth($token){
+        if( $token === NULL ) $this->answer(array("result" => "error", "message" => "Не указан токен"));
+
+        if( User::model()->count("usr_token='$token'") ){
+            return true;
+        }else{
+            $this->answer(array("result" => "not_authorized"));
+        }
     }
 }

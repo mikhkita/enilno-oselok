@@ -116,6 +116,21 @@ class Sale extends CActiveRecord
 		));
 	}
 
+	public function add($attributes){
+		if( isset($attributes["summ"]) ){
+			if( !isset($attributes["date"]) )
+				$attributes['date'] = time();
+
+			$attributes['date'] = date_format($attributes['date'], 'Y-m-d H:i:s');
+			if( !isset($attributes['channel_id']) || $attributes['channel_id'] == "" ) $attributes['channel_id'] = NULL;
+			if( !isset($attributes['tk_id']) || $attributes['tk_id'] == "" ) $attributes['tk_id'] = NULL;
+
+			$sale = new Sale();
+			$sale->attributes = $attributes;
+			return $sale->save();
+		}else throw new CHttpException(404, 'Не указана сумма продажи');
+	}
+
 	/**
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!

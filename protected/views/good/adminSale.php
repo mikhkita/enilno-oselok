@@ -4,34 +4,41 @@
         <?php $form=$this->beginWidget('CActiveForm', array(
         	'id'=>'faculties-form',
         	'enableAjaxValidation'=>false,
-        	'htmlOptions' => array("data-beforeAjax"=>"attributesAjax"),
+        	'htmlOptions' => array(
+                "data-beforeAjax" => "attributesAjax",
+                "data-type" => "json"
+            ),
         )); ?>
 
         	<?php echo $form->errorSummary($model); ?>
-        	<div class="row">
-        		<?php echo $form->labelEx($model,'summ'); ?>
-        		<?php echo $form->textField($model,'summ',array('maxlength'=>6,'required'=>true)); ?>
-        		<?php echo $form->error($model,'summ'); ?>
-        	</div>
-            <div class="row">
-                <?php echo $form->labelEx($model,'extra'); ?>
-                <?php echo $form->textField($model,'extra',array('maxlength'=>6)); ?>
-                <?php echo $form->error($model,'extra'); ?>
+            <div class="clearfix">
+            	<div class="row row-half">
+            		<?php echo $form->labelEx($model,'summ'); ?>
+            		<?php echo $form->numberField($model,'summ',array('maxlength'=>10,'required'=>true)); ?>
+            		<?php echo $form->error($model,'summ'); ?>
+            	</div>
+                <div class="row row-half">
+                    <?php echo $form->labelEx($model,'extra'); ?>
+                    <?php echo $form->numberField($model,'extra',array('maxlength'=>10)); ?>
+                    <?php echo $form->error($model,'extra'); ?>
+                </div>
             </div>
             <div class="row">
                 <?php echo $form->labelEx($model,'date'); ?>
                 <?php echo $form->textField($model,'date',array("id" => 'datepicker','required' => true)); ?>
                 <?php echo $form->error($model,'date'); ?>
             </div>
-            <div class="row">
-                <?php echo $form->labelEx($model,'channel_id'); ?>
-                <?php echo $form->dropDownList($model,'channel_id',CHtml::listData(Desktop::getList(86), 'row_id', 'value'),array("empty" => "Не задано")); ?>
-                <?php echo $form->error($model,'channel_id'); ?>
-            </div>
-            <div class="row">
-                <?php echo $form->labelEx($model,'tk_id'); ?>
-                <?php echo $form->dropDownList($model,'tk_id',CHtml::listData(Desktop::getList(80), 'row_id', 'value'),array("empty" => "Не задано")); ?>
-                <?php echo $form->error($model,'tk_id'); ?>
+            <div class="clearfix">
+                <div class="row row-half">
+                    <?php echo $form->labelEx($model,'channel_id'); ?>
+                    <?php echo $form->dropDownList($model,'channel_id',CHtml::listData(Desktop::getList(86), 'row_id', 'value'),array("empty" => "Не задано")); ?>
+                    <?php echo $form->error($model,'channel_id'); ?>
+                </div>
+                <div class="row row-half">
+                    <?php echo $form->labelEx($model,'tk_id'); ?>
+                    <?php echo $form->dropDownList($model,'tk_id',CHtml::listData(Desktop::getList(80), 'row_id', 'value'),array("empty" => "Не задано")); ?>
+                    <?php echo $form->error($model,'tk_id'); ?>
+                </div>
             </div>
             <div class="row">
                 <?php echo $form->labelEx($model,'order_number'); ?>

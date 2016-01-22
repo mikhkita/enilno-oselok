@@ -582,9 +582,15 @@ class Controller extends CController
 
     public function getImages($good, $number = NULL, $get_default = true)
     {   
+        if( is_object($good) ){
+            $code = $good->fields_assoc[3]->value;
+            $good_type_id = $good->good_type_id;
+        }else if( is_array($good) ){
+            $code = $good["code"];
+            $good_type_id = $good["good_type_id"];
+        }
         $imgs = array();
-        $code = $good->fields_assoc[3]->value;
-        $path = Yii::app()->params["imageFolder"]."/".$this->type_codes[$good->good_type_id];
+        $path = Yii::app()->params["imageFolder"]."/".$this->type_codes[$good_type_id];
         $dir = $path."/".$code;
         if (is_dir($dir)) {
             $imgs = array_values(array_diff(scandir($dir), array('..', '.', 'Thumbs.db', '.DS_Store')));
@@ -686,6 +692,13 @@ class Controller extends CController
         $out = array();
         foreach ($items as $item)
             $out[$item->getAttribute($attr)] = $item;
+        return $out;
+    }
+
+    public function getAssocByAssoc($items,$attr){
+        $out = array();
+        foreach ($items as $item)
+            $out[$item[$attr]] = $item;
         return $out;
     }
 
@@ -812,6 +825,11 @@ class Controller extends CController
             "in" => ($in)?$in->value:""
         );
         unset($_GET['city']);
+    }
+
+    public function getRussianMonth($m){
+        $month = array(0,"января","февраля","марта","апреля","мая","июня","июля","августа","сентября","октября","ноября","декабря");
+        return $month[intval($m)];
     }
 
     public function cityReplace($str){

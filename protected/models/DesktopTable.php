@@ -98,6 +98,25 @@ class DesktopTable extends CActiveRecord
   		return parent::beforeDelete();
  	}
 
+ 	public function getTable($table_id, $lables, $key_code = NULL, $objects = false){
+        $out = array();
+        $rows = DesktopTableRow::model()->with(array("cells"))->findAll("table_id=$table_id");
+        if( $rows ){
+            foreach ($rows as $i => $row) {
+                $one_cell = array();
+                foreach ($row->cells as $key => $cell)
+                    $one_cell[$lables[$cell->col_id]] = $cell->value;
+                if( $key_code !== NULL ){
+                	$out[$one_cell[$key_code]] = ($objects)?((object)$one_cell):$one_cell;
+                }else{
+                	$out[$row->id] = ($objects)?((object)$one_cell):$one_cell;
+                }
+                
+            }   
+        }
+        return $out;
+ 	}
+
 	/**
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!

@@ -17,7 +17,7 @@ class GoodController extends Controller
 				'roles'=>array('manager'),
 			),
 			array('allow',
-				'actions'=>array('adminIndex2'),
+				'actions'=>array('adminIndex2','adminUpdateCities'),
 				'users'=>array('*'),
 			),
 			array('deny',
@@ -47,36 +47,38 @@ class GoodController extends Controller
 
 	public function actionAdminSold($id,$good_type_id)
 	{
-		$model = new Sale;
 		if($_POST['Sale']) {
-			if($_POST['Customer']['phone']) {
-				$customer = Customer::model()->find("phone='".$_POST['Customer']['phone']."'");
-				$customer = ($customer) ? $customer : new Customer;
-				$customer->attributes = $_POST['Customer'];
-				$customer->save();		
-				$_POST['Sale']['customer_id'] = $customer->id;
-			}
-			$_POST['Sale']['date'] = date_format(date_create_from_format('d.m.Y',$_POST['Sale']['date']), 'Y-m-d H:i:s');
-			$model->attributes = $_POST['Sale'];
-			$model->good_id = $id;
-			$good = $this->loadModel($id);
-			$good->archive = 1;
+			Sale::model()->deleteByPk($id);
 
-			if($model->save() && $good->save()){
-				GoodAttribute::model()->deleteAll('good_id='.$id.' AND attribute_id IN (58,59,60,61)');
-				$good->updateAdverts();	
-				$this->redirect( Yii::app()->createUrl('good/adminindex',array('good_type_id'=>$good_type_id,'partial'=>true)) );
+			if($_POST['Customer']['phone']) {
+				$customer_id = Customer::addOrUpdate($_POST["Customer"]);	
+				$_POST['Sale']['customer_id'] = $customer_id;
+			}
+
+			$_POST['Sale']['good_id'] = $id;
+			$_POST['Sale']['date'] = date_create_from_format('d.m.Y', $_POST['Sale']['date']);
+
+			if( Sale::add($_POST["Sale"]) ){
+				$this->loadModel($id)->sold();
+	
+				echo json_encode(array(
+					"result" => "success",
+					"action" => "delete", 
+					"selector" => "#id-".$id
+				));
 			}		
 		} else {	
+			$model = new Sale;
 			$model->date = date("d.m.Y", time());
+
 			$cities = AttributeVariant::model()->with("variant")->findAll("attribute_id=27");
-	        foreach ($cities as &$item) {
+	        foreach ($cities as &$item)
 	        	$item = $item->value;
-	        }
+
 			$this->renderPartial('adminSale',array(
-					'model'=>$model,
-					'cities' => $cities
-				));
+				'model'=>$model,
+				'cities' => $cities
+			));
 		}
 	}
 
@@ -122,14 +124,20 @@ class GoodController extends Controller
 			$this->renderPartial('adminCreate',array(
 				'model'=>$model,
 				'result' => $result,
-				'cities' => $this->cityGroup()
+				'cities' => $this->cityGroup(),
+				'fields' => $model->type->fields
 			));
 		}
 
 	}
 
-	public function actionAdminUpdate($id,$good_type_id)
+	public function actionAdminUpdate($id, $good_type_id, $attributes = NULL)
 	{
+		$view = array(
+			2 => array(3,5,6,9,11,28,27,26,31,32,33,34,36,43),
+		);
+		$view_fields = array();
+
 		$model = $this->loadModel($id);
 		$result = $this->getAttr($model);
 		if(isset($_POST['Good_attr']))
@@ -138,9 +146,6 @@ class GoodController extends Controller
 			$values = array();
 			foreach ($_POST['Good_attr'] as $attr_id => $value) {
 				if(!is_array($value) || isset($value['single']) ) {
-					// if(!is_array($value) && $value == ""){
-					// 	continue;
-					// }
 					$tmp = array("good_id"=>$id,"attribute_id"=>$attr_id,"int_value"=>NULL,"varchar_value"=>NULL,"float_value"=>NULL,"text_value"=>NULL,"variant_id"=>NULL);
 
 					$attr_type = $this->getAttrType($model,$attr_id);
@@ -157,7 +162,6 @@ class GoodController extends Controller
 							$values[] = array("good_id"=>$id,"attribute_id"=>$attr_id,"int_value"=>NULL,"varchar_value"=>NULL,"float_value"=>NULL,"text_value"=>NULL,"variant_id"=>$variant);
 				}
 			}
-			// Log::debug(print_r($values, true));
 			$this->insertValues(GoodAttribute::tableName(),$values);
 
 			$this->checkAdverts($model);
@@ -166,12 +170,28 @@ class GoodController extends Controller
 			Good::updateAuctionLinks();
 
 			$this->redirect( Yii::app()->createUrl('good/adminindex',array('good_type_id'=>$good_type_id,'partial'=>true,'GoodFilter_page' => $_GET["GoodFilter_page"])) );
-
 		}else{
+			$fields = $model->type->fields;
+
+			if( $attributes !== NULL ){
+				$attributes = explode(",", $attributes);
+
+				foreach ($fields as $i => $field) {
+					if( !in_array($field->attribute_id, $attributes) ){
+						if( in_array($field->attribute_id, $view[$good_type_id]) ){
+							array_push($view_fields, $field);
+						}
+						unset($fields[$i]);
+					}
+				}
+			}
+
 			$this->renderPartial('adminUpdate',array(
 				'model'=>$model,
 				'result' => $result,
-				'cities' => $this->cityGroup()
+				'cities' => $this->cityGroup(),
+				'fields' => $fields,
+				'view_fields' => $view_fields
 			));
 		}
 	}
@@ -181,8 +201,11 @@ class GoodController extends Controller
 		$good_ids_key = array();
 		if( !count($good_ids) ) return false;
 
+		$selector = array();
+
 		foreach ($good_ids as $key => $value) {
 			$tmp = $key;
+			array_push($selector, "#id-".$key);
 			array_push($good_ids_key, $key);
 		}
 		$goods = Good::model()->with(array("type","fields.variant","fields.attribute"))->findAllByPk($good_ids_key);
@@ -190,84 +213,81 @@ class GoodController extends Controller
 			$good->delete();
 		}
 		Good::removeAllCheckbox($good_type_id);
-		return true;
+
+		echo json_encode(array(
+			"result" => "success",
+			"action" => "delete",
+			"selector" => implode(",", $selector)
+		));
+	}
+
+	public function	actionAdminUpdateCities($id = NULL){
+		if( $id === NULL || !isset($_GET["Good_attr"]) ){
+			if( $id === NULL ){
+				echo json_encode(array("result" => "error","message" => "Не указан ID товара"));
+			}else{
+				echo json_encode(array("result" => "success"));
+			}
+			return true;
+		}
+		$Good_attr = $_GET["Good_attr"];
+
+		$good = $this->loadModel($id);
+
+		if( !$good ){
+			echo json_encode(array("result" => "error", "message" => "Не найден товар с ID=$id"));
+			return true;
+		}
+		
+		$attrs_id = array();
+		foreach ($Good_attr as $attr_id => $val)
+			array_push($attrs_id, "attribute_id=".$attr_id);
+
+		$values = array();
+		$delete_variants = array();
+		foreach ($Good_attr as $attr_id => $value) {
+			if( array_search("-", $value) !== false )
+				GoodAttribute::model()->deleteAll("good_id=".$good->id." AND (".implode(" OR ", $attrs_id).")");
+
+			if(count($value))
+				foreach ($value as $variant) {
+					if( $variant == "-" ) continue;
+					$values[] = array("good_id"=>$good->id,"attribute_id"=>$attr_id,"int_value"=>NULL,"varchar_value"=>NULL,"float_value"=>NULL,"text_value"=>NULL,"variant_id"=>$variant);
+					$delete_variants[] = "(good_id=".$good->id." AND attribute_id=$attr_id AND variant_id=$variant)";
+				}
+		}
+		if( count($delete_variants) )
+			GoodAttribute::model()->deleteAll(implode(" OR ", $delete_variants));
+		$this->insertValues(GoodAttribute::tableName(),$values);
+
+		$this->checkAdverts($good);
+		$good->updateAdverts();
+
+		echo json_encode(array("result" => "success"));
 	}
 
 	public function actionAdminUpdateAll($good_type_id)
 	{
 		$good_ids = Good::getCheckboxes($good_type_id);
-		$good_ids_key = array();
 		if( !count($good_ids) ) return false;
-
-		foreach ($good_ids as $key => $value) {
-			$tmp = $key;
-			array_push($good_ids_key, $key);
-		}
-
-		$model = $this->loadModel($tmp);
-		$result = NULL;
 		
 		if(isset($_POST['Good_attr']))
 		{
-			$goods = Good::model()->filter(
-				array(
-					"good_type_id"=>$good_type_id,
-				),
-				$good_ids_key
-			)->getPage(
-				array(
-			    	'pageSize'=>10000,
-			    )
-			);
-			$goods = $goods["items"];
+			$links = array();
+			foreach ($good_ids as $key => $value)
+				array_push($links, "http://".Yii::app()->params['host'].$this->createUrl('/good/adminupdatecities',array('id'=> $key, 'Good_attr' => $_POST["Good_attr"])));
 
-			$attrs_id = array();
-			foreach ($_POST['Good_attr'] as $attr_id => $val) {
-				array_push($attrs_id, "attribute_id=".$attr_id);
-			}
-			// $goods_id = array();
-			// foreach ($good_ids as $key => $good_id) {
-			// 	array_push($goods_id, "good_id='".$key."'");
-			// }	
+			Cron::addAll($links);
 
-			// print_r(end($goods)->fields_assoc);
-			// die();
-
-			if( isset($_POST['Good_attr']) ){
-				$values = array();
-				$delete_variants = array();
-				foreach ($good_ids as $key => $id) {
-					foreach ($_POST['Good_attr'] as $attr_id => $value) {
-						if( array_search("-", $value) !== false )
-							GoodAttribute::model()->deleteAll("good_id=".$key." AND (".implode(" OR ", $attrs_id).")");
-
-						if(count($value))
-							foreach ($value as $variant) {
-								if( $variant == "-" ) continue;
-								$values[] = array("good_id"=>$key,"attribute_id"=>$attr_id,"int_value"=>NULL,"varchar_value"=>NULL,"float_value"=>NULL,"text_value"=>NULL,"variant_id"=>$variant);
-								$delete_variants[] = "(good_id=$key AND attribute_id=$attr_id AND variant_id=$variant)";
-							}
-					}
-				}
-				if( count($delete_variants) )
-					GoodAttribute::model()->deleteAll(implode(" OR ", $delete_variants));
-				$this->insertValues(GoodAttribute::tableName(),$values);
-			}
-
-			foreach ($goods as $i => $good) {
-				$this->checkAdverts($good);
-				$good->updateAdverts();
-			}
-
-			// list($queryCount, $queryTime) = Yii::app()->db->getStats();
-			// echo "Query count: $queryCount, Total query time: ".sprintf('%0.5f',$queryTime)."s";
-			$this->redirect( Yii::app()->createUrl('good/adminindex',array('good_type_id'=>$good_type_id,'partial'=>true,'GoodFilter_page' => $_GET["GoodFilter_page"])) );
-
+			echo json_encode(array("result" => "success", "action" => "updateCronCount", "count" => Cron::model()->count()));
 		}else{
+			$model = $this->loadModel(key($good_ids));
+
 			$this->renderPartial('adminUpdateAll',array(
 				'model'=>$model,
-				'result' => $result,
-				'cities' => $this->cityGroup()
+				'result' => NULL,
+				'cities' => $this->cityGroup(),
+				'fields' => $model->type->fields
 			));
 		}
 	}
@@ -380,12 +400,6 @@ class GoodController extends Controller
 		}
 	}
 
-	public function actionAdminDelete($id,$shop = false)
-	{
-		$this->loadModel($id)->delete();
-		if($shop) echo "1"; else $this->actionAdminIndex(true);
-	}
-
 	public function actionAdminTest($partial = false, $good_type_id = false)
 	{
 		$start = microtime(true);
@@ -446,6 +460,16 @@ class GoodController extends Controller
 		printf('<br>Прошло %.4F сек.<br>', microtime(true) - $start);		
 	}
 
+	public function actionAdminDelete($id){
+		Good::model()->findByPk($id)->delete();
+
+		echo json_encode(array(
+			"result" => "success",
+			"action" => "delete",
+			"selector" => "#id-".$id
+		));
+	}
+
 	public function actionAdminIndex($partial = false, $good_type_id = false,$sort_field = NULL,$sort_type = "ASC",$with_photos = NULL)
 	{
 		$attr_arr = 'filter';
@@ -455,16 +479,6 @@ class GoodController extends Controller
 			$_POST = array($attr_arr=>array(),$int_attr_arr=>array());
 
 		unset($_GET["partial"]);
-
-		if( isset($_GET["delete"]) ){
-			Good::model()->findByPk($_GET["delete"])->delete();
-			unset($_GET["delete"]);
-		}
-
-		if( isset($_GET["deleteAll"]) ){
-			$this->actionAdminDeleteAll($good_type_id);
-			unset($_GET["deleteAll"]);
-		}
 
 		if( isset($_GET["deleteAdvert"]) ){
 			Advert::model()->findByPk($_GET["deleteAdvert"])->delete();
@@ -725,6 +739,7 @@ class GoodController extends Controller
 	public function displayCodes($success,$good_type_id) {
 		$result = array();
 		$result['result'] = "error";
+		if( !isset($_SESSION['goods'][$good_type_id]) || !is_array($_SESSION['goods'][$good_type_id]) ) $_SESSION['goods'][$good_type_id] = array();
 		if($success) {
 			$result['result'] = "success";
 			$result['codes'] = ((count($_SESSION['goods'][$good_type_id]))?("Выделено всего - ".count($_SESSION['goods'][$good_type_id]).": "):"").implode(", ",$_SESSION['goods'][$good_type_id]);			

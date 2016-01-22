@@ -98,6 +98,17 @@ class Customer extends CActiveRecord
 		));
 	}
 
+	public function addOrUpdate($attributes){
+		if( isset($attributes['phone']) ){
+			$customer = Customer::model()->find("phone='".$attributes['phone']."'");
+			$customer = ($customer) ? $customer : new Customer;
+			$customer->attributes = $attributes;
+			if( $customer->save() ){
+				return $customer->id;
+			}else throw new CHttpException(500, 'Не удалось создать клиента');
+		}else throw new CHttpException(404, 'Не указан телефон клиента');
+	}
+
 	/**
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!

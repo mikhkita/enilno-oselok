@@ -250,13 +250,26 @@ $(document).ready(function(){
                 url: url,
                 success: function(msg){
                     progress.end(function(){
-                        if( isSetResult )
-                            setResult(msg);
+                        if( msg != "" && isValidJSON(msg) ){
+                            jsonHandler(msg);
+                        }else{
+                            if( isSetResult )
+                                setResult(msg);
+                        }
                     });
                     $.fancybox.close();
                 }
             });    
         });
+    }
+
+    function isValidJSON(src) {
+        var filtered = src;
+        filtered = filtered.replace(/\\["\\\/bfnrtu]/g, '@');
+        filtered = filtered.replace(/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g, ']');
+        filtered = filtered.replace(/(?:^|:|,)(?:\s*\[)+/g, '');
+
+        return (/^[\],:{}\s]*$/.test(filtered));
     }
 
     function bindFilter(){
@@ -299,11 +312,6 @@ $(document).ready(function(){
             placeholder: "",
             allowClear: true
         });
-
-        // $(".select2").change(function(){
-        //     if( $(this).val().indexOf("-") != -1 )
-        //         $(this).select2("val", "-");
-        // });
 
         $(".select2-all").click(function() {
             var element = $(this).siblings("select.select2");
@@ -353,15 +361,20 @@ $(document).ready(function(){
             });  
         }
 
-        $("#Customer_phone").focusout(function() {
-            $.ajax({
-                type: "GET",
-                url: $("#Customer-form").attr("data-url"),
-                data: {phone: $("#Customer_phone").val()},
-                success: function(msg){
-                    $("#Customer-form").html(msg);
-                }
-            });
+        $("#Customer_phone").keyup(function() {
+            n = $(this).val().match( /\d/g );
+            n = n ? n = n.length : 0;
+
+            if( n == 11 ){
+                $.ajax({
+                    type: "GET",
+                    url: $("#Customer-form").attr("data-url"),
+                    data: {phone: $("#Customer_phone").val()},
+                    success: function(msg){
+                        $("#Customer-form").html(msg);
+                    }
+                });
+            }
         });
 
         $(".numeric").numericInput({ allowFloat: true, allowNegative: true });
@@ -410,7 +423,11 @@ $(document).ready(function(){
                     success: function(msg){
                         progress.end(function(){
                             $form.find("input[type=submit]").removeClass("blocked");
-                            if( msg != "none" ) setResult(msg);
+                            if( $form.attr("data-type") == "json" ){
+                                jsonHandler(msg);
+                            }else{
+                                if( msg != "none" ) setResult(msg);
+                            }
                         });
                         if( a != false ){
                             $.fancybox.close();
@@ -451,6 +468,23 @@ $(document).ready(function(){
         //     $(".b-image-cancel").hide(); // Прячем кнопку отмены удаления                                 
         // });
 
+    }
+
+    function jsonHandler(msg){
+        var json = JSON.parse(msg);
+        console.log(json);
+        if( json.result == "success" ){
+            switch (json.action) {
+                case "delete":
+                    $(json.selector).remove();
+                    $(".b-sess-checkbox").eq(0).trigger("change");
+                break;
+
+                case "updateCronCount":
+                    $(".b-place-state p").text(json.count);
+                break;
+            }
+        }
     }
 
     function bindImageUploader(){

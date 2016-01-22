@@ -26,7 +26,7 @@
 			<? if($_GET["good_type_id"] == 1 || $_GET["good_type_id"] == 2): ?>
 				<li><a href="<?php echo $this->createUrl('/good/adminjoin')?>">Склеить</a></li>
 			<? endif; ?>
-			<li><a href="<?php echo $this->createUrl('/good/adminindex',array('good_type_id'=> $_GET["good_type_id"],'partial'=>"true",'deleteAll'=>"true",'GoodFilter_page' => ($pages->currentPage+1) ))?>" class="ajax-form ajax-delete" data-warning="Вы действительно хотите удалить выделенные товары?">Удалить</a></li>
+			<li><a href="<?php echo $this->createUrl('/good/admindeleteall',array('good_type_id'=> $_GET["good_type_id"]))?>" class="ajax-form ajax-delete" data-warning="Вы действительно хотите удалить выделенные товары?">Удалить</a></li>
 			<!-- <li><a href="<?php echo $this->createUrl('/good/adminupdateadverts',array('good_type_id'=> $_GET["good_type_id"], 'images' => '1'))?>" class="ajax-update-prices">Обновить&nbsp;фотографии</a></li> -->
 		</ul>
 	</div>
@@ -59,7 +59,7 @@
 			</tr>
 			<? if( count($data) ): ?>
 				<? foreach ($data as $i => $item): ?>
-					<tr>
+					<tr id="id-<?=$item->id?>">
 						<td><input type="checkbox" name="good_id" class="b-sess-checkbox" data-block="#b-sess-checkbox-list" <? if($item->isChecked()): ?>checked="checked"<? endif; ?> value="<?=$item->id?>"></td>
 						<? if($with_photos): ?>
 							<? $images = $this->getImages($item); $first_image = array_shift($images); ?>
@@ -79,7 +79,7 @@
 							<span href="<?php echo Yii::app()->createUrl('/good/adminsold',array('id'=>$item->id,'good_type_id' => $_GET['good_type_id']))?>" class="ajax-form ajax-create b-tool b-tool-sale" data-warning="Вы действительно хотите перенести товар &quot;<?=$item->fields_assoc[3]->value?>&quot; в архив?" title="Продано"></span>
 							<!-- <span href="<?php echo Yii::app()->createUrl('/good/adminupdateimages',array('id'=>$item->id))?>" class="ajax-form ajax-update ajax-photodoska b-tool b-tool-photo" title="Обновить фотографии"></span> -->
 							<span href="<?php echo Yii::app()->createUrl('/good/adminupdate',array('id'=>$item->id,'good_type_id' => $_GET['good_type_id'],'GoodFilter_page' => ($pages->currentPage+1) ))?>" class="ajax-form ajax-update b-tool b-tool-update" title="Редактировать"></span>
-							<? if($this->user->role->code == "root"): ?><span href="<?php echo Yii::app()->createUrl('/good/adminindex',array('delete'=>$item->id,'partial'=>'true','good_type_id'=>$_GET["good_type_id"],'GoodFilter_page'=>isset($_GET["GoodFilter_page"])?$_GET["GoodFilter_page"]:1))?>" class="ajax-form ajax-delete b-tool b-tool-delete not-ajax-delete" data-warning="Вы действительно хотите удалить товар &quot;<?=$item->fields_assoc[3]->value?>&quot;?" title="Удалить"></span><? endif; ?>
+							<? if($this->user->role->code == "root"): ?><span href="<?php echo Yii::app()->createUrl('/good/admindelete',array('id'=>$item->id))?>" class="ajax-form ajax-delete b-tool b-tool-delete not-ajax-delete" data-warning="Вы действительно хотите удалить товар &quot;<?=$item->fields_assoc[3]->value?>&quot;?" title="Удалить"></span><? endif; ?>
 						</td>
 						<? foreach ($fields as $field): ?>
 							<td style="min-width: <?=$field->attribute->width?>px; text-align: left;">

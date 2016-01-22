@@ -1,5 +1,5 @@
 <div class="b-popup">
 	<h1>Добавление</h1>
 
-	<?php $this->renderPartial('_form', array('model'=>$model,'result' => $result,'cities' => $cities)); ?>
+	<?php $this->renderPartial('_form', array('model'=>$model,'result' => $result,'cities' => $cities, 'fields' => $fields)); ?>
 </div>
