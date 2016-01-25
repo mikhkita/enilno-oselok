@@ -13,7 +13,7 @@ class GoodController extends Controller
 	{
 		return array(
 			array('allow',
-				'actions'=>array('adminIndex','adminTest','updatePrices','updateAuctionLinks','adminCreate','adminUpdate','adminDelete','adminEdit','getAttrType','getAttr','adminAdverts','adminUpdateImages',"adminAddCheckbox","adminRemoveCheckbox","adminAddAllCheckbox","adminRemoveAllCheckbox",'adminUpdateAll','adminAddSomeCheckbox','adminUpdateAdverts','adminViewSettings','adminSold','adminArchive','adminJoin','adminDeleteAll','adminSale','adminCustomer'),
+				'actions'=>array('adminIndex','adminTest','updatePrices','updateAuctionLinks','adminCreate','adminUpdate','adminDelete','adminEdit','getAttrType','getAttr','adminAdverts','adminUpdateImages',"adminAddCheckbox","adminRemoveCheckbox","adminAddAllCheckbox","adminRemoveAllCheckbox",'adminUpdateAll','adminAddSomeCheckbox','adminUpdateAdverts','adminViewSettings','adminSold','adminArchive','adminJoin','adminDeleteAll','adminSale','adminCustomer','adminArchiveAll'),
 				'roles'=>array('manager'),
 			),
 			array('allow',
@@ -35,7 +35,7 @@ class GoodController extends Controller
 			$model->date = NULL;
 			$model->save();
 		}
-		$goods = Good::model()->with('sale')->findAll(array("condition" => "good_type_id=".$good_type_id." AND archive=1","order" => "sale.date DESC"));
+		$goods = Good::model()->with(array("type","fields.variant","fields.attribute","sale"))->findAll(array("condition" => "good_type_id=".$good_type_id." AND archive=1","order" => "sale.date DESC"));
 		$options = array(
 			'data'=>$goods,
 			'name'=>$goodType->name
@@ -204,7 +204,6 @@ class GoodController extends Controller
 		$selector = array();
 
 		foreach ($good_ids as $key => $value) {
-			$tmp = $key;
 			array_push($selector, "#id-".$key);
 			array_push($good_ids_key, $key);
 		}
@@ -212,6 +211,28 @@ class GoodController extends Controller
 		foreach ($goods as $key => $good) {
 			$good->delete();
 		}
+		Good::removeAllCheckbox($good_type_id);
+
+		echo json_encode(array(
+			"result" => "success",
+			"action" => "delete",
+			"selector" => implode(",", $selector)
+		));
+	}
+
+	public function actionAdminArchiveAll($good_type_id){
+		$good_ids = Good::getCheckboxes($good_type_id);
+		$good_ids_key = array();
+		if( !count($good_ids) ) return false;
+
+		$selector = array();
+
+		foreach ($good_ids as $key => $value) {
+			array_push($selector, "#id-".$key);
+			array_push($good_ids_key, $key);
+		}
+		Good::model()->updateAll(array("archive" => 1), "id IN (".implode(", ", $good_ids_key).")");
+
 		Good::removeAllCheckbox($good_type_id);
 
 		echo json_encode(array(
@@ -536,24 +557,29 @@ class GoodController extends Controller
 
 			if(isset($_POST['filter-active'])) {
 				$this->setUserParam("GOOD_FILTER_".$good_type_id,array());
+				$this->setUserParam("GOOD_FILTER_NEW_".$good_type_id, NULL);
 			}
 			if(isset($_POST[$attr_arr])) $this->setUserParam("GOOD_FILTER_".$good_type_id,$_POST[$attr_arr]);
 			if(isset($_POST[$int_attr_arr])) $this->setUserParam("GOOD_FILTER_INT_".$good_type_id,$_POST[$int_attr_arr]);
+			if(isset($_POST["new_only"])) $this->setUserParam("GOOD_FILTER_NEW_".$good_type_id,$_POST["new_only"]);
 
 			$filter_values = $this->getUserParam("GOOD_FILTER_".$good_type_id) ? $this->getUserParam("GOOD_FILTER_".$good_type_id,false,true) : array();
 			$filter_values_int = $this->getUserParam("GOOD_FILTER_INT_".$good_type_id) ? $this->getUserParam("GOOD_FILTER_INT_".$good_type_id,false,true) : array();
+			$filter_new_only = $this->getUserParam("GOOD_FILTER_NEW_".$good_type_id) ? $this->getUserParam("GOOD_FILTER_NEW_".$good_type_id,false) : NULL;
 
 			foreach ($filter_values_int as $key => $value) {
 				$filter_values_int[$key] = (array)$value;
 			}			
 			
-			$goods = Good::model()->filter(
-				array(
-					"good_type_id"=>$good_type_id,
-					"attributes"=>$filter_values,
-					"int_attributes"=>$filter_values_int
-				)
-			)->sort( 
+			$filter_params = array(
+				"good_type_id"=>$good_type_id,
+				"attributes"=>$filter_values,
+				"int_attributes"=>$filter_values_int,
+			);
+			if( $filter_new_only )
+				$filter_params["not_contain"] = 107;
+
+			$goods = Good::model()->filter($filter_params)->sort( 
 				$sort
 			)->getPage(
 				array(
@@ -581,6 +607,7 @@ class GoodController extends Controller
 			'arr_name_int' => $int_attr_arr,
 			'filter_values' => $filter_values,
 			'filter_values_int' => $filter_values_int,
+			'filter_new_only' => $filter_new_only,
 			'good_count' => $goods["count"],
 			'sort_field' => $sort['field'],
 			'sort_type' => $sort_type,

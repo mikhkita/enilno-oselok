@@ -31,6 +31,12 @@ class ApiController extends Controller
     {
         // $this->auth($token);
 
+        $types = array(
+            1 => "Шины",
+            2 => "Диски",
+            3 => "Колеса"
+        );
+
         $sale = Yii::app()->db->createCommand()
             ->select('s.good_id, s.summ, s.extra, s.date, s.channel_id, s.city, s.order_number, s.tk_id, s.comment, s.photo, s.customer_id, g.good_type_id, f.varchar_value')
             ->from(Sale::tableName().' s')
@@ -46,10 +52,11 @@ class ApiController extends Controller
             $date = explode(".", $date);
             $sale[$i]["date"] = $date[0]." ".$this->getRussianMonth($date[1])." ".$date[2];
 
-            $images = $this->getImages(array("code"=>$sale[$i]["varchar_value"], "good_type_id"=>$sale[$i]["good_type_id"]));
-            foreach ($images as $key => $image) {
-                $images[$key] = "http://".Yii::app()->params["host"].$image;
-            }
+            $images = Good::getImages(NULL, NULL, array("code"=>$sale[$i]["varchar_value"], "good_type_id"=>$sale[$i]["good_type_id"]));
+            foreach ($images as $key => $image)
+                foreach ($images[$key] as $key2 => $href)
+                    $images[$key][$key2] = "http://".Yii::app()->params["host"].$href;
+
             $sale[$i]["images"] = $images;
             if( $sale[$i]["customer_id"] )
                 array_push($customers, $sale[$i]["customer_id"]);
@@ -83,12 +90,22 @@ class ApiController extends Controller
             if( $sale[$i]["tk_id"] )
                 $sale[$i]["tk"] = $tks[$sale[$i]["tk_id"]]["name"];
 
+            $sale[$i]["good_type"] = $types[intval($sale[$i]["good_type_id"])];
+
             unset($sale[$i]["customer_id"]);
             unset($sale[$i]["channel_id"]);
             unset($sale[$i]["tk_id"]);
         }
 
-        $this->answer(array("result" => "success", "sale" => $sale));
+        $out = array(
+            1 => array(),
+            2 => array(),
+            3 => array()
+        );
+        foreach ($sale as $key => $item)
+            array_push($out[$item["good_type_id"]], $item);
+
+        $this->answer(array("result" => "success", "sale" => $out));
     }
 
     public function answer($array){

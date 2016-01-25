@@ -26,14 +26,19 @@
 			<? if($_GET["good_type_id"] == 1 || $_GET["good_type_id"] == 2): ?>
 				<li><a href="<?php echo $this->createUrl('/good/adminjoin')?>">Склеить</a></li>
 			<? endif; ?>
-			<li><a href="<?php echo $this->createUrl('/good/admindeleteall',array('good_type_id'=> $_GET["good_type_id"]))?>" class="ajax-form ajax-delete" data-warning="Вы действительно хотите удалить выделенные товары?">Удалить</a></li>
+			<li><a>Убрать</a>
+				<ul class="b-section-submenu">
+					<li><a href="<?php echo $this->createUrl('/good/adminarchiveall',array('good_type_id'=> $_GET["good_type_id"]))?>" class="ajax-form ajax-delete" data-warning="Вы действительно хотите удалить выделенные товары?">В архив</a></li></li>
+					<li><a href="<?php echo $this->createUrl('/good/admindeleteall',array('good_type_id'=> $_GET["good_type_id"]))?>" class="ajax-form ajax-delete" data-warning="Вы действительно хотите убрать в архив выделенные товары?">Удалить</a></li></li>
+				</ul>
+			</li>
 			<!-- <li><a href="<?php echo $this->createUrl('/good/adminupdateadverts',array('good_type_id'=> $_GET["good_type_id"], 'images' => '1'))?>" class="ajax-update-prices">Обновить&nbsp;фотографии</a></li> -->
 		</ul>
 	</div>
 </div>
 <h1 class="b-with-nav"><?=$name?></h1>
 
-<?php $this->renderPartial('_filter', array('attributes'=>$attributes, 'arr_name' => $arr_name, 'arr_name_int' => $arr_name_int, 'labels' => $labels, 'filter_values' => $filter_values, 'filter_values_int' => $filter_values_int)); ?>
+<?php $this->renderPartial('_filter', array('attributes'=>$attributes, 'arr_name' => $arr_name, 'arr_name_int' => $arr_name_int, 'labels' => $labels, 'filter_values' => $filter_values, 'filter_values_int' => $filter_values_int, 'filter_new_only' => $filter_new_only)); ?>
 <div class="b-filter-pagination">
 	<?php $form=$this->beginWidget('CActiveForm'); ?>
 		<table class="b-table b-good-table b-sess-checkbox-info" data-add-url="<?=Yii::app()->createUrl('/good/adminaddcheckbox')?>" data-remove-url="<?=Yii::app()->createUrl('/good/adminremovecheckbox')?>" border="1">

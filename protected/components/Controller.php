@@ -590,16 +590,18 @@ class Controller extends CController
             $good_type_id = $good["good_type_id"];
         }
         $imgs = array();
-        $path = Yii::app()->params["imageFolder"]."/".$this->type_codes[$good_type_id];
+        $path = Yii::app()->params["imageFolder"]."/".GoodType::getCode($good_type_id);
         $dir = $path."/".$code;
         if (is_dir($dir)) {
             $imgs = array_values(array_diff(scandir($dir), array('..', '.', 'Thumbs.db', '.DS_Store')));
             $dir = Yii::app()->request->baseUrl."/".$path."/".$code;
+            $out = array();
             if(count($imgs)) {
                 if($number) {
                     for ($i=0; $i < $number; $i++) { 
-                        $imgs[$i] = $dir."/".$imgs[$i];
+                        $out[$i] = $dir."/".$imgs[$i];
                     }
+                    $imgs = $out;
                 } else {
                     foreach ($imgs as $key => &$value) {
                         $value = $dir."/".$value;

@@ -268,6 +268,91 @@ class GoodFilter extends CActiveRecord
 		return false;
 	}
 
+	public function getImages($count = NULL, $sizes = NULL, $good = NULL){
+		$default_sizes = array(
+			"small" => "320",
+			"big" => "640"
+		);
+
+		if( $sizes != NULL )
+			foreach ($default_sizes as $i => $size)
+				if( !in_array($i, $sizes) ) 
+					unset($default_sizes[$i]);
+
+		$sizes = $default_sizes;
+
+		if( $good === NULL ){
+			$good = array("code" => $this->fields_assoc[3]->value, "good_type_id" => $this->good_type_id);
+		}else{
+			if( is_object($good) ){
+				$good = array("code" => $good->fields_assoc[3]->value, "good_type_id" => $good->good_type_id);
+			}
+		}
+
+		$images = Controller::getImages($good, $count);
+		if( count($images) == 1 ){
+			if( strpos($images[0], "default.jpg") ){
+				foreach ($sizes as $i => $size)
+					$sizes[$i] = $images[0];
+
+				return array($sizes);
+			}
+		}
+		$values = array();
+		foreach ($images as $i => $image) {
+			$name = ($i<10?"0":"").$i;
+
+			$image = array(
+				"class" => $good["code"],
+				"hash" => filesize(substr($image,1)),
+				"path" => substr($image,1)
+			);
+
+			foreach ($sizes as $key => $size) {
+				$image["name"] = $name."_".$size;
+				array_push($values, $image);
+			}
+		}
+
+		$values = Cache::model()->check($values);
+		$update = array();
+		foreach ($values as $i => $value) {
+			$size = intval(array_pop(explode("_", $value["name"])));
+			array_push($update, array($value["class"], $value["name"], "/".Good::cropImage($value["path"], $size), $value["hash"]));
+		}
+
+		Controller::updateRows(Cache::tableName(), $update, array("value", "hash"));
+
+		$values = Cache::get($good["code"]);
+
+		foreach ($values as $i => $value) {
+			$arr = explode("_", $value["name"]);
+			$key = intval($arr[0]);
+			if( !is_array($images[$key]) ) $images[$key] = array("original" => $images[$key]);
+
+			$images[$key][array_search(intval($arr[1]), $sizes)] = $value["value"];
+		}
+
+		return $images;
+	}
+
+	public function cropImage($original, $width){
+		$arr = explode("/", $original);
+		$name_arr = explode(".", $arr[4]);
+		$new_path = $arr[0]."/cache/".$arr[2]."/".$arr[3]."/".$name_arr[0]."_".$width.".".strtolower($name_arr[1]);
+
+		$dir = $arr[0]."/cache/".$arr[2]."/".$arr[3]; 
+        if (!is_dir($dir)){
+        	mkdir($dir, 0777, true);
+        }
+
+        $resizeObj = new Resize($original);
+        $resizeObj -> resizeImage($width, $width);
+        $resizeObj -> saveImage($new_path, 80);
+
+        return $new_path;
+	}
+
 	public function isChecked(){
 		if(!isset($_SESSION)) session_start();
 

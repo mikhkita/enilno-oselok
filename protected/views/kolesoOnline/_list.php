@@ -1,7 +1,7 @@
 <? if(count($goods)): ?>
     <? foreach ($goods as $key => $good): ?>   
         <li  <? unset($_GET['partial'],$_GET['GoodFilter_page']); echo "data-last='".$last."'" ?> class="gradient-grey b-good-type-<?=$good->good_type_id?>">
-            <a href="<?=Yii::app()->createUrl('/kolesoOnline/detail',array('id' => ($good->code)?$good->code:$good->fields_assoc[3]->value,'type' => $type))?>"><div class="good-img<?=((isset($partial) && $partial)?"":" after-load-back")?>" <?=((isset($partial) && $partial)?"":"data-")?>style="background-image: url(<? $images = $this->getImages($good); echo $images[0];?>);"></div></a>
+            <a href="<?=Yii::app()->createUrl('/kolesoOnline/detail',array('id' => ($good->code)?$good->code:$good->fields_assoc[3]->value,'type' => $type))?>"><div class="good-img<?=((isset($partial) && $partial)?"":" after-load-back")?>" <?=((isset($partial) && $partial)?"":"data-")?>style="background-image: url(<? $images = $good->getImages(1, array("small")); echo $images[0]["small"];?>);"></div></a>
             <div class="params-cont">
                 <a class="params-cont-a" href="<?=Yii::app()->createUrl('/kolesoOnline/detail',array('id' => ($good->code)?$good->code:$good->fields_assoc[3]->value,'type' => $type))?>">
                 <? if($type == 2): ?>

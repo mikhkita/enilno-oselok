@@ -1,21 +1,22 @@
 <?php
 
 /**
- * This is the model class for table "good_type".
+ * This is the model class for table "cache".
  *
- * The followings are the available columns in table 'good_type':
- * @property integer $id
+ * The followings are the available columns in table 'cache':
+ * @property string $class
  * @property string $name
- * @property string $code
+ * @property string $value
+ * @property string $hash
  */
-class GoodType extends CActiveRecord
+class Cache extends CActiveRecord
 {
 	/**
 	 * @return string the associated database table name
 	 */
 	public function tableName()
 	{
-		return 'good_type';
+		return 'cache';
 	}
 
 	/**
@@ -26,11 +27,12 @@ class GoodType extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('name', 'required'),
-			array('name, code', 'length', 'max'=>255),
+			array('name, value, hash', 'required'),
+			array('class, hash', 'length', 'max'=>32),
+			array('name, value', 'length', 'max'=>255),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, name, code', 'safe', 'on'=>'search'),
+			array('class, name, value, hash', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -42,13 +44,6 @@ class GoodType extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'fields' => array(self::HAS_MANY, 'GoodTypeAttribute', 'good_type_id','order'=>'sort'),
-			'goods' => array(self::HAS_MANY, 'Good', 'good_type_id'),
-			'goodsFilter' => array(self::HAS_MANY, 'GoodFilter', 'good_type_id'),
-			'pdAdverts' => array(self::HAS_MANY, 'Photodoska', 'good_type_id'),
-			'interpreters' => array(self::HAS_MANY, 'Interpreter', 'good_type_id'),
-			'exports' => array(self::HAS_MANY, 'Export', 'good_type_id'),
-			'places' => array(self::HAS_MANY, 'Place', 'good_type_id'),
 		);
 	}
 
@@ -58,9 +53,10 @@ class GoodType extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'id' => 'ID',
-			'name' => 'Название',
-			'code' => 'Код',
+			'class' => 'Class',
+			'name' => 'Name',
+			'value' => 'Value',
+			'hash' => 'Hash',
 		);
 	}
 
@@ -82,29 +78,51 @@ class GoodType extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('id',$this->id);
+		$criteria->compare('class',$this->class,true);
 		$criteria->compare('name',$this->name,true);
-		$criteria->compare('code',$this->code,true);
+		$criteria->compare('value',$this->value,true);
+		$criteria->compare('hash',$this->hash,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 		));
 	}
 
-	public function getCode($id){
-		$codes = array(
-			1 => "tires",
-			2 => "discs",
-			3 => "wheels",
-		);
-		return $codes[intval($id)];
+	public function check($values){
+		$queries = array();
+		foreach ($values as $i => $value)
+			array_push($queries, "(class='".$value["class"]."' AND name='".$value["name"]."' AND hash='".$value["hash"]."')");
+
+		$cache = Yii::app()->db->createCommand()
+		    ->select("class, name")
+		    ->from(Cache::tableName().' t')
+		    ->where(implode(" OR ", $queries))
+		    ->queryAll();
+
+		foreach ($cache as $i => $item)
+			$cache[$i] = $item["class"]."_".$item["name"];
+
+		foreach ($values as $i => $value)
+			if( in_array($value["class"]."_".$value["name"], $cache) )
+				unset($values[$i]);
+
+		return $values;
+	}
+
+	public function get($class){
+		return Yii::app()->db->createCommand()
+		    ->select("name, value")
+		    ->order("name ASC")
+		    ->from(Cache::tableName().' t')
+		    ->where("class='$class'")
+		    ->queryAll();
 	}
 
 	/**
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return GoodType the static model class
+	 * @return Cache the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{

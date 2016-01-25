@@ -416,7 +416,8 @@ class KolesoOnlineController extends Controller
 			$_GET['GoodFilter_page'] = $last;
 		}
 
-		$_SESSION["FILTER"][$_GET['type']]['sort'] = (isset($_SESSION["FILTER"][$_GET['type']]['sort']))?$_SESSION["FILTER"][$_GET['type']]['sort']:array("field"=>9,"type"=>"DESC");
+		$def = ( intval($_GET['type']) == 1 )?7:31;
+		$_SESSION["FILTER"][$_GET['type']]['sort'] = (isset($_SESSION["FILTER"][$_GET['type']]['sort']))?$_SESSION["FILTER"][$_GET['type']]['sort']:array("field"=>$def,"type"=>"DESC");
 
 		$_SESSION["FILTER"][$_GET['type']]["arr"][43] = array(1418,1419,1857,1860);
 		$goods = $this->getGoods(40,$_GET['type']); 
@@ -593,9 +594,9 @@ class KolesoOnlineController extends Controller
 			$this->description = Interpreter::generate($this->params[$_GET['type']]["DESCRIPTION_CODE"], $good, $dynamic);
 			$this->keywords = Interpreter::generate($this->getParam("SHOP",$good->type->code."_KEYWORDS_CODE"), $good, $dynamic);
 
-			$imgs = $this->getImages($good);
+			$imgs = $good->getImages();
 
-			$this->image = Yii::app()->getBaseUrl(true).$imgs[0];
+			$this->image = Yii::app()->getBaseUrl(true).$imgs[0]["big"];
 
 			$this->render('detail',array(
 				'good'=>$good,

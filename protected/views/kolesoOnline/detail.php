@@ -13,14 +13,14 @@
 					<div class="detail-slider-for">
 						<?$i=0;?>
 						<? foreach ($imgs as $img): ?>
-							<div><a href="<?=$img?>" class="fancy-img big<?=(($i==0)?"":" after-load-back")?>" <?=(($i==0)?"":"data-")?>style="background-image:url('<?=$img?>');" rel="gallery0"></a></div>
+							<div><a href="<?=$img["original"]?>" class="fancy-img big<?=(($i==0)?"":" after-load-back")?>" <?=(($i==0)?"":"data-")?>style="background-image:url('<?=$img["big"]?>');" rel="gallery0"></a></div>
 							<?$i++;?>
 						<? endforeach; ?>
 					</div>
 					<ul class="detail-thumb">
 						<? if (count($imgs)>1): ?>
 							<? foreach ($imgs as $img): ?>
-								<li class="thumb after-load-back" data-style="background-image:url('<?=$img?>');"></li>
+								<li class="thumb after-load-back" data-style="background-image:url('<?=$img["small"]?>');"></li>
 							<? endforeach; ?>
 						<? endif; ?>
 					</ul>

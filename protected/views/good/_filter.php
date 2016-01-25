@@ -2,6 +2,14 @@
 	<div class="b-popup-filter b-popup-good-filter b-popup">
 		<h1>Фильтр</h1>
 	<?=CHTML::beginForm(Yii::app()->createUrl('/good/adminindex',array('good_type_id' => $_GET['good_type_id'])),'POST',array('id'=>'b-filter-form'))?>
+		<div class="b-filter-block">
+			<div class="clearfix">
+				<div class='b-filter-checkbox'>
+					<?=CHTML::checkBox("new_only",$filter_new_only); ?>
+					<label for="new_only">Только новые</label>
+				</div>
+			</div>
+		</div>
 		<? foreach ($attributes as $field => $item): ?>
 			<? if( isset($item["VIEW"]) ): ?>
 				<div class="b-filter-block">

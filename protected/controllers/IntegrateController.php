@@ -546,10 +546,6 @@ class IntegrateController extends Controller
         return true;
     }
 
-    public function actionTest(){
-        $place = new Avito("admin:4815162342@185.63.191.103:1212");
-    }
-
     public function getPlaceName($place_id){
         switch ($place_id) {
             case 2047:
@@ -683,6 +679,10 @@ class IntegrateController extends Controller
         return ( trim($toggle) == "on" );
     }
 // Планировщик ----------------------------------------------------------- Планировщик
+    public function actionTest(){
+        $good = Good::model()->with(array("type","fields.variant","fields.attribute"))->findByPk(213);
+        $images = $good->getImages();
+    }
 
     public function actionPercent(){
         $start = microtime(true);
