@@ -13,7 +13,7 @@ class AdvertController extends Controller
 	{
 		return array(
 			array('allow',
-				'actions'=>array('adminIndex','adminUpDrom','adminAction'),
+				'actions'=>array('adminIndex','adminUpDrom','adminUpAvito','adminAction','adminFindById'),
 				'roles'=>array('manager'),
 			),
 			array('deny',
@@ -61,6 +61,32 @@ class AdvertController extends Controller
 		}
 	}
 
+	public function actionAdminUpAvito(){
+		if( !isset($_SESSION["advert_filter"]) ) $_SESSION["advert_filter"] = array();
+
+		$filter = $_SESSION["advert_filter"];
+
+		$model = Place::model()->findAll("category_id=2048");
+		$place_ids = array();
+		foreach ($model as $i => $place)
+			array_push($place_ids, $place->id);
+
+		if(isset($filter["Place"])){
+			foreach ($filter["Place"] as $i => $val)
+				if( !in_array($val, $place_ids)) 
+					unset($filter["Place"][$i]);
+		}else
+			$filter["Place"] = array(11);
+		
+		$adverts = Advert::filter($filter,array('type','city','place.category'),array("good_id","id"))->getData();
+
+		Queue::addAll($adverts, "up", 0, 0);
+
+		Queue::refreshTime(2048, true);
+
+		echo json_encode(array("result" => "success"));
+	}
+
 	public function actionAdminAction($action){
 		$start = microtime(true);
 		if( !isset($_SESSION["advert_filter"]) ) $_SESSION["advert_filter"] = array();
@@ -90,7 +116,7 @@ class AdvertController extends Controller
 
 			$this->renderPartial('adminAction',array(
 				'advert_count' => $advert_count,
-				'action' => $action_model
+				'action_name' => $action_model->name
 			));
 		}
 
@@ -151,6 +177,24 @@ class AdvertController extends Controller
 				'advert_count' => $advert_count,
 				'labels'=> Advert::attributeLabels()
 			));
+		}
+	}
+
+	public function actionAdminFindById($find_advert_id){
+		$codes = array(NULL, "shiny", "diski", "kolesa");
+		$advert = Advert::model()->find("url='$find_advert_id'");
+		if( $advert ){
+			$good = Good::model()->with(array("type","fields.variant","fields.attribute"))->findByPk($advert->good_id);
+			if( $good ){
+				$dictionary = DictionaryVariant::model()->find("attribute_1='".$advert->city_id."' AND dictionary_id=125");
+            	$city_code = (!$dictionary)?"tomsk":$dictionary->value;
+
+            	header("Location: http://".$city_code.".".Yii::app()->params["host"]."/".$codes[$good->good_type_id]."/".$good->fields_assoc[3]->value);
+			}else{
+				echo "Товар не найден";
+			}
+		}else{
+			echo "Объявление не найдено";
 		}
 	}
 

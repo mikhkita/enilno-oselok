@@ -20,7 +20,7 @@
 					<ul class="detail-thumb">
 						<? if (count($imgs)>1): ?>
 							<? foreach ($imgs as $img): ?>
-								<li class="thumb after-load-back" data-style="background-image:url('<?=$img["small"]?>');"></li>
+								<li class="thumb" style="background-image:url('<?=$img["small"]?>');"></li>
 							<? endforeach; ?>
 						<? endif; ?>
 					</ul>

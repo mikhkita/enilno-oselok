@@ -50,6 +50,9 @@
 				<? if($with_photos): ?>
 					<th>Фотографии</th>
 				<? endif; ?>
+				<? if($filter_new_only): ?>
+					<th style="min-width: 160px;">Отсмотр</th>
+				<? endif; ?>
 				<th style="min-width: 110px;max-width: 110px;width: 110px;"><span href="<?php echo Yii::app()->createUrl('/good/adminviewsettings',array('id'=>$item->id,'good_type_id'=>$_GET["good_type_id"]))?>" class="ajax-form ajax-update b-tool b-tool-settings" title="Настройки отображения"></span></th>
 				<? foreach ($fields as $field): ?>
 					<th <?if($field->attribute_id == 3):?>style="min-width: 55px;"<?endif;?> <? if($field->attribute->alias): ?>class="b-tooltip" title="<?=$field->attribute->name?>"<?endif;?>>
@@ -75,6 +78,14 @@
 								<? endforeach; ?>
 							</td>
 						<? endif; ?>
+						<? if($filter_new_only): ?>
+							<td class="b-tool-nav">
+								<span href="<?php echo Yii::app()->createUrl('/good/admintoarchive',array('id' => $item->id))?>" class="ajax-request b-adverts-link"><p class="advert-info">-1</p></span>
+								<? foreach ($type_variants as $key => $var): ?>
+									<span href="<?php echo Yii::app()->createUrl('/good/adminchangetype',array('id' => $item->id, 'type' => $var->variant_id))?>" class="ajax-request b-adverts-link"><p class="advert-info"><?=$var->variant->value?></p></span>
+								<? endforeach; ?>
+							</td>
+						<? endif; ?>
 						<td style="min-width: 161px;text-align: right;" class="b-tool-nav">
 							<? if($item->count_all_adverts): ?>
 								<span href="<?php echo Yii::app()->createUrl('/good/adminadverts',array('id'=>$item->id,'good_type_id'=> $_GET["good_type_id"],'GoodFilter_page' => ($pages->currentPage+1)))?>" class="ajax-form ajax-update b-adverts-link b-tooltip" title="Объявления"><p class="advert-info"><?=$item->count_all_adverts?> (<?=(!$item->count_url_adverts)?0:$item->count_url_adverts?>)</p></span>
@@ -94,7 +105,7 @@
 											<div><?=$attr->value?></div>
 										<? endforeach; ?>
 									<? else: ?>
-										<? if($field->attribute->id == 44 || $field->attribute->id == 53): ?>
+										<? if($field->attribute->id == 44 || $field->attribute->id == 53 || substr($item->fields_assoc[$field->attribute->id]->value, 0, 7) == "http://"): ?>
 											<div><a href="<?=$item->fields_assoc[$field->attribute->id]->value?>" target="_blank"><?=$this->cutText($item->fields_assoc[$field->attribute->id]->value,30)?></a></div>
 										<? elseif( $field->attribute->id == 69 ): ?>
 											<div><a href="https://injapan.ru/auction/<?=$item->fields_assoc[$field->attribute->id]->value?>.html" target="_blank"><?=$item->fields_assoc[$field->attribute->id]->value?></a></div>

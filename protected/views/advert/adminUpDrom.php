@@ -1,5 +1,5 @@
 <div class="b-popup">
-	<h1>Поднятие. Дром платные (<?=$advert_count?> объявлений)</h1>
+	<h1>Дром. Платное поднятие (<?=$advert_count?> объявлений)</h1>
 	<div class="form">
 	<?php $form=$this->beginWidget('CActiveForm', array(
 		'id'=>'faculties-form',

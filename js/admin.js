@@ -471,8 +471,8 @@ $(document).ready(function(){
     }
 
     function jsonHandler(msg){
+        // alert(msg);
         var json = JSON.parse(msg);
-        console.log(json);
         if( json.result == "success" ){
             switch (json.action) {
                 case "delete":
@@ -482,6 +482,10 @@ $(document).ready(function(){
 
                 case "updateCronCount":
                     $(".b-place-state p").text(json.count);
+                break;
+
+                case "updateQueue":
+                    liveUpdate();
                 break;
             }
         }
@@ -652,6 +656,11 @@ $(document).ready(function(){
 
             cmddown = ctrldown = false;
         }
+    });
+    $(".b-table-td-editable textarea").focus(function(){
+        $(this).parents("tr").find("textarea").css("height", 400);
+    }).blur(function(){
+        $(this).parents("tr").find("textarea").css("height", "auto");
     });
     /* Редактирование таблиц ------------------------------------ Редактирование таблиц */
 
@@ -1176,29 +1185,35 @@ $(document).ready(function(){
     /* Filter Pagination ------------------------- Filter Pagination */
 
     /* Live -------------------------------------- Live */
-
+    var liveTimeOut;
     if( $("#filter-form").length ){
-        $this = $("#filter-form");
-        var liveDelay = $this.attr("data-delay")*1000;
-        function liveUpdate(){
-            $.ajax({
-                url: $this.attr("action"),
-                data: $this.serialize(),
-                method: $this.attr("method"),
-                success: function(msg){
-                    console.log("success");
-                    $(".ajax-content").html(msg);
-                },
-                error: function(){
-                    
-                },
-                complete: function(){
-                    setTimeout(liveUpdate,liveDelay);
-                }
-            });
-        }
+        var liveDelay = $("#filter-form").attr("data-delay")*1000;
         setTimeout(liveUpdate,liveDelay);
     }
+
+    function liveUpdate(tog){
+        clearTimeout(liveTimeOut);
+        $.ajax({
+            url: $("#filter-form").attr("action"),
+            data: (tog)?$("#filter-form").serialize():null,
+            method: $("#filter-form").attr("method"),
+            success: function(msg){
+                console.log("success");
+                $(".ajax-content").html(msg);
+            },
+            error: function(){
+                
+            },
+            complete: function(){
+                liveTimeOut = setTimeout(liveUpdate,liveDelay);
+            }
+        });
+    }
+
+    $("#b-queue-filter").click(function(){
+        liveUpdate(true);
+        return false;
+    });
 
     /* Live -------------------------------------- Live */
 
@@ -1311,8 +1326,10 @@ $(document).ready(function(){
             complete: function(){
                 progress.end();
             },
-            success: function(){
-
+            success: function(msg){
+                if( msg.trim() != "" && isValidJSON(msg) ){
+                    jsonHandler(msg);
+                }
             },
             error: function(){
                 alert("Ошибка");
@@ -1426,6 +1443,20 @@ $(document).ready(function(){
                 }
             });
         }
+
+        customHandlers["updateQueue"] = function($this){
+            progress.setColor("#D26A44");
+            progress.start(3);
+            var href = $this.attr("data-"+(($this.hasClass("checked"))?"on":"off")+"-href");
+            $.ajax({
+                url: href,
+                success: function(msg){
+                    progress.end(function(){
+                        $(".b-place-state span[data-id='"+$this.attr("data-id")+"']").removeClass((($this.hasClass("checked"))?"b-red":"b-green")).addClass((($this.hasClass("checked"))?"b-green":"b-red")); 
+                    });
+                }
+            });
+        }
     }
 
     $("body").on("click",".b-group-popup .select-all",function(){
@@ -1473,5 +1504,14 @@ $(document).ready(function(){
             });
         }
     }
+
+    $("#b-find-advert-button").click(function(){
+        if( $(".b-find-advert").hasClass("opened") ){
+            $(".b-find-advert").removeClass("opened");
+        }else{
+            $(".b-find-advert").addClass("opened");
+            $("#b-find-advert").focus();
+        }
+    });
 
 });

@@ -174,9 +174,36 @@ Class Avito {
     public function deleteAdvert($advert_id) {
         include_once Yii::app()->basePath.'/extensions/simple_html_dom.php';
         $result = $this->curl->request("https://www.avito.ru/profile",array('item_id[]' => $advert_id,'delete' => 'Снять объявление с публикации'));
-		$html = str_get_html($this->curl->request("https://www.avito.ru/".$advert_id));
-		$delete = $html->find('.has-bold',0)->plaintext;
-		return ($delete == "Срок размещения этого объявления истёк" || $delete == "Вы закрыли это объявление");
+        $result = $this->curl->request("https://www.avito.ru/".$advert_id);
+		$html = str_get_html($result);
+		if( $html->find(".catalog-filters",0) ) return true;
+		$delete = trim($html->find('.has-bold',0)->plaintext);
+		return ($delete == "Срок размещения этого объявления истёк" || $delete == "Вы закрыли это объявление" || $delete == "Вы удалили это объявление навсегда.");
+    }
+
+    public function up($advert_id){
+    	include_once Yii::app()->basePath.'/extensions/simple_html_dom.php';
+
+    	$i = 0;
+    	$tog = false;
+    	do {
+    		$i++;
+			$result = $this->curl->request("https://www.avito.ru/profile/items/old?item_id[]=$advert_id&start");
+        	$html = str_get_html($this->curl->request("https://www.avito.ru/$advert_id"));
+        	$tog = ($html->find(".alert-red",0))?false:true;
+    		if( $i > 1 ) sleep(10);
+    	}while( $i < 3 && !$tog );
+        
+        return $tog;
+    }
+
+    public function parseMessages(){
+    	include_once Yii::app()->basePath.'/extensions/simple_html_dom.php';
+    	$html = str_get_html($this->curl->request("https://www.avito.ru/profile/messenger/"));
+    	var_dump($html->find(".messenger-channel-text"));
+    	foreach ($html->find(".messenger-channel-text") as $i => $chat) {
+    		echo $chat->getAttribute("href")."<br>";
+    	}
     }
 
     public function generateFields($fields,$good_type_id){

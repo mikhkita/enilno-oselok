@@ -49,6 +49,7 @@ class Advert extends CActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
 			'good' => array(self::BELONGS_TO, 'Good', 'good_id'),
+			'good_filter' => array(self::BELONGS_TO, 'GoodFilter', 'good_id'),
 			'place' => array(self::BELONGS_TO, 'Place', 'place_id'),
 			'city' => array(self::BELONGS_TO, 'Variant', 'city_id'),
 			'type' => array(self::BELONGS_TO, 'Variant', 'type_id'),
@@ -154,7 +155,7 @@ class Advert extends CActiveRecord
 		}
 	}
 
-	public function filter($params, $with = NULL, $select = NULL, $good_ids = NULL){
+	public function filter($params, $with = NULL, $select = NULL){
 
 		$good_type_id = array();
 		$criteria = new CDbCriteria();
@@ -194,6 +195,46 @@ class Advert extends CActiveRecord
 	   	$options['criteria'] = $criteria;
 		$dataProvider = new CActiveDataProvider(Advert::tableName(), $options);
 		return $dataProvider;
+	}
+
+	public function filter_ids($params, $with = NULL){
+		$where = array();
+		$order = "id DESC";
+
+		$good_type_id = array();
+		if(isset($params['Place'])) {
+	    	array_push($where, "place_id IN (".implode(",", $params['Place']).")");
+
+	    	$model = Place::model()->findAll('id IN ('.implode(",", $params['Place']).')');
+			foreach ($model as $key => $place)
+				$good_type_id[$place->goodType->id] = $place->goodType->id;
+		}
+
+		if(isset($params['Codes']) && $params['Codes']) {
+			$arr = explode(PHP_EOL,$params['Codes']);
+			foreach ($arr as $key => $value)
+				$arr[$key] = trim($value);
+
+			$good_ids = Good::getIdbyCode($arr,$good_type_id);
+			array_push($where, "good_id IN (".implode(",", $good_ids).")");
+			if( count($good_ids) )
+				$order = "field(good_id,".implode(",", array_reverse($good_ids)).") DESC, t.id DESC";
+		}
+		if(isset($params['Attr'][37])) {
+	    	array_push($where, "type_id IN (".implode(",", $params['Attr'][37]).")");
+	    }
+		if(isset($params['Attr'][58])) {
+			array_push($where, "city_id IN (".implode(",", $params['Attr'][58]).")");
+	   	}
+
+		$advert = Yii::app()->db->createCommand()
+            ->select('t.id')
+            ->from(Advert::tableName().' t')
+            ->where((count($where)?implode(" AND ", $where):""))
+            ->order($order)
+            ->queryAll();
+
+        return Controller::getIds($advert, "id");
 	}
 
 	/**

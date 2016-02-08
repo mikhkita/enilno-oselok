@@ -13,7 +13,7 @@ class GoodController extends Controller
 	{
 		return array(
 			array('allow',
-				'actions'=>array('adminIndex','adminTest','updatePrices','updateAuctionLinks','adminCreate','adminUpdate','adminDelete','adminEdit','getAttrType','getAttr','adminAdverts','adminUpdateImages',"adminAddCheckbox","adminRemoveCheckbox","adminAddAllCheckbox","adminRemoveAllCheckbox",'adminUpdateAll','adminAddSomeCheckbox','adminUpdateAdverts','adminViewSettings','adminSold','adminArchive','adminJoin','adminDeleteAll','adminSale','adminCustomer','adminArchiveAll'),
+				'actions'=>array('adminIndex','adminToArchive','adminChangeType','adminTest','updatePrices','updateAuctionLinks','adminCreate','adminUpdate','adminDelete','adminEdit','getAttrType','getAttr','adminAdverts','adminUpdateImages',"adminAddCheckbox","adminRemoveCheckbox","adminAddAllCheckbox","adminRemoveAllCheckbox",'adminUpdateAll','adminAddSomeCheckbox','adminUpdateAdverts','adminViewSettings','adminSold','adminArchive','adminJoin','adminDeleteAll','adminSale','adminCustomer','adminArchiveAll'),
 				'roles'=>array('manager'),
 			),
 			array('allow',
@@ -220,6 +220,27 @@ class GoodController extends Controller
 		));
 	}
 
+	public function actionAdminChangeType($id, $type){
+		GoodAttribute::model()->delete("attribute_id=107 AND good_id=$id");
+		$new = new GoodAttribute();
+		$new->variant_id = $type;
+		$new->good_id = $id;
+		$new->attribute_id = 107;
+
+		if( $new->save() ){
+			echo json_encode(array(
+				"result" => "success",
+				"action" => "delete",
+				"selector" => "#id-$id"
+			));
+		}else{
+			echo json_encode(array(
+				"result" => "error",
+				"message" => "Ошибка добавления атрибута"
+			));
+		}
+	}
+
 	public function actionAdminArchiveAll($good_type_id){
 		$good_ids = Good::getCheckboxes($good_type_id);
 		$good_ids_key = array();
@@ -240,6 +261,21 @@ class GoodController extends Controller
 			"action" => "delete",
 			"selector" => implode(",", $selector)
 		));
+	}
+
+	public function actionAdminToArchive($id){
+		if( GoodFilter::model()->updateByPk($id, array("archive" => "2")) ){
+			echo json_encode(array(
+				"result" => "success",
+				"action" => "delete",
+				"selector" => "#id-$id"
+			));
+		}else{
+			echo json_encode(array(
+				"result" => "error",
+				"message" => "Ошибка изменения свойства archive"
+			));
+		}
 	}
 
 	public function	actionAdminUpdateCities($id = NULL){
@@ -596,6 +632,8 @@ class GoodController extends Controller
 			$fields = GoodTypeAttribute::model()->findAll("attribute_id IN (".implode(",", $this->getUserParam("GOOD_TYPE_".$good_type_id)).") AND good_type_id=$good_type_id");
 		}
 
+		$type_variants = ( $filter_new_only )?AttributeVariant::model()->with("variant")->findAll("attribute_id=107"):NULL;
+
 		$options = array(
 			'data'=>$goods["items"],
 			'fields' => $fields,
@@ -608,6 +646,7 @@ class GoodController extends Controller
 			'filter_values' => $filter_values,
 			'filter_values_int' => $filter_values_int,
 			'filter_new_only' => $filter_new_only,
+			'type_variants' => $type_variants,
 			'good_count' => $goods["count"],
 			'sort_field' => $sort['field'],
 			'sort_type' => $sort_type,

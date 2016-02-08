@@ -17,7 +17,8 @@ class Queue extends CActiveRecord
 		"delete" => 3,
 		"updateImages" => 4,
 		"payUp" => 5,
-		"updateWithImages" => 6
+		"updateWithImages" => 6,
+		"up" => 7
 	);
 
 	public $states = array(
@@ -103,6 +104,45 @@ class Queue extends CActiveRecord
 		);
 	}
 
+	public function filter($params, $with = NULL, $select = NULL, $pagination = NULL){
+		$temp = Advert::filter_ids($params,NULL,array("id"));
+
+		$queue = Yii::app()->db->createCommand()
+            ->select('t.id')
+            ->from(Queue::tableName().' t')
+            ->join(Advert::tableName().' a', 't.advert_id=a.id')
+            ->join(Place::tableName().' p', 'a.place_id=p.id')
+            ->where("p.category_id=".$params["category_id"].((count($temp))?(" AND t.advert_id IN (".implode(",", $temp).")"):"").((isset($params['Attr']['state']))?(" AND t.state_id IN (".implode(",", $params['Attr']['state']).")"):"").((isset($params['Attr']['action']))?(" AND t.action_id IN (".implode(",", $params['Attr']['action']).")"):""))
+            ->order("t.id ASC")
+            ->queryAll();
+
+        $queue = Controller::getIds($queue, "id");
+        if( $with === true ) return $queue;
+
+		$criteria = new CDbCriteria();
+		$options = array();
+
+		if($select){
+			$criteria->select = $select;
+		}
+		if($with){
+			$criteria->with = $with;
+		}
+
+		if( $pagination ){
+			$options['pagination'] = array('pageSize' => $pagination);
+		} else {
+			$options['pagination'] = false;
+		}
+  		
+  		$criteria->addInCondition("t.id", $queue);
+  		$criteria->order = "start ASC";
+
+	   	$options['criteria'] = $criteria;
+		$dataProvider = new CActiveDataProvider(Queue::tableName(), $options);
+		return $dataProvider;
+	}
+
 	/**
 	 * Retrieves a list of models based on the current search/filter conditions.
 	 *
@@ -172,6 +212,10 @@ class Queue extends CActiveRecord
 								$from = (( isset($city_settings[$advert->city_id]) )?$city_settings[$advert->city_id]->avito_delay:30)*0.9;
 								$to = (( isset($city_settings[$advert->city_id]) )?$city_settings[$advert->city_id]->avito_delay:30)*1.1;
 								$item["start"] = date("Y-m-d H:i:s", ($last)?(strtotime($last->start)+rand($from*60,$to*60)):$start );
+								break;
+
+							case 'up':
+								$item["start"] = NULL;
 								break;
 							
 							default:
@@ -268,10 +312,108 @@ class Queue extends CActiveRecord
 
 	public function getNext($category_id){
 		$queue = Queue::model()->with(array("advert.good.type","advert.place","action"))->nextStart()->find(array("condition"=>"place.category_id=$category_id","order"=>"t.start ASC"));
-		if( !count($queue) ){
+		if( !count($queue) && $category_id != 2048 ){
 			$queue = Queue::model()->with(array("advert.good.type","advert.place","action"))->next()->find(array("condition"=>"place.category_id=$category_id","order"=>"t.id ASC"));
 		}
 		return $queue;
+	}
+
+	public function refreshTime($category_id, $queue = NULL){
+		// Ищем города в которых есть объявы, которые нужно добавить
+		$model = Yii::app()->db->createCommand()
+            ->select('a.city_id')
+            ->from(Queue::tableName().' t')
+            ->join(Advert::tableName().' a', 't.advert_id=a.id')
+            ->where((is_array($queue)?("t.id IN (".implode(",", $queue).") AND "):(($queue === true)?("t.start IS NULL AND "):""))."t.action_id IN (1,7) AND t.state_id=1")
+            ->order("t.id ASC")
+            ->group("a.city_id")
+            ->queryAll();
+
+        $city_ids = array();
+		foreach ($model as $key => $value)
+			array_push($city_ids, $value["city_id"]);
+
+		// Обновляем время выполнения объявлений, который нужно добавить
+		Queue::refreshAddTime($category_id, $city_ids, $not_full);
+	}
+
+	public function refreshAddTime($category_id, $city_ids, $not_full = false){
+		$cities = DesktopTable::getTable(13, array(
+			56 => "id",
+			107 => "start",
+			108 => "end",
+			109 => "interval",
+		), "id");
+
+		$values = array();
+		foreach ($city_ids as $i => $city_id) {
+			$queue = Queue::model()->with(array("advert.place"))->findAll("advert.city_id=$city_id AND action_id IN (1,7) AND state_id=1 AND place.category_id=$category_id".( ($not_full)?(" AND start IS NULL"):("") ));
+
+			if( $queue ){
+				$city_params = $cities[$city_id];
+				$city_params["interval"] = intval($city_params["interval"]);
+				$days = Queue::getDays($city_params);
+
+				$cur_time = time()+rand(0, 1*60*60);
+				$cur_day = 0;
+				if( $not_full ){
+					$last_time = Queue::getLastAddTime($city_id);
+					if( $last_time ){
+						$cur_time = $last_time;
+						$cur_day = Queue::getDayByTime($cur_time, $city_params["end"]);
+					}
+				}
+
+				foreach ($queue as $key => $item) {
+					$cur_time += $city_params["interval"]*60+(rand($city_params["interval"]*(-0.3)*60, $city_params["interval"]*0.3*60));
+					if( $cur_time < $days[$cur_day]["start"] ){
+						$cur_time = $days[$cur_day]["start"];
+					}else if( $cur_time > $days[$cur_day]["end"]){
+						if( isset($days[$cur_day+1]) ){
+							$cur_day++;
+							$cur_time = $days[$cur_day]["start"]; 
+						}
+					}
+					array_push($values, array($item->id, $item->advert_id, $item->action_id, $item->state_id, date("Y-m-d H:i:s", $cur_time) ));
+				}
+			}
+		}
+		Controller::updateRows(Queue::tableName(), $values, array("start"));
+	}
+
+	public function getLastAddTime($city_id){
+		$queue = Queue::model()->with(array("advert.place"))->find(array(
+			"condition" => "advert.city_id=$city_id AND action_id IN (1,7) AND state_id=1 AND place.category_id=$category_id AND start IS NOT NULL",
+			"order" => "start DESC",
+			"limit" => 1
+		));
+		if( !$queue ) return NULL;
+		return strtotime($queue->start);
+	}
+
+	public function getDayByTime($time, $end){
+		$end = strtotime(str_replace("#", $params["end"], date("Y-m-d #:00", $time)));
+		$i = 0;
+		while ( 1 ) {
+			if( $time <= $end ) return $i;
+			$i++;
+			$end += 24*60*60;
+		}
+	}
+
+	public function getDays($params){
+		$days = array();
+		$start = strtotime(str_replace("#", $params["start"], date("Y-m-d #:00", time())));
+		$end = strtotime(str_replace("#", $params["end"], date("Y-m-d #:00", time())));
+		if( $start > $end ) $end += (24*60*60);
+
+		for( $i = 0; $i < 100; $i++ )
+			array_push($days, array("start" => $start+($i*24*60*60)+rand(0, 60*60), "end" => $end+($i*24*60*60)+rand(0, 60*60)));
+
+		if( $days[0]["start"] < time() ) $days[0]["start"] = time();
+		if( $days[0]["end"] < time() ) array_shift($days);
+
+		return $days;
 	}
 
 	/**

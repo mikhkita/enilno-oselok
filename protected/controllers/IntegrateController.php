@@ -249,7 +249,7 @@ class IntegrateController extends Controller
 
 // Yahoo ----------------------------------------------------------------- Yahoo
     public function actionYahooBids(){
-        return true;
+        // return true;
         $model = YahooCategory::model()->findAll(array("order"=>"id ASC"));
         foreach ($model as $item)
             $this->parseCategory($item,true);
@@ -257,7 +257,7 @@ class IntegrateController extends Controller
     }
 
     public function actionYahooAll(){
-        return true;
+        // return true;
         $category = $this->getNextCategory();
         
         $this->parseCategory($category);
@@ -471,7 +471,7 @@ class IntegrateController extends Controller
 
         $fields = $place->generateFields($fields,$advert->good->good_type_id);
 
-        print_r($fields);
+        // print_r($fields);
         // die();
         
         $place->setUser($account->login, $account->password);
@@ -519,6 +519,12 @@ class IntegrateController extends Controller
                 $result = $place->upPaidAdverts($advert->url);
 
                 break;
+            case 'up':
+
+                Log::debug("Поднятие ".$advert->good->fields_assoc[3]->value." в аккаунте ".$account->login);
+                $result = $place->up($advert->url);
+
+                break;
         }
 
         // var_dump($fields);
@@ -527,17 +533,18 @@ class IntegrateController extends Controller
         // $result = 1;
 
         if( $result ){
-            if( $place_name == "AVITO" ){
+            if( $place_name == "AVITO" && ($queue->action->code == "add" || $queue->action->code == "update" || $queue->action->code == "updateImages" || $queue->action->code == "updateWithImages") ){
                 $unique_arr = array();
                 foreach ($unique as $i => $u)
                     $unique_arr[$u] = $fields[$i];
 
                 $advert->replaceUnique($unique_arr);
             }
-
+            // echo "Успешно";
             Log::debug("Действие над ".$advert->good->fields_assoc[3]->value." в аккаунте ".$account->login." прошло успешно");
             $queue->delete();
         }else{
+            // echo "Ошибка";
             Log::debug("Действие над ".$advert->good->fields_assoc[3]->value." в аккаунте ".$account->login." прошло с ОШИБКОЙ");
             $queue->setState("error");
         }
@@ -654,16 +661,22 @@ class IntegrateController extends Controller
 
         if( !$task ) return false;
 
-        $result = file_get_contents(urldecode($task->link));
-        $json = json_decode($result);
-        var_dump($result);
-        if( $json->result == "success" ){
-            $task->delete();
+        $result = @file_get_contents(urldecode($task->link));
+        if( $result !== false ){
+            $json = json_decode($result);
+            var_dump($result);
+            if( $json->result == "success" ){
+                $task->delete();
+            }else{
+                $task->state_id = Cron::model()->states["error"];
+                if( isset($json->message) )
+                    $task->error = $json->message;
+                
+                $task->save();
+            }
         }else{
             $task->state_id = Cron::model()->states["error"];
-            if( isset($json->message) )
-                $task->error = $json->message;
-            
+            $task->error = "Ошибка запроса";
             $task->save();
         }
         return true;
@@ -680,8 +693,10 @@ class IntegrateController extends Controller
     }
 // Планировщик ----------------------------------------------------------- Планировщик
     public function actionTest(){
-        $good = Good::model()->with(array("type","fields.variant","fields.attribute"))->findByPk(213);
-        $images = $good->getImages();
+        $avito = new Avito();
+        $avito->setUser("beatbox787@gmail.com", "481516");
+        $res = $avito->auth();
+        $avito->parseMessages();
     }
 
     public function actionPercent(){
@@ -757,32 +772,28 @@ class IntegrateController extends Controller
             echo "<br>".round(microtime(true) - $this->start,4);
     }
 
-    public function actionAdminIndex2(){
-        include_once Yii::app()->basePath.'/extensions/simple_html_dom.php';
-        $adverts = Advert::model()->with("place")->findAll("place.category_id=2048 AND url IS NOT NULL");
+    public function actionCacheAll(){
+        $goods = Yii::app()->db->createCommand()
+            ->select('g.id')
+            ->from(Good::tableName().' g')
+            ->queryAll();
 
-        $curl = new Curl();
+        $links = array();
+        foreach ($goods as $i => $good)
+            array_push($links, "http://".Yii::app()->params['host'].$this->createUrl('/integrate/cacheone',array('id'=> $good["id"])));
 
-        // echo count($adverts);
-        // $advert = array_pop($adverts);
-        $i = 0;
-        foreach ($adverts as $key => $advert) {
-            $html = str_get_html($curl->request("http://avito.ru/".$advert->url));
+        Cron::addAll($links);
+    }
 
-            $title = str_replace("&quot;", '"',$html->find("h1.h1",0)->innertext);
-            $text = array();
-            foreach ($html->find("#desc_text p") as $key => $p) {
-                array_push($text, str_replace("<br />", "\n", $p->innertext));   
-            }
-            $text = implode("\n\n", $text);
+    public function actionCacheOne($id){
+        $good = Good::model()->with(array("type","fields.variant","fields.attribute"))->findByPk($id);
 
-            $advert->replaceUnique(array(
-                138 => $title,
-                139 => $text
-            ));
+        $good->getImages();
 
-            $i++;
-            echo $i."<br>";
-        }
+        sleep(2);
+
+        echo json_encode(array(
+            "result" => "success"
+        ));
     }
 }

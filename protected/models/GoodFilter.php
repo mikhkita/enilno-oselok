@@ -303,7 +303,7 @@ class GoodFilter extends CActiveRecord
 			$name = ($i<10?"0":"").$i;
 
 			$image = array(
-				"class" => $good["code"],
+				"class" => $good["code"]."#".$good["good_type_id"],
 				"hash" => filesize(substr($image,1)),
 				"path" => substr($image,1)
 			);
@@ -323,7 +323,7 @@ class GoodFilter extends CActiveRecord
 
 		Controller::updateRows(Cache::tableName(), $update, array("value", "hash"));
 
-		$values = Cache::get($good["code"]);
+		$values = Cache::get($good["code"]."#".$good["good_type_id"]);
 
 		foreach ($values as $i => $value) {
 			$arr = explode("_", $value["name"]);

@@ -15,6 +15,7 @@
     <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/preloader.css" />
     <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/select2.css" />
     <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/js/plupload/jquery.plupload.queue/css/jquery.plupload.queue.css" />
+    <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/ionicons/css/ionicons.min.css" />
     <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/admin.css" />
 
     <link rel="apple-touch-icon-precomposed" sizes="57x57" href="<?php echo Yii::app()->request->baseUrl; ?>/html/icon/admin/apple-touch-icon-57x57.png" />
@@ -96,6 +97,13 @@
             </div>
         </div>
         <div class="main">
+            <div class="b-find-advert-button ion-ios-search-strong" id="b-find-advert-button"></div>
+            <div class="b-find-advert">
+                <form action="<?php echo $this->createUrl('/advert/adminfindbyid')?>" method="GET" target="_blank">
+                    <input type="text" name="find_advert_id" id="b-find-advert" />
+                    <input type="submit" style="display:none;" />
+                </form>
+            </div>
             <div class="b-main-center">
                 <?php echo $content;?>
                 <br>

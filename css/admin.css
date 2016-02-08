@@ -526,6 +526,7 @@ td.b-photo-td{
                     box-sizing: border-box;
                     resize: none;
                     border: 0px solid #452716 !important;
+                    border-radius: 0px;
                 }
                 .b-table-td-editable input{
                     background-color: transparent;
@@ -558,6 +559,13 @@ td.b-photo-td{
 .b-buttons-left-cont{
 
 }
+.b-buttons-center-cont{
+    text-align: center;
+}
+    .b-buttons-center-cont .b-butt{
+        display: inline-block;
+        float: none !important;
+    }
     .b-buttons-left-cont .b-butt{
         float: left;
         margin-right: 10px;
@@ -667,7 +675,7 @@ td.b-photo-td{
             border-radius: 5px;
             background: #FFF5D1;
             border: 1px solid #452716;
-            padding: 1px 10px 3px;
+            padding: 4px 10px 3px;
             font-size: 14px;
             display: block;
             width: 420px;
@@ -2680,7 +2688,7 @@ ul.b-filter-list{
         }
 .b-section-nav{
     position: fixed;
-    top: 0px;   
+    top: 0px;
     left: 0px;
     padding-left: 250px;
     box-sizing: border-box;
@@ -2784,6 +2792,54 @@ input[disabled="disabled"] {
 .small-textarea {
     height: 100px !important;
 }
+.b-find-advert-button{
+    position: fixed;
+    right: 0px;
+    top: 0px;
+    font-size: 25px;
+    width: 30px;
+    height: 30px;
+    border: 1px solid #937868;
+    border-top: 0px;
+    border-right: 0px;
+    background-color: #FFF5D1;
+    box-shadow: 0px 3px 5px rgba(0,0,0,0.2);
+    z-index: 999999;
+    cursor: pointer;
+}
+    .b-find-advert-button:hover{
+        background-color: #D26A44;
+        color: #F5E9BC;
+    }
+    .b-find-advert-button:before{
+        line-height: 30px;
+    }
+.b-find-advert{
+    position: fixed;
+    right: 31px;
+    top: 0px;
+    z-index: 999999;
+    display: none;
+}
+.b-find-advert.opened{
+    display: block;
+}
+    .b-find-advert input[type="text"]{
+        background-color: #FFF5D1;
+        height: 30px;
+        line-height: 30px;
+        font-size: 14px;
+        color: #452716;
+        padding: 0px 10px;
+        border: 1px solid #937868;
+        border-top: 0px;
+        border-right: 0px;
+    }
+
+
+
+
+
 @media screen and (max-width: 1500px){
     .b-hide-title{
         opacity: 0;

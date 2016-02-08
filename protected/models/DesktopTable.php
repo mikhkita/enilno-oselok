@@ -105,7 +105,8 @@ class DesktopTable extends CActiveRecord
             foreach ($rows as $i => $row) {
                 $one_cell = array();
                 foreach ($row->cells as $key => $cell)
-                    $one_cell[$lables[$cell->col_id]] = $cell->value;
+                	if( isset($lables[$cell->col_id]) )
+                    	$one_cell[$lables[$cell->col_id]] = $cell->value;
                 if( $key_code !== NULL ){
                 	$out[$one_cell[$key_code]] = ($objects)?((object)$one_cell):$one_cell;
                 }else{

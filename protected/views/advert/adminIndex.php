@@ -1,7 +1,12 @@
 <div class="b-section-nav clearfix">
 	<div class="b-section-nav-back clearfix">
 		<ul style="border-left: 0px;" class="b-section-menu clearfix left">
-			<li><a href="<?php echo $this->createUrl('/advert/adminupdrom')?>" class="ajax-form ajax-update">Поднять</a></li>
+			<li><a>Поднять</a>
+				<ul class="b-section-submenu">
+					<li><a href="<?php echo $this->createUrl('/advert/adminupdrom')?>" class="ajax-form ajax-update">Дром&nbsp;платные</a></li>
+					<li><a href="<?php echo $this->createUrl('/advert/adminupavito')?>" class="ajax-form ajax-delete not-result not-ajax-delete" data-warning="Вы действительно хотите бесплатно поднять отфильтрованные объявления на Авито?">Авито&nbsp;бесплатные</a></li>
+				</ul>
+			</li>
 			<li><a>Обновить</a>
 				<ul class="b-section-submenu">
 					<li><a href="<?php echo $this->createUrl('/advert/adminaction', array('action'=> "update"))?>" class="ajax-form ajax-update">Без&nbsp;фотографий</a></li>
@@ -42,7 +47,7 @@ $form=$this->beginWidget('CActiveForm',array('id'=>'adverts-form',"action" => $t
 	</div>
 </div>	
 <div class="clearfix">
-	<?php echo CHtml::submitButton("Поиск",array("class"=> "b-butt advert-butt")); ?>
+	<?php echo CHtml::submitButton("Фильтровать",array("class"=> "b-butt advert-butt")); ?>
 </div>
 <div id="adverts-form-hidden" style="display:none;"></div>
 <p><br>Найдено объявлений: <?=$advert_count?></p>
