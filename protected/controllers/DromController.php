@@ -228,42 +228,42 @@ class DromController extends Controller
     }
     public function actionAdminIndex(){
         // $queue = Queue::model()->with("advert.good.type","advert.place","action")->findByPk(198);
-        $advert = Advert::model()->findByPk(1);
+        // $advert = Advert::model()->findByPk(1);
 
-        // $queue->setState("processing");
+        // // $queue->setState("processing");
 
-        $dynamic = $this->getDynObjects(array(
-            57 => $advert->place->category_id,
-            38 => $advert->city_id,
-            37 => $advert->type_id
-        ));
+        // $dynamic = $this->getDynObjects(array(
+        //     57 => $advert->place->category_id,
+        //     38 => $advert->city_id,
+        //     37 => $advert->type_id
+        // ));
 
-        $fields = Place::getValues(Place::getInters($advert->place->category_id,$advert->good->type->id),$advert->good,$dynamic);
+        // $fields = Place::getValues(Place::getInters($advert->place->category_id,$advert->good->type->id),$advert->good,$dynamic);
         // print_r($advert->good);
         $fields = array(
             'email'=>'vladis1ove81@gmail.com',
             'seller_name' => "Владислав",
             'phone' => '8 952 896-09-88',
             'location_id' => 657600,
-            'params[733]' => 10359,
-            'params[734]' => 10376,
-            'params[731]' => 10312,
-            'params[732]' => 10340,
-            'title' => 'Шины для машны',
+            'params[796]' => 11060,
+            'params[797]' => 11065,
+            'params[798]' => 11089,
+            'title' => 'Шины для машнasdasdы',
             'description' => 'Шины для машны 123213',
             'price' => 1000
         );
-        $images = $this->getImages($advert->good);
-        print_r($fields);
-        die();
+        // $images = $this->getImages($advert->good);
+        // print_r($fields);
+        // die();
 
 
         $avito = new Avito();
         $avito->setUser("vladis1ove81@gmail.com","Friday13");
         // unset($fields["login"]);
         $avito->auth();
-        $fields = $avito->generateFields($fields,1);
-        $id = $avito->addAdvert($fields,$images);
+        $fields = $avito->generateFields($fields,2);
+        $avito->updateAdvert(724576563,$fields);
+        // $id = $avito->addAdvert($fields,$images);
         // if( $queue->action->code == "delete" ){
         //     $delete = $avito->deleteAdvert($advert->url);
         //     if($delete){

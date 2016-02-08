@@ -45,6 +45,7 @@ Class Avito {
 	    $token['value'] = $html->find('input[name^=token]',0)->value;
 	    $params[$token['name']] = $token['value'];
 	    $params['source'] = "add";
+	    $params['seller_name'] = $html->find('span[data-read-id="companyName"]',0)->plaintext;
 
 		$html = str_get_html($this->curl->request("https://www.avito.ru/additem",$params));
 		Log::debug("Шаг 4");
@@ -125,16 +126,13 @@ Class Avito {
 				$params['images['.$i.']'] = $image->value;
 			}
 		}
-		
+		$params['seller_name'] = $html->find('span[data-read-id="companyName"]',0)->plaintext;
 		$params['version'] = $version;
-		$params['source'] = 'edit';	
-		// $params['private'] = '1';	
+		$params['source'] = 'edit';		
 
 		$result = $this->curl->request($href,$params);
-		print_r($result);
    
    		$result = $this->curl->request($href."/confirm",array('done' => "",'subscribe-position' => '1'));
-   		print_r($result);
 		$html = str_get_html($result);
 
 		$id = $html->find('.content-text a[rel="nofollow"]',0)->href;
@@ -142,9 +140,7 @@ Class Avito {
 		
 		if( $html->find(".alert-warning-big a",0) && $html->find(".alert-warning-big a",0)->plaintext == "активировать его" ){
 			$result = $this->curl->request("https://www.avito.ru/profile/items/old?item_id[]=$advert_id&start");
-			// print_r($result);
 		}
-
 		return $id;
     }
    				
