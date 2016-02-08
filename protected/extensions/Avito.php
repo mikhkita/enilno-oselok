@@ -45,7 +45,6 @@ Class Avito {
 	    $token['value'] = $html->find('input[name^=token]',0)->value;
 	    $params[$token['name']] = $token['value'];
 	    $params['source'] = "add";
-	    $params['seller_name'] = $html->find('span[data-read-id="companyName"]',0)->plaintext;
 
 		$html = str_get_html($this->curl->request("https://www.avito.ru/additem",$params));
 		Log::debug("Шаг 4");
@@ -126,7 +125,7 @@ Class Avito {
 				$params['images['.$i.']'] = $image->value;
 			}
 		}
-		$params['seller_name'] = $html->find('span[data-read-id="companyName"]',0)->plaintext;
+
 		$params['version'] = $version;
 		$params['source'] = 'edit';		
 
@@ -143,7 +142,52 @@ Class Avito {
 		}
 		return $id;
     }
-   				
+
+   	public function updatePrice($advert_id,$params,$price,$images = NULL){	
+    	include_once Yii::app()->basePath.'/extensions/simple_html_dom.php';
+    	$result = $this->curl->request("https://www.avito.ru/".$advert_id);
+		$html = str_get_html($result);
+		if( !$html->find('meta[property="og:url"]',0) ) return NULL;
+		$href = $html->find('meta[property="og:url"]',0)->getAttribute('content');
+		$href = $href."/edit";
+		$html = str_get_html( $this->curl->request($href));
+		$fields = Advert::model()->with('place.interpreters')->find("url=".$advert_id);
+		foreach ($fields->place->interpreters as $key => $value) {
+			if(stripos($value->code, "params") === false) {
+				$params[$value->code] = $html->find('.form-fieldset [name="'.$value->code.'"]',0)->value;
+			} else {
+				if($html->find('[name="'.$value->code.'"] option[selected=""]',0))
+					$params[$value->code] = $html->find('[name="'.$value->code.'"] option[selected=""]',0)->value;
+			}
+		}
+		$params['price'] = $price;
+		unset($params['login']);
+		if($images !== NULL) {
+        	$params = $this->addImages($params,$images);
+		} else {
+			foreach ( $html->find('input[name="images[]"]') as $i => $image) {
+				$params['images['.$i.']'] = $image->value;
+			}
+		}
+		
+		// $params['seller_name'] = $html->find('span[data-read-id="companyName"]',0)->plaintext;
+		$params['version'] = $html->find('input[name="version"]',0)->value;
+		$params['source'] = 'edit';		
+
+		$result = $this->curl->request($href,$params);
+   
+   		$result = $this->curl->request($href."/confirm",array('done' => "",'subscribe-position' => '1'));
+		$html = str_get_html($result);
+
+		$id = $html->find('.content-text a[rel="nofollow"]',0)->href;
+		$id = end(explode("_", $id));
+		
+		if( $html->find(".alert-warning-big a",0) && $html->find(".alert-warning-big a",0)->plaintext == "активировать его" ){
+			$result = $this->curl->request("https://www.avito.ru/profile/items/old?item_id[]=$advert_id&start");
+		}
+		return $id;
+    }
+
     public function addImages($params,$images = NULL) {
         if($images) {
         	$img = array();

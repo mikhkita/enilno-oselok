@@ -227,6 +227,7 @@ class DromController extends Controller
         }
     }
     public function actionAdminIndex(){
+
         // $queue = Queue::model()->with("advert.good.type","advert.place","action")->findByPk(198);
         // $advert = Advert::model()->findByPk(1);
 
@@ -239,6 +240,8 @@ class DromController extends Controller
         // ));
 
         // $fields = Place::getValues(Place::getInters($advert->place->category_id,$advert->good->type->id),$advert->good,$dynamic);
+       
+
         // print_r($advert->good);
         $fields = array(
             'email'=>'vladis1ove81@gmail.com',
@@ -258,11 +261,14 @@ class DromController extends Controller
 
 
         $avito = new Avito();
-        $avito->setUser("vladis1ove81@gmail.com","Friday13");
+        $avito->setUser("kolesotomskru@mail.ru","vdjieFRA34");
         // unset($fields["login"]);
         $avito->auth();
-        $fields = $avito->generateFields($fields,2);
-        $avito->updateAdvert(724576563,$fields);
+        // 25508
+        $avito->updatePrice(723876982,$fields,39001);
+
+        // $fields = $avito->generateFields($fields,2);
+        // $avito->updateAdvert(724576563,$fields);
         // $id = $avito->addAdvert($fields,$images);
         // if( $queue->action->code == "delete" ){
         //     $delete = $avito->deleteAdvert($advert->url);
