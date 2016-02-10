@@ -33,8 +33,14 @@
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'template'); ?>
-		<?php echo $form->textArea($model,'template',array('maxlength'=>20000,'required'=>true,'style'=>'height: 300px;')); ?>
+		<?php echo $form->textArea($model,'template',array('maxlength'=>20000,'class'=>'visual-inter','required'=>true,'style'=>'height: 250px; resize: vertical;','data-href'=>$this->createUrl('/interpreter/adminvisual'),'data-block'=>".b-inter-visual")); ?>
 		<?php echo $form->error($model,'template'); ?>
+	</div>
+
+	<div class="row">
+		<div class="b-inter-visual">
+			<?=$this->visualInter($model->template)?>
+		</div>
 	</div>
 
 	<? if($this->isRoot()): ?>

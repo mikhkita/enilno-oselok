@@ -829,6 +829,89 @@ class Controller extends CController
         unset($_GET['city']);
     }
 
+    public function visualInter($template){
+        $start = microtime(true);
+        preg_match_all("~\[\+([^\+\]]+)\+\]~", $template, $matches);
+        if( !count($matches[1]) ){
+            echo $template;
+            return true;
+        }
+
+        $params = array(
+            "ATTR"  => array("link" => false),
+            "INTER" => array("link" => true, "main_url" => "/admin/interpreter/list", "url" => "/interpreter/adminupdate"),
+            "LIST"  => array("link" => true, "main_url" => "/admin/data/dictionary", "url" => "/data/admindictionaryupdate"),
+            "TABLE" => array("link" => true, "main_url" => "/admin/data/table", "url" => "/data/admintableupdate"),
+            "CUBE"  => array("link" => true, "main_url" => "/admin/data/cube", "url" => "/data/admincubeupdate"),
+            "VAR"   => array("link" => true, "main_url" => "/admin/data/vars", "url" => "/data/adminvarsupdate"),
+        );
+
+        $types = array();
+        foreach ($matches[1] as $i => $match) {
+            $tmp = explode(";", $match);
+            $item = explode("=", $tmp[0]);
+
+            if( !in_array(trim($item[0]), $types) )
+                array_push($types, strtoupper(trim($item[0])));
+
+            $matches[1][$i] = array(
+                "type" => strtoupper(trim($item[0])),
+                "id" => trim($item[1])
+            );
+        }
+        $types = $this->getTypes($types);
+
+        foreach ($matches[1] as $i => $match) {
+            if( $params[$match["type"]]["link"] ){
+                $matches[1][$i] = "<a href='".$params[$match["type"]]["main_url"]."#click|".$this->createUrl($params[$match["type"]]["url"],array("id" => $match["id"]))."' class='".strtolower($matches[1][$i]["type"])."'>".$types[$matches[1][$i]["type"]][$matches[1][$i]["id"]]["name"]."</a>";
+            }else{
+                $matches[1][$i] = "<span class='".strtolower($matches[1][$i]["type"])."'>".$types[$matches[1][$i]["type"]][$matches[1][$i]["id"]]["name"]."</span>";
+            }
+        }
+
+        // var_dump($matches[1]);
+        echo str_replace($matches[0], $matches[1], $template);
+        
+        // printf('<br>Генерация %.4F сек.<br>', microtime(true) - $start);   
+    }
+
+    public function getTypes($types){
+        if( !isset($this->cache["visual"]) ) $this->cache["visual"] = array();
+
+        $tableNames = array(
+            "ATTR" => Attribute::tableName(),
+            "INTER" => Interpreter::tableName(),
+            "LIST" => Dictionary::tableName(),
+            "TABLE" => Table::tableName(),
+            "CUBE" => Cube::tableName(),
+            "VAR" => Vars::tableName(),
+        );
+
+        $out = array();
+        foreach ($types as $i => $type) {
+            if( isset($this->cache["visual"][$type]) ){
+                $out[$type] = $this->cache["visual"][$type];
+            }else{
+                if( $type == "VAR" ){
+                    $model = Yii::app()->db->createCommand()
+                        ->select('value, name')
+                        ->from($tableNames[$type].' t')
+                        ->limit(1000)
+                        ->queryAll();
+                    $out[$type] = $this->getAssocByAssoc($model, "value");
+                }else{
+                    $model = Yii::app()->db->createCommand()
+                        ->select('id, name')
+                        ->from($tableNames[$type].' t')
+                        ->limit(1000)
+                        ->queryAll();
+                    $out[$type] = $this->getAssocByAssoc($model, "id");
+                }
+            }
+        }
+        return $out;
+    }
+
     public function getRussianMonth($m){
         $month = array(0,"января","февраля","марта","апреля","мая","июня","июля","августа","сентября","октября","ноября","декабря");
         return $month[intval($m)];

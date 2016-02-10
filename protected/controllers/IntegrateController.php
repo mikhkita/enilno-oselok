@@ -399,7 +399,9 @@ class IntegrateController extends Controller
 
         while( $this->allowed($category_id) || $debug ){
             $this->writeTime($category_id);
+            // sleep(5);
             if( !$this->getNext($category_id) ) sleep(5);
+              
             if( $debug ) return true;
         }
     }
@@ -441,12 +443,14 @@ class IntegrateController extends Controller
         // var_dump($fields);
         // die();
 
-        if( $place_name == "AVITO" ){
+        if( $place_name == "AVITO" && $queue->action->code != "delete" && $queue->action->code != "updateImages" ){
             if( $fields["title"] == "not unique" ) $queue->setState("titleNotUnique");
             if( $fields["description"] == "not unique" ) $queue->setState("textNotUnique");
 
             if( $fields["title"] == "not unique" || $fields["description"] == "not unique" )return true;
         }
+
+        printf('<br>2Прошло %.4F сек.<br>', microtime(true) - $start); 
 
 
         $images = $this->getImages($advert->good);
@@ -525,15 +529,25 @@ class IntegrateController extends Controller
                 $result = $place->up($advert->url);
 
                 break;
-        }
+            case 'updatePrice':
 
+                Log::debug("Обновление цены ".$advert->good->fields_assoc[3]->value." в аккаунте ".$account->login);
+                if( $place_name == "AVITO" ){
+                    $result = $place->updatePrice($advert->url, $fields);
+                }else if( $place_name == "DROM" ){
+                    $result = $place->updateAdvert($advert->url,$fields);
+                }
+
+                break;
+        }
+        printf('<br>4Прошло %.4F сек.<br>', microtime(true) - $start); 
         // var_dump($fields);
         // die();
 
         // $result = 1;
 
         if( $result ){
-            if( $place_name == "AVITO" && ($queue->action->code == "add" || $queue->action->code == "update" || $queue->action->code == "updateImages" || $queue->action->code == "updateWithImages") ){
+            if( $place_name == "AVITO" && ($queue->action->code == "add" || $queue->action->code == "update" || $queue->action->code == "updateWithImages") ){
                 $unique_arr = array();
                 foreach ($unique as $i => $u)
                     $unique_arr[$u] = $fields[$i];

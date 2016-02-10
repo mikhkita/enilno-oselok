@@ -116,6 +116,7 @@ Class Avito {
 		$href = $href."/edit";
 
 		$result = $this->curl->request($href);
+		// print_r($result);
 		$html = str_get_html( $this->curl->request($href));
 		$version = $html->find('input[name="version"]',0)->value;
 		if($images !== NULL) {
@@ -130,27 +131,30 @@ Class Avito {
 		$params['source'] = 'edit';		
 
 		$result = $this->curl->request($href,$params);
-   
+   		// print_r($result);
    		$result = $this->curl->request($href."/confirm",array('done' => "",'subscribe-position' => '1'));
 		$html = str_get_html($result);
-
+		// print_r($result);
 		$id = $html->find('.content-text a[rel="nofollow"]',0)->href;
 		$id = end(explode("_", $id));
-		
+		// print_r($id);
 		if( $html->find(".alert-warning-big a",0) && $html->find(".alert-warning-big a",0)->plaintext == "активировать его" ){
 			$result = $this->curl->request("https://www.avito.ru/profile/items/old?item_id[]=$advert_id&start");
 		}
 		return $id;
     }
 
-   	public function updatePrice($advert_id,$params,$price,$images = NULL){	
+   	public function updatePrice($advert_id,$params,$images = NULL){	
     	include_once Yii::app()->basePath.'/extensions/simple_html_dom.php';
     	$result = $this->curl->request("https://www.avito.ru/".$advert_id);
+    	print_r($result);
 		$html = str_get_html($result);
 		if( !$html->find('meta[property="og:url"]',0) ) return NULL;
 		$href = $html->find('meta[property="og:url"]',0)->getAttribute('content');
 		$href = $href."/edit";
-		$html = str_get_html( $this->curl->request($href));
+		$result = $this->curl->request($href);
+		print_r($result);
+		$html = str_get_html( $result );
 		$fields = Advert::model()->with('place.interpreters')->find("url=".$advert_id);
 		foreach ($fields->place->interpreters as $key => $value) {
 			if(stripos($value->code, "params") === false) {
@@ -160,7 +164,7 @@ Class Avito {
 					$params[$value->code] = $html->find('[name="'.$value->code.'"] option[selected=""]',0)->value;
 			}
 		}
-		$params['price'] = $price;
+		// $params['price'] = $price;
 		unset($params['login']);
 		if($images !== NULL) {
         	$params = $this->addImages($params,$images);
@@ -175,13 +179,16 @@ Class Avito {
 		$params['source'] = 'edit';		
 
 		$result = $this->curl->request($href,$params);
+
+		print_r($result);
    
    		$result = $this->curl->request($href."/confirm",array('done' => "",'subscribe-position' => '1'));
+   		print_r($result);
 		$html = str_get_html($result);
 
 		$id = $html->find('.content-text a[rel="nofollow"]',0)->href;
 		$id = end(explode("_", $id));
-		
+		print_r($id);
 		if( $html->find(".alert-warning-big a",0) && $html->find(".alert-warning-big a",0)->plaintext == "активировать его" ){
 			$result = $this->curl->request("https://www.avito.ru/profile/items/old?item_id[]=$advert_id&start");
 		}
@@ -214,10 +221,13 @@ Class Avito {
     public function deleteAdvert($advert_id) {
         include_once Yii::app()->basePath.'/extensions/simple_html_dom.php';
         $result = $this->curl->request("https://www.avito.ru/profile",array('item_id[]' => $advert_id,'delete' => 'Снять объявление с публикации'));
+        // print_r($result);
         $result = $this->curl->request("https://www.avito.ru/".$advert_id);
+        // print_r($result);
 		$html = str_get_html($result);
 		if( $html->find(".catalog-filters",0) ) return true;
 		$delete = trim($html->find('.has-bold',0)->plaintext);
+		// print_r($delete);
 		return ($delete == "Срок размещения этого объявления истёк" || $delete == "Вы закрыли это объявление" || $delete == "Вы удалили это объявление навсегда.");
     }
 

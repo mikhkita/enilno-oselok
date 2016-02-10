@@ -60,6 +60,10 @@ Class Curl {
             $html = str_get_html($result);
         } while ( !is_object($html) && $i < 5 );
 
+        if( !is_object($html) ){
+            Log::debug("Прокси ".$temp_ip[0]." упал");
+            return false;
+        }
         $ip = $html->find('.url',0)->value;
 
         $temp_ip = explode(":", $this->proxy_ip);

@@ -31,7 +31,7 @@
 			<? foreach ($data as $i => $item): ?>
 				<tr class="<?if($item->state==6):?>b-win<?endif;?><?if(isset($_GET["id"]) && $item->id == $_GET["id"]):?> b-refresh<?endif;?>" data-id="<?=$item->id?>">
 					<td><a href="https://injapan.ru/auction/<?=$item->code?>.html" target="_blank"><?=$item->code?></a></td>
-					<td class="align-left"><a href="<?=$item->image?>" class="fancy-img"><img src="<?=$item->image?>" class="b-index-img"></a></td>
+					<td><a href="<?=$item->image?>" class="fancy-img"><img src="<?=$item->image?>" class="b-index-img"></a></td>
 					<td class="align-left"><?=$this->cutText($item->name,90)?></td>
 					<td data-field="date"><?=$item->date?></td>
 					<td class="align-left" data-field="current_price"><?=$item->current_price?></td>

@@ -12,8 +12,8 @@
 			</a>
 		</div>
 		<ul class="b-section-menu clearfix left">
+			<li><a href="<?php echo $this->createUrl('/good/admincreate',array('good_type_id'=> $_GET["good_type_id"] ))?>" class="ajax-form ajax-create">+</a></li>
 			<li><a href="#" class="fancy" data-block=".b-popup-filter">Фильтр</a></li>
-			<li><a href="<?php echo $this->createUrl('/good/admincreate',array('good_type_id'=> $_GET["good_type_id"] ))?>" class="ajax-form ajax-create">Добавить</a></li>
 			<li><a>Выделить</a>
 				<ul class="b-section-submenu">
 					<li><a href="<?php echo $this->createUrl('/good/adminaddallcheckbox',array('good_type_id'=> $_GET["good_type_id"]))?>" class="b-sess-allcheckbox">Все</a></li>
@@ -32,6 +32,7 @@
 					<li><a href="<?php echo $this->createUrl('/good/admindeleteall',array('good_type_id'=> $_GET["good_type_id"]))?>" class="ajax-form ajax-delete" data-warning="Вы действительно хотите убрать в архив выделенные товары?">Удалить</a></li></li>
 				</ul>
 			</li>
+			<li><a href="<?php echo $this->createUrl('/good/adminupdateall',array('good_type_id'=> $_GET["good_type_id"],'GoodFilter_page' => ($pages->currentPage+1) ))?>" class="ajax-form ajax-create" data-block=".b-popup-filter">Экспорт</a></li>
 			<!-- <li><a href="<?php echo $this->createUrl('/good/adminupdateadverts',array('good_type_id'=> $_GET["good_type_id"], 'images' => '1'))?>" class="ajax-update-prices">Обновить&nbsp;фотографии</a></li> -->
 		</ul>
 	</div>

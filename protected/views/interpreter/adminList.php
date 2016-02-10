@@ -25,7 +25,7 @@
 					<td class="align-left"><?=$item->name?></td>
 					<!-- <td class="align-left"><?=$item->category->name?></td> -->
 					<td class="align-left"><?=$item->goodType->name?></td>
-					<td class="align-left"><? if($this->checkAccess($item,true)) echo $this->replaceToBr($this->cutText($item->template,1000)); ?></td>
+					<td class="align-left b-inter-visual-highlight"><? if($this->checkAccess($item,true)) echo $this->visualInter($this->replaceToBr($this->cutText($item->template,1000))); ?></td>
 					<td class="b-tool-cont">
 						<? if($this->checkAccess($item,true)): ?><a href="<?php echo Yii::app()->createUrl('/'.$this->adminMenu["cur"]->code.'/adminupdate',array('id'=>$item->id))?>" class="ajax-form ajax-update b-tool b-tool-update" title="Редактировать <?=$this->adminMenu["cur"]->vin_name?>"></a><? endif; ?>
 						<a href="<?php echo Yii::app()->createUrl('/'.$this->adminMenu["cur"]->code.'/adminpreview',array('id'=>$item->id))?>" class="ajax-form ajax-update b-tool b-tool-list" title="Посмотреть примеры"></a>
@@ -44,7 +44,7 @@
 					<td class="align-left"><?=$item->name?></td>
 					<!-- <td class="align-left"><?=$item->category->name?></td> -->
 					<td class="align-left"><?=$item->goodType->name?></td>
-					<td class="align-left"><? if($this->checkAccess($item,true)) echo $this->replaceToBr($this->cutText($item->template,1000)); ?></td>
+					<td class="align-left b-inter-visual-highlight"><? if($this->checkAccess($item,true)) echo $this->visualInter($this->replaceToBr($this->cutText($item->template,1000))); ?></td>
 					<td class="b-tool-cont">
 						<? if($this->checkAccess($item,true)): ?><a href="<?php echo Yii::app()->createUrl('/'.$this->adminMenu["cur"]->code.'/adminupdate',array('id'=>$item->id))?>" class="ajax-form ajax-update b-tool b-tool-update" title="Редактировать <?=$this->adminMenu["cur"]->vin_name?>"></a><? endif; ?>
 						<a href="<?php echo Yii::app()->createUrl('/'.$this->adminMenu["cur"]->code.'/adminpreview',array('id'=>$item->id))?>" class="ajax-form ajax-update b-tool b-tool-list" title="Посмотреть примеры"></a>

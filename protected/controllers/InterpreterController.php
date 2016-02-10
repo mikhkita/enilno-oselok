@@ -13,7 +13,7 @@ class InterpreterController extends Controller
 	{
 		return array(
 			array('allow',
-				'actions'=>array('adminIndex','adminCreate','adminUpdate','adminDelete','adminPreview','adminList'),
+				'actions'=>array('adminIndex','adminCreate','adminUpdate','adminDelete','adminPreview','adminList','adminVisual'),
 				'roles'=>array('manager'),
 			),
 			array('deny',
@@ -172,6 +172,12 @@ class InterpreterController extends Controller
 			'data'=>$data,
 			'dynamic'=>$dynamic
 		));
+	}
+
+	public function actionAdminVisual(){
+		if( isset($_GET["Interpreter"]) && isset($_GET["Interpreter"]["template"]) ){
+			$out = $this->visualInter($_GET["Interpreter"]["template"]);
+		}
 	}
 
 	public function loadModel($id)

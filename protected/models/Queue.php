@@ -18,7 +18,8 @@ class Queue extends CActiveRecord
 		"updateImages" => 4,
 		"payUp" => 5,
 		"updateWithImages" => 6,
-		"up" => 7
+		"up" => 7,
+		"updatePrice" => 8
 	);
 
 	public $states = array(
@@ -311,9 +312,9 @@ class Queue extends CActiveRecord
 	}
 
 	public function getNext($category_id){
-		$queue = Queue::model()->with(array("advert.good.type","advert.place","action"))->nextStart()->find(array("condition"=>"place.category_id=$category_id","order"=>"t.start ASC"));
+		$queue = Queue::model()->with(array("advert.good.fields.variant","advert.good.fields.attribute","advert.good.type","advert.place","action"))->nextStart()->find(array("condition"=>"place.category_id=$category_id","order"=>"t.start ASC"));
 		if( !count($queue) && $category_id != 2048 ){
-			$queue = Queue::model()->with(array("advert.good.type","advert.place","action"))->next()->find(array("condition"=>"place.category_id=$category_id","order"=>"t.id ASC"));
+			$queue = Queue::model()->with(array("advert.good.fields.variant","advert.good.fields.attribute","advert.good.type","advert.place","action"))->next()->find(array("condition"=>"place.category_id=$category_id","order"=>"t.id ASC"));
 		}
 		return $queue;
 	}

@@ -327,7 +327,8 @@ h1.b-with-nav{
     margin-top: 25px;
 }
 .b-index-img{
-    max-width: 100px;
+    height: 100px;
+    display: inline-block;
 }
 .b-filter-export{
     max-height: 155px;
@@ -1969,7 +1970,57 @@ li.ui-autocomplete-category {
                     color: #F5E9BC !important;
                     text-shadow: 0 1px 1px rgba(0,0,0,0.5);
                 }
-
+.b-inter-visual{
+    border-radius: 5px;
+    background-color: #FFF5D1;
+    border: 1px solid #452716;
+    padding: 5px 10px;
+    line-height: 26px;
+}
+    .b-inter-visual span,
+    .b-inter-visual a,
+    .b-inter-visual-highlight span,
+    .b-inter-visual-highlight a
+    {
+        border-radius: 3px;
+        display: inline-block;
+        padding: 0px 5px 2px;
+        box-shadow: inset 0 0 0 1px rgba(0,0,0,0.2);
+        line-height: 21px;
+    }
+    .b-inter-visual a,
+    .b-inter-visual-highlight a{
+        cursor: pointer;
+        text-decoration: underline;
+    }
+    .b-inter-visual a:hover,
+    .b-inter-visual-highlight a:hover{
+        text-decoration: none;
+    }
+    .b-inter-visual-highlight .attr,
+    .b-inter-visual .attr{
+        background-color: #FFC5C5;
+    }
+    .b-inter-visual-highlight .inter,
+    .b-inter-visual .inter{
+        background-color: #FFF7EF;
+    }
+    .b-inter-visual-highlight .list,
+    .b-inter-visual .list{
+        background-color: #CCF6A5;
+    }
+    .b-inter-visual-highlight .var,
+    .b-inter-visual .var{
+        background-color: #A5C5FF;
+    }
+    .b-inter-visual-highlight .table,
+    .b-inter-visual .table{
+        background-color: #85C945;
+    }
+    .b-inter-visual-highlight .cube,
+    .b-inter-visual .cube{
+        background-color: #FFF472;
+    }
 .photo-preview {
     margin-top: 20px;
 

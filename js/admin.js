@@ -118,6 +118,7 @@ $(document).ready(function(){
             bindAutocomplete();
             bindTooltip();
             bindDoubleList();
+            bindVisual();
             if( $form.attr("data-beforeShow") && customHandlers[$form.attr("data-beforeShow")] ){
                 customHandlers[$form.attr("data-beforeShow")]($form);
             }
@@ -1283,6 +1284,44 @@ $(document).ready(function(){
     
 
     /* Session Checkboxes ------------------------ Session Checkboxes */
+
+    /* Visual Interpreter ------------------------ Visual Interpreter */
+    function bindVisual(){
+        if( $(".visual-inter").length ){
+            var vis_int;
+            $(".visual-inter").focus(function(){
+                var $this = $(this);
+                vis_int = setInterval(function(){
+                    updateVisual($this);
+                },1000);
+            }).blur(function(){
+                clearInterval(vis_int);
+            });
+        }
+    }
+
+    function updateVisual($el){
+        $.ajax({
+            url: $el.attr("data-href"),
+            data: $el.serialize(),
+            success: function(msg){
+                $($el.attr("data-block")).html(msg);
+            },
+            error: function(){
+                
+            }
+        });
+    }
+    /* Visual Interpreter ------------------------ Visual Interpreter */
+
+    function clickHash(){
+        var hash = window.location.hash.split("|");
+        if( hash[0] == "#click" ){
+            $("a[href='"+hash[1]+"']").trigger("click");
+        }
+    }
+    clickHash();
+    window.onhashchange = clickHash;
 
     if( $(".b-section-nav").length ){
         $(".main").scroll(function(){
