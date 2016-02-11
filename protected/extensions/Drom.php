@@ -72,7 +72,7 @@ Class Drom {
         return $links;
     }
 
-    public function parseAllItems($link,$auth = true){
+    public function parseAllItems($link, $user_id, $auth = true){
         include_once Yii::app()->basePath.'/extensions/simple_html_dom.php';
 
         if($auth) $this->auth("https://baza.drom.ru/partner/sign");
@@ -80,6 +80,7 @@ Class Drom {
         $html = str_get_html(iconv('windows-1251', 'utf-8', $this->curl->request($link)));
 
         $links = array();
+        if( !$html->find('.userProfile',0) || trim($html->find('.userProfile',0)->getAttribute("data-view-dir-user-id")) != trim($user_id) ) return $links;
         $pageLinks = $html->find('.bulletinLink');
         $page = 1;
         while(count($pageLinks) && ($links[0] != $pageLinks[0]->getAttribute("href")) ){

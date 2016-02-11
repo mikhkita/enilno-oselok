@@ -1314,6 +1314,29 @@ $(document).ready(function(){
     }
     /* Visual Interpreter ------------------------ Visual Interpreter */
 
+    /* Photo sortable ---------------------------- Photo sortable */
+    $( ".photo-sortable" ).sortable({
+        update : function(){
+            progress.setColor("#D26A44");
+            progress.start(1);
+            $.ajax({
+                url: $( ".photo-sortable" ).attr("data-href"),
+                data: $( ".photo-sortable input" ).serialize(),
+                method: "POST",
+                success: function(msg){
+                    progress.end(function(){
+                        alert(msg);
+                    });
+                },
+                error: function(){
+                    alert("Ошибка обновления фотографий");
+                }
+            });
+        }
+    });
+    $( ".photo-sortable" ).disableSelection();
+    /* Photo sortable ---------------------------- Photo sortable */
+
     function clickHash(){
         var hash = window.location.hash.split("|");
         if( hash[0] == "#click" ){

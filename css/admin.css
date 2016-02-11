@@ -2886,8 +2886,45 @@ input[disabled="disabled"] {
         border-top: 0px;
         border-right: 0px;
     }
-
-
+.photo-sortable{
+    cursor: move;
+    margin-top: 20px;
+    border: 1px solid #452716;
+    font-size: 0px;
+}
+    .photo-sortable li{
+        box-sizing: border-box;
+        border: 1px solid #452716;
+        list-style: none;
+        margin: 8px 0.4%;
+        /*float: left;*/
+        display: inline-block;
+        width: 24%;
+        height: 200px;
+        background-position: 50% 50%;
+        background-size: cover;
+    }
+@media screen and (min-width: 1366px){
+    .photo-sortable li{
+        margin: 8px 0.4%;
+        width: 19%;
+        height: 180px;
+    }
+}
+@media screen and (min-width: 1600px){
+    .photo-sortable li{
+        margin: 8px 0.4%;
+        width: 19%;
+        height: 200px;
+    }
+}
+@media screen and (min-width: 1900px){
+    .photo-sortable li{
+        margin: 8px 0.4%;
+        width: 15.666666%;
+        height: 200px;
+    }
+}
 
 
 

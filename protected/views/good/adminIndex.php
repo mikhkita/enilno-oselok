@@ -93,6 +93,7 @@
 							<? else: ?>
 								<p class="advert-info b-tooltip" title="Нет объявлений">0 (0)</p>
 							<? endif; ?>
+							<a href="<?php echo Yii::app()->createUrl('/good/adminphoto',array('id'=>$item->id))?>" class="b-tool b-tool-photo"></a>
 							<span href="<?php echo Yii::app()->createUrl('/good/adminsold',array('id'=>$item->id,'good_type_id' => $_GET['good_type_id']))?>" class="ajax-form ajax-create b-tool b-tool-sale" data-warning="Вы действительно хотите перенести товар &quot;<?=$item->fields_assoc[3]->value?>&quot; в архив?" title="Продано"></span>
 							<!-- <span href="<?php echo Yii::app()->createUrl('/good/adminupdateimages',array('id'=>$item->id))?>" class="ajax-form ajax-update ajax-photodoska b-tool b-tool-photo" title="Обновить фотографии"></span> -->
 							<span href="<?php echo Yii::app()->createUrl('/good/adminupdate',array('id'=>$item->id,'good_type_id' => $_GET['good_type_id'],'GoodFilter_page' => ($pages->currentPage+1) ))?>" class="ajax-form ajax-update b-tool b-tool-update" title="Редактировать"></span>

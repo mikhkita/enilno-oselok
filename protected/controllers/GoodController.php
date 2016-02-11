@@ -13,7 +13,7 @@ class GoodController extends Controller
 	{
 		return array(
 			array('allow',
-				'actions'=>array('adminIndex','adminToArchive','adminChangeType','adminTest','updatePrices','updateAuctionLinks','adminCreate','adminUpdate','adminDelete','adminEdit','getAttrType','getAttr','adminAdverts','adminUpdateImages',"adminAddCheckbox","adminRemoveCheckbox","adminAddAllCheckbox","adminRemoveAllCheckbox",'adminUpdateAll','adminAddSomeCheckbox','adminUpdateAdverts','adminViewSettings','adminSold','adminArchive','adminJoin','adminDeleteAll','adminSale','adminCustomer','adminArchiveAll'),
+				'actions'=>array('adminIndex','adminPhoto', 'adminPhotoUpdate','adminToArchive','adminChangeType','adminTest','updatePrices','updateAuctionLinks','adminCreate','adminUpdate','adminDelete','adminEdit','getAttrType','getAttr','adminAdverts','adminUpdateImages',"adminAddCheckbox","adminRemoveCheckbox","adminAddAllCheckbox","adminRemoveAllCheckbox",'adminUpdateAll','adminAddSomeCheckbox','adminUpdateAdverts','adminViewSettings','adminSold','adminArchive','adminJoin','adminDeleteAll','adminSale','adminCustomer','adminArchiveAll'),
 				'roles'=>array('manager'),
 			),
 			array('allow',
@@ -754,6 +754,51 @@ class GoodController extends Controller
 					if( $allow ) array_push($adverts, $advert);
 				}
 				Queue::addAll($adverts,"updateImages");
+			}
+		}
+	}
+
+	public function actionAdminPhoto($id){
+		$good = $this->loadModel($id);
+
+		$options = array(
+			"good" => $good,
+			"images" => $this->getImages($good)
+		);
+
+		$this->render('adminPhoto', $options);
+	}
+
+	public function actionAdminPhotoUpdate($id){
+		// $fields = Yii::app()->db->createCommand()
+		//     ->select('varchar_value')
+		//     ->from(GoodAttribute::tableName().' t')
+		//     ->where("t.attribute_id=3 AND t.good_id=$id")
+		//     ->queryAll();
+
+		// if( !is_array($fields) || !isset($fields[0]["varchar_value"]) ){
+		// 	echo json_encode(array("result" => "error", "message" => "Не найден товар с кодом $id"));
+		// 	return true;
+		// }
+
+		// $code = $fields[0]["varchar_value"];
+		if( isset($_POST["Images"]) ){
+			foreach ($_POST["Images"] as $i => &$image) {
+				$image = array("path" => explode("/", substr($image, 1)));
+				$filename = implode("/", $image["path"]);
+				$image["ext"] = array_pop(explode(".", array_pop($image["path"])));
+				$image["code"] = $image["path"][3];
+				$image["path"] = implode("/", $image["path"]);
+				$tmp = $image["path"]."/".$i.".".$image["ext"];
+				if( file_exists($filename) )
+					rename($filename, $tmp);
+			}
+			foreach ($_POST["Images"] as $i => $image) {
+				$tmp = $image["path"]."/".$i.".".$image["ext"];
+				$new_filename = $image["path"]."/".$image["code"]."_".(($i < 10)?("0".strval($i)):strval($i)).".".$image["ext"];
+
+				if( file_exists($tmp) )
+					rename($tmp, $new_filename);
 			}
 		}
 	}
