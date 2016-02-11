@@ -63,7 +63,11 @@ $(function () {
                             tmpArr[index] = "<?=$_GET['tmpPath']?>/"+item;
                         });
                     <?endif;?>
-                    $("<?=$_GET['selector']?>").val(tmpArr.join(',')).trigger("change");
+                    <?if(isset($_GET['afterLoad'])):?>
+                        customHandlers["<?=$_GET['afterLoad']?>"](tmpArr);
+                    <?else:?>
+                        $("<?=$_GET['selector']?>").val(tmpArr.join(',')).trigger("change");
+                    <?endif;?>
                     $(".plupload_save").click();
                     $(".b-save-buttons").fadeIn(300);
                 }

@@ -2887,16 +2887,39 @@ input[disabled="disabled"] {
         border-right: 0px;
     }
 .photo-sortable{
-    cursor: move;
     margin-top: 20px;
     border: 1px solid #452716;
     font-size: 0px;
+    position: relative;
+    padding: 5px 0px;
+}
+.photo-sortable:before{
+    content: "s";
+    font-size: 0px;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    visibility: hidden;
+    background-color: rgba(0,0,0,0.3);
+    -webkit-transition: all 300ms ease-out;
+       -moz-transition: all 300ms ease-out;
+        -ms-transition: all 300ms ease-out;
+         -o-transition: all 300ms ease-out;
+            transition: all 300ms ease-out;
+}
+.photo-sortable.disabled:before{
+    visibility: visible;
+    opacity: 1;
 }
     .photo-sortable li{
+        cursor: move;
         box-sizing: border-box;
         border: 1px solid #452716;
         list-style: none;
-        margin: 8px 0.4%;
+        margin: 4px 0.4%;
         /*float: left;*/
         display: inline-block;
         width: 24%;

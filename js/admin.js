@@ -512,6 +512,11 @@ $(document).ready(function(){
         });
     }
 
+    customHandlers["add-to-photo-sortable"] = function(links){
+        for( var i in links )
+            $(".photo-sortable").append('<li style="background-image: url(\'/'+links[i]+'\');" data-src="/'+links[i]+'"><input type="hidden" name="Images[]" value="/'+links[i]+'"></li>');
+    }
+
     /* TinyMCE ------------------------------------- TinyMCE */
     function bindTinymce(){
         if( $("#tinymce").length ){
@@ -1315,26 +1320,44 @@ $(document).ready(function(){
     /* Visual Interpreter ------------------------ Visual Interpreter */
 
     /* Photo sortable ---------------------------- Photo sortable */
-    $( ".photo-sortable" ).sortable({
-        update : function(){
-            progress.setColor("#D26A44");
-            progress.start(1);
-            $.ajax({
-                url: $( ".photo-sortable" ).attr("data-href"),
-                data: $( ".photo-sortable input" ).serialize(),
-                method: "POST",
-                success: function(msg){
-                    progress.end(function(){
-                        alert(msg);
-                    });
-                },
-                error: function(){
-                    alert("Ошибка обновления фотографий");
-                }
-            });
-        }
-    });
+    $( ".photo-sortable" ).sortable();
     $( ".photo-sortable" ).disableSelection();
+
+    $("body").on("click","#b-update-photo",function(){
+        $(".photo-sortable").addClass("disabled");
+        progress.setColor("#D26A44");
+        progress.start(1);
+        $.ajax({
+            url: $( ".photo-sortable" ).attr("data-href"),
+            data: $( ".photo-sortable input" ).serialize(),
+            method: "POST",
+            success: function(msg){
+                $(".photo-sortable").removeClass("disabled");
+                $(".photo-sortable").html(msg);
+
+                reloadImages($(".photo-sortable li"));
+                progress.end();
+            },
+            error: function(){
+                alert("Ошибка сохранения");
+            }
+        });
+    });
+
+    function reloadImages($images){
+        $images.each(function(){
+            var $this = $(this);
+           $this.css({
+                "background-image" : "url('"+$this.attr('data-src')+'?'+Math.random()+"')",
+                "opacity" : 0
+            });
+            var img = new Image();
+            img.src = $(this).attr("data-src");
+            img.onload = function(){
+                $this.fadeTo(300,1);
+            }
+        });
+    }
     /* Photo sortable ---------------------------- Photo sortable */
 
     function clickHash(){

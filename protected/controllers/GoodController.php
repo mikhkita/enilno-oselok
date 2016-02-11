@@ -758,49 +758,61 @@ class GoodController extends Controller
 		}
 	}
 
-	public function actionAdminPhoto($id){
+	public function actionAdminPhoto($id, $partial = false){
 		$good = $this->loadModel($id);
 
 		$options = array(
 			"good" => $good,
-			"images" => $this->getImages($good)
+			"images" => $this->getImages($good),
+			"partial" => $partial
 		);
 
-		$this->render('adminPhoto', $options);
+		if( $partial ){
+			$this->renderPartial('adminPhoto', $options);
+		}else{
+			$this->render('adminPhoto', $options);
+		}
 	}
 
 	public function actionAdminPhotoUpdate($id){
-		// $fields = Yii::app()->db->createCommand()
-		//     ->select('varchar_value')
-		//     ->from(GoodAttribute::tableName().' t')
-		//     ->where("t.attribute_id=3 AND t.good_id=$id")
-		//     ->queryAll();
+		$fields = Yii::app()->db->createCommand()
+		    ->select('varchar_value')
+		    ->from(GoodAttribute::tableName().' t')
+		    ->where("t.attribute_id=3 AND t.good_id=$id")
+		    ->queryAll();
 
-		// if( !is_array($fields) || !isset($fields[0]["varchar_value"]) ){
-		// 	echo json_encode(array("result" => "error", "message" => "Не найден товар с кодом $id"));
-		// 	return true;
-		// }
+		if( !is_array($fields) || !isset($fields[0]["varchar_value"]) ){
+			echo json_encode(array("result" => "error", "message" => "Не найден товар с кодом $id"));
+			return true;
+		}
 
-		// $code = $fields[0]["varchar_value"];
+		$code = $fields[0]["varchar_value"];
+		$path = Yii::app()->params["imageFolder"]."/";
 		if( isset($_POST["Images"]) ){
 			foreach ($_POST["Images"] as $i => &$image) {
-				$image = array("path" => explode("/", substr($image, 1)));
-				$filename = implode("/", $image["path"]);
-				$image["ext"] = array_pop(explode(".", array_pop($image["path"])));
-				$image["code"] = $image["path"][3];
-				$image["path"] = implode("/", $image["path"]);
-				$tmp = $image["path"]."/".$i.".".$image["ext"];
-				if( file_exists($filename) )
-					rename($filename, $tmp);
+				$filename = substr($image, 1);
+				$image = array("ext" => array_pop(explode(".", array_pop(explode("/", substr($image, 1))))));
+				$tmp = $path.$i.".".$image["ext"];
+				echo $tmp."<br>";
+				echo $filename;
+				die();
+				if( file_exists($filename) ){
+					if( strpos($path, $image) ){
+						rename($filename, $tmp);
+					}else{
+						copy($filename, $tmp);
+					}
+				}
 			}
 			foreach ($_POST["Images"] as $i => $image) {
-				$tmp = $image["path"]."/".$i.".".$image["ext"];
-				$new_filename = $image["path"]."/".$image["code"]."_".(($i < 10)?("0".strval($i)):strval($i)).".".$image["ext"];
+				$tmp = $path.$i.".".$image["ext"];
+				$new_filename = $path.$code."_".(($i < 10)?("0".strval($i)):strval($i)).".".$image["ext"];
 
 				if( file_exists($tmp) )
 					rename($tmp, $new_filename);
 			}
 		}
+		$this->actionAdminPhoto($id, true);
 	}
 
 	public function actionAdminAddCheckbox($id = NULL){
