@@ -512,11 +512,6 @@ $(document).ready(function(){
         });
     }
 
-    customHandlers["add-to-photo-sortable"] = function(links){
-        for( var i in links )
-            $(".photo-sortable").append('<li style="background-image: url(\'/'+links[i]+'\');" data-src="/'+links[i]+'"><input type="hidden" name="Images[]" value="/'+links[i]+'"></li>');
-    }
-
     /* TinyMCE ------------------------------------- TinyMCE */
     function bindTinymce(){
         if( $("#tinymce").length ){
@@ -1320,34 +1315,66 @@ $(document).ready(function(){
     /* Visual Interpreter ------------------------ Visual Interpreter */
 
     /* Photo sortable ---------------------------- Photo sortable */
-    $( ".photo-sortable" ).sortable();
-    $( ".photo-sortable" ).disableSelection();
+    if( $("#photo-sortable").length ) {
+        var el = document.getElementById('photo-sortable');
+        var sortable = Sortable.create(el);
+    }
 
+    $("body").on("click",".b-photo-delete",function(){
+        var $li = $(this).parents("li");
+        if( !$li.hasClass("deleted") ){
+            $li.addClass("deleted");
+            $li.find("input").attr("name", $li.find("input").attr("data-delete"));
+            $li.find(".ion-close").removeClass("ion-close").addClass("ion-android-refresh");
+        }else{
+            $li.removeClass("deleted");
+            $li.find("input").attr("name", $li.find("input").attr("data-name"));
+            $li.find(".ion-android-refresh").removeClass("ion-android-refresh").addClass("ion-close");
+        }
+        return false;
+    });
+
+    customHandlers["add-to-photo-sortable"] = function(links){
+        for( var i in links )
+            $(".photo-sortable").append('<li style="background-image: url(\'/'+links[i]+'\');" data-src="/'+links[i]+'"><a href="#" class="b-photo-delete ion-icon ion-close"></a><input type="hidden" name="Images[]" data-name="Images[]" data-delete="Delete[]" value="/'+links[i]+'"></li>');
+    }
+
+    var order = [],
+        issetdeleted = false;
     $("body").on("click","#b-update-photo",function(){
         $(".photo-sortable").addClass("disabled");
         progress.setColor("#D26A44");
         progress.start(1);
+        backupImages($(".photo-sortable li"));
+
+        issetdeleted = $(".photo-sortable li.deleted").length;
         $.ajax({
             url: $( ".photo-sortable" ).attr("data-href"),
             data: $( ".photo-sortable input" ).serialize(),
             method: "POST",
             success: function(msg){
-                $(".photo-sortable").removeClass("disabled");
-                $(".photo-sortable").html(msg);
+                progress.end(function(){
+                    $(".photo-sortable").removeClass("disabled");
+                    $(".photo-sortable").html(msg);
 
-                reloadImages($(".photo-sortable li"));
-                progress.end();
+                    if( issetdeleted ){
+                        reloadImages($(".photo-sortable li"));
+                    }else{
+                        restoreImages($(".photo-sortable li"));
+                    }
+                });
             },
             error: function(){
                 alert("Ошибка сохранения");
             }
         });
+        return false;
     });
 
     function reloadImages($images){
         $images.each(function(){
             var $this = $(this);
-           $this.css({
+            $this.css({
                 "background-image" : "url('"+$this.attr('data-src')+'?'+Math.random()+"')",
                 "opacity" : 0
             });
@@ -1356,6 +1383,19 @@ $(document).ready(function(){
             img.onload = function(){
                 $this.fadeTo(300,1);
             }
+        });
+    }
+
+    function backupImages($images){
+        order = [];
+        $images.each(function(){
+            order.push( $(this).css("background-image") );
+        });
+    }
+
+    function restoreImages($images){
+        $images.each(function(){
+            $(this).css("background-image", order[$(this).index()]);
         });
     }
     /* Photo sortable ---------------------------- Photo sortable */

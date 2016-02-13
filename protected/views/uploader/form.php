@@ -19,17 +19,20 @@ $(function () {
             uniq_name = false;
             multi_select = true;
         }
+        <?if(isset($_GET["maxFiles"]) && $_GET["maxFiles"] > 1):?>
+        multi_select = true;
+        <?endif;?>
     $("#uploaderPj").pluploadQueue({
         runtimes : 'html5',                          
         url : "<? echo Yii::app()->createUrl('/uploader/upload'); ?>",
-        max_file_size : '30mb',
+        max_file_size : '50mb',
         max_file_count: maxfiles,
         chunk_size : '1mb',
         unique_names : uniq_name,
         multi_selection:multi_select,
         resize: {
-            width: 800,
-            height: 600
+            width: 2560,
+            height: 2560
         },
         filters : [
             {title : "Files", extensions : "<?=$_GET['extensions']?>" }

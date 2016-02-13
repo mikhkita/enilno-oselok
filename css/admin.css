@@ -2903,12 +2903,13 @@ input[disabled="disabled"] {
     height: 100%;
     opacity: 0;
     visibility: hidden;
-    background-color: rgba(0,0,0,0.3);
+    background-color: rgba(0,0,0,0.5);
     -webkit-transition: all 300ms ease-out;
        -moz-transition: all 300ms ease-out;
         -ms-transition: all 300ms ease-out;
          -o-transition: all 300ms ease-out;
             transition: all 300ms ease-out;
+    z-index: 10;
 }
 .photo-sortable.disabled:before{
     visibility: visible;
@@ -2926,6 +2927,45 @@ input[disabled="disabled"] {
         height: 200px;
         background-position: 50% 50%;
         background-size: cover;
+        position: relative;
+    }
+    .photo-sortable li .b-photo-delete{
+        opacity: 0.5;
+        color: #FFF;
+        font-size: 30px;
+        position: absolute;
+        right: 8px;
+        top: 5px;
+    }
+    .photo-sortable li .b-photo-delete:hover{
+        opacity: 1;
+    }
+    .photo-sortable li.sortable-ghost{
+        opacity: 0.3;
+    }
+    .photo-sortable li.deleted{
+
+    }
+    .photo-sortable li.deleted:after{
+        position: absolute;
+        content: "Удалено";
+        color: #FFF;
+        font-size: 30px;
+        width: 100%;
+        left: 0px;
+        top: 50%;
+        margin-top: -15px;
+        line-height: 30px;
+    }
+    .photo-sortable li.deleted:before{
+        position: absolute;
+        content: "s";
+        font-size: 0px;
+        width: 100%;
+        height: 100%;
+        left: 0px;
+        top: 0px;
+        background-color: rgba(0,0,0,0.7);
     }
 @media screen and (min-width: 1366px){
     .photo-sortable li{

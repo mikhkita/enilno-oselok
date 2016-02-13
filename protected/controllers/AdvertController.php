@@ -88,7 +88,6 @@ class AdvertController extends Controller
 	}
 
 	public function actionAdminAction($action){
-		$start = microtime(true);
 		if( !isset($_SESSION["advert_filter"]) ) $_SESSION["advert_filter"] = array();
 
 		$action_model = Action::model()->find("code='$action'");
@@ -96,8 +95,7 @@ class AdvertController extends Controller
 		
 		if( isset($_POST["data"]) ){
 			$adverts = Advert::filter($_SESSION["advert_filter"],array('type','city','place.category'),array("*"))->getData();
-			// print_r(count($adverts));
-			// echo "<br>".(microtime(true) - $start);
+
 			$random_offset = isset($_POST["random_offset"])?intval($_POST["random_offset"]):24;
 			$offset = isset($_POST["offset"])?intval($_POST["offset"]):0;
 

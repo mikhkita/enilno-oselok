@@ -17,7 +17,7 @@ class GoodController extends Controller
 				'roles'=>array('manager'),
 			),
 			array('allow',
-				'actions'=>array('adminIndex2','adminUpdateCities'),
+				'actions'=>array('adminIndex2','adminUpdateCities', 'adminDeleteAdverts'),
 				'users'=>array('*'),
 			),
 			array('deny',
@@ -241,6 +241,16 @@ class GoodController extends Controller
 		}
 	}
 
+	public function actionAdminDeleteAdverts($id){
+		$model=Good::model()->with(array("type","fields.variant","fields.attribute"))->findByPk($id);
+		if($model===null){
+			echo json_encode(array("result" => "error","message" => "Не найден товар с ID = $id"));
+		}else{
+			$this->loadModel($id)->sold();	
+			echo json_encode(array("result" => "success"));
+		}
+	}
+
 	public function actionAdminArchiveAll($good_type_id){
 		$good_ids = Good::getCheckboxes($good_type_id);
 		$good_ids_key = array();
@@ -253,6 +263,12 @@ class GoodController extends Controller
 			array_push($good_ids_key, $key);
 		}
 		Good::model()->updateAll(array("archive" => 1), "id IN (".implode(", ", $good_ids_key).")");
+
+		$links = array();
+		foreach ($good_ids_key as $i => $item) {
+			array_push($links, "http://".Yii::app()->params['host'].$this->createUrl('/good/admindeleteadverts',array('id'=> $item)));
+		}
+		Cron::addAll($links);
 
 		Good::removeAllCheckbox($good_type_id);
 
@@ -763,7 +779,7 @@ class GoodController extends Controller
 
 		$options = array(
 			"good" => $good,
-			"images" => $this->getImages($good),
+			"images" => $this->getImages($good, NULL, false),
 			"partial" => $partial
 		);
 
@@ -781,25 +797,43 @@ class GoodController extends Controller
 		    ->where("t.attribute_id=3 AND t.good_id=$id")
 		    ->queryAll();
 
-		if( !is_array($fields) || !isset($fields[0]["varchar_value"]) ){
+		$goodType = Yii::app()->db->createCommand()
+		    ->select('t.code')
+		    ->from(Good::tableName().' g')
+		    ->join(GoodType::tableName().' t', 'g.good_type_id=t.id')
+		    ->where("g.id=$id")
+		    ->queryAll();
+
+		if( !is_array($goodType) || !isset($goodType[0]["code"]) || !is_array($fields) || !isset($fields[0]["varchar_value"]) ){
 			echo json_encode(array("result" => "error", "message" => "Не найден товар с кодом $id"));
 			return true;
 		}
 
+		if( isset($_POST["Delete"]) ){
+			foreach ($_POST["Delete"] as $i => $image) {
+				$filename = substr($image, 1);
+				if( file_exists($filename) ){
+					unlink($filename);
+				}
+			}
+		}
+
 		$code = $fields[0]["varchar_value"];
-		$path = Yii::app()->params["imageFolder"]."/";
+		$goodType = $goodType[0]["code"];
+		$path = Yii::app()->params["imageFolder"]."/".$goodType."s/".$code."/";
+
+		if (!is_dir($path)) mkdir($path, 0777, true);
+		
 		if( isset($_POST["Images"]) ){
 			foreach ($_POST["Images"] as $i => &$image) {
 				$filename = substr($image, 1);
 				$image = array("ext" => array_pop(explode(".", array_pop(explode("/", substr($image, 1))))));
 				$tmp = $path.$i.".".$image["ext"];
-				echo $tmp."<br>";
-				echo $filename;
-				die();
 				if( file_exists($filename) ){
-					if( strpos($path, $image) ){
+					if( strpos($filename, $path) !== false ){
 						rename($filename, $tmp);
 					}else{
+						echo "string";
 						copy($filename, $tmp);
 					}
 				}

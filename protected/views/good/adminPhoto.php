@@ -13,16 +13,14 @@
 	</div>
 </div>
 <h1 class="b-with-nav"><?=$good->type->name?> <?=$good->fields_assoc[3]->value?>: фотографии</h1>
-<ul class="photo-sortable clearfix" data-href="<?=Yii::app()->createUrl('/good/adminphotoupdate',array('id'=>$good->id))?>">
+<ul class="photo-sortable clearfix" id="photo-sortable" data-href="<?=Yii::app()->createUrl('/good/adminphotoupdate',array('id'=>$good->id))?>">
 <?endif;?>
 	<? foreach ($images as $i => $image):?>
 	<li style="background-image: url('<?=$image?>');" data-src="<?=$image?>">
-		<input type="hidden" name="Images[]" value="<?=$image?>">
+		<a href="#" class="b-photo-delete ion-icon ion-close"></a>
+		<input type="hidden" name="Images[]" data-name="Images[]" data-delete="Delete[]" value="<?=$image?>">
 	</li>
 	<? endforeach; ?>
-	<li style="background-image: url('/upload/temp/p1ab89hukt1uu035n16ev1718p904.jpg');" data-src="/upload/temp/p1ab89hukt1uu035n16ev1718p904.jpg">
-		<input type="hidden" name="Images[]" value="/upload/temp/p1ab89hukt1uu035n16ev1718p904.jpg?>">
-	</li>
 <?if(!$partial):?>
 </ul>
 <?endif;?>

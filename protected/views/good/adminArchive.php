@@ -15,10 +15,11 @@
 					<div><?=$item->fields_assoc[3]->value?></div>
 				</td>
 				<td style="text-align: center; font-size: 0px;">
-					<? $images = $this->getImages($item);?>
+					<? $images = $item->getImages(3, array("small"));?>
+					<? var_dump($images); ?>
 					<? foreach ($images as $i => $image): ?>
-						<img src="<?=$image;?>" style="max-height: 100px;" alt="">
-						<? if($i == 3) break; ?>
+						<img src="<?=$image["small"];?>" style="height: 100px;" alt="">
+						<? if($i == 2) break; ?>
 					<? endforeach; ?>
 				</td>
 				<td style="min-width: 100px; text-align: center;">

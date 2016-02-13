@@ -115,6 +115,7 @@ class Queue extends CActiveRecord
             ->join(Place::tableName().' p', 'a.place_id=p.id')
             ->where("p.category_id=".$params["category_id"].((count($temp))?(" AND t.advert_id IN (".implode(",", $temp).")"):"").((isset($params['Attr']['state']))?(" AND t.state_id IN (".implode(",", $params['Attr']['state']).")"):"").((isset($params['Attr']['action']))?(" AND t.action_id IN (".implode(",", $params['Attr']['action']).")"):""))
             ->order("t.id ASC")
+            ->limit( ($pagination === NULL)?999999:$pagination )
             ->queryAll();
 
         $queue = Controller::getIds($queue, "id");
