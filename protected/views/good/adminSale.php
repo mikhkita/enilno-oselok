@@ -14,12 +14,12 @@
             <div class="clearfix">
             	<div class="row row-half">
             		<?php echo $form->labelEx($model,'summ'); ?>
-            		<?php echo $form->numberField($model,'summ',array('maxlength'=>10,'required'=>true)); ?>
+            		<?php echo $form->numberField($model,'summ',array('maxlength'=>6,'required'=>true,"min"=>0)); ?>
             		<?php echo $form->error($model,'summ'); ?>
             	</div>
                 <div class="row row-half">
                     <?php echo $form->labelEx($model,'extra'); ?>
-                    <?php echo $form->numberField($model,'extra',array('maxlength'=>10)); ?>
+                    <?php echo $form->numberField($model,'extra',array('maxlength'=>6,"min"=>0)); ?>
                     <?php echo $form->error($model,'extra'); ?>
                 </div>
             </div>

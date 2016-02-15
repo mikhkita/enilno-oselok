@@ -13,7 +13,7 @@ class GoodController extends Controller
 	{
 		return array(
 			array('allow',
-				'actions'=>array('adminIndex','adminPhoto','adminCheckCode', 'adminPhotoUpdate','adminToArchive','adminChangeType','adminTest','updatePrices','updateAuctionLinks','adminCreate','adminUpdate','adminDelete','adminEdit','getAttrType','getAttr','adminAdverts','adminUpdateImages',"adminAddCheckbox","adminRemoveCheckbox","adminAddAllCheckbox","adminRemoveAllCheckbox",'adminUpdateAll','adminAddSomeCheckbox','adminUpdateAdverts','adminViewSettings','adminSold','adminArchive','adminJoin','adminDeleteAll','adminSale','adminCustomer','adminArchiveAll'),
+				'actions'=>array('adminIndex','adminPhoto','adminCheckCode', 'adminPhotoUpdate','adminToArchive','adminChangeType','adminTest','updatePrices','updateAuctionLinks','adminCreate','adminUpdate','adminDelete','adminEdit','getAttrType','getAttr','adminAdverts','adminUpdateImages',"adminAddCheckbox","adminRemoveCheckbox","adminAddAllCheckbox","adminRemoveAllCheckbox",'adminUpdateAll','adminAddSomeCheckbox','adminUpdateAdverts','adminViewSettings','adminSold','adminArchive','adminJoin','adminDeleteAll','adminSale','adminCustomer','adminArchiveAll','adminSaleTable'),
 				'roles'=>array('manager'),
 			),
 			array('allow',
@@ -35,13 +35,33 @@ class GoodController extends Controller
 			$model->date = NULL;
 			$model->save();
 		}
-		$goods = Good::model()->with(array("type","fields.variant","fields.attribute","sale"))->findAll(array("condition" => "good_type_id=".$good_type_id." AND archive=1","order" => "sale.date DESC"));
+		$goods = Good::model()->with(array("fields.variant","fields.attribute","sale"))->findAll(array("condition" => "good_type_id=".$good_type_id." AND archive=1","order" => "sale.date DESC"));
 		$options = array(
 			'data'=>$goods,
 			'name'=>$goodType->name
 		);
 
 		$this->render('adminArchive',$options);
+
+	}
+
+	public function actionAdminSaleTable($good_type_id = NULL) 
+	{
+		if($good_type_id) {
+			$goodType = GoodType::model()->with("fields")->findByPk($good_type_id);
+			$name = $goodType->name;
+			$sale = Sale::model()->with(array("good.fields.variant","good.fields.attribute"))->findAll(array("condition" => "good_type_id=".$good_type_id,"order" => "t.date DESC"));
+		} else {
+			$sale = Sale::model()->with(array("good.fields.variant","good.fields.attribute"))->findAll(array("order" => "t.date DESC"));
+			$name = "Общие";
+		}
+		$options = array(
+			'data'=>$goods,
+			'name'=>$name
+		);
+		print_r($sale);
+		die();
+		$this->render('adminSaleTable',$options);
 
 	}
 
