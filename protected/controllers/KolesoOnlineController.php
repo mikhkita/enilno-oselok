@@ -306,7 +306,7 @@ class KolesoOnlineController extends Controller
 				'roles'=>array('manager'),
 			),
 			array('allow',
-				'actions'=>array('index', 'index2', 'detail','page','mail','category','getCities','setCity'),
+				'actions'=>array('index', 'search', 'index2', 'detail','page','mail','category','getCities','setCity'),
 				'users'=>array('*'),
 			),
 			array('deny',
@@ -419,7 +419,13 @@ class KolesoOnlineController extends Controller
 		$def = ( intval($_GET['type']) == 1 )?7:31;
 		$_SESSION["FILTER"][$_GET['type']]['sort'] = (isset($_SESSION["FILTER"][$_GET['type']]['sort']))?$_SESSION["FILTER"][$_GET['type']]['sort']:array("field"=>$def,"type"=>"DESC");
 
-		$_SESSION["FILTER"][$_GET['type']]["arr"][43] = array(1418,1419,1857,1860);
+		if( !$this->user ){
+			$_SESSION["FILTER"][$_GET['type']]["arr"][43] = array(1418,1419,1857,1860);
+		}else{
+			if( isset($_SESSION["FILTER"][$_GET['type']]["arr"][43]) ){
+				unset($_SESSION["FILTER"][$_GET['type']]["arr"][43]);
+			}
+		}
 		$goods = $this->getGoods(40,$_GET['type']); 
 		$count = $goods['count'];	
 		$pages = $goods['pages'];	
@@ -725,5 +731,36 @@ class KolesoOnlineController extends Controller
                 echo "0";
             }
         }
+    }
+
+    public function actionSearch($search){
+    	$criteria=new CDbCriteria();
+		$search = explode(" ", $search);
+		if( !$this->user ){
+			$criteria->condition = "public=1";
+		}
+		foreach ($search as $i => $val) {
+			$criteria->addSearchCondition("value", $val);
+		}
+		$criteria->limit = 15;
+
+		$model = Search::model()->findAll($criteria);
+		$ids = array();
+		$titles = array();
+		foreach ($model as $key => $value){
+			array_push($ids, $value->good_id);
+			$tmp = explode(" ", $value->value);
+			$tmp = "<b>".array_shift($tmp)."</b> ".implode(" ", $tmp);
+			$titles[$value->good_id] = $tmp;
+		}
+
+		// $good_types = $this->getAssoc(GoodType::model()->findAll(), "id");
+
+		if( count($ids) )
+		$goods = GoodFilter::model()->with("type", "fields")->findAll(array("condition" => "t.id IN (".implode(",", $ids).") AND fields.attribute_id=3", "order" => "fields.varchar_value ASC"));
+    	$this->renderPartial('search',array(
+			'goods' => $goods,
+			'titles' => $titles
+		));
     }
 }

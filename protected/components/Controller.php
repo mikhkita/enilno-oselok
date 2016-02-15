@@ -642,7 +642,7 @@ class Controller extends CController
 
             $tmpName = "tmp_".md5(rand().time());
 
-            Yii::app()->db->createCommand()->createTable($tmpName, $structure, 'ENGINE=InnoDB');
+            Yii::app()->db->createCommand()->createTable($tmpName, $structure, 'ENGINE=InnoDB CHARSET=utf8 COLLATE=utf8_general_ci');
 
             $sql = "INSERT INTO `$tmpName` (".implode(",", $columns).") VALUES ";
 
@@ -659,6 +659,9 @@ class Controller extends CController
             foreach ($update as &$item) {
                 $item = " ".$table_name.".".$item." = ".$tmpName.".".$item;
             }
+
+            // print_r($sql);
+            // die();
 
             if( Yii::app()->db->createCommand($sql)->execute() ){
                 $sql = "INSERT INTO `$table_name` SELECT * FROM `$tmpName` ON DUPLICATE KEY UPDATE".implode(",", $update);

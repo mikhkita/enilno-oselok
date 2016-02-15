@@ -1,4 +1,4 @@
-<div class="form b-good-form clearfix">
+<div class="form b-good-form clearfix" data-href="<?php echo $this->createUrl('/good/admincheckcode',array('good_type_id' => $good_type_id))?>">
 
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'good-edit-form',
@@ -37,11 +37,11 @@
 							<?php echo Chtml::dropDownList("Good_attr[".$item->attribute_id."][single]", $attr_id, CHtml::listData(AttributeVariant::model()->with("variant")->findAll(array("condition" => "attribute_id=".$item->attribute_id,"order" => "variant.sort ASC")), 'variant_id', 'value'),array('class'=> 'select2',"empty" => "Не задано")); ?>
 						<? endif; ?>
 					<? elseif($item->attribute->type->code == "text"):?>
-						<?php echo Chtml::textArea("Good_attr[".$item->attribute_id."]",$attr_id,array('rows'=>4,"required"=>($item->attribute_id==3) )); ?>
+						<?php echo Chtml::textArea("Good_attr[".$item->attribute_id."]",$attr_id,array('rows'=>4,"required"=>($item->attribute_id==3), "disabled" => (!$model->isNewRecord && $item->attribute_id==3 && 0) )); ?>
 					<? elseif($item->attribute->type->code == "int"):?>
-						<?php echo Chtml::numberField("Good_attr[".$item->attribute_id."]",$attr_id,array('maxlength'=>255,"required"=>($item->attribute_id==3) )); ?>
+						<?php echo Chtml::numberField("Good_attr[".$item->attribute_id."]",$attr_id,array('maxlength'=>255,"required"=>($item->attribute_id==3), "disabled" => (!$model->isNewRecord && $item->attribute_id==3 && 0) )); ?>
 					<? else: ?>
-						<?php echo Chtml::textField("Good_attr[".$item->attribute_id."]",$attr_id,array('maxlength'=>255,"required"=>($item->attribute_id==3) )); ?>
+						<?php echo Chtml::textField("Good_attr[".$item->attribute_id."]",$attr_id,array('maxlength'=>255,"required"=>($item->attribute_id==3), "disabled" => (!$model->isNewRecord && $item->attribute_id==3 && 0) )); ?>
 					<?endif;?>
 				</div>
 			<?endif;?>

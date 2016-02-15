@@ -44,6 +44,13 @@
 	<?php $form=$this->beginWidget('CActiveForm'); ?>
 		<table class="b-table b-good-table b-sess-checkbox-info" data-add-url="<?=Yii::app()->createUrl('/good/adminaddcheckbox')?>" data-remove-url="<?=Yii::app()->createUrl('/good/adminremovecheckbox')?>" border="1">
 			<tr>
+				<th>
+					<?if($sort_field=="id"):?>
+						<a class="good-sort active <? if($sort_type=='DESC') echo ' up'; ?>" href="<?=$this->createUrl('/good/adminindex',array('sort_type' => $sort_type,'sort_field' => 'id','good_type_id'=> $_GET["good_type_id"]))?>">ID</a>
+					<? else:?>
+						<a href="<?=$this->createUrl('/good/adminindex',array('sort_field' => 'id', 'sort_type' => 'DESC','good_type_id'=> $_GET["good_type_id"]))?>">ID</a>
+					<? endif;?>
+				</th>
 				<? $ids = array(); if( count($data) ) foreach ($data as $i => $item) array_push($ids, $item->id); ?>
 				<th style="vertical-align:bottom; min-width: 20px;">
 					<!-- <input type="checkbox" name="goods_id" class="b-sess-checkbox check-page" data-block="#b-sess-checkbox-list" value="<?=implode(',',$ids)?>"> -->
@@ -69,6 +76,7 @@
 			<? if( count($data) ): ?>
 				<? foreach ($data as $i => $item): ?>
 					<tr id="id-<?=$item->id?>">
+						<td class="align-left"><?=$item->id?></td>
 						<td><input type="checkbox" name="good_id" class="b-sess-checkbox" data-block="#b-sess-checkbox-list" <? if($item->isChecked()): ?>checked="checked"<? endif; ?> value="<?=$item->id?>"></td>
 						<? if($with_photos): ?>
 							<? $images = $this->getImages($item); $first_image = array_shift($images); ?>

@@ -592,6 +592,7 @@ class IntegrateController extends Controller
 
 // Магазин --------------------------------------------------------------- Магазин
     public function actionGoodCodes(){
+        $j = 1;
         for ($i = 1; $i <= 3; $i++) {
             $data = Good::model()->filter(
                 array(
@@ -608,12 +609,22 @@ class IntegrateController extends Controller
             $good_type = GoodType::model()->findByPk($i);
 
             $values = array();
+            $search = array();
             foreach ($goods as $key => $good) {
-                array_push($values, array($good->id,NULL,$good->good_type_id,0,Translit::get(Interpreter::generate($this->getParam("SHOP", $good_type->code."_CODE"),$good))));
+                $str = Interpreter::generate($this->getParam("SHOP", $good_type->code."_CODE"),$good);
+                array_push($values, array($good->id,NULL,$good->good_type_id,0,Translit::get($str)));
+
+                $str = explode(" ", $str);
+                array_pop($str);
+                $str = $good->fields_assoc[3]->value." ".$good_type->name." ".implode(" ", $str);
+                $public = ( isset($good->fields_assoc[43]) && in_array(intval($good->fields_assoc[43]->value), array(0, 1, 10, 13)) )?"1":"0";
+                array_push($search, array($good->id, addslashes( preg_replace('/[\s]{2,}/', ' ', $str) ), $public));
             }
 
             $this->updateRows(Good::tableName(),$values,array("code"));
-            // echo $i."<br>";
+            $this->updateRows(Search::tableName(), $search, array("value", "public"));     
+
+            header("HTTP/1.1 200 OK");
         }
     }
 

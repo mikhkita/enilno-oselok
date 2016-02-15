@@ -13,7 +13,7 @@ class GoodController extends Controller
 	{
 		return array(
 			array('allow',
-				'actions'=>array('adminIndex','adminPhoto', 'adminPhotoUpdate','adminToArchive','adminChangeType','adminTest','updatePrices','updateAuctionLinks','adminCreate','adminUpdate','adminDelete','adminEdit','getAttrType','getAttr','adminAdverts','adminUpdateImages',"adminAddCheckbox","adminRemoveCheckbox","adminAddAllCheckbox","adminRemoveAllCheckbox",'adminUpdateAll','adminAddSomeCheckbox','adminUpdateAdverts','adminViewSettings','adminSold','adminArchive','adminJoin','adminDeleteAll','adminSale','adminCustomer','adminArchiveAll'),
+				'actions'=>array('adminIndex','adminPhoto','adminCheckCode', 'adminPhotoUpdate','adminToArchive','adminChangeType','adminTest','updatePrices','updateAuctionLinks','adminCreate','adminUpdate','adminDelete','adminEdit','getAttrType','getAttr','adminAdverts','adminUpdateImages',"adminAddCheckbox","adminRemoveCheckbox","adminAddAllCheckbox","adminRemoveAllCheckbox",'adminUpdateAll','adminAddSomeCheckbox','adminUpdateAdverts','adminViewSettings','adminSold','adminArchive','adminJoin','adminDeleteAll','adminSale','adminCustomer','adminArchiveAll'),
 				'roles'=>array('manager'),
 			),
 			array('allow',
@@ -125,7 +125,8 @@ class GoodController extends Controller
 				'model'=>$model,
 				'result' => $result,
 				'cities' => $this->cityGroup(),
-				'fields' => $model->type->fields
+				'fields' => $model->type->fields,
+				'good_type_id' => $good_type_id
 			));
 		}
 
@@ -191,7 +192,8 @@ class GoodController extends Controller
 				'result' => $result,
 				'cities' => $this->cityGroup(),
 				'fields' => $fields,
-				'view_fields' => $view_fields
+				'view_fields' => $view_fields,
+				'good_type_id' => $good_type_id
 			));
 		}
 	}
@@ -779,7 +781,7 @@ class GoodController extends Controller
 
 		$options = array(
 			"good" => $good,
-			"images" => $this->getImages($good, NULL, false),
+			"images" => $good->getImages(NULL, NULL, NULL, false),
 			"partial" => $partial
 		);
 
@@ -823,7 +825,7 @@ class GoodController extends Controller
 		$path = Yii::app()->params["imageFolder"]."/".$goodType."s/".$code."/";
 
 		if (!is_dir($path)) mkdir($path, 0777, true);
-		
+
 		if( isset($_POST["Images"]) ){
 			foreach ($_POST["Images"] as $i => &$image) {
 				$filename = substr($image, 1);
@@ -859,6 +861,16 @@ class GoodController extends Controller
 			}	
 		}
 		echo $this->displayCodes(Good::addCheckbox($good),$good->good_type_id);
+	}
+
+	public function actionAdminCheckCode($good_type_id){
+		if( !isset($_GET["Good_attr"]) || !isset($_GET["Good_attr"][3]) ) echo json_encode(array("result" => "error", "message" => "Не передан код"));
+		$code = $_GET["Good_attr"][3];
+		if( GoodAttribute::model()->with("good")->count("good.good_type_id=$good_type_id AND varchar_value=$code") ){
+			echo json_encode(array("result" => "error", "message" => "Товар с таким кодом уже существует"));
+		}else{
+			echo json_encode(array("result" => "success"));
+		}
 	}
 
 	public function actionAdminRemoveCheckbox($id = NULL){

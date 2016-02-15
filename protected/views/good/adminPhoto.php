@@ -16,9 +16,9 @@
 <ul class="photo-sortable clearfix" id="photo-sortable" data-href="<?=Yii::app()->createUrl('/good/adminphotoupdate',array('id'=>$good->id))?>">
 <?endif;?>
 	<? foreach ($images as $i => $image):?>
-	<li style="background-image: url('<?=$image?>');" data-src="<?=$image?>">
+	<li style="background-image: url('<?=$image['small']?>');" data-small="<?=$image['small']?>" data-src="<?=$image['original']?>">
 		<a href="#" class="b-photo-delete ion-icon ion-close"></a>
-		<input type="hidden" name="Images[]" data-name="Images[]" data-delete="Delete[]" value="<?=$image?>">
+		<input type="hidden" name="Images[]" data-name="Images[]" data-delete="Delete[]" value="<?=$image['original']?>">
 	</li>
 	<? endforeach; ?>
 <?if(!$partial):?>

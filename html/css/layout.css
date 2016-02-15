@@ -294,7 +294,8 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 	.b-header .b-header-main {
 		background-image: url("../i/back-asphalt.jpg");
 		/*background-color: #28252C;*/
-		overflow: hidden;
+		/* overflow: hidden; */
+		z-index: 100;
 	}
 	/*.b-header .b-header-main {
 		background-image: url("../i/back-asphalt@2x.jpg");
@@ -2293,6 +2294,47 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 			.b-not-found h3 a:hover{
 				text-decoration: none;
 			}
+.b-search-form{
+	position: relative;
+}
+	.b-search-results{
+		position: absolute;
+		left: 0px;
+		top: 32px;
+		background-color: rgb(255, 255, 255);
+		/* z-index: 99999999999; */
+		width: 100%;
+		border: 1px solid #FFB000;
+		box-sizing: border-box;
+		border-radius: 2px;
+		display: none;
+	}
+		.b-search-results li{
+
+		}
+			.b-search-results li a,
+			.b-search-results li span{
+				font-size: 14px;
+				display: block;
+				padding: 8px 12px 7px;
+				color: #1c1c1c;
+				text-overflow: ellipsis;
+				overflow: hidden;
+				text-decoration: none;
+				white-space: nowrap;
+				border-bottom: 1px solid #eeeeee;
+			}
+			.b-search-results li a{
+				/*text-decoration: underline;*/
+			}
+			.b-search-results li a:hover,
+			.b-search-results li a.focus{
+				/*text-decoration: none;*/
+				background-color: #eeeeee;
+			}
+.b-search-close{
+	display: none;
+}
 /*.after-load-back{
 	display: none;
 }*/

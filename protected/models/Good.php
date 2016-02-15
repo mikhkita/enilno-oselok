@@ -224,40 +224,44 @@ class Good extends GoodFilter
 		if( isset($options["field"]) ){
 			if( !isset($options["type"]) ) $options["type"] = "ASC";
 
-			$attribute = Attribute::model()->with("type")->findByPk($options["field"]);
-
-			if( !$attribute ) throw new CHttpException(404,'Не найден атрибут с кодом "'.$options["field"].'"');
-
-			$criteria=new CDbCriteria();
-			$criteria->select = 't.id';
-			$criteria->together = true;
-			$criteria->group = 't.id';
-			$criteria->condition = 'fields.attribute_id='.$attribute->id;
-
-			if( $this->ids !== NULL )
-				$criteria->addInCondition("t.id",$this->ids);
-
-			if( $attribute->list ){
-				$criteria->with = array('fields' => array('select'=> array('attribute_id')),"fields.variant"=> array('select' => array('sort')));
-				$criteria->order = 'variant.sort '.$options["type"];
+			if( $options["field"] == "id" ){
+				if( $options["type"] == "ASC" ){
+					$this->ids = array_reverse($this->ids);
+				}
 			}else{
-				$criteria->with = array('fields' => array('select'=> array('variant_id','attribute_id',$attribute->type->code."_value")));
-				$criteria->order = 'fields.'.$attribute->type->code.'_value '.$options["type"].', fields.id '.$options["type"];
+				$attribute = Attribute::model()->with("type")->findByPk($options["field"]);
+
+				if( !$attribute ) throw new CHttpException(404,'Не найден атрибут с кодом "'.$options["field"].'"');
+
+				$criteria=new CDbCriteria();
+				$criteria->select = 't.id';
+				$criteria->together = true;
+				$criteria->group = 't.id';
+				$criteria->condition = 'fields.attribute_id='.$attribute->id;
+
+				if( $this->ids !== NULL )
+					$criteria->addInCondition("t.id",$this->ids);
+
+				if( $attribute->list ){
+					$criteria->with = array('fields' => array('select'=> array('attribute_id')),"fields.variant"=> array('select' => array('sort')));
+					$criteria->order = 'variant.sort '.$options["type"];
+				}else{
+					$criteria->with = array('fields' => array('select'=> array('variant_id','attribute_id',$attribute->type->code."_value")));
+					$criteria->order = 'fields.'.$attribute->type->code.'_value '.$options["type"].', fields.id '.$options["type"];
+				}
+
+				$ids = $this->getIds( GoodFilter::model()->findAll($criteria) );
+
+				$criteria=new CDbCriteria();
+
+				if( count($ids) )
+					$criteria->condition = "t.id NOT IN (".implode(",", $ids).")";
+
+				if( $this->ids !== NULL )
+					$criteria->addInCondition("t.id",$this->ids);
+
+				$this->ids = array_merge($ids, $this->getIds( GoodFilter::model()->findAll($criteria) ) );
 			}
-
-			$ids = $this->getIds( GoodFilter::model()->findAll($criteria) );
-
-			$criteria=new CDbCriteria();
-
-			if( count($ids) )
-				$criteria->condition = "t.id NOT IN (".implode(",", $ids).")";
-
-			if( $this->ids !== NULL )
-				$criteria->addInCondition("t.id",$this->ids);
-
-			$this->ids = array_merge($ids, $this->getIds( GoodFilter::model()->findAll($criteria) ) );
-
-			// echo " ".count($this->ids);
 	    }
 
 	    return $this;

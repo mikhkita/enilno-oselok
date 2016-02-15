@@ -1336,7 +1336,7 @@ $(document).ready(function(){
 
     customHandlers["add-to-photo-sortable"] = function(links){
         for( var i in links )
-            $(".photo-sortable").append('<li style="background-image: url(\'/'+links[i]+'\');" data-src="/'+links[i]+'"><a href="#" class="b-photo-delete ion-icon ion-close"></a><input type="hidden" name="Images[]" data-name="Images[]" data-delete="Delete[]" value="/'+links[i]+'"></li>');
+            $(".photo-sortable").append('<li style="background-image: url(\'/'+links[i]+'\');" data-small="/'+links[i]+'" data-src="/'+links[i]+'"><a href="#" class="b-photo-delete ion-icon ion-close"></a><input type="hidden" name="Images[]" data-name="Images[]" data-delete="Delete[]" value="/'+links[i]+'"></li>');
     }
 
     var order = [],
@@ -1375,11 +1375,11 @@ $(document).ready(function(){
         $images.each(function(){
             var $this = $(this);
             $this.css({
-                "background-image" : "url('"+$this.attr('data-src')+'?'+Math.random()+"')",
+                "background-image" : "url('"+$this.attr('data-small')+'?'+Math.random()+"')",
                 "opacity" : 0
             });
             var img = new Image();
-            img.src = $(this).attr("data-src");
+            img.src = $(this).attr("data-small");
             img.onload = function(){
                 $this.fadeTo(300,1);
             }
@@ -1399,6 +1399,30 @@ $(document).ready(function(){
         });
     }
     /* Photo sortable ---------------------------- Photo sortable */
+
+    $("body").on("change","#good-edit-form input[name='Good_attr[3]']",function(){
+        progress.setColor("#D26A44");
+        progress.start(1);
+        $.ajax({
+            url: $( ".b-good-form" ).attr("data-href"),
+            data: $( "input[name='Good_attr[3]']" ).serialize(),
+            method: "GET",
+            success: function(msg){
+                var json = JSON.parse(msg);
+                if( json.result == "success" ){
+                    $( "input[name='Good_attr[3]']" ).parents(".row").find(".error").remove();
+                    $( "input[name='Good_attr[3]']" ).parents(".row").append('<label class="error" style="color: #5FC147;">Код свободен</label>');
+                }else{
+                    alert(json.message);
+                    $( "input[name='Good_attr[3]']" ).val("");
+                }
+                progress.end();
+            },
+            error: function(){
+                alert("Ошибка проверки");
+            }
+        });
+    });
 
     function clickHash(){
         var hash = window.location.hash.split("|");

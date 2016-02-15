@@ -485,7 +485,103 @@ $(document).ready(function(){
         $( ".main-tabs" ).tabs( "option", "active", 1 );
     });
 
+    var focusIn = false,
+        mouseIn = false;
+    $("#search").keydown(function(e){
+        if( [38, 40].indexOf(e.keyCode) !== -1 ){
+            if( e.keyCode == 38 ){
+                if( $(".b-search-results li a.focus ").length ){
+                    var index = $(".b-search-results li a.focus").removeClass("focus").parents("li").index();
+                    if( index != 0){
+                        $(".b-search-results li").eq(index-1).find("a").addClass("focus");
+                    }
+                }else{
+                    $(".b-search-results li:last a").addClass("focus");
+                }
+            }else{
+                if( $(".b-search-results li a.focus").length ){
+                    $(".b-search-results li").eq($(".b-search-results li a.focus").removeClass("focus").parents("li").index()+1).find("a").addClass("focus");
+                }else{
+                    $(".b-search-results li").eq(0).find("a").addClass("focus");
+                }
+            }
+        }else if( e.keyCode == 13 ){
+            if( $(".b-search-results li a.focus").length ){
+                window.location.href = $(".b-search-results li a.focus").attr("href");
+            }else if( $(".b-search-results li a").length ){
+                window.location.href = $(".b-search-results li:first a").attr("href");
+            }
+            return false;
+        }
+    });
 
+    $("body").on("mouseover", ".b-search-results", function(){
+        $(".b-search-results li a.focus").removeClass("focus");
+        mouseIn = true;
+    }).on("mouseleave", ".b-search-results", function(){
+        if( !focusIn ) $(".b-search-results").fadeOut(150);
+        mouseIn = false;
+    });
+
+    $("body").on("mousedown", ".b-search-results li a", function(){
+        
+    })
+
+    $(".b-search-form").submit(function(){
+        $("#search").focus();
+        return false;
+    });
+
+    $("#search").keyup(function(e){
+        if( [36, 38, 39, 40, 13].indexOf(e.keyCode) == -1 ){
+            $form = $(this).parents("form");
+
+            if( $(this).val() == "" ){
+                $(".b-search-results").fadeOut(150);
+                return false;
+            }
+
+            if( $(".b-search-results li").length < 1 )
+                $(".b-search-results").fadeIn(150).html("<li><span>Загрузка...</span></li>");
+            $.ajax({
+                type: "GET",
+                url: $form.attr("action"),
+                data: $form.serialize(),
+                success: function(msg){
+                    // console.log(msg);
+                    $(".b-search-results").fadeIn(150).html(msg);
+                }
+            });
+        }
+    });
+
+    $("#search").focus(function(){
+        focusIn = true;
+        if( $(".b-search-results li").length )
+            $(".b-search-results").fadeIn(150);
+    }).blur(function(){
+        focusIn = false;
+        if( !mouseIn ) $(".b-search-results").fadeOut(150);
+    });
+
+    $(".b-mobile-search-top-icon").click(openSearch);
+    $("body").on("click", ".b-search-results a, .b-search-close", closeSearch);
+    // .on('touchmove', function(e){ e.preventDefault(); });
+
+    function openSearch(){
+        $("body").addClass("mobile-menu-opened");
+        setTimeout(function(){
+            $("#search").focus();
+        },300);
+        $(".b-search-form").fadeIn(200);
+        return false;
+    }
+
+    var togLink = false;
+    function closeSearch(){
+        $(".b-search-form").fadeOut(300);
+        return false;
+    }
 
 
 

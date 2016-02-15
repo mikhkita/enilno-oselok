@@ -16,7 +16,6 @@
 				</td>
 				<td style="text-align: center; font-size: 0px;">
 					<? $images = $item->getImages(3, array("small"));?>
-					<? var_dump($images); ?>
 					<? foreach ($images as $i => $image): ?>
 						<img src="<?=$image["small"];?>" style="height: 100px;" alt="">
 						<? if($i == 2) break; ?>

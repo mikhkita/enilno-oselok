@@ -1975,6 +1975,80 @@ width: 700px;margin-left: 0px;}
 			.b-not-found h3 a:hover{
 				text-decoration: none;
 			}
+.b-header .b-header-main .b-block > .right form.b-search-form{
+	position: fixed;
+	background-color: rgba(0,0,0,0.9);
+	left: 0px;
+	top: 0px;
+	width: 100%;
+	height: 100%;
+	box-sizing: border-box;
+	z-index: 99999;
+	text-align: center;
+	padding-top: 110px;
+	padding-bottom: 114px;
+}
+	.b-header .b-header-main .b-block > .right form.b-search-form input{
+		font-size: 28px;
+		padding: 10px 20px 12px;
+		position: absolute;
+		left: 30px;
+		top: 30px;
+		width: 565px;
+	}
+	.b-header .b-header-main .b-block > .right form.b-search-form button{
+		position: absolute;
+		right: 30px;
+		top: 30px;
+		height: 60px;
+		font-size: 0px;
+		width: 126px;
+	}
+		.b-header .b-header-main .b-block > .right form.b-search-form button:before{
+			background-position: -336px -74px;
+			left: 42px;
+			top: 11px;
+			width: 37px;
+			height: 38px;
+		}
+	.b-header .b-header-main .b-block > .right form.b-search-form ul{
+		padding: 0px 30px;
+		display: block !Important;
+		height: 100%;
+		background-color: transparent;
+		border: 0px;
+		text-align: left;
+		top: 0px;
+		overflow: scroll;
+		position: relative;
+	}
+		.b-header .b-header-main .b-block > .right form.b-search-form ul li{
+
+		}
+			.b-header .b-header-main .b-block > .right form.b-search-form ul li a{
+				font-size: 28px;
+				color: #FFF;
+				padding: 15px 0px;
+				border-bottom: 1px solid rgba(255, 255, 255, 0.28);
+			}
+			.b-header .b-header-main .b-block > .right form.b-search-form ul li:last-child a{
+				border-bottom: 0px;
+			}
+				.b-header .b-header-main .b-block > .right form.b-search-form ul li a:hover{
+					background-color: transparent;
+					color: #ffb000;
+				}
+			.b-search-close{
+				display: block;
+				position: absolute;
+				left: 80px;
+				bottom: 30px;
+				font-size: 28px;
+				padding: 15px 0px;
+				width: 590px;
+				text-align: center;
+				border-radius: 6px;
+			}
 
 @media screen and (max-width: 1250px){
 	
