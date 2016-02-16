@@ -362,6 +362,7 @@ $(document).ready(function(){
             });  
         }
 
+
         $("#Customer_phone").keyup(function() {
             n = $(this).val().match( /\d/g );
             n = n ? n = n.length : 0;
@@ -377,6 +378,8 @@ $(document).ready(function(){
                 });
             }
         });
+
+        $("#Customer_phone").keyup();
 
         $(".numeric").numericInput({ allowFloat: true, allowNegative: true });
 
@@ -424,7 +427,7 @@ $(document).ready(function(){
                     success: function(msg){
                         progress.end(function(){
                             $form.find("input[type=submit]").removeClass("blocked");
-                            if( $form.attr("data-type") == "json" ){
+                            if(isValidJSON(msg)){
                                 jsonHandler(msg);
                             }else{
                                 if( msg != "none" ) setResult(msg);

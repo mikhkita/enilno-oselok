@@ -57,7 +57,8 @@
             </div>
             <div class="row">
                 <label for="Customer_phone">Телефон клиента</label>
-                <?=Chtml::textField("Customer[phone]","",array('maxlength'=>25,'class' => 'phone','id' => 'Customer_phone')); ?>
+
+                <? $customer=""; if(isset($model->customer) && $model->customer->phone) $customer = $model->customer->phone; echo Chtml::textField("Customer[phone]",$customer,array('maxlength'=>25,'class' => 'phone','id' => 'Customer_phone')); ?>
             </div>
             <div id="Customer-form" data-url="<?=$this->createUrl('/good/admincustomer')?>"></div>
         	<div class="row buttons">

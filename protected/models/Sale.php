@@ -67,7 +67,7 @@ class Sale extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'good_id' => 'good_id',
+			'good_id' => 'Код товара',
 			'summ' => 'Сумма',
 			'extra' => 'Доп. издержки',
 			'date' => 'Дата',
@@ -77,7 +77,7 @@ class Sale extends CActiveRecord
 			'tk_id' => 'ТК',
 			'comment' => 'Комментарий',
 			'photo' => 'Фото накладной',
-			'customer_id' => 'customer_id',
+			'customer_id' => 'Покупатель',
 		);
 	}
 
@@ -116,7 +116,7 @@ class Sale extends CActiveRecord
 		));
 	}
 
-	public function add($attributes){
+	public function add($attributes,$id){
 		if( isset($attributes["summ"]) ){
 			if( !isset($attributes["date"]) )
 				$attributes['date'] = time();
@@ -125,7 +125,8 @@ class Sale extends CActiveRecord
 			if( !isset($attributes['channel_id']) || $attributes['channel_id'] == "" ) $attributes['channel_id'] = NULL;
 			if( !isset($attributes['tk_id']) || $attributes['tk_id'] == "" ) $attributes['tk_id'] = NULL;
 
-			$sale = new Sale();
+			if(!$sale = Sale::model()->findByPk($id)) $sale = new Sale();
+			
 			$sale->attributes = $attributes;
 			return $sale->save();
 		}else throw new CHttpException(404, 'Не указана сумма продажи');

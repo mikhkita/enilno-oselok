@@ -13,7 +13,7 @@ class GoodController extends Controller
 	{
 		return array(
 			array('allow',
-				'actions'=>array('adminIndex','adminPhoto','adminCheckCode', 'adminPhotoUpdate','adminToArchive','adminChangeType','adminTest','updatePrices','updateAuctionLinks','adminCreate','adminUpdate','adminDelete','adminEdit','getAttrType','getAttr','adminAdverts','adminUpdateImages',"adminAddCheckbox","adminRemoveCheckbox","adminAddAllCheckbox","adminRemoveAllCheckbox",'adminUpdateAll','adminAddSomeCheckbox','adminUpdateAdverts','adminViewSettings','adminSold','adminArchive','adminJoin','adminDeleteAll','adminSale','adminCustomer','adminArchiveAll','adminSaleTable'),
+				'actions'=>array('adminIndex','adminPhoto','adminCheckCode', 'adminPhotoUpdate','adminToArchive','adminChangeType','adminTest','updatePrices','updateAuctionLinks','adminCreate','adminUpdate','adminDelete','adminEdit','getAttrType','getAttr','adminAdverts','adminUpdateImages',"adminAddCheckbox","adminRemoveCheckbox","adminAddAllCheckbox","adminRemoveAllCheckbox",'adminUpdateAll','adminAddSomeCheckbox','adminUpdateAdverts','adminViewSettings','adminSold','adminArchive','adminJoin','adminDeleteAll','adminSale','adminCustomer','adminArchiveAll','adminSaleTable','adminSaleDelete'),
 				'roles'=>array('manager'),
 			),
 			array('allow',
@@ -34,6 +34,7 @@ class GoodController extends Controller
 			$model->archive = 0;
 			$model->date = NULL;
 			$model->save();
+			Sale::model()->deleteByPk($id);
 		}
 		$goods = Good::model()->with(array("fields.variant","fields.attribute","sale"))->findAll(array("condition" => "good_type_id=".$good_type_id." AND archive=1","order" => "sale.date DESC"));
 		$options = array(
@@ -45,7 +46,7 @@ class GoodController extends Controller
 
 	}
 
-	public function actionAdminSaleTable($good_type_id = NULL) 
+	public function actionAdminSaleTable($good_type_id = NULL,$partial = NULL) 
 	{
 		if($good_type_id) {
 			$goodType = GoodType::model()->with("fields")->findByPk($good_type_id);
@@ -56,20 +57,19 @@ class GoodController extends Controller
 			$name = "Общие";
 		}
 		$options = array(
-			'data'=>$goods,
-			'name'=>$name
+			'data'=>$sale,
+			'name'=>$name,
+			'labels'=>Sale::attributeLabels()
 		);
-		print_r($sale);
-		die();
-		$this->render('adminSaleTable',$options);
+		if($partial){	
+			$this->renderPartial('adminSaleTable',$options);
+		} else $this->render('adminSaleTable',$options);
 
 	}
 
-	public function actionAdminSold($id,$good_type_id)
+	public function actionAdminSold($id,$good_type_id,$update = NULL)
 	{
 		if($_POST['Sale']) {
-			Sale::model()->deleteByPk($id);
-
 			if($_POST['Customer']['phone']) {
 				$customer_id = Customer::addOrUpdate($_POST["Customer"]);	
 				$_POST['Sale']['customer_id'] = $customer_id;
@@ -78,19 +78,24 @@ class GoodController extends Controller
 			$_POST['Sale']['good_id'] = $id;
 			$_POST['Sale']['date'] = date_create_from_format('d.m.Y', $_POST['Sale']['date']);
 
-			if( Sale::add($_POST["Sale"]) ){
+			if( Sale::add($_POST["Sale"],$id) ){
 				$this->loadModel($id)->sold();
-	
-				echo json_encode(array(
+				if($update) {
+					$this->actionAdminSaleTable($good_type_id,true);
+				} else echo json_encode(array(
 					"result" => "success",
 					"action" => "delete", 
 					"selector" => "#id-".$id
 				));
 			}		
-		} else {	
-			$model = new Sale;
-			$model->date = date("d.m.Y", time());
-
+		} else {
+			if($model = Sale::model()->findByPk($id)) {				
+				$model->date = date_format(date_create($model->date), 'd.m.Y');	
+			} else {
+				$model = new Sale;
+				$model->date = date("d.m.Y", time());
+			}
+			
 			$cities = AttributeVariant::model()->with("variant")->findAll("attribute_id=27");
 	        foreach ($cities as &$item)
 	        	$item = $item->value;
@@ -100,6 +105,12 @@ class GoodController extends Controller
 				'cities' => $cities
 			));
 		}
+	}
+
+	public function actionAdminSaleDelete($id,$good_type_id)
+	{
+		Sale::model()->deleteByPk($id);
+		$this->actionAdminSaleTable($good_type_id,true);
 	}
 
 	public function actionAdminCustomer($phone) {

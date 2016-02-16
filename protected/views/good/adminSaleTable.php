@@ -1,28 +1,54 @@
-<h1><?=$name?></h1>
+<h1>Продажи (<?=$name?>)</h1>
 <a href="<?=$this->createUrl('/good/adminindex',array('good_type_id'=> $_GET["good_type_id"]))?>" class="b-link-back">Назад</a>
 <table class="b-table b-good-table" border="1">
 	<tr>
-		<th style="min-width: 110px;max-width: 110px;width: 110px;"></th>
-		<th style="vertical-align:bottom; min-width: 20px;">Код</th>
-		<th style="min-width: 110px;max-width: 110px;width: 110px;">Фото</th>
-		<th style="min-width: 110px;max-width: 110px;width: 110px;">Дата продажи</th>
+		<? foreach ($labels as $item): ?>
+			<th style="min-width: 80px;"><?=$item?></th>
+		<? endforeach; ?>
+		<th></th>
+		<th></th>
 	</tr>
 	<? if( count($data) ): ?>
-		<? foreach ($data as $i => $item): ?>
+		<? foreach ($data as $key => $item): ?>
 			<tr>
-				<td><a href="<?=$this->createUrl('/good/adminarchive',array('id' => $item->id,'good_type_id'=> $_GET["good_type_id"]))?>">Вернуть</a></td>
-				<td style="width:55px; text-align: center;">
-					<div><?=$item->fields_assoc[3]->value?></div>
+				<td>
+					<div><?=$item->good->fields_assoc[3]->value?></div>
 				</td>
-				<td style="text-align: center; font-size: 0px;">
-					<? $images = $item->getImages(3, array("small"));?>
-					<? foreach ($images as $i => $image): ?>
-						<img src="<?=$image["small"];?>" style="height: 100px;" alt="">
-						<? if($i == 2) break; ?>
-					<? endforeach; ?>
+				<td >
+					<div><?=$item->summ." р."?></div>
 				</td>
-				<td style="min-width: 100px; text-align: center;">
-					<div><? if($item->sale->date) echo date_format(date_create($item->sale->date), 'd.m.Y H:i:s');?></div>
+				<td>
+					<div><?=$item->extra." р."?></div>
+				</td>
+				<td>
+					<div><? if($item->date) echo date_format(date_create($item->date), 'd.m.Y');?></div>
+				</td>
+				<td>
+					<div><? if($item->channel_id) echo DesktopTableCell::model()->find("row_id=$item->channel_id")->varchar_value;?></div>				
+				</td>
+				<td>
+					<div><?=$item->city?></div>				
+				</td>
+				<td>
+					<div><?=$item->order_number?></div>				
+				</td>
+				<td>
+					<div><? if($item->tk_id) echo DesktopTableCell::model()->find("row_id=$item->tk_id")->varchar_value;?></div>		
+				</td>
+				<td>
+					<div style="text-align: left;"><?=$item->comment?></div>			
+				</td>
+				<td>
+					<div>&nbsp;</div>			
+				</td>
+				<td style="min-width: 120px;">
+					<div><? if($item->customer_id) echo Customer::model()->findbyPk($item->customer_id)->phone; ?></div>		
+				</td>
+				<td>
+					<a href="<?php echo Yii::app()->createUrl('/good/adminsold',array('id'=>$item->good_id,'good_type_id' => $_GET['good_type_id'],'update' => true));?>" class="ajax-form ajax-update b-tool b-tool-update"></a>
+				</td>
+				<td>
+					<a href="<?php echo Yii::app()->createUrl('/good/adminsaledelete',array('id'=>$item->good_id,'good_type_id' => $_GET['good_type_id']));?>" class="ajax-form ajax-delete b-tool b-tool-delete"></a>
 				</td>
 			</tr>
 		<? endforeach; ?>
