@@ -1,6 +1,7 @@
 <div class="b-section-nav clearfix">
 	<div class="b-section-nav-back clearfix">
 		<a href="<?=$this->createUrl('/good/adminarchive',array('good_type_id'=> $_GET["good_type_id"]))?>" class="b-link left">Архив</a>
+		<a href="<?=$this->createUrl('/good/adminsaletable',array('good_type_id'=> $_GET["good_type_id"]))?>" class="b-link left">Продажи</a>
 		<div class="left b-kit-switcher-cont clearfix">
 			<span>Фото: </span>
 			<a href="#" class="b-kit-switcher right<?if($with_photos) echo" checked";?>" data-on="goTo" data-off="goTo" data-on-href="<?=$this->createUrl('/good/adminindex',array('good_type_id'=> $_GET["good_type_id"],'partial'=>'true','with_photos'=>1))?>" data-off-href="<?=$this->createUrl('/good/adminindex',array('good_type_id'=> $_GET["good_type_id"],'partial'=>'true','with_photos'=>0))?>" >
