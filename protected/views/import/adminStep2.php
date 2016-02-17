@@ -20,14 +20,13 @@
         <div class="left">
             <label for="">Атрибуты Excel</label>
           	<ul id="imp-sort">
-                <? foreach ($xls as $key=>$value): ?>
-                <li class="ui-widget-content"><?=$value?><input type="hidden" name="excel[<?=$key?>]" value="no-id"></li>
-                <? endforeach; ?>
-                <? if( count($model->fields) > count($xls) ): ?>
-                    <? for( $i = 0; $i < count($model->fields)-count($xls); $i++ ): ?>
-                    <li class="ui-state-default">&nbsp;</li>
-                    <? endfor; ?>
-                <? endif; ?>
+                <? for( $i = 0; $i < count($model->fields); $i++ ):?>
+                    <? if( isset($xls[$i]) ): ?>
+                        <li class="ui-widget-content"><?=$xls[$i]?><input type="hidden" name="excel[<?=$i?>]" value="no-id"></li>
+                    <? else: ?>
+                        <li class="ui-state-default">&nbsp;</li>
+                    <? endif; ?>
+                <? endfor; ?>
             </ul>
         </div>
     </div>

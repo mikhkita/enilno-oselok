@@ -49,10 +49,42 @@ class ImportController extends Controller
 			$excel_path = Yii::app()->params['tempFolder']."/".$_POST["excel_name"];
 
 			$xls = $this->getXLS($excel_path,1);
+			$result = array();
+			$temp_arr = array();
+			foreach ($xls as $i => $xls_cell) {
+				$temp = 0;
+				$pos = $i;
+				foreach ($model->fields as $key => $value) {
+					similar_text(mb_strtoupper($value->attribute->name,'UTF-8'),mb_strtoupper($xls_cell,'UTF-8'), $percent); 
+					if(mb_stripos($value->attribute->name, $xls_cell,0,"UTF-8") !== false) {
+						$percent += 51;
+					}
+					// if($xls_cell == 'сезон') {
+					// 	print_r($value->attribute->name." ".$percent."<br>");
+					// }
+					if($percent > $temp) {
+						$temp = $percent;
+						$pos = $key;
+					}
+				}
+				if(isset($result[$pos])) {
+					array_push($temp_arr, $xls_cell);
 
+				} else $result[$pos] = $xls_cell;
+			}
+			$free_index = 0;
+			foreach ($temp_arr as $item) {
+				for ($i=$free_index; $i < count($model->fields); $i++) { 
+					if(!isset($result[$i])) {
+						$result[$i] = $item;
+						$free_index = $i++;
+						break;
+					}
+				}
+			}
 			$this->render('adminStep2',array(
 				'model'=>$model,
-				'xls'=>$xls,
+				'xls'=>$result,
 				'excel_path'=>$excel_path,
 				'GoodTypeId'=>$_POST["GoodTypeId"]
 			));
