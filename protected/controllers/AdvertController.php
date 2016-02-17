@@ -82,8 +82,6 @@ class AdvertController extends Controller
 
 		Queue::addAll($adverts, "up", 0, 0);
 
-		Queue::refreshTime(2048, true);
-
 		echo json_encode(array("result" => "success"));
 	}
 

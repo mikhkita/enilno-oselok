@@ -187,15 +187,35 @@ class GoodController extends Controller
 				}
 			}
 
+			$dropdown = $this->getDropDown($fields);
+
 			$this->renderPartial('adminUpdate',array(
 				'model'=>$model,
 				'result' => $result,
 				'cities' => $this->cityGroup(),
 				'fields' => $fields,
+				'dropdown' => $dropdown,
 				'view_fields' => $view_fields,
 				'good_type_id' => $good_type_id
 			));
 		}
+	}
+
+	public function getDropDown($fields){
+		$out = array();
+		foreach ($fields as $i => $field) {
+			if( $field->attribute->list && !$field->attribute->multi ){
+				$variants = CHtml::listData(AttributeVariant::model()->with("variant")->findAll(array("condition" => "attribute_id=".$field->attribute_id,"order" => "variant.sort ASC")), 'variant_id', 'value');
+				if( $field->attribute->label ){
+					$list = $this->getListValue($field->attribute->label);
+					foreach ($variants as $key => $variant)
+						if( isset($list[$key]) ) 
+							$variants[$key] = $variant." (".$list[$key].")";
+				}
+				$out[$field->attribute_id] = $variants;
+			}
+		}
+		return $out;
 	}
 
 	public function actionAdminDeleteAll($good_type_id){
@@ -637,7 +657,7 @@ class GoodController extends Controller
 				$sort
 			)->getPage(
 				array(
-			    	'pageSize'=>10000,
+			    	'pageSize'=>80,
 			    ), 
 			    $this->getUserParam("GOOD_TYPE_".$good_type_id),
 			    true

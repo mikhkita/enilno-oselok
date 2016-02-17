@@ -108,15 +108,15 @@ class Queue extends CActiveRecord
 	public function filter($params, $with = NULL, $select = NULL, $pagination = NULL){
 		$temp = Advert::filter_ids($params,NULL,array("id"));
 
-		$queue = Yii::app()->db->createCommand()
+		$command = Yii::app()->db->createCommand()
             ->select('t.id')
             ->from(Queue::tableName().' t')
             ->join(Advert::tableName().' a', 't.advert_id=a.id')
             ->join(Place::tableName().' p', 'a.place_id=p.id')
             ->where("p.category_id=".$params["category_id"].((count($temp))?(" AND t.advert_id IN (".implode(",", $temp).")"):"").((isset($params['Attr']['state']))?(" AND t.state_id IN (".implode(",", $params['Attr']['state']).")"):"").((isset($params['Attr']['action']))?(" AND t.action_id IN (".implode(",", $params['Attr']['action']).")"):""))
-            ->order("t.id ASC")
-            ->limit( ($pagination === NULL)?999999:$pagination )
-            ->queryAll();
+            ->order("t.start ASC, t.id ASC")
+            ->limit( ($pagination === NULL)?999999:$pagination );
+        $queue = $command->queryAll();
 
         $queue = Controller::getIds($queue, "id");
         if( $with === true ) return $queue;
@@ -138,10 +138,21 @@ class Queue extends CActiveRecord
 		}
   		
   		$criteria->addInCondition("t.id", $queue);
-  		$criteria->order = "start ASC";
+  		$criteria->order = "start ASC, t.id ASC";
 
 	   	$options['criteria'] = $criteria;
 		$dataProvider = new CActiveDataProvider(Queue::tableName(), $options);
+
+		$count = $command = Yii::app()->db->createCommand()
+            ->select('COUNT(t.id)')
+            ->from(Queue::tableName().' t')
+            ->join(Advert::tableName().' a', 't.advert_id=a.id')
+            ->join(Place::tableName().' p', 'a.place_id=p.id')
+            ->where("p.category_id=".$params["category_id"].((count($temp))?(" AND t.advert_id IN (".implode(",", $temp).")"):"").((isset($params['Attr']['state']))?(" AND t.state_id IN (".implode(",", $params['Attr']['state']).")"):"").((isset($params['Attr']['action']))?(" AND t.action_id IN (".implode(",", $params['Attr']['action']).")"):""))
+            ->order("t.id ASC")
+			->queryScalar();
+
+		$dataProvider->totalItemCount = ($count)?$count:0;
 		return $dataProvider;
 	}
 
@@ -199,32 +210,28 @@ class Queue extends CActiveRecord
 				$toDelete = array();
 				foreach ($adverts as $advert){
 					$item = array("advert_id" => isset($advert->id)?$advert->id:$advert, "action_id" => Queue::model()->codes[$code], "start" => NULL );
-					if( $offset > 0 || $interval > 0 )
-						$item["start"] = date("Y-m-d H:i:s", $start);
+						$item["start"] = NULL;
 
 					if( $code == "delete" && $advert->url === NULL ){
 						array_push($toDelete, $advert);	
 						continue;
 					}
 
-					if( $advert->place->category_id == 2048 ){
-						switch ( $code ) {
-							case 'add':
-								$last = Queue::model()->with("advert.place")->find(array("limit"=>1,"order"=>"start DESC","condition"=>"place.category_id=2048 AND start IS NOT NULL AND advert.city_id=".$advert->city_id));
-								$from = (( isset($city_settings[$advert->city_id]) )?$city_settings[$advert->city_id]->avito_delay:30)*0.9;
-								$to = (( isset($city_settings[$advert->city_id]) )?$city_settings[$advert->city_id]->avito_delay:30)*1.1;
-								$item["start"] = date("Y-m-d H:i:s", ($last)?(strtotime($last->start)+rand($from*60,$to*60)):$start );
-								break;
+					// if( $advert->place->category_id == 2048 ){
+					// 	// switch ( $code ) {
+					// 	// 	case 'add':
+					// 	// 		$item["start"] = NULL;
+					// 	// 		break;
 
-							case 'up':
-								$item["start"] = NULL;
-								break;
+					// 	// 	case 'up':
+					// 			$item["start"] = NULL;
+					// 	// 		break;
 							
-							default:
-								$item["start"] = date("Y-m-d H:i:s", intval(rand(intval($offset_avito*60*60), intval($random_offset*60*60))) + time() );
-								break;
-						}
-					}
+					// 	// 	default:
+					// 	// 		$item["start"] = NULL;
+					// 	// 		break;
+					// 	// }
+					// }
 
 					array_push($values, $item);
 					$start += $interval;
@@ -233,6 +240,8 @@ class Queue extends CActiveRecord
 				Advert::delAll($toDelete);
 				
 				Controller::insertValues(Queue::tableName(),$values);
+
+				Queue::refreshTime(2048, true);
 				return true;
 			}else{
 				return Log::error("Не найдено действие с кодом \"".$code."\" для добавления в очередь");
@@ -321,7 +330,7 @@ class Queue extends CActiveRecord
 	}
 
 	public function refreshTime($category_id, $queue = NULL){
-		// Ищем города в которых есть объявы, которые нужно добавить
+		// Ищем города в которых есть объявы, которые нужно добавить или поднять
 		$model = Yii::app()->db->createCommand()
             ->select('a.city_id')
             ->from(Queue::tableName().' t')
@@ -335,8 +344,25 @@ class Queue extends CActiveRecord
 		foreach ($model as $key => $value)
 			array_push($city_ids, $value["city_id"]);
 
-		// Обновляем время выполнения объявлений, который нужно добавить
-		Queue::refreshAddTime($category_id, $city_ids, $not_full);
+		// Обновляем время выполнения объявлений, которые нужно добавить или поднять
+		Queue::refreshAddTime($category_id, $city_ids, (($queue === true)?true:false) );
+
+		// // Ищем города в которых есть объявы, которые нужно обновить или удалить
+		// $model = Yii::app()->db->createCommand()
+  //           ->select('a.city_id')
+  //           ->from(Queue::tableName().' t')
+  //           ->join(Advert::tableName().' a', 't.advert_id=a.id')
+  //           ->where((is_array($queue)?("t.id IN (".implode(",", $queue).") AND "):(($queue === true)?("t.start IS NULL AND "):""))."t.action_id IN (2,3,4,6,8) AND t.state_id=1")
+  //           ->order("t.id ASC")
+  //           ->group("a.city_id")
+  //           ->queryAll();
+
+  //       $city_ids = array();
+		// foreach ($model as $key => $value)
+		// 	array_push($city_ids, $value["city_id"]);
+
+		// // Обновляем время выполнения объявлений, который нужно обновить или удалить
+		// Queue::refreshUpdateTime($category_id, $city_ids, (($queue === NULL)?false:true) );
 	}
 
 	public function refreshAddTime($category_id, $city_ids, $not_full = false){
@@ -349,8 +375,7 @@ class Queue extends CActiveRecord
 
 		$values = array();
 		foreach ($city_ids as $i => $city_id) {
-			$queue = Queue::model()->with(array("advert.place"))->findAll("advert.city_id=$city_id AND action_id IN (1,7) AND state_id=1 AND place.category_id=$category_id".( ($not_full)?(" AND start IS NULL"):("") ));
-
+			$queue = Queue::model()->with(array("advert.place"))->findAll("advert.city_id=$city_id AND action_id IN (1,7) AND state_id=1 AND place.category_id=$category_id".( ($not_full)?(" AND t.start IS NULL"):("") ));
 			if( $queue ){
 				$city_params = $cities[$city_id];
 				$city_params["interval"] = intval($city_params["interval"]);
@@ -359,7 +384,7 @@ class Queue extends CActiveRecord
 				$cur_time = time()+rand(0, 1*60*60);
 				$cur_day = 0;
 				if( $not_full ){
-					$last_time = Queue::getLastAddTime($city_id);
+					$last_time = Queue::getLastAddTime($category_id, $city_id);
 					if( $last_time ){
 						$cur_time = $last_time;
 						$cur_day = Queue::getDayByTime($cur_time, $city_params["end"]);
@@ -383,7 +408,7 @@ class Queue extends CActiveRecord
 		Controller::updateRows(Queue::tableName(), $values, array("start"));
 	}
 
-	public function getLastAddTime($city_id){
+	public function getLastAddTime($category_id, $city_id){
 		$queue = Queue::model()->with(array("advert.place"))->find(array(
 			"condition" => "advert.city_id=$city_id AND action_id IN (1,7) AND state_id=1 AND place.category_id=$category_id AND start IS NOT NULL",
 			"order" => "start DESC",
@@ -391,6 +416,50 @@ class Queue extends CActiveRecord
 		));
 		if( !$queue ) return NULL;
 		return strtotime($queue->start);
+	}
+
+	public function refreshUpdateTime($category_id, $city_ids, $not_full = false){
+		$cities = DesktopTable::getTable(13, array(
+			56 => "id",
+			107 => "start",
+			108 => "end",
+			109 => "interval",
+		), "id");
+
+		$values = array();
+		foreach ($city_ids as $i => $city_id) {
+			$queue = Queue::model()->with(array("advert.place"))->findAll("advert.city_id=$city_id AND action_id IN (1,7) AND state_id=1 AND place.category_id=$category_id".( ($not_full)?(" AND start IS NULL"):("") ));
+
+			if( $queue ){
+				$city_params = $cities[$city_id];
+				$city_params["interval"] = intval($city_params["interval"]);
+				$days = Queue::getDays($city_params);
+
+				$cur_time = time()+rand(0, 1*60*60);
+				$cur_day = 0;
+				if( $not_full ){
+					$last_time = Queue::getLastAddTime($category_id, $city_id);
+					if( $last_time ){
+						$cur_time = $last_time;
+						$cur_day = Queue::getDayByTime($cur_time, $city_params["end"]);
+					}
+				}
+
+				foreach ($queue as $key => $item) {
+					$cur_time += $city_params["interval"]*60+(rand($city_params["interval"]*(-0.3)*60, $city_params["interval"]*0.3*60));
+					if( $cur_time < $days[$cur_day]["start"] ){
+						$cur_time = $days[$cur_day]["start"];
+					}else if( $cur_time > $days[$cur_day]["end"]){
+						if( isset($days[$cur_day+1]) ){
+							$cur_day++;
+							$cur_time = $days[$cur_day]["start"]; 
+						}
+					}
+					array_push($values, array($item->id, $item->advert_id, $item->action_id, $item->state_id, date("Y-m-d H:i:s", $cur_time) ));
+				}
+			}
+		}
+		Controller::updateRows(Queue::tableName(), $values, array("start"));
 	}
 
 	public function getDayByTime($time, $end){

@@ -1989,25 +1989,27 @@ width: 700px;margin-left: 0px;}
 	padding-bottom: 114px;
 }
 	.b-header .b-header-main .b-block > .right form.b-search-form input{
-		font-size: 28px;
-		padding: 10px 20px 12px;
+		font-size: 30px;
+		padding: 15px 20px 15px;
 		position: absolute;
 		left: 30px;
 		top: 30px;
 		width: 565px;
+		border-radius: 4px 0px 0px 4px;
 	}
 	.b-header .b-header-main .b-block > .right form.b-search-form button{
 		position: absolute;
 		right: 30px;
 		top: 30px;
-		height: 60px;
+		height: 71px;
 		font-size: 0px;
 		width: 126px;
+		border-radius: 0px 4px 4px 0px;
 	}
 		.b-header .b-header-main .b-block > .right form.b-search-form button:before{
 			background-position: -336px -74px;
 			left: 42px;
-			top: 11px;
+			top: 16px;
 			width: 37px;
 			height: 38px;
 		}
@@ -2025,13 +2027,15 @@ width: 700px;margin-left: 0px;}
 		.b-header .b-header-main .b-block > .right form.b-search-form ul li{
 
 		}
-			.b-header .b-header-main .b-block > .right form.b-search-form ul li a{
-				font-size: 28px;
+			.b-header .b-header-main .b-block > .right form.b-search-form ul li a,
+			.b-header .b-header-main .b-block > .right form.b-search-form ul li span{
+				font-size: 30px;
 				color: #FFF;
-				padding: 15px 0px;
+				padding: 20px 0px;
 				border-bottom: 1px solid rgba(255, 255, 255, 0.28);
 			}
-			.b-header .b-header-main .b-block > .right form.b-search-form ul li:last-child a{
+			.b-header .b-header-main .b-block > .right form.b-search-form ul li:last-child a,
+			.b-header .b-header-main .b-block > .right form.b-search-form ul li:last-child span{
 				border-bottom: 0px;
 			}
 				.b-header .b-header-main .b-block > .right form.b-search-form ul li a:hover{
@@ -2044,10 +2048,15 @@ width: 700px;margin-left: 0px;}
 				left: 80px;
 				bottom: 30px;
 				font-size: 28px;
-				padding: 15px 0px;
+				padding: 20px 0px;
 				width: 590px;
 				text-align: center;
-				border-radius: 6px;
+				border-radius: 4px;
+			}
+			.b-search-close:active{
+				position: absolute;
+				top: auto;
+				bottom: 26px;
 			}
 
 @media screen and (max-width: 1250px){

@@ -472,6 +472,10 @@ td.b-photo-td{
         }
         .b-good-table td{
             padding: 0px 5px;
+            text-align: left;
+        }
+        .b-good-table td:nth-child(2){
+            text-align: center;
         }
         .b-advert-table td{
             padding: 2px 10px;
@@ -1123,7 +1127,7 @@ td.b-photo-td{
     font-size: 0px;
 }
 .b-tool-nav{
-
+    text-align: right;
 }
     .b-tool-nav span{
         cursor: pointer;
@@ -1731,7 +1735,7 @@ li.ui-autocomplete-category {
         }
         .import-list ul{
             padding: 5px 5px 4px 5px;
-            width: 300px;
+            width: 400px;
             /*min-height: 150px;*/
             /*height: 300px;*/
             overflow-y: auto;
@@ -1753,7 +1757,7 @@ li.ui-autocomplete-category {
                 padding: 5px 10px;
                 /*margin-bottom: 5px;*/
                 color: #F5E9BC;
-                background-color: #452716;
+                background: #452716;
                 border: 0px solid #F5E9BC;
                 border-bottom: 1px solid #F5E9BC;
                 font-size: 14px;
@@ -2174,6 +2178,7 @@ li.ui-autocomplete-category {
 ul.yiiPager {
     margin-top: 30px;
     display: inline-block;
+    margin-bottom: 25px;
 }
 
 ul.yiiPager .page a,

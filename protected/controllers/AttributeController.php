@@ -32,6 +32,9 @@ class AttributeController extends Controller
 
 		if(isset($_POST['Attribute']))
 		{
+			if( $_POST['Attribute']['group_id'] == "" )
+				unset($_POST['Attribute']['group_id']);
+
 			$model->attributes=$_POST['Attribute'];
 			if($model->save()){
 				$this->actionAdminIndex(true);
@@ -51,6 +54,9 @@ class AttributeController extends Controller
 
 		if(isset($_POST['Attribute']))
 		{
+			if( $_POST['Attribute']['group_id'] == "" )
+				unset($_POST['Attribute']['group_id']);
+
 			$model->attributes=$_POST['Attribute'];
 			if($model->save())
 				$this->actionAdminIndex(true);

@@ -564,23 +564,35 @@ $(document).ready(function(){
         if( !mouseIn ) $(".b-search-results").fadeOut(150);
     });
 
-    $(".b-mobile-search-top-icon").click(openSearch);
-    $("body").on("click", ".b-search-results a, .b-search-close", closeSearch);
-    // .on('touchmove', function(e){ e.preventDefault(); });
+    $(".b-mobile-search-top-icon, .b-search-icon").click(openSearch);
+    $("body").on("click", ".b-search-results a", closeSearch);
+    $("body").on("click", ".b-search-close", function(){
+        closeSearch();
+        return false;
+    });
+    $(".b-search-form").on('touchmove', function(e){ e.preventDefault(); });
 
     function openSearch(){
         $("body").addClass("mobile-menu-opened");
         setTimeout(function(){
-            $("#search").focus();
-        },300);
+            $($("input#search")[0]).focus();
+        },400);
         $(".b-search-form").fadeIn(200);
+        $(".b-sub-menu.b-fixed-top").css({
+            top: -90
+        });
         return false;
     }
 
     var togLink = false;
     function closeSearch(){
         $(".b-search-form").fadeOut(300);
-        return false;
+        setTimeout(function(){
+            $(".b-sub-menu.b-fixed-top").css({
+                top: 0
+            });
+        },200);
+        // return false;
     }
 
 

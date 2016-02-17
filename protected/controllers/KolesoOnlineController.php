@@ -64,9 +64,10 @@ class KolesoOnlineController extends Controller
 					"UNIT" => ' %'
 				),
 				"REST" => array(
-					"ID" => 12,
-					"LABEL" => "Остаток протектора (мм.)",
-					"UNIT" => ' '
+					"ID" => 41,
+					"LABEL" => "Остаток протектора",
+					"UNIT" => ' мм.',
+					"TYPE" => "INTER"
 				),
 				"CONDITION" => array(
 					"ID" => 26,
@@ -255,9 +256,10 @@ class KolesoOnlineController extends Controller
 					"UNIT" => ' %'
 				),
 				"REST" => array(
-					"ID" => 12,
-					"LABEL" => "Остаток протектора (мм.)",
-					"UNIT" => ' '
+					"ID" => 203,
+					"LABEL" => "Остаток протектора",
+					"UNIT" => ' мм.',
+					"TYPE" => "INTER"
 				),
 				"CONDITION" => array(
 					"ID" => 26,
@@ -742,7 +744,7 @@ class KolesoOnlineController extends Controller
 		foreach ($search as $i => $val) {
 			$criteria->addSearchCondition("value", $val);
 		}
-		$criteria->limit = 15;
+		$criteria->limit = 11;
 
 		$model = Search::model()->findAll($criteria);
 		$ids = array();

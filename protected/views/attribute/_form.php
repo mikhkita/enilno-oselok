@@ -20,6 +20,12 @@
 	</div>
 
 	<div class="row">
+		<?php echo $form->labelEx($model,'label'); ?>
+		<?php echo $form->textField($model,'label',array('maxlength'=>255,'class'=>'numeric')); ?>
+		<?php echo $form->error($model,'label'); ?>
+	</div>
+
+	<div class="row">
 		<?php echo $form->labelEx($model,'attribute_type_id'); ?>
 		<?php echo $form->DropDownList($model,'attribute_type_id',CHtml::listData(AttributeType::model()->findAll(array('order'=>'id ASC')), 'id', 'name')); ?>
 		<?php echo $form->error($model,'attribute_type_id'); ?>
