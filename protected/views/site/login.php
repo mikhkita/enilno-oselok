@@ -25,6 +25,7 @@ $this->breadcrumbs=array(
 				<?php echo $form->passwordField($model,'password'); ?>
 				<?php echo $form->error($model,'username'); ?>
 				<?php echo $form->error($model,'password'); ?>
+				<input type="hidden" name="LoginForm[referer]" value="<?=$_SERVER['HTTP_REFERER']?>"></input>
 			</div>
 		</div>
 		<div class="right">
