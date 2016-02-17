@@ -221,99 +221,35 @@ class ExportController extends Controller
 		$criteria->condition = "t.id=57 OR t.id=37 OR t.id=38";
 
         $model = Attribute::model()->findAll($criteria);
+
+        $defaults = array(
+        	57 => 2047,
+        	37 => 869,
+        	38 => 1081
+        );
         
 		$this->render('adminDynamic',array(
-			'data'=>$model,
-			'id'=>$id
-		));
-	}
-
-	public function actionAdminPreview($id = false){
-		$this->scripts[] = "export";
-		$this->scripts[] = "filterTable";
-
-		if( $id ){
-			$export = Export::model()->with('fields.attribute','interpreters.interpreter')->findByPk($id);
-			$GoodType = GoodType::model()->findByPk($export->good_type_id);
-			$goods = Good::model()->filter(
-				array(
-					"good_type_id"=>$export->good_type_id,
-				)
-			)->getPage(
-				array(
-			    	'pageSize'=>10000,
-			    )
-			);
-			$goods = $goods["items"];
-		}
-
-		$dynObjects = array();
-
-		if( isset($_POST["dynamic"]) ){
-			$dynObjects = $this->getDynObjects($_POST["dynamic"]);
-		}
-
-		$arr = array();
-
-		foreach ($export->fields as $key => $value) {
-			$arr[intval($value->sort)] = array("TYPE"=>"attr", "VALUE"=>$value->attribute);
-			
-			if( $value->attribute->list && !$value->attribute->dynamic ){
-				$variants = array();
-
-				foreach ($goods as $good) {
-					if( isset($good->fields_assoc[$value->attribute->id]) ){
-						$obj = $good->fields_assoc[$value->attribute->id];
-						if( is_array($obj) ){
-							foreach ($obj as $key => $v) {
-								if( !isset($variants[$v->value]) )
-									$variants[$v->variant_id] = $v->value;
-							}
-						}else{
-							if( !isset($variants[$obj->value]) )
-								$variants[$obj->variant_id] = $obj->value;
-						}
-					}else{
-						$variants[$obj->variant_id] = "";
-					}
-				}
-
-				$arr[intval($value->sort)]["VARIANTS"] = $variants;
-			}
-		}
-
-		foreach ($export->interpreters as $key => $value) {
-			if( stripos($value->interpreter->name, "головок") !== false )
-				$arr[intval($value->sort)] = array("TYPE"=>"inter", "VALUE"=>$value->interpreter);
-		}
-
-		ksort($arr);
-
-		$this->render('adminPreview',array(
+			'data' => $model,
 			'id' => $id,
-			'data'=>$GoodType,
-			'goods'=>$goods,
-			'fields' => $arr,
-			'name'=>$export->name,
-			'dynObjects'=>$dynObjects,
-			'dynValues'=>(isset($_POST["dynamic"]))?$_POST["dynamic"]:array()
+			'defaults' => $defaults
 		));
 	}
 
 	public function actionAdminExport($id){
-		if( !isset($_POST["ids"]) || $_POST["ids"] == "" ) 
-			throw new CHttpException(500,"Не выбран ни один товар");
-
 		$export = Export::model()->with('fields.attribute','interpreters.interpreter')->findByPk($id);
+		$good_ids = Good::getCheckboxes($export->good_type_id);
+		$ids = array();
+		foreach ($good_ids as $i => $value)
+			array_push($ids, $i);
 
 		$goods = Good::model()->filter(
 			array(
 				"good_type_id"=>$export->good_type_id,
 			),
-			explode(",",$_POST["ids"])
+			$ids
 		)->getPage(
 			array(
-		    	'pageSize'=>10000,
+		    	'pageSize'=>100000,
 		    )
 		);
 		$goods = $goods["items"];
@@ -336,30 +272,8 @@ class ExportController extends Controller
 		}
 		array_push($excel, $titles);
 
-		if( isset($_POST["dynamic_values"]) ){
-			foreach ($_POST["dynamic_values"] as $key => $value) {
-				$vals = explode(",", $value);
-				// $_POST["dynamic_values"][$key] = $vals;
-				if( !count($dynamic_values) ){
-					foreach ($vals as $val) {
-						array_push($dynamic_values, array($key => intval($val)));
-					}
-				}else{
-					$tmp = array();
-					foreach ($vals as $val) {
-						foreach ($dynamic_values as $i => $a) {
-							$a[$key] = $val;
-							array_push($tmp, $a);
-						}
-					}
-					$dynamic_values = $tmp;
-				}
-			}
-
-			foreach ($dynamic_values as $dynVal) {
-				$excel = $this->generateFields($excel, $goods, $fields, $this->getDynObjects($dynVal));
-			}
-
+		if( isset($_POST["dynamic"]) ){
+			$excel = $this->generateFields($excel, $goods, $fields, $this->getDynObjects($_POST["dynamic"]));
 		}else{
 			$excel = $this->generateFields($excel, $goods, $fields);
 		}

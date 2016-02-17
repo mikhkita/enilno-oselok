@@ -27,14 +27,19 @@
 			<? if($_GET["good_type_id"] == 1 || $_GET["good_type_id"] == 2): ?>
 				<li><a href="<?php echo $this->createUrl('/good/adminjoin')?>">Склеить</a></li>
 			<? endif; ?>
+			<li><a>Экспорт</a>
+				<ul class="b-section-submenu">
+					<? foreach ($export as $i => $item): ?>
+						<li><a href="<?php echo $this->createUrl('/export/admindynamic',array('id'=> $item->id))?>"><?=str_replace(" ", "&nbsp;", $item->name)?></a></li>
+					<? endforeach; ?>
+				</ul>
+			</li>
 			<li><a>Убрать</a>
 				<ul class="b-section-submenu">
 					<li><a href="<?php echo $this->createUrl('/good/adminarchiveall',array('good_type_id'=> $_GET["good_type_id"]))?>" class="ajax-form ajax-delete" data-warning="Вы действительно хотите удалить выделенные товары?">В архив</a></li></li>
 					<li><a href="<?php echo $this->createUrl('/good/admindeleteall',array('good_type_id'=> $_GET["good_type_id"]))?>" class="ajax-form ajax-delete" data-warning="Вы действительно хотите убрать в архив выделенные товары?">Удалить</a></li></li>
 				</ul>
 			</li>
-			<li><a href="<?php echo $this->createUrl('/good/adminupdateall',array('good_type_id'=> $_GET["good_type_id"],'GoodFilter_page' => ($pages->currentPage+1) ))?>" class="ajax-form ajax-create" data-block=".b-popup-filter">Экспорт</a></li>
-			<!-- <li><a href="<?php echo $this->createUrl('/good/adminupdateadverts',array('good_type_id'=> $_GET["good_type_id"], 'images' => '1'))?>" class="ajax-update-prices">Обновить&nbsp;фотографии</a></li> -->
 		</ul>
 	</div>
 </div>

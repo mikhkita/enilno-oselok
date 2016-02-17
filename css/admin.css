@@ -459,6 +459,12 @@ td.b-photo-td{
     .b-table tr:nth-child(2n+1){
         background-color: #F5E9BC;
     }
+    .b-table.b-not-hover tr:nth-child(2n+2){
+        background-color: #FFF4CD !important;
+    }
+    .b-table.b-not-hover tr:nth-child(2n+1){
+        background-color: #F5E9BC !important;
+    }
         .b-table th{
             padding: 5px;
         }
@@ -470,9 +476,18 @@ td.b-photo-td{
             color: #D26A44;
             /*font-weight: 700 !important;*/
         }
+        .b-table tr:nth-child(n+2):hover{
+            background-color: #FFFAE6;
+        }
         .b-good-table td{
             padding: 0px 5px;
             text-align: left;
+        }
+        .b-good-table td:nth-child(9){
+            min-width: 300px;
+        }
+        .b-sale-table td{
+            text-align: left !important;
         }
         .b-good-table td:nth-child(2){
             text-align: center;
@@ -501,7 +516,7 @@ td.b-photo-td{
         }
         .b-table tr td .advert-info{
             display: inline-block;
-            margin: 5px 3px 0px;
+            margin: 1px 3px 0px;
             vertical-align: top;
         }
             span.b-adverts-link p{
@@ -1151,7 +1166,7 @@ td.b-photo-td{
         height: 20px;
         display: inline-block;
         margin: 0px 2px;
-        margin-top: 5px;
+        margin-top: 2px;
         background-size: 20px;
     }
         .b-tool:hover{
@@ -1933,6 +1948,7 @@ li.ui-autocomplete-category {
     }
 .b-choose-dynamic{
     text-align: center;
+    padding-top: 13px;
 }
     .b-choose-dynamic .clearfix{
         display: inline-block;
@@ -1949,7 +1965,7 @@ li.ui-autocomplete-category {
                 margin-bottom: 20px;
             }
             .b-choosable select{
-                margin-bottom: 20px;
+                margin-bottom: 8px;
             }
             .b-choose-dynamic .b-error{
                 display: none;
@@ -2039,6 +2055,7 @@ li.ui-autocomplete-category {
     }
 .b-dynamic select{
     min-width: 230px;
+    margin-top: 5px;
 }
 .b-select-buttons{
     margin-top: 15px;
@@ -2994,7 +3011,17 @@ input[disabled="disabled"] {
     }
 }
 
-
+@media screen and (max-width: 1300px){
+    .b-section-nav .b-link, .b-section-nav span {
+        padding: 5px 14px 6px;
+    }
+    .b-section-nav .b-link+.b-link{
+        padding-left: 5px;
+    }
+    .b-section-menu>li>a{
+        padding: 5px 14px 6px;
+    }
+}
 
 @media screen and (max-width: 1500px){
     .b-hide-title{
