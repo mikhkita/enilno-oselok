@@ -844,9 +844,9 @@ class Controller extends CController
         $params = array(
             "ATTR"  => array("link" => false),
             "INTER" => array("link" => true, "main_url" => "/admin/interpreter/list", "url" => "/interpreter/adminupdate"),
-            "LIST"  => array("link" => true, "main_url" => "/admin/data/dictionary", "url" => "/data/admindictionaryupdate"),
-            "TABLE" => array("link" => true, "main_url" => "/admin/data/table", "url" => "/data/admintableupdate"),
-            "CUBE"  => array("link" => true, "main_url" => "/admin/data/cube", "url" => "/data/admincubeupdate"),
+            "LIST"  => array("link" => true, "main_url" => "/admin/data/dictionaryedit"),
+            "TABLE" => array("link" => true, "main_url" => "/admin/data/tableedit"),
+            "CUBE"  => array("link" => true, "main_url" => "/admin/data/cubeedit"),
             "VAR"   => array("link" => true, "main_url" => "/admin/data/vars", "url" => "/data/adminvarsupdate"),
         );
 
@@ -866,8 +866,13 @@ class Controller extends CController
         $types = $this->getTypes($types);
 
         foreach ($matches[1] as $i => $match) {
-            if( $params[$match["type"]]["link"] ){
-                $matches[1][$i] = "<a href='".$params[$match["type"]]["main_url"]."#click|".$this->createUrl($params[$match["type"]]["url"],array("id" => $match["id"]))."' class='".strtolower($matches[1][$i]["type"])."'>".$types[$matches[1][$i]["type"]][$matches[1][$i]["id"]]["name"]."</a>";
+            $param = $params[$match["type"]];
+            if( $param["link"] ){
+                if( isset($param["url"]) ){
+                    $matches[1][$i] = "<a href='".$param["main_url"]."#click|".$this->createUrl($param["url"],array("id" => $match["id"]))."' class='".strtolower($matches[1][$i]["type"])."' target='_blank'>".$types[$matches[1][$i]["type"]][$matches[1][$i]["id"]]["name"]."</a>";
+                }else{
+                    $matches[1][$i] = "<a href='".$this->createUrl($param["main_url"],array("id" => $match["id"]))."' class='".strtolower($matches[1][$i]["type"])."' target='_blank'>".$types[$matches[1][$i]["type"]][$matches[1][$i]["id"]]["name"]."</a>";
+                }
             }else{
                 $matches[1][$i] = "<span class='".strtolower($matches[1][$i]["type"])."'>".$types[$matches[1][$i]["type"]][$matches[1][$i]["id"]]["name"]."</span>";
             }
