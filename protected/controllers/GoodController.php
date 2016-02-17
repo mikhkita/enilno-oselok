@@ -307,7 +307,10 @@ class GoodController extends Controller
 	public function actionAdminArchiveAll($good_type_id){
 		$good_ids = Good::getCheckboxes($good_type_id);
 		$good_ids_key = array();
-		if( !count($good_ids) ) return false;
+		if( !count($good_ids) ){
+			echo "Ты все удалил нахуй.";
+			return false;
+		}
 
 		$selector = array();
 
@@ -703,6 +706,8 @@ class GoodController extends Controller
 
 		$type_variants = ( $filter_new_only )?AttributeVariant::model()->with("variant")->findAll("attribute_id=107"):NULL;
 
+		$export = Export::model()->findAll("good_type_id=$good_type_id");
+
 		$options = array(
 			'data'=>$goods["items"],
 			'fields' => $fields,
@@ -719,7 +724,8 @@ class GoodController extends Controller
 			'good_count' => $goods["count"],
 			'sort_field' => $sort['field'],
 			'sort_type' => $sort_type,
-			'with_photos' => $with_photos
+			'with_photos' => $with_photos,
+			'export' => $export
 		);
 
 		if( !$partial ){

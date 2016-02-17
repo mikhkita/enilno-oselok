@@ -25,7 +25,7 @@
             <label for="">Все атрибуты</label>
             <ul id="sortable1" class="sortable connectedSortable">
                 <? foreach ($allAttr as $key => $value): ?>
-                <li class="ui-state-default" data-id="<?=$value->name?>"><p><?=$value->name?></p><input type="hidden" name="sorted[]" value="<?if($key[strlen($key)-1] == "a"):?>attributes<?else:?>interpreters<?endif;?>-<?=$value->id?>"></li>
+                <li class="ui-state-default" data-id="<?=$value->name?>"><p><?if($key[strlen($key)-1] == "i"):?>(инт)<?endif;?> <?=$value->name?></p><input type="hidden" name="sorted[]" value="<?if($key[strlen($key)-1] == "a"):?>attributes<?else:?>interpreters<?endif;?>-<?=$value->id?>"></li>
                 <? endforeach; ?>
             </ul>
         </div>
@@ -33,7 +33,7 @@
             <label for="">Атрибуты этого шаблона<?=( ( isset($_GET["name"]) )?(" \"".$_GET["name"]."\""):("") )?></label>
             <ul id="sortable2" class="sortable connectedSortable">
 				<? foreach ($attr as $key => $value): ?>
-                <li class="ui-state-default" data-id="<?=$value->name?>"><p><?=$value->name?></p><input type="hidden" name="sorted[]" value="<?if($key[strlen($key)-1] == "a"):?>attributes<?else:?>interpreters<?endif;?>-<?=$value->id?>"><span></span></li>
+                <li class="ui-state-default" data-id="<?=$value->name?>"><p><?if($key[strlen($key)-1] == "i"):?>(инт)<?endif;?> <?=$value->name?></p><input type="hidden" name="sorted[]" value="<?if($key[strlen($key)-1] == "a"):?>attributes<?else:?>interpreters<?endif;?>-<?=$value->id?>"><span></span></li>
                 <? endforeach; ?>
             </ul>
         </div>

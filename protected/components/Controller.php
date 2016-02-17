@@ -393,6 +393,7 @@ class Controller extends CController
 
             $arr = explode(".", $source);
             
+            header("HTTP/1.0 200 OK");
             header('Content-Description: File Transfer');
             header('Content-Type: application/octet-stream');
             header('Content-Disposition: attachment; filename='.$filename.".".array_pop($arr) );
