@@ -68,9 +68,15 @@ class ImportController extends Controller
 					}
 				}
 				if(isset($result[$pos])) {
-					array_push($temp_arr, $xls_cell);
+					$temp = array();
+					$temp['val'] = $xls_cell;
+					$temp['index'] = $i;
+					array_push($temp_arr, $temp);
 
-				} else $result[$pos] = $xls_cell;
+				} else {
+					$result[$pos]['val'] = $xls_cell;
+					$result[$pos]['index'] = $i;
+				}
 			}
 			$free_index = 0;
 			foreach ($temp_arr as $item) {
@@ -82,6 +88,7 @@ class ImportController extends Controller
 					}
 				}
 			}
+
 			$this->render('adminStep2',array(
 				'model'=>$model,
 				'xls'=>$result,
