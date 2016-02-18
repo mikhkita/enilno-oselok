@@ -22,7 +22,7 @@
           	<ul id="imp-sort">
                 <? for( $i = 0; $i < count($model->fields); $i++ ):?>
                     <? if( isset($xls[$i]) ): ?>
-                        <li class="ui-widget-content"><?=$xls[$i]?><input type="hidden" name="excel[<?=$i?>]" value="no-id"></li>
+                        <li class="ui-widget-content"><?=$xls[$i]['val']?><input type="hidden" name="excel[<?=$xls[$i]['index']?>]" value="no-id"></li>
                     <? else: ?>
                         <li class="ui-state-default">&nbsp;</li>
                     <? endif; ?>
