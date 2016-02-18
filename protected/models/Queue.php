@@ -330,39 +330,41 @@ class Queue extends CActiveRecord
 	}
 
 	public function refreshTime($category_id, $queue = NULL){
-		// Ищем города в которых есть объявы, которые нужно добавить или поднять
-		$model = Yii::app()->db->createCommand()
-            ->select('a.city_id')
-            ->from(Queue::tableName().' t')
-            ->join(Advert::tableName().' a', 't.advert_id=a.id')
-            ->where((is_array($queue)?("t.id IN (".implode(",", $queue).") AND "):(($queue === true)?("t.start IS NULL AND "):""))."t.action_id IN (1,7) AND t.state_id=1")
-            ->order("t.id ASC")
-            ->group("a.city_id")
-            ->queryAll();
+		if( $category_id == 2048 ){
+			// Ищем города в которых есть объявы, которые нужно добавить или поднять
+			$model = Yii::app()->db->createCommand()
+	            ->select('a.city_id')
+	            ->from(Queue::tableName().' t')
+	            ->join(Advert::tableName().' a', 't.advert_id=a.id')
+	            ->where((is_array($queue)?("t.id IN (".implode(",", $queue).") AND "):(($queue === true)?("t.start IS NULL AND "):""))."t.action_id IN (1,7) AND t.state_id=1")
+	            ->order("t.id ASC")
+	            ->group("a.city_id")
+	            ->queryAll();
 
-        $city_ids = array();
-		foreach ($model as $key => $value)
-			array_push($city_ids, $value["city_id"]);
+	        $city_ids = array();
+			foreach ($model as $key => $value)
+				array_push($city_ids, $value["city_id"]);
 
-		// Обновляем время выполнения объявлений, которые нужно добавить или поднять
-		Queue::refreshAddTime($category_id, $city_ids, (($queue === true)?true:false) );
+			// Обновляем время выполнения объявлений, которые нужно добавить или поднять
+			Queue::refreshAddTime($category_id, $city_ids, (($queue === true)?true:false) );
 
-		// // Ищем города в которых есть объявы, которые нужно обновить или удалить
-		// $model = Yii::app()->db->createCommand()
-  //           ->select('a.city_id')
-  //           ->from(Queue::tableName().' t')
-  //           ->join(Advert::tableName().' a', 't.advert_id=a.id')
-  //           ->where((is_array($queue)?("t.id IN (".implode(",", $queue).") AND "):(($queue === true)?("t.start IS NULL AND "):""))."t.action_id IN (2,3,4,6,8) AND t.state_id=1")
-  //           ->order("t.id ASC")
-  //           ->group("a.city_id")
-  //           ->queryAll();
+			// // Ищем города в которых есть объявы, которые нужно обновить или удалить
+			// $model = Yii::app()->db->createCommand()
+	  //           ->select('a.city_id')
+	  //           ->from(Queue::tableName().' t')
+	  //           ->join(Advert::tableName().' a', 't.advert_id=a.id')
+	  //           ->where((is_array($queue)?("t.id IN (".implode(",", $queue).") AND "):(($queue === true)?("t.start IS NULL AND "):""))."t.action_id IN (2,3,4,6,8) AND t.state_id=1")
+	  //           ->order("t.id ASC")
+	  //           ->group("a.city_id")
+	  //           ->queryAll();
 
-  //       $city_ids = array();
-		// foreach ($model as $key => $value)
-		// 	array_push($city_ids, $value["city_id"]);
+	  //       $city_ids = array();
+			// foreach ($model as $key => $value)
+			// 	array_push($city_ids, $value["city_id"]);
 
-		// // Обновляем время выполнения объявлений, который нужно обновить или удалить
-		// Queue::refreshUpdateTime($category_id, $city_ids, (($queue === NULL)?false:true) );
+			// // Обновляем время выполнения объявлений, который нужно обновить или удалить
+			// Queue::refreshUpdateTime($category_id, $city_ids, (($queue === NULL)?false:true) );
+		}
 	}
 
 	public function refreshAddTime($category_id, $city_ids, $not_full = false){

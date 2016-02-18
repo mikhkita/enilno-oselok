@@ -151,12 +151,16 @@ class GoodController extends Controller
 			$this->redirect( Yii::app()->createUrl('good/adminindex',array('good_type_id'=>$good_type_id,'partial'=>true)) );
 
 		}else{
+			$fields = $model->type->fields;
+
+			$dropdown = $this->getDropDown($fields);
 
 			$this->renderPartial('adminCreate',array(
 				'model'=>$model,
 				'result' => $result,
 				'cities' => $this->cityGroup(),
-				'fields' => $model->type->fields,
+				'fields' => $fields,
+				'dropdown' => $dropdown,
 				'good_type_id' => $good_type_id
 			));
 		}
