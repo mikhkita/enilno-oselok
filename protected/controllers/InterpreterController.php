@@ -175,8 +175,8 @@ class InterpreterController extends Controller
 	}
 
 	public function actionAdminVisual(){
-		if( isset($_GET["Interpreter"]) && isset($_GET["Interpreter"]["template"]) ){
-			$out = $this->visualInter($_GET["Interpreter"]["template"]);
+		if( isset($_GET["inter_value"]) ){
+			$out = $this->visualInter($_GET["inter_value"]);
 		}
 	}
 

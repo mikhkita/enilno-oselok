@@ -76,6 +76,8 @@ class DataController extends Controller
 		if( !$partial )
 			$this->layout='admin';
 
+		$this->pageTitle = "Переменные";
+
 		$filter = new Vars('filter');
 		$criteria = new CDbCriteria();
 
@@ -155,7 +157,10 @@ class DataController extends Controller
 	{
 		$this->scripts[] = "table";
 
-		$this->checkAccess( Dictionary::model()->findByPk($id) );
+		$model = Dictionary::model()->findByPk($id);
+		$this->checkAccess( $model );
+
+		$this->pageTitle = $model->name;
 
 		if(isset($_POST['json']))
 		{
@@ -205,6 +210,8 @@ class DataController extends Controller
 	{
 		if( !$partial )
 			$this->layout='admin';
+
+		$this->pageTitle = "Списки";
 
 		$filter = new Dictionary('filter');
 		$criteria = new CDbCriteria();
@@ -287,7 +294,10 @@ class DataController extends Controller
 	{
 		$this->scripts[] = "table";
 
-		$this->checkAccess( Table::model()->findByPk($id) );
+		$model = Table::model()->findByPk($id);
+		$this->checkAccess( $model );
+
+		$this->pageTitle = $model->name;
 
 		if(isset($_POST['json']))
 		{
@@ -341,6 +351,8 @@ class DataController extends Controller
 	{
 		if( !$partial )
 			$this->layout='admin';
+
+		$this->pageTitle = "Таблицы";
 
 		$filter = new Table('filter');
 		$criteria = new CDbCriteria();
@@ -423,7 +435,10 @@ class DataController extends Controller
 	{
 		$this->scripts[] = "table";
 
-		$this->checkAccess( Cube::model()->findByPk($id) );
+		$model = Cube::model()->findByPk($id);
+		$this->checkAccess( $model );
+
+		$this->pageTitle = $model->name;
 
 		if(isset($_POST['json']))
 		{
@@ -481,6 +496,8 @@ class DataController extends Controller
 	{
 		if( !$partial )
 			$this->layout='admin';
+
+		$this->pageTitle = "Трехмерные массивы";
 
 		$filter = new Cube('filter');
 		$criteria = new CDbCriteria();

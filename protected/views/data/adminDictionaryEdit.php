@@ -7,9 +7,14 @@
 			<? foreach ($data as $i => $item): ?>
 				<tr>
 					<td class="tleft"><?=$item->value?></td>
-					<td class="b-table-td-editable">
+					<td class="b-table-td-editable" style="width: 40%">
 						<input type="hidden" name="Values[<?=$i?>][attribute_1]" value="<?=$item->variant_id?>">
-						<textarea name="Values[<?=$i?>][value]"><?=((isset($values[$item->variant_id]))?$values[$item->variant_id]:"")?></textarea>
+						<textarea class="visual-inter" name="Values[<?=$i?>][value]" data-href="<?=$this->createUrl('/interpreter/adminvisual')?>" data-block="#b-inter-visual-<?=$i?>"><?=((isset($values[$item->variant_id]))?$values[$item->variant_id]:"")?></textarea>
+					</td>
+					<td class="b-inter-visual-td">
+						<div class="b-inter-visual" id="b-inter-visual-<?=$i?>">
+							<?=((isset($values[$item->variant_id]))?$this->visualInter($values[$item->variant_id]):"")?>
+						</div>
 					</td>
 				</tr>
 			<? endforeach; ?>

@@ -65,7 +65,7 @@
 						<? if($this->user->role->code == "root"): ?><span href="<?php echo Yii::app()->createUrl('/good/admindelete',array('id'=>$item->id))?>" class="ajax-form ajax-delete b-tool b-tool-delete not-ajax-delete" data-warning="Вы действительно хотите удалить товар &quot;<?=$item->fields_assoc[3]->value?>&quot;?" title="Удалить"></span><? endif; ?>
 					</td>
 					<? foreach ($fields as $field): ?>
-						<td<?if($tog):?> style="min-width: <?=$field->attribute->width?>px;"<?endif;?>>
+						<td<?if($tog):?> style="min-width: <?=$field->attribute->width?>px;"<?endif;?> <?=(($field->attribute->required && !isset($item->fields_assoc[$field->attribute->id]))?('class="empty"'):(""))?>>
 							<? if( isset($item->fields_assoc[$field->attribute->id]) ): ?>
 								<? if( is_array($item->fields_assoc[$field->attribute->id]) ): ?>
 									<? foreach ($item->fields_assoc[$field->attribute->id] as $attr): ?>

@@ -10,7 +10,9 @@ Class Resize {
     function __construct($fileName) {
 
         $this->image = $this->openImage($fileName);
-        // die($this->image );
+        if( !$this->image ){
+           $this->image = $this->openImage(str_replace("jpg", "JPG", $fileName));
+        }
         $this->width  = imagesx($this->image);
         $this->height = imagesy($this->image);
     }
@@ -58,7 +60,7 @@ Class Resize {
     }
 
     public function resizeImage($newWidth, $newHeight, $option="auto") {
-     
+     // 
         // *** Get optimal width and height - based on $option
         $optionArray = $this->getDimensions($newWidth, $newHeight, strtolower($option));
      

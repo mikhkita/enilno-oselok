@@ -31,6 +31,8 @@ class DromUserParseController extends Controller
     }
 
     public function actionAdminIndex($alert = false) {
+        $this->pageTitle = "Парсинг партнеров";
+
         if($_POST['user'] && $_POST['good_types']) {
             include_once Yii::app()->basePath.'/extensions/simple_html_dom.php';
             $curl = new Curl;
@@ -51,7 +53,7 @@ class DromUserParseController extends Controller
 		            $type = GoodType::model()->findByPk($good_type_id)->code;
 		            $pages = $drom->parseAllItems('http://baza.drom.ru/user/'.$user_id.'/wheel/'.$type, $user_id, false);   
 		            foreach ($pages as $page) {
-		            	array_push($links, "http://".Yii::app()->params['host'].$this->createUrl('/dromUserParse/parse',array('page'=> $page,'user_id' => $user_id)));
+		            	array_push($links, "http://".Yii::app()->params['ip'].$this->createUrl('/dromUserParse/parse',array('page'=> $page,'user_id' => $user_id)));
 		            }
                     Cron::addAll($links);
 		        }
@@ -63,7 +65,7 @@ class DromUserParseController extends Controller
             $arr = explode(PHP_EOL,$_POST['links']);
             foreach ($arr as $key => &$value) {
                 $item = explode(" ", $value); 
-                $value = "http://".Yii::app()->params['host'].$this->createUrl('/dromUserParse/parse',array('page'=> trim($item[0]),'code' => trim($item[1])));
+                $value = "http://".Yii::app()->params['ip'].$this->createUrl('/dromUserParse/parse',array('page'=> trim($item[0]),'code' => trim($item[1])));
             }
             Cron::addAll($arr);
             Yii::app()->user->setFlash('message','Товар(ы) добавлен(ы) в очередь');

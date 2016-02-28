@@ -177,6 +177,9 @@ class AdvertController extends Controller
 	}
 
 	public function actionAdminFindById($find_advert_id){
+		if( strpos($find_advert_id, "http") !== false )
+			$find_advert_id = array_pop(explode("/", $find_advert_id));
+
 		$codes = array(NULL, "shiny", "diski", "kolesa");
 		$advert = Advert::model()->find("url='$find_advert_id'");
 		if( $advert ){

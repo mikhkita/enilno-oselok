@@ -85,6 +85,8 @@ class Controller extends CController
 
         $this->adminMenu["cur"] = $this->toLowerCaseModelNames(ModelNames::model()->find(array("condition" => "code = '".Yii::app()->controller->id."'")));
         
+        $this->pageTitle = $this->adminMenu["cur"]->name;
+
         $this->start = microtime(true);
 
         $this->getInterpreters();
@@ -879,9 +881,53 @@ class Controller extends CController
         }
 
         // var_dump($matches[1]);
-        echo str_replace($matches[0], $matches[1], $template);
+        echo $this->tabInter(str_replace($matches[0], $matches[1], $template));
         
         // printf('<br>Генерация %.4F сек.<br>', microtime(true) - $start);   
+    }
+
+    public function tabInter($str){
+        $str = str_replace(")?", ")<br>?", $str);
+        $str = str_replace("):", ")<br>:", $str);
+        $str = str_replace("`", "<br>`", $str);
+        $str = explode("<br>", $str);
+        $tab = 0;
+        $prev = 0;
+        $til = false;
+        foreach ($str as $i => $line) {
+            $first = substr($line, 0, 1);
+            if( $first == "?" ){
+                if( $prev == "?" ){
+                    $tab++;
+                }else{
+                    $tab++;
+                }
+            }else if( $first == ":" ){
+                if( $prev == ":" ){
+                    $tab--;
+                }else{
+                    // $tab++;
+                }
+            }else if( $first == "`" ){
+                if( $til ){
+                    $tab--;
+                    $til = false;
+                }else{
+                    $til = true;
+                }
+            }
+
+            $str[$i] = $this->getTab($tab).$line;
+            $prev = $first;
+        }
+        return implode("<br>", $str);
+    }
+
+    public function getTab($num){
+        $out = "";
+        for ($i=0; $i < $num*4; $i++)
+            $out .= "&nbsp;";
+        return $out;
     }
 
     public function getTypes($types){
@@ -903,11 +949,12 @@ class Controller extends CController
             }else{
                 if( $type == "VAR" ){
                     $model = Yii::app()->db->createCommand()
-                        ->select('value, name')
+                        ->select('name')
                         ->from($tableNames[$type].' t')
                         ->limit(1000)
                         ->queryAll();
-                    $out[$type] = $this->getAssocByAssoc($model, "value");
+
+                    $out[$type] = $this->getAssocByAssoc($model, "name");
                 }else{
                     $model = Yii::app()->db->createCommand()
                         ->select('id, name')

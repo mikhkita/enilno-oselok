@@ -318,7 +318,9 @@ class GoodFilter extends CActiveRecord
 		$update = array();
 		foreach ($values as $i => $value) {
 			$size = intval(array_pop(explode("_", $value["name"])));
-			array_push($update, array($value["class"], $value["name"], "/".Good::cropImage($value["path"], $size), $value["hash"]));
+			$new_link = Good::cropImage($value["path"], $size);
+			if( $new_link )
+				array_push($update, array($value["class"], $value["name"], "/".$new_link, $value["hash"]));
 		}
 
 		Controller::updateRows(Cache::tableName(), $update, array("value", "hash"));

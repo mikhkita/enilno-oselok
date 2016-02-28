@@ -76,6 +76,8 @@ class DesktopController extends Controller
 
         $model = Desktop::model()->with(array("childs","tables"))->findByPk($id);
 
+        $this->pageTitle = $model->name;
+
         // foreach ($model as $key => $value) {
         // 	if(!$this->checkAccess($value,true)) unset($model[$key]);
         // }
@@ -149,6 +151,8 @@ class DesktopController extends Controller
 		}
 
         $model = DesktopTable::model()->with(array("cols.type","rows.cells"))->findByPk($id);
+
+        $this->pageTitle = $model->name;
 
 		if( !$partial ){
 			$this->render('adminTableIndex',array(

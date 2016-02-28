@@ -216,6 +216,8 @@ class ExportController extends Controller
 		$this->scripts[] = "export";
 		$export = Export::model()->findByPk($id);
 
+		$this->pageTitle = "Экспорт: ".$export->name;
+
 		$criteria = new CDbCriteria();
 		$criteria->with = array("variants.variant"=>array("order"=>"variant.sort ASC"));
 		$criteria->condition = "t.id=57 OR t.id=37 OR t.id=38";

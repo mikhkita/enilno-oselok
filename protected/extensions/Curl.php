@@ -81,6 +81,13 @@ Class Curl {
         $this->$proxy_login = NULL;
         $this->$proxy_ip = NULL;
     }
+
+    public function changeCookies($login){
+        $this->removeCookies();
+        
+        $this->cookie = md5($login);
+    }
+
     public function removeCookies(){
         if( file_exists(dirname(__FILE__).'/cookies/'.$this->cookie.'.txt') )
             unlink(dirname(__FILE__).'/cookies/'.$this->cookie.'.txt');

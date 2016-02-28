@@ -291,6 +291,15 @@ class Interpreter extends CActiveRecord
 		}
 		$template = str_replace($matches[0], $matches[1], $template);
 
+		// Перемешивание в случайном порядке (пробелы ставятся автоматом) [*1|2|3*] - например.
+		preg_match_all("~\[\^([^\^\]]+)\^\]~", $template, $matches);
+		foreach ($matches[1] as $key => $value) {
+			$vars = explode("~", $value);
+			shuffle($vars);
+			$matches[1][$key] = implode(" ", $vars);
+		}
+		$template = str_replace($matches[0], $matches[1], $template);
+
 		// Перемешивание [#1#] [#2#] [#3#] - например.
 		preg_match_all("~\[\#([^\#\]]+)\#\]~", $template, $matches);
 		shuffle($matches[1]);

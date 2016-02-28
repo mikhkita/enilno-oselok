@@ -1,5 +1,7 @@
-<h1>Продажи (<?=$name?>)</h1>
-<a href="<?=$this->createUrl('/good/adminindex',array('good_type_id'=> $_GET["good_type_id"]))?>" class="b-link-back">Назад</a>
+<h1>Продажи: <?=$name?></h1>
+<? if($good_type_id !== NULL): ?>
+	<a href="<?=$this->createUrl('/good/adminindex',array('good_type_id'=> $_GET["good_type_id"]))?>" class="b-link-back">Назад</a>
+<? endif; ?>
 <table class="b-table b-sale-table b-good-table" border="1">
 	<tr>
 		<? foreach ($labels as $item): ?>

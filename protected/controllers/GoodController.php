@@ -48,17 +48,22 @@ class GoodController extends Controller
 
 	public function actionAdminSaleTable($good_type_id = NULL,$partial = NULL) 
 	{
+		$this->pageTitle = "Продажи";
+
 		if($good_type_id) {
 			$goodType = GoodType::model()->with("fields")->findByPk($good_type_id);
+			$this->pageTitle = $this->pageTitle.": ".$goodType->name;
 			$name = $goodType->name;
 			$sale = Sale::model()->with(array("good.fields.variant","good.fields.attribute"))->findAll(array("condition" => "good_type_id=".$good_type_id,"order" => "t.date DESC"));
 		} else {
 			$sale = Sale::model()->with(array("good.fields.variant","good.fields.attribute"))->findAll(array("order" => "t.date DESC"));
 			$name = "Общие";
 		}
+
 		$options = array(
 			'data'=>$sale,
 			'name'=>$name,
+			'good_type_id'=>$good_type_id,
 			'labels'=>Sale::attributeLabels()
 		);
 		if($partial){	
@@ -326,7 +331,7 @@ class GoodController extends Controller
 
 		$links = array();
 		foreach ($good_ids_key as $i => $item) {
-			array_push($links, "http://".Yii::app()->params['host'].$this->createUrl('/good/admindeleteadverts',array('id'=> $item)));
+			array_push($links, "http://".Yii::app()->params['ip'].$this->createUrl('/good/admindeleteadverts',array('id'=> $item)));
 		}
 		Cron::addAll($links);
 
@@ -408,7 +413,7 @@ class GoodController extends Controller
 		{
 			$links = array();
 			foreach ($good_ids as $key => $value)
-				array_push($links, "http://".Yii::app()->params['host'].$this->createUrl('/good/adminupdatecities',array('id'=> $key, 'Good_attr' => $_POST["Good_attr"])));
+				array_push($links, "http://".Yii::app()->params['ip'].$this->createUrl('/good/adminupdatecities',array('id'=> $key, 'Good_attr' => $_POST["Good_attr"])));
 
 			Cron::addAll($links);
 
@@ -624,17 +629,19 @@ class GoodController extends Controller
 
 		$goodType = GoodType::model()->with("fields")->findByPk($good_type_id);
 
+		$this->pageTitle = $goodType->name;
+
 		$params = array(
 			1 => array(
-				"FILTER" => array(43,36,26,23,27,16),
+				"FILTER" => array(43,36,26,23,27,16,111),
 				"FILTER_NAMES" => array(43=>41),
 			),
 			2 => array(
-				"FILTER" => array(43,36,26,27,70,66,67),
+				"FILTER" => array(43,27,36,9,5,31,32,11,33,20,26,70,111),
 				"FILTER_NAMES" => array(43=>41),
 			),
 			3 => array(
-				"FILTER" => array(43,36,26,23,27,16),
+				"FILTER" => array(43,36,26,23,27,16,111),
 				"FILTER_NAMES" => array(43=>41),
 			),
 		);
@@ -695,7 +702,7 @@ class GoodController extends Controller
 				$sort
 			)->getPage(
 				array(
-			    	'pageSize'=>80,
+			    	'pageSize'=>250,
 			    ), 
 			    $this->getUserParam("GOOD_TYPE_".$good_type_id),
 			    true
@@ -705,7 +712,7 @@ class GoodController extends Controller
 		$fields = $goodType->fields;
 
 		if( $this->getUserParam("GOOD_TYPE_".$good_type_id) ){
-			$fields = GoodTypeAttribute::model()->findAll("attribute_id IN (".implode(",", $this->getUserParam("GOOD_TYPE_".$good_type_id)).") AND good_type_id=$good_type_id");
+			$fields = GoodTypeAttribute::model()->with("attribute")->findAll(array("condition" => "attribute_id IN (".implode(",", $this->getUserParam("GOOD_TYPE_".$good_type_id)).") AND good_type_id=$good_type_id", 'order'=>'sort ASC'));
 		}
 
 		$type_variants = ( $filter_new_only )?AttributeVariant::model()->with("variant")->findAll("attribute_id=107"):NULL;

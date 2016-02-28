@@ -433,7 +433,7 @@ Class Drom {
             foreach ($params as  $key => &$value) {
                 if(!is_array($value)) $value = trim($value);
             }
-            if(!empty($html->find(".bulletinImages img"))) {
+            if($html->find(".bulletinImages img")) {
     	        $dir = Yii::app()->params["imageFolder"]."/".GoodType::model()->findByPk($params[$fields['type']])->code."s/".$good_code; 
     	        if (!is_dir($dir)) mkdir($dir, 0777, true);
     	        foreach ($html->find(".bulletinImages img") as $i => $img) {

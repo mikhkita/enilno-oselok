@@ -184,7 +184,7 @@ class Good extends GoodFilter
 
 		if(isset($options["int_attributes"]) && count($options["int_attributes"]))
 			foreach ($options["int_attributes"] as $id => $attribute)
-				if( count($attribute) && !( !(isset($attribute["min"]) && $attribute["min"] != "") || !(isset($attribute["max"]) && $attribute["max"] != "") ) ){
+				if( count($attribute) && ( (isset($attribute["min"]) && $attribute["min"] != "") || (isset($attribute["max"]) && $attribute["max"] != "") ) ){
 					$criteria->addCondition('(good_type_id='.$options["good_type_id"].' AND fields.attribute_id='.$id.' '.((isset($attribute["min"]) && $attribute["min"] != "")?(' AND fields.int_value>='.$attribute["min"]):'').((isset($attribute["max"]) && $attribute["max"] != "")?' AND fields.int_value<='.$attribute["max"]:'').')','OR');
 					$count++;
 				}
@@ -469,11 +469,18 @@ class Good extends GoodFilter
 
 			}
 
+			$filter_values = $this->getUserParam("GOOD_FILTER_".$good_type_id) ? $this->getUserParam("GOOD_FILTER_".$good_type_id,false,true) : array();
+			$filter_values_int = $this->getUserParam("GOOD_FILTER_INT_".$good_type_id) ? $this->getUserParam("GOOD_FILTER_INT_".$good_type_id,false,true) : array();
+
+			foreach ($filter_values_int as $key => $value) {
+				$filter_values_int[$key] = (array)$value;
+			}		
+
 			$goods = Good::model()->filter(
 				array(
 					"good_type_id"=>$good_type_id,
-					"attributes"=>$this->getUserParam("good_filter_".$good_type_id) ? (array)$this->getUserParam("good_filter_".$good_type_id) : array(),
-					"int_attributes"=>array()
+					"attributes"=>$filter_values,
+					"int_attributes"=>$filter_values_int
 				),$ids
 			)->sort( 
 				$this->getUserParam("good_sort_".$good_type_id) ? (array)$this->getUserParam("good_sort_".$good_type_id) : array()
@@ -485,9 +492,9 @@ class Good extends GoodFilter
 			);
 
 			$_SESSION["goods"][$good_type_id] = array();
-			foreach ($goods['items'] as $key => $good) {
-				$_SESSION["goods"][$good->good_type_id][$good->id] = $good->fields_assoc[3]->value;
-			}
+			if( isset($goods["items"]) )
+				foreach ($goods['items'] as $key => $good)
+					$_SESSION["goods"][$good->good_type_id][$good->id] = $good->fields_assoc[3]->value;
 
 			return true;
 		}else{

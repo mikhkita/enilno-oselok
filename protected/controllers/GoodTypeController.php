@@ -176,6 +176,9 @@ class GoodTypeController extends Controller
 		if( !$partial ){
 			$this->layout='admin';
 		}
+
+		$this->pageTitle = "Типы товаров";
+		
 		// $ph = new Photodoska;
 		// $ph->del_ads();
 		// $arr = array("title","титл1");

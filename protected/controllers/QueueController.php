@@ -144,6 +144,8 @@ class QueueController extends Controller
 			$this->layout='admin';
 		}
 
+		$this->pageTitle = "Очередь: ".( ($category_id==2047)?"Дром":"Авито" );
+
 		$model_filter = Place::model()->with('category','goodType')->findAll("category_id=$category_id");
 		$data = array();
 		foreach ($model_filter as $key => $item) {

@@ -11,7 +11,8 @@
 				<ul class="b-section-submenu">
 					<li><a href="<?php echo $this->createUrl('/advert/adminaction', array('action'=> "update"))?>" class="ajax-form ajax-update">Без&nbsp;фотографий</a></li>
 					<li><a href="<?php echo $this->createUrl('/advert/adminaction', array('action'=> "updateWithImages"))?>" class="ajax-form ajax-update">С&nbsp;фотографиями</a></li>
-					<li><a href="<?php echo $this->createUrl('/advert/adminaction', array('action'=> "updateImages"))?>" class="ajax-form ajax-update">Только&nbsp;Фотографии</a></li>
+					<li><a href="<?php echo $this->createUrl('/advert/adminaction', array('action'=> "updateImages"))?>" class="ajax-form ajax-update">Только&nbsp;фотографии</a></li>
+					<li><a href="<?php echo $this->createUrl('/advert/adminaction', array('action'=> "updatePrice"))?>" class="ajax-form ajax-update">Только&nbsp;цены</a></li>
 				</ul>
 			</li>
 			<li><a href="<?php echo $this->createUrl('/advert/adminaction', array('action'=> "delete"))?>" class="ajax-form ajax-update">Удалить</a></li>

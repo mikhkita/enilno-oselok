@@ -11,16 +11,24 @@ Class Avito {
     );
     
     function __construct($proxy = NULL) {
+    	include_once Yii::app()->basePath.'/extensions/simple_html_dom.php';
         $this->curl = new Curl($proxy);
         $this->captcha_curl = new Curl();
     }
 
     public function setUser($login,$password){
+    	$this->curl->changeCookies($login);
         $this->login = $login;
         $this->password = $password;
     }
 
     public function auth(){
+    	$html = str_get_html($this->curl->request("https://www.avito.ru/"));
+
+        if( is_object($html) && $html->find(".userinfo-details",0) && trim($html->find(".userinfo-details",0)->plaintext) == $this->login )
+        	return true;
+
+        echo "Авторизация ".$this->login;
         $this->curl->removeCookies();
 
         $params = array(
@@ -32,31 +40,34 @@ Class Avito {
     }
 
     public function addAdvert($params,$images = NULL){
-        include_once Yii::app()->basePath.'/extensions/simple_html_dom.php';
-        Log::debug("Шаг 1");
+        // Log::debug("Шаг 1");
         if($images !== NULL) {
         	$params = $this->addImages($params,$images);
 		}
-		Log::debug("Шаг 2");
-		$html = str_get_html($this->curl->request("https://www.avito.ru/additem"));
-		Log::debug("Шаг 3");
+		// Log::debug("Шаг 2");
+		$result = $this->curl->request("https://www.avito.ru/additem");
+		// print_r($result);
+		$html = str_get_html($result);
+		// Log::debug("Шаг 3");
 	    $token = array();
 	    $token['name'] = $html->find('input[name^=token]',0)->name;
 	    $token['value'] = $html->find('input[name^=token]',0)->value;
 	    $params[$token['name']] = $token['value'];
 	    $params['source'] = "add";
 
-		$html = str_get_html($this->curl->request("https://www.avito.ru/additem",$params));
-		Log::debug("Шаг 4");
+	    $result = $this->curl->request("https://www.avito.ru/additem",$params);
+	    // print_r($result);
+		$html = str_get_html($result);
+		// Log::debug("Шаг 4");
 		$captcha = $html->find('.form-captcha-image',0)->src;
 
         $out = $this->curl->request('https://www.avito.ru'.$captcha);
-        Log::debug("Шаг 5");
+        // Log::debug("Шаг 5");
 	    $captcha_path = Yii::app()->basePath.'/extensions/captcha.jpg';  
 	    file_put_contents($captcha_path, $out); 
 
 		$captcha = $this->captcha_curl->request("http://rucaptcha.com/in.php",array('key'=>'0b07ab2862c1ad044df277cbaf7ceb99','file'=> new CurlFile($captcha_path)));
-		Log::debug("Шаг 6");
+		// Log::debug("Шаг 6");
 		while ($captcha == 'ERROR_NO_SLOT_AVAILABLE') {
 			var_dump($captcha);
 			sleep(5);
@@ -64,7 +75,7 @@ Class Avito {
 		    $captcha = $this->captcha_curl->request("http://rucaptcha.com/in.php",array('key'=>'0b07ab2862c1ad044df277cbaf7ceb99','file'=> new CurlFile($captcha_path)));
 		} 
 		if(strpos($captcha, "|") !== false) {
-			Log::debug("Вошли");
+			// Log::debug("Вошли");
 			$captcha = substr($captcha, 3);
 			$url = "http://rucaptcha.com/res.php?";
 					$url_params = array(
@@ -73,16 +84,16 @@ Class Avito {
 				    	'id' => $captcha
 					);
 			$url .= urldecode(http_build_query($url_params));
-			Log::debug("Вошли 1");
+			// Log::debug("Вошли 1");
 			$captcha = $this->captcha_curl->request($url);
 			while ($captcha == 'CAPCHA_NOT_READY') {
 				sleep(2);
 		   		$captcha = $this->captcha_curl->request($url);
 			} 
-			Log::debug("Вошли 2");
-			Log::debug($captcha);
+			// Log::debug("Вошли 2");
+			// Log::debug($captcha);
 			if(strpos($captcha, "|") !== false) {
-				Log::debug("Вошли 3");
+				// Log::debug("Вошли 3");
 				$captcha = substr($captcha, 3);
 				$result_array = array(
 					'captcha' => $captcha,
@@ -90,26 +101,28 @@ Class Avito {
     				'action' => "company_info"
 				);
 				$result = $this->curl->request("https://www.avito.ru/additem/confirm",$result_array);
+				// print_r($result);
 				$html = str_get_html($result);
-				Log::debug("Вошли 4");
+				// Log::debug("Вошли 4");
 				$id = $html->find('.content-text a[rel="nofollow"]',0)->href;
-				Log::debug($id);
+				// Log::debug($id);
 				file_put_contents(Yii::app()->basePath."/logs/avito.txt", $result);
 				$id = end(explode("_", $id));
 				return $id;
 			} else {
-				Log::debug("Вошли 5");
+				// Log::debug("Вошли 5");
 				return false;
 			}
 		} else {
-			Log::debug("Вошли 6");
+			// Log::debug("Вошли 6");
 			return false;
 		}
     }
 
-    public function updateAdvert($advert_id,$params,$images = NULL,$only_images = false){
-    	include_once Yii::app()->basePath.'/extensions/simple_html_dom.php';
-    	$result = $this->curl->request("https://www.avito.ru/".$advert_id);
+    public function updateAdvert($link,$params,$images = NULL,$only_images = false){
+    	$advert_id = substr($link, strripos($link, "_")+1);
+
+    	$result = $this->curl->request("https://www.avito.ru".$link);
 		$html = str_get_html($result);
 		if( !$html->find('meta[property="og:url"]',0) ) return NULL;
 		$href = $html->find('meta[property="og:url"]',0)->getAttribute('content');
@@ -144,26 +157,36 @@ Class Avito {
 		return $id;
     }
 
-   	public function updatePrice($advert_id,$params,$images = NULL){	
-    	include_once Yii::app()->basePath.'/extensions/simple_html_dom.php';
-    	$result = $this->curl->request("https://www.avito.ru/".$advert_id);
-    	print_r($result);
+   	public function updatePrice($link,$params,$images = NULL){	
+   		$advert_id = substr($link, strripos($link, "_")+1);
+
+    	$result = $this->curl->request("https://www.avito.ru".$link);
+    	// echo "1111";
+    	// print_r($result);
 		$html = str_get_html($result);
 		if( !$html->find('meta[property="og:url"]',0) ) return NULL;
 		$href = $html->find('meta[property="og:url"]',0)->getAttribute('content');
 		$href = $href."/edit";
 		$result = $this->curl->request($href);
-		print_r($result);
-		$html = str_get_html( $result );
+		// echo "2222";
+		// print_r($result);
+		$html = str_get_html( $result , true, true, DEFAULT_TARGET_CHARSET, false);
 		$fields = Advert::model()->with('place.interpreters')->find("url=".$advert_id);
 		foreach ($fields->place->interpreters as $key => $value) {
 			if(stripos($value->code, "params") === false) {
-				$params[$value->code] = $html->find('.form-fieldset [name="'.$value->code.'"]',0)->value;
+				if( $value->code != "price" ){
+					if( $value->code == "description" ){
+						$params[$value->code] = str_replace("&quot;", "''", $html->find('.form-fieldset [name="'.$value->code.'"]',0)->outertext);
+					}else{
+						$params[$value->code] = str_replace("&quot;", "''", $html->find('.form-fieldset [name="'.$value->code.'"]',0)->value);
+					}
+				}
 			} else {
 				if($html->find('[name="'.$value->code.'"] option[selected=""]',0))
 					$params[$value->code] = $html->find('[name="'.$value->code.'"] option[selected=""]',0)->value;
 			}
 		}
+		// var_dump($params);
 		// $params['price'] = $price;
 		unset($params['login']);
 		if($images !== NULL) {
@@ -180,22 +203,24 @@ Class Avito {
 
 		$result = $this->curl->request($href,$params);
 
-		print_r($result);
-   
+		// echo "3333";
+		// print_r($result);
    		$result = $this->curl->request($href."/confirm",array('done' => "",'subscribe-position' => '1'));
-   		print_r($result);
+   		// echo "4444";
+   		// print_r($result);
 		$html = str_get_html($result);
 
 		$id = $html->find('.content-text a[rel="nofollow"]',0)->href;
 		$id = end(explode("_", $id));
-		print_r($id);
+		// echo "5555";
+		// print_r($id);
 		if( $html->find(".alert-warning-big a",0) && $html->find(".alert-warning-big a",0)->plaintext == "активировать его" ){
 			$result = $this->curl->request("https://www.avito.ru/profile/items/old?item_id[]=$advert_id&start");
 		}
 		return $id;
     }
 
-    public function addImages($params,$images = NULL) {
+    public function addImages($params, $images = NULL) {
         if($images) {
         	$img = array();
             foreach ($images as $key => $image_path) {
@@ -218,21 +243,25 @@ Class Avito {
         }
     }
 
-    public function deleteAdvert($advert_id) {
-        include_once Yii::app()->basePath.'/extensions/simple_html_dom.php';
+    public function deleteAdvert($link) {
+    	if( $link == "" ) return true;
+    	$advert_id = substr($link, strripos($link, "_")+1);
+
         $result = $this->curl->request("https://www.avito.ru/profile",array('item_id[]' => $advert_id,'delete' => 'Снять объявление с публикации'));
-        // print_r($result);
-        $result = $this->curl->request("https://www.avito.ru/".$advert_id);
-        // print_r($result);
+        print_r($result);
+        $result = $this->curl->request("https://www.avito.ru".$link);
+        print_r("https://www.avito.ru".$link);
+        print_r($result);
 		$html = str_get_html($result);
-		if( $html->find(".catalog-filters",0) ) return true;
+		if( is_object($html) && $html->find(".catalog-filters",0) ) return true;
+		if( !is_object($html) ) return false;
 		$delete = trim($html->find('.has-bold',0)->plaintext);
-		// print_r($delete);
+
+		$result = $this->curl->request("https://www.avito.ru/profile/items/old?item_id[]=$advert_id&remove");
 		return ($delete == "Срок размещения этого объявления истёк" || $delete == "Вы закрыли это объявление" || $delete == "Вы удалили это объявление навсегда.");
     }
 
     public function up($advert_id){
-    	include_once Yii::app()->basePath.'/extensions/simple_html_dom.php';
 
     	$i = 0;
     	$tog = false;
@@ -248,7 +277,6 @@ Class Avito {
     }
 
     public function parseMessages(){
-    	include_once Yii::app()->basePath.'/extensions/simple_html_dom.php';
     	$html = str_get_html($this->curl->request("https://www.avito.ru/profile/messenger/"));
     	var_dump($html->find(".messenger-channel-text"));
     	foreach ($html->find(".messenger-channel-text") as $i => $chat) {
@@ -282,6 +310,26 @@ Class Avito {
 
     public function self(){
         return new Avito();
+    }
+
+    public function parseAll($src){
+    	$html = str_get_html($this->curl->request($src));
+    	$links = array();
+    	$count = 0;
+    	if( $item = $html->find(".tabs-item_active .tabs-item__num", 0) ){
+    		$count = intval($item->plaintext);
+    		$num = ceil($count/10);
+    		for ($i=1; $i <= $num; $i++) { 
+    			$html = str_get_html($this->curl->request($src."/rossiya?p=".$i));
+    			if( $images = $html->find(".photo-wrapper") ){
+    				foreach ($images as $j => $link) {
+    					array_push($links, $link->getAttribute("href"));
+    				}
+    			}
+    		}
+    	}
+    	
+    	return array("links" => $links, "count" => $count);
     }
 }
 

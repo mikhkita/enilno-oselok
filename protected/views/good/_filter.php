@@ -1,7 +1,13 @@
 <div style="display:none;">
 	<div class="b-popup-filter b-popup-good-filter b-popup">
-		<h1>Фильтр</h1>
+		<h1>Фильтр<a href="#" class="b-filter-clear-all" style="margin-left: 20px;">Сбросить выделение</a></h1>
 	<?=CHTML::beginForm(Yii::app()->createUrl('/good/adminindex',array('good_type_id' => $_GET['good_type_id'])),'POST',array('id'=>'b-filter-form'))?>
+		<div class="row b-filter-top-buttons buttons">
+			<?=CHTML::submitButton('Применить')?>
+			<input type="hidden" name="filter-active" value="1">
+			<input type="button" class="b-good-clear-filter" value="Сбросить">
+			<input type="button" onclick="$.fancybox.close(); return false;" value="Закрыть">
+		</div>
 		<div class="b-filter-block">
 			<div class="clearfix">
 				<div class='b-filter-checkbox'>
@@ -13,10 +19,22 @@
 		<? foreach ($attributes as $field => $item): ?>
 			<? if( isset($item["VIEW"]) ): ?>
 				<div class="b-filter-block">
-					<h3><?=$labels[$field]?></h3>
-					<div class="clearfix">
+					<h3>
+						<?=$labels[$field]?>
+						<? if( $item["VIEW"] == "CHECKBOX" ): ?>
+							<div class="b-filter-check-buttons">
+								<a href="#" class="b-filter-check-section">Все</a>
+								<a href="#" class="b-filter-uncheck-section">Сбросить</a>
+							</div>
+						<? elseif( $item["VIEW"] == "FROMTO" ): ?>
+							<div class="b-filter-check-buttons">
+								<a href="#" class="b-filter-clear-inputs">Сбросить</a>
+							</div>
+						<? endif;?>
+					</h3>
+					<div class="clearfix b-filter-<?=$field?>">
 						<? if( $item["VIEW"] == "CHECKBOX" ): ?>	
-							<?if( count($item["VARIANTS"]) > 10):?>
+							<?if( count($item["VARIANTS"]) > 50):?>
 								<? $selected = array(); if(!empty($filter_values[$field])) foreach ($filter_values[$field] as $multi) $selected[$multi] = array('selected' => 'selected'); ?>
 								<?=Chtml::dropDownList($arr_name."[$field]", "", $item["VARIANTS"],array('class'=> 'select2-filter','multiple' => 'true','options' => $selected)); ?>	
 							<? else: ?>
