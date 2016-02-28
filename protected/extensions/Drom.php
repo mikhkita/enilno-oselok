@@ -355,8 +355,9 @@ Class Drom {
             if($params[$fields['type']] == 2) {
             	$params[$fields['diskModel']] = $html->find("span[data-field=model]",0)->plaintext;
             	$params[$fields['wheelDiameter']] = str_replace('"',"", $html->find("span[data-field=wheelDiameter]",0)->plaintext);
-            	$params[$fields['condition']] = $html->find("span[data-field=condition]",0) ? trim($html->find("span[data-field=condition]",0)->plaintext) : NULL;
-            	$params[$fields['condition']] = ($params[$fields['condition']]=="Новый") ? "Новые": "Б/у";
+            	$params[$fields['condition']] = $html->find("span[data-field=condition]",0) ? trim($html->find("span[data-field=condition]",0)->plaintext) : 'Б/п РФ';
+                $params[$fields['condition']] = ($params[$fields['condition']]=="Новый") ? "Новые": $params[$fields['condition']];
+                if($params[$fields['condition']] != "Новые" || $params[$fields['condition']] != "Б/у") $params[$fields['condition']] = 'Б/п РФ';
             }
 
             if($params[$fields['type']] != 1) {
