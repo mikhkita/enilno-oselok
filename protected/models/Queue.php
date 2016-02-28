@@ -213,6 +213,9 @@ class Queue extends CActiveRecord
 					$item = array("advert_id" => isset($advert->id)?$advert->id:$advert, "action_id" => Queue::model()->codes[$code], "start" => NULL );
 						$item["start"] = NULL;
 
+					if( $advert->place->category_id == 2048 && in_array($item["action_id"], array(2,6)) )
+						$item["action_id"] = 8;
+
 					if( $code == "delete" && $advert->url === NULL ){
 						array_push($toDelete, $advert);	
 						continue;
@@ -435,7 +438,7 @@ class Queue extends CActiveRecord
 		foreach ($city_ids as $i => $city_id) {
 			$queue = Queue::model()->with(array("advert.place"))->findAll("advert.city_id=$city_id AND action_id IN (2,3,4,6,8) AND state_id=1 AND place.category_id=$category_id".( ($not_full)?(" AND start IS NULL"):("") ));
 
-			echo count($queue);
+			// echo count($queue);
 			if( $queue ){
 				$city_params = $cities[$city_id];
 				$city_params["interval"] = 1;

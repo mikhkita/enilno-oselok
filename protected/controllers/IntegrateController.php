@@ -410,7 +410,7 @@ class IntegrateController extends Controller
 
     public function checkQueueAccess($category_id){
         $last = $this->getParam( Place::model()->categories[$category_id], "TIME", true );
-        return ( time() - intval($last) > 120 );
+        return ( time() - intval($last) > 180 );
     }
 
     public function allowed($category_id){

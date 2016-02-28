@@ -956,12 +956,14 @@ class Controller extends CController
 
                     $out[$type] = $this->getAssocByAssoc($model, "name");
                 }else{
-                    $model = Yii::app()->db->createCommand()
-                        ->select('id, name')
-                        ->from($tableNames[$type].' t')
-                        ->limit(1000)
-                        ->queryAll();
-                    $out[$type] = $this->getAssocByAssoc($model, "id");
+                    if( isset($tableNames[$type]) ){
+                        $model = Yii::app()->db->createCommand()
+                            ->select('id, name')
+                            ->from($tableNames[$type].' t')
+                            ->limit(1000)
+                            ->queryAll();
+                        $out[$type] = $this->getAssocByAssoc($model, "id");
+                    }
                 }
             }
         }

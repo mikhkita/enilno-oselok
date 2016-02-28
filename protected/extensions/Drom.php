@@ -119,7 +119,9 @@ Class Drom {
 			);
 
 			$url .= http_build_query($url_params);
-			$html = str_get_html(iconv('windows-1251', 'utf-8', $this->curl->request($url)));
+            $result = iconv('windows-1251', 'utf-8', $this->curl->request($url));
+            print_r($result);
+			$html = str_get_html($result);
 
 			$auction = array(
 				'return_to' => $html->find("input[name=return_to]",0)->value,
@@ -135,6 +137,7 @@ Class Drom {
 			);
         	$result = iconv('windows-1251', 'utf-8', $this->curl->request("https://baza.drom.ru/bulletin/service-apply",$auction));
         } else $result = iconv('windows-1251', 'utf-8', $this->curl->request("http://baza.drom.ru/bulletin/".$advert_id."/draft/publish?from=draft.publish",array('from'=>'adding.publish')));
+        print_r($result);
         $html = str_get_html($result);
         return ( $html->find('#fieldsetView',0) && $html->find('#fieldsetView',0)->getAttribute("bulletinid") == $advert_id )?$advert_id:false;
     }
@@ -182,7 +185,9 @@ Class Drom {
             $params['images'] = array('images' => $images);
         }
         $options = $this->setOptions($params,$advert_id,$only_images);    
+        print_r($options);
         $result = json_decode($this->curl->request("http://baza.drom.ru/api/1.0/save/bulletin",$options));
+        print_r($result);
         return $result->id;
     }
 
@@ -222,7 +227,14 @@ Class Drom {
             }
             $options['id'] = $advert_id;
         }
-        $options = array('changeDescription' => json_encode($options));
+        $options = array(
+            'changeDescription' => json_encode($options),
+            'APIOptions' => json_encode(array(
+                "fieldSetVariation" => "full_set",
+                "canUsePersistentSettings" => true
+            ))
+        );
+
         $options['client_type'] = ($advert_id) ? 'v2:editing' : "v2:adding";
         return $options;
     }
