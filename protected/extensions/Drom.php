@@ -184,9 +184,15 @@ Class Drom {
             }
             $params['images'] = array('images' => $images);
         }
+         
+        if($params["advert_type"] == 'bestOffer') {
+            $params['offersRestricted'] = 0;
+        }
+        if($params["advert_type"] == 'fixedPrice') {
+            $params['offersRestricted'] = 1;
+        }
         $options = $this->setOptions($params,$advert_id,$only_images);    
-        // print_r(json_decode($options));
-        // die();
+
         $result = json_decode($this->curl->request("http://baza.drom.ru/api/1.0/save/bulletin",$options));
 
         return $result->id;
