@@ -286,7 +286,7 @@ Class Drom {
                 'diskType' => 41,
         		'diskHoleDiameter' => 33,
         		'desc' => 52,
-                'tireModel' => 98,
+                'tireModel' => 16,
                 'year' => 10,
                 'wheelSeason' => 23,
                 'wheelTireWear' => 29,
@@ -368,7 +368,7 @@ Class Drom {
     	    }
 
             if($params[$fields['type']] == 1) {
-            	$params[$fields['tireModel']] .= "Модель шины: ".trim(str_ireplace($html->find("span[data-field=model] div",0)->plaintext,"",$html->find("span[data-field=model]",0)->plaintext))."\n\r";
+            	$params[$fields['tireModel']] = trim(str_ireplace($html->find("span[data-field=model] div",0)->plaintext,"",$html->find("span[data-field=model]",0)->plaintext));
                 if(count($html->find("span[data-field=marking]")) == 5) {
                     $params[$fields['wheelDiameter']] = $html->find("span[data-field=marking] a",0)->plaintext;
                     $marking = 2;

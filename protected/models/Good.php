@@ -607,8 +607,24 @@ class Good extends GoodFilter
 				$temp["variant_id"] = ($attr_id == 27) ? $model->attribute_1 : $model->variants[0]->variant_id; 
 				array_push($fields, $temp);
 			} else {
-				$model = Attribute::model()->findbyPk($attr_id);
-				$fields[0]["text_value"].= $model->name.": ".$value."\n\r";
+				if($attr_id == 16 || $attr_id == 6) {
+					$variant = new Variant;
+					$variant->value = $value;
+					$variant->sort = 999999;
+					if($variant->save()) {
+						$attribute_variant = new AttributeVariant;
+						$attribute_variant->attribute_id = $attr_id;
+						$attribute_variant->variant_id = $variant->id;
+						if($attribute_variant->save()) {
+							$temp["variant_id"] = $variant->id;
+							array_push($fields, $temp);
+						}
+					}
+				} else {
+					$model = Attribute::model()->findbyPk($attr_id);
+					$fields[0]["text_value"].= $model->name.": ".$value."\n\r";
+				}
+				
 			}
 		} else {
 			if($attr_id != 98) {
