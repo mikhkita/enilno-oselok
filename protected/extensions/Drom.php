@@ -120,7 +120,7 @@ Class Drom {
 
 			$url .= http_build_query($url_params);
             $result = iconv('windows-1251', 'utf-8', $this->curl->request($url));
-            print_r($result);
+
 			$html = str_get_html($result);
 
 			$auction = array(
@@ -137,7 +137,7 @@ Class Drom {
 			);
         	$result = iconv('windows-1251', 'utf-8', $this->curl->request("https://baza.drom.ru/bulletin/service-apply",$auction));
         } else $result = iconv('windows-1251', 'utf-8', $this->curl->request("http://baza.drom.ru/bulletin/".$advert_id."/draft/publish?from=draft.publish",array('from'=>'adding.publish')));
-        print_r($result);
+
         $html = str_get_html($result);
         return ( $html->find('#fieldsetView',0) && $html->find('#fieldsetView',0)->getAttribute("bulletinid") == $advert_id )?$advert_id:false;
     }
@@ -184,10 +184,17 @@ Class Drom {
             }
             $params['images'] = array('images' => $images);
         }
+         
+        if($params["advert_type"] == 'bestOffer') {
+            $params['offersRestricted'] = 0;
+        }
+        if($params["advert_type"] == 'fixedPrice') {
+            $params['offersRestricted'] = 1;
+        }
         $options = $this->setOptions($params,$advert_id,$only_images);    
-        print_r($options);
+
         $result = json_decode($this->curl->request("http://baza.drom.ru/api/1.0/save/bulletin",$options));
-        print_r($result);
+
         return $result->id;
     }
 
@@ -348,8 +355,9 @@ Class Drom {
             if($params[$fields['type']] == 2) {
             	$params[$fields['diskModel']] = $html->find("span[data-field=model]",0)->plaintext;
             	$params[$fields['wheelDiameter']] = str_replace('"',"", $html->find("span[data-field=wheelDiameter]",0)->plaintext);
-            	$params[$fields['condition']] = $html->find("span[data-field=condition]",0) ? trim($html->find("span[data-field=condition]",0)->plaintext) : NULL;
-            	$params[$fields['condition']] = ($params[$fields['condition']]=="Новый") ? "Новые": $params[$fields['condition']];
+            	$params[$fields['condition']] = $html->find("span[data-field=condition]",0) ? trim($html->find("span[data-field=condition]",0)->plaintext) : 'Б/п РФ';
+                $params[$fields['condition']] = ($params[$fields['condition']]=="Новый") ? "Новые": $params[$fields['condition']];
+                if($params[$fields['condition']] != "Новые" || $params[$fields['condition']] != "Б/у") $params[$fields['condition']] = 'Б/п РФ';
             }
 
             if($params[$fields['type']] != 1) {
