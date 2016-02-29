@@ -289,7 +289,7 @@ Class Drom {
 
     public function parseUser() {
         $wheel_array = array("tire","disc","wheel");
-        $Users = AttributeVariant::model()->with('variant')->findAll("attribute_id=43 AND variant_id=3001");
+        $Users = AttributeVariant::model()->with('variant')->findAll("attribute_id=43 AND variant_id > 2900");
 
         foreach ($Users as $user) {
             $good_type = 1;
@@ -321,7 +321,6 @@ Class Drom {
                         array_push($goods, $code);
                         if(array_search($code, $drom_ids) === false) {
                             if($archive = Good::model()->find("id=".$key." AND archive=0")) {
-                                print_r($code."<br>");
                                 $archive->sold(); 
                             }
                         }
@@ -329,19 +328,19 @@ Class Drom {
 
                     foreach ($drom_ids as $key => $code) {
                         if(array_search($code, $goods) === false) {
-                            array_push($links, "http://".Yii::app()->params['ip'].Controller::createUrl('/dromUserParse/parse',array('page'=> 'http://baza.drom.ru/'.$code,'user_id' => $user->variant->value)));     
+                        	$link = "http://".Yii::app()->params['ip'].Controller::createUrl('/dromUserParse/parse',array('page'=> 'http://baza.drom.ru/'.$code,'user_id' => $user->variant->value));
+                        	if(Cron::model()->count("link='".addslashes($link)."'")) {
+								Log::debug("Объявление ".$code." уже добавлено в очередь на парсинг");	
+							} else array_push($links, $link);     
                         }
                     }
                     Cron::addAll($links);    
                 }
                 $good_type++;
 
-            }
-            die("КОнец");       
+            }     
         }
-
-        
-        
+     
     }
 
     public function parseAdvert($page,$good_code,$user_id) {

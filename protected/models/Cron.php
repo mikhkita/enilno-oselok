@@ -105,6 +105,7 @@ class Cron extends CActiveRecord
 	{	
 		if( $values ){
 			foreach ($values as $key => $value) {
+
 				if( !is_array($value) ){
 					$value = array("link"=>$value, "state_id"=>Cron::model()->states["waiting"]);
 				}else if( !isset($value["state_id"]) )
