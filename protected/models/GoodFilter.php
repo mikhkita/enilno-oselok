@@ -327,13 +327,25 @@ class GoodFilter extends CActiveRecord
 
 		$values = Cache::get($good["code"]."#".$good["good_type_id"]);
 
+		$delete = array();
 		foreach ($values as $i => $value) {
 			$arr = explode("_", $value["name"]);
 			$key = intval($arr[0]);
-			if( !is_array($images[$key]) ) $images[$key] = array("original" => $images[$key]);
 
-			$images[$key][array_search(intval($arr[1]), $sizes)] = $value["value"];
+			if( $images[$key] !== NULL ){
+				if( !is_array($images[$key]) ) 
+					$images[$key] = array("original" => $images[$key]);
+
+				$images[$key][array_search(intval($arr[1]), $sizes)] = $value["value"];
+			}else{
+				array_push($delete, "'".$value["value"]."'");
+				if( file_exists(substr($value["value"], 1)) )
+					unlink(substr($value["value"], 1));
+			}
 		}
+
+		if( count($delete) )
+			Cache::model()->deleteAll("value IN (".implode(",", $delete).")");
 
 		return $images;
 	}

@@ -421,13 +421,14 @@ class KolesoOnlineController extends Controller
 		$def = ( intval($_GET['type']) == 1 )?7:31;
 		$_SESSION["FILTER"][$_GET['type']]['sort'] = (isset($_SESSION["FILTER"][$_GET['type']]['sort']))?$_SESSION["FILTER"][$_GET['type']]['sort']:array("field"=>$def,"type"=>"DESC");
 
-		if( !$this->user ){
-			$_SESSION["FILTER"][$_GET['type']]["arr"][43] = array(1418,1419,1857,1860);
-		}else{
+		// if( !$this->user ){
+		// 	$_SESSION["FILTER"][$_GET['type']]["arr"][43] = array(1418,1419,1857,1860);
+		// }else{
 			if( isset($_SESSION["FILTER"][$_GET['type']]["arr"][43]) ){
 				unset($_SESSION["FILTER"][$_GET['type']]["arr"][43]);
 			}
-		}
+		// }
+			
 		$goods = $this->getGoods(40,$_GET['type']); 
 		$count = $goods['count'];	
 		$pages = $goods['pages'];	
@@ -738,9 +739,9 @@ class KolesoOnlineController extends Controller
     public function actionSearch($search){
     	$criteria=new CDbCriteria();
 		$search = explode(" ", $search);
-		if( !$this->user ){
-			$criteria->condition = "public=1";
-		}
+		// if( !$this->user ){
+			// $criteria->condition = "public=1";
+		// }
 		foreach ($search as $i => $val) {
 			$criteria->addSearchCondition("value", $val);
 		}

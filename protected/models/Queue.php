@@ -325,8 +325,8 @@ class Queue extends CActiveRecord
 		}
 	}
 
-	public function getNext($category_id){
-		$queue = Queue::model()->with(array("advert.good.fields.variant","advert.good.fields.attribute","advert.good.type","advert.place","action"))->nextStart()->find(array("condition"=>"place.category_id=$category_id","order"=>"t.start ASC"));
+	public function getNext($category_id, $exclude = NULL){
+		$queue = Queue::model()->with(array("advert.good.fields.variant","advert.good.fields.attribute","advert.good.type","advert.place","action"))->nextStart()->find(array("condition"=>"place.category_id=$category_id".( (is_array($exclude) && count($exclude))?(" AND advert.city_id NOT IN (".implode(",", $exclude).")"):"" ),"order"=>"t.start ASC"));
 		if( !count($queue) && $category_id != 2048 ){
 			$queue = Queue::model()->with(array("advert.good.fields.variant","advert.good.fields.attribute","advert.good.type","advert.place","action"))->next()->find(array("condition"=>"place.category_id=$category_id","order"=>"t.id ASC"));
 		}
@@ -398,6 +398,8 @@ class Queue extends CActiveRecord
 						$cur_day = Queue::getDayByTime($cur_time, $city_params["end"]);
 					}
 				}
+
+				shuffle($queue);
 
 				foreach ($queue as $key => $item) {
 					$cur_time += $city_params["interval"]*60+(rand($city_params["interval"]*(-0.3)*60, $city_params["interval"]*0.3*60));

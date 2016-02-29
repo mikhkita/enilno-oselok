@@ -231,6 +231,7 @@ class ExportController extends Controller
         );
         
 		$this->render('adminDynamic',array(
+			'export' => $export,
 			'data' => $model,
 			'id' => $id,
 			'defaults' => $defaults

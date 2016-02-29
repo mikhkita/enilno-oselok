@@ -388,28 +388,41 @@ class IntegrateController extends Controller
         $this->doQueueNext($debug, 2048);
     }
 
+    public function actionQueueNextAvito1($debug = false){
+        sleep(5);
+        $this->doQueueNext($debug, 2048, "1");
+    }
+
+    public function actionQueueNextAvito2($debug = false){
+        sleep(10);
+        $this->doQueueNext($debug, 2048, "2");
+    }
+
     public function actionQueueNextDrom($debug = false){
         $this->doQueueNext($debug, 2047);
     }
 
-    public function doQueueNext($debug = false,$category_id){
-        if( !$this->checkQueueAccess($category_id) && !$debug ) return true;
+    public function doQueueNext($debug = false,$category_id,$nth = ""){
+        if( !$this->checkQueueAccess($category_id, $nth) && !$debug ) return true;
+
+        if( $category_id == 2048 )
+            $this->setParam( "AVITO", "CITY".$nth, "0" );
 
         while( $this->allowed($category_id) || $debug ){
-            $this->writeTime($category_id);
+            $this->writeTime($category_id, $nth);
             // sleep(5);
-            if( !$this->getNext($category_id) ) sleep(5);
+            if( !$this->getNext($category_id, $nth) ) sleep(5);
               
             if( $debug ) return true;
         }
     }
 
-    public function writeTime($category_id){
-        $this->setParam( Place::model()->categories[$category_id], "TIME", time() );
+    public function writeTime($category_id, $nth = ""){
+        $this->setParam( Place::model()->categories[$category_id], "TIME".$nth, time() );
     }
 
-    public function checkQueueAccess($category_id){
-        $last = $this->getParam( Place::model()->categories[$category_id], "TIME", true );
+    public function checkQueueAccess($category_id, $nth = ""){
+        $last = $this->getParam( Place::model()->categories[$category_id], "TIME".$nth, true );
         return ( time() - intval($last) > 180 );
     }
 
@@ -418,8 +431,17 @@ class IntegrateController extends Controller
         return ( trim($queue) == "on" );
     }
 
-    public function getNext($category_id){
-        $queue = Queue::getNext($category_id);
+    public function getNext($category_id, $nth = ""){
+        if( $category_id == 2048 ){
+            $queue = Queue::getNext($category_id, array(
+                $this->getParam( "AVITO", "CITY", true ),
+                $this->getParam( "AVITO", "CITY1", true ),
+                $this->getParam( "AVITO", "CITY2", true )
+            ));
+            $this->setParam( "AVITO", "CITY".$nth, $queue->advert->city_id );
+        }else{
+            $queue = Queue::getNext($category_id);
+        }
 
         if( !$queue ) return false;
         $advert = $queue->advert;
@@ -883,5 +905,39 @@ class IntegrateController extends Controller
                 print_r($errors);
             }
         }
+    }
+
+    public function actionRibka(){
+        $model = Good::model()->filter(
+            array(
+                "good_type_id"=>1,
+                "attributes"=>array(
+                    43 => array(2915)
+                )
+            )
+        )->getPage(
+            array(
+                'pageSize'=>10000,
+            )
+        );
+        $model = $model["items"];
+
+        $images = array();
+        foreach ($model as $i => $good) {
+            foreach ($this->getImages($good) as $key => $link) {
+                $link = substr($link, 1);
+                $size = getimagesize($link);
+                if( $size[0] == 640 && $size[1] == 115 ){
+                    echo "<img src='/".$link."'>";
+                    echo "<br>";
+                    // unlink($link);
+                    // array_push($images, $link);
+                }
+                // echo imagesy($link)." ".imagesx($link)."<br>";
+            }
+        }
+        // print_r(count($images));
+
+        // echo count($model);
     }
 }
