@@ -108,7 +108,7 @@
                     </ul>
                     <h1 class="category-title"><?=($this->params[$_GET['type']]["NAME"]." ".Yii::app()->params["city"]->in)?></h1>
                 </div>
-                <? if(count($goods)): ?>
+                <? if(count($goods || $similar)): ?>
                 <?php $this->widget('CLinkPager', array(
                     'header' => '',
                     'firstPageLabel' => '1', 
@@ -146,10 +146,14 @@
                         <span class="list-view view"></span>
                     </div> -->
                 </div>
-                <ul class="goods clearfix">  
+                <ul class="goods clearfix" id="goods">  
                     <?php $this->renderPartial('_list', array('goods' => $goods,'last' => $last,'params' => $params,'type' => $_GET['type'],'dynamic'=>$dynamic)); ?>
                 </ul>
                 <div class="load" style="display:none;">Загрузка...</div>
+                <h3>Похожие товары</h3>
+                <ul class="goods clearfix">  
+                    <?php $this->renderPartial('_list', array('goods' => $similar,'last' => 1,'params' => $params,'type' => $_GET['type'],'dynamic'=>$dynamic)); ?>
+                </ul>
                 <? else: ?>
                     <h3 class="b-no-goods">Товаров не найдено</h3>
                 <? endif; ?>

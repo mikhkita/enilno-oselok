@@ -434,9 +434,9 @@ class KolesoOnlineController extends Controller
 				$delta = 0.5;
 				$similar_arr = array();
 				foreach ($similar_filter[$attr] as $key => $value) {
-					$val = AttributeVariant::model()->with("variant")->find("attribute_id=31 AND variant_id=".$value)->variant->value;
+					$val = AttributeVariant::model()->with("variant")->find("attribute_id=".$attr." AND variant_id=".$value)->variant->value;
 					unset($similar_filter[$attr][$key]);
-					$model = AttributeVariant::model()->with("variant")->findAll("attribute_id=31 AND value >=".($val-$delta)."AND value <>".$val." AND value <=".($val+$delta));
+					$model = AttributeVariant::model()->with("variant")->findAll("attribute_id=".$attr." AND value >=".($val-$delta)."AND value <>".$val." AND value <=".($val+$delta));
 					foreach ($model as $item) {
 						if (array_search($item->variant_id, $similar_filter[$attr]) === false) {
 							array_push($similar_filter[$attr], $item->variant_id);
@@ -457,8 +457,9 @@ class KolesoOnlineController extends Controller
 				"good_type_id"=>$_GET['type'],
 				"attributes"=>isset($similar_filter) ? $similar_filter : array(),
 				"int_attributes"=>isset($_SESSION["FILTER"][$_GET['type']]['int']) ? $_SESSION["FILTER"][$_GET['type']]['int'] : array(),
-			);
+			)
 		); 
+		$similar = $similar['items'];
 		$count = $goods['count'];	
 		$pages = $goods['pages'];	
 		$allCount = $goods["allCount"];
@@ -532,7 +533,7 @@ class KolesoOnlineController extends Controller
             'good'
              => array(
                 'select' => false,
-                'condition' => 'good_type_id='.$type
+                'condition' => 'good_type_id='.$type." AND archive=0"
                 ),
             'variant'
         );
