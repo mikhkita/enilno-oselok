@@ -29,10 +29,10 @@
 					<div class="clearfix">
 						<? $price = number_format(($good->fields_assoc[20])?$good->fields_assoc[20]->value:0, 0, ',', ' ' )." р."; $order = Interpreter::generate($this->params[$_GET['type']]["ORDER"], $good,$dynamic); ?>
 						<? $price = ($good->archive)?"Продано":$price; ?>
-						<h3><?=( !$good->fields_assoc[20]->value || $good->fields_assoc[20]->value == 0 )? Yii::app()->params["zeroPrice"] : $price ?><span> <?=Interpreter::generate($this->params[$_GET['type']]["SHIPPING"], $good,$dynamic);?></span></h3>
+						<h3><?=( !$good->fields_assoc[20]->value || $good->fields_assoc[20]->value == 0 )? Yii::app()->params["zeroPrice"] : $price ?><?$delivery = Interpreter::generate($this->params[$_GET['type']]["SHIPPING"], $good,$dynamic);?><span <?if($delivery=="бесплатная"):?>class="b-free-delivery"<?endif;?>> <?=$delivery?></span></h3>
 						<? $is_available = Interpreter::generate($this->params[$_GET['type']]["AVAILABLE"], $good,$dynamic); ?>
 						<? if($is_available != "В наличии"): ?>
-							<h4><?=$is_available?></h4>
+							<h4 <?if($delivery=="бесплатная"):?>class="b-free-delivery"<?endif;?>><?=$is_available?></h4>
 						<? endif; ?>
 					</div>
 					<div class="clearfix">

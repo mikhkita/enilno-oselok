@@ -36,11 +36,11 @@
 					<td class="align-left"><?=$item->id?></td>
 					<td><input type="checkbox" name="good_id" class="b-sess-checkbox" data-block="#b-sess-checkbox-list" <? if($item->isChecked()): ?>checked="checked"<? endif; ?> value="<?=$item->id?>"></td>
 					<? if($with_photos): ?>
-						<? $images = $this->getImages($item); $first_image = array_shift($images); ?>
+						<? $images = $item->getImages(1, array("small"));?>
 						<td class="b-photo-td">
-							<a href="<?=$first_image?>" class="fancy-img" rel="<?=$item->id?>"><img src="<?=$first_image?>" alt=""></a>
+							<a href="<?=$images[0]["original"]?>" class="fancy-img" rel="<?=$item->id?>"><img src="<?=$images[0]["small"]?>" alt=""></a>
 							<? foreach ($images as $key => $img): ?>
-								<a href="<?=$img?>" class="fancy-img" rel="<?=$item->id?>"></a>
+								<!-- <a href="<?=$img["original"]?>" class="fancy-img" rel="<?=$item->id?>"></a> -->
 							<? endforeach; ?>
 						</td>
 					<? endif; ?>

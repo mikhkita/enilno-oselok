@@ -1849,9 +1849,18 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 				}
 				.good-detail .b-block .detail-wrap .detail-price h3 span {
 					top: 0px;
+					font-size: 22px;
+					font-weight: 400;
 					left: 5px;
 					position: relative;
 					display: inline-block;
+					color: #414141;
+				}
+				.good-detail .b-block .detail-wrap .detail-price h3 span.b-free-delivery{
+					font-size: 15px;
+					color: #797979;
+					font-weight: 300;
+					margin-left: -5px;
 				}
 				.good-detail .b-block .detail-wrap .detail-price h4{
 					margin-bottom: 14px;

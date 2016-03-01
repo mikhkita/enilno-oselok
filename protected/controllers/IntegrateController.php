@@ -388,15 +388,15 @@ class IntegrateController extends Controller
         $this->doQueueNext($debug, 2048);
     }
 
-    public function actionQueueNextAvito1($debug = false){
-        sleep(5);
-        $this->doQueueNext($debug, 2048, "1");
-    }
+    // public function actionQueueNextAvito1($debug = false){
+    //     sleep(5);
+    //     $this->doQueueNext($debug, 2048, "1");
+    // }
 
-    public function actionQueueNextAvito2($debug = false){
-        sleep(10);
-        $this->doQueueNext($debug, 2048, "2");
-    }
+    // public function actionQueueNextAvito2($debug = false){
+    //     sleep(10);
+    //     $this->doQueueNext($debug, 2048, "2");
+    // }
 
     public function actionQueueNextDrom($debug = false){
         $this->doQueueNext($debug, 2047);
@@ -405,10 +405,10 @@ class IntegrateController extends Controller
     public function doQueueNext($debug = false,$category_id,$nth = ""){
         if( !$this->checkQueueAccess($category_id, $nth) && !$debug ) return true;
 
-        if( $category_id == 2048 )
-            $this->setParam( "AVITO", "CITY".$nth, "0" );
-
         while( $this->allowed($category_id) || $debug ){
+            // if( $category_id == 2048 )
+            //     $this->setParam( "AVITO", "CITY".$nth, "0" );
+
             $this->writeTime($category_id, $nth);
             // sleep(5);
             if( !$this->getNext($category_id, $nth) ) sleep(5);
@@ -432,16 +432,16 @@ class IntegrateController extends Controller
     }
 
     public function getNext($category_id, $nth = ""){
-        if( $category_id == 2048 ){
-            $queue = Queue::getNext($category_id, array(
-                $this->getParam( "AVITO", "CITY", true ),
-                $this->getParam( "AVITO", "CITY1", true ),
-                $this->getParam( "AVITO", "CITY2", true )
-            ));
-            $this->setParam( "AVITO", "CITY".$nth, $queue->advert->city_id );
-        }else{
+        // if( $category_id == 2048 ){
+        //     $queue = Queue::getNext($category_id, array(
+        //         $this->getParam( "AVITO", "CITY", true ),
+        //         $this->getParam( "AVITO", "CITY1", true ),
+        //         $this->getParam( "AVITO", "CITY2", true )
+        //     ));
+        //     $this->setParam( "AVITO", "CITY".$nth, $queue->advert->city_id );
+        // }else{
             $queue = Queue::getNext($category_id);
-        }
+        // }
 
         if( !$queue ) return false;
         $advert = $queue->advert;
@@ -505,18 +505,18 @@ class IntegrateController extends Controller
         switch ($queue->action->code) {
             case 'delete':
 
-                if( $advert->type_id == 869 ){
+                // if( $advert->type_id == 869 ){
                     Log::debug("Удаление ".$advert->good->fields_assoc[3]->value." в аккаунте ".$account->login);
                     $result = $place->deleteAdvert( (($place_name == "AVITO")?$advert->link:$advert->url) );
                     // $result = $place->deleteAdvert( $advert->url );
                     if( $result )
                         $advert->delete();
-                }else{
-                    Log::debug("Попытка удаления платного объявления ".$advert->good->fields_assoc[3]->value." в аккаунте ".$account->login);
-                    $queue->setState("partner");
-                    // $place->curl->removeCookies();
-                    return true;
-                }
+                // }else{
+                //     Log::debug("Попытка удаления платного объявления ".$advert->good->fields_assoc[3]->value." в аккаунте ".$account->login);
+                //     $queue->setState("partner");
+                //     // $place->curl->removeCookies();
+                //     return true;
+                // }
 
                 break;
             case 'add':

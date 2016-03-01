@@ -249,7 +249,7 @@ class Good extends GoodFilter
 
 				if( $attribute->list ){
 					$criteria->with = array('fields' => array('select'=> array('attribute_id')),"fields.variant"=> array('select' => array('sort')));
-					$criteria->order = 'variant.sort '.$options["type"];
+					$criteria->order = 'variant.sort '.$options["type"].', t.id ASC';
 				}else{
 					$criteria->with = array('fields' => array('select'=> array('variant_id','attribute_id',$attribute->type->code."_value")));
 					$criteria->order = 'fields.'.$attribute->type->code.'_value '.$options["type"].', fields.id '.$options["type"];
