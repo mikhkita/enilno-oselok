@@ -412,7 +412,6 @@ class KolesoOnlineController extends Controller
 		$filter = $this->getFilter($_GET['type']);
 
 		$last = isset($_GET['last']) ? $_GET['last'] : 1;
-		
 		if($partial) {
 			$last++;
 			$_GET['GoodFilter_page'] = $last;
@@ -426,10 +425,10 @@ class KolesoOnlineController extends Controller
 		// if( !$this->user ){
 		// 	$_SESSION["FILTER"][$_GET['type']]["arr"][43] = array(1418,1419,1857,1860);
 		// }else{
-		print_r($_SESSION["FILTER"][2]);
+		// print_r($_SESSION["FILTER"][2]);
 		$similar_filter = $_SESSION["FILTER"][$_GET['type']]["arr"];
 		$attr = 31;
-		if($_GET['type'] != 2) {
+		if($_GET['type'] != 1) {
 			if(isset($similar_filter[$attr])) {
 				$delta = 0.5;
 				$similar_arr = array();
@@ -442,24 +441,22 @@ class KolesoOnlineController extends Controller
 							array_push($similar_filter[$attr], $item->variant_id);
 						}
 					}
-				}
-
-					
-					
-				
+				}			
 			}
 		}
 			
 		// }
 			
 		$goods = $this->getGoods(40,$_GET['type']); 
-		$similar = $this->getGoods(8,$_GET['type'],array(
-				"good_type_id"=>$_GET['type'],
-				"attributes"=>isset($similar_filter) ? $similar_filter : array(),
-				"int_attributes"=>isset($_SESSION["FILTER"][$_GET['type']]['int']) ? $_SESSION["FILTER"][$_GET['type']]['int'] : array(),
-			)
-		); 
-		$similar = $similar['items'];
+		if(!$partial) {
+			$similar = $this->getGoods(40,$_GET['type'],array(
+					"good_type_id"=>$_GET['type'],
+					"attributes"=>isset($similar_filter) ? $similar_filter : array(),
+					"int_attributes"=>isset($_SESSION["FILTER"][$_GET['type']]['int']) ? $_SESSION["FILTER"][$_GET['type']]['int'] : array(),
+				)
+			); 
+			$similar = $similar['items'];
+		}
 		$count = $goods['count'];	
 		$pages = $goods['pages'];	
 		$allCount = $goods["allCount"];
@@ -477,7 +474,7 @@ class KolesoOnlineController extends Controller
 		// $mobile = true;
 
 		if($partial) {
-			$this->renderPartial('_list',array(
+			$options = array(
 				'goods'=> $goods,
 				'last' => $last,
 				'params' => $this->params,
@@ -485,14 +482,15 @@ class KolesoOnlineController extends Controller
 				'dynamic' => $dynamic,
 				'pages' => $pages,
 				'partial' => true
-			));
+			);
+			$this->renderPartial('_list',$options);
 		} else {
 			$this->render('category',array(
 				'goods'=> $goods,
+				'similar' => $similar,
 				'filter' => $filter,
 				'pages' => $pages,
 				'params' => $this->params,
-				'last' => $last,
 				'dynamic' => $dynamic,
 				'mobile' => $this->is_mobile,
 				'pages' => $pages,

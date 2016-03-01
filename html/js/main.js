@@ -37,7 +37,7 @@ $(document).ready(function(){
             }
     }
 
-    var blocked = false;
+    var blocked = false,blocked_s = false;
 
     if( device.mobile() )
         new FastClick(document.body);
@@ -63,7 +63,9 @@ $(document).ready(function(){
                             $("#goods").append(msg);
                             fancyInit();
                             if($('#goods li:eq(-1)').attr("data-last") == 0) {
-                                $(".load").hide(); 
+                                $(".load").hide();
+                                if($("#similar").length) $("#similar").show();
+                                
                             } 
                             blocked = false;
                         }

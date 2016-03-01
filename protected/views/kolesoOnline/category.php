@@ -147,16 +147,13 @@
                     </div> -->
                 </div>
                 <ul class="goods clearfix" id="goods">  
-                    <?php $this->renderPartial('_list', array('goods' => $goods,'last' => $last,'params' => $params,'type' => $_GET['type'],'dynamic'=>$dynamic)); ?>
+                    <?php $this->renderPartial('_list', array('goods' => $goods,'last' => 1,'params' => $params,'type' => $_GET['type'],'dynamic'=>$dynamic)); ?>
                 </ul>
                 <div class="load" style="display:none;">Загрузка...</div>
-                <h3>Похожие товары</h3>
-                <ul class="goods clearfix">  
-                    <?php $this->renderPartial('_list', array('goods' => $similar,'last' => 1,'params' => $params,'type' => $_GET['type'],'dynamic'=>$dynamic)); ?>
-                </ul>
                 <? else: ?>
                     <h3 class="b-no-goods">Товаров не найдено</h3>
                 <? endif; ?>
+                
             </div>
             <?php $this->endWidget(); ?>            
         </div>
