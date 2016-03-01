@@ -1430,20 +1430,28 @@ width: 700px;margin-left: 0px;}
 				}
 				.good-detail .b-block .detail-wrap .detail-price h3 span {
 					top: 0px;
-					font-size: 28px;
+					font-size: 40px;
 					left: 5px;
 					color: #777;
 					position: relative;
 					display: inline-block;
+					font-weight: 500;
+					color: #414141;
+				}
+				.good-detail .b-block .detail-wrap .detail-price h3 span.b-free-delivery{
+					font-size: 30px;
 				}
 				.good-detail .b-block .detail-wrap .detail-price h4{
 					margin-bottom: 8px;
-					font-size: 28px;
+					font-size: 32px;
 					display: inline-block;
 					position: relative;
 					top: 0px;
 					color: #777;
 					margin-left: 8px;
+				}
+				.good-detail .b-block .detail-wrap .detail-price h4.b-free-delivery{
+					font-size: 30px;
 				}
 				.good-detail .b-block .detail-wrap .detail-price a{
 					font-weight: 500;

@@ -241,6 +241,27 @@ class GoodController extends Controller
 		}
 	}
 
+	public function actionAdminMassUpdate($good_type_id){
+		$good_ids = Good::getCheckboxes($good_type_id);
+
+		if( count($good_ids) ){
+			$good_type = GoodType::model()->findByPk($good_type_id);
+			$fields = $good_type->fields;
+
+			$dropdown = $this->getDropDown($fields);
+
+			
+
+			// $this->renderPartial('adminUpdate',array(
+			// 	'model'=>$model,
+			// 	'result' => $result,
+			// 	'fields' => $fields,
+			// 	'dropdown' => $dropdown,
+			// 	'good_type_id' => $good_type_id
+			// ));
+		}
+	}
+
 	public function getDropDown($fields){
 		$out = array();
 		foreach ($fields as $i => $field) {
@@ -971,7 +992,6 @@ class GoodController extends Controller
 		}
 		
 	}
-
 	
 	public function displayCodes($success,$good_type_id) {
 		$result = array();
