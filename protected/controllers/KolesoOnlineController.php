@@ -420,16 +420,45 @@ class KolesoOnlineController extends Controller
 
 		$def = ( intval($_GET['type']) == 1 )?7:31;
 		$_SESSION["FILTER"][$_GET['type']]['sort'] = (isset($_SESSION["FILTER"][$_GET['type']]['sort']))?$_SESSION["FILTER"][$_GET['type']]['sort']:array("field"=>$def,"type"=>"DESC");
-
+		if( isset($_SESSION["FILTER"][$_GET['type']]["arr"][43]) ){
+			unset($_SESSION["FILTER"][$_GET['type']]["arr"][43]);
+		}
 		// if( !$this->user ){
 		// 	$_SESSION["FILTER"][$_GET['type']]["arr"][43] = array(1418,1419,1857,1860);
 		// }else{
-			if( isset($_SESSION["FILTER"][$_GET['type']]["arr"][43]) ){
-				unset($_SESSION["FILTER"][$_GET['type']]["arr"][43]);
+		print_r($_SESSION["FILTER"][2]);
+		$similar_filter = $_SESSION["FILTER"][$_GET['type']]["arr"];
+		$attr = 31;
+		if($_GET['type'] != 2) {
+			if(isset($similar_filter[$attr])) {
+				$delta = 0.5;
+				$similar_arr = array();
+				foreach ($similar_filter[$attr] as $key => $value) {
+					$val = AttributeVariant::model()->with("variant")->find("attribute_id=31 AND variant_id=".$value)->variant->value;
+					unset($similar_filter[$attr][$key]);
+					$model = AttributeVariant::model()->with("variant")->findAll("attribute_id=31 AND value >=".($val-$delta)."AND value <>".$val." AND value <=".($val+$delta));
+					foreach ($model as $item) {
+						if (array_search($item->variant_id, $similar_filter[$attr]) === false) {
+							array_push($similar_filter[$attr], $item->variant_id);
+						}
+					}
+				}
+
+					
+					
+				
 			}
+		}
+			
 		// }
 			
 		$goods = $this->getGoods(40,$_GET['type']); 
+		$similar = $this->getGoods(8,$_GET['type'],array(
+				"good_type_id"=>$_GET['type'],
+				"attributes"=>isset($similar_filter) ? $similar_filter : array(),
+				"int_attributes"=>isset($_SESSION["FILTER"][$_GET['type']]['int']) ? $_SESSION["FILTER"][$_GET['type']]['int'] : array(),
+			);
+		); 
 		$count = $goods['count'];	
 		$pages = $goods['pages'];	
 		$allCount = $goods["allCount"];
