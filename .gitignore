@@ -2,6 +2,7 @@ assets/*
 /framework/*
 /filemanager/*
 /photodoska/*
+/upload/cache/*
 /protected/config/main.php
 /protected/config/params.php
 /protected/runtime/application.log

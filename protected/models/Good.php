@@ -200,8 +200,13 @@ class Good extends GoodFilter
 		if( $count == 0 )
 			$criteria->condition = 'good_type_id='.$options["good_type_id"].' AND fields.attribute_id=3';
 
-		$options["archive"] = isset($options["archive"]) ? $options["archive"] : 0;
-		$criteria->addCondition('archive='.$options["archive"]);
+		if(isset($options["archive"]) && $options["archive"] == "all") {
+			$criteria->addInCondition('archive',array(0,1)); 
+		} else {
+			$options["archive"] = isset($options["archive"]) ? $options["archive"] : 0;
+			$criteria->addCondition('archive='.$options["archive"]);
+		}
+		
 		$criteria->having = 'COUNT(DISTINCT fields.attribute_id)'.(( $count == 0 )?'>':'').'='.$count;
 
 		if( $ids ){

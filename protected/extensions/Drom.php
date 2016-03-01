@@ -72,7 +72,7 @@ Class Drom {
         return $links;
     }
 
-    public function parseAllItems($link, $user_id, $auth = true){
+    public function parseAllItems($link, $user_id, $auth = true, $get_id = false){
         include_once Yii::app()->basePath.'/extensions/simple_html_dom.php';
 
         if($auth) $this->auth("https://baza.drom.ru/partner/sign");
@@ -83,15 +83,24 @@ Class Drom {
         if( !$html->find('.userProfile',0) || trim($html->find('.userProfile',0)->getAttribute("data-view-dir-user-id")) != trim($user_id) ) return $links;
         $pageLinks = $html->find('.bulletinLink');
         $page = 1;
-        while(count($pageLinks) && ($links[0] != $pageLinks[0]->getAttribute("href")) ){
+
+        if($get_id) {
+            $attr = "name";
+        } else $attr = "href";
+
+        while(count($pageLinks) && ($links[0] != $pageLinks[0]->getAttribute($attr)) ){
             foreach($pageLinks as $element){
-                array_push($links, $element->getAttribute("href"));
+                array_push($links, $element->getAttribute($attr));
             }
             $page++;
             $html = str_get_html(iconv('windows-1251', 'utf-8', $this->curl->request($link."?page=".$page)));
             $pageLinks = $html->find('.bulletinLink');
         }
-        
+
+        if($get_id && $html->find('#itemsCount_placeholder strong',0)) {
+            if(count($links) != array_shift(explode(" пр", $html->find('#itemsCount_placeholder strong',0)->plaintext)))
+                return false;
+        }
         return $links;
     }
 
@@ -276,6 +285,62 @@ Class Drom {
             $fields['predestination'] = "regular";
         }
         return $fields;
+    }
+
+    public function parseUser() {
+        $wheel_array = array("tire","disc","wheel");
+        $Users = AttributeVariant::model()->with('variant')->findAll("attribute_id=43 AND variant_id > 2900");
+
+        foreach ($Users as $user) {
+            $good_type = 1;
+            foreach ($wheel_array as $type) {
+                $model = Good::model()->filter(
+                    array(
+                        "good_type_id"=>$good_type,
+                        "archive" => 'all',
+                        "attributes"=>array(
+                            43 => array($user->variant_id)
+                        )
+                    )
+                )->getPage(
+                    array(
+                        'pageSize'=>10000,
+                    )
+                );
+                   
+                if($model = $model['items']) {
+                    $goods = array();
+                    $links = array();
+                    $drom_ids = $this->parseAllItems('http://baza.drom.ru/user/'.$user->variant->value.'/wheel/'.$type, $user->variant->value, false,true);
+                    if(!$drom_ids){
+                        Log::debug("Ошибка парсинга объявлений пользователя");
+                        break;
+                    }    
+                    foreach ($model as $key => $item) {
+                        $code = str_replace(".html","", array_pop(explode("/", $item->fields_assoc[106]->value)));
+                        array_push($goods, $code);
+                        if(array_search($code, $drom_ids) === false) {
+                            if($archive = Good::model()->find("id=".$key." AND archive=0")) {
+                                $archive->sold(); 
+                            }
+                        }
+                    }
+
+                    foreach ($drom_ids as $key => $code) {
+                        if(array_search($code, $goods) === false) {
+                        	$link = "http://".Yii::app()->params['ip'].Controller::createUrl('/dromUserParse/parse',array('page'=> 'http://baza.drom.ru/'.$code,'user_id' => $user->variant->value));
+                        	if(Cron::model()->count("link='".addslashes($link)."'")) {
+								Log::debug("Объявление ".$code." уже добавлено в очередь на парсинг");	
+							} else array_push($links, $link);     
+                        }
+                    }
+                    Cron::addAll($links);    
+                }
+                $good_type++;
+
+            }     
+        }
+     
     }
 
     public function parseAdvert($page,$good_code,$user_id) {

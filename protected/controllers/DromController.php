@@ -226,6 +226,10 @@ class DromController extends Controller
             $this->insertValues(GoodAttribute::tableName(),$insertCities);
         }
     }
+    public function actionAdminVlad(){
+        $drom = new Drom;
+        $drom->parseUser();
+    }
     public function actionAdminIndex(){
 
         // $queue = Queue::model()->with("advert.good.type","advert.place","action")->findByPk(198);
