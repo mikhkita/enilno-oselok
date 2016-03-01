@@ -11,15 +11,23 @@ Class Drom {
     );
     
     function __construct() {
+        include_once Yii::app()->basePath.'/extensions/simple_html_dom.php';
         $this->curl = new Curl();
     }
 
     public function setUser($login,$password){
+        $this->curl->changeCookies($login);
         $this->login = $login;
         $this->password = $password;
     }
 
     public function auth($redirect = "https://baza.drom.ru/partner/sign"){
+        $html = str_get_html(iconv('windows-1251', 'utf-8', $this->curl->request("http://baza.drom.ru/personal")));
+
+        if( is_object($html) && $html->find("body",0) && trim($html->find("body",0)->getAttribute("data-user-login")) == $this->login )
+            return true;
+
+        echo "Авторизация ".$this->login;
         $this->curl->removeCookies();
 
         $params = array(
@@ -48,8 +56,6 @@ Class Drom {
     }
 
     public function parseExpired(){
-        include_once Yii::app()->basePath.'/extensions/simple_html_dom.php';
-
         $this->auth("https://baza.drom.ru/partner/sign");
         
         $html = str_get_html(iconv('windows-1251', 'utf-8', $this->curl->request("https://baza.drom.ru/personal/non_active/bulletins")));
@@ -73,8 +79,6 @@ Class Drom {
     }
 
     public function parseAllItems($link, $user_id, $auth = true, $get_id = false){
-        include_once Yii::app()->basePath.'/extensions/simple_html_dom.php';
-
         if($auth) $this->auth("https://baza.drom.ru/partner/sign");
         
         $html = str_get_html(iconv('windows-1251', 'utf-8', $this->curl->request($link)));
@@ -105,7 +109,6 @@ Class Drom {
     }
 
     public function addAdvert($params,$images){
-        include_once Yii::app()->basePath.'/extensions/simple_html_dom.php';
         $options = $this->setOptions($params);
         $advert_id = json_decode($this->curl->request("http://baza.drom.ru/api/1.0/save/bulletin",$options))->id;
 
@@ -147,13 +150,13 @@ Class Drom {
         	$result = iconv('windows-1251', 'utf-8', $this->curl->request("https://baza.drom.ru/bulletin/service-apply",$auction));
         } else $result = iconv('windows-1251', 'utf-8', $this->curl->request("http://baza.drom.ru/bulletin/".$advert_id."/draft/publish?from=draft.publish",array('from'=>'adding.publish')));
 
+        print_r($result);
+
         $html = str_get_html($result);
         return ( $html->find('#fieldsetView',0) && $html->find('#fieldsetView',0)->getAttribute("bulletinid") == $advert_id )?$advert_id:false;
     }
     
-    public function upPaidAdverts($advert_id){
-        include_once Yii::app()->basePath.'/extensions/simple_html_dom.php';
-        
+    public function upPaidAdverts($advert_id){        
         $begin = iconv('windows-1251', 'utf-8', $this->curl->request("https://baza.drom.ru/".$advert_id));
         $html = str_get_html($begin);
 
@@ -203,12 +206,12 @@ Class Drom {
         $options = $this->setOptions($params,$advert_id,$only_images);    
 
         $result = json_decode($this->curl->request("http://baza.drom.ru/api/1.0/save/bulletin",$options));
+        print_r($result);
 
         return $result->id;
     }
 
     public function deleteAdvert($advert_id) {
-        include_once Yii::app()->basePath.'/extensions/simple_html_dom.php';
         $html = str_get_html($this->curl->request('https://baza.drom.ru/bulletin/service-configure?ids='.$advert_id.'&applier=deleteBulletin'));
         
         $del_arr = array(
@@ -221,10 +224,11 @@ Class Drom {
         );
 
         $result = iconv('windows-1251', 'utf-8', $this->curl->request('https://baza.drom.ru/bulletin/service-apply',$del_arr));
+        // print_r($result);
 
         $html = str_get_html($result);
 
-        return ( $html->find('.bulletin_expired_notification h2',0) && $html->find('.bulletin_expired_notification h2',0)->plaintext == "Вы удалили объявление" );
+        return ( ($html->find('.bulletin_expired_notification h2',0) && $html->find('.bulletin_expired_notification h2',0)->plaintext == "Вы удалили объявление") || ($html->find('.alert_r p',0) && $html->find('.alert_r p',0)->plaintext == "Действие уже выполнено") );
     }
 
     public function setOptions($params,$advert_id = NULL,$only_images = false) {
@@ -346,7 +350,6 @@ Class Drom {
     public function parseAdvert($page,$good_code,$user_id) {
         $link = "http://baza.drom.ru/".array_pop(explode("-",array_pop(explode("/", $page))));
         if(!GoodAttribute::model()->find("attribute_id=106 AND varchar_value='".$link."'")) {
-            include_once Yii::app()->basePath.'/extensions/simple_html_dom.php';
             $fields = array(
                 'type' => 0,
                 'link' => 106,
