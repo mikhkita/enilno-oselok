@@ -490,6 +490,7 @@ class KolesoOnlineController extends Controller
 				'similar' => $similar,
 				'filter' => $filter,
 				'pages' => $pages,
+				'last' => $last,
 				'params' => $this->params,
 				'dynamic' => $dynamic,
 				'mobile' => $this->is_mobile,
