@@ -51,6 +51,7 @@ $(document).ready(function(){
 
     $('#similar-slider').slick({
         slide: 'li',
+        infinite: false,
         slidesToShow: 5,
         slidesToScroll: 1,
         prevArrow: "<span class='b-sim-nav gradient-lightBlack b-sim-left'></span>",
