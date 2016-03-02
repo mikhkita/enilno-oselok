@@ -13,7 +13,7 @@ class GoodController extends Controller
 	{
 		return array(
 			array('allow',
-				'actions'=>array('adminIndex','adminPhoto','adminCheckCode', 'adminPhotoUpdate','adminToArchive','adminChangeType','adminTest','updatePrices','updateAuctionLinks','adminCreate','adminUpdate','adminDelete','adminEdit','getAttrType','getAttr','adminAdverts','adminUpdateImages',"adminAddCheckbox","adminRemoveCheckbox","adminAddAllCheckbox","adminRemoveAllCheckbox",'adminUpdateAll','adminAddSomeCheckbox','adminUpdateAdverts','adminViewSettings','adminSold','adminArchive','adminJoin','adminDeleteAll','adminSale','adminCustomer','adminArchiveAll','adminSaleTable','adminSaleDelete'),
+				'actions'=>array('adminIndex','adminPhoto','adminCheckCode', 'adminPhotoUpdate','adminToArchive','adminChangeType','adminTest','updatePrices','updateAuctionLinks','adminCreate','adminUpdate','adminDelete','adminEdit','getAttrType','getAttr','adminAdverts','adminUpdateImages',"adminAddCheckbox","adminRemoveCheckbox","adminAddAllCheckbox","adminRemoveAllCheckbox", "adminRemoveManyCheckbox",'adminUpdateAll','adminAddSomeCheckbox','adminAddManyCheckbox','adminUpdateAdverts','adminViewSettings','adminSold','adminArchive','adminJoin','adminDeleteAll','adminSale','adminCustomer','adminArchiveAll','adminSaleTable','adminSaleDelete'),
 				'roles'=>array('manager'),
 			),
 			array('allow',
@@ -976,6 +976,18 @@ class GoodController extends Controller
 
 	public function actionAdminAddAllCheckbox($good_type_id) {
 		echo $this->displayCodes(Good::addAllCheckbox($good_type_id),$good_type_id);
+	}
+
+	public function actionAdminAddManyCheckbox($good_type_id, $ids) {
+		$out = (array)json_decode($this->displayCodes(Good::addAllCheckbox($good_type_id, NULL, $ids),$good_type_id));
+		$out["ids"] = $ids;
+		echo json_encode($out);
+	}
+
+	public function actionAdminRemoveManyCheckbox($good_type_id, $ids) {
+		$out = (array)json_decode($this->displayCodes(Good::removeAllCheckbox($good_type_id, $ids),$good_type_id));
+		$out["ids"] = $ids;
+		echo json_encode($out);
 	}
 
 	public function actionAdminRemoveAllCheckbox($good_type_id) {

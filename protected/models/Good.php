@@ -459,19 +459,21 @@ class Good extends GoodFilter
 			return false;
 		}
 	}
-	public function addAllCheckbox($good_type_id,$ids = NULL){
+	public function addAllCheckbox($good_type_id, $codes = NULL, $many = NULL){
 		if(!isset($_SESSION)) session_start();
 
 		if( $good_type_id ){
 			if( !is_array($_SESSION["goods"]) ) $_SESSION["goods"] = array();
-			if($ids) {
 
-				$arr = explode(PHP_EOL,$ids);
+			if( $many )
+				$ids = explode(",", $many);
+
+			if($codes) {
+				$arr = explode(PHP_EOL,$codes);
 				foreach ($arr as &$value) {
 					$value = trim($value);
 				}
 				$ids = Good::getIdbyCode($arr,array($good_type_id));
-
 			}
 
 			$filter_values = $this->getUserParam("GOOD_FILTER_".$good_type_id) ? $this->getUserParam("GOOD_FILTER_".$good_type_id,false,true) : array();
@@ -496,7 +498,9 @@ class Good extends GoodFilter
 			    array(3)
 			);
 
-			$_SESSION["goods"][$good_type_id] = array();
+			if( $many === NULL || !isset($_SESSION["goods"][$good_type_id]) )
+				$_SESSION["goods"][$good_type_id] = array();
+
 			if( isset($goods["items"]) )
 				foreach ($goods['items'] as $key => $good)
 					$_SESSION["goods"][$good->good_type_id][$good->id] = $good->fields_assoc[3]->value;
@@ -507,14 +511,20 @@ class Good extends GoodFilter
 		}
 	}
 
-	public function removeAllCheckbox($good_type_id){
+	public function removeAllCheckbox($good_type_id, $many = NULL){
 		if(!isset($_SESSION)) session_start();
 
 		if( $good_type_id ){
 			if( !is_array($_SESSION["goods"]) ) $_SESSION["goods"] = array(); 
 			if( !is_array($_SESSION["goods"][$good_type_id]) ) $_SESSION["goods"][$good_type_id] = array();
 
-			$_SESSION["goods"][$good_type_id] = array();
+			if( $many ){
+				$ids = explode(",", $many);
+				foreach ($ids as $i => $id)
+					unset($_SESSION["goods"][$good_type_id][$id]);	
+			}else{
+				$_SESSION["goods"][$good_type_id] = array();
+			}
 
 			return true;
 		}else{

@@ -6,7 +6,7 @@ $(document).ready(function(){
         title = window.location.href,
         titleVar = ( title.split("localhost").length > 1 )?4:3,
         progress = new KitProgress("#FFF",3),
-        yahooShift = false;
+        shift = false;
 
     progress.endDuration = 0.3;
 
@@ -569,7 +569,7 @@ $(document).ready(function(){
             }
         }
         if( e.keyCode == 16 ){
-            yahooShift = true;
+            shift = true;
         }
         if( e.keyCode == 13 ){
             enterVariantsHandler();
@@ -584,7 +584,7 @@ $(document).ready(function(){
             ctrldown = false;
         }
         if( e.keyCode == 16 ){
-            yahooShift = false;
+            shift = false;
         }
     }
     // if( $(".ajax-create").length ){
@@ -1124,7 +1124,7 @@ $(document).ready(function(){
                     return false;
                 }
                 yahooTog = false;
-                if( yahooShift && prevClick !== null ){
+                if( shift && prevClick !== null ){
                     selectInterval(prevClick,$(this).index());
                 }else{
                     $(this).toggleClass("selected");
@@ -1223,40 +1223,16 @@ $(document).ready(function(){
     /* Live -------------------------------------- Live */
 
     /* Session Checkboxes ------------------------ Session Checkboxes */
+    var prevCheck = {
+        index : null,
+        checked : null
+    };
 
     if( $(".b-sess-checkbox").length ){
         var addUrl = $(".b-sess-checkbox-info").attr("data-add-url"),
-            removeUrl = $(".b-sess-checkbox-info").attr("data-remove-url");
-
-        $("body").on("change",".b-sess-checkbox",function(){
-            var $this = $(this);
-            progress.setColor("#D26A44");
-            progress.start(1);
-
-            $.ajax({
-            url: ( $this.prop("checked") )?addUrl:removeUrl,
-            data: "id="+$this.val(),
-                success: function(msg){
-                    var json = JSON.parse(msg);
-                    progress.end();
-                    if( json.result == "success" ){
-                        if($this.hasClass("check-page")) {
-                            if($this.prop("checked")) {
-                                $(".b-sess-checkbox").prop("checked",true);
-                            } else $(".b-sess-checkbox").prop("checked",false);
-                        }
-                        $($this.attr("data-block")).text(json.codes);
-                    }else{
-                        alert("Какая-то ошибка. Не удалось выяснить причину. Попробуй еще пару раз и звони Мише.");
-                    }
-                },
-                error: function(){
-                    progress.end();
-                    alert("Какая-то ошибка. Не удалось выяснить причину. Попробуй еще пару раз и звони Мише.");
-                }
-            });
-
-        });
+            removeUrl = $(".b-sess-checkbox-info").attr("data-remove-url"),
+            addManyUrl = $(".b-sess-checkbox-info").attr("data-add-many-url"),
+            removeManyUrl = $(".b-sess-checkbox-info").attr("data-remove-many-url");
 
         $("body").on("click",".b-sess-allcheckbox",function(){
             var $this = $(this);
@@ -1283,10 +1259,80 @@ $(document).ready(function(){
             return false;
         });
 
+        $("body").on("change",".b-sess-checkbox", function(){
+            progress.setColor("#D26A44");
+            progress.start(1);
+
+            if( shift && prevCheck.index !== null && $(this).parents("tr").index() !== prevCheck.index){
+                manyCheckboxes($(this));
+            }else{
+                oneCheckbox($(this));
+            }
+        });
     }
 
-    
+    function manyCheckboxes($this){
+        var ids = [],
+            from = Math.min(prevCheck.index, $this.parents("tr").index()),
+            to = Math.max(prevCheck.index, $this.parents("tr").index()),
+            $table = $this.parents("table"),
+            action = prevCheck.checked;
 
+        console.log([from,to]);
+        for (var i = from; i <= to; i++){
+            var input = $table.find("tr").eq(i).find("input[type='checkbox']");
+            ids.push(input.val());
+            input.prop("checked", prevCheck.checked);
+        }
+
+        $.ajax({
+            url: ( prevCheck.checked )?addManyUrl:removeManyUrl,
+            data: "ids="+ids.join(","),
+            success: function(msg){
+                var json = JSON.parse(msg);
+                progress.end();
+
+                $($this.attr("data-block")).text(json.codes);
+                if( json.ids ){
+                    var items = json.ids.split(",");
+                    for( var i in items )
+                        $("#id-"+items[i]).find("input[type='checkbox']").prop("checked", action);
+                }
+            },
+            error: function(){
+                progress.end();
+                alert("Какая-то ошибка. Не удалось выяснить причину. Попробуй еще пару раз и звони Мише.");
+            }
+        });
+    }
+
+    function oneCheckbox($this){
+        prevCheck.index = $this.parents("tr").index();
+        prevCheck.checked = $this.prop("checked");
+
+        $.ajax({
+            url: ( $this.prop("checked") )?addUrl:removeUrl,
+            data: "id="+$this.val(),
+            success: function(msg){
+                var json = JSON.parse(msg);
+                progress.end();
+                if( json.result == "success" ){
+                    if($this.hasClass("check-page")) {
+                        if($this.prop("checked")) {
+                            $(".b-sess-checkbox").prop("checked",true);
+                        } else $(".b-sess-checkbox").prop("checked",false);
+                    }
+                    $($this.attr("data-block")).text(json.codes);
+                }else{
+                    alert("Какая-то ошибка. Не удалось выяснить причину. Попробуй еще пару раз и звони Мише.");
+                }
+            },
+            error: function(){
+                progress.end();
+                alert("Какая-то ошибка. Не удалось выяснить причину. Попробуй еще пару раз и звони Мише.");
+            }
+        });
+    }
     /* Session Checkboxes ------------------------ Session Checkboxes */
 
     /* Visual Interpreter ------------------------ Visual Interpreter */

@@ -1,4 +1,4 @@
-<table class="b-table b-good-table b-sess-checkbox-info" data-add-url="<?=Yii::app()->createUrl('/good/adminaddcheckbox')?>" data-remove-url="<?=Yii::app()->createUrl('/good/adminremovecheckbox')?>" border="1">
+<table class="b-table b-good-table b-sess-checkbox-info" data-add-url="<?=Yii::app()->createUrl('/good/adminaddcheckbox')?>" data-add-many-url="<?=Yii::app()->createUrl('/good/adminaddmanycheckbox',array('good_type_id' => $_GET["good_type_id"]))?>" data-remove-many-url="<?=Yii::app()->createUrl('/good/adminremovemanycheckbox',array('good_type_id' => $_GET["good_type_id"]))?>" data-remove-url="<?=Yii::app()->createUrl('/good/adminremovecheckbox')?>" border="1">
 		<tr>
 			<th>
 				<?if($sort_field=="id"):?>
