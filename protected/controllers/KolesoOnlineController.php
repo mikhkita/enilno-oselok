@@ -426,37 +426,10 @@ class KolesoOnlineController extends Controller
 		// 	$_SESSION["FILTER"][$_GET['type']]["arr"][43] = array(1418,1419,1857,1860);
 		// }else{
 		// print_r($_SESSION["FILTER"][2]);
-		$similar_filter = $_SESSION["FILTER"][$_GET['type']]["arr"];
-		$attr = 31;
-		if($_GET['type'] != 1) {
-			if(isset($similar_filter[$attr])) {
-				$delta = 0.5;
-				$similar_arr = array();
-				foreach ($similar_filter[$attr] as $key => $value) {
-					$val = AttributeVariant::model()->with("variant")->find("attribute_id=".$attr." AND variant_id=".$value)->variant->value;
-					unset($similar_filter[$attr][$key]);
-					$model = AttributeVariant::model()->with("variant")->findAll("attribute_id=".$attr." AND value >=".($val-$delta)."AND value <>".$val." AND value <=".($val+$delta));
-					foreach ($model as $item) {
-						if (array_search($item->variant_id, $similar_filter[$attr]) === false) {
-							array_push($similar_filter[$attr], $item->variant_id);
-						}
-					}
-				}			
-			}
-		}
-			
 		// }
-			
+	
 		$goods = $this->getGoods(40,$_GET['type']); 
-		if(!$partial) {
-			$similar = $this->getGoods(40,$_GET['type'],array(
-					"good_type_id"=>$_GET['type'],
-					"attributes"=>isset($similar_filter) ? $similar_filter : array(),
-					"int_attributes"=>isset($_SESSION["FILTER"][$_GET['type']]['int']) ? $_SESSION["FILTER"][$_GET['type']]['int'] : array(),
-				)
-			); 
-			$similar = $similar['items'];
-		}
+		
 		$count = $goods['count'];	
 		$pages = $goods['pages'];	
 		$allCount = $goods["allCount"];
@@ -487,7 +460,7 @@ class KolesoOnlineController extends Controller
 		} else {
 			$this->render('category',array(
 				'goods'=> $goods,
-				'similar' => $similar,
+				'similar' => $this->similarGoods(),
 				'filter' => $filter,
 				'pages' => $pages,
 				'last' => $last,
@@ -502,6 +475,58 @@ class KolesoOnlineController extends Controller
 		// list($queryCount, $queryTime) = Yii::app()->db->getStats();
 		// echo "Query count: $queryCount, Total query time: ".sprintf('%0.5f',$queryTime)."s";
 		// printf('<br>Прошло %.4F сек.<br>', microtime(true) - $start);	
+	}
+
+	public function similarGoods($good = NULL,$detail = false) {
+		if(isset($_SESSION["FILTER"][$_GET['type']]["arr"]) || $detail) {
+			if($_GET['type'] == 1) { $detail_arr = array(23,9,7,8); $attrs = array(7,8); $deltas = array(10,5); }
+			if($_GET['type'] == 2) { $detail_arr = array(9,5,31,32); $attrs = array(31,32); $deltas = array(0.5,3); }
+			if($_GET['type'] == 3) { $detail_arr = array(23,9,7,8,5,31,32); $attrs = array(7,8,31,32); $deltas = array(10,5,0.5,3); }
+			$filter = array();
+			$show = false;
+
+			if($detail) {
+				foreach ($detail_arr as $key => $value) {
+					if(isset($good->fields_assoc[$value])) {
+						$filter[$value] = array();
+						if(is_array($good->fields_assoc[$value])) {
+							foreach ($good->fields_assoc[$value] as $item) {
+								array_push($filter[$value],$item->variant_id);
+							}
+						} else array_push($filter[$value],$good->fields_assoc[$value]->variant_id);
+					}
+				}
+			} else $filter = $_SESSION["FILTER"][$_GET['type']]["arr"];
+
+			foreach ($attrs as $i => $attr) {
+				if(isset($filter[$attr])) {
+					$show = true;
+					$delta = $deltas[$i];
+					foreach ($filter[$attr] as $key => $value) {
+						$val = AttributeVariant::model()->with("variant")->find("attribute_id=".$attr." AND variant_id=".$value)->variant->value;
+						if(!$detail) unset($filter[$attr][$key]);
+						$model = AttributeVariant::model()->with("variant")->findAll("attribute_id=".$attr." AND value >=".($val-$delta)." AND value <>".$val." AND value <=".($val+$delta));
+						foreach ($model as $item) {
+							if (array_search($item->variant_id, $filter[$attr]) === false) {
+								array_push($filter[$attr], $item->variant_id);
+							}
+						}
+					}	
+				}			
+			}
+			if($show) {
+				$similar = $this->getGoods(40,$_GET['type'],array(
+						"good_type_id"=>$_GET['type'],
+						"attributes"=>$filter,
+						"int_attributes"=>(isset($_SESSION["FILTER"][$_GET['type']]['int']) && !$detail) ? $_SESSION["FILTER"][$_GET['type']]['int'] : array(),
+					)
+				); 
+				$similar = $similar['items'];
+				if($detail) unset($similar[$good->id]);
+				return $similar;
+			}		
+		}
+		return array();
 	}
 
 	public function getFilter($type = NULL) {
@@ -633,11 +658,12 @@ class KolesoOnlineController extends Controller
 			$this->keywords = Interpreter::generate($this->getParam("SHOP",$good->type->code."_KEYWORDS_CODE"), $good, $dynamic);
 
 			$imgs = $good->getImages();
-
 			$this->image = Yii::app()->getBaseUrl(true).$imgs[0]["big"];
-
+			$similar = $this->similarGoods($good,true);
+			
 			$this->render('detail',array(
 				'good'=>$good,
+				'similar' => $similar,
 				'imgs'=>$imgs,
 				'params' => $this->params,
 				'dynamic' => $dynamic,

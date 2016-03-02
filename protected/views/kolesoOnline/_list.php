@@ -22,8 +22,15 @@
                     <h5><span><?=$price==0 ? Yii::app()->params["zeroPrice"] : number_format( $price, 0, ',', ' ' )." р."?> </span> <?=Interpreter::generate($this->params[$type]["SHIPPING"], $good,$dynamic);?></h5>
                     <h5><?=Interpreter::generate($this->params[$type]["AVAILABLE"], $good,$dynamic);?></h5>
                     <h6><?=Interpreter::generate($this->params[$type]["TITLE_2_CODE"], $good,$dynamic);?> <?=$good->fields_assoc[$params[$type]["CATEGORY"]["AMOUNT"]['ID']]->value." ".$params[$type]["CATEGORY"]["AMOUNT"]['UNIT']?></h6>
-                    <h3><?=$params[$type]["CATEGORY"]["WEAR"]["LABEL"]?>: <span><?=$good->fields_assoc[$params[$type]["CATEGORY"]["WEAR"]['ID']]->value?> %</span></h3>
-                    <h3><?=$params[$type]["CATEGORY"]["YEAR"]["LABEL"]?>: <span><?=$good->fields_assoc[$params[$type]["CATEGORY"]["YEAR"]['ID']]->value?></h3>
+                    <h3 style="display:block;"><?=$params[$type]["CATEGORY"]["WEAR"]["LABEL"]?>: <span><?=$good->fields_assoc[$params[$type]["CATEGORY"]["WEAR"]['ID']]->value?> %</span></h3>
+                    <h3> 
+                        <?if($good->fields_assoc[$params[$type]["CATEGORY"]["YEAR"]['ID']]->value): ?> 
+                            <?=$params[$type]["CATEGORY"]["YEAR"]["LABEL"].": "?> 
+                            <span><?=$good->fields_assoc[$params[$type]["CATEGORY"]["YEAR"]['ID']]->value?></span>
+                        <? else: ?>
+                            <span>&nbsp;</span>
+                        <? endif; ?>
+                    </h3>
                 <? elseif($type == 3): ?>
                     <h4><?=Interpreter::generate($this->params[$type]["TITLE_CATEGORY"], $good,$dynamic);?></h4>
                     <? $price = ($good->fields_assoc[20])?$good->fields_assoc[20]->value:0;

@@ -42,6 +42,21 @@ $(document).ready(function(){
     if( device.mobile() )
         new FastClick(document.body);
 
+    if($('#goods li:eq(-1)').attr("data-last") == 0) {
+        if($("#similar").length) $("#similar").show();    
+    } 
+    if($('#goods li:eq(-1)').attr("data-last") != 0) {
+        $(".load").css("display","inline-block"); 
+    }
+
+    $('#similar-slider').slick({
+        slide: 'li',
+        slidesToShow: 5,
+        slidesToScroll: 1,
+        prevArrow: "<span class='b-sim-nav gradient-lightBlack b-sim-left'></span>",
+        nextArrow: "<span class='b-sim-nav gradient-lightBlack b-sim-right'></span>"    
+    });
+
     function whenScroll(){
         if( $(".b-fixed-top").length ){
             var scroll = ((document.documentElement && document.documentElement.scrollTop) || document.body.scrollTop);
@@ -64,8 +79,7 @@ $(document).ready(function(){
                             fancyInit();
                             if($('#goods li:eq(-1)').attr("data-last") == 0) {
                                 $(".load").hide();
-                                if($("#similar").length) $("#similar").show();
-                                
+                                if($("#similar").length) $("#similar").show();    
                             } 
                             blocked = false;
                         }
@@ -120,16 +134,6 @@ $(document).ready(function(){
     //     return false;
     // });
 
-    if($('#goods li:eq(-1)').attr("data-last") != 0) {
-        $(".load").css("display","inline-block"); 
-    }
-
-    $('#similar-slider').slick({
-        slidesToShow: 5,
-        slidesToScroll: 1,
-        prevArrow: "<span class='b-sim-nav gradient-lightBlack b-sim-left'></span>",
-        nextArrow: "<span class='b-sim-nav gradient-lightBlack b-sim-right'></span>"
-    });
     $(window).resize(resize);
     resize();
     

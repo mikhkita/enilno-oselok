@@ -54,7 +54,8 @@
 					<ul>
 						<? foreach ($params[$_GET['type']]["CATEGORY"] as $key => $attr): ?>
 						<? if( isset($attr["TYPE"]) && $attr["TYPE"] == "INTER" ): ?>
-							<li><?=$attr['LABEL']?>:<span><?=Interpreter::generate($attr['ID'], $good, $dynamic).$attr['UNIT']?></span></li>
+							<li><?=$attr['LABEL']?>: <span><? echo Interpreter::generate($attr['ID'], $good, $dynamic); if(Interpreter::generate($attr['ID'], $good, $dynamic) != "Новая резина") echo $attr['UNIT']?></span>
+							</li>
 						<? else: ?>
 							<? if(isset($good->fields_assoc[$attr['ID']])): ?>
 								<li><?=$attr['LABEL']?>:<span><?=$good->fields_assoc[$attr['ID']]->value.$attr['UNIT']?></span></li>
@@ -74,93 +75,12 @@
 				<div id="tabs-shippping"><?=$this->replaceToBr(Interpreter::generate($this->params[$_GET['type']]["ORDER"], $good,$dynamic));?></div>
 				<div id="tabs-warranty"><?=$this->replaceToBr(Interpreter::generate($this->params[$_GET['type']]["GARANTY_CODE"], $good,$dynamic));?></div>
 			</div>
-			<!-- <h3 class="category-title similar">Похожие товары</h3>
-			<div class="goods clearfix" id="similar-slider">
-				<div class="gradient-grey">
-					<div class="good-img" style="background-image: url('i/tire.jpg');"></div>
-					<div class="params-cont">
-						<h4>Yokohama DNA</h4>
-						<h5><span>8900 р.</span> + 800 р.</h5>
-						<h5>доставка в г. Томск</h5>
-						<h6>225/45/17  2 шт.</h6>
-						<h3>Износ: <span>82%</span></h3>
-						<h3>Год выпуска: <span>2013</span></h3>
-						<a href="#" class="b-orange-butt">Купить</a>
-					</div>
-				</div>
-				<div class="gradient-grey">
-					<div class="good-img" style="background-image: url('i/tire.jpg');"></div>
-					<div class="params-cont">
-						<h4>Yokohama DNA</h4>
-						<h5><span>8900 р.</span> + 800 р.</h5>
-						<h5>доставка в г. Томск</h5>
-						<h6>225/45/17  2 шт.</h6>
-						<h3>Износ: <span>82%</span></h3>
-						<h3>Год выпуска: <span>2013</span></h3>
-						<a href="#" class="b-orange-butt">Купить</a>
-					</div>
-				</div>
-				<div class="gradient-grey">
-					<div class="good-img" style="background-image: url('i/tire.jpg');"></div>
-					<div class="params-cont">
-						<h4>Yokohama DNA</h4>
-						<h5><span>8900 р.</span> + 800 р.</h5>
-						<h5>доставка в г. Томск</h5>
-						<h6>225/45/17  2 шт.</h6>
-						<h3>Износ: <span>82%</span></h3>
-						<h3>Год выпуска: <span>2013</span></h3>
-						<a href="#" class="b-orange-butt">Купить</a>
-					</div>
-				</div>
-				<div class="gradient-grey">
-					<div class="good-img" style="background-image: url('i/tire.jpg');"></div>
-					<div class="params-cont">
-						<h4>Yokohama DNA</h4>
-						<h5><span>8900 р.</span> + 800 р.</h5>
-						<h5>доставка в г. Томск</h5>
-						<h6>225/45/17  2 шт.</h6>
-						<h3>Износ: <span>82%</span></h3>
-						<h3>Год выпуска: <span>2013</span></h3>
-						<a href="#" class="b-orange-butt">Купить</a>
-					</div>
-				</div>
-				<div class="gradient-grey">
-					<div class="good-img" style="background-image: url('i/tire.jpg');"></div>
-					<div class="params-cont">
-						<h4>Yokohama DNA</h4>
-						<h5><span>8900 р.</span> + 800 р.</h5>
-						<h5>доставка в г. Томск</h5>
-						<h6>225/45/17  2 шт.</h6>
-						<h3>Износ: <span>82%</span></h3>
-						<h3>Год выпуска: <span>2013</span></h3>
-						<a href="#" class="b-orange-butt">Купить</a>
-					</div>
-				</div>
-				<div class="gradient-grey">
-					<div class="good-img" style="background-image: url('i/tire.jpg');"></div>
-					<div class="params-cont">
-						<h4>Yokohama DNA</h4>
-						<h5><span>8900 р.</span> + 800 р.</h5>
-						<h5>доставка в г. Томск</h5>
-						<h6>225/45/17  2 шт.</h6>
-						<h3>Износ: <span>82%</span></h3>
-						<h3>Год выпуска: <span>2013</span></h3>
-						<a href="#" class="b-orange-butt">Купить</a>
-					</div>
-				</div>
-				<div class="gradient-grey">
-					<div class="good-img" style="background-image: url('i/tire.jpg');"></div>
-					<div class="params-cont">
-						<h4>Yokohama DNA</h4>
-						<h5><span>8900 р.</span> + 800 р.</h5>
-						<h5>доставка в г. Томск</h5>
-						<h6>225/45/17  2 шт.</h6>
-						<h3>Износ: <span>82%</span></h3>
-						<h3>Год выпуска: <span>2013</span></h3>
-						<a href="#" class="b-orange-butt">Купить</a>
-					</div>
-				</div>
-			</div> -->
+			<? if(count($similar)): ?>
+                <h3 class="category-title similar">Похожие товары</h3>
+                <ul class="goods clearfix" id="similar-slider">  
+                    <?php $this->renderPartial('_list', array('goods' => $similar,'last' => 0,'params' => $params,'type' => $_GET['type'],'dynamic'=>$dynamic)); ?>
+                </ul>
+        	<? endif; ?>
 		</div>
 	</div>
 </div>
