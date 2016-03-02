@@ -242,24 +242,24 @@ class GoodController extends Controller
 	}
 
 	public function actionAdminMassUpdate($good_type_id){
-		$good_ids = Good::getCheckboxes($good_type_id);
+		// $good_ids = Good::getCheckboxes($good_type_id);
 
-		if( count($good_ids) ){
-			$good_type = GoodType::model()->findByPk($good_type_id);
-			$fields = $good_type->fields;
+		// if( count($good_ids) ){
+		// 	$good_type = GoodType::model()->findByPk($good_type_id);
+		// 	$fields = $good_type->fields;
 
-			$dropdown = $this->getDropDown($fields);
+		// 	$dropdown = $this->getDropDown($fields);
 
 			
 
-			// $this->renderPartial('adminUpdate',array(
-			// 	'model'=>$model,
-			// 	'result' => $result,
-			// 	'fields' => $fields,
-			// 	'dropdown' => $dropdown,
-			// 	'good_type_id' => $good_type_id
-			// ));
-		}
+		// 	// $this->renderPartial('adminUpdate',array(
+		// 	// 	'model'=>$model,
+		// 	// 	'result' => $result,
+		// 	// 	'fields' => $fields,
+		// 	// 	'dropdown' => $dropdown,
+		// 	// 	'good_type_id' => $good_type_id
+		// 	// ));
+		// }
 	}
 
 	public function getDropDown($fields){
@@ -955,7 +955,7 @@ class GoodController extends Controller
 	public function actionAdminCheckCode($good_type_id){
 		if( !isset($_GET["Good_attr"]) || !isset($_GET["Good_attr"][3]) ) echo json_encode(array("result" => "error", "message" => "Не передан код"));
 		$code = $_GET["Good_attr"][3];
-		if( GoodAttribute::model()->with("good")->count("good.good_type_id=$good_type_id AND varchar_value=$code") ){
+		if( GoodAttribute::model()->with("good")->count("good.good_type_id=$good_type_id AND varchar_value='$code'") ){
 			echo json_encode(array("result" => "error", "message" => "Товар с таким кодом уже существует"));
 		}else{
 			echo json_encode(array("result" => "success"));

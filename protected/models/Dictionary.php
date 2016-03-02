@@ -108,6 +108,11 @@ class Dictionary extends CActiveRecord
 		$this->rule_code = ( !isset($this->rule_code) )?Yii::app()->params['defaultRule']:$this->rule_code;
 		return true;
 	}
+
+	public function get($dictionary_id, $variant_id){
+		$model = DictionaryVariant::model()->find(array("limit" => 1, "condition" => "dictionary_id='$dictionary_id' AND attribute_1='$variant_id'"));
+		return ($model)?$model->value:NULL;
+	}
 	
 	/**
 	 * Returns the static model of the specified AR class.

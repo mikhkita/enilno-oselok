@@ -635,8 +635,16 @@ class KolesoOnlineController extends Controller
 
 			$this->image = Yii::app()->getBaseUrl(true).$imgs[0]["big"];
 
+			$partner = NULL;
+
+			if( $this->user && isset($good->fields_assoc[106]) && isset($good->fields_assoc[43]) && $good->fields_assoc[43]->attribute->label ){
+				$nick = Dictionary::get($good->fields_assoc[43]->attribute->label, $good->fields_assoc[43]->variant_id);
+				$partner = array("label" => $nick, "link" => $good->fields_assoc[106]->value);
+			}
+
 			$this->render('detail',array(
 				'good'=>$good,
+				'partner'=>$partner,
 				'imgs'=>$imgs,
 				'params' => $this->params,
 				'dynamic' => $dynamic,

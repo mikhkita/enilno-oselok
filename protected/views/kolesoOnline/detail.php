@@ -27,12 +27,15 @@
 				</div>
 				<div class="detail-price gradient-grey right">
 					<div class="clearfix">
-						<? $price = number_format(($good->fields_assoc[20])?$good->fields_assoc[20]->value:0, 0, ',', ' ' )." р."; $order = Interpreter::generate($this->params[$_GET['type']]["ORDER"], $good,$dynamic); ?>
-						<? $price = ($good->archive)?"Продано":$price; ?>
+						<? $price = ($good->fields_assoc[20])?$good->fields_assoc[20]->value:0; if( isset($good->fields_assoc[106]) ) $price += 1000; ?>
+						<? $price = number_format($price, 0, ',', ' ' )." р."; $order = Interpreter::generate($this->params[$_GET['type']]["ORDER"], $good,$dynamic); ?>
+						<? $price = ($good->archive)?(($this->user)?("Продано за ".$price):"Продано"):$price; ?>
 						<h3><?=( !$good->fields_assoc[20]->value || $good->fields_assoc[20]->value == 0 )? Yii::app()->params["zeroPrice"] : $price ?><?$delivery = Interpreter::generate($this->params[$_GET['type']]["SHIPPING"], $good,$dynamic);?><span <?if($delivery=="бесплатная"):?>class="b-free-delivery"<?endif;?>> <?=$delivery?></span></h3>
 						<? $is_available = Interpreter::generate($this->params[$_GET['type']]["AVAILABLE"], $good,$dynamic); ?>
-						<? if($is_available != "В наличии"): ?>
-							<h4 <?if($delivery=="бесплатная"):?>class="b-free-delivery"<?endif;?>><?=$is_available?></h4>
+						<? if(!$good->archive): ?>
+							<? if($is_available != "В наличии"): ?>
+								<h4 <?if($delivery=="бесплатная"):?>class="b-free-delivery"<?endif;?>><?=$is_available?></h4>
+							<? endif; ?>
 						<? endif; ?>
 					</div>
 					<div class="clearfix">
@@ -61,6 +64,10 @@
 							<? endif; ?>
 						<? endif; ?>
 						<? endforeach; ?>
+
+						<? if($partner): ?>
+							<li>Партнерское объявление:<span><a href="<?=$partner['link']?>" target="_blank"><?=$partner['label']?></a></span></li>
+						<? endif; ?>
 					</ul>
 				</div>
 			</div>
