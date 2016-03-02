@@ -1012,7 +1012,10 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 	color: #414141;
 	text-transform: uppercase;
 	text-align: left;
-	padding-bottom: 10px;
+	padding-bottom: 20px;
+}
+#similar {
+	margin-top: 20px;
 }	
 .goods {
 
