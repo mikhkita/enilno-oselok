@@ -108,7 +108,7 @@
                     </ul>
                     <h1 class="category-title"><?=($this->params[$_GET['type']]["NAME"]." ".Yii::app()->params["city"]->in)?></h1>
                 </div>
-                <? if(count($goods || $similar)): ?>
+                <? if(count($goods)): ?>
                 <?php $this->widget('CLinkPager', array(
                     'header' => '',
                     'firstPageLabel' => '1', 
