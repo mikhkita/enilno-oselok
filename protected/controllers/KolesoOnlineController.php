@@ -429,7 +429,6 @@ class KolesoOnlineController extends Controller
 		// }
 	
 		$goods = $this->getGoods(40,$_GET['type'],NULL,NULL,true); 
-		print_r($goods['ids']);
 		$similar = $this->similarGoods($goods['ids']);
 
 		$count = $goods['goods']['count'];	
