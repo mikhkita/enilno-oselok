@@ -429,7 +429,7 @@ class KolesoOnlineController extends Controller
 		// }
 	
 		$goods = $this->getGoods(40,$_GET['type'],NULL,NULL,true); 
-		// $similar = $this->similarGoods($goods['ids']);
+		$similar = $this->similarGoods($goods['ids']);
 
 		$count = $goods['goods']['count'];	
 		$pages = $goods['goods']['pages'];	
@@ -461,7 +461,7 @@ class KolesoOnlineController extends Controller
 		} else {
 			$this->render('category',array(
 				'goods'=> $goods,
-				'similar' => array(),
+				'similar' => $similar,
 				'filter' => $filter,
 				'pages' => $pages,
 				'last' => $last,
@@ -482,8 +482,8 @@ class KolesoOnlineController extends Controller
 	public function similarGoods($good = NULL,$detail = false) {
 		if(isset($_SESSION["FILTER"][$_GET['type']]["arr"]) || $detail) {
 			if($_GET['type'] == 1) { $detail_arr = array(23,9,7,8); $attrs = array(7,8); $deltas = array(10,5); }
-			if($_GET['type'] == 2) { $detail_arr = array(9,5,31,32); $attrs = array(31,32); $deltas = array(0.5,3); }
-			if($_GET['type'] == 3) { $detail_arr = array(23,9,7,8,5,31,32); $attrs = array(7,8,31,32); $deltas = array(10,5,0.5,3); }
+			if($_GET['type'] == 2) { $detail_arr = array(9,5,31,32); $attrs = array(31,32); $deltas = array(0.5,5); }
+			if($_GET['type'] == 3) { $detail_arr = array(23,9,7,8,5,31,32); $attrs = array(7,8,31,32); $deltas = array(10,5,0.5,5); }
 			$filter = array();
 			$show = false;
 
@@ -517,11 +517,10 @@ class KolesoOnlineController extends Controller
 				}			
 			}
 			if($show) {
-
 				$similar = $this->getGoods(40,$_GET['type'],array(
 						"good_type_id"=>$_GET['type'],
 						"attributes"=>$filter,
-						"int_attributes"=>(isset($_SESSION["FILTER"][$_GET['type']]['int']) && !$detail) ? $_SESSION["FILTER"][$_GET['type']]['int'] : array(),
+						"int_attributes"=> array(),
 					),NULL,$good); 
 				$similar = $similar['items'];
 				return $similar;
@@ -667,12 +666,10 @@ class KolesoOnlineController extends Controller
 				$nick = Dictionary::get($good->fields_assoc[43]->attribute->label, $good->fields_assoc[43]->variant_id);
 				$partner = array("label" => $nick, "link" => $good->fields_assoc[106]->value);
 			}
-
-			// $similar = $this->similarGoods($good,true);
 			
 			$this->render('detail',array(
 				'good'=>$good,
-				'similar' => array(),
+				'similar' => $this->similarGoods($good,true),
 				'partner'=>$partner,
 				'imgs'=>$imgs,
 				'params' => $this->params,
@@ -709,6 +706,7 @@ class KolesoOnlineController extends Controller
 		$goods = Good::model()->filter(
 			$filter,NULL,$ids
 		);
+
 		if($ids === true) $ids_arr = $goods->ids;
 		$goods = $goods->sort( 
 			$sort
