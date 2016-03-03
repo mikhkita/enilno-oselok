@@ -96,7 +96,7 @@
                     </div>
                 <?php $this->endWidget(); ?>
             </div>
-            <div id="tabs-tire">
+            <div id="tabs-tire" class="load-tabs">
                 <?php $form=$this->beginWidget('CActiveForm', array(
                     'action' => Yii::app()->createUrl('/kolesoOnline/category',array("type" => 1)),
                     'method' => 'GET'
@@ -174,7 +174,7 @@
                     </div>
                 <?php $this->endWidget(); ?>
             </div>
-            <div id="tabs-wheel">
+            <div id="tabs-wheel" class="load-tabs">
                 <?php $form=$this->beginWidget('CActiveForm', array(
                     'action' => Yii::app()->createUrl('/kolesoOnline/category',array("type" => 3)),
                     'method' => 'GET'

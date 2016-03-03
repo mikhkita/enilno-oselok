@@ -106,6 +106,7 @@ $(document).ready(function(){
         // $(".after-load").removeClass("after-load");
 
         $(".b-content").css("min-height",myHeight-$(".b-header").height()-$(".b-footer").height());
+        $(".slider-range-cont").css("margin-left",34);
     });
 
     $( ".city-tabs" ).tabs({
@@ -207,7 +208,14 @@ $(document).ready(function(){
         // fade: true
     });
         
-    $( ".main-tabs" ).tabs();
+    $( ".main-tabs" ).tabs({
+        load: function( event, ui ) {
+            $(".good-detail .b-block .load-tabs").show();
+        },
+        activate: function( event, ui ) {
+            $( ".main-tabs" ).tabs( "option", "active", $(".main-tabs").tabs('option', 'active') );
+        }
+    });
 
 
     $('.min-val,.max-val').bind("change keyup input click", function() {

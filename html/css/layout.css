@@ -565,6 +565,9 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 					border-bottom: 1px solid #000000;
 				}
 
+			.b-filters .b-block .load-tabs {
+				display: none;
+			}
 			/*.b-filters .b-block .tabs li {
 				float: left;
 				width: 319px;
@@ -1421,7 +1424,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 					display: inline-block;
 					margin-bottom: 28px;
 					width: 506px;
-					margin-left: 34px;
+					margin-left: 30px;
 				}
 				.slider-range .ui-widget-header {
 					height: 4px;
@@ -1947,6 +1950,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 							background-position: -40px -97px;
 							width: 19px;
 						}
+
 		.good-detail .b-block .main-tabs {
 			padding-top: 40px;
 			margin-bottom: 25px;
