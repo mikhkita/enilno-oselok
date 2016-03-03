@@ -2387,6 +2387,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 }
 .b-clear-filter{
 	display: inline-block;
+	display: none;
 	margin-top: 20px;
 }
 
