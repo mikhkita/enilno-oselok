@@ -397,7 +397,7 @@ class Good extends GoodFilter
 		return count($this->ids);
 	}
 
-	public function getIds($model){
+	public function getIds($model = array()){
 		$ids = array();
     	foreach ($model as $key => $value)
     		array_push($ids, $value->id);
