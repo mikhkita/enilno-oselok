@@ -35,7 +35,7 @@
             <div class="grey-block left">
                 <div class="gradient-grey">
                     <h3>Фильтр</h3>
-                    <!-- <a href="#">Сбросить фильтр</a> -->
+                    <a href="#" class="b-clear-filter">Сбросить фильтр</a>
                     <div class="filter-block">
                         <div class="clearfix">
                         <? if($_GET['type'] == 1 || $_GET['type'] == 3): ?>

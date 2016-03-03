@@ -1873,16 +1873,18 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 					color: #414141;
 				}
 				.good-detail .b-block .detail-wrap .detail-price h3 span.b-free-delivery{
-					font-size: 15px;
+					font-size: 14px;
 					color: #797979;
 					font-weight: 300;
-					margin-left: -5px;
+					margin-left: 0px;
+					margin-right: -2px;
 				}
 				.good-detail .b-block .detail-wrap .detail-price h4{
 					margin-bottom: 14px;
 					margin-top: -5px;
 					margin-left: 8px;
 					display: inline-block;
+					font-size: 14px;
 				}
 				.good-detail .b-block .detail-wrap .detail-price a{
 					font-weight: 500;
@@ -2383,9 +2385,10 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 .b-search-close{
 	display: none;
 }
-/*.after-load-back{
-	display: none;
-}*/
+.b-clear-filter{
+	display: inline-block;
+	margin-top: 20px;
+}
 
 @media (-webkit-min-device-pixel-ratio: 1.5) {
 	.icon:before,
@@ -2406,6 +2409,12 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 	.b-popup-city h4 span:before{
 		background-image: url("../i/sprite@2x.png");
 		background-size: 222px;
+	}
+	#similar-slider .b-sim-nav:before {
+		background-position: -199px -98px;
+	}
+	#similar-slider .b-sim-nav.b-sim-right:before {
+		background-position: -211px -98px;
 	}
 	.b-header .b-header-main .b-block > .left .right h2 a:before,
 	.b-footer .b-footer-main .b-block .sections > li .footer-contacts.map:before {
