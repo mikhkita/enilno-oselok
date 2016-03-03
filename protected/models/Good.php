@@ -151,7 +151,7 @@ class Good extends GoodFilter
 		Yii::app()->db->createCommand($sql)->execute();
 	}
 
-	public function filter($options = array(),$ids = NULL){
+	public function filter($options = array(),$ids = NULL,$exclude_ids = NULL){
 		if(isset($options["not_contain"]) && count($options["not_contain"])){
 			if( intval($options["not_contain"]) >= 0 ){
 				$exclude_ids = Yii::app()->db->createCommand()
@@ -213,8 +213,7 @@ class Good extends GoodFilter
 			$criteria->addInCondition("fields.good_id", $ids);
 			$criteria->order = "field(fields.good_id,".implode(",", array_reverse($ids)).") DESC, t.id DESC";
 		}
-
-		if( isset($exclude_ids) && count($exclude_ids) ){
+		if( isset($exclude_ids) && is_array($exclude_ids) && count($exclude_ids) ) {
 			$criteria->addCondition("t.id NOT IN (".implode(", ", $exclude_ids).")", "AND");
 		}
 

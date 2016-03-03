@@ -428,12 +428,13 @@ class KolesoOnlineController extends Controller
 		// print_r($_SESSION["FILTER"][2]);
 		// }
 	
-		$goods = $this->getGoods(40,$_GET['type']); 
-		
-		$count = $goods['count'];	
-		$pages = $goods['pages'];	
-		$allCount = $goods["allCount"];
-		$goods = $goods['items'];
+		$goods = $this->getGoods(40,$_GET['type'],NULL,NULL,true); 
+		// $similar = $this->similarGoods($goods['ids']);
+
+		$count = $goods['goods']['count'];	
+		$pages = $goods['goods']['pages'];	
+		$allCount = $goods['goods']["allCount"];
+		$goods = $goods['goods']['items'];
 
 		if( $_GET['GoodFilter_page'] >= $pages->pageCount || $pages->pageCount == 1 ) {
 			$last = 0;
@@ -460,7 +461,7 @@ class KolesoOnlineController extends Controller
 		} else {
 			$this->render('category',array(
 				'goods'=> $goods,
-				'similar' => $this->similarGoods(),
+				'similar' => array(),
 				'filter' => $filter,
 				'pages' => $pages,
 				'last' => $last,
@@ -476,6 +477,7 @@ class KolesoOnlineController extends Controller
 		// echo "Query count: $queryCount, Total query time: ".sprintf('%0.5f',$queryTime)."s";
 		// printf('<br>Прошло %.4F сек.<br>', microtime(true) - $start);	
 	}
+
 
 	public function similarGoods($good = NULL,$detail = false) {
 		if(isset($_SESSION["FILTER"][$_GET['type']]["arr"]) || $detail) {
@@ -496,6 +498,7 @@ class KolesoOnlineController extends Controller
 						} else array_push($filter[$value],$good->fields_assoc[$value]->variant_id);
 					}
 				}
+				$good = array($good->id);
 			} else $filter = $_SESSION["FILTER"][$_GET['type']]["arr"];
 
 			foreach ($attrs as $i => $attr) {
@@ -504,8 +507,7 @@ class KolesoOnlineController extends Controller
 					$delta = $deltas[$i];
 					foreach ($filter[$attr] as $key => $value) {
 						$val = AttributeVariant::model()->with("variant")->find("attribute_id=".$attr." AND variant_id=".$value)->variant->value;
-						if(!$detail) unset($filter[$attr][$key]);
-						$model = AttributeVariant::model()->with("variant")->findAll("attribute_id=".$attr." AND value >=".($val-$delta)." AND value <>".$val." AND value <=".($val+$delta));
+						$model = AttributeVariant::model()->with("variant")->findAll("attribute_id=".$attr." AND value >=".($val-$delta)." AND value <=".($val+$delta));
 						foreach ($model as $item) {
 							if (array_search($item->variant_id, $filter[$attr]) === false) {
 								array_push($filter[$attr], $item->variant_id);
@@ -515,14 +517,13 @@ class KolesoOnlineController extends Controller
 				}			
 			}
 			if($show) {
+
 				$similar = $this->getGoods(40,$_GET['type'],array(
 						"good_type_id"=>$_GET['type'],
 						"attributes"=>$filter,
 						"int_attributes"=>(isset($_SESSION["FILTER"][$_GET['type']]['int']) && !$detail) ? $_SESSION["FILTER"][$_GET['type']]['int'] : array(),
-					)
-				); 
+					),NULL,$good); 
 				$similar = $similar['items'];
-				if($detail) unset($similar[$good->id]);
 				return $similar;
 			}		
 		}
@@ -667,11 +668,11 @@ class KolesoOnlineController extends Controller
 				$partner = array("label" => $nick, "link" => $good->fields_assoc[106]->value);
 			}
 
-			$similar = $this->similarGoods($good,true);
+			// $similar = $this->similarGoods($good,true);
 			
 			$this->render('detail',array(
 				'good'=>$good,
-				'similar' => $similar,
+				'similar' => array(),
 				'partner'=>$partner,
 				'imgs'=>$imgs,
 				'params' => $this->params,
@@ -694,7 +695,7 @@ class KolesoOnlineController extends Controller
 		return $last;
 	}
 
-	public function getGoods($page_size = 8,$type = 2,$filter = NULL,$sort = NULL) {
+	public function getGoods($page_size = 8,$type = 2,$filter = NULL,$sort = NULL,$ids = NULL) {
 		if( $sort === NULL )
 			$sort = isset($_SESSION["FILTER"][$type]['sort']) ? $_SESSION["FILTER"][$type]['sort'] : NULL;
 
@@ -706,15 +707,19 @@ class KolesoOnlineController extends Controller
 			);
 
 		$goods = Good::model()->filter(
-			$filter
-		)->sort( 
+			$filter,NULL,$ids
+		);
+		if($ids === true) $ids_arr = $goods->ids;
+		$goods = $goods->sort( 
 			$sort
 		)->getPage(
 			array(
 		    	'pageSize'=>$page_size,
 		    )
 		);
-		return $goods;
+		if($ids === true) {
+			return array("goods" => $goods,"ids" => $ids_arr);
+		} else return $goods;
 	}
 
 	public function actionPage($page = NULL)
