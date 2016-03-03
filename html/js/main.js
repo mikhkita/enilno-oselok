@@ -609,17 +609,32 @@ $(document).ready(function(){
         // return false;
     }
 
+    $(".b-clear-filter").click(function(){
+        $("#filter input[type='checkbox']").prop("checked", false);
+        $("#filter .min-val").val("").trigger("change");
+        $("#filter .max-val").val("").trigger("change");
+        $("label.active").removeClass("active");
+        $("#filter .input").html("<span></span>");
+        $(".b-clear-filter").hide();
+        return false;
+    });
 
+    // $("#filter input").change(function(){
+    //     if( issetFilterValues() ){
 
+    //     }
+    // });
 
+    if( $("#filter").length && issetFilterValues() ){
+        alert();
+        $(".b-clear-filter").show();
+    }
 
+    function issetFilterValues(){
+        $("#filter input").each(function(){
+            if( $(this).val() != "" ) return true;
+        });
 
-
-
-
-
-
-
-
-
+        return false;
+    }
 });
