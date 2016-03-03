@@ -106,7 +106,6 @@ $(document).ready(function(){
         // $(".after-load").removeClass("after-load");
 
         $(".b-content").css("min-height",myHeight-$(".b-header").height()-$(".b-footer").height());
-        $(".slider-range-cont").css("margin-left",34);
     });
 
     $( ".city-tabs" ).tabs({
