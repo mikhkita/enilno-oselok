@@ -411,7 +411,11 @@ class IntegrateController extends Controller
 
             $this->writeTime($category_id, $nth);
             // sleep(5);
-            if( !$this->getNext($category_id, $nth) ) sleep(5);
+            if( !$this->getNext($category_id, $nth) ){
+                sleep(5);
+            }else{
+                sleep(rand(50,90));
+            }
               
             if( $debug ) return true;
         }
