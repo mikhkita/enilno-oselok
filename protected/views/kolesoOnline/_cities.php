@@ -1,6 +1,10 @@
 <div class="for_all b-popup-city">
     <div class="city-top">
-        <h3>Выбор города</h3>
+        <? if($show === 1): ?>
+            <h3 class="city-popup-show">Выберите ближайший к вам город</h3>
+        <? else:?>
+            <h3>Выбор города</h3>
+        <? endif; ?>
         <h4>Федеральный округ<span>Город</span></h4>
         <div class="clearfix city-tabs popup-fo">
             <ul class="left">

@@ -643,4 +643,8 @@ $(document).ready(function(){
 
         return false;
     }
+
+    if($(".city-popup-show").length) {
+        $("a[data-block='#b-popup-city']").click();
+    }
 });

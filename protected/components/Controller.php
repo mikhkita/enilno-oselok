@@ -803,13 +803,16 @@ class Controller extends CController
     public function checkCity(){
         if( isset(Yii::app()->params["city"]) ) return true;
         $city_id = 1081;
+        $show = 0;
         if( !(isset($_GET['city']) && $_GET['city'] != "") ) {
             $curl = new Curl();
             $city = json_decode($curl->request('http://194.28.132.219/json/'.$_SERVER["REMOTE_ADDR"]));
             $city = (isset($city->city->name_ru)) ? $city->city->name_ru : "Томск";   
             $city = Variant::model()->with(array("attribute"))->find("value='".$city."' AND attribute.attribute_id=38");
-            if( !$city )
+            if( !$city ) {
                 $city = Variant::model()->with(array("attribute"))->find("value='Томск' AND attribute.attribute_id=38");
+                $show = 1;
+            }
 
             $city_id = $city->id;
             $dictionary = DictionaryVariant::model()->find("attribute_1='$city_id' AND dictionary_id=125");
@@ -831,6 +834,7 @@ class Controller extends CController
             "in" => ($in)?$in->value:""
         );
         unset($_GET['city']);
+        return $show;
     }
 
     public function visualInter($template){
