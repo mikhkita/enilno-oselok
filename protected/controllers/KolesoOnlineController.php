@@ -24,7 +24,7 @@ class KolesoOnlineController extends Controller
 				9 => "Диаметр",
 				7 => "Ширина",
 				8 => "Профиль",
-				16 => "Модель",
+				// 16 => "Модель",
 				28 => "Количество"
 			),
 			"CATEGORY" => array(
@@ -185,7 +185,7 @@ class KolesoOnlineController extends Controller
 				9 => "Диаметр",
 				7 => "Ширина шины",
 				8 => "Профиль",
-				16 => "Модель шины",
+				// 16 => "Модель шины",
 				5 => "Сверловка",
 				31 => "Ширина диска",
 				32 => "Вылет",
@@ -417,8 +417,9 @@ class KolesoOnlineController extends Controller
 			$_GET['GoodFilter_page'] = $last;
 		}
 
-		$def = ( intval($_GET['type']) == 1 )?7:31;
-		$_SESSION["FILTER"][$_GET['type']]['sort'] = (isset($_SESSION["FILTER"][$_GET['type']]['sort']))?$_SESSION["FILTER"][$_GET['type']]['sort']:array("field"=>$def,"type"=>"DESC");
+		$def_field = 9;
+		$def_sort = ( intval($_GET['type']) == 1 )?"ASC":"DESC";
+		$_SESSION["FILTER"][$_GET['type']]['sort'] = (isset($_SESSION["FILTER"][$_GET['type']]['sort']))?$_SESSION["FILTER"][$_GET['type']]['sort']:array("field"=>$def_field,"type"=>$def_sort);
 		if( isset($_SESSION["FILTER"][$_GET['type']]["arr"][43]) ){
 			unset($_SESSION["FILTER"][$_GET['type']]["arr"][43]);
 		}

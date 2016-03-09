@@ -104,9 +104,9 @@
                 <div class="not-mobile">
                     <ul class="navigation clearfix">
                         <li><a href="<?=Yii::app()->createUrl('/kolesoOnline')?>"></a></li>
-                        <li><a href="#"><?=($this->params[$_GET['type']]["NAME"]." ".Yii::app()->params["city"]->in)?></a></li>
+                        <li><a href="#"><?=($this->params[$_GET['type']]["NAME"])?></a></li>
                     </ul>
-                    <h1 class="category-title"><?=($this->params[$_GET['type']]["NAME"]." ".Yii::app()->params["city"]->in)?></h1>
+                    <h1 class="category-title"><?=($this->params[$_GET['type']]["NAME"])?></h1>
                 </div>
                 <? if(count($goods)): ?>
                 <?php $this->widget('CLinkPager', array(
