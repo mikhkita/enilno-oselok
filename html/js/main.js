@@ -206,13 +206,19 @@ $(document).ready(function(){
         autoplaySpeed: 6000
         // fade: true
     });
-        
-    $( ".main-tabs" ).tabs({
+         
+    $( ".b-block.main-tabs" ).tabs({
         load: function( event, ui ) {
             $(".good-detail .b-block .load-tabs").show();
         },
         activate: function( event, ui ) {
-            $( ".main-tabs" ).tabs( "option", "active", $(".main-tabs").tabs('option', 'active') );
+            $( ".popular-good.main-tabs" ).tabs( "option", "active", $(".b-block.main-tabs").tabs('option', 'active') );
+        }
+    });
+
+    $( ".popular-good.main-tabs" ).tabs({
+        activate: function( event, ui ) {
+            $( ".b-block.main-tabs" ).tabs( "option", "active", $(".popular-good.main-tabs").tabs('option', 'active') );
         }
     });
 
@@ -636,5 +642,9 @@ $(document).ready(function(){
         });
 
         return false;
+    }
+
+    if($(".city-popup-show").length) {
+        $("a[data-block='#b-popup-city']").click();
     }
 });
