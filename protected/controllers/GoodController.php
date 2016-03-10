@@ -230,7 +230,7 @@ class GoodController extends Controller
 			$dropdown = $this->getDropDown($fields);
 
 			$this->renderPartial('adminUpdate',array(
-				'model'=>$model,
+				'model' => $model,
 				'result' => $result,
 				'cities' => $this->cityGroup(),
 				'fields' => $fields,

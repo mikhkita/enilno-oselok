@@ -49,12 +49,31 @@
 		<? if(isset($view_fields) && count($view_fields)): ?>
 		</div>
 		<div class="right b-right-column clearfix">
-			<table class="b-params-table">
-				<? foreach ($view_fields as $field): ?>
+			<table class="b-params-table b-table" border="1">
 				<tr>
-					<td></td>
-					<td></td>
+					<td>Параметр</td>
+					<td>Значение</td>
 				</tr>
+				<? $fields_assoc = $model->fields_assoc; ?>
+				<? foreach ($view_fields as $field): ?>
+					<? $item = (isset($fields_assoc[$field->attribute_id]) && $fields_assoc[$field->attribute_id] != "") ? $fields_assoc[$field->attribute_id] : NULL; ?>
+					<? if( $item ): ?>
+						<? if( is_array($item) ): ?>
+							<tr>
+								<td><?=$field->attribute->name?></td>
+								<td>
+								<? foreach ($item as $i => $value): ?>
+									<span><?=$value->value?></span>
+								<? endforeach; ?>
+								</td>
+							</tr>
+						<? else: ?>
+							<tr>
+								<td><?=$field->attribute->name?></td>
+								<td><?=$item->value?></td>
+							</tr>
+						<? endif; ?>
+					<? endif; ?>
 				<? endforeach; ?>
 			</table>
 		</div>

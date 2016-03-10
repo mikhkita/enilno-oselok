@@ -473,6 +473,17 @@ td.b-photo-td{
             height: 27px;
             padding: 5px 10px;
         }
+        .b-params-table td{
+            text-align: left !important;
+        }
+        .b-params-table tr td span{
+            border-left: 1px solid #452716;
+            padding-left: 5px;
+        }
+        .b-params-table tr td span:first-child{
+            border-left: 0px;
+            padding-left: 0px;
+        }
         .b-table td b{
             color: #D26A44;
             /*font-weight: 700 !important;*/
@@ -883,10 +894,10 @@ td.b-photo-td{
         width: 454px;
     }
         .b-good-form .b-left-column{
-            width: 33.33%;
+            width: 50%;
         }
         .b-good-form .b-right-column{
-            width: 66.6666%;
+            width: 50%;
         }
         .b-good-form .clearfix .row:nth-child(2n){
             /*margin-left: 5px;*/
