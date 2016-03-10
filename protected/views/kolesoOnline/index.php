@@ -37,7 +37,8 @@
                     </div> -->
                     <? $ind = 0; foreach ($params[2]["FILTER"] as $filters): ?>
                     <div class="filter-cont clearfix">
-                        <? foreach ($filters as $attr_id => $label): ?>     
+                        <? foreach ($filters as $attr_id => $label): ?>  
+                            <? if( $attr_id != 28 ): ?>   
                             <div class="filter-item">
                                 <h5><?=$label?></h5>
                                 <div class="input"></div>   
@@ -62,6 +63,7 @@
                                         <? endif; ?>
                                     </div>
                             </div>
+                            <? endif; ?>
                         <? endforeach; ?>
                         <? if($ind == 1): ?>
                             <div class="slide-type b-third clearfix">
