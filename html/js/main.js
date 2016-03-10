@@ -206,7 +206,8 @@ $(document).ready(function(){
         autoplaySpeed: 6000
         // fade: true
     });
-         
+    $( "#shipping" ).tabs();    
+        
     $( ".b-block.main-tabs" ).tabs({
         load: function( event, ui ) {
             $(".good-detail .b-block .load-tabs").show();
