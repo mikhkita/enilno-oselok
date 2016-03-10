@@ -96,7 +96,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
                     <li><a href="<?=Yii::app()->createUrl('/contacts.html')?>">Контакты</a></li>
                 </ul>
                 <div class="clearfix b-mobile-top-line mobile-only">
-                    <h2 class="left">Вы находитесь в г. <a href="#" class="icon fancy" data-block="#b-popup-city"><?=Yii::app()->params["city"]->name?></a></h2>
+                    <h2 class="left">Вы находитесь в г. <a href="#" class="icon fancy" data-block="#b-popup-city"><? $show = $this->checkCity(); echo Yii::app()->params["city"]->name?></a></h2>
                     <a href="#" class="right icon b-mobile-search-top-icon">Поиск</a>
                 </div>
             </div>  
@@ -203,7 +203,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
     </div>
 <div style="display:none;">
     <div id="b-popup-city">
-        <?php $show = $this->checkCity(); $this->renderPartial('_cities', array('cities' => $this->getCityGroups(),"show" => $show )); ?>
+        <?php $this->renderPartial('_cities', array('cities' => $this->getCityGroups(),"show" => $show )); ?>
     </div>
     <div id="b-popup-callback">
         <div class="for_all b-popup-small">

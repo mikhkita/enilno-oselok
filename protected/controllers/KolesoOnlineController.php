@@ -344,7 +344,7 @@ class KolesoOnlineController extends Controller
 
 	public function actionIndex($countGood = false)
 	{	
-		$this->checkCity();
+		// $this->checkCity();
 		// var_dump($_GET);
 		$start = microtime(true);
 
@@ -396,7 +396,7 @@ class KolesoOnlineController extends Controller
 	}
 
 	public function actionCategory($partial = false, $countGood = false) {
-		$this->checkCity();
+		// $this->checkCity();
 
 		$start = microtime(true);	
 		if(!isset($_SESSION)) session_start();
@@ -636,7 +636,7 @@ class KolesoOnlineController extends Controller
 
 	public function actionDetail($id = NULL,$type = NULL)
 	{
-		$this->checkCity();
+		// $this->checkCity();
 
 		if($id) {
 			$url = $id;
@@ -727,7 +727,7 @@ class KolesoOnlineController extends Controller
 	public function actionPage($page = NULL)
 	{
 		if( $page ){
-			$this->checkCity();
+			// $this->checkCity();
 
 			$page = $this->getPage($page);
 
@@ -761,7 +761,7 @@ class KolesoOnlineController extends Controller
 	public function actionMail(){
         require_once("phpmail.php");
 
-        $this->checkCity();
+        // $this->checkCity();
 
         $email_admin = $this->getParam("SHOP","EMAILS");
 

@@ -807,6 +807,9 @@ class Controller extends CController
         if( !(isset($_GET['city']) && $_GET['city'] != "") ) {
             $curl = new Curl();
             $city = json_decode($curl->request('http://194.28.132.219/json/'.$_SERVER["REMOTE_ADDR"]));
+            // if($_SERVER["REMOTE_ADDR"] == "62.109.21.73") {
+            //     die("asd");
+            // }
             $city = (isset($city->city->name_ru)) ? $city->city->name_ru : "Томск";   
             $city = Variant::model()->with(array("attribute"))->find("value='".$city."' AND attribute.attribute_id=38");
             if( !$city ) {
