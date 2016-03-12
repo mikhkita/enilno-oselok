@@ -834,10 +834,10 @@ class Controller extends CController
             "id" => $city_id,
             "code" => $dictionary->value,
             "name" => $city->value,
-            "in" => ($in)?$in->value:""
+            "in" => ($in)?$in->value:"",
+            "popup" => $show
         );
         unset($_GET['city']);
-        return $show;
     }
 
     public function visualInter($template){

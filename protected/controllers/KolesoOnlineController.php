@@ -294,7 +294,15 @@ class KolesoOnlineController extends Controller
         parent::init();
 
         $this->image = Yii::app()->getBaseUrl(true)."/html/i/logo-vk.jpg";
+
     }
+
+    public function beforeaction(){
+		if( Yii::app()->controller->action->id == "detail" || Yii::app()->controller->action->id == "index" || Yii::app()->controller->action->id == "category"){
+			$this->checkCity();
+		}
+		return true;
+	}
 
 	public function filters()
 	{
