@@ -765,7 +765,7 @@ padding-top: 30px;}
 }		
 .goods {
 
-width: 700px;margin-left: 0px;}
+width: 712px;margin-left: -12px;}
 	.goods .gradient-grey {
 		float: left;
 		width: 337px !important;
@@ -1564,11 +1564,11 @@ width: 700px;margin-left: 0px;}
 
 			}
 			.good-detail .b-block .goods .gradient-grey {
-				margin: 5px 17px 5px 3px;
+				margin: 5px 5px 5px 14px;
 			}
 			#similar-slider .b-sim-nav {
 				position: absolute;
-				right: 80px;
+				right: 83px;
 				top: -88px;
 				width: 60px;
 				height: 60px;
@@ -1592,7 +1592,7 @@ width: 700px;margin-left: 0px;}
 				left: 18px;
 			}
 			#similar-slider .b-sim-nav.b-sim-right {
-				right: 2px;
+				right: 5px;
 			}
 				#similar-slider .b-sim-nav.b-sim-right:before{
 					background-position: -420px -196px;
