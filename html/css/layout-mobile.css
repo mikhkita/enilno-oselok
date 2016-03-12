@@ -1016,6 +1016,11 @@ width: 700px;margin-left: 0px;}
 			}
 				.b-footer .b-footer-sub .b-block h3 a {
 				}
+.similar-title {
+	font-size: 45px;
+    font-weight: 700;
+    padding: 0 0 30px;
+}
 .b-category	{
 
 }	
@@ -1496,6 +1501,7 @@ width: 700px;margin-left: 0px;}
 				}
 		.good-detail .b-block .main-tabs {
 			margin-bottom: 25px;
+			padding-right: 0;
 		}	
 			.main-tabs .ui-tabs-panel{
 				margin-top: 10px;
@@ -1558,11 +1564,11 @@ width: 700px;margin-left: 0px;}
 
 			}
 			.good-detail .b-block .goods .gradient-grey {
-				margin: 5px 13px 5px 13px;
+				margin: 5px 10px 5px 3px;
 			}
 			#similar-slider .b-sim-nav {
 				position: absolute;
-				right: 90px;
+				right: 88px;
 				top: -88px;
 				width: 60px;
 				height: 60px;
@@ -1576,14 +1582,17 @@ width: 700px;margin-left: 0px;}
 					height: 25px;
 					left: 18px;
 					background-position: -397px -196px;
-					top: 18px;
+					top: 19px;
 				}
 			#similar-slider .b-sim-nav:active {
 				top: -86px;
 				border-bottom: none;
 			}
+			#similar-slider .b-sim-nav.b-sim-left:before {
+				left: 18px;
+			}
 			#similar-slider .b-sim-nav.b-sim-right {
-				right: 12px;
+				right: 10px;
 			}
 				#similar-slider .b-sim-nav.b-sim-right:before{
 					background-position: -420px -196px;
