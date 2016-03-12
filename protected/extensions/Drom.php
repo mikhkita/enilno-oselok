@@ -10,9 +10,9 @@ Class Drom {
         3 => 236
     );
     
-    function __construct() {
+    function __construct($proxy = NULL) {
         include_once Yii::app()->basePath.'/extensions/simple_html_dom.php';
-        $this->curl = new Curl();
+        $this->curl = new Curl($proxy);
     }
 
     public function setUser($login,$password){

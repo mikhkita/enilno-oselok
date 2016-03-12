@@ -413,8 +413,6 @@ class IntegrateController extends Controller
             // sleep(5);
             if( !$this->getNext($category_id, $nth) ){
                 sleep(5);
-            }else{
-                sleep(rand(50,90));
             }
               
             if( $debug ) return true;
@@ -480,7 +478,7 @@ class IntegrateController extends Controller
         $images = $this->getImages($advert->good);
         if( $place_name == "DROM" ){
             $account = $this->getDromAccount($fields["login"]);
-            $place = new Drom();
+            $place = new Drom( (isset($account->proxy) && $account->proxy != "")?$account->proxy:NULL );
             $fields["contacts"] = $account->phone;
         }else if( $place_name == "AVITO" ){
             $account = $this->getAvitoAccount($fields["login"]);
