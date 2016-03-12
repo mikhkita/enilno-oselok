@@ -1564,11 +1564,11 @@ width: 700px;margin-left: 0px;}
 
 			}
 			.good-detail .b-block .goods .gradient-grey {
-				margin: 5px 10px 5px 3px;
+				margin: 5px 17px 5px 3px;
 			}
 			#similar-slider .b-sim-nav {
 				position: absolute;
-				right: 88px;
+				right: 80px;
 				top: -88px;
 				width: 60px;
 				height: 60px;
@@ -1592,7 +1592,7 @@ width: 700px;margin-left: 0px;}
 				left: 18px;
 			}
 			#similar-slider .b-sim-nav.b-sim-right {
-				right: 10px;
+				right: 2px;
 			}
 				#similar-slider .b-sim-nav.b-sim-right:before{
 					background-position: -420px -196px;
