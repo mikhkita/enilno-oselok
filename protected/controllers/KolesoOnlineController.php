@@ -298,7 +298,7 @@ class KolesoOnlineController extends Controller
     }
 
     public function beforeaction(){
-		if( Yii::app()->controller->action->id == "detail" || Yii::app()->controller->action->id == "index" || Yii::app()->controller->action->id == "category"){
+		if( Yii::app()->controller->action->id == "detail" || Yii::app()->controller->action->id == "index" || Yii::app()->controller->action->id == "category" || Yii::app()->controller->action->id == "page" || Yii::app()->controller->action->id == "mail"){
 			$this->checkCity();
 		}
 		return true;
