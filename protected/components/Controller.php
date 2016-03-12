@@ -524,7 +524,8 @@ class Controller extends CController
         $cols = array(
             46 => "login",
             47 => "password",
-            48 => "phone"
+            48 => "phone",
+            114 => "proxy"
         );
         $cells = DesktopTableCell::model()->with(array("row.cells"))->findAll("row.table_id=12".(($login)?" AND t.varchar_value='$login'":""));
         if( $cells ){
