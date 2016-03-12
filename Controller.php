@@ -802,31 +802,27 @@ class Controller extends CController
 
     public function checkCity(){
         if( isset(Yii::app()->params["city"]) ) return true;
+        $city_id = 1081;
         $show = 0;
         if( !(isset($_GET['city']) && $_GET['city'] != "") ) {
-            if (!isset($_COOKIE['geobase'])) {
-                include_once Yii::app()->basePath.'/geo.php';
-                $geo = new Geo();
-                $city = $geo->get_value('city', false);
-                setcookie('geobase', $city, time() + 3600 * 24 * 7, '/'); 
-            } else $city = $_COOKIE['geobase'];
-            if( $city ) {
-                $city = Variant::model()->with(array("attribute"))->find("value='".$city."' AND attribute.attribute_id=38");
-            } else {
-                $city = Variant::model()->with(array("attribute"))->find("value='Москва' AND attribute.attribute_id=38");
+            $curl = new Curl();
+            $city = json_decode($curl->request('http://194.28.132.219/json/'.$_SERVER["REMOTE_ADDR"]));
+            $city = (isset($city->city->name_ru)) ? $city->city->name_ru : "Томск";   
+            $city = Variant::model()->with(array("attribute"))->find("value='".$city."' AND attribute.attribute_id=38");
+            if( !$city ) {
+                $city = Variant::model()->with(array("attribute"))->find("value='Томск' AND attribute.attribute_id=38");
                 $show = 1;
             }
 
             $city_id = $city->id;
             $dictionary = DictionaryVariant::model()->find("attribute_1='$city_id' AND dictionary_id=125");
-            $city_code = $dictionary->value;
-            header("Location: http://".$city_code.".".$_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"]);     
+            $city_code = (!$dictionary)?"tomsk":$dictionary->value;
 
+            header("Location: http://".$city_code.".".$_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"]);
         }else{
             $dictionary = DictionaryVariant::model()->find("value='".$_GET["city"]."' AND dictionary_id=125");
-            $city_id = $dictionary->attribute_1;
+            $city_id = (!$dictionary)?"1081":$dictionary->attribute_1;
             $city = Variant::model()->with(array("attribute"))->find("id=$city_id AND attribute.attribute_id=38");
-            setcookie('geobase', $dictionary->value, time() + 3600 * 24 * 7, '/');
         }
 
         $in = DictionaryVariant::model()->find("attribute_1='$city_id' AND dictionary_id=126");
@@ -837,6 +833,7 @@ class Controller extends CController
             "name" => $city->value,
             "in" => ($in)?$in->value:""
         );
+        unset($_GET['city']);
         return $show;
     }
 
