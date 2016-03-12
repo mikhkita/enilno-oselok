@@ -5,28 +5,28 @@
  */
 class Controller extends CController
 {
-	/**
-	 * @var string the default layout for the controller view. Defaults to 'column1',
-	 * meaning using a single column layout. See 'protected/views/layouts/column1.php'.
-	 */
-	public $layout='admin';
-	public $scripts = array();
+    /**
+     * @var string the default layout for the controller view. Defaults to 'column1',
+     * meaning using a single column layout. See 'protected/views/layouts/column1.php'.
+     */
+    public $layout='admin';
+    public $scripts = array();
 
     public $courses = array("USD" => 120);
-	/**
-	 * @var array context menu items. This property will be assigned to {@link CMenu::items}.
-	 */
-	public $menu=array();
+    /**
+     * @var array context menu items. This property will be assigned to {@link CMenu::items}.
+     */
+    public $menu=array();
 
     public $title="Godzilla Wheels";
     public $description="Godzilla Wheels";
     public $keywords="Godzilla Wheels";
-	/**
-	 * @var array the breadcrumbs of the current page. The value of this property will
-	 * be assigned to {@link CBreadcrumbs::links}. Please refer to {@link CBreadcrumbs::links}
-	 * for more details on how to specify this property.
-	 */
-	public $breadcrumbs = array();
+    /**
+     * @var array the breadcrumbs of the current page. The value of this property will
+     * be assigned to {@link CBreadcrumbs::links}. Please refer to {@link CBreadcrumbs::links}
+     * for more details on how to specify this property.
+     */
+    public $breadcrumbs = array();
 
     public $interpreters = array();
 
@@ -804,29 +804,28 @@ class Controller extends CController
         if( isset(Yii::app()->params["city"]) ) return true;
         $show = 0;
         if( !(isset($_GET['city']) && $_GET['city'] != "") ) {
-            if (!isset($_COOKIE['geobase'])) {
+            if (!isset($_COOKIE['geo'])) {
                 include_once Yii::app()->basePath.'/geo.php';
                 $geo = new Geo();
                 $city = $geo->get_value('city', false);
-                setcookie('geobase', $city, time() + 3600 * 24 * 7, '/'); 
-            } else $city = $_COOKIE['geobase'];
-            if( $city ) {
                 $city = Variant::model()->with(array("attribute"))->find("value='".$city."' AND attribute.attribute_id=38");
+                if( !$city ) {
+                    $city = Variant::model()->with(array("attribute"))->find("value='Москва' AND attribute.attribute_id=38");
+                    $show = 1;
+                }
+                $city_id = $city->id;
+                if(!$show) setcookie('geo', $city_id, time() + 3600 * 24 * 30, '/','koleso.online');
             } else {
-                $city = Variant::model()->with(array("attribute"))->find("value='Москва' AND attribute.attribute_id=38");
-                $show = 1;
+                $city_id = $_COOKIE['geo'];
+                $city = Variant::model()->with(array("attribute"))->find("id=$city_id AND attribute.attribute_id=38");
             }
-
-            $city_id = $city->id;
             $dictionary = DictionaryVariant::model()->find("attribute_1='$city_id' AND dictionary_id=125");
-            $city_code = $dictionary->value;
-            header("Location: http://".$city_code.".".$_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"]);     
-
+            header("Location: http://".$dictionary->value.".".$_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"]);     
         }else{
             $dictionary = DictionaryVariant::model()->find("value='".$_GET["city"]."' AND dictionary_id=125");
             $city_id = $dictionary->attribute_1;
             $city = Variant::model()->with(array("attribute"))->find("id=$city_id AND attribute.attribute_id=38");
-            setcookie('geobase', $dictionary->value, time() + 3600 * 24 * 7, '/');
+            setcookie('geo', $city_id, time() + 3600 * 24 * 30, '/','koleso.online');
         }
 
         $in = DictionaryVariant::model()->find("attribute_1='$city_id' AND dictionary_id=126");
@@ -837,6 +836,7 @@ class Controller extends CController
             "name" => $city->value,
             "in" => ($in)?$in->value:""
         );
+        unset($_GET['city']);
         return $show;
     }
 
