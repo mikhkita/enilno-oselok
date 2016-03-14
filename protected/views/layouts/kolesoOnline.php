@@ -180,7 +180,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
                         <? else: ?>
                             <br>
                         <? endif; ?>
-                        <div class="social">
+                        <!-- <div class="social">
                             <h3>Присоединяйтесь к нам</h3>
                             <div class="social-icon clearfix">
                                 <a class="tw" href="#"></a>
@@ -189,7 +189,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
                                 <a class="vk" href="#"></a>
                                 <a class="fb" href="#"></a>
                             </div>
-                        </div>
+                        </div> -->
                     </li>
                 </ul>
             </div>

@@ -1683,7 +1683,8 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 						float: left;
 						font-weight: 300;
 						text-decoration: underline;
-						margin: 0 12px;
+						margin-left: 15px;
+						padding-right: 15px;
 						cursor: pointer;
 						color: #8f8f8f;
 					}
@@ -1708,7 +1709,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 							width: 9px;
 							height: 7px;
 							top: 6px;
-							right: -13px;
+							right: 0;
 						}
 						.b-category .b-block .good-list .b-sort ul li.active.up:after {
 							background-position: -104px -99px;
@@ -2087,6 +2088,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 						right: 9px;
 						background-position: -216px -99px;
 					}
+
 .fancybox-close {
 	width: 24px;
     height: 24px;

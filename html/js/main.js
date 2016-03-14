@@ -38,11 +38,13 @@ $(document).ready(function(){
         $(".load").css("display","inline-block"); 
     }
 
-    nowBig = ( myWidth > 767 ) ? 5 : 2;
+    var nowBig = ( myWidth > 767 ) ? 5 : 2;
+    var drag = ( myWidth > 767 ) ? false: true;
+
     $('#similar-slider').slick({
         slide: 'li',
-        infinite: false,
         slidesToShow: nowBig,
+        draggable: drag,
         slidesToScroll: 1,
         prevArrow: "<span class='b-sim-nav gradient-lightBlack b-sim-left'></span>",
         nextArrow: "<span class='b-sim-nav gradient-lightBlack b-sim-right'></span>"    
