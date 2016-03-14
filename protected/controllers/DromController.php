@@ -227,8 +227,29 @@ class DromController extends Controller
         }
     }
     public function actionAdminVlad(){
-        $drom = new Drom;
-        $drom->parseUser();
+        include_once Yii::app()->basePath.'/extensions/simple_html_dom.php';
+        $drom = new Drom();
+        $html = file_get_html('http://hramy.ru/regions/city_abc.htm');
+        $each = 0;
+        $cities = array();
+        foreach ($html->find("#table2 tbody tr td") as $key => $value) {
+            $each++;
+            if($each == 1) {
+                $temp = $value->plaintext;
+            }
+            if($each == 3) {
+                if(!isset($cities[$value->plaintext])) {
+                   $cities[$value->plaintext] = array(); 
+                }
+                array_push($cities[$value->plaintext], $temp);
+            }
+            if($each == 5) $each = 0;
+            
+        }
+        print_r($cities);
+
+        // Dictionary::add(138,$variant_id,$value)
+       
     }
     public function actionAdminIndex(){
 
