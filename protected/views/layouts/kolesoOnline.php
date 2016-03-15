@@ -205,7 +205,25 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
             </div>
         </div>
     </div>
+    <span class="exit fancy" data-block="#b-popup-exit"></span>
 <div style="display:none;">
+    <div id="b-popup-exit">
+        <div class="for_all b-popup-small">
+            <h3>Не нашли подходящий товар?</h3>
+            <h4 class="exit-desc">Оставьте заявку и наши менеджеры подберут вам дополнительные варианты</h4>
+            <form action="<?=Yii::app()->createUrl('/kolesoOnline/mail/')?>" id="b-form-exit" method="POST"  data-block="#b-popup-2">
+                <div class="b-popup-form">
+                    <label for="tel">Ваш телефон</label>
+                    <input type="text" name="phone" required placeholder="+7 (___) ___-__-__"/>               
+                    <label for="name">Ваши параметры</label>
+                    <textarea type="text" name="1" placeholder="17 радиус, сверловка 5*114.3, ширина 7"></textarea>
+                    <input type="hidden" name="1-name" value="Параметры" />
+                    <input type="hidden" name="subject" value="Подбор товара"/>
+                </div>
+                <input type="submit" class="ajax b-orange-butt" value="Отправить">
+            </form>
+        </div>
+    </div>
     <div id="b-popup-city">
         <?php $this->renderPartial('_cities', array('cities' => $this->getCityGroups(),"show" => Yii::app()->params["city"]->popup )); ?>
     </div>
@@ -258,7 +276,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
         </div>
     </div>
     <div id="b-popup-error">
-        <div class="b-thanks b-popup">
+        <div class="for_all b-popup-small">
             <h3>Ошибка отправки!</h3>
             <h4>Приносим свои извинения. Пожалуйста, попробуйте отправить Вашу заявку позже.</h4>
             <input type="submit" class="b-orange-butt" onclick="$.fancybox.close(); return false;" value="Закрыть">
@@ -281,6 +299,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
 <script type="text/javascript" src="/html/js/select2.full.min.js"></script>
 <script type="text/javascript" src="/html/js/stroll.js"></script>
 <script type="text/javascript" src="/html/js/i18n/ru.js"></script>
+<script type="text/javascript" src="/html/js/jquery.cookie.js"></script>
 <script type="text/javascript" src="/html/js/KitSend.js"></script>
 <script type="text/javascript" src="/html/js/main.js"></script>
 

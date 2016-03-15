@@ -637,4 +637,19 @@ $(document).ready(function(){
     if($(".city-popup-show").length) {
         $("a[data-block='#b-popup-city']").click();
     }
+
+
+    function exitPopup() {
+        $( document ).on("mousemove", function( event ) {  
+            if(!$.cookie('exitPopup') || $.cookie('exitPopup') == 0) {
+                if(event.pageY < 30) {
+                    $("span.exit").click();
+                    $.cookie('exitPopup',1);
+                }    
+            }
+        });
+    }
+    
+    setTimeout(exitPopup, 30000);
+
 });
