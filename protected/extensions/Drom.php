@@ -294,6 +294,8 @@ Class Drom {
     public function parseUser() {
         $wheel_array = array("tire","disc","wheel");
         $Users = AttributeVariant::model()->with('variant')->findAll("attribute_id=43 AND variant_id > 2900");
+        $add_count = 0;
+        $delete_count = 0;
 
         foreach ($Users as $user) {
             $good_type = 1;
@@ -320,12 +322,15 @@ Class Drom {
                         Log::debug("Ошибка парсинга объявлений пользователя");
                         break;
                     }    
+
                     foreach ($model as $key => $item) {
                         $code = str_replace(".html","", array_pop(explode("/", $item->fields_assoc[106]->value)));
                         array_push($goods, $code);
                         if(array_search($code, $drom_ids) === false) {
-                            if($archive = Good::model()->find("id=".$key." AND archive=0")) {
+                            if($archive = Good::model()->with(array("type","fields.variant","fields.attribute"))->find("t.id=".$key." AND t.archive=0")) {
+                                Log::debug("Удаление товара ".$archive->fields_assoc[3]->value);
                                 $archive->sold(); 
+                                $delete_count++;
                             }
                         }
                     }
@@ -335,16 +340,21 @@ Class Drom {
                         	$link = "http://".Yii::app()->params['ip'].Controller::createUrl('/dromUserParse/parse',array('page'=> 'http://baza.drom.ru/'.$code,'user_id' => $user->variant->value));
                         	if(Cron::model()->count("link='".addslashes($link)."'")) {
 								Log::debug("Объявление ".$code." уже добавлено в очередь на парсинг");	
-							} else array_push($links, $link);     
+							} else {
+                                Log::debug("Товар добавлен в очередь на парсинг ".$link);
+                                array_push($links, $link);     
+                            }
                         }
                     }
                     Cron::addAll($links);    
+                    $add_count += count($links);
                 }
                 $good_type++;
-
             }     
         }
-     
+
+        Log::debug("Удалено товаров: ".$delete_count);
+        Log::debug("Добавлено товаров: ".$add_count);
     }
 
     public function parseAdvert($page,$good_code,$user_id) {

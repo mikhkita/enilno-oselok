@@ -630,6 +630,12 @@ class IntegrateController extends Controller
         if( count($ids) )
             Queue::model()->deleteAll("id IN (".implode(",", $ids).")");
     }
+
+    public function actionDromParse(){
+        $drom = new Drom();
+
+        $drom->parseUser();
+    }
 // Выкладка -------------------------------------------------------------- Выкладка
 
 // Магазин --------------------------------------------------------------- Магазин
@@ -759,6 +765,7 @@ class IntegrateController extends Controller
         return ( trim($toggle) == "on" );
     }
 // Планировщик ----------------------------------------------------------- Планировщик
+
     public function actionTest(){
         $avito = new Avito();
         $avito->setUser("beatbox787@gmail.com", "481516");
