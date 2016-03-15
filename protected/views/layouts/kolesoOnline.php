@@ -115,7 +115,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
                 </div>
                 <div class="right">
                     <div class="clearfix contacts">
-                        <a href="tel:+79138275756" class="mobile-not-fancy fancy left" data-block="#b-popup-callback">+7 (913) 827 57-56</a>
+                        <a href="tel:+79138275756" class="mobile-not-fancy fancy left" data-block="#b-popup-callback">+7 (913) 827-57-56</a>
                         <a href="mailto:kolesotomskru@mail.ru" class="left mail">kolesotomskru@mail.ru</a>
                     </div>
                     <form action="<?=Yii::app()->createUrl('kolesoOnline/search')?>" method="GET" class="b-search-form">
