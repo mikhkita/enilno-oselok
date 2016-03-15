@@ -828,7 +828,11 @@ class Controller extends CController
             $city = Variant::model()->with(array("attribute"))->find("id=$city_id AND attribute.attribute_id=38");
             setcookie('geo', $city_id, time() + 3600 * 24 * 30, '/','koleso.online');
         }
+        // $region = DictionaryVariant::model()->find("dictionary_id=138 AND attribute_1='$city_id'")->value;
+        // $phone = ;
+        // if($phone) {
 
+        // } else $phone = '79138275756';
         $in = DictionaryVariant::model()->find("attribute_1='$city_id' AND dictionary_id=126");
 
         Yii::app()->params["city"] = (object) array(
@@ -836,6 +840,7 @@ class Controller extends CController
             "code" => $dictionary->value,
             "name" => $city->value,
             "in" => ($in)?$in->value:"",
+            // "phone" => $phone,
             "popup" => $show
         );
         unset($_GET['city']);
