@@ -650,6 +650,6 @@ $(document).ready(function(){
         });
     }
     
-    setTimeout(exitPopup, 30000);
+    setTimeout(exitPopup, 10000);
 
 });

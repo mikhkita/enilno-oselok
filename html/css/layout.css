@@ -916,7 +916,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 				
 				.filter-item .input:hover,.filter-item .input:hover:after,input[type="text"]:hover,input[type="text"]:focus,textarea:hover,textarea:focus,.filter-item.active .input,.filter-item.active .input:after {
 					border-color: #ffad00 !important;
-					box-shadow: 0 0px 0px 1px #ffad00 !important;
+					// box-shadow: 0 0px 0px 1px #ffad00 !important;
 				}
 .b-popular {
 
