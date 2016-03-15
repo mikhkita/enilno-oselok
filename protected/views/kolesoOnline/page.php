@@ -7,7 +7,7 @@
             </ul>
             <h3 class="category-title" id="buy-title"><?=$page->title?></h3>
             <div class="b-text">
-                <?=$page->content?>
+                <?=$this->cityReplace($page->content)?>
             </div>
         </div>
     </div>

@@ -352,7 +352,7 @@ Class Drom {
                 $good_type++;
             }     
         }
-
+        $this->curl->removeCookies();
         Log::debug("Удалено товаров: ".$delete_count);
         Log::debug("Добавлено товаров: ".$add_count);
     }
