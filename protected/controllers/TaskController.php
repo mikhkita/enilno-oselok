@@ -1,6 +1,6 @@
 <?php
 
-class NotificationController extends Controller
+class TaskController extends Controller
 {
 	public function filters()
 	{
@@ -24,9 +24,9 @@ class NotificationController extends Controller
 
 	public function actionAdminCreate()
 	{
-		$model=new Notification;
+		$model=new Task;
 
-		if(isset($_POST['Notification']))
+		if(isset($_POST['Task']))
 		{
 			$this->setAttr($model);
 		}else{
@@ -44,9 +44,9 @@ class NotificationController extends Controller
 
 	public function actionAdminUpdate($id)
 	{
-		$model=Notification::model()->with("fields.attribute","interpreters.interpreter")->findByPk($id);
+		$model=Task::model()->with("fields.attribute","interpreters.interpreter")->findByPk($id);
 
-		if(isset($_POST['Notification']))
+		if(isset($_POST['Task']))
 		{
 			$this->setAttr($model);
 		}else{
@@ -73,15 +73,15 @@ class NotificationController extends Controller
 	{
 		if( !$partial ){
 			$this->layout = 'admin';
-			$this->scripts[] = 'Notification';
+			$this->scripts[] = 'Task';
 		}
-		$filter = new Notification('filter');
+		$filter = new Task('filter');
 		$criteria = new CDbCriteria();
 
-		if (isset($_GET['Notification']))
+		if (isset($_GET['Task']))
         {
-            $filter->attributes = $_GET['Notification'];
-            foreach ($_GET['Notification'] AS $key => $val)
+            $filter->attributes = $_GET['Task'];
+            foreach ($_GET['Task'] AS $key => $val)
             {
                 if ($val != '')
                 {
@@ -96,26 +96,26 @@ class NotificationController extends Controller
 
         $criteria->order = 'id DESC';
 
-        $model = Notification::model()->findAll($criteria);
+        $model = Task::model()->findAll($criteria);
 
 		if( !$partial ){
 			$this->render('adminIndex',array(
 				'data'=>$model,
 				'filter'=>$filter,
-				'labels'=>Notification::attributeLabels()
+				'labels'=>Task::attributeLabels()
 			));
 		}else{
 			$this->renderPartial('adminIndex',array(
 				'data'=>$model,
 				'filter'=>$filter,
-				'labels'=>Notification::attributeLabels()
+				'labels'=>Task::attributeLabels()
 			));
 		}
 	}
 	
 	public function loadModel($id)
 	{
-		$model=Notification::model()->findByPk($id);
+		$model=Task::model()->findByPk($id);
 		if($model===null)
 			throw new CHttpException(404,'The requested page does not exist.');
 		return $model;

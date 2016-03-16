@@ -9,14 +9,14 @@
  * @property integer $category_id
  * @property string $data
  */
-class Notification extends CActiveRecord
+class Task extends CActiveRecord
 {
 	/**
 	 * @return string the associated database table name
 	 */
 	public function tableName()
 	{
-		return 'notification';
+		return 'task';
 	}
 
 	/**

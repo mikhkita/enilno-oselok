@@ -410,10 +410,10 @@ class IntegrateController extends Controller
             //     $this->setParam( "AVITO", "CITY".$nth, "0" );
 
             $this->writeTime($category_id, $nth);
-            // sleep(5);
             if( !$this->getNext($category_id, $nth) ){
                 sleep(5);
             }
+            sleep(rand(15,30));
               
             if( $debug ) return true;
         }
@@ -919,7 +919,7 @@ class IntegrateController extends Controller
     public function actionRibka(){
         $model = Good::model()->filter(
             array(
-                "good_type_id"=>1,
+                "good_type_id"=>2,
                 "attributes"=>array(
                     43 => array(2915)
                 )
@@ -939,13 +939,13 @@ class IntegrateController extends Controller
                 if( $size[0] == 640 && $size[1] == 115 ){
                     echo "<img src='/".$link."'>";
                     echo "<br>";
-                    // unlink($link);
-                    // array_push($images, $link);
+                    unlink($link);
+                    array_push($images, $link);
                 }
                 // echo imagesy($link)." ".imagesx($link)."<br>";
             }
         }
-        // print_r(count($images));
+        print_r(count($images));
 
         // echo count($model);
     }
