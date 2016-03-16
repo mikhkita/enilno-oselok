@@ -65,22 +65,22 @@ class DromUserParseController extends Controller
             $arr = explode(PHP_EOL,$_POST['links']);
             foreach ($arr as $key => &$value) {
                 $item = explode(" ", $value); 
-                $value = "http://".Yii::app()->params['ip'].$this->createUrl('/dromUserParse/parse',array('page'=> trim($item[0]),'code' => trim($item[1])));
+                $value = "http://".Yii::app()->params['ip'].$this->createUrl('/dromUserParse/parse',array('page'=> trim($item[0])));
             }
             Cron::addAll($arr);
             Yii::app()->user->setFlash('message','Товар(ы) добавлен(ы) в очередь');
             $this->refresh();
         } else $this->render('adminIndex');
     }
-    public function actionParse($page,$user_id = NULL,$code = NULL) {
+    public function actionParse($page,$user_id = NULL) {
     	$page = urldecode($page);	
     	$drom = new Drom();
-        $good_code = ($code === NULL) ? $this->getParam( "OTHER", "PARTNERS_LAST_CODE", true) : $code;
+        $good_code = $this->getParam( "OTHER", "PARTNERS_LAST_CODE", true);
         $params = $drom->parseAdvert($page,$good_code,$user_id);
         $drom->curl->removeCookies();
         if($params) {
             if(Good::addAttributes($params,$params[0]) === true) {
-                if($code === NULL) $this->setParam( "OTHER", "PARTNERS_LAST_CODE",($good_code+1));
+                $this->setParam( "OTHER", "PARTNERS_LAST_CODE",($good_code+1));
                 echo json_encode(array("result" => "success"));
             } else echo json_encode(array("result" => "error","message" => "Ошибка при добавлении товара"));
         } else if($params === false) {
