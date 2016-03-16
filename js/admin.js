@@ -1405,9 +1405,7 @@ $(document).ready(function(){
         backupImages($(".photo-sortable li"));
 
         issetdeleted = $(".photo-sortable li.deleted").length;
-        $( ".photo-sortable" ).each(function() {
-            $this = $(this);
-            $.ajax({
+        $.ajax({
             url: $( "#photo-sortable" ).attr("data-href"),
             data: $( ".photo-sortable input" ).serialize(),
             method: "POST",
@@ -1426,7 +1424,6 @@ $(document).ready(function(){
             error: function(){
                 alert("Ошибка сохранения");
             }
-        });
         });
        
         return false;
