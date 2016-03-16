@@ -2954,6 +2954,7 @@ input[disabled="disabled"] {
         border-right: 0px;
     }
 .photo-sortable{
+    min-height: 200px;
     margin-top: 20px;
     border: 1px solid #452716;
     font-size: 0px;

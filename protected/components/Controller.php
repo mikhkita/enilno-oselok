@@ -584,7 +584,7 @@ class Controller extends CController
         }
     }
 
-    public function getImages($good, $number = NULL, $get_default = true)
+    public function getImages($good, $number = NULL, $get_default = true,$extra = false)
     {   
         if( is_object($good) ){
             $code = $good->fields_assoc[3]->value;
@@ -595,6 +595,9 @@ class Controller extends CController
         }
         $imgs = array();
         $path = Yii::app()->params["imageFolder"]."/".GoodType::getCode($good_type_id);
+        if($extra) {
+            $code = $code."/extra";
+        }
         $dir = $path."/".$code;
         if (is_dir($dir)) {
             $imgs = array_values(array_diff(scandir($dir), array('..', '.', 'Thumbs.db', '.DS_Store')));
