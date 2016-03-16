@@ -1369,6 +1369,8 @@ $(document).ready(function(){
     if( $("#photo-sortable").length ) {
         var el = document.getElementById('photo-sortable');
         var sortable = Sortable.create(el);
+        var el2 = document.getElementById('photo-sortable-2');
+        var sortable2 = Sortable.create(el2);
     }
 
     $("body").on("click",".b-photo-delete",function(){
@@ -1387,7 +1389,11 @@ $(document).ready(function(){
 
     customHandlers["add-to-photo-sortable"] = function(links){
         for( var i in links )
-            $(".photo-sortable").append('<li style="background-image: url(\'/'+links[i]+'\');" data-small="/'+links[i]+'" data-src="/'+links[i]+'"><a href="#" class="b-photo-delete ion-icon ion-close"></a><input type="hidden" name="Images[]" data-name="Images[]" data-delete="Delete[]" value="/'+links[i]+'"></li>');
+            $("#photo-sortable").append('<li style="background-image: url(\'/'+links[i]+'\');" data-small="/'+links[i]+'" data-src="/'+links[i]+'"><a href="#" class="b-photo-delete ion-icon ion-close"></a><input type="hidden" name="Images[]" data-name="Images[]" data-delete="Delete[]" value="/'+links[i]+'"></li>');
+    }
+    customHandlers["add-to-photo-sortable-2"] = function(links){
+        for( var i in links )
+            $("#photo-sortable-2").append('<li style="background-image: url(\'/'+links[i]+'\');" data-small="/'+links[i]+'" data-src="/'+links[i]+'"><a href="#" class="b-photo-delete ion-icon ion-close"></a><input type="hidden" name="Extra[]" data-name="Extra[]" data-delete="Delete[]" value="/'+links[i]+'"></li>');
     }
 
     var order = [],
@@ -1400,13 +1406,13 @@ $(document).ready(function(){
 
         issetdeleted = $(".photo-sortable li.deleted").length;
         $.ajax({
-            url: $( ".photo-sortable" ).attr("data-href"),
+            url: $( "#photo-sortable" ).attr("data-href"),
             data: $( ".photo-sortable input" ).serialize(),
             method: "POST",
             success: function(msg){
                 progress.end(function(){
                     $(".photo-sortable").removeClass("disabled");
-                    $(".photo-sortable").html(msg);
+                    $("#photo-sortable").html(msg);
 
                     if( issetdeleted ){
                         reloadImages($(".photo-sortable li"));
@@ -1419,6 +1425,7 @@ $(document).ready(function(){
                 alert("Ошибка сохранения");
             }
         });
+       
         return false;
     });
 

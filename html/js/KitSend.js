@@ -99,8 +99,12 @@ $(document).ready(function(){
 					if( msg.trim() == "1" ){
 						if( $this.attr("id") == "b-form-call" ){
 							yaCounter34102235.reachGoal('CALL_REQUEST');
-						}else if( $this.attr("id") == "b-form-buy" ){
+						}
+						if( $this.attr("id") == "b-form-buy" ){
 							yaCounter34102235.reachGoal('BUY_REQUEST');
+						}
+						if( $this.attr("id") == "b-form-exit" ){
+							yaCounter34102235.reachGoal('EXIT_REQUEST');
 						}
 					}
 				}
@@ -141,6 +145,7 @@ function fancyInit() {
 				}
 			},
 			afterShow: function(){
+				$popup.find("input:eq(0)").focus();
 				if( $this.attr("data-afterShow") && customHandlers[$this.attr("data-afterShow")] ){
 					customHandlers[$this.attr("data-afterShow")]($this);
 				}

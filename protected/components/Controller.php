@@ -584,7 +584,7 @@ class Controller extends CController
         }
     }
 
-    public function getImages($good, $number = NULL, $get_default = true)
+    public function getImages($good, $number = NULL, $get_default = true,$extra = false)
     {   
         if( is_object($good) ){
             $code = $good->fields_assoc[3]->value;
@@ -595,6 +595,9 @@ class Controller extends CController
         }
         $imgs = array();
         $path = Yii::app()->params["imageFolder"]."/".GoodType::getCode($good_type_id);
+        if($extra) {
+            $code = $code."/extra";
+        }
         $dir = $path."/".$code;
         if (is_dir($dir)) {
             $imgs = array_values(array_diff(scandir($dir), array('..', '.', 'Thumbs.db', '.DS_Store')));
@@ -828,14 +831,19 @@ class Controller extends CController
             $city = Variant::model()->with(array("attribute"))->find("id=$city_id AND attribute.attribute_id=38");
             setcookie('geo', $city_id, time() + 3600 * 24 * 30, '/','koleso.online');
         }
-
+        $region = intval(DictionaryVariant::model()->find("dictionary_id=138 AND attribute_1='$city_id'")->value);
+        $row = DesktopTableCell::model()->find("col_id=120 AND int_value=$region");
+        if( $row ) {
+            $phone = DesktopTableCell::model()->find("col_id=119 AND row_id=".$row->row_id)->varchar_value;
+        } else $phone = '79138275756';
+        
         $in = DictionaryVariant::model()->find("attribute_1='$city_id' AND dictionary_id=126");
-
         Yii::app()->params["city"] = (object) array(
             "id" => $city_id,
             "code" => $dictionary->value,
             "name" => $city->value,
             "in" => ($in)?$in->value:"",
+            "phone" => $phone,
             "popup" => $show
         );
         unset($_GET['city']);
@@ -982,6 +990,8 @@ class Controller extends CController
     }
 
     public function cityReplace($str){
-        return str_replace(array("[+CITY+]","[+IN+]"), array(Yii::app()->params["city"]->name,Yii::app()->params["city"]->in), $str);
+        $phone = str_split(Yii::app()->params["city"]->phone); 
+        $phone = $phone[0]." (".$phone[1].$phone[2].$phone[3].") ".$phone[4].$phone[5].$phone[6]."-".$phone[7].$phone[8]."-".$phone[9].$phone[10];
+        return str_replace(array("[+CITY+]","[+IN+]","[+PHONE+]"), array(Yii::app()->params["city"]->name,Yii::app()->params["city"]->in,$phone), $str);
     }
 }

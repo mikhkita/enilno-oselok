@@ -1,4 +1,4 @@
-$(document).ready(function(){	
+$(document).ready(function(){   
     var myWidth,myHeight,
         big = 3,
         nowBig = 1,
@@ -85,6 +85,13 @@ $(document).ready(function(){
     $('body').bind('touchmove', whenScroll);
     whenScroll();
 
+    $( document ).mouseleave(function() {
+        if(!$.cookie('exitPopup')) {
+            $("span.exit").click();
+            $.cookie('exitPopup',1,{ expires: 30});  
+        }
+    });
+    
     $(window).load(function() {
         var i = 0;
         $(".after-load-back").each(function(){
@@ -120,6 +127,10 @@ $(document).ready(function(){
         $(".b-city-link").attr("href",$(this).val());
     });
 
+    if($(".city-popup-show").length) {
+        $("a[data-block='#b-popup-city']").click();
+    }
+
     // $("#city-form input[name='url']").val(window.location.href);
     // $(".popup-cities li a").click(function() {    
     //     $("select[name='city']").val($(this).text());
@@ -153,7 +164,7 @@ $(document).ready(function(){
     }
     $.fn.placeholder();
     
-	// var myPlace = new google.maps.LatLng(55.754407, 37.625151);
+    // var myPlace = new google.maps.LatLng(55.754407, 37.625151);
  //    var myOptions = {
  //        zoom: 16,
  //        center: myPlace,
@@ -165,10 +176,10 @@ $(document).ready(function(){
  //    var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions); 
 
  //    var marker = new google.maps.Marker({
-	//     position: myPlace,
-	//     map: map,
-	//     title: "Ярмарка вакансий и стажировок"
-	// });
+    //     position: myPlace,
+    //     map: map,
+    //     title: "Ярмарка вакансий и стажировок"
+    // });
 
     //  var options = {
     //     $AutoPlay: true,                                
@@ -634,7 +645,4 @@ $(document).ready(function(){
         return false;
     }
 
-    if($(".city-popup-show").length) {
-        $("a[data-block='#b-popup-city']").click();
-    }
 });

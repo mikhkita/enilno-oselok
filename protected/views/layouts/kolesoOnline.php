@@ -85,7 +85,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
                 <li><a href="<?=Yii::app()->createUrl('/oplata.html')?>" class="b-mobile-menu-a">Оплата</a></li>
                 <li><a href="<?=Yii::app()->createUrl('/contacts.html')?>" class="b-mobile-menu-a">Контакты</a></li>
             </ul>
-            <a href="tel:+79138275756" class="b-menu-call b-orange-butt">Позвонить</a>
+            <a href="tel:+<?=Yii::app()->params["city"]->phone?>" class="b-menu-call b-orange-butt">Позвонить</a>
         </div>
         <div class="b b-menu">
             <div class="b-block">
@@ -115,7 +115,11 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
                 </div>
                 <div class="right">
                     <div class="clearfix contacts">
-                        <a href="tel:+79138275756" class="mobile-not-fancy fancy left" data-block="#b-popup-callback">+7 (913) 827-57-56</a>
+                        <? 
+                            $phone = str_split(Yii::app()->params["city"]->phone); 
+                            $phone = $phone[0]." (".$phone[1].$phone[2].$phone[3].") ".$phone[4].$phone[5].$phone[6]."-".$phone[7].$phone[8]."-".$phone[9].$phone[10];
+                        ?>
+                        <a href="tel:+<?=Yii::app()->params["city"]->phone?>" class="mobile-not-fancy fancy left" data-block="#b-popup-callback">+<?=$phone?></a>
                         <a href="mailto:kolesotomskru@mail.ru" class="left mail">kolesotomskru@mail.ru</a>
                     </div>
                     <form action="<?=Yii::app()->createUrl('kolesoOnline/search')?>" method="GET" class="b-search-form">
@@ -141,7 +145,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
         <div class="b b-sub-menu b-fixed-top gradient-orange mobile-only">
             <div class="b-block clearfix">
                 <a href="#" class="b-burger icon left"></a>
-                <a href="tel:+79138275756" class="mobile-not-fancy fancy b-phone-center left" data-block="#b-popup-callback">+7 (913) 827 57-56</a>
+                <a href="tel:+<?=Yii::app()->params["city"]->phone?>" class="mobile-not-fancy fancy b-phone-center left" data-block="#b-popup-callback">+<?=$phone?></a>
                 <a href="#" class="b-search-icon icon right"></a>
             </div>
         </div>
@@ -174,7 +178,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
                     <li>
                         <h3>Контактная информация</h3>
                         <a class="footer-contacts mail" href="mailto:kolesotomskru@mail.ru">kolesotomskru@mail.ru</a>
-                        <a class="mobile-not-fancy fancy footer-contacts phone" data-block="#b-popup-callback" href="tel:+79138275756">+7 (913) 827 57-56</a>
+                        <a class="mobile-not-fancy fancy footer-contacts phone" data-block="#b-popup-callback" href="tel:+<?=Yii::app()->params["city"]->phone?>">+<?=$phone?></a>
                         <? if(Yii::app()->params["city"]->id == 1081): ?>
                             <span class="footer-contacts map">г. Томск, улица Мокрушина, 9 ст. 42</span>
                         <? else: ?>
@@ -201,7 +205,25 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
             </div>
         </div>
     </div>
+    <span class="exit fancy" data-block="#b-popup-exit"></span>
 <div style="display:none;">
+    <div id="b-popup-exit">
+        <div class="for_all b-popup-small">
+            <h3>Не нашли подходящий товар?</h3>
+            <h4 class="exit-desc">Оставьте заявку и наши менеджеры предложат вам дополнительные варианты</h4>
+            <form action="<?=Yii::app()->createUrl('/kolesoOnline/mail/')?>" id="b-form-exit" method="POST"  data-block="#b-popup-2">
+                <div class="b-popup-form">
+                    <label for="tel">Ваш телефон</label>
+                    <input type="text" name="phone" required placeholder="+7 (___) ___-__-__"/>               
+                    <label for="name">Ваши параметры</label>
+                    <textarea type="text" name="1" placeholder="R17, сверловка 5*114.3, ширина 7 на mazda 3"></textarea>
+                    <input type="hidden" name="1-name" value="Параметры" />
+                    <input type="hidden" name="subject" value="Подбор товара"/>
+                </div>
+                <input type="submit" class="ajax b-orange-butt" value="Отправить">
+            </form>
+        </div>
+    </div>
     <div id="b-popup-city">
         <?php $this->renderPartial('_cities', array('cities' => $this->getCityGroups(),"show" => Yii::app()->params["city"]->popup )); ?>
     </div>
@@ -225,7 +247,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
         <div class="for_all b-popup-small">
             <h3>Купить товар</h3>
             <h4>Для покупки Вы можете позвонить<br>по телефону:</h4>
-            <h5><a href='tel:+79138275756'>+7 (913) 827 57-56</a></h5>
+            <h5><a href='tel:+<?=Yii::app()->params["city"]->phone?>'>+<?=$phone?></a></h5>
             <h4>Или оставить заявку и мы Вам перезвоним в ближайшее время:</h4>
             <form action="<?=Yii::app()->createUrl('/kolesoOnline/mail/')?>" id="b-form-buy" method="POST" data-block="#b-popup-2">
                 <div class="b-popup-form">
@@ -254,7 +276,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
         </div>
     </div>
     <div id="b-popup-error">
-        <div class="b-thanks b-popup">
+        <div class="for_all b-popup-small">
             <h3>Ошибка отправки!</h3>
             <h4>Приносим свои извинения. Пожалуйста, попробуйте отправить Вашу заявку позже.</h4>
             <input type="submit" class="b-orange-butt" onclick="$.fancybox.close(); return false;" value="Закрыть">
@@ -277,6 +299,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
 <script type="text/javascript" src="/html/js/select2.full.min.js"></script>
 <script type="text/javascript" src="/html/js/stroll.js"></script>
 <script type="text/javascript" src="/html/js/i18n/ru.js"></script>
+<script type="text/javascript" src="/html/js/jquery.cookie.js"></script>
 <script type="text/javascript" src="/html/js/KitSend.js"></script>
 <script type="text/javascript" src="/html/js/main.js"></script>
 

@@ -114,7 +114,7 @@ input.error,textarea.error{
 	left: 50%;
 	margin-left: -500px;
 }
-input {
+input,textarea {
 	font-size: 14px;
 	font-family: 'Roboto';
 	font-weight: 300;
@@ -914,8 +914,9 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 					top: 12px;
 				}
 				
-				.filter-item .input:hover,.filter-item .input:hover:after,input[type="text"]:hover,input[type="text"]:focus,.filter-item.active .input,.filter-item.active .input:after {
+				.filter-item .input:hover,.filter-item .input:hover:after,input[type="text"]:hover,input[type="text"]:focus,textarea:hover,textarea:focus,.filter-item.active .input,.filter-item.active .input:after {
 					border-color: #ffad00 !important;
+					// box-shadow: 0 0px 0px 1px #ffad00 !important;
 				}
 .b-popular {
 
@@ -1684,7 +1685,6 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 						font-weight: 300;
 						text-decoration: underline;
 						margin-left: 15px;
-						padding-right: 15px;
 						cursor: pointer;
 						color: #8f8f8f;
 					}
@@ -1700,6 +1700,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 							/*cursor: default;*/
 							text-decoration: none;
 							position: relative;
+							padding-right: 15px;
 						}
 						.b-category .b-block .good-list .b-sort ul li.active:after {
 							position: absolute;
@@ -2136,6 +2137,9 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 		line-height: 1.429;
 		margin-bottom: 17px;
 	}
+	.b-popup-small h4.exit-desc {
+		font-size: 16px;
+	}
 	.b-popup-small h5 {
 		line-height: 1.6;
 		margin-bottom: 20px;
@@ -2150,7 +2154,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 			display: block;
 			margin-bottom: 10px;
 		}
-		.b-popup-small .b-popup-form input {
+		.b-popup-small .b-popup-form input,.b-popup-small .b-popup-form textarea{
 			text-align: center;
 			width: 100%;
 			box-sizing:border-box;
@@ -2159,6 +2163,11 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 			border: 1px solid rgb(140, 140, 140);
 			border-radius: 2px;
 			background-color: #f4f4f4;
+		}
+		.b-popup-small .b-popup-form textarea {
+			padding: 10px;
+			max-width: 100%;
+			text-align: left;
 		}
 		.b-popup-small .b-orange-butt {
 			margin-top: 17px;

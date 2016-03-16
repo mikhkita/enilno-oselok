@@ -633,7 +633,6 @@ class IntegrateController extends Controller
 
     public function actionDromParse(){
         $drom = new Drom();
-
         $drom->parseUser();
     }
 // Выкладка -------------------------------------------------------------- Выкладка

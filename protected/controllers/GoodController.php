@@ -871,6 +871,7 @@ class GoodController extends Controller
 		$options = array(
 			"good" => $good,
 			"images" => $good->getImages(NULL, NULL, NULL, false),
+			"extra" => $good->getImages(NULL, NULL, NULL, false,true),
 			"partial" => $partial
 		);
 
@@ -930,6 +931,33 @@ class GoodController extends Controller
 				}
 			}
 			foreach ($_POST["Images"] as $i => $image) {
+				$tmp = $path.$i.".".$image["ext"];
+				$new_filename = $path.$code."_".(($i < 10)?("0".strval($i)):strval($i)).".".$image["ext"];
+
+				if( file_exists($tmp) )
+					rename($tmp, $new_filename);
+			}
+		}
+
+		$path = Yii::app()->params["imageFolder"]."/".$goodType."s/".$code."/extra/";
+
+		if (!is_dir($path)) mkdir($path, 0777, true);
+
+		if( isset($_POST["Extra"]) ){
+			foreach ($_POST["Extra"] as $i => &$image) {
+				$filename = substr($image, 1);
+				$image = array("ext" => array_pop(explode(".", array_pop(explode("/", substr($image, 1))))));
+				$tmp = $path.$i.".".$image["ext"];
+				if( file_exists($filename) ){
+					if( strpos($filename, $path) !== false ){
+						rename($filename, $tmp);
+					}else{
+						echo "string";
+						copy($filename, $tmp);
+					}
+				}
+			}
+			foreach ($_POST["Extra"] as $i => $image) {
 				$tmp = $path.$i.".".$image["ext"];
 				$new_filename = $path.$code."_".(($i < 10)?("0".strval($i)):strval($i)).".".$image["ext"];
 
