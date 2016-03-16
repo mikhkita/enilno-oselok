@@ -638,18 +638,11 @@ $(document).ready(function(){
         $("a[data-block='#b-popup-city']").click();
     }
 
-
-    function exitPopup() {
-        $( document ).on("mousemove", function( event ) {  
-            if(!$.cookie('exitPopup') || $.cookie('exitPopup') == 0) {
-                if(event.pageY < 30) {
-                    $("span.exit").click();
-                    $.cookie('exitPopup',1);
-                }    
-            }
-        });
-    }
-    
-    setTimeout(exitPopup, 10000);
+    $( document ).mouseleave(function() {
+        if(!$.cookie('exitPopup')) {
+            $("span.exit").click();
+            $.cookie('exitPopup',1,{ expires: 30});  
+        }
+    });
 
 });

@@ -114,7 +114,7 @@ input.error,textarea.error{
 	left: 50%;
 	margin-left: -500px;
 }
-input {
+input,textarea {
 	font-size: 14px;
 	font-family: 'Roboto';
 	font-weight: 300;
@@ -1685,7 +1685,6 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 						font-weight: 300;
 						text-decoration: underline;
 						margin-left: 15px;
-						padding-right: 15px;
 						cursor: pointer;
 						color: #8f8f8f;
 					}
@@ -1701,6 +1700,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 							/*cursor: default;*/
 							text-decoration: none;
 							position: relative;
+							padding-right: 15px;
 						}
 						.b-category .b-block .good-list .b-sort ul li.active:after {
 							position: absolute;
