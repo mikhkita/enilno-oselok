@@ -606,15 +606,16 @@ class Controller extends CController
             if(count($imgs)) {
                 if($number) {
                     for ($i=0; $i < $number; $i++) { 
-                        $out[$i] = $dir."/".$imgs[$i];
+                        if(!is_dir($imgs[$i])) $out[$i] = $dir."/".$imgs[$i];
                     }
                     $imgs = $out;
                 } else {
                     foreach ($imgs as $key => &$value) {
-                        $value = $dir."/".$value;
+                        if(!is_dir($value)) $value = $dir."/".$value;
                     }
                 }           
             } else {
+                
                 if( $get_default )
                     array_push($imgs, Yii::app()->request->baseUrl."/".$path."/default.jpg");
             }

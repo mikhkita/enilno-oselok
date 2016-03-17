@@ -268,7 +268,8 @@ class GoodFilter extends CActiveRecord
 		return false;
 	}
 
-	public function getImages($count = NULL, $sizes = NULL, $good = NULL, $get_default = true){
+	public function getImages($count = NULL, $sizes = NULL, $good = NULL, $get_default = true,$extra = false){
+
 		$default_sizes = array(
 			"small" => "320",
 			"big" => "640"
@@ -290,6 +291,9 @@ class GoodFilter extends CActiveRecord
 		}
 
 		$images = Controller::getImages($good, $count, $get_default);
+		if($extra) {
+			$images = Controller::getImages($good, $count, $get_default,true);
+		}
 		if( count($images) == 1 ){
 			if( strpos($images[0], "default.jpg") ){
 				foreach ($sizes as $i => $size)
@@ -315,6 +319,7 @@ class GoodFilter extends CActiveRecord
 		}
 
 		$values = Cache::model()->check($values);
+
 		$update = array();
 		foreach ($values as $i => $value) {
 			$size = intval(array_pop(explode("_", $value["name"])));
