@@ -866,6 +866,7 @@ class GoodController extends Controller
 	}
 
 	public function actionAdminPhoto($id, $partial = false){
+
 		$good = $this->loadModel($id);
 
 		$options = array(
@@ -874,7 +875,6 @@ class GoodController extends Controller
 			"extra" => $good->getImages(NULL, NULL, NULL, false,true),
 			"partial" => $partial
 		);
-
 		if( $partial ){
 			$this->renderPartial('adminPhoto', $options);
 		}else{
