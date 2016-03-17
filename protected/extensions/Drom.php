@@ -78,27 +78,39 @@ Class Drom {
         return $links;
     }
 
-    public function parseAllItems($link, $user_id, $auth = true, $get_id = false){
+    public function parseAllItems($link, $user_id, $auth = true, $get_id = false, $get_object = false){
         if($auth) $this->auth("https://baza.drom.ru/partner/sign");
         
         $html = str_get_html(iconv('windows-1251', 'utf-8', $this->curl->request($link)));
 
         $links = array();
+        $first = NULL;
         if( !$html->find('.userProfile',0) || trim($html->find('.userProfile',0)->getAttribute("data-view-dir-user-id")) != trim($user_id) ) return $links;
-        $pageLinks = $html->find('.bulletinLink');
+        $pageLinks = $html->find('.descriptionCell');
         $page = 1;
 
         if($get_id) {
             $attr = "name";
         } else $attr = "href";
 
-        while(count($pageLinks) && ($links[0] != $pageLinks[0]->getAttribute($attr)) ){
+        while(count($pageLinks) && ($first != $pageLinks[0]->find(".bulletinLink",0)->getAttribute($attr)) ){
             foreach($pageLinks as $element){
-                array_push($links, $element->getAttribute($attr));
+                if( !count($links) ) $first = $element->find(".bulletinLink",0)->getAttribute($attr);
+
+                if( $get_object ){
+                    $tmp = array(
+                        "link" => $element->find(".bulletinLink",0)->getAttribute($attr),
+                        "type" => (($element->find(".bestOffer"))?1:2),
+                        "title" => $element->find(".bulletinLink",0)->plaintext
+                    );
+                    array_push($links, (object)$tmp);
+                }else{
+                    array_push($links, $element->find(".bulletinLink",0)->getAttribute($attr) );
+                }
             }
             $page++;
             $html = str_get_html(iconv('windows-1251', 'utf-8', $this->curl->request($link."?page=".$page)));
-            $pageLinks = $html->find('.bulletinLink');
+            $pageLinks = $html->find('.descriptionCell');
         }
 
         if($get_id && $html->find('#itemsCount_placeholder strong',0)) {

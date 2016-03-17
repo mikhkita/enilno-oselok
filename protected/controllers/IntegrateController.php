@@ -413,7 +413,7 @@ class IntegrateController extends Controller
             if( !$this->getNext($category_id, $nth) ){
                 sleep(5);
             }
-            sleep(rand(15,30));
+            sleep(rand(30,50));
               
             if( $debug ) return true;
         }
@@ -947,5 +947,50 @@ class IntegrateController extends Controller
         print_r(count($images));
 
         // echo count($model);
+    }
+
+    public function actionParse70(){
+        $places = array( 1 => 9, 2 => 10 );
+        $names = array( 1 => "tire", 2 => "disc" );
+        $types = array( 1 => "2129", 2 => "868" );
+        $attrs = array( 1 => 61, 2 => 59);
+        $good_type_id = 1;
+        $drom = new Drom();
+
+        $links = $drom->parseAllItems("http://baza.drom.ru/user/wheels70/wheel/".$names[$good_type_id]."/", "848235", false, true, true);
+
+        $codes = array();
+        foreach ($links as $key => $item) {
+            $item->title = array_shift(explode(" ",substr($item->title, 1)));
+            array_push($codes, $item->title);
+        }
+
+        $goods = Good::getIdbyCode($codes, array($good_type_id));
+
+        print_r($goods);
+
+        $values = array();
+        foreach ($links as $key => $item) {
+            $tmp = array(
+                "good_id" => $goods[$item->title],
+                "place_id" => $places[$good_type_id],
+                "url" => $item->link,
+                "type_id" => $types[$item->type],
+                "city_id" => 1081
+            );
+            array_push($values, $tmp);
+        }
+        $this->insertValues(Advert::tableName(), $values);
+
+        $values = array();
+        foreach ($links as $key => $item) {
+            $tmp = array(
+                "good_id" => $goods[$item->title],
+                "attribute_id" => $attrs[$item->type],
+                "variant_id" => 1081,
+            );
+            array_push($values, $tmp);
+        }
+        $this->insertValues(GoodAttribute::tableName(), $values);        
     }
 }
