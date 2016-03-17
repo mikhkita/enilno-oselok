@@ -289,7 +289,6 @@ class GoodFilter extends CActiveRecord
 				$good = array("code" => $good->fields_assoc[3]->value, "good_type_id" => $good->good_type_id);
 			}
 		}
-
 		$images = Controller::getImages($good, $count, $get_default);
 		if($extra) {
 			$images = Controller::getImages($good, $count, $get_default,true);
