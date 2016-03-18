@@ -104,7 +104,6 @@ class Cache extends CActiveRecord
 		foreach ($values as $i => $value)
 			if( in_array($value["class"]."_".$value["name"], $cache) )
 				unset($values[$i]);
-
 		return $values;
 	}
 
