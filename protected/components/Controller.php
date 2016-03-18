@@ -94,13 +94,6 @@ class Controller extends CController
         if( !Yii::app()->user->isGuest ) $this->checkModelAccess();
     }
 
-    protected function beforeAction($action){
-        if(defined('YII_DEBUG') && YII_DEBUG){
-            Yii::app()->assetManager->forceCopy = true;
-        }
-        return parent::beforeAction($action);
-    }
-
     public function beforeRender($view){
         parent::beforeRender($view);
 

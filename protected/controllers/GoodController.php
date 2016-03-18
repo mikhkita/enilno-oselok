@@ -913,7 +913,6 @@ class GoodController extends Controller
 		$path = Yii::app()->params["imageFolder"]."/".$goodType."s/".$code."/";
 
 		if (!is_dir($path)) mkdir($path, 0777, true);
-
 		if( isset($_POST["Images"]) ){
 			foreach ($_POST["Images"] as $i => &$image) {
 				$filename = substr($image, 1);
