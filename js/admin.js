@@ -1396,14 +1396,14 @@ $(document).ready(function(){
             $("#photo-sortable-2").append('<li style="background-image: url(\'/'+links[i]+'\');" data-small="/'+links[i]+'" data-src="/'+links[i]+'"><a href="#" class="b-photo-delete ion-icon ion-close"></a><input type="hidden" name="Extra[]" data-name="Extra[]" data-delete="Delete[]" value="/'+links[i]+'"></li>');
     }
 
-    var order = [],
+    var order1 = [],order2 = [],
         issetdeleted = false;
     $("body").on("click","#b-update-photo",function(){
         $(".photo-sortable").addClass("disabled");
         progress.setColor("#D26A44");
         progress.start(1);
-        backupImages($(".photo-sortable li"));
-
+        order1 = backupImages($(".photo-sortable:eq(0) li"));
+        order2 = backupImages($(".photo-sortable:eq(1) li"));
         issetdeleted = $(".photo-sortable li.deleted").length;
         $.ajax({
             url: $( "#photo-sortable" ).attr("data-href"),
@@ -1412,12 +1412,14 @@ $(document).ready(function(){
             success: function(msg){
                 progress.end(function(){
                     $(".photo-sortable").removeClass("disabled");
-                    $("#photo-sortable").html(msg);
+                    $("#photo-cont").html(msg);
 
                     if( issetdeleted ){
-                        reloadImages($(".photo-sortable li"));
+                        reloadImages($(".photo-sortable:eq(0) li"));
+                        reloadImages($(".photo-sortable:eq(1) li"));
                     }else{
-                        restoreImages($(".photo-sortable li"));
+                        restoreImages($(".photo-sortable:eq(0) li"),order1);
+                        restoreImages($(".photo-sortable:eq(1) li"),order2);
                     }
                 });
             },
@@ -1445,15 +1447,16 @@ $(document).ready(function(){
     }
 
     function backupImages($images){
-        order = [];
+        var order = [];
         $images.each(function(){
             order.push( $(this).css("background-image") );
         });
+        return order;
     }
 
-    function restoreImages($images){
+    function restoreImages($images,arr){
         $images.each(function(){
-            $(this).css("background-image", order[$(this).index()]);
+            $(this).css("background-image", arr[$(this).index()]);
         });
     }
     /* Photo sortable ---------------------------- Photo sortable */

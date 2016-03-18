@@ -289,7 +289,6 @@ class GoodFilter extends CActiveRecord
 				$good = array("code" => $good->fields_assoc[3]->value, "good_type_id" => $good->good_type_id);
 			}
 		}
-
 		$images = Controller::getImages($good, $count, $get_default);
 		if($extra) {
 			$images = Controller::getImages($good, $count, $get_default,true);
@@ -311,7 +310,6 @@ class GoodFilter extends CActiveRecord
 				"hash" => filesize(substr($image,1)),
 				"path" => substr($image,1)
 			);
-
 			foreach ($sizes as $key => $size) {
 				$image["name"] = $name."_".$size;
 				array_push($values, $image);
@@ -351,16 +349,22 @@ class GoodFilter extends CActiveRecord
 
 		if( count($delete) )
 			Cache::model()->deleteAll("value IN (".implode(",", $delete).")");
-
 		return $images;
 	}
 
 	public function cropImage($original, $width){
 		$arr = explode("/", $original);
-		$name_arr = explode(".", $arr[4]);
-		$new_path = $arr[0]."/cache/".$arr[2]."/".$arr[3]."/".$name_arr[0]."_".$width.".".strtolower($name_arr[1]);
+		if(strpos($original,"extra")) {
+			$name_arr = explode(".", $arr[5]);
+			$new_path = $arr[0]."/cache/".$arr[2]."/".$arr[3]."/".$arr[4]."/".$name_arr[0]."_".$width.".".strtolower($name_arr[1]);
 
-		$dir = $arr[0]."/cache/".$arr[2]."/".$arr[3]; 
+			$dir = $arr[0]."/cache/".$arr[2]."/".$arr[3]."/".$arr[4]; 
+		} else {
+			$name_arr = explode(".", $arr[4]);
+			$new_path = $arr[0]."/cache/".$arr[2]."/".$arr[3]."/".$name_arr[0]."_".$width.".".strtolower($name_arr[1]);
+
+			$dir = $arr[0]."/cache/".$arr[2]."/".$arr[3]; 
+		}
         if (!is_dir($dir)){
         	mkdir($dir, 0777, true);
         }
