@@ -922,7 +922,7 @@ class GoodController extends Controller
 					if( strpos($filename, $path) !== false ){
 						rename($filename, $tmp);
 					}else{
-						echo "string";
+						// echo "string";
 						copy($filename, $tmp);
 					}
 				}
@@ -949,7 +949,7 @@ class GoodController extends Controller
 					if( strpos($filename, $path) !== false ){
 						rename($filename, $tmp);
 					}else{
-						echo "string";
+						// echo "string";
 						copy($filename, $tmp);
 					}
 				}
