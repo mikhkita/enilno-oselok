@@ -765,6 +765,7 @@ class IntegrateController extends Controller
     }
 // Планировщик ----------------------------------------------------------- Планировщик
 
+// Остальное ------------------------------------------------------------- Остальное
     public function actionTest(){
         $avito = new Avito();
         $avito->setUser("beatbox787@gmail.com", "481516");
@@ -783,9 +784,7 @@ class IntegrateController extends Controller
         $max = 0;
         // $txt = "";
 
-        $text = 'Возможна отправка по России. Предоставлю доп. фото Поставляется на заказ с нашего склада, доставка 9 - 12 дней, включена в цену.
-диаметр 17, cверловка 5-114.3, ширина 7,вылет 38, 
-Возможна отправка по России. Предоставлю доп. фото';
+        $text = 'Возможна отправка по России. Предоставлю доп. фото Поставляется на заказ с нашего склада, доставка 9 - 12 дней, включена в цену.диаметр 17, cверловка 5-114.3, ширина 7,вылет 38, Возможна отправка по России. Предоставлю доп. фото';
 
         foreach ($unique as $key => $item) {
             similar_text($item["value"], $text, $percent);
@@ -993,4 +992,12 @@ class IntegrateController extends Controller
         }
         $this->insertValues(GoodAttribute::tableName(), $values);        
     }
+// Остальное ------------------------------------------------------------- Остальное
+
+    public function actionGoodTest(){
+        $good = Good::model()->with(array("type","fields.variant","fields.attribute"))->findByPk(206);
+
+        var_dump(Task::model()->testGood($good));
+    }
+
 }

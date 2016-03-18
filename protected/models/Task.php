@@ -11,6 +11,21 @@
  */
 class Task extends CActiveRecord
 {
+	public $params = array(
+		1 => array(
+			"necessary" => array(16,17,9,8,7,28,43),
+			"price" => array(20),
+		),
+		2 => array(
+			"necessary" => array(9,6,28,43),
+			"price" => array(20),
+		),
+		3 => array(
+			"necessary" => array(16,17,9,8,7,28,6,43),
+			"price" => array(20),
+		)
+	);
+
 	/**
 	 * @return string the associated database table name
 	 */
@@ -87,6 +102,76 @@ class Task extends CActiveRecord
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 		));
+	}
+
+	public function testGood($good){
+		$params = $this->params[$good->good_type_id];
+
+		// Проверка фотографий
+		if( !$this->checkPhoto($good) ){
+			echo "Добавить задание: добавить фотографии<br>";
+		}else{
+			echo "Удалить задание: добавить фотографии<br>";
+		}
+
+		// Проверка первичных атрибутов
+		$not_exist = $this->checkFields($good, $params["necessary"]);
+		$necessary_exist = count($not_exist)?false:true;
+		if( !$necessary_exist ){
+			echo "Добавить задание: заполнить недостающие первичные атрибуты<br>";
+			print_r($not_exist);
+		}else{
+			echo "Удалить задание: заполнить недостающие первичные атрибуты<br>";
+		}
+
+		// Проверка цены
+		$not_exist = $this->checkFields($good, $params["price"]);
+		$price_exist = count($not_exist)?false:true;
+		if( !$price_exist ){
+			if( $necessary_exist ){
+				echo "Добавить задание: заполнить цену<br>";
+			}
+		}else{
+			echo "Удалить задание: заполнить цену<br>";
+		}
+
+		$required = $this->getRequired($good->good_type_id);
+
+		// Проверка обязательных атрибутов
+		$not_exist = $this->checkFields($good, $required);
+		if( count($not_exist) ){
+			if( $necessary_exist && $price_exist ) {
+				echo "Добавить задание: заполнить обязательные параметры<br>";
+				print_r($not_exist);
+			}
+		}else{
+			echo "Удалить задание: заполнить обязательные параметры<br>";
+		}
+	}
+
+	public function checkFields($good, $fields){
+		$not_exist = array();
+		foreach ($fields as $i => $attr_id)
+			if( !isset($good->fields_assoc[$attr_id]) || $good->fields_assoc[$attr_id]->value === NULL )
+				array_push($not_exist, $attr_id);
+
+		return $not_exist;
+	}
+
+	public function checkPhoto($good){
+		return count(Controller::getImages($good, NULL, false))?true:false;
+	}
+
+	public function getRequired($good_type_id){
+		$model = Yii::app()->db->createCommand()
+            ->select('a.id')
+            ->from(Attribute::tableName().' a')
+            ->join(GoodTypeAttribute::tableName().' t', 'a.id=t.attribute_id')
+            ->where("a.required=1 AND t.good_type_id=$good_type_id")
+            ->order("t.sort ASC")
+            ->queryAll();
+
+        return Controller::getIds($model, "id");
 	}
 
 	/**
