@@ -94,6 +94,13 @@ class Controller extends CController
         if( !Yii::app()->user->isGuest ) $this->checkModelAccess();
     }
 
+    protected function beforeAction($action){
+        if(defined('YII_DEBUG') && YII_DEBUG){
+            Yii::app()->assetManager->forceCopy = true;
+        }
+        return parent::beforeAction($action);
+    }
+
     public function beforeRender($view){
         parent::beforeRender($view);
 
@@ -599,6 +606,7 @@ class Controller extends CController
             $code = $code."/extra";
         }
         $dir = $path."/".$code;
+        $dir2 = $dir;
         if (is_dir($dir)) {
             $imgs = array_values(array_diff(scandir($dir), array('..', '.', 'Thumbs.db', '.DS_Store')));
             $dir = Yii::app()->request->baseUrl."/".$path."/".$code;
@@ -606,12 +614,16 @@ class Controller extends CController
             if(count($imgs)) {
                 if($number) {
                     for ($i=0; $i < $number; $i++) { 
-                        if(!is_dir($imgs[$i])) $out[$i] = $dir."/".$imgs[$i];
+                        if(!is_dir($dir2."/".$imgs[$i])) {
+                            $out[$i] = $dir."/".$imgs[$i];
+                        } else unset($imgs[$i]);
                     }
                     $imgs = $out;
                 } else {
                     foreach ($imgs as $key => &$value) {
-                        if(!is_dir($value)) $value = $dir."/".$value;
+                        if(!is_dir($dir2."/".$value)) {
+                            $value = $dir."/".$value;
+                        } else unset($imgs[$key]);
                     }
                 }           
             } else {

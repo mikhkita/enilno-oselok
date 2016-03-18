@@ -13,9 +13,10 @@
 		</ul>
 	</div>
 </div>
+<div id="photo-cont">
+<?endif;?>
 <h1 class="b-with-nav"><?=$good->type->name?> <?=$good->fields_assoc[3]->value?>: фотографии</h1>
 <ul class="photo-sortable clearfix" id="photo-sortable" data-href="<?=Yii::app()->createUrl('/good/adminphotoupdate',array('id'=>$good->id))?>">
-<?endif;?>
 	<? foreach ($images as $i => $image):?>
 	<li style="background-image: url('<?=$image['small']?>');" data-small="<?=$image['small']?>" data-src="<?=$image['original']?>">
 		<a href="#" class="b-photo-delete ion-icon ion-close"></a>
@@ -23,14 +24,15 @@
 	</li>
 	<? endforeach; ?>
 </ul>
-<h1 class="b-with-nav-2"><?=$good->type->name?> <?=$good->fields_assoc[3]->value?>: фотографии</h1>
+<h1 class="b-with-nav-2"></h1>
 <ul class="photo-sortable clearfix" id="photo-sortable-2">
 	<? foreach ($extra as $i => $image):?>
-	<li style="background-image: url('<?=$extra['small']?>');" data-small="<?=$extra['small']?>" data-src="<?=$extra['original']?>">
+	<li style="background-image: url('<?=$image['small']?>');" data-small="<?=$image['small']?>" data-src="<?=$image['original']?>">
 		<a href="#" class="b-photo-delete ion-icon ion-close"></a>
-		<input type="hidden" name="Extra[]" data-name="Extra[]" data-delete="Delete[]" value="<?=$extra['original']?>">
+		<input type="hidden" name="Extra[]" data-name="Extra[]" data-delete="Delete[]" value="<?=$image['original']?>">
 	</li>
 	<? endforeach; ?>
-<?if(!$partial):?>
 </ul>
+<?if(!$partial):?>
+</div>
 <? endif; ?>

@@ -92,7 +92,6 @@ class Cache extends CActiveRecord
 		$queries = array();
 		foreach ($values as $i => $value)
 			array_push($queries, "(class='".$value["class"]."' AND name='".$value["name"]."' AND hash='".$value["hash"]."')");
-
 		$cache = Yii::app()->db->createCommand()
 		    ->select("class, name")
 		    ->from(Cache::tableName().' t')
