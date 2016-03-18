@@ -310,6 +310,9 @@ class GoodFilter extends CActiveRecord
 				"hash" => filesize(substr($image,1)),
 				"path" => substr($image,1)
 			);
+			if($extra) {
+				$image["class"] = $good["code"]."#".$good["good_type_id"]."_e";
+			}
 			foreach ($sizes as $key => $size) {
 				$image["name"] = $name."_".$size;
 				array_push($values, $image);
@@ -322,14 +325,17 @@ class GoodFilter extends CActiveRecord
 		foreach ($values as $i => $value) {
 			$size = intval(array_pop(explode("_", $value["name"])));
 			$new_link = Good::cropImage($value["path"], $size);
+
 			if( $new_link )
 				array_push($update, array($value["class"], $value["name"], "/".$new_link, $value["hash"]));
 		}
 
 		Controller::updateRows(Cache::tableName(), $update, array("value", "hash"));
 
-		$values = Cache::get($good["code"]."#".$good["good_type_id"]);
-
+		
+		if($extra) {
+			$values = Cache::get($good["code"]."#".$good["good_type_id"]."_e");
+		} else $values = Cache::get($good["code"]."#".$good["good_type_id"]);
 		$delete = array();
 		foreach ($values as $i => $value) {
 			$arr = explode("_", $value["name"]);
@@ -354,7 +360,7 @@ class GoodFilter extends CActiveRecord
 
 	public function cropImage($original, $width){
 		$arr = explode("/", $original);
-		if(strpos($original,"extra")) {
+		if(strpos($original,"extra") !== false) {
 			$name_arr = explode(".", $arr[5]);
 			$new_path = $arr[0]."/cache/".$arr[2]."/".$arr[3]."/".$arr[4]."/".$name_arr[0]."_".$width.".".strtolower($name_arr[1]);
 
@@ -372,7 +378,6 @@ class GoodFilter extends CActiveRecord
         $resizeObj = new Resize($original);
         $resizeObj -> resizeImage($width, $width);
         $resizeObj -> saveImage($new_path, 80);
-
         return $new_path;
 	}
 

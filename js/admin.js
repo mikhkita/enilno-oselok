@@ -1397,14 +1397,15 @@ $(document).ready(function(){
     }
 
     var order1 = [],order2 = [],
-        issetdeleted = false;
+        issetdeleted1 = false,issetdeleted2 = false;
     $("body").on("click","#b-update-photo",function(){
         $(".photo-sortable").addClass("disabled");
         progress.setColor("#D26A44");
         progress.start(1);
         order1 = backupImages($(".photo-sortable:eq(0) li"));
         order2 = backupImages($(".photo-sortable:eq(1) li"));
-        issetdeleted = $(".photo-sortable li.deleted").length;
+        issetdeleted1 = $(".photo-sortable:eq(0) li.deleted").length;
+        issetdeleted2 = $(".photo-sortable:eq(1) li.deleted").length;
         $.ajax({
             url: $( "#photo-sortable" ).attr("data-href"),
             data: $( ".photo-sortable input" ).serialize(),
@@ -1414,11 +1415,14 @@ $(document).ready(function(){
                     $(".photo-sortable").removeClass("disabled");
                     $("#photo-cont").html(msg);
 
-                    if( issetdeleted ){
+                    if( issetdeleted1 ){
                         reloadImages($(".photo-sortable:eq(0) li"));
-                        reloadImages($(".photo-sortable:eq(1) li"));
                     }else{
                         restoreImages($(".photo-sortable:eq(0) li"),order1);
+                    }
+                    if( issetdeleted2 ){
+                        reloadImages($(".photo-sortable:eq(1) li"));
+                    }else{
                         restoreImages($(".photo-sortable:eq(1) li"),order2);
                     }
                 });
