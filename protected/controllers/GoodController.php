@@ -866,7 +866,6 @@ class GoodController extends Controller
 	}
 
 	public function actionAdminPhoto($id, $partial = false){
-
 		$good = $this->loadModel($id);
 
 		$options = array(
