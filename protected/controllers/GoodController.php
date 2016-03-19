@@ -917,7 +917,8 @@ class GoodController extends Controller
 			foreach ($_POST["Images"] as $i => &$image) {
 				$filename = substr($image, 1);
 				$image = array("ext" => array_pop(explode(".", array_pop(explode("/", substr($image, 1))))));
-				$tmp = $path.$i.".".$image["ext"];
+				$tmp = strtolower($path.$i.".".$image["ext"]);
+
 				if( file_exists($filename) ){
 					if( strpos($filename, $path) !== false ){
 						rename($filename, $tmp);
@@ -928,11 +929,12 @@ class GoodController extends Controller
 				}
 			}
 			foreach ($_POST["Images"] as $i => $image) {
-				$tmp = $path.$i.".".$image["ext"];
+				$tmp = strtolower($path.$i.".".$image["ext"]);
 				$new_filename = $path.$code."_".(($i < 10)?("0".strval($i)):strval($i)).".".$image["ext"];
-
-				if( file_exists($tmp) )
+				
+				if( file_exists($tmp) ) 
 					rename($tmp, $new_filename);
+				
 			}
 		}
 
@@ -944,7 +946,7 @@ class GoodController extends Controller
 			foreach ($_POST["Extra"] as $i => &$image) {
 				$filename = substr($image, 1);
 				$image = array("ext" => array_pop(explode(".", array_pop(explode("/", substr($image, 1))))));
-				$tmp = $path.$i.".".$image["ext"];
+				$tmp = strtolower($path.$i.".".$image["ext"]);
 				if( file_exists($filename) ){
 					if( strpos($filename, $path) !== false ){
 						rename($filename, $tmp);
@@ -955,7 +957,7 @@ class GoodController extends Controller
 				}
 			}
 			foreach ($_POST["Extra"] as $i => $image) {
-				$tmp = $path.$i.".".$image["ext"];
+				$tmp = strtolower($path.$i.".".$image["ext"]);
 				$new_filename = $path.$code."_".(($i < 10)?("0".strval($i)):strval($i)).".".$image["ext"];
 
 				if( file_exists($tmp) )
