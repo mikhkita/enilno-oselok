@@ -173,8 +173,11 @@ class Task extends CActiveRecord
 
 	public function checkFields($good, $fields){
 		$not_exist = array();
+		$rules = array(
+			20 => array(0)
+		);
 		foreach ($fields as $i => $attr_id)
-			if( !isset($good->fields_assoc[$attr_id]) || ( !is_array($good->fields_assoc[$attr_id]) && $good->fields_assoc[$attr_id]->value === NULL ) ){
+			if( !isset($good->fields_assoc[$attr_id]) || (isset($rules[$attr_id]) && is_array($rules[$attr_id]) && in_array($good->fields_assoc[$attr_id]->value, $rules[$attr_id])) || ( !is_array($good->fields_assoc[$attr_id]) && $good->fields_assoc[$attr_id]->value === NULL ) ){
 				array_push($not_exist, $attr_id);
 			}
 
