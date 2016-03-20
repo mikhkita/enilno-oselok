@@ -607,11 +607,13 @@ class Controller extends CController
             if(count($imgs)) {
                 if($number) {
                     for ($i=0; $i < $number; $i++) { 
-                        if(!is_dir($dir2."/".$imgs[$i])) {
-                            $out[$i] = $dir."/".$imgs[$i];
-                        } else {
-                            unset($imgs[$i]);
-                            $number++;
+                        if(isset($imgs[$i])) {
+                            if(!is_dir($dir2."/".$imgs[$i])) {
+                                $out[$i] = $dir."/".$imgs[$i];
+                            } else {
+                                unset($imgs[$i]);
+                                $number++;
+                            }
                         }
                     }
                     $imgs = $out;
