@@ -1366,11 +1366,13 @@ $(document).ready(function(){
     /* Visual Interpreter ------------------------ Visual Interpreter */
 
     /* Photo sortable ---------------------------- Photo sortable */
-    if( $("#photo-sortable").length ) {
-        var el = document.getElementById('photo-sortable');
-        var sortable = Sortable.create(el);
-        var el2 = document.getElementById('photo-sortable-2');
-        var sortable2 = Sortable.create(el2);
+    function photo_init() {
+        if( $("#photo-sortable").length ) {
+            var el = document.getElementById('photo-sortable');
+            var sortable = Sortable.create(el);
+            var el2 = document.getElementById('photo-sortable-2');
+            var sortable2 = Sortable.create(el2);
+        }
     }
 
     $("body").on("click",".b-photo-delete",function(){
@@ -1425,6 +1427,7 @@ $(document).ready(function(){
                     }else{
                         restoreImages($(".photo-sortable:eq(1) li"),order2);
                     }
+                    photo_init();
                 });
             },
             error: function(){
