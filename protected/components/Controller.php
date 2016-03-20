@@ -609,7 +609,10 @@ class Controller extends CController
                     for ($i=0; $i < $number; $i++) { 
                         if(!is_dir($dir2."/".$imgs[$i])) {
                             $out[$i] = $dir."/".$imgs[$i];
-                        } else unset($imgs[$i]);
+                        } else {
+                            unset($imgs[$i]);
+                            $number++;
+                        }
                     }
                     $imgs = $out;
                 } else {
@@ -618,7 +621,11 @@ class Controller extends CController
                             $value = $dir."/".$value;
                         } else unset($imgs[$key]);
                     }
-                }           
+                } 
+                // if(!count($imgs)) {
+                //     if( $get_default )
+                //     array_push($imgs, Yii::app()->request->baseUrl."/".$path."/default.jpg");
+                // }          
             } else {
                 
                 if( $get_default )
