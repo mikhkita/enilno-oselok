@@ -6,6 +6,9 @@
         "data-type" => ((isset($json_type))?"json":"none")
     ),
 )); ?>
+	<?if($_GET["to_task"]):?>
+		<input type="hidden" name="to_task" value="1">
+	<?endif;?>
 	<div class="row buttons">
 		<?php echo CHtml::submitButton($model->isNewRecord ? 'Добавить' : 'Сохранить'); ?>
 		<input type="button" onclick="$.fancybox.close(); return false;" value="Отменить">

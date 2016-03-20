@@ -174,8 +174,9 @@ class Task extends CActiveRecord
 	public function checkFields($good, $fields){
 		$not_exist = array();
 		foreach ($fields as $i => $attr_id)
-			if( !isset($good->fields_assoc[$attr_id]) || $good->fields_assoc[$attr_id]->value === NULL )
+			if( !isset($good->fields_assoc[$attr_id]) || ( !is_array($good->fields_assoc[$attr_id]) && $good->fields_assoc[$attr_id]->value === NULL ) ){
 				array_push($not_exist, $attr_id);
+			}
 
 		return $not_exist;
 	}
@@ -199,13 +200,16 @@ class Task extends CActiveRecord
 	public function add($good_id, $action, $data = NULL){
 		$action = Task::getAction($action);
 
-		if( $task = Task::model()->find("good_id=$good_id AND action_id=".$action->id) )
-			return $task->id;
+		if( $task = Task::model()->find("good_id=$good_id AND action_id=".$action->id) ){
+			if( $data === NULL )
+				return $task->id;
+		}else{
+			$task = new Task;
+			$task->good_id = $good_id;
+			$task->action_id = $action->id;
+			$task->user_id = $action->user_id;
+		}
 		
-		$task = new Task;
-		$task->good_id = $good_id;
-		$task->action_id = $action->id;
-		$task->user_id = $action->user_id;
 		if( $data )
 			$task->data = json_encode($data);
 

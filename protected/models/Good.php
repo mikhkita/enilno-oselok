@@ -760,6 +760,8 @@ class Good extends GoodFilter
   		foreach ($this->fields as $key => $value) {
   			$value->delete();
   		}
+  		Task::model()->deleteAll("good_id=".$this->id);
+  		
   		return parent::beforeDelete();
  	}
 }
