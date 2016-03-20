@@ -1,17 +1,17 @@
 <?php
 
 /**
- * This is the model class for table "notification".
+ * This is the model class for table "task".
  *
- * The followings are the available columns in table 'notification':
+ * The followings are the available columns in table 'task':
  * @property string $id
- * @property string $title
- * @property integer $category_id
+ * @property string $good_id
  * @property string $data
+ * @property integer $action_id
  */
 class Task extends CActiveRecord
 {
-	public $params = array(
+	static public $params = array(
 		1 => array(
 			"necessary" => array(16,17,9,8,7,28,43),
 			"price" => array(20),
@@ -23,6 +23,25 @@ class Task extends CActiveRecord
 		3 => array(
 			"necessary" => array(16,17,9,8,7,28,6,43),
 			"price" => array(20),
+		)
+	);
+
+	static public $actions = array(
+		"photo" => array(
+			"id" => 1,
+			"user_id" => 1,
+		),
+		"necessary" => array(
+			"id" => 2,
+			"user_id" => 1,
+		),
+		"price" => array(
+			"id" => 3,
+			"user_id" => 1,
+		),
+		"required" => array(
+			"id" => 4,
+			"user_id" => 1,
 		)
 	);
 
@@ -42,13 +61,13 @@ class Task extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('title, category_id, data', 'required'),
-			array('category_id', 'numerical', 'integerOnly'=>true),
-			array('title', 'length', 'max'=>1000),
+			array('good_id, user_id, action_id', 'required'),
+			array('action_id', 'numerical', 'integerOnly'=>true),
+			array('good_id, user_id', 'length', 'max'=>10),
 			array('data', 'length', 'max'=>10000),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, title, category_id, data', 'safe', 'on'=>'search'),
+			array('id, good_id, data, action_id, user_id', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -60,6 +79,7 @@ class Task extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'action' => array(self::BELONGS_TO, 'TaskAction', 'action_id'),
 		);
 	}
 
@@ -70,69 +90,65 @@ class Task extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'title' => 'Заголовок',
-			'category_id' => 'Категория',
+			'good_id' => 'Товар',
 			'data' => 'Данные',
+			'action_id' => 'Действие',
+			'user_id' => 'Пользователь',
 		);
 	}
 
-	/**
-	 * Retrieves a list of models based on the current search/filter conditions.
-	 *
-	 * Typical usecase:
-	 * - Initialize the model fields with values from filter form.
-	 * - Execute this method to get CActiveDataProvider instance which will filter
-	 * models according to data in model fields.
-	 * - Pass data provider to CGridView, CListView or any similar widget.
-	 *
-	 * @return CActiveDataProvider the data provider that can return the models
-	 * based on the search/filter conditions.
-	 */
-	public function search()
-	{
-		// @todo Please modify the following code to remove attributes that should not be searched.
+	public function filter($user_id){
+		$model = Yii::app()->db->createCommand()
+            ->select('t.id, t.data, t.good_id, t.action_id, t.user_id, a.varchar_value, g.good_type_id, ta.name')
+            ->from(Task::tableName().' t')
+            ->join(TaskAction::tableName().' ta', 'ta.id=t.action_id')
+            ->join(Good::tableName().' g', 'g.id=t.good_id')
+            ->join(GoodAttribute::tableName().' a', 'g.id=a.good_id')
+            ->where("t.user_id=$user_id AND a.attribute_id=3")
+            ->order("t.id ASC")
+            ->queryAll();
 
-		$criteria=new CDbCriteria;
+        $goodTypes = Controller::getAssoc(GoodType::model()->findAll(), "id");
 
-		$criteria->compare('id',$this->id,true);
-		$criteria->compare('title',$this->title,true);
-		$criteria->compare('category_id',$this->category_id);
-		$criteria->compare('data',$this->data,true);
+        foreach ($model as $i => $value) {
+        	if($value["data"] !== NULL)
+        		$model[$i]["data"] = json_decode($value["data"]);
 
-		return new CActiveDataProvider($this, array(
-			'criteria'=>$criteria,
-		));
+        	$model[$i]["good"] = (object) array(
+        		"id" => $model[$i]["good_id"],
+        		"code" => $model[$i]["varchar_value"],
+        		"good_type_id" => $model[$i]["good_type_id"]
+        	);
+        	$model[$i]["good_type"] = $goodTypes[$model[$i]["good_type_id"]]->name;
+        	unset($model[$i]["varchar_value"]);
+        	unset($model[$i]["good_type_id"]);
+        	$model[$i] = (object) $model[$i];
+        }
+
+        return $model;
 	}
 
 	public function testGood($good){
-		$params = $this->params[$good->good_type_id];
-
-		// Проверка фотографий
-		if( !$this->checkPhoto($good) ){
-			echo "Добавить задание: добавить фотографии<br>";
-		}else{
-			echo "Удалить задание: добавить фотографии<br>";
-		}
+		$params = $this->getParams($good->good_type_id);
 
 		// Проверка первичных атрибутов
-		$not_exist = $this->checkFields($good, $params["necessary"]);
+		$not_exist = $this->checkFields($good, $params->necessary);
 		$necessary_exist = count($not_exist)?false:true;
 		if( !$necessary_exist ){
-			echo "Добавить задание: заполнить недостающие первичные атрибуты<br>";
-			print_r($not_exist);
+			Task::add($good->id, "necessary", implode(",", $not_exist));
 		}else{
-			echo "Удалить задание: заполнить недостающие первичные атрибуты<br>";
+			Task::remove($good->id, "necessary");
 		}
 
 		// Проверка цены
-		$not_exist = $this->checkFields($good, $params["price"]);
+		$not_exist = $this->checkFields($good, $params->price);
 		$price_exist = count($not_exist)?false:true;
 		if( !$price_exist ){
 			if( $necessary_exist ){
-				echo "Добавить задание: заполнить цену<br>";
+				Task::add($good->id, "price", implode(",", $not_exist));
 			}
 		}else{
-			echo "Удалить задание: заполнить цену<br>";
+			Task::remove($good->id, "price");
 		}
 
 		$required = $this->getRequired($good->good_type_id);
@@ -141,11 +157,17 @@ class Task extends CActiveRecord
 		$not_exist = $this->checkFields($good, $required);
 		if( count($not_exist) ){
 			if( $necessary_exist && $price_exist ) {
-				echo "Добавить задание: заполнить обязательные параметры<br>";
-				print_r($not_exist);
+				Task::add($good->id, "required", implode(",", $not_exist));
 			}
 		}else{
-			echo "Удалить задание: заполнить обязательные параметры<br>";
+			Task::remove($good->id, "required");
+		}
+
+		// Проверка фотографий
+		if( !$this->checkPhoto($good) ){
+			Task::add($good->id, "photo");
+		}else{
+			Task::remove($good->id, "photo");
 		}
 	}
 
@@ -174,11 +196,44 @@ class Task extends CActiveRecord
         return Controller::getIds($model, "id");
 	}
 
+	public function add($good_id, $action, $data = NULL){
+		$action = Task::getAction($action);
+
+		if( $task = Task::model()->find("good_id=$good_id AND action_id=".$action->id) )
+			return $task->id;
+		
+		$task = new Task;
+		$task->good_id = $good_id;
+		$task->action_id = $action->id;
+		$task->user_id = $action->user_id;
+		if( $data )
+			$task->data = json_encode($data);
+
+		if( $task->save() )
+			return $task->id;
+		
+		return false;
+	}
+
+	public function remove($good_id, $action){
+		$action = Task::getAction($action);
+
+		Task::model()->deleteAll("good_id=$good_id AND action_id=".$action->id);
+	}
+
+	public function getParams($good_type_id){
+		return (object) self::$params[$good_type_id];
+	}
+
+	public function getAction($code){
+		return (object) self::$actions[$code];
+	}
+
 	/**
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return Notification the static model class
+	 * @return Task the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{

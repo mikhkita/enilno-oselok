@@ -607,7 +607,7 @@ $(document).ready(function(){
 
     var togLink = false;
     function closeSearch(){
-        $(".b-search-form").fadeOut(300);
+        $(".b-search-results").fadeOut(300);
         setTimeout(function(){
             $(".b-sub-menu.b-fixed-top").css({
                 top: 0

@@ -210,6 +210,8 @@ class GoodController extends Controller
 
 			Good::updateAuctionLinks();
 
+			Task::model()->testGood($this->loadModel($model->id));
+
 			$this->redirect( Yii::app()->createUrl('good/adminindex',array('good_type_id'=>$good_type_id,'partial'=>true,'GoodFilter_page' => $_GET["GoodFilter_page"])) );
 		}else{
 			$fields = $model->type->fields;
@@ -963,6 +965,8 @@ class GoodController extends Controller
 			}
 		}
 		$this->actionAdminPhoto($id, true);
+
+		Task::model()->testGood($this->loadModel($id));
 	}
 
 	public function actionAdminAddCheckbox($id = NULL){

@@ -998,6 +998,8 @@ class IntegrateController extends Controller
         $good = Good::model()->with(array("type","fields.variant","fields.attribute"))->findByPk(206);
 
         var_dump(Task::model()->testGood($good));
+
+        // var_dump(Task::model()->filter(1));
     }
 
 }

@@ -51,8 +51,8 @@
 		<div class="right b-right-column clearfix">
 			<table class="b-params-table b-table" border="1">
 				<tr>
-					<td>Параметр</td>
-					<td>Значение</td>
+					<th>Параметр</th>
+					<th>Значение</th>
 				</tr>
 				<? $fields_assoc = $model->fields_assoc; ?>
 				<? foreach ($view_fields as $field): ?>
