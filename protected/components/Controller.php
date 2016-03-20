@@ -622,10 +622,10 @@ class Controller extends CController
                         } else unset($imgs[$key]);
                     }
                 } 
-                // if(!count($imgs)) {
-                //     if( $get_default )
-                //     array_push($imgs, Yii::app()->request->baseUrl."/".$path."/default.jpg");
-                // }          
+                if(!count($imgs)) {
+                    if( $get_default )
+                    array_push($imgs, Yii::app()->request->baseUrl."/".$path."/default.jpg");
+                }          
             } else {
                 
                 if( $get_default )
