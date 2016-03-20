@@ -75,28 +75,8 @@ class TaskController extends Controller
 			$this->layout = 'admin';
 			$this->scripts[] = 'Task';
 		}
-		$filter = new Task('filter');
-		$criteria = new CDbCriteria();
 
-		if (isset($_GET['Task']))
-        {
-            $filter->attributes = $_GET['Task'];
-            foreach ($_GET['Task'] AS $key => $val)
-            {
-                if ($val != '')
-                {
-                    if( $key == "name" ){
-                    	$criteria->addSearchCondition('name', $val);
-                    }else{
-                    	$criteria->addCondition("$key = '{$val}'");
-                    }
-                }
-            }
-        }
-
-        $criteria->order = 'id DESC';
-
-        $model = Task::model()->findAll($criteria);
+        $model = Task::model()->filter(1);
 
 		if( !$partial ){
 			$this->render('adminIndex',array(

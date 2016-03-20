@@ -473,6 +473,11 @@ td.b-photo-td{
             height: 27px;
             padding: 5px 10px;
         }
+        .b-params-table th{
+            background-color: #D26A44;
+            color: #F5E9BC;
+            text-shadow: 0 1px 1px rgba(0,0,0,0.5);
+        }
         .b-params-table td{
             text-align: left !important;
         }

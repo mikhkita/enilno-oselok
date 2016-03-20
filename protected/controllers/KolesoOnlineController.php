@@ -819,14 +819,26 @@ class KolesoOnlineController extends Controller
     	$criteria=new CDbCriteria();
 		$search = explode(" ", $search);
 		// if( !$this->user ){
-			// $criteria->condition = "public=1";
+			// $criteria->condition = "1=1";
 		// }
+		$values = array();
 		foreach ($search as $i => $val) {
-			$criteria->addSearchCondition("value", $val);
+			array_push($values, "value LIKE '%$val%'");
 		}
-		$criteria->limit = 11;
 
-		$model = Search::model()->findAll($criteria);
+		$data = Yii::app()->db->createCommand()
+            ->select('*')
+            ->from(Search::tableName().' s')
+            ->join(Good::tableName().' g', 'g.id=s.good_id')
+            ->where(implode(" AND ", $values))
+            ->limit(15)
+            ->queryAll();
+
+        $model = array();
+        foreach ($data as $i => $value){
+        	array_push($model, (object) $value);
+    	}
+
 		$ids = array();
 		$titles = array();
 		foreach ($model as $key => $value){
@@ -836,10 +848,17 @@ class KolesoOnlineController extends Controller
 			$titles[$value->good_id] = $tmp;
 		}
 
-		// $good_types = $this->getAssoc(GoodType::model()->findAll(), "id");
+		if( count($ids) ){
+			$goods = Yii::app()->db->createCommand()
+	            ->select('g.id, a.varchar_value, g.good_type_id, t.code')
+	            ->from(Good::tableName().' g')
+	            ->join(GoodType::tableName().' t', 't.id=g.good_type_id')
+	            ->join(GoodAttribute::tableName().' a', 'g.id=a.good_id')
+	            ->where("a.attribute_id=3 AND g.id IN (".implode(",", $ids).")")
+	            ->order("a.varchar_value ASC")
+	            ->queryAll();
+		}
 
-		if( count($ids) )
-		$goods = GoodFilter::model()->with("type", "fields")->findAll(array("condition" => "t.id IN (".implode(",", $ids).") AND fields.attribute_id=3", "order" => "fields.varchar_value ASC"));
     	$this->renderPartial('search',array(
 			'goods' => $goods,
 			'titles' => $titles

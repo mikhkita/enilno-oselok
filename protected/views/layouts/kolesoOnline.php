@@ -213,8 +213,10 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
             <h4 class="exit-desc">Оставьте заявку и наши менеджеры предложат вам дополнительные варианты</h4>
             <form action="<?=Yii::app()->createUrl('/kolesoOnline/mail/')?>" id="b-form-exit" method="POST"  data-block="#b-popup-2">
                 <div class="b-popup-form">
-                    <label for="tel">Ваш телефон</label>
+                    <label for="phone">Ваш телефон *</label>
                     <input type="text" name="phone" required placeholder="+7 (___) ___-__-__"/>               
+                    <label for="email">Ваш E-mail</label>
+                    <input type="text" name="email" placeholder="onlinekoleso@yandex.ru"/>
                     <label for="name">Ваши параметры</label>
                     <textarea type="text" name="1" placeholder="R17, сверловка 5*114.3, ширина 7 на mazda 3"></textarea>
                     <input type="hidden" name="1-name" value="Параметры" />
@@ -233,9 +235,9 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
             <h4>Оставьте заявку и мы Вам перезвоним<br>в ближайшее время:</h4>
             <form action="<?=Yii::app()->createUrl('/kolesoOnline/mail/')?>" id="b-form-call" method="POST"  data-block="#b-popup-2">
                 <div class="b-popup-form">
-                    <label for="name">Ваше имя</label>
+                    <label for="name">Ваше имя *</label>
                     <input type="text" name="name" required placeholder="Иван"/>
-                    <label for="tel">Ваш телефон</label>
+                    <label for="tel">Ваш телефон *</label>
                     <input type="text" name="phone" required placeholder="+7 (___) ___-__-__"/>
                     <input type="hidden" name="subject" value="Обратный звонок"/>
                 </div>
@@ -251,9 +253,9 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
             <h4>Или оставить заявку и мы Вам перезвоним в ближайшее время:</h4>
             <form action="<?=Yii::app()->createUrl('/kolesoOnline/mail/')?>" id="b-form-buy" method="POST" data-block="#b-popup-2">
                 <div class="b-popup-form">
-                    <label for="name">Ваше имя</label>
+                    <label for="name">Ваше имя *</label>
                     <input type="text" name="name" required placeholder="Иван"/>
-                    <label for="tel">Ваш телефон</label>
+                    <label for="tel">Ваш телефон *</label>
                     <input type="text" name="phone" required placeholder="+7 (___) ___-__-__"/>
 
                     <input type="hidden" name="good" id="good" required/>

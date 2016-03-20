@@ -183,7 +183,12 @@ class GoodController extends Controller
 		$result = $this->getAttr($model);
 		if(isset($_POST['Good_attr']))
 		{
-			GoodAttribute::model()->deleteAll('good_id='.$id);
+			if( $attributes === NULL ){
+				GoodAttribute::model()->deleteAll("good_id=".$id);
+			}else{
+				GoodAttribute::model()->deleteAll("good_id=".$id." AND attribute_id IN ($attributes)");
+			}
+
 			$values = array();
 			foreach ($_POST['Good_attr'] as $attr_id => $value) {
 				if(!is_array($value) || isset($value['single']) ) {
@@ -210,7 +215,13 @@ class GoodController extends Controller
 
 			Good::updateAuctionLinks();
 
-			$this->redirect( Yii::app()->createUrl('good/adminindex',array('good_type_id'=>$good_type_id,'partial'=>true,'GoodFilter_page' => $_GET["GoodFilter_page"])) );
+			Task::model()->testGood($this->loadModel($model->id));
+
+			if( isset($_GET["to_task"]) ){
+				$this->redirect( Yii::app()->createUrl('task/adminindex', array('partial' => true)) );
+			}else{
+				$this->redirect( Yii::app()->createUrl('good/adminindex',array('good_type_id'=>$good_type_id,'partial'=>true,'GoodFilter_page' => $_GET["GoodFilter_page"])) );
+			}
 		}else{
 			$fields = $model->type->fields;
 
@@ -965,6 +976,8 @@ class GoodController extends Controller
 			}
 		}
 		$this->actionAdminPhoto($id, true);
+
+		Task::model()->testGood($this->loadModel($id));
 	}
 
 	public function actionAdminAddCheckbox($id = NULL){
