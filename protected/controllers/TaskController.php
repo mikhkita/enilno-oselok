@@ -76,7 +76,7 @@ class TaskController extends Controller
 			$this->scripts[] = 'Task';
 		}
 
-        $model = Task::model()->filter(1);
+        $model = Task::model()->filter(NULL);
 
 		if( !$partial ){
 			$this->render('adminIndex',array(
