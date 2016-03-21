@@ -16,7 +16,7 @@
 <div id="photo-cont">
 <?endif;?>
 <h1 class="b-with-nav"><?=$good->type->name?> <?=$good->fields_assoc[3]->value?>: фотографии</h1>
-<ul class="photo-sortable clearfix" id="photo-sortable" data-href="<?=Yii::app()->createUrl('/good/adminphotoupdate',array('id'=>$good->id))?>">
+<ul class="photo-sortable clearfix" data-sort = 'Images[]' id="photo-sortable" data-href="<?=Yii::app()->createUrl('/good/adminphotoupdate',array('id'=>$good->id))?>">
 	<? foreach ($images as $i => $image):?>
 	<li style="background-image: url('<?=$image['small']?>');" data-small="<?=$image['small']?>" data-src="<?=$image['original']?>">
 		<a href="#" class="b-photo-delete ion-icon ion-close"></a>
@@ -25,7 +25,7 @@
 	<? endforeach; ?>
 </ul>
 <h1 class="b-with-nav-2"></h1>
-<ul class="photo-sortable clearfix" id="photo-sortable-2">
+<ul class="photo-sortable clearfix" id="photo-sortable-2" data-sort = 'Extra[]'>
 	<? foreach ($extra as $i => $image):?>
 	<li style="background-image: url('<?=$image['small']?>');" data-small="<?=$image['small']?>" data-src="<?=$image['original']?>">
 		<a href="#" class="b-photo-delete ion-icon ion-close"></a>
