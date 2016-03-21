@@ -120,7 +120,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
                             $phone = $phone[0]." (".$phone[1].$phone[2].$phone[3].") ".$phone[4].$phone[5].$phone[6]."-".$phone[7].$phone[8]."-".$phone[9].$phone[10];
                         ?>
                         <a href="tel:+<?=Yii::app()->params["city"]->phone?>" class="mobile-not-fancy fancy left" data-block="#b-popup-callback">+<?=$phone?></a>
-                        <a href="mailto:kolesotomskru@mail.ru" class="left mail">kolesotomskru@mail.ru</a>
+                        <a href="mailto:onlinekoleso@yandex.ru" class="left mail">onlinekoleso@yandex.ru</a>
                     </div>
                     <form action="<?=Yii::app()->createUrl('kolesoOnline/search')?>" method="GET" class="b-search-form">
                         <input type="text" id="search" autocomplete="off" name="search" placeholder="Поиск">
@@ -162,7 +162,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
                         <a href="<?=Yii::app()->createUrl('/kolesoOnline')?>" class="footer-logo clearfix">
                             <span class="b-footer-logo"></span>
                         </a>
-                        <p>Лучший выбор автомобильных б/у шин и дисков из Японии <?=Yii::app()->params["city"]->in?>. Удобный поиск и выгодные цены, а самое главное честное описание и фото. Мы постоянно работаем над расширением географии наших представительств на территории РФ.</p>
+                        <p>Лучший выбор автомобильных б/у шин и дисков из Японии в России. Удобный поиск и выгодные цены, а самое главное честное описание и фото. Мы постоянно работаем над расширением географии наших представительств на территории РФ.</p>
                     </li>
                     <li>
                         <h3>Разделы</h3>
@@ -177,7 +177,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
                     </li>
                     <li>
                         <h3>Контактная информация</h3>
-                        <a class="footer-contacts mail" href="mailto:kolesotomskru@mail.ru">kolesotomskru@mail.ru</a>
+                        <a class="footer-contacts mail" href="mailto:onlinekoleso@yandex.ru">onlinekoleso@yandex.ru</a>
                         <a class="mobile-not-fancy fancy footer-contacts phone" data-block="#b-popup-callback" href="tel:+<?=Yii::app()->params["city"]->phone?>">+<?=$phone?></a>
                         <? if(Yii::app()->params["city"]->id == 1081): ?>
                             <span class="footer-contacts map">г. Томск, улица Мокрушина, 9 ст. 42</span>

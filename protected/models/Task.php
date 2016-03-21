@@ -29,19 +29,19 @@ class Task extends CActiveRecord
 	static public $actions = array(
 		"photo" => array(
 			"id" => 1,
-			"user_id" => 1,
+			"user_id" => 4,
 		),
 		"necessary" => array(
 			"id" => 2,
-			"user_id" => 1,
+			"user_id" => 4,
 		),
 		"price" => array(
 			"id" => 3,
-			"user_id" => 1,
+			"user_id" => 3,
 		),
 		"required" => array(
 			"id" => 4,
-			"user_id" => 1,
+			"user_id" => 4,
 		)
 	);
 
@@ -97,14 +97,14 @@ class Task extends CActiveRecord
 		);
 	}
 
-	public function filter($user_id){
+	public function filter($user_id = NULL){
 		$model = Yii::app()->db->createCommand()
             ->select('t.id, t.data, t.good_id, t.action_id, t.user_id, a.varchar_value, g.good_type_id, ta.name')
             ->from(Task::tableName().' t')
             ->join(TaskAction::tableName().' ta', 'ta.id=t.action_id')
             ->join(Good::tableName().' g', 'g.id=t.good_id')
             ->join(GoodAttribute::tableName().' a', 'g.id=a.good_id')
-            ->where("t.user_id=$user_id AND a.attribute_id=3")
+            ->where( (($user_id !== NULL)?"t.user_id=$user_id AND ":"")."a.attribute_id=3")
             ->order("t.id ASC")
             ->queryAll();
 

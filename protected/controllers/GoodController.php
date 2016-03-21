@@ -175,7 +175,9 @@ class GoodController extends Controller
 	public function actionAdminUpdate($id, $good_type_id, $attributes = NULL)
 	{
 		$view = array(
-			2 => array(3,5,6,9,11,28,27,26,31,32,33,34,36,43),
+			1 => array(3,26,27,16,17,9,8,7,28,10,29,11,20,36,43,101,98,110),
+			2 => array(3,5,6,9,11,28,27,26,31,32,33,34,20,36,43,101,98,110),
+			3 => array(3,5,6,9,16,17,8,7,10,29,11,28,27,26,31,32,33,34,20,36,43,101,98,110),
 		);
 		$view_fields = array();
 
