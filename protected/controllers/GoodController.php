@@ -933,22 +933,15 @@ class GoodController extends Controller
 				$tmp = strtolower($path.$i.".".$image["ext"]);
 
 				if( file_exists($filename) ){
-					if( strpos($filename, $path) !== false ){
+					if( strpos($filename, $path) !== false && strpos($filename, "extra") === false){
 						rename($filename, $tmp);
 					}else{
-						// echo "string";
 						copy($filename, $tmp);
+						unlink($filename);
 					}
 				}
 			}
-			foreach ($_POST["Images"] as $i => $image) {
-				$tmp = strtolower($path.$i.".".$image["ext"]);
-				$new_filename = $path.$code."_".(($i < 10)?("0".strval($i)):strval($i)).".".$image["ext"];
-				
-				if( file_exists($tmp) ) 
-					rename($tmp, $new_filename);
-				
-			}
+			
 		}
 
 		$path = Yii::app()->params["imageFolder"]."/".$goodType."s/".$code."/extra/";
@@ -964,8 +957,8 @@ class GoodController extends Controller
 					if( strpos($filename, $path) !== false ){
 						rename($filename, $tmp);
 					}else{
-						// echo "string";
 						copy($filename, $tmp);
+						unlink($filename);
 					}
 				}
 			}
@@ -975,6 +968,17 @@ class GoodController extends Controller
 
 				if( file_exists($tmp) )
 					rename($tmp, $new_filename);
+			}
+		}
+		if( isset($_POST["Images"]) ){
+			$path = Yii::app()->params["imageFolder"]."/".$goodType."s/".$code."/";
+			foreach ($_POST["Images"] as $i => $image) {
+				$tmp = strtolower($path.$i.".".$image["ext"]);
+				$new_filename = $path.$code."_".(($i < 10)?("0".strval($i)):strval($i)).".".$image["ext"];
+				
+				if( file_exists($tmp) ) 
+					rename($tmp, $new_filename);
+				
 			}
 		}
 		$this->actionAdminPhoto($id, true);

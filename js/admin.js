@@ -1369,11 +1369,30 @@ $(document).ready(function(){
     function photo_init() {
         if( $("#photo-sortable").length ) {
             var el = document.getElementById('photo-sortable');
-            var sortable = Sortable.create(el);
             var el2 = document.getElementById('photo-sortable-2');
-            var sortable2 = Sortable.create(el2);
+            var sortable = Sortable.create(el, {
+                group: {
+                    name: 'photo-sortable',
+                    put: ['photo-sortable-2']
+                  },
+                  onAdd: function (evt) {
+                    console.log(evt);
+                    $(evt.item).find("input").attr("name",$(evt.to).attr("data-sort")).attr("data-name",$(evt.to).attr("data-sort"));
+                }
+            });
+            
+            var sortable2 = Sortable.create(el2, {
+                group: {
+                    name: 'photo-sortable-2',
+                    put: ['photo-sortable']
+                  },
+                  onAdd: function (evt) {
+                    $(evt.item).find("input").attr("name",$(evt.to).attr("data-sort")).attr("data-name",$(evt.to).attr("data-sort"));
+                }
+            });
         }
     }
+    photo_init();
 
     $("body").on("click",".b-photo-delete",function(){
         var $li = $(this).parents("li");
@@ -1408,6 +1427,7 @@ $(document).ready(function(){
         order2 = backupImages($(".photo-sortable:eq(1) li"));
         issetdeleted1 = $(".photo-sortable:eq(0) li.deleted").length;
         issetdeleted2 = $(".photo-sortable:eq(1) li.deleted").length;
+        console.log($( ".photo-sortable input" ));
         $.ajax({
             url: $( "#photo-sortable" ).attr("data-href"),
             data: $( ".photo-sortable input" ).serialize(),
