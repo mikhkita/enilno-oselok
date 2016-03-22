@@ -1178,7 +1178,7 @@ td.b-photo-td{
         background-position: 50% 50%;
         background-repeat: no-repeat;
         margin: 0px 5px;
-        background-size: 25px;
+        background-size: contain;
         /*background-color: #000;*/
     }
     .b-good-table .b-tool{
@@ -2835,6 +2835,13 @@ ul.b-filter-list{
     .b-section-menu{
         border-left: 1px solid #E8DEB8;
     }
+        .b-section-menu .b-tool-settings {
+            float: left;
+            width: 20px;
+            height: 20px;
+            padding: 0;
+            margin: 4px;
+        }
         .b-section-menu>li{
             float: left;
             list-style: none;
@@ -2847,6 +2854,7 @@ ul.b-filter-list{
                 padding: 5px 19px 6px;
                 text-decoration: none;
                 border-right: 1px solid #E8DEB8;
+                float: left;
             }
             .b-section-menu>li:last-child>a{
                 /*border-right: 0;*/
