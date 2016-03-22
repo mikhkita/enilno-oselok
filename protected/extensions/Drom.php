@@ -308,6 +308,7 @@ Class Drom {
         $Users = AttributeVariant::model()->with('variant')->findAll("attribute_id=43 AND variant_id > 2900");
         $add_count = 0;
         $delete_count = 0;
+        $restore_count = 0;
 
         foreach ($Users as $user) {
             $good_type = 1;
@@ -330,19 +331,25 @@ Class Drom {
                     $goods = array();
                     $links = array();
                     $drom_ids = $this->parseAllItems('http://baza.drom.ru/user/'.$user->variant->value.'/wheel/'.$type, $user->variant->value, false,true);
-                    if(!$drom_ids){
-                        Log::debug("Ошибка парсинга объявлений пользователя");
-                        break;
-                    }    
+                    $drom_ids = ($drom_ids) ? $drom_ids : array(); 
 
                     foreach ($model as $key => $item) {
                         $code = str_replace(".html","", array_pop(explode("/", $item->fields_assoc[106]->value)));
                         array_push($goods, $code);
                         if(array_search($code, $drom_ids) === false) {
                             if($archive = Good::model()->with(array("type","fields.variant","fields.attribute"))->find("t.id=".$key." AND t.archive=0")) {
-                                Log::debug("Удаление товара ".$archive->fields_assoc[3]->value);
-                                $archive->sold(); 
-                                $delete_count++;
+                                if($archive->sold()) {
+                                    Log::debug("Удаление товара ".$archive->fields_assoc[3]->value);
+                                    $delete_count++;
+                                }
+                            }
+                        } else {
+                            if($item->archive) {
+                                $item->archive = 0;
+                                if($item->save()) {
+                                    Log::debug("Восстановление товара ".$item->fields_assoc[3]->value);
+                                    $restore_count++;
+                                }  
                             }
                         }
                     }
@@ -365,8 +372,9 @@ Class Drom {
             }     
         }
         $this->curl->removeCookies();
-        Log::debug("Удалено товаров: ".$delete_count);
         Log::debug("Добавлено товаров: ".$add_count);
+        Log::debug("Удалено товаров: ".$delete_count);
+        Log::debug("Восстановлено товаров: ".$restore_count);
     }
 
     public function parseAdvert($page,$good_code,$user_id) {
