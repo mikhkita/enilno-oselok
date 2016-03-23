@@ -21,6 +21,7 @@
         </div>
 
         <div class="row buttons">
+            <input type="hidden" name="submit" value="1">
             <?php echo CHtml::submitButton('Сохранить'); ?>
             <input type="button" onclick="$.fancybox.close(); return false;" value="Отменить">
         </div>

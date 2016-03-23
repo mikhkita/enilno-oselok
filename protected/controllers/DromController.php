@@ -266,7 +266,9 @@ class DromController extends Controller
        
     }
     public function actionAdminIndex(){
-
+        $drom = new Drom();
+        $drom->parseUser();
+        die();
         // $queue = Queue::model()->with("advert.good.type","advert.place","action")->findByPk(198);
         // $advert = Advert::model()->findByPk(1);
 

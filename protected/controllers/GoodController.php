@@ -664,24 +664,27 @@ class GoodController extends Controller
 		$goodType = GoodType::model()->with("fields")->findByPk($good_type_id);
 
 		$this->pageTitle = $goodType->name;
-
 		$params = array(
-			1 => array(
-				"FILTER" => array(43,36,26,23,27,16,111),
-				"FILTER_NAMES" => array(43=>41),
-			),
-			2 => array(
-				"FILTER" => array(43,27,36,9,5,31,32,11,33,20,26,70,111),
-				"FILTER_NAMES" => array(43=>41),
-			),
-			3 => array(
-				"FILTER" => array(43,36,26,23,27,16,111),
-				"FILTER_NAMES" => array(43=>41),
-			),
+			"FILTER" => $this->getUserParam("GOOD_TYPE_FILTER_".$good_type_id),
+			"FILTER_NAMES" => array(43=>41),
 		);
+		// $params = array(
+		// 	1 => array(
+		// 		"FILTER" => array(43,36,26,23,27,16,111,17,9,8,7,28,18,19,10,29,11,112,20,108,46,101),
+		// 		"FILTER_NAMES" => array(43=>41),
+		// 	),
+		// 	2 => array(
+		// 		"FILTER" => array(43,27,36,9,5,31,32,11,33,20,26,70,111),
+		// 		"FILTER_NAMES" => array(43=>41),
+		// 	),
+		// 	3 => array(
+		// 		"FILTER" => array(43,36,26,23,27,16,111),
+		// 		"FILTER_NAMES" => array(43=>41),
+		// 	),
+		// );
 
-		$attributes = $this->getFilterVariants($params[$good_type_id]["FILTER"],$params[$good_type_id]["FILTER_NAMES"],$good_type_id);
-		$labels = $this->getLabels($params[$good_type_id]["FILTER"]);
+		$attributes = $this->getFilterVariants($params["FILTER"],$params["FILTER_NAMES"],$good_type_id);
+		$labels = $this->getLabels($params["FILTER"]);
 
 		if( !$partial ){
 			$this->layout='admin';
@@ -782,44 +785,44 @@ class GoodController extends Controller
 
 	public function getFilterVariants($array,$array_names,$good_type_id){
 		$result = array();
-
-		foreach ($array as $value) {
-			$result[$value] = array();
-		}
-
-		$criteria = new CDbCriteria();
-		$criteria->with = array("good_filter"=>array("select"=>"good_type_id"),"variant"=>array("select"=>"variant.sort"));
-		$criteria->condition = "good_filter.good_type_id = ".$good_type_id;
-	    $criteria->addInCondition("t.attribute_id",$array);
-	    $criteria->group = "t.variant_id";
-	    $criteria->order = "variant.sort ASC";
-
-		$model = GoodAttribute::model()->with(array("attribute","variant"))->findAll($criteria);
-
-		foreach ($model as $key => $field) {
-			if( !count($result[$field->attribute_id]) ){
-				$type = ($field->attribute->list)?"CHECKBOX":"FROMTO";
-				$result[$field->attribute_id] = array("VIEW"=>$type,"VARIANTS"=>array());
+		if($array) {
+			foreach ($array as $value) {
+				$result[$value] = array();
 			}
-			$result[$field->attribute_id]["VARIANTS"][$field->variant_id] = $field->value;
-		}
 
-		foreach ($array_names as $key => $val) {
-			if( isset($result[$key]) ){
-				$list = $this->getListValue($val);
-				if( isset($result[$key]["VARIANTS"]) )
-					foreach ($result[$key]["VARIANTS"] as $i => &$variant) {
-						$variant = $list[$i];
-					}
+			$criteria = new CDbCriteria();
+			$criteria->with = array("good_filter"=>array("select"=>"good_type_id"),"variant"=>array("select"=>"variant.sort"));
+			$criteria->condition = "good_filter.good_type_id = ".$good_type_id;
+		    $criteria->addInCondition("t.attribute_id",$array);
+		    $criteria->group = "t.variant_id";
+		    $criteria->order = "variant.sort ASC";
+
+			$model = GoodAttribute::model()->with(array("attribute","variant"))->findAll($criteria);
+
+			foreach ($model as $key => $field) {
+				if( !count($result[$field->attribute_id]) ){
+					$type = ($field->attribute->list)?"CHECKBOX":"FROMTO";
+					$result[$field->attribute_id] = array("VIEW"=>$type,"VARIANTS"=>array());
+				}
+				$result[$field->attribute_id]["VARIANTS"][$field->variant_id] = $field->value;
 			}
-		}
 
-		if( count($array) ){
-			$fromto = Attribute::model()->findAll(array("condition"=>"list!=1 AND id IN (".implode(",", $array).")"));
-			foreach ($fromto as $key => $attr)
-				$result[$attr->id] = array("VIEW"=>"FROMTO");
-		}
+			foreach ($array_names as $key => $val) {
+				if( isset($result[$key]) ){
+					$list = $this->getListValue($val);
+					if( isset($result[$key]["VARIANTS"]) )
+						foreach ($result[$key]["VARIANTS"] as $i => &$variant) {
+							$variant = $list[$i];
+						}
+				}
+			}
 
+			if( count($array) ){
+				$fromto = Attribute::model()->findAll(array("condition"=>"list!=1 AND id IN (".implode(",", $array).")"));
+				foreach ($fromto as $key => $attr)
+					$result[$attr->id] = array("VIEW"=>"FROMTO");
+			}
+		}	
 		return $result;
 	}
 
@@ -1123,11 +1126,12 @@ class GoodController extends Controller
 		return $cities;
 	}
 
-	public function actionAdminViewSettings($good_type_id = NULL){
+	public function actionAdminViewSettings($good_type_id = NULL,$filter = false){
 		if( $good_type_id ){
-			if( isset($_POST["view_fields"]) ){
-				$this->setUserParam("GOOD_TYPE_".$good_type_id,$_POST["view_fields"]);
-
+			$filter = ($filter) ? "GOOD_TYPE_FILTER_".$good_type_id : "GOOD_TYPE_".$good_type_id;
+			$fields = (isset($_POST["view_fields"])) ? $_POST["view_fields"] : array();
+			if( isset($_POST["submit"]) ){
+				$this->setUserParam($filter,$fields);
 				$this->actionAdminIndex(true,$good_type_id);
 			}else{
 				$good_type = GoodType::model()->with("fields.attribute")->findByPk($good_type_id);
@@ -1136,7 +1140,7 @@ class GoodController extends Controller
 
 				$this->renderPartial('_viewSettings',array(
 					'good_type'=>$good_type,
-					'selected'=>$this->getUserParam("GOOD_TYPE_".$good_type_id),
+					'selected'=>$this->getUserParam($filter),
 					'attributes'=>$attributes
 				));
 			}
