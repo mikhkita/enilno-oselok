@@ -11,7 +11,7 @@
 	</tr>
 	<? foreach ($data as $i => $item): ?>
 		<tr<?if(isset($_GET["id"]) && $item->usr_id == $_GET["id"]):?> class="b-refresh"<?endif;?>>
-			<td><? echo $i+1; ?></td>
+			<td><? echo $item->usr_id; ?></td>
 			<td class="align-left"><? echo $item->usr_login; ?></td>
 			<td class="align-left"><? echo $item->usr_name; ?></td>
 			<td class="align-left"><? echo $item->usr_email; ?></td>

@@ -14,34 +14,34 @@ class Task extends CActiveRecord
 	static public $params = array(
 		1 => array(
 			"necessary" => array(16,17,9,8,7,28,43),
-			"price" => array(20),
+			"price" => array(20, 108),
 		),
 		2 => array(
 			"necessary" => array(9,6,28,43),
-			"price" => array(20),
+			"price" => array(20, 108),
 		),
 		3 => array(
 			"necessary" => array(16,17,9,8,7,28,6,43),
-			"price" => array(20),
+			"price" => array(20, 108),
 		)
 	);
 
 	static public $actions = array(
 		"photo" => array(
 			"id" => 1,
-			"user_id" => 4,
+			"user_id" => 10,
 		),
 		"necessary" => array(
 			"id" => 2,
-			"user_id" => 4,
+			"user_id" => 10,
 		),
 		"price" => array(
 			"id" => 3,
-			"user_id" => 3,
+			"user_id" => 9,
 		),
 		"required" => array(
 			"id" => 4,
-			"user_id" => 4,
+			"user_id" => 10,
 		)
 	);
 
@@ -99,36 +99,82 @@ class Task extends CActiveRecord
 
 	public function filter($user_id = NULL){
 		$model = Yii::app()->db->createCommand()
-            ->select('t.id, t.data, t.good_id, t.action_id, t.user_id, a.varchar_value, g.good_type_id, ta.name')
+            ->select('t.id, t.data, t.good_id, t.action_id, t.user_id, g.good_type_id, ta.name')
             ->from(Task::tableName().' t')
             ->join(TaskAction::tableName().' ta', 'ta.id=t.action_id')
             ->join(Good::tableName().' g', 'g.id=t.good_id')
-            ->join(GoodAttribute::tableName().' a', 'g.id=a.good_id')
-            ->where( (($user_id !== NULL)?"t.user_id=$user_id AND ":"")."a.attribute_id=3")
+            ->where( (($user_id !== NULL)?"t.user_id=$user_id AND ":"")."1=1")
             ->order("t.id ASC")
+            ->limit(1000)
             ->queryAll();
+
+        if( count($model) ){
+        	$ids = array();
+        	foreach ($model as $i => $task)
+        		array_push($ids, $task["good_id"]);
+
+        	$goods = Yii::app()->db->createCommand()
+	            ->select('t.varchar_value, t.good_id')
+	            ->from(GoodAttribute::tableName().' t')
+	            ->where("t.attribute_id=3 AND t.good_id IN (".implode(",", $ids).")")
+	            ->queryAll();
+
+	       	$goods = Controller::getAssocByAssoc($goods, "good_id");
+        }
 
         $goodTypes = Controller::getAssoc(GoodType::model()->findAll(), "id");
 
+        $attributes = array();
         foreach ($model as $i => $value) {
-        	if($value["data"] !== NULL)
+        	if($value["data"] !== NULL){
         		$model[$i]["data"] = json_decode($value["data"]);
 
+        		foreach (explode(",", $model[$i]["data"]) as $key => $val)
+        			if( !in_array($val, $attributes) )
+        				array_push($attributes, $val);
+        	}
+
         	$model[$i]["good"] = (object) array(
-        		"id" => $model[$i]["good_id"],
-        		"code" => $model[$i]["varchar_value"],
-        		"good_type_id" => $model[$i]["good_type_id"]
+        		"id" => $value["good_id"],
+        		"code" => (isset($goods[$value["good_id"]])?$goods[$value["good_id"]]["varchar_value"]:""),
+        		"good_type_id" => $value["good_type_id"]
         	);
-        	$model[$i]["good_type"] = $goodTypes[$model[$i]["good_type_id"]]->name;
+        	$model[$i]["good_type"] = $goodTypes[$value["good_type_id"]]->name;
         	unset($model[$i]["varchar_value"]);
         	unset($model[$i]["good_type_id"]);
         	$model[$i] = (object) $model[$i];
+        }
+
+        if( count($attributes) ){
+        	$attributes = Yii::app()->db->createCommand()
+	            ->select('t.id, t.name')
+	            ->from(Attribute::tableName().' t')
+	            ->where("t.id IN (".implode(",", $attributes).")")
+	            ->queryAll();
+
+	        $attributes = Controller::getAssocByAssoc($attributes, "id");
+
+	        foreach ($model as $i => $value) {
+	        	if($value->data !== NULL){
+	        		$names = array();
+
+	        		$tmp = explode(",", $value->data);
+	        		foreach ($tmp as $key => $val)
+	        			array_push($names, mb_strtolower($attributes[$val]["name"],"UTF-8"));
+
+		        	$model[$i]->data = (object) array(
+		        		"ids" => $value->data,
+		        		"names" => implode(", ", $names)
+		        	);
+	        	}
+	        }
         }
 
         return $model;
 	}
 
 	public function testGood($good){
+		if( isset($good->fields_assoc[27]) && $good->fields_assoc[27]->value != 1056 ) return true;
 		$params = $this->getParams($good->good_type_id);
 
 		// Проверка первичных атрибутов
@@ -174,7 +220,8 @@ class Task extends CActiveRecord
 	public function checkFields($good, $fields){
 		$not_exist = array();
 		$rules = array(
-			20 => array(0)
+			20 => array(0),
+			108 => array(0)
 		);
 		foreach ($fields as $i => $attr_id)
 			if( !isset($good->fields_assoc[$attr_id]) || (isset($rules[$attr_id]) && is_array($rules[$attr_id]) && in_array($good->fields_assoc[$attr_id]->value, $rules[$attr_id])) || ( !is_array($good->fields_assoc[$attr_id]) && $good->fields_assoc[$attr_id]->value === NULL ) ){

@@ -20,7 +20,7 @@
 						<? if($item->action_id == 1): ?>
 							<a href="<?php echo Yii::app()->createUrl('/good/adminphoto',array('id'=>$item->good->id))?>" target="_blank"><?=$item->name?></a>
 						<? elseif( in_array($item->action_id, array(2,3,4)) ): ?>
-							<a href="<?php echo Yii::app()->createUrl('/good/adminupdate',array('id'=>$item->good->id,'good_type_id' => $item->good->good_type_id, "attributes" => $item->data, "to_task" => '1' ))?>" class="ajax-form ajax-update"><?=$item->name?></a>
+							<a href="<?php echo Yii::app()->createUrl('/good/adminupdate',array('id'=>$item->good->id,'good_type_id' => $item->good->good_type_id, "attributes" => $item->data->ids, "to_task" => '1' ))?>" class="ajax-form ajax-update"><?=($item->name." (".$item->data->names.")")?></a>
 						<? endif; ?>
 					</td>
 					<!-- <td class="b-tool-cont">

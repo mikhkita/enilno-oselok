@@ -917,7 +917,7 @@ class IntegrateController extends Controller
     public function actionRibka(){
         $model = Good::model()->filter(
             array(
-                "good_type_id"=>2,
+                "good_type_id"=>1,
                 "attributes"=>array(
                     43 => array(2915)
                 )
@@ -995,11 +995,23 @@ class IntegrateController extends Controller
 // Остальное ------------------------------------------------------------- Остальное
 
     public function actionGoodTest(){
-        $good = Good::model()->with(array("type","fields.variant","fields.attribute"))->findByPk(206);
+        $model = Good::model()->filter(
+            array(
+                "good_type_id"=>2,
+                "attributes"=>array(
+                    27 => array(1056)
+                )
+            )
+        )->getPage(
+            array(
+                'pageSize'=>10000,
+            )
+        );
+        $goods = $model["items"];
 
-        var_dump(Task::model()->testGood($good));
-
-        // var_dump(Task::model()->filter(1));
+        foreach ($goods as $i => $good) {
+            Task::model()->testGood($good);
+        }
     }
 
 }
