@@ -734,12 +734,35 @@ class Good extends GoodFilter
 		// print_r($result);
 	}
 
-	public function sold(){
+	public function sold($archive = true){
 		$this->archive = 1;
+		if($archive) {
+			$code = $this->fields_assoc[3]->value;
+			if($this->good_type_id != 3) {
+				$code = array_shift(explode("-", $code));
+				if($model = Good::model()->with("fields")->find("good_type_id=3 AND archive=0 AND fields.attribute_id=3 AND fields.varchar_value='".$code."'"))	
+					$model->sold(false);
+			} else {
+				if($model = Good::model()->with("fields")->find("good_type_id=2 AND archive=0 AND fields.attribute_id=3 AND fields.varchar_value='".$code."'"))	
+					$model->sold(false);
 
+				$code = array(
+					$code,
+					$code."-1",
+					$code."-2",
+					$code."-3",
+					$code."-4",
+					$code."-5"
+				);
+
+				if($model = Good::model()->with("fields")->findAll("good_type_id=1 AND archive=0 AND fields.attribute_id=3 AND fields.varchar_value IN (".implode(",",$code).")" ))
+					foreach ($model as $value) 
+						$value->sold(false);
+							
+			}
+		}
 		GoodAttribute::model()->deleteAll('good_id='.$this->id.' AND attribute_id IN (58,59,60,61)');
 		$this->updateAdverts();
-
 		return $this->save();
 	}
 
