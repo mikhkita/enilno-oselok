@@ -165,7 +165,7 @@ class Advert extends CActiveRecord
 			$criteria->select = $select;
 			$options['pagination'] = false;
 		} else {
-			$options['pagination'] = array('pageSize' => 50);
+			$options['pagination'] = array('pageSize' => 300);
 			$criteria->with = $with;
 		}
 

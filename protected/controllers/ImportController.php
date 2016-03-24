@@ -361,6 +361,8 @@ class ImportController extends Controller
 
 				$result = "success";
 				$message .= $goodCode;
+
+				Task::model()->testGood(Good::model()->with(array("type","fields.variant","fields.attribute"))->findByPk($id));
 			}else{
 				$result = "success";
 				$model = Good::model()->findByPk($_POST["IMPORT"]["ID"]);

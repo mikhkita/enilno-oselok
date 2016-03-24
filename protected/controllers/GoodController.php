@@ -183,43 +183,47 @@ class GoodController extends Controller
 
 		$model = $this->loadModel($id);
 		$result = $this->getAttr($model);
-		if(isset($_POST['Good_attr']))
+
+		if(isset($_POST['Good_attr']) || isset($_POST["to_task"]))
 		{
-			if( $attributes === NULL ){
-				GoodAttribute::model()->deleteAll("good_id=".$id);
-			}else{
-				GoodAttribute::model()->deleteAll("good_id=".$id." AND attribute_id IN ($attributes)");
-			}
-
-			$values = array();
-			foreach ($_POST['Good_attr'] as $attr_id => $value) {
-				if(!is_array($value) || isset($value['single']) ) {
-					$tmp = array("good_id"=>$id,"attribute_id"=>$attr_id,"int_value"=>NULL,"varchar_value"=>NULL,"float_value"=>NULL,"text_value"=>NULL,"variant_id"=>NULL);
-
-					$attr_type = $this->getAttrType($model,$attr_id);
-					if(!is_array($value) && $value != "" ){
-						$tmp[$attr_type] = $value;
-						$values[] = $tmp;
-					}else if(isset($value['single']) && $value['single']){
-						$tmp["variant_id"] = $value['single'];
-						$values[] = $tmp;
-					}
-				} else {
-					if(!empty($value))
-						foreach ($value as $variant)
-							$values[] = array("good_id"=>$id,"attribute_id"=>$attr_id,"int_value"=>NULL,"varchar_value"=>NULL,"float_value"=>NULL,"text_value"=>NULL,"variant_id"=>$variant);
+			if( isset($_POST['Good_attr']) ){
+				if( $attributes === NULL ){
+					GoodAttribute::model()->deleteAll("good_id=".$id);
+				}else{
+					GoodAttribute::model()->deleteAll("good_id=".$id." AND attribute_id IN ($attributes)");
 				}
+
+				$values = array();
+				foreach ($_POST['Good_attr'] as $attr_id => $value) {
+					if(!is_array($value) || isset($value['single']) ) {
+						$tmp = array("good_id"=>$id,"attribute_id"=>$attr_id,"int_value"=>NULL,"varchar_value"=>NULL,"float_value"=>NULL,"text_value"=>NULL,"variant_id"=>NULL);
+
+						$attr_type = $this->getAttrType($model,$attr_id);
+						if(!is_array($value) && $value != "" ){
+							$tmp[$attr_type] = $value;
+							$values[] = $tmp;
+						}else if(isset($value['single']) && $value['single']){
+							$tmp["variant_id"] = $value['single'];
+							$values[] = $tmp;
+						}
+					} else {
+						if(!empty($value))
+							foreach ($value as $variant)
+								$values[] = array("good_id"=>$id,"attribute_id"=>$attr_id,"int_value"=>NULL,"varchar_value"=>NULL,"float_value"=>NULL,"text_value"=>NULL,"variant_id"=>$variant);
+					}
+				}
+				if( count($values) )
+					$this->insertValues(GoodAttribute::tableName(),$values);
+
+				$this->checkAdverts($model);
+				$model->updateAdverts();
+
+				Good::updateAuctionLinks();
 			}
-			$this->insertValues(GoodAttribute::tableName(),$values);
-
-			$this->checkAdverts($model);
-			$model->updateAdverts();
-
-			Good::updateAuctionLinks();
 
 			Task::model()->testGood($this->loadModel($model->id));
 
-			if( isset($_GET["to_task"]) ){
+			if( isset($_POST["to_task"]) ){
 				$this->redirect( Yii::app()->createUrl('task/adminindex', array('partial' => true)) );
 			}else{
 				$this->redirect( Yii::app()->createUrl('good/adminindex',array('good_type_id'=>$good_type_id,'partial'=>true,'GoodFilter_page' => $_GET["GoodFilter_page"])) );

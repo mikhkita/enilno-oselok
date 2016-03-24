@@ -151,6 +151,11 @@ class KolesoOnlineController extends Controller
 					"LABEL" => "Центральное отверстие",
 					"UNIT" => ' мм.'
 				),
+				"WEIGHT" => array(
+					"ID" => 34,
+					"LABEL" => "Масса одного диска",
+					"UNIT" => ' кг.'
+				),
 				"YEAR" => array(
 					"ID" => 10,
 					"LABEL" => "Год выпуска",
@@ -268,6 +273,11 @@ class KolesoOnlineController extends Controller
 					"ID" => 26,
 					"LABEL" => "Состояние товара",
 					"UNIT" => ' '
+				),
+				"WEIGHT" => array(
+					"ID" => 34,
+					"LABEL" => "Масса одного диска",
+					"UNIT" => ' кг.'
 				),
 				"YEAR" => array(
 					"ID" => 10,

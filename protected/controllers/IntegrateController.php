@@ -966,31 +966,113 @@ class IntegrateController extends Controller
 
         $goods = Good::getIdbyCode($codes, array($good_type_id));
 
-        print_r($goods);
+        // print_r($goods);
 
         $values = array();
         foreach ($links as $key => $item) {
-            $tmp = array(
-                "good_id" => $goods[$item->title],
-                "place_id" => $places[$good_type_id],
-                "url" => $item->link,
-                "type_id" => $types[$item->type],
-                "city_id" => 1081
-            );
-            array_push($values, $tmp);
+            if( $advert = Advert::model()->find("good_id='".$goods[$item->title]."' AND place_id='".$places[$good_type_id]."' AND type_id='".$types[$item->type]."' AND city_id='1081'") ){
+                $advert->url = $item->link;
+                $advert->save();
+
+                Queue::model()->deleteAll("advert_id='".$advert->id."' AND action_id='1'");
+            }else{
+                $tmp = array(
+                    "good_id" => $goods[$item->title],
+                    "place_id" => $places[$good_type_id],
+                    "url" => $item->link,
+                    "type_id" => $types[$item->type],
+                    "city_id" => 1081
+                );
+                array_push($values, $tmp);
+            }
         }
-        $this->insertValues(Advert::tableName(), $values);
+        if( count($values) ){
+            print_r($values);
+            $this->insertValues(Advert::tableName(), $values);
+        }
 
         $values = array();
         foreach ($links as $key => $item) {
-            $tmp = array(
-                "good_id" => $goods[$item->title],
-                "attribute_id" => $attrs[$item->type],
-                "variant_id" => 1081,
-            );
-            array_push($values, $tmp);
+            if( !GoodAttribute::model()->count("good_id='".$goods[$item->title]."' AND attribute_id='".$attrs[$item->type]."' AND variant_id='1081'") ){
+                $tmp = array(
+                    "good_id" => $goods[$item->title],
+                    "attribute_id" => $attrs[$item->type],
+                    "variant_id" => 1081,
+                );
+                array_push($values, $tmp);
+            }
         }
-        $this->insertValues(GoodAttribute::tableName(), $values);        
+        if( count($values) ){
+            print_r($values);
+            $this->insertValues(GoodAttribute::tableName(), $values);        
+        }
+    }
+
+    public function actionDelete70(){
+        $places = array( 1 => 9, 2 => 10 );
+        $names = array( 1 => "tire", 2 => "disc" );
+        $types = array( 1 => "2129", 2 => "868" );
+        $attrs = array( 1 => 61, 2 => 59);
+        $good_type_id = 2;
+        $drom = new Drom();
+
+        $links = $drom->parseAllItems("http://baza.drom.ru/user/wheels70/wheel/".$names[$good_type_id]."/", "848235", false, true, true);
+
+        $codes = array();
+        foreach ($links as $key => $item) {
+            $item->title = array_shift(explode(" ",substr($item->title, 1)));
+            array_push($codes, $item->title);
+        }
+
+        $goods = Good::getIdbyCode($codes, array($good_type_id));
+
+        // print_r($goods);
+
+        $values = array();
+        foreach ($links as $key => $item) {
+            if( $advert = Advert::model()->find("url='".$item->link."'") ){
+                // $advert->url = $item->link;
+                // $advert->save();
+
+                // Queue::model()->deleteAll("advert_id='".$advert->id."' AND action_id='1'");
+            }else{
+                echo "delete: ".$item->link."<br>";
+                // $tmp = array(
+                //     "good_id" => $goods[$item->title],
+                //     "place_id" => $places[$good_type_id],
+                //     "url" => $item->link,
+                //     "type_id" => $types[$item->type],
+                //     "city_id" => 1081
+                // );
+                // array_push($values, $tmp);
+            }
+        }
+        // if( count($values) ){
+        //     print_r($values);
+        //     $this->insertValues(Advert::tableName(), $values);
+        // }
+
+        // $account = $this->getDromAccount("wheels70");
+        // $place = new Drom( NULL );
+        // $place->setUser($account->login, $account->password);
+        // $place->auth();
+        // $result = $place->deleteAdvert( (($place_name == "AVITO")?$advert->link:$advert->url) );
+
+        // $values = array();
+        // foreach ($links as $key => $item) {
+        //     if( !GoodAttribute::model()->count("good_id='".$goods[$item->title]."' AND attribute_id='".$attrs[$item->type]."' AND variant_id='1081'") ){
+        //         $tmp = array(
+        //             "good_id" => $goods[$item->title],
+        //             "attribute_id" => $attrs[$item->type],
+        //             "variant_id" => 1081,
+        //         );
+        //         array_push($values, $tmp);
+        //     }
+        // }
+        // if( count($values) ){
+        //     print_r($values);
+        //     $this->insertValues(GoodAttribute::tableName(), $values);        
+        // }
     }
 // Остальное ------------------------------------------------------------- Остальное
 
@@ -1012,6 +1094,13 @@ class IntegrateController extends Controller
         foreach ($goods as $i => $good) {
             Task::model()->testGood($good);
         }
+    }
+
+    public function actionDromReg(){
+        $place = new Drom( "admin:4815162342@82.146.35.208:1212" );
+        $place->setUser("5069820", "y23u2e62");
+        $res = $place->auth();
+        $place->registration();
     }
 
 }

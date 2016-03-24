@@ -174,7 +174,7 @@ class Task extends CActiveRecord
 	}
 
 	public function testGood($good){
-		if( isset($good->fields_assoc[27]) && $good->fields_assoc[27]->value != 1056 ) return true;
+		if( is_object($good->fields_assoc[27]) && $good->fields_assoc[27]->variant_id != 1056 ) return true;
 		$params = $this->getParams($good->good_type_id);
 
 		// Проверка первичных атрибутов
@@ -186,12 +186,15 @@ class Task extends CActiveRecord
 			Task::remove($good->id, "necessary");
 		}
 
+
 		// Проверка цены
 		$not_exist = $this->checkFields($good, $params->price);
 		$price_exist = count($not_exist)?false:true;
 		if( !$price_exist ){
 			if( $necessary_exist ){
 				Task::add($good->id, "price", implode(",", $not_exist));
+			}else{
+				Task::edit($good->id, "price", implode(",", $not_exist));
 			}
 		}else{
 			Task::remove($good->id, "price");
@@ -200,10 +203,12 @@ class Task extends CActiveRecord
 		$required = $this->getRequired($good->good_type_id);
 
 		// Проверка обязательных атрибутов
-		$not_exist = $this->checkFields($good, $required);
+		$not_exist = $this->checkFields($good, array_diff($required, $params->price, $params->necessary));
 		if( count($not_exist) ){
 			if( $necessary_exist && $price_exist ) {
 				Task::add($good->id, "required", implode(",", $not_exist));
+			}else{
+				Task::edit($good->id, "required", implode(",", $not_exist));
 			}
 		}else{
 			Task::remove($good->id, "required");
@@ -251,7 +256,7 @@ class Task extends CActiveRecord
 		$action = Task::getAction($action);
 
 		if( $task = Task::model()->find("good_id=$good_id AND action_id=".$action->id) ){
-			if( $data === NULL )
+			if( !$data && (!isset($task->data) || !$task->data) )
 				return $task->id;
 		}else{
 			$task = new Task;
@@ -260,13 +265,25 @@ class Task extends CActiveRecord
 			$task->user_id = $action->user_id;
 		}
 		
-		if( $data )
-			$task->data = json_encode($data);
+		$task->data = ($data === NULL)?$data:json_encode($data);
 
 		if( $task->save() )
 			return $task->id;
 		
 		return false;
+	}
+
+	public function edit($good_id, $action, $data = NULL){
+		$action = Task::getAction($action);
+
+		if( $task = Task::model()->find("good_id=$good_id AND action_id=".$action->id) ){
+			$task->data = ($data === NULL)?$data:json_encode($data);
+
+			if( $task->save() )
+				return $task->id;
+
+			return false;
+		}
 	}
 
 	public function remove($good_id, $action){

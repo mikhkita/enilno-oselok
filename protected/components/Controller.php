@@ -849,7 +849,7 @@ class Controller extends CController
         $region = intval(DictionaryVariant::model()->find("dictionary_id=138 AND attribute_1='$city_id'")->value);
         $row = DesktopTableCell::model()->find("col_id=120 AND int_value=$region");
         $row = ($row) ? $row : DesktopTableCell::model()->find("col_id=120 AND int_value=70");
-        $phone = DesktopTableCell::model()->find("col_id=119 AND row_id=".$row->row_id)->varchar_value;
+        $phone = DesktopTableCell::model()->find("col_id=119 AND row_id='".$row->row_id."'")->varchar_value;
         
         $in = DictionaryVariant::model()->find("attribute_1='$city_id' AND dictionary_id=126");
         Yii::app()->params["city"] = (object) array(

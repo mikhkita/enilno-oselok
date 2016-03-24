@@ -568,6 +568,10 @@ Class Drom {
     public function self(){
         return new Drom();
     }
+
+    public function registration(){
+        print_r( iconv('windows-1251', 'utf-8', $this->curl->request("http://baza.drom.ru/personal/email_confirmation_request")) );
+    }
 }
 
 ?>
