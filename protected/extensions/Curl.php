@@ -6,13 +6,13 @@ Class Curl {
     public $ip = NULL;
 
     function __construct($ip = NULL) {
+        if($ip !== NULL) $this->ip = $ip;
         $this->cookie = md5(rand().time());
         $this->removeCookies();
-        if($ip !== NULL) 
-            $this->ip = $ip;
+        
     }
 
-    public function request($url,$post = NULL){
+    public function request($url = NULL,$post = NULL){
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
@@ -25,19 +25,18 @@ Class Curl {
         //     curl_setopt($ch, CURLOPT_PROXY, $this->proxy_ip);
         //     curl_setopt($ch, CURLOPT_PROXYUSERPWD, $this->proxy_login); 
         // }
-        if (!is_dir(dirname(__FILE__).'/cookies')) mkdir(dirname(__FILE__).'/cookies',0777, true);
-        
+
+        if($this->ip) {
+            curl_setopt($ch, CURLOPT_URL, "http://".$this->ip."/redirect.php");
+            if($post) {
+                $post['cookie'] = $this->cookie;
+            } else $post = array("cookie" => $this->cookie);
+            if($url) $post['url'] = $url;
+            
+        } else {
+            if (!is_dir(dirname(__FILE__).'/cookies')) mkdir(dirname(__FILE__).'/cookies',0777, true);
             curl_setopt($ch, CURLOPT_COOKIEJAR, dirname(__FILE__).'/cookies/'.$this->cookie.'.txt');
             curl_setopt($ch, CURLOPT_COOKIEFILE,  dirname(__FILE__).'/cookies/'.$this->cookie.'.txt');
-        
-        if($this->ip) {
-            curl_setopt($ch, CURLOPT_URL, "http://".$ip."/redirect.php");
-            if($post) {
-                $post['url'] = $url;
-            } else {
-                $post = array("url" => $url);
-            }
-            $post['cookie'] = $this->cookie;
         }
         if( $post !== NULL ){
             curl_setopt($ch, CURLOPT_POST, 1);
@@ -89,13 +88,16 @@ Class Curl {
 
     public function changeCookies($login){
         $this->removeCookies();
-        
         $this->cookie = md5($login);
     }
 
     public function removeCookies(){
-        if( file_exists(dirname(__FILE__).'/cookies/'.$this->cookie.'.txt') )
-            unlink(dirname(__FILE__).'/cookies/'.$this->cookie.'.txt');
+        if($this->ip) {
+            $this->request(NULL,array("remove" => 1));
+        } else {
+            if( file_exists(dirname(__FILE__).'/cookies/'.$this->cookie.'.txt') )
+                unlink(dirname(__FILE__).'/cookies/'.$this->cookie.'.txt');
+        }
     }
 }
 

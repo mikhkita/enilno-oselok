@@ -228,15 +228,8 @@ class DromController extends Controller
     }
     public function actionAdminVlad(){
 
-        $Curl = new Curl();
-        $photodoska = new Photodoska();
-        $params = array(
-            'url' => 'http://photodoska.ru/?a=auth',
-            'data53' => $photodoska->login,
-            'data84' => $photodoska->password
-        );
-
-        print_r($Curl->request("http://82.146.35.208/redirect.php",$params));
+        $photodoska = new Photodoska("82.146.35.208");
+        print_r($photodoska->auth());
         // include_once Yii::app()->basePath.'/extensions/simple_html_dom.php';
         // $drom = new Drom();
         // $html = file_get_html('http://hramy.ru/regions/city_abc.htm');
