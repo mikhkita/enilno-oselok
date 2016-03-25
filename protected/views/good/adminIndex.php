@@ -14,7 +14,7 @@
 		</div>
 		<ul class="b-section-menu clearfix left">
 			<li><a href="<?php echo $this->createUrl('/good/admincreate',array('good_type_id'=> $_GET["good_type_id"] ))?>" class="ajax-form ajax-create">+</a></li>
-			<li><span href="<?php echo Yii::app()->createUrl('/good/adminviewsettings',array('good_type_id'=>$_GET["good_type_id"],'filter' => true))?>" class="ajax-form ajax-update b-tool b-tool-settings" title="Настройки отображения"></span><a href="#" class="fancy" data-block=".b-popup-filter">Фильтр</a></li>
+			<li><span href="<?php echo Yii::app()->createUrl('/good/adminviewsettings',array('good_type_id'=>$_GET["good_type_id"],'goodFilter' => true))?>" class="ajax-form ajax-update b-tool b-tool-settings" title="Настройки отображения"></span><a href="#" class="fancy" data-block=".b-popup-filter">Фильтр</a></li>
 			<li><a>Выделить</a>
 				<ul class="b-section-submenu">
 					<li><a href="<?php echo $this->createUrl('/good/adminaddallcheckbox',array('good_type_id'=> $_GET["good_type_id"]))?>" class="b-sess-allcheckbox">Все</a></li>

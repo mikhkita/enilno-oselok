@@ -1130,9 +1130,9 @@ class GoodController extends Controller
 		return $cities;
 	}
 
-	public function actionAdminViewSettings($good_type_id = NULL,$filter = false){
+	public function actionAdminViewSettings($good_type_id = NULL,$goodFilter = false){
 		if( $good_type_id ){
-			$filter = ($filter) ? "GOOD_TYPE_FILTER_".$good_type_id : "GOOD_TYPE_".$good_type_id;
+			$filter = ($goodFilter) ? "GOOD_TYPE_FILTER_".$good_type_id : "GOOD_TYPE_".$good_type_id;
 			$fields = (isset($_POST["view_fields"])) ? $_POST["view_fields"] : array();
 			if( isset($_POST["submit"]) ){
 				$this->setUserParam($filter,$fields);

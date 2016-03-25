@@ -701,6 +701,12 @@ class KolesoOnlineController extends Controller
 		}
 	}
 
+	public function actionBasket($id = NULL)
+	{
+		if(!isset($_SESSION)) session_start();
+		$good = Good::model()->with("type","fields.variant","fields.attribute")->findByPk($good->id);
+		if(isset($_SESSION["BASKET"])) array_push($_SESSION["BASKET"], $id);
+	}
 	public function getCodeFromUrl($url){
 		$arr = explode("-", $url);
 		if(!count($arr)) return NULL;
