@@ -520,18 +520,25 @@ class Controller extends CController
         }
     }
 
+    public function dromIncCount($account){
+        if( isset($account->count) )
+            DesktopTableCell::model()->updateAll(array("int_value" => $account->count+1), "row_id='".$account->row_id."' AND col_id='121'" );
+    }
+
     public function getDromAccount($login = NULL){
         $cols = array(
             46 => "login",
             47 => "password",
             48 => "phone",
-            114 => "proxy"
+            114 => "ip",
+            121 => "count",
+            122 => "photo",
         );
         $cells = DesktopTableCell::model()->with(array("row.cells"))->findAll("row.table_id=12".(($login)?" AND t.varchar_value='$login'":""));
         if( $cells ){
             $out = array();
             foreach ($cells as $i => $cell) {
-                $one_cell = array();
+                $one_cell = array("row_id" => $cell->row->id);
                 foreach ($cell->row->cells as $key => $cell)
                     $one_cell[$cols[$cell->col_id]] = $cell->value;
                 $out[$one_cell["login"]] = (object) $one_cell;
