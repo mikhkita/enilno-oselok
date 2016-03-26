@@ -35,7 +35,7 @@ class DromUserParseController extends Controller
 
         if($_POST['user'] && $_POST['good_types']) {
             include_once Yii::app()->basePath.'/extensions/simple_html_dom.php';
-            $curl = new Curl;
+            $curl = new Curl();
             $html = str_get_html(iconv('windows-1251', 'utf-8',$curl->request('http://baza.drom.ru/user/'.trim($_POST['user']))));
             $user_id = $html->find(".userProfile",0) ? $html->find(".userProfile",0)->getAttribute('data-view-dir-user-id') : NULL;
             $curl->removeCookies();
@@ -44,8 +44,13 @@ class DromUserParseController extends Controller
                 if(!$model) {
                     if($variant_id = Variant::add(43,$user_id)) {
                         $user_name = trim($html->find("span.userNick",0)->plaintext);
+                        if(!Dictionary::add(139,$variant_id,1)) return false;
                         if($user_id != $user_name) Dictionary::add(41,$variant_id,$user_name);
                     } else return false;
+                } else {
+                    $parse = DictionaryVariant::model()->find("dictionary_id=139 AND attribute_1='".$model->variants[0]->variant_id."'");
+                    $parse->value = 1;
+                    if(!$parse->save()) return false;
                 }
                	$drom = new Drom(); 	
 		        foreach ($_POST['good_types'] as $good_type_id) {

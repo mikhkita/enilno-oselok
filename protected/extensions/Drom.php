@@ -311,65 +311,67 @@ Class Drom {
         $restore_count = 0;
 
         foreach ($Users as $user) {
-            $good_type = 1;
-            foreach ($wheel_array as $type) {
-                $model = Good::model()->filter(
-                    array(
-                        "good_type_id"=>$good_type,
-                        "archive" => 'all',
-                        "attributes"=>array(
-                            43 => array($user->variant_id)
-                        )
-                    )
-                )->getPage(
-                    array(
-                        'pageSize'=>10000,
-                    )
-                );
-                   
-                if($model = $model['items']) {
-                    $goods = array();
-                    $links = array();
-                    $drom_ids = $this->parseAllItems('http://baza.drom.ru/user/'.$user->variant->value.'/wheel/'.$type, $user->variant->value, false,true);
-                    $drom_ids = ($drom_ids) ? $drom_ids : array(); 
+        	if(DictionaryVariant::model()->find("dictionary_id=139 AND attribute_1='".$user->variant_id."' AND value=1")) {
+	            $good_type = 1;
+	            foreach ($wheel_array as $type) {
+	                $model = Good::model()->filter(
+	                    array(
+	                        "good_type_id"=>$good_type,
+	                        "archive" => 'all',
+	                        "attributes"=>array(
+	                            43 => array($user->variant_id)
+	                        )
+	                    )
+	                )->getPage(
+	                    array(
+	                        'pageSize'=>10000,
+	                    )
+	                );
+	                   
+	                if($model = $model['items']) {
+	                    $goods = array();
+	                    $links = array();
+	                    $drom_ids = $this->parseAllItems('http://baza.drom.ru/user/'.$user->variant->value.'/wheel/'.$type, $user->variant->value, false,true);
+	                    $drom_ids = ($drom_ids) ? $drom_ids : array(); 
 
-                    foreach ($model as $key => $item) {
-                        $code = str_replace(".html","", array_pop(explode("/", $item->fields_assoc[106]->value)));
-                        array_push($goods, $code);
-                        if(array_search($code, $drom_ids) === false) {
-                            if($archive = Good::model()->with(array("type","fields.variant","fields.attribute"))->find("t.id=".$key." AND t.archive=0")) {
-                                if($archive->sold()) {
-                                    Log::debug("Удаление товара ".$archive->fields_assoc[3]->value);
-                                    $delete_count++;
-                                }
-                            }
-                        } else {
-                            if($item->archive) {
-                                $item->archive = 0;
-                                if($item->save()) {
-                                    Log::debug("Восстановление товара ".$item->fields_assoc[3]->value);
-                                    $restore_count++;
-                                }  
-                            }
-                        }
-                    }
+	                    foreach ($model as $key => $item) {
+	                        $code = str_replace(".html","", array_pop(explode("/", $item->fields_assoc[106]->value)));
+	                        array_push($goods, $code);
+	                        if(array_search($code, $drom_ids) === false) {
+	                            if($archive = Good::model()->with(array("type","fields.variant","fields.attribute"))->find("t.id=".$key." AND t.archive=0")) {
+	                                if($archive->sold()) {
+	                                    Log::debug("Удаление товара ".$archive->fields_assoc[3]->value);
+	                                    $delete_count++;
+	                                }
+	                            }
+	                        } else {
+	                            if($item->archive) {
+	                                $item->archive = 0;
+	                                if($item->save()) {
+	                                    Log::debug("Восстановление товара ".$item->fields_assoc[3]->value);
+	                                    $restore_count++;
+	                                }  
+	                            }
+	                        }
+	                    }
 
-                    foreach ($drom_ids as $key => $code) {
-                        if(array_search($code, $goods) === false) {
-                        	$link = "http://".Yii::app()->params['ip'].Controller::createUrl('/dromUserParse/parse',array('page'=> 'http://baza.drom.ru/'.$code,'user_id' => $user->variant->value));
-                        	if(Cron::model()->count("link='".addslashes($link)."'")) {
-								Log::debug("Объявление ".$code." уже добавлено в очередь на парсинг");	
-							} else {
-                                Log::debug("Товар добавлен в очередь на парсинг ".$link);
-                                array_push($links, $link);     
-                            }
-                        }
-                    }
-                    Cron::addAll($links);    
-                    $add_count += count($links);
-                }
-                $good_type++;
-            }     
+	                    foreach ($drom_ids as $key => $code) {
+	                        if(array_search($code, $goods) === false) {
+	                        	$link = "http://".Yii::app()->params['ip'].Controller::createUrl('/dromUserParse/parse',array('page'=> 'http://baza.drom.ru/'.$code,'user_id' => $user->variant->value));
+	                        	if(Cron::model()->count("link='".addslashes($link)."'")) {
+									Log::debug("Объявление ".$code." уже добавлено в очередь на парсинг");	
+								} else {
+	                                Log::debug("Товар добавлен в очередь на парсинг ".$link);
+	                                array_push($links, $link);     
+	                            }
+	                        }
+	                    }
+	                    Cron::addAll($links);    
+	                    $add_count += count($links);
+	                }
+	                $good_type++;
+	            } 
+	        }    
         }
         $this->curl->removeCookies();
         Log::debug("Добавлено товаров: ".$add_count);
@@ -425,7 +427,7 @@ Class Drom {
                 $model = Attribute::model()->with('variants.variant')->find("attribute_id=43 AND value=".$user_id);
                 if(!$model) {
                     if($variant_id = Variant::add(43,$user_id)) {
-                        Dictionary::add(41,$variant_id,$user_name);
+                        if(!Dictionary::add(139,$variant_id,0)) return false;
                         $user_name = trim($html->find("span.userNick",0)->plaintext);
                         if($user_id != $user_name) Dictionary::add(41,$variant_id,$user_name);
                     } else return false;
