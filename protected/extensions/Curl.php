@@ -32,8 +32,8 @@ Class Curl {
                 $post['cookie'] = $this->cookie;
             } else $post = array("cookie" => $this->cookie);
             if($url) $post['url'] = $url;
-            
         } else {
+            curl_setopt($ch, CURLOPT_URL, $url);
             if (!is_dir(dirname(__FILE__).'/cookies')) mkdir(dirname(__FILE__).'/cookies',0777, true);
             curl_setopt($ch, CURLOPT_COOKIEJAR, dirname(__FILE__).'/cookies/'.$this->cookie.'.txt');
             curl_setopt($ch, CURLOPT_COOKIEFILE,  dirname(__FILE__).'/cookies/'.$this->cookie.'.txt');
