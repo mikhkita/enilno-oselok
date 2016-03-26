@@ -209,18 +209,18 @@ class IntegrateController extends Controller
 
 // Дром ------------------------------------------------------------------ Дром
     public function actionDromUp(){
-        Log::debug("Начало автоподнятия дром");
-        $drom = new Drom();
+        // Log::debug("Начало автоподнятия дром");
+        // $drom = new Drom();
         
 
-        $users = $this->getDromAccount();
+        // $users = $this->getDromAccount();
 
-        foreach ($users as $user) {
-            $drom->setUser($user->login,$user->password);
-            $drom->upAdverts();
-        }
+        // foreach ($users as $user) {
+        //     $drom->setUser($user->login,$user->password);
+        //     $drom->upAdverts();
+        // }
 
-        Log::debug("Кончало автоподнятия дром");
+        // Log::debug("Кончало автоподнятия дром");
     }
 
     public function actionDromParseAll(){
@@ -388,35 +388,29 @@ class IntegrateController extends Controller
         $this->doQueueNext($debug, 2048);
     }
 
-    // public function actionQueueNextAvito1($debug = false){
-    //     sleep(5);
-    //     $this->doQueueNext($debug, 2048, "1");
-    // }
-
-    // public function actionQueueNextAvito2($debug = false){
-    //     sleep(10);
-    //     $this->doQueueNext($debug, 2048, "2");
-    // }
-
     public function actionQueueNextDrom($debug = false){
         $this->doQueueNext($debug, 2047);
     }
 
     public function doQueueNext($debug = false,$category_id,$nth = ""){
-        if( !$this->checkQueueAccess($category_id, $nth) && !$debug ) return true;
+        if( (!$this->checkQueueAccess($category_id, $nth) && !$debug) || !$this->checkTime() ) return true;
 
-        while( $this->allowed($category_id) || $debug ){
-            // if( $category_id == 2048 )
-            //     $this->setParam( "AVITO", "CITY".$nth, "0" );
-
+        while( ($this->allowed($category_id) && $this->checkTime()) || $debug ){
             $this->writeTime($category_id, $nth);
             if( !$this->getNext($category_id, $nth) ){
                 sleep(5);
+            }else{
+                if( !$debug ) sleep(rand(40,180));
             }
-            sleep(rand(30,50));
               
             if( $debug ) return true;
         }
+    }
+
+    public function checkTime(){
+        $date = (object) getdate();
+        if( $date->hours >= 1 && $date->hours < 7 ) return false;
+        return true;
     }
 
     public function writeTime($category_id, $nth = ""){
@@ -434,16 +428,8 @@ class IntegrateController extends Controller
     }
 
     public function getNext($category_id, $nth = ""){
-        // if( $category_id == 2048 ){
-        //     $queue = Queue::getNext($category_id, array(
-        //         $this->getParam( "AVITO", "CITY", true ),
-        //         $this->getParam( "AVITO", "CITY1", true ),
-        //         $this->getParam( "AVITO", "CITY2", true )
-        //     ));
-        //     $this->setParam( "AVITO", "CITY".$nth, $queue->advert->city_id );
-        // }else{
-            $queue = Queue::getNext($category_id);
-        // }
+        die();
+        $queue = Queue::getNext($category_id);
 
         if( !$queue ) return false;
         $advert = $queue->advert;
@@ -472,13 +458,15 @@ class IntegrateController extends Controller
             if( $fields["title"] == "not unique" || $fields["description"] == "not unique" )return true;
         }
 
-        printf('<br>2Прошло %.4F сек.<br>', microtime(true) - $start); 
-
-
-        $images = $this->getImages($advert->good);
         if( $place_name == "DROM" ){
             $account = $this->getDromAccount($fields["login"]);
-            $place = new Drom( (isset($account->proxy) && $account->proxy != "")?$account->proxy:NULL );
+
+            if( $advert->type_id == 869 && isset($account->count) && $account->count >= 50 ){
+                $queue->setState("limit");
+                return false;
+            }
+
+            $place = new Drom( (isset($account->ip) && $account->ip != "")?$account->ip:NULL );
             $fields["contacts"] = $account->phone;
         }else if( $place_name == "AVITO" ){
             $account = $this->getAvitoAccount($fields["login"]);
@@ -488,11 +476,17 @@ class IntegrateController extends Controller
             $fields["seller_name"] = $account->name;
         }
 
-
         if( !$account ){
             Log::error("Не найден пользователь с логином \"".$fields["login"]."\"");
             $queue->setState("error");
             return true;
+        }
+
+        $images = $this->getImages($advert->good, NULL, false, (($account->photo == 2)?true:false) );
+
+        if( !count($images) ){
+            $queue->setState("noImages");
+            return false;
         }
 
         $fields = $place->generateFields($fields,$advert->good->good_type_id);
@@ -510,7 +504,6 @@ class IntegrateController extends Controller
                 // if( $advert->type_id == 869 ){
                     Log::debug("Удаление ".$advert->good->fields_assoc[3]->value." в аккаунте ".$account->login);
                     $result = $place->deleteAdvert( (($place_name == "AVITO")?$advert->link:$advert->url) );
-                    // $result = $place->deleteAdvert( $advert->url );
                     if( $result )
                         $advert->delete();
                 // }else{
@@ -595,6 +588,8 @@ class IntegrateController extends Controller
                     $unique_arr[$u] = $fields[$i];
 
                 $advert->replaceUnique($unique_arr);
+            }else if( $place_name == "DROM" && $advert->type_id == 869 && $queue->action->code == "add" ){
+                $this->dromIncCount($account);
             }
             // echo "Успешно";
             Log::debug("Действие над ".$advert->good->fields_assoc[3]->value." в аккаунте ".$account->login." прошло успешно");
@@ -634,6 +629,18 @@ class IntegrateController extends Controller
     public function actionDromParse(){
         $drom = new Drom();
         $drom->parseUser();
+    }
+
+    public function actionResetLimit(){
+        $rows = DesktopTableRow::model()->findAll("table_id=12");
+        $ids = array();
+        foreach ($rows as $i => $row)
+            array_push($ids, $row->id);
+
+        if( count($ids) )
+            DesktopTableCell::model()->updateAll(array("int_value" => 0), "row_id IN (".implode(",", $ids).") AND col_id=121");
+
+        Queue::model()->updateAll(array("state_id" => 1),"state_id=9");
     }
 // Выкладка -------------------------------------------------------------- Выкладка
 
@@ -1103,4 +1110,20 @@ class IntegrateController extends Controller
         $place->registration();
     }
 
+    public function actionDromCheck(){
+        $place = new Drom( "82.146.35.208" );
+        $place->setUser("5069820", "y23u2e62");
+        $res = $place->auth();
+        print_r( iconv('windows-1251', 'utf-8', $place->curl->request("http://baza.drom.ru/tomsk/wheel/tire/b-u-letnjaja-para-yokohama-dna-ecos-es300-215-40-17-japonija-43479729.html")) );
+    }
+
+    public function actionKsk(){
+        $place = new Drom();
+        $links = $place->parseAllItems("http://baza.drom.ru/user/ksknik/wheel/disk/", "270426", false, false, true);
+
+        $titles = array();
+        foreach ($links as $key => $item) {
+            echo $item->title."<br>";
+        }
+    }
 }

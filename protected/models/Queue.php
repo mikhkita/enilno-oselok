@@ -29,7 +29,9 @@ class Queue extends CActiveRecord
 		"freeze" => 4,
 		"titleNotUnique" => 5,
 		"textNotUnique" => 6,
-		"partner" => 7
+		"partner" => 7,
+		"noImages" => 8,
+		"limit" => 9
 	);
 
 	/**
