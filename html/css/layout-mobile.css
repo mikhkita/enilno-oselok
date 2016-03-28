@@ -763,9 +763,10 @@ padding-top: 30px;}
 	border-bottom: 0px;
 	padding-top: 30px;
 }		
-.goods {
-
-width: 712px;margin-left: -12px;}
+// .goods {
+// 	width: 712px;
+// 	margin-left: -12px;
+// }
 	.goods .gradient-grey {
 		float: left;
 		width: 337px !important;
@@ -1334,6 +1335,10 @@ width: 712px;margin-left: -12px;}
 .good-detail {
 
 }
+	.good-detail .goods{
+		width: 712px;
+		margin-left: -12px;
+	}
 	.good-detail .b-block {
 		padding: 30px 0;
 	}
