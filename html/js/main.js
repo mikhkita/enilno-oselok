@@ -85,13 +85,14 @@ $(document).ready(function(){
     $('body').bind('touchmove', whenScroll);
     whenScroll();
 
-    $( document ).mouseleave(function() {
-        if(!$.cookie('exitPopup')) {
-            $("span.exit").click();
-            $.cookie('exitPopup',1,{ expires: 30});  
-        }
-    });
-    
+    if( !isMobile ){
+        $( document ).mouseleave(function() {
+            if(!$.cookie('exitPopup')) {
+                $("span.exit").click();
+                $.cookie('exitPopup',1,{ expires: 30});  
+            }
+        });
+    }
     $(window).load(function() {
         var i = 0;
         $(".after-load-back").each(function(){
