@@ -339,21 +339,21 @@ Class Drom {
 	                        array_push($goods, $code);
 	                        if(array_search($code, $drom_ids) === false) {
 	                            if($archive = Good::model()->with(array("type","fields.variant","fields.attribute"))->find("t.id=".$key." AND t.archive=0")) {
-	                                if($archive->sold()) {
+	                                if($archive->sold(false,2)) {
 	                                    Log::debug("Удаление товара ".$archive->fields_assoc[3]->value);
 	                                    $delete_count++;
 	                                }
 	                            }
 	                        } 
-                         //    else {
-	                        //     if($item->archive) {
-	                        //         $item->archive = 0;
-	                        //         if($item->save()) {
-	                        //             Log::debug("Восстановление товара ".$item->fields_assoc[3]->value);
-	                        //             $restore_count++;
-	                        //         }  
-	                        //     }
-	                        // }
+                            else {
+	                            if($item->archive == 2) {
+	                                $item->archive = 0;
+	                                if($item->save()) {
+	                                    Log::debug("Восстановление товара ".$item->fields_assoc[3]->value);
+	                                    $restore_count++;
+	                                }  
+	                            }
+	                        }
 	                    }
 
 	                    foreach ($drom_ids as $key => $code) {

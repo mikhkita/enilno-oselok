@@ -228,44 +228,10 @@ class DromController extends Controller
     }
     public function actionAdminVlad(){
 
-        $curl = new Curl();
+        $vk = new Vk();
         
-        $url = (json_decode($curl->request("https://api.vk.com/method/photos.getMarketUploadServer?group_id=118079986&main_photo=1&v=5.50&access_token=5bafda61f16ad372a8e79d39b2090d0eaa03576846f16f8cb4e672ba9aea1dd55a7c08a997eb512b8fde9")));
-        print_r($url);
+        print_r($vk->addAdvert(false,array(1,2,3,4)));
         die();
-        $asd = $curl->request($url,array("file" => new CurlFile(Yii::app()->basePath."/1.jpg") ));
-        $asd = json_decode($asd);
-        // print_r($asd);
-        $photo = $asd->photo;
-        $server = $asd->server;
-        $hash = $asd->hash;
-        $crop_hash = $asd->crop_hash;
-        $crop_data = $asd->crop_data;
-        $photo = $curl->request("https://api.vk.com/method/photos.saveMarketPhoto?group_id=118079986&photo=$photo&server=$server&hash=$hash&crop_hash=$crop_hash&crop_data=$crop_data&access_token=5bafda61f16ad372a8e79d39b2090d0eaa03576846f16f8cb4e672ba9aea1dd55a7c08a997eb512b8fde9");
-        $photo = json_decode($photo);
-        $photo_main = $photo->response[0]->pid;
-        $url = (json_decode($curl->request("https://api.vk.com/method/photos.getMarketUploadServer?group_id=118079986&main_photo=0&v=5.50&access_token=5bafda61f16ad372a8e79d39b2090d0eaa03576846f16f8cb4e672ba9aea1dd55a7c08a997eb512b8fde9"))->response->upload_url);
-        // print_r($url);
-        $asd = $curl->request($url,array("file" => new CurlFile(Yii::app()->basePath."/2.jpg") ));
-        $asd = json_decode($asd);
-        
-        $photo = $asd->photo;
-        $server = $asd->server;
-        $hash = $asd->hash;
-        $photo = $curl->request("https://api.vk.com/method/photos.saveMarketPhoto?group_id=118079986&photo=$photo&server=$server&hash=$hash&access_token=5bafda61f16ad372a8e79d39b2090d0eaa03576846f16f8cb4e672ba9aea1dd55a7c08a997eb512b8fde9");
-        // print_r($photo);
-        $photo = json_decode($photo);
-        $photo = $photo->response[0]->pid;
-        
-        $photo = $curl->request("https://api.vk.com/method/market.add?owner_id=-118079986&name=QWERTY&v=5.50&description=QWERTY123456&category_id=404&price=1111&main_photo_id=$photo_main&photo_ids=$photo&access_token=5bafda61f16ad372a8e79d39b2090d0eaa03576846f16f8cb4e672ba9aea1dd55a7c08a997eb512b8fde9");
-        print_r($photo);
-        // 'https://api.vk.com/method/photos.getMarketUploadServer?group_id=118079986&main_photo=1&v=5.50'
-        
-        // 'https://api.vk.com/method/market.add?owner_id=-118079986&name=QWERTY&description=QWERTY123456&category_id=404&main_photo_id=&v=5.50&
-
-        // access_token=5bafda61f16ad372a8e79d39b2090d0eaa03576846f16f8cb4e672ba9aea1dd55a7c08a997eb512b8fde9'
-
-
         // https://oauth.vk.com/access_token?client_id=5378578&client_secret=KI6VRCmR4BRiXpkBtVr9&redirect_uri=http://tomsk.koleso.online&code=f270032aaa3dd3a7cf
         // $photodoska = new Photodoska("82.146.35.208");
         // print_r($photodoska->auth());
