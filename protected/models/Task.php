@@ -42,7 +42,11 @@ class Task extends CActiveRecord
 		"required" => array(
 			"id" => 4,
 			"user_id" => 10,
-		)
+		),
+		"extra" => array(
+			"id" => 5,
+			"user_id" => 10,
+		),
 	);
 
 	/**
@@ -220,6 +224,13 @@ class Task extends CActiveRecord
 		}else{
 			Task::remove($good->id, "photo");
 		}
+
+		// Проверка дополнительных фотографий
+		if( !$this->checkExtraPhoto($good) ){
+			Task::add($good->id, "extra");
+		}else{
+			Task::remove($good->id, "extra");
+		}
 	}
 
 	public function checkFields($good, $fields){
@@ -238,6 +249,10 @@ class Task extends CActiveRecord
 
 	public function checkPhoto($good){
 		return count(Controller::getImages($good, NULL, false))?true:false;
+	}
+
+	public function checkExtraPhoto($good){
+		return count(Controller::getImages($good, NULL, false, true))?true:false;
 	}
 
 	public function getRequired($good_type_id){

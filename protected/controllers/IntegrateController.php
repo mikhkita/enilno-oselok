@@ -393,9 +393,9 @@ class IntegrateController extends Controller
     }
 
     public function doQueueNext($debug = false,$category_id,$nth = ""){
-        if( (!$this->checkQueueAccess($category_id, $nth) && !$debug) || !$this->checkTime() ) return true;
+        if( (!$this->checkQueueAccess($category_id, $nth) && !$debug) || !$this->checkTime($category_id) ) return true;
 
-        while( ($this->allowed($category_id) && $this->checkTime()) || $debug ){
+        while( ($this->allowed($category_id) && $this->checkTime($category_id)) || $debug ){
             $this->writeTime($category_id, $nth);
             if( !$this->getNext($category_id, $nth) ){
                 sleep(5);
@@ -407,9 +407,11 @@ class IntegrateController extends Controller
         }
     }
 
-    public function checkTime(){
-        $date = (object) getdate();
-        if( $date->hours >= 1 && $date->hours < 7 ) return false;
+    public function checkTime($category_id = NULL){
+        if( $category_id == 2047 ){
+            $date = (object) getdate();
+            if( $date->hours >= 1 && $date->hours < 15 ) return false;
+        }
         return true;
     }
 
@@ -428,7 +430,6 @@ class IntegrateController extends Controller
     }
 
     public function getNext($category_id, $nth = ""){
-        die();
         $queue = Queue::getNext($category_id);
 
         if( !$queue ) return false;
@@ -1086,7 +1087,7 @@ class IntegrateController extends Controller
     public function actionGoodTest(){
         $model = Good::model()->filter(
             array(
-                "good_type_id"=>2,
+                "good_type_id"=>1,
                 "attributes"=>array(
                     27 => array(1056)
                 )
@@ -1119,9 +1120,10 @@ class IntegrateController extends Controller
 
     public function actionKsk(){
         $place = new Drom();
-        $links = $place->parseAllItems("http://baza.drom.ru/user/ksknik/wheel/disk/", "270426", false, false, true);
+        $links = $place->parseAllItems("http://baza.drom.ru/user/ksknik/wheel/disc/", "270426", false, false, true);
 
         $titles = array();
+        // print_r($links);
         foreach ($links as $key => $item) {
             echo $item->title."<br>";
         }

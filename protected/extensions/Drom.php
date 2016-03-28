@@ -344,15 +344,16 @@ Class Drom {
 	                                    $delete_count++;
 	                                }
 	                            }
-	                        } else {
-	                            if($item->archive) {
-	                                $item->archive = 0;
-	                                if($item->save()) {
-	                                    Log::debug("Восстановление товара ".$item->fields_assoc[3]->value);
-	                                    $restore_count++;
-	                                }  
-	                            }
-	                        }
+	                        } 
+                         //    else {
+	                        //     if($item->archive) {
+	                        //         $item->archive = 0;
+	                        //         if($item->save()) {
+	                        //             Log::debug("Восстановление товара ".$item->fields_assoc[3]->value);
+	                        //             $restore_count++;
+	                        //         }  
+	                        //     }
+	                        // }
 	                    }
 
 	                    foreach ($drom_ids as $key => $code) {
