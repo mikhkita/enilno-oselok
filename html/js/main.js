@@ -614,7 +614,7 @@ $(document).ready(function(){
                     top: 0
                 });
             },200);
-            return false;
+            // return false;
         }else{
             $(".b-search-results").fadeOut(300);
         }

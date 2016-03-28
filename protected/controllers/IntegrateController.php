@@ -923,7 +923,9 @@ class IntegrateController extends Controller
     }
 
     public function actionRibka(){
-        $model = Good::model()->filter(
+        $model = array();
+
+        $goods = Good::model()->filter(
             array(
                 "good_type_id"=>1,
                 "attributes"=>array(
@@ -935,7 +937,25 @@ class IntegrateController extends Controller
                 'pageSize'=>10000,
             )
         );
-        $model = $model["items"];
+        $goods = $goods["items"];
+        if( is_array($goods["items"]) )
+            array_merge($model, $goods["items"]);
+
+        $goods = Good::model()->filter(
+            array(
+                "good_type_id"=>2,
+                "attributes"=>array(
+                    43 => array(2915)
+                )
+            )
+        )->getPage(
+            array(
+                'pageSize'=>10000,
+            )
+        );
+        $goods = $goods["items"];
+        if( is_array($goods["items"]) )
+            array_merge($model, $goods["items"]);
 
         $images = array();
         foreach ($model as $i => $good) {
@@ -1127,5 +1147,11 @@ class IntegrateController extends Controller
         foreach ($links as $key => $item) {
             echo $item->title."<br>";
         }
+    }
+
+    public function actionAnalyse(){
+        $text = "Разноширокие R18 4x114.3/5x114.3 7.5/7.5";
+
+        $this->analyse($text);
     }
 }
