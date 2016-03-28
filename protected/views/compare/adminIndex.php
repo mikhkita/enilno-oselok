@@ -1,8 +1,8 @@
 <h1><?=$this->adminMenu["cur"]->name?></h1>
 <div class="b-compare" data-url="<?php echo Yii::app()->createUrl('/compare/adminput')?>">
 	<div class="clearfix">
-		<textarea class="left <?=( ($this->isRoot())?("b-other-column"):("b-main-column") )?>" name="left" id="compare1"><?=file_get_contents(Yii::app()->basePath."/data/left.txt");?></textarea>
-		<textarea class="right <?=( ($this->isRoot())?("b-main-column"):("b-other-column") )?>" name="right" id="compare2"><?=file_get_contents(Yii::app()->basePath."/data/right.txt");?></textarea>
+		<textarea class="left b-main-column" name="left" id="compare1"><?=file_get_contents(Yii::app()->basePath."/data/left.txt");?></textarea>
+		<textarea class="right b-main-column" name="right" id="compare2"><?=file_get_contents(Yii::app()->basePath."/data/right.txt");?></textarea>
 	</div>
 	<button type="button" class="b-butt">Сравнить</button>
 	<div class="compare-cont">

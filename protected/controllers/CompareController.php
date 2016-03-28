@@ -33,11 +33,11 @@ class CompareController extends Controller
 
 	public function actionAdminPut($left=null,$right=null)
 	{
-		if( $left === null ){
+		// if( $left === null ){
 			file_put_contents(Yii::app()->basePath."/data/right.txt", $right);
-		}else{
+		// }else{
 			file_put_contents(Yii::app()->basePath."/data/left.txt", $left);
-		}
+		// }
 		
 	}
 }

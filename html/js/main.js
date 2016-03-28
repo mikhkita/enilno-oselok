@@ -608,13 +608,17 @@ $(document).ready(function(){
 
     var togLink = false;
     function closeSearch(){
-        $(".b-search-results").fadeOut(300);
-        setTimeout(function(){
-            $(".b-sub-menu.b-fixed-top").css({
-                top: 0
-            });
-        },200);
-        // return false;
+        if( isMobile ){
+            $(".b-search-form").fadeOut(300);
+            setTimeout(function(){
+                $(".b-sub-menu.b-fixed-top").css({
+                    top: 0
+                });
+            },200);
+            return false;
+        }else{
+            $(".b-search-results").fadeOut(300);
+        }
     }
 
     $(".b-clear-filter").click(function(){
