@@ -66,8 +66,8 @@ Class Vk {
     }
 
     public function generateFields($fields,$good_type_id){
-        if( $good_type_id == 1) $fields['album_id'] = 7;
-        if( $good_type_id == 2) $fields['album_id'] = 6;
+        if( $good_type_id == 1) $fields['album_id'] = 6;
+        if( $good_type_id == 2) $fields['album_id'] = 7;
         if( $good_type_id == 3) $fields['album_id'] = 5;
         return $fields;
     }
