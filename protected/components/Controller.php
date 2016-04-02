@@ -82,6 +82,7 @@ class Controller extends CController
 
         $this->place_states[2048] = $this->place_states["AVITO"] = $this->getParam("AVITO","TOGGLE");
         $this->place_states[2047] = $this->place_states["DROM"] = $this->getParam("DROM","TOGGLE");
+        $this->place_states[3875] = $this->place_states["VK"] = $this->getParam("VK","TOGGLE");
 
         $this->adminMenu["cur"] = $this->toLowerCaseModelNames(ModelNames::model()->find(array("condition" => "code = '".Yii::app()->controller->id."'")));
         
@@ -92,6 +93,17 @@ class Controller extends CController
         $this->getInterpreters();
 
         if( !Yii::app()->user->isGuest ) $this->checkModelAccess();
+    }
+
+    public function getImages($count = NULL, $sizes = NULL, $cap = NULL, $good = NULL, $get_default = false){
+        $images = Good::getImages($count, $size, $cap, $good, $get_default);
+
+        $out = array();
+        if( count($images) )
+            foreach ($images as $i => $image)
+                array_push($out, $image["original"]);
+
+        return $out;
     }
 
     public function beforeRender($view){
@@ -591,7 +603,7 @@ class Controller extends CController
         }
     }
 
-    public function getImages($good, $number = NULL, $get_default = true,$extra = false)
+    public function getImages1($good, $number = NULL, $get_default = true,$extra = false)
     {   
         if( is_object($good) ){
             $code = $good->fields_assoc[3]->value;
@@ -788,7 +800,6 @@ class Controller extends CController
                             array_push($delete_ids, $city->id);
                     }
             }
-            // print_r($delete_ids);
             if( count($delete_ids) )
                 GoodAttribute::model()->deleteAll("id IN (".implode(",", $delete_ids).")");
         }else{

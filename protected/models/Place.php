@@ -27,11 +27,16 @@ class Place extends CActiveRecord
 			"PLACE" => 2047,
 			"TYPE" => 2129
 		),
+		115 => array(
+			"PLACE" => 3875,
+			"TYPE" => 869
+		)
 	);
 
 	public $categories = array(
 		2048 => "AVITO",
 		2047 => "DROM",
+		3875 => "VK",
 	);
 
 	/**

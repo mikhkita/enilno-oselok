@@ -143,8 +143,9 @@ class QueueController extends Controller
 		if( !$partial ){
 			$this->layout='admin';
 		}
+		$category = Variant::model()->findByPk($category_id);
 
-		$this->pageTitle = "Очередь: ".( ($category_id==2047)?"Дром":"Авито" );
+		$this->pageTitle = "Очередь: ".$category->value;
 
 		$model_filter = Place::model()->with('category','goodType')->findAll("category_id=$category_id");
 		$data = array();
@@ -183,7 +184,7 @@ class QueueController extends Controller
 			'data'=>$dataProvider->getData(),
 			'filter'=>$filter,
 			'labels'=>Queue::attributeLabels(),
-			'category'=>Variant::model()->findByPk($category_id),
+			'category'=>$category,
 			'count_filter' => $dataProvider->totalItemCount,
 			'count'=>Queue::model()->with("advert.place")->count("place.category_id=$category_id"),
 			'waiting_count'=>Queue::model()->with("advert.place")->count("place.category_id=$category_id AND state_id=1"),

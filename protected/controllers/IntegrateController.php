@@ -37,6 +37,274 @@ class IntegrateController extends Controller
         );
     }
 
+// Выкладка -------------------------------------------------------------- Выкладка
+    public function actionQueueNextVk($debug = false){
+        $this->doQueueNext($debug, 3875);
+    }
+
+    public function actionQueueNextAvito($debug = false){
+        $this->doQueueNext($debug, 2048);
+    }
+
+    public function actionQueueNextDrom($debug = false){
+        $this->doQueueNext($debug, 2047);
+    }
+
+    public function doQueueNext($debug = false,$category_id,$nth = ""){
+        if( (!$this->checkQueueAccess($category_id, $nth) && !$debug) || !$this->checkTime($category_id) ) return true;
+
+        while( ($this->allowed($category_id) && $this->checkTime($category_id)) || $debug ){
+            $this->writeTime($category_id, $nth);
+            if( !$this->getNext($category_id, $nth) ){
+                sleep(5);
+            }else{
+                if( !$debug ) sleep(rand(40,180));
+            }
+              
+            if( $debug ) return true;
+        }
+    }
+
+    public function checkTime($category_id = NULL){
+        if( $category_id == 2047 ){
+            $date = (object) getdate();
+            if( $date->hours >= 1 && $date->hours < 15 ) return false;
+        }
+        return true;
+    }
+
+    public function writeTime($category_id, $nth = ""){
+        $this->setParam( Place::model()->categories[$category_id], "TIME".$nth, time() );
+    }
+
+    public function checkQueueAccess($category_id, $nth = ""){
+        $last = $this->getParam( Place::model()->categories[$category_id], "TIME".$nth, true );
+        return ( time() - intval($last) > 180 );
+    }
+
+    public function allowed($category_id){
+        $queue = $this->getParam( Place::model()->categories[$category_id], "TOGGLE", true );
+        return ( trim($queue) == "on" );
+    }
+
+    public function getNext($category_id, $nth = ""){
+        $queue = Queue::getNext($category_id);
+
+        if( !$queue ) return false;
+        $advert = $queue->advert;
+
+        $place_name = $this->getPlaceName($advert->place->category_id);
+
+        $queue->setState("processing");
+
+        $dynamic = $this->getDynObjects(array(
+            57 => $advert->place->category_id,
+            38 => $advert->city_id,
+            37 => $advert->type_id
+        ));
+
+        $unique = Place::getInters($advert->place->category_id,$advert->good->type->id,true);
+        $fields = Place::getValues(Place::getInters($advert->place->category_id,$advert->good->type->id),$advert,$dynamic);
+
+        // var_dump($unique);
+        // var_dump($fields);
+        // die();
+
+        if( $place_name == "AVITO" && $queue->action->code != "delete" && $queue->action->code != "updateImages" ){
+            if( $fields["title"] == "not unique" ) $queue->setState("titleNotUnique");
+            if( $fields["description"] == "not unique" ) $queue->setState("textNotUnique");
+
+            if( $fields["title"] == "not unique" || $fields["description"] == "not unique" )return true;
+        }
+
+        if( $place_name == "DROM" ){
+            $account = $this->getDromAccount($fields["login"]);
+
+            if( $advert->type_id == 869 && isset($account->count) && $account->count >= 50 ){
+                $queue->setState("limit");
+                return false;
+            }
+
+            $place = new Drom( (isset($account->ip) && $account->ip != "")?$account->ip:NULL );
+            $fields["contacts"] = $account->phone;
+        }else if( $place_name == "AVITO" ){
+            $account = $this->getAvitoAccount($fields["login"]);
+            $place = new Avito( (isset($account->proxy) && $account->proxy != "")?$account->proxy:NULL );
+            $fields["phone"] = $account->phone;
+            $fields["email"] = $account->login;
+            $fields["seller_name"] = $account->name;
+        }else if( $place_name == "VK" ){
+            
+        }
+
+        if( !$account ){
+            Log::error("Не найден пользователь с логином \"".$fields["login"]."\"");
+            $queue->setState("error");
+            return true;
+        }
+
+        $images = $this->getImages(NULL, NULL, (isset($account->photo))?$account->photo:NULL, $advert->good);
+
+        if( !count($images) ){
+            $queue->setState("noImages");
+            return false;
+        }
+
+        $fields = $place->generateFields($fields,$advert->good->good_type_id);
+
+        // print_r($fields);
+        // die();
+        
+        $place->setUser($account->login, $account->password);
+        $res = $place->auth();
+        // die();
+        
+        switch ($queue->action->code) {
+            case 'delete':
+
+                // if( $advert->type_id == 869 ){
+                    Log::debug("Удаление ".$advert->good->fields_assoc[3]->value." в аккаунте ".$account->login);
+                    $result = $place->deleteAdvert( (($place_name == "AVITO")?$advert->link:$advert->url) );
+                    if( $result )
+                        $advert->delete();
+                // }else{
+                //     Log::debug("Попытка удаления платного объявления ".$advert->good->fields_assoc[3]->value." в аккаунте ".$account->login);
+                //     $queue->setState("partner");
+                //     // $place->curl->removeCookies();
+                //     return true;
+                // }
+
+                break;
+            case 'add':
+
+                Log::debug("Выкладка ".$advert->good->fields_assoc[3]->value." в аккаунт ".$account->login);
+                $result = $place->addAdvert($fields,$images);
+                if( $result )
+                    $advert->setUrl($result);
+
+                break;
+            case 'update':
+
+                if( $place_name == "AVITO" ){
+                    $result = true;
+                }else{
+                    Log::debug("Редактирование ".$advert->good->fields_assoc[3]->value." в аккаунте ".$account->login);
+                    $result = $place->updateAdvert( (($place_name == "AVITO")?$advert->link:$advert->url) ,$fields);
+                }
+
+                break;
+            case 'updateImages':
+
+                if( $place_name == "AVITO" ){
+                    $result = true;
+                }else{
+                    Log::debug("Обновление фотографий ".$advert->good->fields_assoc[3]->value." в аккаунте ".$account->login);
+                    $result = $place->updateAdvert( (($place_name == "AVITO")?$advert->link:$advert->url) ,$fields,$images,true);
+                }
+
+                break;
+            case 'updateWithImages':
+
+                if( $place_name == "AVITO" ){
+                    $result = true;
+                }else{
+                    Log::debug("Обновление с фотографиями ".$advert->good->fields_assoc[3]->value." в аккаунте ".$account->login);
+                    $result = $place->updateAdvert( (($place_name == "AVITO")?$advert->link:$advert->url) ,$fields,$images);
+                }
+
+                break;
+            case 'payUp':
+
+                Log::debug("Платное поднятие ".$advert->good->fields_assoc[3]->value." в аккаунте ".$account->login);
+                $result = $place->upPaidAdverts( (($place_name == "AVITO")?$advert->link:$advert->url) );
+
+                break;
+            case 'up':
+
+                Log::debug("Поднятие ".$advert->good->fields_assoc[3]->value." в аккаунте ".$account->login);
+                $result = $place->up( (($place_name == "AVITO")?$advert->link:$advert->url) );
+
+                break;
+            case 'updatePrice':
+
+                Log::debug("Обновление цены ".$advert->good->fields_assoc[3]->value." в аккаунте ".$account->login);
+                if( $place_name == "AVITO" ){
+                    $result = $place->updatePrice($advert->link, $fields);
+                }else if( $place_name == "DROM" ){
+                    $result = $place->updateAdvert($advert->url,$fields);
+                }
+
+                break;
+        }
+        printf('<br>4Прошло %.4F сек.<br>', microtime(true) - $start); 
+        // var_dump($fields);
+        // die();
+
+        // $result = 1;
+
+        if( $result ){
+            if( $place_name == "AVITO" && ($queue->action->code == "add" || $queue->action->code == "update" || $queue->action->code == "updateWithImages") ){
+                $unique_arr = array();
+                foreach ($unique as $i => $u)
+                    $unique_arr[$u] = $fields[$i];
+
+                $advert->replaceUnique($unique_arr);
+            }else if( $place_name == "DROM" && $advert->type_id == 869 && $queue->action->code == "add" ){
+                $this->dromIncCount($account);
+            }
+            // echo "Успешно";
+            Log::debug("Действие над ".$advert->good->fields_assoc[3]->value." в аккаунте ".$account->login." прошло успешно");
+            $queue->delete();
+        }else{
+            // echo "Ошибка";
+            Log::debug("Действие над ".$advert->good->fields_assoc[3]->value." в аккаунте ".$account->login." прошло с ОШИБКОЙ");
+            $queue->setState("error");
+        }
+
+        // $place->curl->removeCookies();
+        return true;
+    }
+
+    public function getPlaceName($place_id){
+        switch ($place_id) {
+            case 2047:
+                return "DROM";
+                break;
+            case 2048:
+                return "AVITO";
+                break;
+            default:
+                return "UNDEFINED";
+                break;
+        }
+    }
+
+    public function actionDeleteAdverts(){
+        $model = Queue::model()->with("advert.place")->findAll("place.category_id=2048 AND action_id=2");
+
+        $ids = $this->getIds($model);
+        if( count($ids) )
+            Queue::model()->deleteAll("id IN (".implode(",", $ids).")");
+    }
+
+    public function actionDromParse(){
+        $drom = new Drom();
+        $drom->parseUser();
+    }
+
+    public function actionResetLimit(){
+        $rows = DesktopTableRow::model()->findAll("table_id=12");
+        $ids = array();
+        foreach ($rows as $i => $row)
+            array_push($ids, $row->id);
+
+        if( count($ids) )
+            DesktopTableCell::model()->updateAll(array("int_value" => 0), "row_id IN (".implode(",", $ids).") AND col_id=121");
+
+        Queue::model()->updateAll(array("state_id" => 1),"state_id=9");
+    }
+// Выкладка -------------------------------------------------------------- Выкладка
+
 // Фотодоска ------------------------------------------------------------- Фотодоска
     public function actionGeneratePdQueue(){
         Log::debug("Начало генерации очереди выкладки на фотодоску");
@@ -209,18 +477,19 @@ class IntegrateController extends Controller
 
 // Дром ------------------------------------------------------------------ Дром
     public function actionDromUp(){
-        // Log::debug("Начало автоподнятия дром");
-        // $drom = new Drom();
-        
+        Log::debug("Начало автоподнятия дром");
+        $drom = new Drom();
 
-        // $users = $this->getDromAccount();
+        $users = $this->getDromAccount();
 
-        // foreach ($users as $user) {
-        //     $drom->setUser($user->login,$user->password);
-        //     $drom->upAdverts();
-        // }
+        foreach ($users as $user) {
+            if( !isset($user->ip) ){
+                $drom->setUser($user->login,$user->password);
+                $drom->upAdverts();
+            }
+        }
 
-        // Log::debug("Кончало автоподнятия дром");
+        Log::debug("Кончало автоподнятия дром");
     }
 
     public function actionDromParseAll(){
@@ -382,268 +651,6 @@ class IntegrateController extends Controller
         return date("Y-m-d H:i:s", date_timestamp_get(date_create(substr(str_replace("T", " ", $time), 0, strpos($time, "+"))))-3*60*60);
     }
 // Yahoo ----------------------------------------------------------------- Yahoo
-
-// Выкладка -------------------------------------------------------------- Выкладка
-    public function actionQueueNextAvito($debug = false){
-        $this->doQueueNext($debug, 2048);
-    }
-
-    public function actionQueueNextDrom($debug = false){
-        $this->doQueueNext($debug, 2047);
-    }
-
-    public function doQueueNext($debug = false,$category_id,$nth = ""){
-        if( (!$this->checkQueueAccess($category_id, $nth) && !$debug) || !$this->checkTime($category_id) ) return true;
-
-        while( ($this->allowed($category_id) && $this->checkTime($category_id)) || $debug ){
-            $this->writeTime($category_id, $nth);
-            if( !$this->getNext($category_id, $nth) ){
-                sleep(5);
-            }else{
-                if( !$debug ) sleep(rand(40,180));
-            }
-              
-            if( $debug ) return true;
-        }
-    }
-
-    public function checkTime($category_id = NULL){
-        if( $category_id == 2047 ){
-            $date = (object) getdate();
-            if( $date->hours >= 1 && $date->hours < 15 ) return false;
-        }
-        return true;
-    }
-
-    public function writeTime($category_id, $nth = ""){
-        $this->setParam( Place::model()->categories[$category_id], "TIME".$nth, time() );
-    }
-
-    public function checkQueueAccess($category_id, $nth = ""){
-        $last = $this->getParam( Place::model()->categories[$category_id], "TIME".$nth, true );
-        return ( time() - intval($last) > 180 );
-    }
-
-    public function allowed($category_id){
-        $queue = $this->getParam( Place::model()->categories[$category_id], "TOGGLE", true );
-        return ( trim($queue) == "on" );
-    }
-
-    public function getNext($category_id, $nth = ""){
-        $queue = Queue::getNext($category_id);
-
-        if( !$queue ) return false;
-        $advert = $queue->advert;
-
-        $place_name = $this->getPlaceName($advert->place->category_id);
-
-        $queue->setState("processing");
-
-        $dynamic = $this->getDynObjects(array(
-            57 => $advert->place->category_id,
-            38 => $advert->city_id,
-            37 => $advert->type_id
-        ));
-
-        $unique = Place::getInters($advert->place->category_id,$advert->good->type->id,true);
-        $fields = Place::getValues(Place::getInters($advert->place->category_id,$advert->good->type->id),$advert,$dynamic);
-
-        // var_dump($unique);
-        // var_dump($fields);
-        // die();
-
-        if( $place_name == "AVITO" && $queue->action->code != "delete" && $queue->action->code != "updateImages" ){
-            if( $fields["title"] == "not unique" ) $queue->setState("titleNotUnique");
-            if( $fields["description"] == "not unique" ) $queue->setState("textNotUnique");
-
-            if( $fields["title"] == "not unique" || $fields["description"] == "not unique" )return true;
-        }
-
-        if( $place_name == "DROM" ){
-            $account = $this->getDromAccount($fields["login"]);
-
-            if( $advert->type_id == 869 && isset($account->count) && $account->count >= 50 ){
-                $queue->setState("limit");
-                return false;
-            }
-
-            $place = new Drom( (isset($account->ip) && $account->ip != "")?$account->ip:NULL );
-            $fields["contacts"] = $account->phone;
-        }else if( $place_name == "AVITO" ){
-            $account = $this->getAvitoAccount($fields["login"]);
-            $place = new Avito( (isset($account->proxy) && $account->proxy != "")?$account->proxy:NULL );
-            $fields["phone"] = $account->phone;
-            $fields["email"] = $account->login;
-            $fields["seller_name"] = $account->name;
-        }
-
-        if( !$account ){
-            Log::error("Не найден пользователь с логином \"".$fields["login"]."\"");
-            $queue->setState("error");
-            return true;
-        }
-
-        $images = $this->getImages($advert->good, NULL, false, (($account->photo == 2)?true:false) );
-
-        if( !count($images) ){
-            $queue->setState("noImages");
-            return false;
-        }
-
-        $fields = $place->generateFields($fields,$advert->good->good_type_id);
-
-        // print_r($fields);
-        // die();
-        
-        $place->setUser($account->login, $account->password);
-        $res = $place->auth();
-        // die();
-        
-        switch ($queue->action->code) {
-            case 'delete':
-
-                // if( $advert->type_id == 869 ){
-                    Log::debug("Удаление ".$advert->good->fields_assoc[3]->value." в аккаунте ".$account->login);
-                    $result = $place->deleteAdvert( (($place_name == "AVITO")?$advert->link:$advert->url) );
-                    if( $result )
-                        $advert->delete();
-                // }else{
-                //     Log::debug("Попытка удаления платного объявления ".$advert->good->fields_assoc[3]->value." в аккаунте ".$account->login);
-                //     $queue->setState("partner");
-                //     // $place->curl->removeCookies();
-                //     return true;
-                // }
-
-                break;
-            case 'add':
-
-                Log::debug("Выкладка ".$advert->good->fields_assoc[3]->value." в аккаунт ".$account->login);
-                $result = $place->addAdvert($fields,$images);
-                if( $result )
-                    $advert->setUrl($result);
-
-                break;
-            case 'update':
-
-                if( $place_name == "AVITO" ){
-                    $result = true;
-                }else{
-                    Log::debug("Редактирование ".$advert->good->fields_assoc[3]->value." в аккаунте ".$account->login);
-                    $result = $place->updateAdvert( (($place_name == "AVITO")?$advert->link:$advert->url) ,$fields);
-                }
-
-                break;
-            case 'updateImages':
-
-                if( $place_name == "AVITO" ){
-                    $result = true;
-                }else{
-                    Log::debug("Обновление фотографий ".$advert->good->fields_assoc[3]->value." в аккаунте ".$account->login);
-                    $result = $place->updateAdvert( (($place_name == "AVITO")?$advert->link:$advert->url) ,$fields,$images,true);
-                }
-
-                break;
-            case 'updateWithImages':
-
-                if( $place_name == "AVITO" ){
-                    $result = true;
-                }else{
-                    Log::debug("Обновление с фотографиями ".$advert->good->fields_assoc[3]->value." в аккаунте ".$account->login);
-                    $result = $place->updateAdvert( (($place_name == "AVITO")?$advert->link:$advert->url) ,$fields,$images);
-                }
-
-                break;
-            case 'payUp':
-
-                Log::debug("Платное поднятие ".$advert->good->fields_assoc[3]->value." в аккаунте ".$account->login);
-                $result = $place->upPaidAdverts( (($place_name == "AVITO")?$advert->link:$advert->url) );
-
-                break;
-            case 'up':
-
-                Log::debug("Поднятие ".$advert->good->fields_assoc[3]->value." в аккаунте ".$account->login);
-                $result = $place->up( (($place_name == "AVITO")?$advert->link:$advert->url) );
-
-                break;
-            case 'updatePrice':
-
-                Log::debug("Обновление цены ".$advert->good->fields_assoc[3]->value." в аккаунте ".$account->login);
-                if( $place_name == "AVITO" ){
-                    $result = $place->updatePrice($advert->link, $fields);
-                }else if( $place_name == "DROM" ){
-                    $result = $place->updateAdvert($advert->url,$fields);
-                }
-
-                break;
-        }
-        printf('<br>4Прошло %.4F сек.<br>', microtime(true) - $start); 
-        // var_dump($fields);
-        // die();
-
-        // $result = 1;
-
-        if( $result ){
-            if( $place_name == "AVITO" && ($queue->action->code == "add" || $queue->action->code == "update" || $queue->action->code == "updateWithImages") ){
-                $unique_arr = array();
-                foreach ($unique as $i => $u)
-                    $unique_arr[$u] = $fields[$i];
-
-                $advert->replaceUnique($unique_arr);
-            }else if( $place_name == "DROM" && $advert->type_id == 869 && $queue->action->code == "add" ){
-                $this->dromIncCount($account);
-            }
-            // echo "Успешно";
-            Log::debug("Действие над ".$advert->good->fields_assoc[3]->value." в аккаунте ".$account->login." прошло успешно");
-            $queue->delete();
-        }else{
-            // echo "Ошибка";
-            Log::debug("Действие над ".$advert->good->fields_assoc[3]->value." в аккаунте ".$account->login." прошло с ОШИБКОЙ");
-            $queue->setState("error");
-        }
-
-        // $place->curl->removeCookies();
-        return true;
-    }
-
-    public function getPlaceName($place_id){
-        switch ($place_id) {
-            case 2047:
-                return "DROM";
-                break;
-            case 2048:
-                return "AVITO";
-                break;
-            default:
-                return "UNDEFINED";
-                break;
-        }
-    }
-
-    public function actionDeleteAdverts(){
-        $model = Queue::model()->with("advert.place")->findAll("place.category_id=2048 AND action_id=2");
-
-        $ids = $this->getIds($model);
-        if( count($ids) )
-            Queue::model()->deleteAll("id IN (".implode(",", $ids).")");
-    }
-
-    public function actionDromParse(){
-        $drom = new Drom();
-        $drom->parseUser();
-    }
-
-    public function actionResetLimit(){
-        $rows = DesktopTableRow::model()->findAll("table_id=12");
-        $ids = array();
-        foreach ($rows as $i => $row)
-            array_push($ids, $row->id);
-
-        if( count($ids) )
-            DesktopTableCell::model()->updateAll(array("int_value" => 0), "row_id IN (".implode(",", $ids).") AND col_id=121");
-
-        Queue::model()->updateAll(array("state_id" => 1),"state_id=9");
-    }
-// Выкладка -------------------------------------------------------------- Выкладка
 
 // Магазин --------------------------------------------------------------- Магазин
     public function actionGoodCodes(){
@@ -1153,5 +1160,22 @@ class IntegrateController extends Controller
         $text = "Разноширокие R18 4x114.3/5x114.3 7.5/7.5";
 
         $this->analyse($text);
+    }
+
+    public function actionUpdatePhoto(){
+        $goods = Good::model()->filter(
+            array(
+                "good_type_id"=>2
+            )
+        )->getPage(
+            array(
+                'pageSize'=>10000,
+            )
+        );
+        $goods = $goods["items"];
+
+        foreach ($goods as $key => $good) {
+            Image::updateImages($good);
+        }
     }
 }

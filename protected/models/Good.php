@@ -49,6 +49,7 @@ class Good extends GoodFilter
 			'type' => array(self::BELONGS_TO, 'GoodType', 'good_type_id'),
 			'adverts' => array(self::HAS_MANY, 'Advert', 'good_id'),
 			'sale' => array(self::HAS_ONE, 'Sale', 'good_id'),
+			'images' => array(self::HAS_MANY, 'Image', 'good_id'),
 		);
 	}
 
@@ -201,9 +202,10 @@ class Good extends GoodFilter
 		if( $count == 0 )
 			$criteria->condition = 'good_type_id='.$options["good_type_id"].' AND fields.attribute_id=3';
 
-			$options["archive"] = isset($options["archive"]) ? $options["archive"] : 0;
-			if($options["archive"] != "all")
-				$criteria->addCondition('archive='.$options["archive"]);
+		$options["archive"] = (isset($options["archive"]) && $options["archive"] !== NULL) ? $options["archive"] : 0;
+		if( !(is_string($options["archive"]) && $options["archive"] == "all") ){
+			$criteria->addCondition("archive='".$options["archive"]."'", "AND");
+		}
 		
 		
 		$criteria->having = 'COUNT(DISTINCT fields.attribute_id)'.(( $count == 0 )?'>':'').'='.$count;

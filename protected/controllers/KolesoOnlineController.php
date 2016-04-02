@@ -15,7 +15,7 @@ class KolesoOnlineController extends Controller
 			"TITLE_2_CODE" => 30,
 			"DESCRIPTION_CODE" => 72,
 			"GARANTY_CODE" => 70,
-			"PRICE_CODE" => 73,
+			"PRICE_CODE" => 213,
 			"ORDER" => 165,
 			"SEASON" => 23,
 			'SHIPPING' => 73,
@@ -95,7 +95,7 @@ class KolesoOnlineController extends Controller
 			"TITLE_2_CODE" => 68,
 			"DESCRIPTION_CODE" => 71,
 			"GARANTY_CODE" => 69,
-			"PRICE_CODE" => 74,
+			"PRICE_CODE" => 214,
 			"ORDER" => 164,
 			'SHIPPING' => 74,
 			'AVAILABLE' => 114,
@@ -183,7 +183,7 @@ class KolesoOnlineController extends Controller
 			"TITLE_2_CODE" => 171,
 			"DESCRIPTION_CODE" => 167,
 			"GARANTY_CODE" => 168,
-			"PRICE_CODE" => 74,
+			"PRICE_CODE" => 215,
 			"ORDER" => 166,
 			"SEASON" => 23,
 			'SHIPPING' => 174,
@@ -438,7 +438,7 @@ class KolesoOnlineController extends Controller
 			$_GET['GoodFilter_page'] = $last;
 		}
 
-		$def_field = 9;
+		$def_field = (intval($_GET['type']) == 1)?8:9;
 		$def_sort = ( intval($_GET['type']) == 1 )?"ASC":"DESC";
 		$_SESSION["FILTER"][$_GET['type']]['sort'] = (isset($_SESSION["FILTER"][$_GET['type']]['sort']))?$_SESSION["FILTER"][$_GET['type']]['sort']:array("field"=>$def_field,"type"=>$def_sort);
 		if( isset($_SESSION["FILTER"][$_GET['type']]["arr"][43]) ){
@@ -679,7 +679,7 @@ class KolesoOnlineController extends Controller
 			$this->description = Interpreter::generate($this->params[$_GET['type']]["DESCRIPTION_CODE"], $good, $dynamic);
 			$this->keywords = Interpreter::generate($this->getParam("SHOP",$good->type->code."_KEYWORDS_CODE"), $good, $dynamic);
 
-			$imgs = $good->getImages();
+			$imgs = $good->getImages(NULL, NULL, NULL, NULL, true);
 			$this->image = Yii::app()->getBaseUrl(true).$imgs[0]["big"];
 
 			$partner = NULL;

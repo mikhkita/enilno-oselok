@@ -1,21 +1,21 @@
 <?php
 
 /**
- * This is the model class for table "cache".
+ * This is the model class for table "cap".
  *
- * The followings are the available columns in table 'cache':
- * @property string $image_id
- * @property integer $size
- * @property string $hash
+ * The followings are the available columns in table 'cap':
+ * @property integer $id
+ * @property integer $sort
+ * @property string $name
  */
-class Cache extends CActiveRecord
+class Cap extends CActiveRecord
 {
 	/**
 	 * @return string the associated database table name
 	 */
 	public function tableName()
 	{
-		return 'cache';
+		return 'cap';
 	}
 
 	/**
@@ -26,13 +26,12 @@ class Cache extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('image_id, size, hash', 'required'),
-			array('size', 'numerical', 'integerOnly'=>true),
-			array('image_id', 'length', 'max'=>10),
-			array('hash', 'length', 'max'=>20),
+			array('sort, name', 'required'),
+			array('sort', 'numerical', 'integerOnly'=>true),
+			array('name', 'length', 'max'=>50),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('image_id, size, hash', 'safe', 'on'=>'search'),
+			array('id, sort, name', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -44,7 +43,7 @@ class Cache extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'image' => array(self::BELONGS_TO, 'Image', 'image_id'),
+			'images' => array(self::HAS_MANY, 'ImageCap', 'cap_id'),
 		);
 	}
 
@@ -54,9 +53,9 @@ class Cache extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'image_id' => 'Image',
-			'size' => 'Size',
-			'hash' => 'Hash',
+			'id' => 'ID',
+			'sort' => 'Сортировка',
+			'name' => 'Название',
 		);
 	}
 
@@ -78,9 +77,9 @@ class Cache extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('image_id',$this->image_id,true);
-		$criteria->compare('size',$this->size);
-		$criteria->compare('hash',$this->hash,true);
+		$criteria->compare('id',$this->id);
+		$criteria->compare('sort',$this->sort);
+		$criteria->compare('name',$this->name,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -91,7 +90,7 @@ class Cache extends CActiveRecord
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return Cache the static model class
+	 * @return Cap the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{
