@@ -887,11 +887,17 @@ class GoodController extends Controller
 
 	public function actionAdminPhoto($id, $partial = false){
 		$good = $this->loadModel($id);
+
+		$caps = Yii::app()->db->createCommand()->select('*')->from(Cap::tableName().' c')->queryAll();
+		$caps = Controller::getAssocByAssoc($caps, "id");
+		foreach ($caps as $i => $cap)
+			$caps[$i] = (object) ($cap+array("images" => $good->getImages(100,array("small"),$cap["id"])));
+
 		$options = array(
 			"good" => $good,
-			"images" => $good->getImages(NULL, NULL, NULL, false),
-			"extra" => $good->getImages(NULL, NULL, NULL, false,true),
-			"partial" => $partial
+			"images" => $good->getImages(),
+			"partial" => $partial,
+			"caps" => $caps
 		);
 		if( $partial ){
 			$this->renderPartial('adminPhoto', $options);
@@ -901,93 +907,57 @@ class GoodController extends Controller
 	}
 
 	public function actionAdminPhotoUpdate($id){
-		$fields = Yii::app()->db->createCommand()
-		    ->select('varchar_value')
-		    ->from(GoodAttribute::tableName().' t')
-		    ->where("t.attribute_id=3 AND t.good_id=$id")
-		    ->queryAll();
-
-		$goodType = Yii::app()->db->createCommand()
-		    ->select('t.code')
-		    ->from(Good::tableName().' g')
-		    ->join(GoodType::tableName().' t', 'g.good_type_id=t.id')
-		    ->where("g.id=$id")
-		    ->queryAll();
+		$fields = Yii::app()->db->createCommand()->select('varchar_value')->from(GoodAttribute::tableName().' t')->where("t.attribute_id=3 AND t.good_id=$id")->queryAll();
+		$goodType = Yii::app()->db->createCommand()->select('t.code')->from(Good::tableName().' g')->join(GoodType::tableName().' t', 'g.good_type_id=t.id')->where("g.id=$id")->queryAll();
 
 		if( !is_array($goodType) || !isset($goodType[0]["code"]) || !is_array($fields) || !isset($fields[0]["varchar_value"]) ){
 			echo json_encode(array("result" => "error", "message" => "Не найден товар с кодом $id"));
 			return true;
 		}
 
-		if( isset($_POST["Delete"]) ){
-			foreach ($_POST["Delete"] as $i => $image) {
-				$filename = substr($image, 1);
-				if( file_exists($filename) ){
-					unlink($filename);
-				}
-			}
-		}
-
 		$code = $fields[0]["varchar_value"];
 		$goodType = $goodType[0]["code"];
-		$path = Yii::app()->params["imageFolder"]."/".$goodType."s/".$code."/";
+		$path = Yii::app()->params["imageFolder"]."/".$goodType."s/".$code;
 
-		if (!is_dir($path)) mkdir($path, 0777, true);
-		if( isset($_POST["Images"]) ){
-			foreach ($_POST["Images"] as $i => &$image) {
-				$filename = substr($image, 1);
-				$image = array("ext" => array_pop(explode(".", array_pop(explode("/", substr($image, 1))))));
-				$tmp = strtolower($path.$i.".".$image["ext"]);
-
-				if( file_exists($filename) ){
-					if( strpos($filename, $path) !== false && strpos($filename, "extra") === false){
-						rename($filename, $tmp);
-					}else{
-						copy($filename, $tmp);
-						unlink($filename);
-					}
-				}
-			}
-			
-		}
-
-		$path = Yii::app()->params["imageFolder"]."/".$goodType."s/".$code."/extra/";
-
-		if (!is_dir($path)) mkdir($path, 0777, true);
-
-		if( isset($_POST["Extra"]) ){
-			foreach ($_POST["Extra"] as $i => &$image) {
-				$filename = substr($image, 1);
-				$image = array("ext" => array_pop(explode(".", array_pop(explode("/", substr($image, 1))))));
-				$tmp = strtolower($path.$i.".".$image["ext"]);
-				if( file_exists($filename) ){
-					if( strpos($filename, $path) !== false ){
-						rename($filename, $tmp);
-					}else{
-						copy($filename, $tmp);
-						unlink($filename);
-					}
-				}
-			}
-			foreach ($_POST["Extra"] as $i => $image) {
-				$tmp = strtolower($path.$i.".".$image["ext"]);
-				$new_filename = $path.$code."_".(($i < 10)?("0".strval($i)):strval($i)).".".$image["ext"];
-
-				if( file_exists($tmp) )
-					rename($tmp, $new_filename);
+		if( isset($_POST["Delete"]) ){
+			foreach ($_POST["Delete"] as $i => $image) {
+				Image::remove($image, $path);
 			}
 		}
+
+		if( isset($_POST["New"]) ){
+			foreach ($_POST["New"] as $i => $image) {
+				$tmp = explode(".", array_pop(explode("/", $image)));
+				$new_id = Image::add($id, $tmp[1], 1, array_search($i, $_POST["Images"])+1);
+	            rename(substr($image, 1), $path."/".$new_id.".".$tmp[1]);	
+			}
+		}
+
+		$image_ids = array();
 		if( isset($_POST["Images"]) ){
-			$path = Yii::app()->params["imageFolder"]."/".$goodType."s/".$code."/";
+			$values = array();
 			foreach ($_POST["Images"] as $i => $image) {
-				$tmp = strtolower($path.$i.".".$image["ext"]);
-				$new_filename = $path.$code."_".(($i < 10)?("0".strval($i)):strval($i)).".".$image["ext"];
-				
-				if( file_exists($tmp) ) 
-					rename($tmp, $new_filename);
-				
+				if( ctype_digit($image) ){
+					array_push($image_ids, $image);
+					array_push($values, array($image,1,1,$i+1,1));
+				}
 			}
+			if( count($image_ids) )
+				ImageCap::model()->deleteAll("image_id IN (".implode(",", $image_ids).")");
+
+			if( count($values) ) 
+				$this->updateRows(Image::tableName(), $values, array("sort"));
+		}		
+
+		if( isset($_POST["Caps"]) ){
+			$values = array();
+			foreach ($_POST["Caps"] as $j => $cap)
+				foreach ($cap as $i => $image)
+					array_push($values, array("image_id" => $image, "cap_id" => $j, "sort" => $i));
+			if( count($values) )
+				$this->insertValues(ImageCap::tableName(), $values);
 		}
+
 		$this->actionAdminPhoto($id, true);
 
 		Task::model()->testGood($this->loadModel($id));

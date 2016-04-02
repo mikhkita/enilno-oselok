@@ -763,9 +763,10 @@ padding-top: 30px;}
 	border-bottom: 0px;
 	padding-top: 30px;
 }		
-.goods {
-	width: 712px;
-}
+// .goods {
+// 	width: 712px;
+// 	margin-left: -12px;
+// }
 	.goods .gradient-grey {
 		float: left;
 		width: 337px !important;
@@ -1204,7 +1205,7 @@ padding-top: 30px;}
 				}
 
 		.b-category .b-block .good-list {
-			width: 695px;
+			width: 700px;
 			float: left !important;
 		}
 			.b-category .b-block .good-list .navigation{
@@ -1335,6 +1336,7 @@ padding-top: 30px;}
 
 }
 	.good-detail .goods{
+		width: 712px;
 		margin-left: -12px;
 	}
 	.good-detail .b-block {

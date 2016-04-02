@@ -36,7 +36,7 @@
 					<td class="align-left"><?=$item->id?></td>
 					<td><input type="checkbox" name="good_id" class="b-sess-checkbox" data-block="#b-sess-checkbox-list" <? if($item->isChecked()): ?>checked="checked"<? endif; ?> value="<?=$item->id?>"></td>
 					<? if($with_photos): ?>
-						<? $images = $item->getImages(1, array("small"));?>
+						<? $images = $item->getImages(1, array("small"), NULL, NULL, true);?>
 						<td class="b-photo-td">
 							<a href="<?=$images[0]["original"]?>" class="fancy-img" rel="<?=$item->id?>"><img src="<?=$images[0]["small"]?>" alt=""></a>
 							<? foreach ($images as $key => $img): ?>

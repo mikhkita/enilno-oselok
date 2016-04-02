@@ -14,6 +14,7 @@ class GoodFilter extends CActiveRecord
 	public $fields_assoc = array();
 	public $count_all_adverts = NULL;
 	public $count_url_adverts = NULL;
+	public $images = array();
 
 	/**
 	 * @return string the associated database table name
@@ -268,8 +269,9 @@ class GoodFilter extends CActiveRecord
 		return false;
 	}
 
-	public function getImages($count = NULL, $sizes = NULL, $good = NULL, $get_default = true,$extra = false){
-
+	public function getImages($count = NULL, $sizes = NULL, $cap = NULL, $good = NULL, $get_default = false){
+		$count = ($count === NULL)?100:$count;
+		ini_set("display_errors", 1);
 		$default_sizes = array(
 			"small" => "320",
 			"big" => "640"
@@ -282,95 +284,82 @@ class GoodFilter extends CActiveRecord
 
 		$sizes = $default_sizes;
 
-		if( $good === NULL ){
-			$good = array("code" => $this->fields_assoc[3]->value, "good_type_id" => $this->good_type_id);
-		}else{
-			if( is_object($good) ){
-				$good = array("code" => $good->fields_assoc[3]->value, "good_type_id" => $good->good_type_id);
-			}
-		}
-		$images = Controller::getImages($good, $count, $get_default);
-		if($extra) {
-			$images = Controller::getImages($good, $count, $get_default,true);
-		}
-		if( count($images) == 1 ){
-			if( strpos($images[0], "default.jpg") ){
-				foreach ($sizes as $i => $size)
-					$sizes[$i] = $images[0];
+		$good = ($good === NULL)?$this:$good;
 
-				return array($sizes);
-			}
-		}
+		$code = $good->fields_assoc[3]->value;
+        $good_type_id = $good->good_type_id;
+        $good_id = $good->id;
+
+        $image_path = Yii::app()->params["imageFolder"]."/".GoodType::getCode($good_type_id)."/".$code;
+        $cache_path = str_replace("images", "cache", $image_path);
+        if( $cap !== NULL ){
+        	$images = array();
+        	$model = Yii::app()->db->createCommand()
+	            ->select('i.id,i.good_id,i.site,c.sort,i.ext')
+	            ->from(Image::tableName().' i')
+	            ->join(ImageCap::tableName().' c', 'c.image_id=i.id')
+	            ->where("i.good_id='$good_id' AND c.cap_id=$cap")
+	            ->order("c.sort")
+	            ->queryAll();
+
+	        foreach ($model as $key => $image)
+	        	array_push($images, (object) $image);
+        }else{
+        	$images = Image::model()->findAll(array("condition" => "good_id='$good_id'", "limit" => $count, "order" => "sort"));
+        }
+		$cache = Cache::model()->with("image")->findAll("good_id='$good_id'");
+
+		$exist = array();
+		foreach ($cache as $key => $item)
+			$exist[$item->image_id."_".$item->size] = $item->hash;
+
 		$values = array();
-		foreach ($images as $i => $image) {
-			$name = ($i<10?"0":"").$i;
+		$out = array();
+		foreach ($images as $p => $image){
+			if( file_exists($image_path."/".$image->id.".".$image->ext) ){
+				$hash = filesize($image_path."/".$image->id.".".$image->ext);
+				$item = array("site" => $image->site, "id" => $image->id);
+				foreach ($sizes as $i => $size) {
+					if( !isset($exist[$image->id."_".$size]) ){
+						Good::cropImage($image_path."/".$image->id.".".$image->ext, $size);
 
-			$image = array(
-				"class" => $good["code"]."#".$good["good_type_id"],
-				"hash" => filesize(substr($image,1)),
-				"path" => substr($image,1)
-			);
-			if($extra) {
-				$image["class"] = $good["code"]."#".$good["good_type_id"]."_e";
-			}
-			foreach ($sizes as $key => $size) {
-				$image["name"] = $name."_".$size;
-				array_push($values, $image);
-			}
-		}
-
-		$values = Cache::model()->check($values);
-
-		$update = array();
-		foreach ($values as $i => $value) {
-			$size = intval(array_pop(explode("_", $value["name"])));
-			$new_link = Good::cropImage($value["path"], $size);
-
-			if( $new_link )
-				array_push($update, array($value["class"], $value["name"], "/".$new_link, $value["hash"]));
-		}
-
-		Controller::updateRows(Cache::tableName(), $update, array("value", "hash"));
-
-		
-		if($extra) {
-			$values = Cache::get($good["code"]."#".$good["good_type_id"]."_e");
-		} else $values = Cache::get($good["code"]."#".$good["good_type_id"]);
-		$delete = array();
-		foreach ($values as $i => $value) {
-			$arr = explode("_", $value["name"]);
-			$key = intval($arr[0]);
-
-			if( $images[$key] !== NULL ){
-				if( !is_array($images[$key]) ) 
-					$images[$key] = array("original" => $images[$key]);
-
-				$images[$key][array_search(intval($arr[1]), $sizes)] = $value["value"];
-			}else{
-				array_push($delete, "'".$value["value"]."'");
-				if( file_exists(substr($value["value"], 1)) )
-					unlink(substr($value["value"], 1));
+						array_push($values, array(
+							"image_id" => $image->id,
+							"size" => $size,
+							"hash" => $hash
+						));
+					}else{
+						if( $hash != $exist[$image->id."_".$size] ){
+							Good::cropImage($image_path."/".$image->id.".".$image->ext, $size);
+							Cache::model()->updateAll(array("hash"=>$hash),"image_id='".$image->id."'");
+						}
+					}
+					$item[$i] = "/".$cache_path."/".$image->id."_".$size.".".$image->ext;
+				}
+				$item["original"] = "/".$image_path."/".$image->id.".".$image->ext;
+				array_push($out, $item);
 			}
 		}
 
-		if( count($delete) )
-			Cache::model()->deleteAll("value IN (".implode(",", $delete).")");
-		return $images;
+		if( count($values) )
+			Controller::insertValues(Cache::tableName(), $values);
+
+		if( !count($out) && $get_default ){
+			array_push($out, $default_sizes+array("original"=>1));
+			foreach ($out[0] as $i => &$item) {
+				$item = "/".Yii::app()->params["imageFolder"]."/".GoodType::getCode($good_type_id)."/default.jpg";
+			}
+		}
+
+		return $out;
 	}
 
 	public function cropImage($original, $width){
 		$arr = explode("/", $original);
-		if(strpos($original,"extra") !== false) {
-			$name_arr = explode(".", $arr[5]);
-			$new_path = $arr[0]."/cache/".$arr[2]."/".$arr[3]."/".$arr[4]."/".$name_arr[0]."_".$width.".".strtolower($name_arr[1]);
+		$name_arr = explode(".", $arr[4]);
+		$new_path = $arr[0]."/cache/".$arr[2]."/".$arr[3]."/".$name_arr[0]."_".$width.".".strtolower($name_arr[1]);
 
-			$dir = $arr[0]."/cache/".$arr[2]."/".$arr[3]."/".$arr[4]; 
-		} else {
-			$name_arr = explode(".", $arr[4]);
-			$new_path = $arr[0]."/cache/".$arr[2]."/".$arr[3]."/".$name_arr[0]."_".$width.".".strtolower($name_arr[1]);
-
-			$dir = $arr[0]."/cache/".$arr[2]."/".$arr[3]; 
-		}
+		$dir = $arr[0]."/cache/".$arr[2]."/".$arr[3]; 
         if (!is_dir($dir)){
         	mkdir($dir, 0777, true);
         }

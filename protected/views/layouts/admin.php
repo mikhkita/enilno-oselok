@@ -67,6 +67,7 @@
             <div class="b-place-state">
                 <span class="<?=(($this->place_states["DROM"] == "on")?("b-green"):("b-red"))?>" data-id="2047">Дром</span>
                 <span class="<?=(($this->place_states["AVITO"] == "on")?("b-green"):("b-red"))?>" data-id="2048">Авито</span>
+                <span class="<?=(($this->place_states["VK"] == "on")?("b-green"):("b-red"))?>" data-id="3875">Вк</span>
                 <p><?=Cron::model()->count();?></p>
             </div>
             <div class="who_am_i">

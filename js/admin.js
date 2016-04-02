@@ -1371,24 +1371,38 @@ $(document).ready(function(){
             var el = document.getElementById('photo-sortable');
             var el2 = document.getElementById('photo-sortable-2');
             var sortable = Sortable.create(el, {
+                sort: false,
                 group: {
                     name: 'photo-sortable',
-                    put: ['photo-sortable-2']
-                  },
-                  onAdd: function (evt) {
+                    pull: 'clone'
+                },
+                onAdd: function (evt) {
                     console.log(evt);
-                    $(evt.item).find("input").attr("name",$(evt.to).attr("data-sort")).attr("data-name",$(evt.to).attr("data-sort"));
+                    $(evt.item).find("input").attr("name",$(evt.to).attr("data-id")).attr("data-name",$(evt.to).attr("data-id"));
                 }
             });
-            
-            var sortable2 = Sortable.create(el2, {
-                group: {
-                    name: 'photo-sortable-2',
-                    put: ['photo-sortable']
-                  },
-                  onAdd: function (evt) {
-                    $(evt.item).find("input").attr("name",$(evt.to).attr("data-sort")).attr("data-name",$(evt.to).attr("data-sort"));
-                }
+
+            $(".photo-sortable-cap").each(function(){
+                var el = document.getElementById($(this).attr("id"));
+
+                var sortable = Sortable.create(el, {
+                    group: {
+                        name: 'photo-sortable-'+$(this).attr("id"),
+                        put: ['photo-sortable']
+                    },
+                    onAdd: function (evt) {
+                        var first = true;
+                        $(".b-photo-sortable-wrap li[data-id='"+$(evt.item).attr("data-id")+"']").each(function(){
+                            if( !first ){
+                                $(this).remove();
+                                // alert("Данная фотография уже есть в другой емкости. Не рекомендуется использовать одну и ту же фотографию в нескольких емкостях.");
+                            }
+                            first = false;
+                        });
+
+                        $(evt.item).find("input").attr("name",$(evt.to).attr("data-sort")).attr("data-name",$(evt.to).attr("data-id"));
+                    }
+                });
             });
         }
     }
@@ -1396,37 +1410,43 @@ $(document).ready(function(){
 
     $("body").on("click",".b-photo-delete",function(){
         var $li = $(this).parents("li");
-        if( !$li.hasClass("deleted") ){
-            $li.addClass("deleted");
-            $li.find("input").attr("name", $li.find("input").attr("data-delete"));
-            $li.find(".ion-close").removeClass("ion-close").addClass("ion-android-refresh");
+
+        if( $(this).parents(".photo-sortable").attr("id") == "photo-sortable" ){
+            if( !$li.hasClass("deleted") ){
+                $li.addClass("deleted");
+                $li.find("input").each(function(){
+                    $(this).attr("name", $(this).attr("data-delete")); 
+                });
+                $li.find(".ion-close").removeClass("ion-close").addClass("ion-android-refresh");
+            }else{
+                $li.removeClass("deleted");
+                $li.find("input").each(function(){
+                    $(this).attr("name", $(this).attr("data-name")); 
+                });
+                $li.find(".ion-android-refresh").removeClass("ion-android-refresh").addClass("ion-close");
+            }
         }else{
-            $li.removeClass("deleted");
-            $li.find("input").attr("name", $li.find("input").attr("data-name"));
-            $li.find(".ion-android-refresh").removeClass("ion-android-refresh").addClass("ion-close");
+            $li.remove();
         }
         return false;
     });
 
+    var newImage = 1;
     customHandlers["add-to-photo-sortable"] = function(links){
-        for( var i in links )
-            $("#photo-sortable").append('<li style="background-image: url(\'/'+links[i]+'\');" data-small="/'+links[i]+'" data-src="/'+links[i]+'"><a href="#" class="b-photo-delete ion-icon ion-close"></a><input type="hidden" name="Images[]" data-name="Images[]" data-delete="Delete[]" value="/'+links[i]+'"></li>');
-    }
-    customHandlers["add-to-photo-sortable-2"] = function(links){
-        for( var i in links )
-            $("#photo-sortable-2").append('<li style="background-image: url(\'/'+links[i]+'\');" data-small="/'+links[i]+'" data-src="/'+links[i]+'"><a href="#" class="b-photo-delete ion-icon ion-close"></a><input type="hidden" name="Extra[]" data-name="Extra[]" data-delete="Delete[]" value="/'+links[i]+'"></li>');
+        for( var i in links ){
+            $("#photo-sortable").append('<li style="background-image: url(\'/'+links[i]+'\');" data-small="/'+links[i]+'" data-src="/'+links[i]+'" data-id="new-'+newImage+'"><a href="#" class="b-photo-delete ion-icon ion-close"></a><input type="hidden" name="Images[]" data-name="Images[]" data-delete="None[]" value="new-'+newImage+'"><input type="hidden" name="New[new-'+newImage+']" data-name="New[new-'+newImage+']" data-delete="None[]" value="/'+links[i]+'"></li>');
+            newImage++;
+        }
     }
 
-    var order1 = [],order2 = [],
-        issetdeleted1 = false,issetdeleted2 = false;
+    var order = [],
+        issetdeleted = false;
     $("body").on("click","#b-update-photo",function(){
         $(".photo-sortable").addClass("disabled");
         progress.setColor("#D26A44");
         progress.start(1);
-        order1 = backupImages($(".photo-sortable:eq(0) li"));
-        order2 = backupImages($(".photo-sortable:eq(1) li"));
-        issetdeleted1 = $(".photo-sortable:eq(0) li.deleted").length;
-        issetdeleted2 = $(".photo-sortable:eq(1) li.deleted").length;
+        order = backupImages($(".photo-sortable:eq(0) li"));
+        issetdeleted = $(".photo-sortable:eq(0) li.deleted").length;
         console.log($( ".photo-sortable input" ));
         $.ajax({
             url: $( "#photo-sortable" ).attr("data-href"),
@@ -1437,15 +1457,10 @@ $(document).ready(function(){
                     $(".photo-sortable").removeClass("disabled");
                     $("#photo-cont").html(msg);
 
-                    if( issetdeleted1 ){
+                    if( issetdeleted ){
                         reloadImages($(".photo-sortable:eq(0) li"));
                     }else{
-                        restoreImages($(".photo-sortable:eq(0) li"),order1);
-                    }
-                    if( issetdeleted2 ){
-                        reloadImages($(".photo-sortable:eq(1) li"));
-                    }else{
-                        restoreImages($(".photo-sortable:eq(1) li"),order2);
+                        restoreImages($(".photo-sortable:eq(0) li"),order);
                     }
                     photo_init();
                 });

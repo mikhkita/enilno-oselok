@@ -1,10 +1,8 @@
 <div class="b-section-nav clearfix">
 	<div class="b-section-nav-back clearfix">
-		<? if( $category->id == 2048 ): ?>
-			<a href="<?php echo $this->createUrl('/queue/adminindex',array("category_id"=>2047))?>" class="b-link left">Дром</a>
-		<? else: ?>
-			<a href="<?php echo $this->createUrl('/queue/adminindex',array("category_id"=>2048))?>" class="b-link left">Авито</a>
-		<? endif; ?>
+		<? if( $category->id != 2047 ): ?><a href="<?php echo $this->createUrl('/queue/adminindex',array("category_id"=>2047))?>" class="b-link left">Дром</a><? endif; ?>
+		<? if( $category->id != 2048 ): ?><a href="<?php echo $this->createUrl('/queue/adminindex',array("category_id"=>2048))?>" class="b-link left">Авито</a><? endif; ?>
+		<? if( $category->id != 3875 ): ?><a href="<?php echo $this->createUrl('/queue/adminindex',array("category_id"=>3875))?>" class="b-link left">Вконтакте</a><? endif; ?>
 		<div class="left b-kit-switcher-cont clearfix">
 			<span>Выкладка: </span>
 			<a href="#" class="b-kit-switcher right<?if($this->place_states[$category->id] == "on") echo" checked";?>" data-on="updateQueue" data-off="updateQueue" data-on-href="<?php echo $this->createUrl('/queue/adminstart',array("category_id"=>$category->id))?>" data-off-href="<?php echo $this->createUrl('/queue/adminstop',array("category_id"=>$category->id))?>" data-id="<?=$category->id?>" >
@@ -46,12 +44,14 @@ $form=$this->beginWidget('CActiveForm',array('id'=>'filter-form',"action" => $th
 				</div>
 			</div>
 		<? endif; ?>
-		<div class="b-advert-block">
-			<h3>Город выкладки</h3>
-			<div class="clearfix">
-			<?=CHtml::checkBoxList("Attr[58]", $_GET['Attr'][58], $data_filter['Attr'][58],$htmlopt);?>
+		<? if( $category->id != 3875 ): ?>
+			<div class="b-advert-block">
+				<h3>Город выкладки</h3>
+				<div class="clearfix">
+				<?=CHtml::checkBoxList("Attr[58]", $_GET['Attr'][58], $data_filter['Attr'][58],$htmlopt);?>
+				</div>
 			</div>
-		</div>
+		<? endif; ?>
 		<div class="b-advert-block">
 			<h3>Состояние</h3>
 			<div class="clearfix">

@@ -248,11 +248,11 @@ class Task extends CActiveRecord
 	}
 
 	public function checkPhoto($good){
-		return count(Controller::getImages($good, NULL, false))?true:false;
+		return count($good->getImages(NULL))?true:false;
 	}
 
 	public function checkExtraPhoto($good){
-		return count(Controller::getImages($good, NULL, false, true))?true:false;
+		return count($good->getImages(NULL, NULL, 3))?true:false;
 	}
 
 	public function getRequired($good_type_id){

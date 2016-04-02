@@ -13,7 +13,7 @@
 					<div class="detail-slider-for">
 						<?$i=0;?>
 						<? foreach ($imgs as $img): ?>
-							<div><a href="<?=$img["original"]?>" class="fancy-img big<?=(($i==0)?"":" after-load-back")?>" <?=(($i==0)?"":"data-")?>style="background-image:url('<?=$img["big"]?>');" rel="gallery0"></a></div>
+							<div><a href="<?=$img["original"]?>" <?if(strpos($img["original"], "default")):?>onclick="return false;"<?endif;?> class="<?if(!strpos($img["original"], "default")):?>fancy-img <?endif;?>big<?=(($i==0)?"":" after-load-back")?>" <?=(($i==0)?"":"data-")?>style="background-image:url('<?=$img["big"]?>');" rel="gallery0"></a></div>
 							<?$i++;?>
 						<? endforeach; ?>
 					</div>
@@ -27,11 +27,11 @@
 				</div>
 				<div class="detail-price gradient-grey right">
 					<div class="clearfix">
-						<? $price = ($good->fields_assoc[20])?$good->fields_assoc[20]->value:0; if( isset($good->fields_assoc[106]) ) $price += 1000; ?>
+						<? $price = Interpreter::generate($this->params[$_GET['type']]["PRICE_CODE"], $good, $dynamic);?>
 						<? $price = number_format($price, 0, ',', ' ' )." р."; $order = Interpreter::generate($this->params[$_GET['type']]["ORDER"], $good,$dynamic); ?>
 						<? $price = ($good->archive)?(($this->user)?("Продано за ".$price):"Продано"):$price; ?>
-						<h3><?=( !$good->fields_assoc[20]->value || $good->fields_assoc[20]->value == 0 )? Yii::app()->params["zeroPrice"] : $price ?><?$delivery = Interpreter::generate($this->params[$_GET['type']]["SHIPPING"], $good,$dynamic);?><span <?if($delivery=="бесплатная"):?>class="b-free-delivery"<?endif;?>> <?=$delivery?></span></h3>
-						<? $is_available = Interpreter::generate($this->params[$_GET['type']]["AVAILABLE"], $good,$dynamic); ?>
+						<h3><?=( !$good->fields_assoc[20]->value || $good->fields_assoc[20]->value == 0 )? Yii::app()->params["zeroPrice"] : $price ?><?if(!$good->archive):?><?$delivery = Interpreter::generate($this->params[$_GET['type']]["SHIPPING"], $good,$dynamic);?><span <?if($delivery=="бесплатная"):?>class="b-free-delivery"<?endif;?>> <?=$delivery?></span><?endif;?></h3>
+						<? $is_available = Interpreter::generate($this->params[$_GET['type']]["AVAILABLE"], $good, $dynamic); ?>
 						<? if(!$good->archive): ?>
 							<? if($is_available != "В наличии"): ?>
 								<h4 <?if($delivery=="бесплатная"):?>class="b-free-delivery"<?endif;?>><?=$is_available?></h4>
