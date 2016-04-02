@@ -230,7 +230,9 @@ class DromController extends Controller
 
         $vk = new Vk();
         
-        print_r($vk->addAdvert(false,array(1,2,3,4)));
+        // print_r($vk->addAdvert(false,array(1,2,3,4)));
+        // $vk->deleteAdvert(163381);
+        $vk->curl->removeCookies();
         die();
         // https://oauth.vk.com/access_token?client_id=5378578&client_secret=KI6VRCmR4BRiXpkBtVr9&redirect_uri=http://tomsk.koleso.online&code=f270032aaa3dd3a7cf
         // $photodoska = new Photodoska("82.146.35.208");

@@ -7,7 +7,6 @@ Class Vk {
     private $version = 5.50;
     private $base_url = 'https://api.vk.com/method/';
     public $curl;
-
     function __construct() {
         $this->curl = new Curl();
     }
@@ -25,20 +24,52 @@ Class Vk {
             $params = array(
                 'owner_id' => "-".$this->group_id,
                 'category_id' => 404,
-                'v' => $this->version,
-                'access_token' => $this->access_token,
                 'name' => $params['name'],
                 'description' => $params['description'],
                 'price' => $params['price'],
-                'main_photo_id' => $photo_arr[0]
+                'main_photo_id' => $photo_arr[0],
+                'v' => $this->version,
+                'access_token' => $this->access_token
             );
             unset($photo_arr[0]);
             if(count($photo_arr))
                 $params['photo_ids'] = implode(",", $photo_arr);       
             $url .='?'.urldecode(http_build_query($params));
-            $this->curl->removeCookies();
-            return json_decode($this->curl->request($url))->response->market_item_id;
-        }
+            $advert_id = json_decode($this->curl->request($url))->response->market_item_id;
+            $url = $this->base_url."market.addToAlbum";
+            $params = array(
+                'owner_id' => "-".$this->group_id,
+                'item_id' => $advert_id,
+                'album_ids' => $params['album_id'],
+                'v' => $this->version,
+                'access_token' => $this->access_token,
+            );
+            $url .='?'.urldecode(http_build_query($params));  
+            $result = json_decode($this->curl->request($url))->response;
+            $result = ($result == 1) ? $advert_id : false;
+            return $result;
+        } 
+        return false;
+    }
+
+    public function deleteAdvert($advert_id) {
+        $url = $this->base_url."market.delete";
+        $params = array(
+            'owner_id' => "-".$this->group_id,
+            'item_id' => $advert_id,
+            'v' => $this->version,
+            'access_token' => $this->access_token
+        );
+        $url .='?'.urldecode(http_build_query($params));  
+        $result = json_decode($this->curl->request($url))->response;
+        return ($result == 1);
+    }
+
+    public function generateFields($fields,$good_type_id){
+        if( $good_type_id == 1) $fields['album_id'] = 7;
+        if( $good_type_id == 2) $fields['album_id'] = 6;
+        if( $good_type_id == 3) $fields['album_id'] = 5;
+        return $fields;
     }
 
     public function addPhoto($image,$type_img = 0){
