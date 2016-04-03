@@ -11,51 +11,70 @@ Class Vk {
         $this->curl = new Curl();
     }
 
-    public function addAdvert($params,$images = NULL){
-        if($images) {
-            $photo_arr = array();
-            array_push($photo_arr, $this->addPhoto($images[0],1));
-            for ($i=1; $i < count($images); $i++) {
-                if($i == 5) break; 
-                array_push($photo_arr, $this->addPhoto($images[$i]));
-                
-            }
-            $url = $this->base_url."market.add";
-            $album_id = $params["album_id"];
-            $params = array(
-                'owner_id' => "-".$this->group_id,
-                'category_id' => 404,
-                'name' => urlencode($params['name']),
-                'description' => urlencode($params['description']),
-                'price' => $params['price'],
-                'main_photo_id' => $photo_arr[0],
-                'v' => $this->version,
-                'access_token' => $this->access_token
-            );
-            unset($photo_arr[0]);
-            if(count($photo_arr))
-                $params['photo_ids'] = implode(",", $photo_arr);       
-            $url .='?'.urldecode(http_build_query($params));
+    public function addAdvert($params,$images,$edit_id = NULL){
+        $photo_arr = array();
+        $inc = 0;
+        $result = false;
+        
+        array_push($photo_arr, $this->addPhoto($images[0],1));
+        for ($i=1; $i < count($images); $i++) {
+            if($i == 5) break; 
+            array_push($photo_arr, $this->addPhoto($images[$i]));
+            
+        }  
+        $url = ($edit_id) ? $this->base_url."market.edit" : $this->base_url."market.add";
+        $album_id = $params["album_id"];
+        $params = array(
+            'owner_id' => "-".$this->group_id,
+            'category_id' => 404,
+            'name' => urlencode($params['name']),
+            'description' => urlencode($params['description']),
+            'price' => $params['price'],
+            'main_photo_id' => $photo_arr[0],
+            'v' => $this->version,
+            'access_token' => $this->access_token
+        );
+        if($edit_id) $params['item_id'] = $edit_id;
+        unset($photo_arr[0]);
+        if(count($photo_arr))
+            $params['photo_ids'] = implode(",", $photo_arr);       
+        $url .='?'.urldecode(http_build_query($params));
+        $json = json_decode($this->curl->request($url));
 
-            $json = json_decode($this->curl->request($url));
+        if(!$edit_id) {
             $advert_id = $json->response->market_item_id;
-            $url = $this->base_url."market.addToAlbum";
-            $params = array(
-                'owner_id' => "-".$this->group_id,
-                'item_id' => $advert_id,
-                'album_ids' => $album_id,
-                'v' => $this->version,
-                'access_token' => $this->access_token,
-            );
-            $url .='?'.urldecode(http_build_query($params));  
-            $json = json_decode($this->curl->request($url));
-            $result = $json->response;
-            $result = ($result == 1) ? $advert_id : false;
+            if($advert_id) {
+                while ( $inc < 5 && $result === false) {
+                    $url = $this->base_url."market.addToAlbum";
+                    $params = array(
+                        'owner_id' => "-".$this->group_id,
+                        'item_id' => $advert_id,
+                        'album_ids' => $album_id,
+                        'v' => $this->version,
+                        'access_token' => $this->access_token,
+                    );
+                    $url .='?'.urldecode(http_build_query($params));  
+                    $json = json_decode($this->curl->request($url));
+                    $result = $json->response;
+                    $result = ($result == 1) ? $advert_id : false;
+                    $inc++;
+                }    
+                if($result === false) {
+                    $inc = 0;
+                    while ( $inc < 5 && !$this->deleteAdvert($advert_id)) {
+                        $inc++;
+                    }
+                }
+            }
+        } else {
+            $result = ($json->response == 1) ? $edit_id : false;
+        }
+        $this->curl->removeCookies();
+        return $result;
+    }
 
-            $this->curl->removeCookies();
-            return $result;
-        } 
-        return false;
+    public function updateAdvert($advert_id,$params,$images) {
+        return $this->addAdvert($params,$images,$advert_id);
     }
 
     public function deleteAdvert($advert_id) {
@@ -67,7 +86,9 @@ Class Vk {
             'access_token' => $this->access_token
         );
         $url .='?'.urldecode(http_build_query($params));  
-        $result = json_decode($this->curl->request($url))->response;
+        $result = json_decode($this->curl->request($url));
+        $result = $result->response;
+        $this->curl->removeCookies();
         return ($result == 1);
     }
 
@@ -87,7 +108,8 @@ Class Vk {
                 'access_token' => $this->access_token
             );
         $url .='?'.urldecode(http_build_query($params));
-        $url = json_decode($this->curl->request($url))->response->upload_url;
+        $json = json_decode($this->curl->request($url));
+        $url = $json->response->upload_url;
         $url = json_decode($this->curl->request($url,array("file" => new CurlFile(Yii::app()->basePath.DIRECTORY_SEPARATOR.'..'.$image))));
         $params = array(
             'group_id' => $this->group_id,
@@ -103,7 +125,8 @@ Class Vk {
         }
         $url = $this->base_url."photos.saveMarketPhoto";
         $url .='?'.urldecode(http_build_query($params));
-        return json_decode($this->curl->request($url))->response[0]->id;
+        $json = json_decode($this->curl->request($url));
+        return $json->response[0]->id;
     }
 }
 
