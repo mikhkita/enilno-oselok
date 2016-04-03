@@ -187,6 +187,8 @@ class IntegrateController extends Controller
 
                 if( $place_name == "AVITO" ){
                     $result = true;
+                }else if( $place_name == "VK" ){
+                    $result = $place->updateAdvert($advert->url, $fields, $images);
                 }else{
                     Log::debug("Редактирование ".$advert->good->fields_assoc[3]->value." в аккаунте ".$account->login);
                     $result = $place->updateAdvert( (($place_name == "AVITO")?$advert->link:$advert->url) ,$fields);
@@ -197,6 +199,8 @@ class IntegrateController extends Controller
 
                 if( $place_name == "AVITO" ){
                     $result = true;
+                }else if( $place_name == "VK" ){
+                    $result = $place->updateAdvert($advert->url, $fields, $images);
                 }else{
                     Log::debug("Обновление фотографий ".$advert->good->fields_assoc[3]->value." в аккаунте ".$account->login);
                     $result = $place->updateAdvert( (($place_name == "AVITO")?$advert->link:$advert->url) ,$fields,$images,true);
@@ -413,7 +417,7 @@ class IntegrateController extends Controller
                     "TEXT" => $this->replaceToBr(Interpreter::generate($curParams["TEXT_CODE"],$item,$dynamic)),
                     "TITLE" => Interpreter::generate($curParams["TITLE_CODE"],$item,$dynamic),
                     "PRICE" => Interpreter::generate($curParams["PRICE_CODE"],$item,$dynamic),
-                    "IMAGE" => substr($this->getImages($item)[0],1)
+                    "IMAGE" => substr($this->getImages(1,NULL,NULL,$item)[0],1)
                 )
             );
         }
