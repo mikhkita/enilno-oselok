@@ -415,7 +415,8 @@ Class Drom {
                 'predestination' => 98,
                 'made' => 11,
                 'tireWidthMore' => 98,
-                'tireHeightMore' => 98
+                'tireHeightMore' => 98,
+                'images' => 999
                 
         	);
 
@@ -557,13 +558,13 @@ Class Drom {
             foreach ($params as  $key => &$value) {
                 if(!is_array($value)) $value = trim($value);
             }
+
             if($html->find(".bulletinImages img")) {
-    	        $dir = Yii::app()->params["imageFolder"]."/".GoodType::model()->findByPk($params[$fields['type']])->code."s/".$good_code; 
-    	        if (!is_dir($dir)) mkdir($dir, 0777, true);
+                $params[$fields['images']] = array();
     	        foreach ($html->find(".bulletinImages img") as $i => $img) {
                     if($img->getAttribute("data-zoom-image")) {
-                        copy( $img->getAttribute("data-zoom-image"), $dir."/".$good_code."_".sprintf("%'.02d", $i).".jpg");
-                    } else copy( $img->src, $dir."/".$good_code."_".sprintf("%'.02d", $i).".jpg");
+                        array_push($params[$fields['images']], $img->getAttribute("data-zoom-image"));
+                    } else array_push($params[$fields['images']], $img->src);
                 }
             }
             return $params;

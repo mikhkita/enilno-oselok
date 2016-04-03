@@ -579,7 +579,7 @@ class Good extends GoodFilter
 		));
 
 		foreach ($params as $attr_id => $value) {
-			if($value!= "" && $attr_id != 0) {
+			if($value!= "") {
 				$attr_type = Attribute::model()->with("type")->findByPk($attr_id);
 				if(is_array($value)) {
 					foreach ($value as $key => $item) {
@@ -598,8 +598,10 @@ class Good extends GoodFilter
 	        }else{
 	        	$this->cleanDir($dir);
 	        }
-	        foreach ($images as $i => $link)
-				copy( $link, $dir."/".$good_code."_".sprintf("%'.02d", $i).".jpg");
+	        foreach ($images as $i => $link) {
+	        	$new_id = Image::add($model->id, "jpg", 1, $i+1);
+				copy( $link, $dir."/".$new_id.".jpg");
+			}
 		}
 		$this->insertValues(GoodAttribute::tableName(),$fields);
 		return true;

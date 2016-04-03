@@ -84,7 +84,10 @@ class DromUserParseController extends Controller
         $params = $drom->parseAdvert($page,$good_code,$user_id);
         $drom->curl->removeCookies();
         if($params) {
-            if(Good::addAttributes($params,$params[0]) === true) {
+            $images = $params[999];
+            $good_type_id = $params[0];
+            unset($params[999],$params[0]);
+            if(Good::addAttributes($params,$good_type_id,$images) === true) {
                 $this->setParam( "OTHER", "PARTNERS_LAST_CODE",($good_code+1));
                 echo json_encode(array("result" => "success"));
             } else echo json_encode(array("result" => "error","message" => "Ошибка при добавлении товара"));
