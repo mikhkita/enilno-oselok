@@ -58,7 +58,7 @@ class IntegrateController extends Controller
             if( !$this->getNext($category_id, $nth) ){
                 sleep(5);
             }else{
-                if( !$debug ) sleep(rand(40,180));
+                if( !$debug && $category_id == 2047 ) sleep(rand(40,180));
             }
               
             if( $debug ) return true;
@@ -134,7 +134,8 @@ class IntegrateController extends Controller
             $fields["email"] = $account->login;
             $fields["seller_name"] = $account->name;
         }else if( $place_name == "VK" ){
-            
+            $place = new Vk();
+            $account = true;
         }
 
         if( !$account ){
@@ -151,12 +152,11 @@ class IntegrateController extends Controller
         }
 
         $fields = $place->generateFields($fields,$advert->good->good_type_id);
-
-        // print_r($fields);
-        // die();
         
-        $place->setUser($account->login, $account->password);
-        $res = $place->auth();
+        if( $place_name != "VK" ){
+            $place->setUser($account->login, $account->password);
+            $res = $place->auth();   
+        }
         // die();
         
         switch ($queue->action->code) {
@@ -266,17 +266,7 @@ class IntegrateController extends Controller
     }
 
     public function getPlaceName($place_id){
-        switch ($place_id) {
-            case 2047:
-                return "DROM";
-                break;
-            case 2048:
-                return "AVITO";
-                break;
-            default:
-                return "UNDEFINED";
-                break;
-        }
+        return Place::model()->categories[$place_id];
     }
 
     public function actionDeleteAdverts(){
@@ -944,9 +934,9 @@ class IntegrateController extends Controller
                 'pageSize'=>10000,
             )
         );
-        $goods = $goods["items"];
+        // $goods = $goods["items"];
         if( is_array($goods["items"]) )
-            array_merge($model, $goods["items"]);
+            $model = array_merge($model, $goods["items"]);
 
         $goods = Good::model()->filter(
             array(
@@ -960,18 +950,16 @@ class IntegrateController extends Controller
                 'pageSize'=>10000,
             )
         );
-        $goods = $goods["items"];
+        // $goods = $goods["items"];
         if( is_array($goods["items"]) )
-            array_merge($model, $goods["items"]);
+            $model = array_merge($model, $goods["items"]);
 
         $images = array();
         foreach ($model as $i => $good) {
-            foreach ($this->getImages($good) as $key => $link) {
+            foreach ($this->getImages(NULL,NULL,NULL,$good) as $key => $link) {
                 $link = substr($link, 1);
                 $size = getimagesize($link);
                 if( $size[0] == 640 && $size[1] == 115 ){
-                    echo "<img src='/".$link."'>";
-                    echo "<br>";
                     unlink($link);
                     array_push($images, $link);
                 }
@@ -1131,6 +1119,26 @@ class IntegrateController extends Controller
         }
     }
 
+    public function actionGoodTestPartner(){
+        $model = Good::model()->filter(
+            array(
+                "good_type_id"=>2,
+                "attributes"=>array(
+                    43 => array(2912)
+                )
+            )
+        )->getPage(
+            array(
+                'pageSize'=>10000,
+            )
+        );
+        $goods = $model["items"];
+
+        foreach ($goods as $i => $good) {
+            Task::model()->testGood($good);
+        }
+    }
+
     public function actionDromReg(){
         $place = new Drom( "admin:4815162342@82.146.35.208:1212" );
         $place->setUser("5069820", "y23u2e62");
@@ -1165,7 +1173,7 @@ class IntegrateController extends Controller
     public function actionUpdatePhoto(){
         $goods = Good::model()->filter(
             array(
-                "good_type_id"=>2
+                "good_type_id"=>3
             )
         )->getPage(
             array(

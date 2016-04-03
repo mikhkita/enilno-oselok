@@ -131,6 +131,7 @@ class Advert extends CActiveRecord
 	}
 
 	public function	setUrl($url = NULL){
+		echo $url;
 		$this->url = $url;
 		return $this->save();
 	}
@@ -140,6 +141,8 @@ class Advert extends CActiveRecord
 			return "http://baza.drom.ru/".$this->url.".html";
 		}else if( $this->place->category_id == 2048 ){
 			return "http://avito.ru/".$this->url;
+		}else if( $this->place->category_id == 3875 ){
+			return "https://vk.com/market-118079986?w=product-118079986_".$this->url;
 		}
 	}
 

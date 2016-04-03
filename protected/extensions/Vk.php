@@ -21,11 +21,12 @@ Class Vk {
                 
             }
             $url = $this->base_url."market.add";
+            $album_id = $params["album_id"];
             $params = array(
                 'owner_id' => "-".$this->group_id,
                 'category_id' => 404,
-                'name' => $params['name'],
-                'description' => $params['description'],
+                'name' => urlencode($params['name']),
+                'description' => urlencode($params['description']),
                 'price' => $params['price'],
                 'main_photo_id' => $photo_arr[0],
                 'v' => $this->version,
@@ -35,18 +36,23 @@ Class Vk {
             if(count($photo_arr))
                 $params['photo_ids'] = implode(",", $photo_arr);       
             $url .='?'.urldecode(http_build_query($params));
-            $advert_id = json_decode($this->curl->request($url))->response->market_item_id;
+
+            $json = json_decode($this->curl->request($url));
+            $advert_id = $json->response->market_item_id;
             $url = $this->base_url."market.addToAlbum";
             $params = array(
                 'owner_id' => "-".$this->group_id,
                 'item_id' => $advert_id,
-                'album_ids' => $params['album_id'],
+                'album_ids' => $album_id,
                 'v' => $this->version,
                 'access_token' => $this->access_token,
             );
             $url .='?'.urldecode(http_build_query($params));  
-            $result = json_decode($this->curl->request($url))->response;
+            $json = json_decode($this->curl->request($url));
+            $result = $json->response;
             $result = ($result == 1) ? $advert_id : false;
+
+            $this->curl->removeCookies();
             return $result;
         } 
         return false;
@@ -66,8 +72,8 @@ Class Vk {
     }
 
     public function generateFields($fields,$good_type_id){
-        if( $good_type_id == 1) $fields['album_id'] = 7;
-        if( $good_type_id == 2) $fields['album_id'] = 6;
+        if( $good_type_id == 1) $fields['album_id'] = 6;
+        if( $good_type_id == 2) $fields['album_id'] = 7;
         if( $good_type_id == 3) $fields['album_id'] = 5;
         return $fields;
     }

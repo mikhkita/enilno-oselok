@@ -178,58 +178,67 @@ class Task extends CActiveRecord
 	}
 
 	public function testGood($good){
-		if( is_object($good->fields_assoc[27]) && $good->fields_assoc[27]->variant_id != 1056 ) return true;
-		$params = $this->getParams($good->good_type_id);
+		if( is_object($good->fields_assoc[27]) && $good->fields_assoc[27]->variant_id == 1056 ){
+			$params = $this->getParams($good->good_type_id);
 
-		// Проверка первичных атрибутов
-		$not_exist = $this->checkFields($good, $params->necessary);
-		$necessary_exist = count($not_exist)?false:true;
-		if( !$necessary_exist ){
-			Task::add($good->id, "necessary", implode(",", $not_exist));
-		}else{
-			Task::remove($good->id, "necessary");
-		}
-
-
-		// Проверка цены
-		$not_exist = $this->checkFields($good, $params->price);
-		$price_exist = count($not_exist)?false:true;
-		if( !$price_exist ){
-			if( $necessary_exist ){
-				Task::add($good->id, "price", implode(",", $not_exist));
+			// Проверка первичных атрибутов
+			$not_exist = $this->checkFields($good, $params->necessary);
+			$necessary_exist = count($not_exist)?false:true;
+			if( !$necessary_exist ){
+				Task::add($good->id, "necessary", implode(",", $not_exist));
 			}else{
-				Task::edit($good->id, "price", implode(",", $not_exist));
+				Task::remove($good->id, "necessary");
+			}
+
+
+			// Проверка цены
+			$not_exist = $this->checkFields($good, $params->price);
+			$price_exist = count($not_exist)?false:true;
+			if( !$price_exist ){
+				if( $necessary_exist ){
+					Task::add($good->id, "price", implode(",", $not_exist));
+				}else{
+					Task::edit($good->id, "price", implode(",", $not_exist));
+				}
+			}else{
+				Task::remove($good->id, "price");
+			}
+
+			$required = $this->getRequired($good->good_type_id);
+
+			// Проверка обязательных атрибутов
+			$not_exist = $this->checkFields($good, array_diff($required, $params->price, $params->necessary));
+			if( count($not_exist) ){
+				if( $necessary_exist && $price_exist ) {
+					Task::add($good->id, "required", implode(",", $not_exist));
+				}else{
+					Task::edit($good->id, "required", implode(",", $not_exist));
+				}
+			}else{
+				Task::remove($good->id, "required");
+			}
+
+			// Проверка фотографий
+			if( !$this->checkPhoto($good) ){
+				Task::add($good->id, "photo");
+			}else{
+				Task::remove($good->id, "photo");
+			}
+
+			// Проверка дополнительных фотографий
+			if( !$this->checkCap($good,3) ){
+				Task::add($good->id, "extra");
+			}else{
+				Task::remove($good->id, "extra");
 			}
 		}else{
-			Task::remove($good->id, "price");
-		}
-
-		$required = $this->getRequired($good->good_type_id);
-
-		// Проверка обязательных атрибутов
-		$not_exist = $this->checkFields($good, array_diff($required, $params->price, $params->necessary));
-		if( count($not_exist) ){
-			if( $necessary_exist && $price_exist ) {
-				Task::add($good->id, "required", implode(",", $not_exist));
-			}else{
-				Task::edit($good->id, "required", implode(",", $not_exist));
+			if( is_object($good->fields_assoc[43]) && $good->fields_assoc[43]->variant_id == 2912 ){
+				if( !$this->checkCap($good,1) || !$this->checkCap($good,2) ){
+					Task::add($good->id, "extra");
+				}else{
+					Task::remove($good->id, "extra");
+				}
 			}
-		}else{
-			Task::remove($good->id, "required");
-		}
-
-		// Проверка фотографий
-		if( !$this->checkPhoto($good) ){
-			Task::add($good->id, "photo");
-		}else{
-			Task::remove($good->id, "photo");
-		}
-
-		// Проверка дополнительных фотографий
-		if( !$this->checkExtraPhoto($good) ){
-			Task::add($good->id, "extra");
-		}else{
-			Task::remove($good->id, "extra");
 		}
 	}
 
@@ -251,8 +260,8 @@ class Task extends CActiveRecord
 		return count($good->getImages(NULL))?true:false;
 	}
 
-	public function checkExtraPhoto($good){
-		return count($good->getImages(NULL, NULL, 3))?true:false;
+	public function checkCap($good,$cap){
+		return count($good->getImages(NULL, NULL, $cap))?true:false;
 	}
 
 	public function getRequired($good_type_id){

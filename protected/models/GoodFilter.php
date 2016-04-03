@@ -334,7 +334,7 @@ class GoodFilter extends CActiveRecord
 							Cache::model()->updateAll(array("hash"=>$hash),"image_id='".$image->id."'");
 						}
 					}
-					$item[$i] = "/".$cache_path."/".$image->id."_".$size.".".$image->ext;
+					$item[$i] = "/".$cache_path."/".$image->id."_".$size.".".strtolower($image->ext);
 				}
 				$item["original"] = "/".$image_path."/".$image->id.".".$image->ext;
 				array_push($out, $item);

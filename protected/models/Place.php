@@ -161,6 +161,10 @@ class Place extends CActiveRecord
   		return parent::beforeDelete();
  	}
 
+ 	public function getCategory($id){
+		return self::$categories[$id];
+	}
+
 	/**
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!

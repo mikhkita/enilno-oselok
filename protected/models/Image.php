@@ -148,10 +148,15 @@ class Image extends CActiveRecord
                                     $tmp = explode(".", $value);
                                     $new_id = Image::add($good_id, $tmp[1], 1, $index);
                                     rename($dir3."/".$value, $dir2."/".$new_id.".".$tmp[1]);
+                                    $new_cap = new ImageCap();
+                                    $new_cap->image_id = $new_id;
+                                    $new_cap->cap_id = 3;
+                                    $new_cap->sort = $key+1;
+                                    $new_cap->save();
                                     $index++;
                                 }
                             }
-                            rmdir($dir3);
+                            @rmdir($dir3);
                         }
                     }
                 }

@@ -459,11 +459,15 @@ class GoodController extends Controller
 		}else{
 			$model = $this->loadModel(key($good_ids));
 
+			$fields = $model->type->fields;
+			$dropdown = $this->getDropDown($fields);
+
 			$this->renderPartial('adminUpdateAll',array(
 				'model'=>$model,
 				'result' => NULL,
 				'cities' => $this->cityGroup(),
-				'fields' => $model->type->fields
+				'fields' => $fields,
+				'dropdown' => $dropdown
 			));
 		}
 	}

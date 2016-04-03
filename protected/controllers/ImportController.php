@@ -335,8 +335,6 @@ class ImportController extends Controller
 					$message = "Добавился товар с кодом: ";
 				}
 
-
-
 				// // Добавляем атрибуты к товару
 		        $sql = "INSERT INTO `$GoodAttributeTableName` (`good_id`,`attribute_id`,`int_value`,`varchar_value`,`text_value`,`float_value`,`variant_id`) VALUES ";
 		        foreach ($import["ITEMS"] as $i => $fields){
