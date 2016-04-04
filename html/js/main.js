@@ -51,12 +51,20 @@ $(document).ready(function(){
     });
 
     function whenScroll(){
-        if( $(".b-fixed-top").length ){
+        if( $(".b-fixed-top").length && myWidth < 768){
             var scroll = ((document.documentElement && document.documentElement.scrollTop) || document.body.scrollTop);
             if( scroll > $(".b-relative-top").offset().top+$(".b-relative-top").height() ){
                 $(".b-fixed-top").addClass("shown");
             }else{
                 $(".b-fixed-top").removeClass("shown");
+            }
+        }
+        if( $(".b-relative-top").length && myWidth > 767){
+            var scroll = ((document.documentElement && document.documentElement.scrollTop) || document.body.scrollTop);
+            if( scroll > $(".b-content").offset().top-$(".b-relative-top").height() ){
+                $(".b-relative-top").addClass("fixed");
+            }else{
+                $(".b-relative-top").removeClass("fixed");
             }
         }
         if($(".b-category #goods").length) {

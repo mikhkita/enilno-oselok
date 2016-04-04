@@ -40,7 +40,7 @@
 					</div>
 					<div class="clearfix">
 						<div class="left">
-							<a href="#" class="fancy b-orange-butt" data-block="#b-popup-buy" data-aftershow="detail_buy">Купить</a>
+							<a href="#" class="fancy b-orange-butt" data-block="#b-popup-buy" data-aftershow="detail_buy">в корзину</a>
 						</div>
 						<div class="left">
 							<h5 class="b-go" data-block="#shipping">Доставка и оплата</h5>

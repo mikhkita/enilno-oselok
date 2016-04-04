@@ -121,7 +121,6 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
                         ?>
                         <a href="tel:+<?=Yii::app()->params["city"]->phone?>" class="mobile-not-fancy fancy left" data-block="#b-popup-callback">+<?=$phone?></a>
                         <a href="mailto:onlinekoleso@yandex.ru" class="left mail">onlinekoleso@yandex.ru</a>
-                        <!-- <a href="#" class="right basket">Корзина (0)</a> -->
                     </div>
                     <form action="<?=Yii::app()->createUrl('kolesoOnline/search')?>" method="GET" class="b-search-form">
                         <input type="text" id="search" autocomplete="off" name="search" placeholder="Поиск">
@@ -133,14 +132,48 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
                 
             </div>
         </div>
-        <div class="b b-sub-menu b-relative-top gradient-orange">
-            <div class="b-block clearfix">
-                <a href="#" class="b-burger icon left"></a>
-                <ul class="clearfix left">
-                    <li><a href="<?=Yii::app()->createUrl('/kolesoOnline/category',array('type' => 2))?>">Диски</a></li>
-                    <li><a href="<?=Yii::app()->createUrl('/kolesoOnline/category',array('type' => 1))?>">Шины</a></li>
-                    <li><a href="<?=Yii::app()->createUrl('/kolesoOnline/category',array('type' => 3))?>">Колеса</a></li>
-                </ul>
+        <div class="b-sub-menu-cont">
+            <div class="b b-sub-menu b-relative-top gradient-orange">
+                <div class="b-block clearfix">
+                    <a href="#" class="b-burger icon left"></a>
+                    <ul class="b-sub-menu-list clearfix left">
+                        <li><a href="<?=Yii::app()->createUrl('/kolesoOnline/category',array('type' => 2))?>">Диски</a></li>
+                        <li><a href="<?=Yii::app()->createUrl('/kolesoOnline/category',array('type' => 1))?>">Шины</a></li>
+                        <li><a href="<?=Yii::app()->createUrl('/kolesoOnline/category',array('type' => 3))?>">Колеса</a></li>
+                    </ul>
+                    <!-- <div id="minicart right">
+                        <div class="b-cart-menu-cont">
+                            <div class="b-cart-menu affix-top gradient-grey" style="display: block;">
+                                <ul class="b-cart-items clearfix">
+                                    <li class="clearfix">
+                                        <a class="img left" style="background-image: url('http://tomsk.koleso.online/upload/cache/discs/7935/12702_320.jpg');" href="#"></a>
+                                        <div class="b-desc left">
+                                            <a href="#">Rally Sparco</a>
+                                            <h3>R17 5*114.3/5*100 7J +48</h3>
+                                            <h4>1 820 руб.</h4>
+                                        </div>
+                                        <a href="#" class="cart-close-btn ajax-href" data-href="/ajax/add_cart.php?delete=252922"></a>
+                                    </li>
+                                    <li class="clearfix">
+                                        <a class="img left" style="background-image: url('http://tomsk.koleso.online/upload/cache/discs/7935/12702_320.jpg');" href="#"></a>
+                                        <div class="b-desc left">
+                                            <a href="#">Rally Sparco</a>
+                                            <h3>R17 5*114.3/5*100 7J +48</h3>
+                                            <h4>1 820 руб.</h4>
+                                        </div>
+                                        <a href="#" class="cart-close-btn ajax-href" data-href="/ajax/add_cart.php?delete=252922"></a>
+                                    </li>
+                                </ul>
+                                <div class="b-cart-bottom clearfix">
+                                    <div class="b-total-price left">2 220 <span class="rub">руб.</span></div>
+                                    <a href="/cart/" class="btn btn-g right" onclick="_gaq.push(['_trackEvent', 'Обычный заказ', 'Оформить заказ', 'Заголовок корзины']);"><span>Оформить</span></a>
+                                </div>
+                            </div>
+                        </div>
+                        <a href="#" class="fixed-link basket right">Корзина (1)</a>    
+                    </div> -->
+                    <a class="fixed-link right fancy" href="#" data-block="#b-popup-callback">Обратный звонок</a>
+                </div>
             </div>
         </div>
         <div class="b b-sub-menu b-fixed-top gradient-orange mobile-only">

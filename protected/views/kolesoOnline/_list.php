@@ -40,7 +40,7 @@
                     <h3>Страна: <span><?=(($good->fields_assoc[11])?$good->fields_assoc[11]->value:"Не указано")?></span></h3>
                 <? endif; ?>
                 </a>
-                <a href="#" class="fancy b-orange-butt" data-block="#b-popup-buy" data-aftershow="category_buy">Купить</a>
+                <a href="#" class="fancy b-orange-butt" data-block="#b-popup-buy" data-aftershow="category_buy">в корзину</a>
             </div>
         </li>
     <? endforeach; ?>
