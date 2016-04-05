@@ -544,21 +544,25 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 					margin-right: 15px;
 				}
 				.b-cart-items li .b-desc {
-					// width: 160px;
+					width: 155px;
 				}
 					.b-cart-items li .b-desc a {
 						display: block;
 						font-size: 14px;
-					    //
+						// max-width: 155px;
 						color: #47669E;
 						font-weight: 400;
-						margin-bottom: 15px;
+						margin-bottom: 3px;
 						text-decoration: none;
+						min-height: 32px;
 					}
 
 					.b-cart-items li .b-desc h4,.b-cart-items li .b-desc h3 {
 					    color: #575757;
-					    margin-bottom: 5px;
+					    margin-bottom: 4px;
+					    text-overflow: ellipsis;
+					    overflow: hidden;
+					    white-space: nowrap;
 					}
 					.b-cart-items li .b-desc h4 {
 						font-weight: bold;
@@ -576,14 +580,30 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 						background-position: -98px -32px;
 					}
 			.b-cart-menu .b-total-price {
-				font-size: 18px;
-			    margin-top: 28px;
-			    margin-left: 28px;
+				font-size: 20px;
+				font-weight: bold;
+				margin-top: 23px;
+				margin-left: 25px;
 			}
-			.b-cart-menu .btn-g {
-				margin: 21px 20px;
-    			padding: 13px 29px 12px 28px;
+			.b-cart-menu .b-orange-butt {
+				color: #181818;
+				font-size: 12px;
+				text-decoration: none;
+				text-transform: uppercase;
+				font-weight: 500;
+				border-radius: 2px;
+				border-bottom: 2px solid #f69303;
+				margin: 15px;
+				width: 116px;
+				padding: 12px 0 9px;
+				display: inline-block;
 			}
+			.b-cart-menu .b-orange-butt:active {
+				border-bottom: 0px solid #FFD900;
+    			margin-top: 17px;
+			}
+				
+
 .b-main-slider {
 	height: 300px;
 }
@@ -1224,15 +1244,27 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 				font-weight: 500;
 				border-radius: 2px;
 				border-bottom: 2px solid #f69303;
-				margin-top: 16px;
+				margin-top: 20px;
 				width: 116px;
 				padding: 12px 0 9px;
 				display: inline-block;
 			}
+
+			.goods .gradient-grey .b-orange-butt.acc {
+				font-size: 11px;
+			}
 				.goods .gradient-grey .b-orange-butt:active {
 					border-bottom: 0px solid #FFD900;
-					margin-top: 18px;
+					margin-top: 22px;
 				}
+				.goods .gradient-grey .b-orange-butt.carted,.goods .gradient-grey .b-orange-butt.carted:active,.goods .gradient-grey .b-orange-butt.carted:hover {
+					background: rgb(227, 228, 232);
+				    cursor: default;
+				    box-shadow: inset 0px 0px 3px;
+				    border-bottom: 0;
+				    margin-top: 20px;
+				}
+
 	.goods .gradient-grey:hover .params-cont{
 		background-color: rgba(255,255,255,0.9);
 		padding: 29px 10px 19px;

@@ -429,9 +429,9 @@ $(document).ready(function(){
         return false;
     });
 
-    $("#goods .gradient-grey .b-orange-butt").click(function(){
-        return false;
-    });
+    // $("#goods .gradient-grey .b-orange-butt").click(function(){
+    //     return false;
+    // });
 
     $(".b-sort ul li").click(function(){
         $(this).find("input").prop("checked",true);
@@ -657,5 +657,30 @@ $(document).ready(function(){
 
         return false;
     }
+
+    $("body").on("click",".to-cart",function(){
+        var selector = $(this);
+        $.ajax({
+            type: "GET",
+            url: selector.attr("href"),
+            success: function(msg){
+                selector.attr("href","#").removeClass("to-cart").addClass("carted").text("добавлено");
+                $(".b-cart-items").append(msg);
+            }
+        });
+        return false;
+    });
+    
+    $("body").on("click",".cart-close-btn",function(){
+        var selector = $(this);
+        $.ajax({
+            type: "GET",
+            url: selector.attr("href"),
+            success: function(msg){
+                selector.closest("li").remove();
+            }
+        });
+        return false;
+    });   
 
 });
