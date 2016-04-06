@@ -143,15 +143,20 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
                     </ul>
                     <div id="minicart right">
                         <div class="b-cart-menu-cont">
-                            <div class="b-cart-menu affix-top gradient-grey" style="display: block;">
-                                <ul class="b-cart-items clearfix"></ul>
+                            <div class="b-cart-menu gradient-grey">
+                                <ul class="b-cart-items clearfix">
+                                    <?  if(isset($_SESSION["BASKET"]) && $_SESSION["BASKET"]) 
+                                        $this->renderPartial('_basket',array('partial' => false)); 
+                                    ?>
+                                </ul>
                                 <div class="b-cart-bottom clearfix">
                                     <div class="b-total-price left">0<span class="rub"> руб.</span></div>
                                     <a href="/cart/" class="b-orange-butt right">Оформить</a>
                                 </div>
                             </div>
                         </div>
-                        <a href="#" class="fixed-link basket right">Корзина (1)</a>    
+                        <? $count = (isset($_SESSION["BASKET"]) && count($_SESSION["BASKET"])) ? count($_SESSION["BASKET"]) : 0; ?>
+                        <a href="#" class="fixed-link basket right <? if(!$count) echo 'empty'; ?>">Корзина (<span><?=$count?></span>)</a>    
                     </div>
                     <a class="fixed-link right fancy" href="#" data-block="#b-popup-callback">Обратный звонок</a>
                 </div>

@@ -403,11 +403,6 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 						left: 0px;
 						background-position: -2px -99px;
 					}
-					.b-header .b-header-main .b-block > .right .contacts a.basket {
-						margin-right: 0;
-						margin-top: 2px;
-						font-size: 14px;
-					}
 					.b-header .b-header-main .b-block > .right form {
 						font-size: 0;
 					}
@@ -490,32 +485,35 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 					.b-header .b-sub-menu .b-block .fixed-link.basket {
 						padding-right: 0;
 					}
+						.b-header .b-sub-menu .b-block .fixed-link.basket.empty {
+							cursor: default;
+						}
+							.b-header .b-sub-menu .b-block .fixed-link.basket.empty:hover {
+								text-decoration: none;
+							}
 		.b-header .b-sub-menu .b-block .fixed-link{
 			margin-left: 47px;
 		}
 		.b-cart-menu {
-			opacity: 1;
+			display: none;
+			opacity: 0;
 			position: absolute;
 			z-index: 100;
-			// background: #FFFFFF;
-			// box-shadow: 0px 4px 10px 0px rgba(0,0,0,0.20);
-			-webkit-transition: all 100ms ease-out;
-			-moz-transition: all 100ms ease-out;
-			-ms-transition: all 100ms ease-out;
-			-o-transition: all 100ms ease-out;
-			transition: all 100ms ease-out;
-			display: none;
+			-webkit-transition: all 150ms ease-out;
+			-moz-transition: all 150ms ease-out;
+			-ms-transition: all 150ms ease-out;
+			-o-transition: all 150ms ease-out;
+			transition: all 150ms ease-out;
 			-webkit-transform: translateY(-20px);
 			-moz-transform: translateY(-20px);
 			-ms-transform: translateY(-20px);
 			-o-transform: translateY(-20px);
 			transform: translateY(-20px);
 			box-shadow: 0px 0px 4.85px 0.15px rgba(32, 32, 32, 0.3);
+			right: 0;
+			top: 45px;
+			
 		}
-			.b-cart-menu.affix-top {
-				right: 0;
-				top: 60px;
-			}
 			.b-cart-menu.opened {
 				opacity: 1;
 			    -webkit-transform: translateY(0px);
@@ -523,9 +521,12 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 			    -ms-transform: translateY(0px);
 			    -o-transform: translateY(0px);
 			    transform: translateY(0px);
+			    
 			}
 			.b-cart-menu .b-cart-items {
 				width: 310px;
+				max-height: 327px;
+				overflow: overlay;
 			}
 				.b-cart-menu .b-cart-items li {
 					display: block;
@@ -533,6 +534,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 					position: relative;
 					padding: 15px 25px 0px 15px;
 					border-bottom: 1px solid #C3C3C3;
+					margin-right: 7px;
 				}
 				.b-cart-items li .img {
 					width: 90px;
@@ -1257,12 +1259,15 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 					border-bottom: 0px solid #FFD900;
 					margin-top: 22px;
 				}
-				.goods .gradient-grey .b-orange-butt.carted,.goods .gradient-grey .b-orange-butt.carted:active,.goods .gradient-grey .b-orange-butt.carted:hover {
+				.goods .gradient-grey .b-orange-butt.carted,.goods .gradient-grey .b-orange-butt.carted:active {
+					margin-top: 20px;
+					padding: 13px 0 10px;
+				}
+				.b-orange-butt.carted,.b-orange-butt.carted:active,.b-orange-butt.carted:hover {
 					background: rgb(227, 228, 232);
 				    cursor: default;
 				    box-shadow: inset 0px 0px 3px;
-				    border-bottom: 0;
-				    margin-top: 20px;
+				    border-bottom: 0px !important;    
 				}
 
 	.goods .gradient-grey:hover .params-cont{
@@ -2035,16 +2040,21 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 					font-weight: 500;
 					border-radius: 2px;
 					border-bottom: 2px solid #f69303;
-					padding: 12px 0 10px;
 					text-transform: uppercase;
-					padding: 12px 60px;
+					padding: 12px 0px;
 					margin-top: 1px;
 					margin-bottom: 2px;
+					width: 195px;
 				}
 				.good-detail .b-block .detail-wrap .detail-price a:active {
 					position: relative;
 					top: 2px;
 					margin-bottom: 4px;
+				}
+				.good-detail .b-block .detail-wrap .detail-price a.carted {
+					top: 0;
+					padding: 13px 0px;
+					margin-bottom: 2px;
 				}
 				.good-detail .b-block .detail-wrap .detail-price h5,.good-detail .b-block .detail-wrap .detail-price a{
 					display: inline-block;

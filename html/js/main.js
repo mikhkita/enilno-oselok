@@ -402,7 +402,7 @@ $(document).ready(function(){
     $(".variants input").change();
     // $(".filter-item select").change();
 
-    var active,open;
+    var active,open,open_cart;
     function closeBubble(active){
         if( typeof active == "undefined" ) active = $(".filter-item.active");
         active.removeClass('active');
@@ -415,13 +415,20 @@ $(document).ready(function(){
 
     $("body").on("mouseup",".variants *,.filter-item .input",function(){
         open = true;
-    });
 
+    });
+    $("body").on("mouseup",".b-cart-menu *,.fixed-link.basket",function(){
+        open_cart = true;
+        
+    });
     $("body").on("mousedown",function() {
         open = false;
+        open_cart = false;
     }).bind("mouseup",function(){
         if( !open )
             closeBubble();
+        if( !open_cart )
+            $(".b-cart-menu").hide(0).removeClass("opened");
     });
 
     $(".b-variants-close").on("click touchstart",function(){
@@ -658,28 +665,72 @@ $(document).ready(function(){
         return false;
     }
 
-    $("body").on("click",".to-cart",function(){
-        var selector = $(this);
-        $.ajax({
-            type: "GET",
-            url: selector.attr("href"),
-            success: function(msg){
-                selector.attr("href","#").removeClass("to-cart").addClass("carted").text("добавлено");
-                $(".b-cart-items").append(msg);
-            }
-        });
+    $("body").on("click",".carted",function(){
         return false;
     });
-    
+
+    $(".fixed-link.basket").click(function(){
+        if($(".b-cart-items li").length && !$(".b-cart-menu").hasClass("opened")) {
+            $(".b-cart-menu").show(0).addClass("opened");
+        } else {
+            $(".b-cart-menu").removeClass("opened");
+            setTimeout(function(){
+                $(".b-cart-menu").hide(0);
+            },200);
+            
+        }
+        return false;
+    });
+
+    var block_add = true;
+    $("body").on("click",".to-cart",function(){
+        if(block_add) {
+            block_add = false;  
+            var selector = $(this);
+            $.ajax({
+                type: "GET",
+                url: selector.attr("href"),
+                success: function(msg){
+                    selector.removeClass("to-cart").addClass("carted").text("добавлено");
+                    $(".b-cart-items").append(msg);
+                    var count = parseInt($(".fixed-link.basket span").text())+1;
+                    $(".fixed-link.basket span").text(count);
+                    $(".fixed-link.basket").removeClass("empty");
+                    block_add = true;  
+                }
+            });
+        }
+        return false;
+    });
+    var block_del = true;
     $("body").on("click",".cart-close-btn",function(){
-        var selector = $(this);
-        $.ajax({
-            type: "GET",
-            url: selector.attr("href"),
-            success: function(msg){
-                selector.closest("li").remove();
-            }
-        });
+        if(block_del) {
+            block_del = false;
+            var selector = $(this);
+            $.ajax({
+                type: "GET",
+                url: selector.attr("href"),
+                success: function(msg){
+                    var count = parseInt($(".fixed-link.basket span").text())-1; 
+                    if(count == 0) {
+                        $(".b-cart-menu").removeClass("opened");
+                        $(".fixed-link.basket").addClass("empty");
+                        setTimeout(function(){
+                            selector.closest("li").remove();  
+                            $(".b-cart-menu").hide(0);
+                        },400);
+                    } else {
+                        selector.closest("li").remove();
+                    }
+                    $(".fixed-link.basket span").text(count);
+                    if($(".carted[href*='id="+selector.attr('data-id')+"']").length) {
+                        var el = $(".carted[href*='id="+selector.attr('data-id')+"']");
+                        el.addClass("to-cart").removeClass("carted").text("в корзину");
+                    }
+                    block_del = true;
+                }
+            });
+        }
         return false;
     });   
 

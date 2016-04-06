@@ -39,9 +39,9 @@
                 </a>
                 <? if($price): ?>
                     <? if(isset($_SESSION["BASKET"]) && array_search($good->id, $_SESSION["BASKET"]) !== false): ?>
-                        <a href="#" class="b-orange-butt carted" onclick="return false;">добавлено</a>
+                        <a href="<?=Yii::app()->createUrl('/kolesoOnline/basket',array('id' => $good->id,'add' => true))?>" class="b-orange-butt carted">добавлено</a>
                     <? else: ?>
-                        <a href="<?=Yii::app()->createUrl('/kolesoOnline/basket',array('id' => $good->id,'type' => $type,'add' => true))?>" class="b-orange-butt to-cart" onclick="return false;">в корзину</a>
+                        <a href="<?=Yii::app()->createUrl('/kolesoOnline/basket',array('id' => $good->id,'add' => true))?>" class="b-orange-butt to-cart">в корзину</a>
                     <? endif; ?>
                 <? else: ?>
                     <a href="#" class="fancy b-orange-butt acc" data-block="#b-popup-buy" data-aftershow="category_buy">Уточнить цену</a>
