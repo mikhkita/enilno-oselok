@@ -120,7 +120,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
                             $phone = $phone[0]." (".$phone[1].$phone[2].$phone[3].") ".$phone[4].$phone[5].$phone[6]."-".$phone[7].$phone[8]."-".$phone[9].$phone[10];
                         ?>
                         <a href="tel:+<?=Yii::app()->params["city"]->phone?>" class="mobile-not-fancy fancy left" data-block="#b-popup-callback">+<?=$phone?></a>
-                        <a href="mailto:onlinekoleso@yandex.ru" class="left mail">onlinekoleso@yandex.ru</a>
+                        <a href="mailto:info@koleso.online" class="left mail">info@koleso.online</a>
                         <!-- <a href="#" class="right basket">Корзина (0)</a> -->
                     </div>
                     <form action="<?=Yii::app()->createUrl('kolesoOnline/search')?>" method="GET" class="b-search-form">
@@ -178,7 +178,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
                     </li>
                     <li>
                         <h3>Контактная информация</h3>
-                        <a class="footer-contacts mail" href="mailto:onlinekoleso@yandex.ru">onlinekoleso@yandex.ru</a>
+                        <a class="footer-contacts mail" href="mailto:info@koleso.online">info@koleso.online</a>
                         <a class="mobile-not-fancy fancy footer-contacts phone" data-block="#b-popup-callback" href="tel:+<?=Yii::app()->params["city"]->phone?>">+<?=$phone?></a>
                         <? if(Yii::app()->params["city"]->id == 1081): ?>
                             <span class="footer-contacts map">г. Томск, улица Мокрушина, 9 ст. 42</span>
@@ -217,7 +217,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
                     <label for="phone">Ваш телефон *</label>
                     <input type="text" name="phone" required placeholder="+7 (___) ___-__-__"/>               
                     <label for="email">Ваш E-mail</label>
-                    <input type="text" name="email" placeholder="onlinekoleso@yandex.ru"/>
+                    <input type="text" name="email" placeholder="info@koleso.online"/>
                     <label for="name">Ваши параметры</label>
                     <textarea type="text" name="1" placeholder="R17, сверловка 5*114.3, ширина 7 на mazda 3"></textarea>
                     <input type="hidden" name="1-name" value="Параметры" />

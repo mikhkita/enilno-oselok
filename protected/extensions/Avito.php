@@ -124,10 +124,8 @@ Class Avito {
 		}
     }
 
-    public function updateAdvert($link,$params,$images = NULL,$only_images = false){
-    	$advert_id = substr($link, strripos($link, "_")+1);
-
-    	$result = $this->curl->request("https://www.avito.ru".$link);
+    public function updateAdvert($advert_id,$params,$images = NULL,$only_images = false){
+    	$result = $this->curl->request("https://www.avito.ru/".$advert_id);
 		$html = str_get_html($result);
 		if( !$html->find('meta[property="og:url"]',0) ) return NULL;
 		$href = $html->find('meta[property="og:url"]',0)->getAttribute('content');
@@ -162,10 +160,8 @@ Class Avito {
 		return $id;
     }
 
-   	public function updatePrice($link,$params,$images = NULL){	
-   		$advert_id = substr($link, strripos($link, "_")+1);
-
-    	$result = $this->curl->request("https://www.avito.ru".$link);
+   	public function updatePrice($advert_id,$params,$images = NULL){	
+    	$result = $this->curl->request("https://www.avito.ru/".$advert_id);
     	// echo "1111";
     	// print_r($result);
 		$html = str_get_html($result);
@@ -248,14 +244,11 @@ Class Avito {
         }
     }
 
-    public function deleteAdvert($link) {
-    	if( $link == "" ) return true;
-    	$advert_id = substr($link, strripos($link, "_")+1);
-
+    public function deleteAdvert($advert_id) {
         $result = $this->curl->request("https://www.avito.ru/profile",array('item_id[]' => $advert_id,'delete' => 'Снять объявление с публикации'));
         print_r($result);
-        $result = $this->curl->request("https://www.avito.ru".$link);
-        print_r("https://www.avito.ru".$link);
+        $result = $this->curl->request("https://www.avito.ru/".$advert_id);
+        print_r("https://www.avito.ru/".$advert_id);
         print_r($result);
 		$html = str_get_html($result);
 		if( is_object($html) && $html->find(".catalog-filters",0) ) return true;

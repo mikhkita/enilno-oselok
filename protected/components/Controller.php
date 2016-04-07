@@ -146,6 +146,7 @@ class Controller extends CController
     public function insertValues($tableName,$values){
         if( !count($values) ) return true;
 
+        $values = array_values($values);
         $structure = array();
         foreach ($values[0] as $key => $value) {
             $structure[] = "`".$key."`";
@@ -1025,11 +1026,5 @@ class Controller extends CController
         $phone = str_split(Yii::app()->params["city"]->phone); 
         $phone = $phone[0]." (".$phone[1].$phone[2].$phone[3].") ".$phone[4].$phone[5].$phone[6]."-".$phone[7].$phone[8]."-".$phone[9].$phone[10];
         return str_replace(array("[+CITY+]","[+IN+]","[+PHONE+]"), array(Yii::app()->params["city"]->name,Yii::app()->params["city"]->in,$phone), $str);
-    }
-
-    public function analyse($string){
-        $array = explode(" ", $string);
-
-        print_r($array);
     }
 }

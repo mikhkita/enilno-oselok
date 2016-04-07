@@ -157,14 +157,47 @@ class Interpreter extends CActiveRecord
     	$uniq = 1;
     	while($uniq <= 10){
     		$result = Interpreter::generate($interpreter_id, $model, $dynObjects, 0, $uniq);
-    		if( Interpreter::isNotIsset($interpreter_id, $result, $advert_id) ) return $result;
+    		$not_isset = Interpreter::isNotIsset($interpreter_id, $result, $advert_id);
+    		if( $not_isset !== false ) return $not_isset;
     		$uniq++;
     	}
     	return "not unique";
     }
 
-    public function isNotIsset($interpreter_id, $result, $advert_id = 0){
-    	return ( Unique::model()->count("value='".stripslashes(trim($result))."' AND interpreter_id=$interpreter_id AND advert_id!=$advert_id") )?false:true;
+    public function isNotIsset($result, $advert_id){
+    	$arr = explode(" ", $result);
+        while (mb_strlen($result, "UTF-8") > 50) {
+            array_shift($arr);
+            $result = implode(" ", $arr);
+        }
+        $result = mb_strtoupper(mb_substr($result, 0, 1, "UTF-8"), "UTF-8").mb_substr($result, 1, NULL, "UTF-8");
+
+    	$words = Word::split($result);
+    	$ids = Word::update($words);
+    	$similar = round(count($ids)*Advert::getPercent()/100);
+
+    	$advert = (is_object($advert_id))?$advert_id:Advert::model()->findByPk($advert_id);
+
+    	if( !$advert ){
+    		echo "Не найдено объявление ".$advert_id;
+    		die();
+    	}
+    	
+    	if( count($ids) ){
+    		$criteria=new CDbCriteria();
+			$criteria->group = "advert_id";
+			$criteria->with = "advert";
+			$criteria->condition = "advert_id != ".$advert->id." AND advert.ready=1 AND advert.place_id=".$advert->place_id." AND word_id IN (".implode(",", $ids).")";
+			$criteria->having = "COUNT(DISTINCT word_id) > $similar";
+			$model = AdvertWord::model()->count($criteria);
+    	}else{
+    		$model = 10;
+    	}
+
+		Advert::model()->updateAll(array("ready" => (($model >= 1)?0:1), "title" => $result), "id=".$advert->id);
+		AdvertWord::update($ids, $advert->id);
+
+		return (($model >= 1)?false:$result);
     }
 
     public function generate($interpreter_id, $model, $dynObjects = NULL, $advert_id = 0, $uniq = NULL){
@@ -178,8 +211,16 @@ class Interpreter extends CActiveRecord
     	}
 
     	if( isset($interpreters[(string)$interpreter_id]) ){
-    		if( $interpreters[(string)$interpreter_id]->unique && $uniq === NULL )
-    			return Interpreter::generateUnique($interpreter_id, $model, $dynObjects, $advert_id);
+    		if( $interpreters[(string)$interpreter_id]->unique && $uniq === NULL ){
+    			if( $advert_id ){
+    				$advert = Advert::model()->findByPk($advert_id, NULL, array("select" => array("select","title")));
+	    			if( $advert && $advert->ready ){
+	    				return $advert->title;
+	    			}else{
+	    				return Interpreter::generateUnique($interpreter_id, $model, $dynObjects, $advert_id);
+	    			}
+    			}
+    		}
 
     		if( $interpreters[(string)$interpreter_id]->good_type_id == $model->good_type_id ){
     			$template = $interpreters[(string)$interpreter_id]->template;

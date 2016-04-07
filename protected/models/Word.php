@@ -1,22 +1,20 @@
 <?php
 
 /**
- * This is the model class for table "cache".
+ * This is the model class for table "word".
  *
- * The followings are the available columns in table 'cache':
- * @property string $class
- * @property string $name
+ * The followings are the available columns in table 'word':
+ * @property string $id
  * @property string $value
- * @property string $hash
  */
-class Cache extends CActiveRecord
+class Word extends CActiveRecord
 {
 	/**
 	 * @return string the associated database table name
 	 */
 	public function tableName()
 	{
-		return 'cache';
+		return 'word';
 	}
 
 	/**
@@ -27,12 +25,11 @@ class Cache extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('name, value, hash', 'required'),
-			array('class, hash', 'length', 'max'=>32),
-			array('name, value', 'length', 'max'=>255),
+			array('value', 'required'),
+			array('value', 'length', 'max'=>30),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('class, name, value, hash', 'safe', 'on'=>'search'),
+			array('id, value', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -44,6 +41,7 @@ class Cache extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'adverts' => array(self::HAS_MANY, 'AdvertWord', 'word_id'),
 		);
 	}
 
@@ -53,10 +51,8 @@ class Cache extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'class' => 'Class',
-			'name' => 'Name',
+			'id' => 'ID',
 			'value' => 'Value',
-			'hash' => 'Hash',
 		);
 	}
 
@@ -78,49 +74,64 @@ class Cache extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('class',$this->class,true);
-		$criteria->compare('name',$this->name,true);
+		$criteria->compare('id',$this->id,true);
 		$criteria->compare('value',$this->value,true);
-		$criteria->compare('hash',$this->hash,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 		));
 	}
 
-	public function check($values){
-		$queries = array();
-		foreach ($values as $i => $value)
-			array_push($queries, "(class='".$value["class"]."' AND name='".$value["name"]."' AND hash='".$value["hash"]."')");
-		$cache = Yii::app()->db->createCommand()
-		    ->select("class, name")
-		    ->from(Cache::tableName().' t')
-		    ->where(implode(" OR ", $queries))
-		    ->queryAll();
+	public function split($string){
+        $to_remove = array(".", "#", "-", "(", ")", "*", "+", "№", "%", "!", ",", ":",";","\"","'");
+        $string = str_replace($to_remove, "", $string);
+        $to_space = array("/");
+        $string = str_replace($to_space, " ", $string);
 
-		foreach ($cache as $i => $item)
-			$cache[$i] = $item["class"]."_".$item["name"];
+        $array = explode(" ", $string);
+        $array = array_filter($array, function($val){
+            return (mb_strlen(((string) $val),"UTF-8")>3);
+        });
 
-		foreach ($values as $i => $value)
-			if( in_array($value["class"]."_".$value["name"], $cache) )
-				unset($values[$i]);
-		return $values;
-	}
+        return $array;
+    }
 
-	public function get($class){
-		return Yii::app()->db->createCommand()
-		    ->select("name, value")
-		    ->order("name ASC")
-		    ->from(Cache::tableName().' t')
-		    ->where("class='$class'")
-		    ->queryAll();
-	}
+    public function update($words){
+    	$values = array();
+    	foreach ($words as $i => $word){
+    		$words[$i] = str_replace(array("ё","Ё"), "е", mb_strtolower($word, "UTF-8"));
+    		array_push($values, "'".addslashes($words[$i])."'");
+    	}
+
+    	$model = Word::model()->findAll("value IN (".implode(",", $values).")");
+    	if( !$model ) $model = array();
+
+    	foreach ($model as $key => $word)
+    		if( in_array($word->value, $words) )
+    			unset($words[array_search($word->value, $words)]);
+
+    	if( count($words) ){
+    		foreach ($words as $i => $word)
+    		{
+    			if( mb_strlen($word, "UTF-8") >= 30 ){
+    				echo $word;
+    				die();
+    			}
+    			$words[$i] = array("value" => $word);
+    		}
+
+    		Controller::insertValues(Word::tableName(), $words);
+    	}
+
+    	$model = Word::model()->findAll(array("select" => "id", "condition" => "value IN (".implode(",", $values).")")); 
+    	if( $model && count($model) ) return Controller::getIds($model);
+    }
 
 	/**
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return Cache the static model class
+	 * @return Word the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{

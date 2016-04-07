@@ -19,7 +19,9 @@ Class Vk {
         array_push($photo_arr, $this->addPhoto($images[0],1));
         for ($i=1; $i < count($images); $i++) {
             if($i == 5) break; 
-            array_push($photo_arr, $this->addPhoto($images[$i]));
+            $photo = $this->addPhoto($images[$i]);
+            if( $photo )
+                array_push($photo_arr, $photo);
             
         }  
         $url = ($edit_id) ? $this->base_url."market.edit" : $this->base_url."market.add";
@@ -40,6 +42,7 @@ Class Vk {
             $params['photo_ids'] = implode(",", $photo_arr);       
         $url .='?'.urldecode(http_build_query($params));
         $json = json_decode($this->curl->request($url));
+        print_r($json);
 
         if(!$edit_id) {
             $advert_id = $json->response->market_item_id;
@@ -111,6 +114,7 @@ Class Vk {
         $json = json_decode($this->curl->request($url));
         $url = $json->response->upload_url;
         $url = json_decode($this->curl->request($url,array("file" => new CurlFile(Yii::app()->basePath.DIRECTORY_SEPARATOR.'..'.$image))));
+        print_r($url);
         $params = array(
             'group_id' => $this->group_id,
             'photo' => $url->photo,
@@ -126,7 +130,7 @@ Class Vk {
         $url = $this->base_url."photos.saveMarketPhoto";
         $url .='?'.urldecode(http_build_query($params));
         $json = json_decode($this->curl->request($url));
-        return $json->response[0]->id;
+        return (isset($json->response[0]) && $json->response[0]->id)?$json->response[0]->id:false;
     }
 }
 

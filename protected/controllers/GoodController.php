@@ -383,7 +383,7 @@ class GoodController extends Controller
 	}
 
 	public function actionAdminToArchive($id){
-		if( GoodFilter::model()->updateByPk($id, array("archive" => "2")) ){
+		if( GoodFilter::model()->updateByPk($id, array("archive" => "1")) ){
 			echo json_encode(array(
 				"result" => "success",
 				"action" => "delete",
@@ -429,7 +429,7 @@ class GoodController extends Controller
 				foreach ($value as $variant) {
 					if( $variant == "-" ) continue;
 					$values[] = array("good_id"=>$good->id,"attribute_id"=>$attr_id,"int_value"=>NULL,"varchar_value"=>NULL,"float_value"=>NULL,"text_value"=>NULL,"variant_id"=>$variant);
-					$delete_variants[] = "(good_id=".$good->id." AND attribute_id=$attr_id AND variant_id=$variant)";
+					$delete_variants[] = "(good_id='".$good->id."' AND attribute_id='$attr_id' AND variant_id='$variant')";
 				}
 		}
 		if( count($delete_variants) )
@@ -446,14 +446,21 @@ class GoodController extends Controller
 	{
 		$good_ids = Good::getCheckboxes($good_type_id);
 		if( !count($good_ids) ) return false;
-		
+
+		if(isset($_POST['Good_attr']))
+			foreach ($_POST["Good_attr"] as $i => $value)
+				if( isset($value["single"]) && $value["single"] == "" ) 
+					unset($_POST["Good_attr"][$i]);
+
 		if(isset($_POST['Good_attr']))
 		{
-			$links = array();
-			foreach ($good_ids as $key => $value)
-				array_push($links, "http://".Yii::app()->params['ip'].$this->createUrl('/good/adminupdatecities',array('id'=> $key, 'Good_attr' => $_POST["Good_attr"])));
+			if( count($_POST['Good_attr']) ){
+				$links = array();
+				foreach ($good_ids as $key => $value)
+					array_push($links, "http://".Yii::app()->params['ip'].$this->createUrl('/good/adminupdatecities',array('id'=> $key, 'Good_attr' => $_POST["Good_attr"])));
 
-			Cron::addAll($links);
+				Cron::addAll($links);
+			}
 
 			echo json_encode(array("result" => "success", "action" => "updateCronCount", "count" => Cron::model()->count()));
 		}else{
@@ -933,7 +940,9 @@ class GoodController extends Controller
 			foreach ($_POST["New"] as $i => $image) {
 				$tmp = explode(".", array_pop(explode("/", $image)));
 				$new_id = Image::add($id, $tmp[1], 1, array_search($i, $_POST["Images"])+1);
+				if (!is_dir($path)) mkdir($path, 0777, true);
 	            rename(substr($image, 1), $path."/".$new_id.".".$tmp[1]);	
+	            $_POST["New"][$i] = $new_id;
 			}
 		}
 
@@ -956,8 +965,10 @@ class GoodController extends Controller
 		if( isset($_POST["Caps"]) ){
 			$values = array();
 			foreach ($_POST["Caps"] as $j => $cap)
-				foreach ($cap as $i => $image)
+				foreach ($cap as $i => $image){
+					$image = (strpos($image, "new") !== false)?$_POST["New"][$image]:$image;
 					array_push($values, array("image_id" => $image, "cap_id" => $j, "sort" => $i));
+				}
 			if( count($values) )
 				$this->insertValues(ImageCap::tableName(), $values);
 		}

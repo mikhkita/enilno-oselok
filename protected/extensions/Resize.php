@@ -13,6 +13,10 @@ Class Resize {
         if( !$this->image ){
            $this->image = $this->openImage(str_replace("jpg", "JPG", $fileName));
         }
+        // if( !$this->image ){
+        //     echo $fileName;
+        //     die();
+        // }
         $this->width  = imagesx($this->image);
         $this->height = imagesy($this->image);
     }

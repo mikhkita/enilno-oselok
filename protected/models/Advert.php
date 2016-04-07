@@ -10,10 +10,13 @@
  * @property string $url
  * @property string $type_id
  * @property string $city_id
- * @property string $login
+ * @property string $title
+ * @property integer $ready
  */
 class Advert extends CActiveRecord
 {
+	static public $similar_percent = 50;
+
 	/**
 	 * @return string the associated database table name
 	 */
@@ -31,12 +34,13 @@ class Advert extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('good_id, place_id, type_id, city_id', 'required'),
+			array('ready', 'numerical', 'integerOnly'=>true),
 			array('good_id, place_id, type_id, city_id', 'length', 'max'=>10),
-			array('url, link', 'length', 'max'=>255),
-			array('login', 'length', 'max'=>20),
+			array('url', 'length', 'max'=>255),
+			array('title', 'length', 'max'=>100),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, good_id, place_id, url, type_id, city_id, login, link', 'safe', 'on'=>'search'),
+			array('id, good_id, place_id, url, type_id, city_id, title, ready', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -55,6 +59,7 @@ class Advert extends CActiveRecord
 			'type' => array(self::BELONGS_TO, 'Variant', 'type_id'),
 			'queue' => array(self::HAS_MANY, 'Queue', 'advert_id'),
 			'unique_fields' => array(self::HAS_MANY, 'Unique', 'advert_id'),
+			'words' => array(self::HAS_MANY, 'AdvertWord', 'advert_id'),
 		);
 	}
 
@@ -67,11 +72,11 @@ class Advert extends CActiveRecord
 			'id' => 'ID',
 			'good_id' => 'Товар',
 			'place_id' => 'Площадка',
-			'url' => 'Код объявления',
+			'url' => 'Ссылка',
 			'type_id' => 'Тип объявления',
 			'city_id' => 'Город',
-			'login' => 'Логин',
-			'link' => 'Ссылка'
+			'title' => 'Название',
+			'ready' => 'Готовность',
 		);
 	}
 
@@ -99,7 +104,8 @@ class Advert extends CActiveRecord
 		$criteria->compare('url',$this->url,true);
 		$criteria->compare('type_id',$this->type_id,true);
 		$criteria->compare('city_id',$this->city_id,true);
-		$criteria->compare('login',$this->login,true);
+		$criteria->compare('title',$this->title,true);
+		$criteria->compare('ready',$this->ready);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -131,7 +137,6 @@ class Advert extends CActiveRecord
 	}
 
 	public function	setUrl($url = NULL){
-		echo $url;
 		$this->url = $url;
 		return $this->save();
 	}
@@ -241,6 +246,28 @@ class Advert extends CActiveRecord
         return Controller::getIds($advert, "id");
 	}
 
+	public function findSimilar(){
+		$words = Word::model()->with("adverts")->findAll("adverts.advert_id=".$this->id);
+		$similar = floor(count($words)*Advert::getPercent()/100);
+
+		foreach ($words as $i => $word)
+			$words[$i] = $word->id;
+		
+		$criteria=new CDbCriteria();
+		$criteria->group = "advert_id";
+		$criteria->with = "advert";
+		$criteria->condition = "advert_id != ".$this->id." AND advert.ready=1 AND advert.place_id=".$this->place_id." AND word_id IN (".implode(",", $words).")";
+		$criteria->having = "COUNT(DISTINCT word_id) > $similar";
+		$model = AdvertWord::model()->findAll($criteria);
+		
+		$titles = array();
+		if( $model )
+		foreach ($model as $key => $value)
+			array_push($titles, $value->advert->title);
+
+		return $titles;
+	}
+
 	/**
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
@@ -250,6 +277,10 @@ class Advert extends CActiveRecord
 	public static function model($className=__CLASS__)
 	{
 		return parent::model($className);
+	}
+
+	public function getPercent(){
+		return self::$similar_percent;
 	}
 	
 	public function beforeDelete(){

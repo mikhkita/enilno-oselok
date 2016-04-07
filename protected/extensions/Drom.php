@@ -204,7 +204,7 @@ Class Drom {
     public function updateAdvert($advert_id,$params,$images = NULL,$only_images = false) {
         if($images) {
             foreach ($images as &$image_path) {
-                $image_path = json_decode($this->curl->request("http://baza.drom.ru/upload-image-jquery",array('up[]' => new CurlFile(Yii::app()->basePath.DIRECTORY_SEPARATOR.'..'.$image_path))))->id;
+                $image_path = json_decode($this->curl->request("http://baza.drom.ru/upload-image-jquery",array('debug' => true,'up[]' => new CurlFile(Yii::app()->basePath.DIRECTORY_SEPARATOR.'..'.$image_path))))->id;
             }
             $params['images'] = array('images' => $images);
         }
@@ -218,7 +218,7 @@ Class Drom {
         $options = $this->setOptions($params,$advert_id,$only_images);    
 
         $result = json_decode($this->curl->request("http://baza.drom.ru/api/1.0/save/bulletin",$options));
-        print_r($result);
+        // print_r($result);
 
         return $result->id;
     }
@@ -236,7 +236,7 @@ Class Drom {
         );
 
         $result = iconv('windows-1251', 'utf-8', $this->curl->request('https://baza.drom.ru/bulletin/service-apply',$del_arr));
-        // print_r($result);
+        print_r($result);
 
         $html = str_get_html($result);
 
@@ -571,6 +571,16 @@ Class Drom {
         } else return false;
         
 	}
+
+    public function parseTitle($link){
+        $html = str_get_html(iconv('windows-1251', 'utf-8', $this->curl->request($link)));
+        if( $html && $html->find("h1.subject nobr",0) ){
+            $html->find("h1.subject nobr",0)->innertext = "";
+            return preg_replace('| +|', ' ', str_replace(array("- ","= ","-","="), " ", trim($html->find("h1",0)->plaintext)));
+        }else{
+            return false;
+        }
+    }
 
     public function self(){
         return new Drom();

@@ -37,7 +37,7 @@
 								<? endif; ?>
 								<?php echo Chtml::dropDownList("Good_attr[".$item->attribute_id."]", "", (($only_cities)?(array("-"=>"Удалить города")):(array())) + CHtml::listData(AttributeVariant::model()->with("variant")->findAll(array("condition" => "attribute_id=".$item->attribute_id,"order" => "variant.sort ASC")), 'variant_id', 'value'),array('class'=> 'select2','multiple' => 'true', 'options' => $selected)); ?>	
 						<? else: ?>
-							<?php echo Chtml::dropDownList("Good_attr[".$item->attribute_id."][single]", $attr_id, $dropdown[$item->attribute_id],array('class'=> 'select2',"empty" => "Не задано")); ?>
+							<?php echo Chtml::dropDownList("Good_attr[".$item->attribute_id."][single]", $attr_id, (($only_cities)?(array("-"=>"Нет")):(array())) + $dropdown[$item->attribute_id],array('class'=> 'select2',"empty" => "Не задано")); ?>
 						<? endif; ?>
 					<? elseif($item->attribute->type->code == "text"):?>
 						<?php echo Chtml::textArea("Good_attr[".$item->attribute_id."]",$attr_id,array('rows'=>4,"required"=>($item->attribute_id==3), "disabled" => (!$model->isNewRecord && $item->attribute_id==3 && 0) )); ?>

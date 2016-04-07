@@ -238,6 +238,12 @@ class Task extends CActiveRecord
 				}else{
 					Task::remove($good->id, "extra");
 				}
+			}else if( is_object($good->fields_assoc[43]) && in_array($good->fields_assoc[43]->variant_id, array(2915,3003,3001,2914)) ){
+				if( !$this->checkCap($good,1) || !$this->checkCap($good,2) ){
+					Task::add($good->id, "extra", NULL, 12);
+				}else{
+					Task::remove($good->id, "extra");
+				}
 			}
 		}
 	}
@@ -276,7 +282,7 @@ class Task extends CActiveRecord
         return Controller::getIds($model, "id");
 	}
 
-	public function add($good_id, $action, $data = NULL){
+	public function add($good_id, $action, $data = NULL, $user_id = NULL){
 		$action = Task::getAction($action);
 
 		if( $task = Task::model()->find("good_id=$good_id AND action_id=".$action->id) ){
@@ -286,7 +292,7 @@ class Task extends CActiveRecord
 			$task = new Task;
 			$task->good_id = $good_id;
 			$task->action_id = $action->id;
-			$task->user_id = $action->user_id;
+			$task->user_id = ($user_id !== NULL)?$user_id:$action->user_id;
 		}
 		
 		$task->data = ($data === NULL)?$data:json_encode($data);

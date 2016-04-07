@@ -1401,6 +1401,7 @@ $(document).ready(function(){
                         });
 
                         $(evt.item).find("input").attr("name",$(evt.to).attr("data-sort")).attr("data-name",$(evt.to).attr("data-id"));
+                        $(evt.item).find("input").eq(1).remove();
                     }
                 });
             });

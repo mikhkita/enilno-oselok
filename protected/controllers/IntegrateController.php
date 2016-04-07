@@ -58,7 +58,7 @@ class IntegrateController extends Controller
             if( !$this->getNext($category_id, $nth) ){
                 sleep(5);
             }else{
-                if( !$debug && $category_id == 2047 ) sleep(rand(40,180));
+                if( !$debug && $category_id == 2047 ) sleep(rand(40,120));
             }
               
             if( $debug ) return true;
@@ -68,7 +68,7 @@ class IntegrateController extends Controller
     public function checkTime($category_id = NULL){
         if( $category_id == 2047 ){
             $date = (object) getdate();
-            if( $date->hours >= 1 && $date->hours < 15 ) return false;
+            if( $date->hours >= 0 && $date->hours < 12 ) return false;
         }
         return true;
     }
@@ -1128,7 +1128,7 @@ class IntegrateController extends Controller
             array(
                 "good_type_id"=>2,
                 "attributes"=>array(
-                    43 => array(2912)
+                    43 => array(2915,3003,3001,2914)
                 )
             )
         )->getPage(
@@ -1169,9 +1169,9 @@ class IntegrateController extends Controller
     }
 
     public function actionAnalyse(){
-        $text = "Разноширокие R18 4x114.3/5x114.3 7.5/7.5";
+        $text = "#9321-2 лето bridgestone DNA potenza 245/35/19 (Japan) Б/п РФ";
 
-        $this->analyse($text);
+        print_r(Interpreter::isNotIsset(1, $text, 1597));
     }
 
     public function actionUpdatePhoto(){
@@ -1188,6 +1188,48 @@ class IntegrateController extends Controller
 
         foreach ($goods as $key => $good) {
             Image::updateImages($good);
+        }
+    }
+
+    public function actionParseTitles(){
+        $goods = Good::model()->filter(
+            array(
+                "good_type_id"=>2,
+                "attributes"=>array(
+                    43 => array(2912)
+                )
+            )
+        )->getPage(
+            array(
+                'pageSize'=>10000,
+            )
+        );
+        $goods = $goods["items"];
+
+        $drom = new Drom();
+        foreach ($goods as $key => $good) {
+            if( $advert = Advert::model()->find("good_id=".$good->id." AND city_id=1074 AND place_id=12") ){
+                // if( !$advert->title ){
+                //     $title = $drom->parseTitle($good->fields_assoc[106]->value);
+                //     if( $title ){
+                //         Interpreter::isNotIsset($title, $advert);
+                //     }else{
+                //         echo "Не удалось спарсить товар с id ".$good->id." по ссылке ".$good->fields_assoc[106]->value;
+                //     }
+                // }
+                if( $advert->title ){
+                    
+                    Interpreter::isNotIsset($advert->title, $advert);
+                    // if( !$advert->ready ){
+                    //     echo $advert->title."<br>";
+                    //     foreach ($advert->findSimilar() as $i => $title)
+                    //         echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".$title."<br>";
+                    // }
+                    //     // echo $advert->title."<br>";
+                }
+            }else{
+                // echo "Не найдено объявление у товара с id ".$good->id;
+            }
         }
     }
 }
