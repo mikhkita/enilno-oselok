@@ -30,7 +30,7 @@
 						<? $price = Interpreter::generate($this->params[$_GET['type']]["PRICE_CODE"], $good, $dynamic);?>
 						<? $price = number_format($price, 0, ',', ' ' )." р."; $order = Interpreter::generate($this->params[$_GET['type']]["ORDER"], $good,$dynamic); ?>
 						<? $price = ($good->archive)?(($this->user)?("Продано за ".$price):"Продано"):$price; ?>
-						<h3><?=( !$good->fields_assoc[20]->value || $good->fields_assoc[20]->value == 0 )? Yii::app()->params["zeroPrice"] : $price ?><?if(!$good->archive):?><?$delivery = Interpreter::generate($this->params[$_GET['type']]["SHIPPING"], $good,$dynamic);?><span <?if($delivery=="бесплатная"):?>class="b-free-delivery"<?endif;?>> <?=$delivery?></span><?endif;?></h3>
+						<h3><?=$price=( !$good->fields_assoc[20]->value || $good->fields_assoc[20]->value == 0 )? Yii::app()->params["zeroPrice"] : $price ?><?if(!$good->archive):?><?$delivery = Interpreter::generate($this->params[$_GET['type']]["SHIPPING"], $good,$dynamic);?><span <?if($delivery=="бесплатная"):?>class="b-free-delivery"<?endif;?>> <?=$delivery?></span><?endif;?></h3>
 						<? $is_available = Interpreter::generate($this->params[$_GET['type']]["AVAILABLE"], $good, $dynamic); ?>
 						<? if(!$good->archive): ?>
 							<? if($is_available != "В наличии"): ?>
@@ -40,7 +40,15 @@
 					</div>
 					<div class="clearfix">
 						<div class="left">
-							<a href="#" class="fancy b-orange-butt" data-block="#b-popup-buy" data-aftershow="detail_buy">Купить</a>
+							<? if(isset($_SESSION["BASKET"]) && array_search($good->id, $_SESSION["BASKET"]) !== false): ?>
+								<a href="<?=Yii::app()->createUrl('/kolesoOnline/basket',array('id' => $good->id,'add' => true))?>" class="b-orange-butt carted">добавлено</a>
+							<? elseif(mb_strpos($price,"Продано",0,"UTF-8") === false && mb_strpos($price,Yii::app()->params["zeroPrice"],0,"UTF-8") === false): ?>
+		                        <a href="<?=Yii::app()->createUrl('/kolesoOnline/basket',array('id' => $good->id,'add' => true))?>" class="b-orange-butt to-cart">в корзину</a>
+		                    <? elseif(mb_strpos($price,Yii::app()->params["zeroPrice"],0,"UTF-8") !== false): ?>
+		                    	<a href="#" class="fancy b-orange-butt acc" data-block="#b-popup-buy" data-aftershow="category_buy">Уточнить цену</a>
+		                    <? else:?>
+		                    	<a href="#" class="b-orange-butt carted">Продано</a>
+		                    <? endif; ?>
 						</div>
 						<div class="left">
 							<h5 class="b-go" data-block="#shipping">Доставка и оплата</h5>

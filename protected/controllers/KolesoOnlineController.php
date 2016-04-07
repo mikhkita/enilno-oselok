@@ -329,7 +329,7 @@ class KolesoOnlineController extends Controller
 				'roles'=>array('manager'),
 			),
 			array('allow',
-				'actions'=>array('index', 'search', 'index2', 'detail','page','mail','category','getCities','setCity'),
+				'actions'=>array('index', 'search', 'index2', 'detail','page','mail','category','getCities','setCity','basket','order'),
 				'users'=>array('*'),
 			),
 			array('deny',
@@ -701,12 +701,52 @@ class KolesoOnlineController extends Controller
 		}
 	}
 
-	public function actionBasket($id = NULL)
+	public function actionBasket($id = NULL,$type = NULL,$add = false)
 	{
 		if(!isset($_SESSION)) session_start();
-		$good = Good::model()->with("type","fields.variant","fields.attribute")->findByPk($good->id);
-		if(isset($_SESSION["BASKET"])) array_push($_SESSION["BASKET"], $id);
+		if($id) {
+			if($add) {
+				$goods = Good::model()->with("type","fields.variant","fields.attribute")->findAllByPk($id);
+				if(isset($_SESSION["BASKET"])) array_push($_SESSION["BASKET"], $id); else $_SESSION["BASKET"] = array($id);
+				$options = array(
+					'goods'=> $goods,
+					'partial' => true
+				);
+				$this->renderPartial('_basket',$options);
+			} else {
+				$key = array_search($id, $_SESSION["BASKET"]);
+				unset($_SESSION["BASKET"][$key]);
+			}		
+		}	
 	}
+
+	public function actionOrder()
+	{
+		if(!isset($_SESSION)) session_start();
+		$goods = array();
+		if(isset($_SESSION["BASKET"]) && count($_SESSION["BASKET"])) {
+			foreach ($_SESSION["BASKET"] as $key => $value) {
+		        if(Good::model()->findByPk($value,"archive <> 0")) unset($_SESSION["BASKET"][$key]);
+		    }
+		    
+		    if(count($_SESSION["BASKET"])) {
+			    $goods = Good::model()->with("type","fields.variant","fields.attribute")->findAllByPk($_SESSION["BASKET"]);
+			    $array = array();
+			    foreach ($_SESSION["BASKET"] as $key => $value) {
+			        foreach ($goods as $good) {
+			            if($good->id == $value)
+			                $array[$value] = $good;
+			        }
+			       
+			    }
+			}
+		}
+		$this->render('order',array(
+			'goods'=> $goods
+		));	
+	}
+
+
 	public function getCodeFromUrl($url){
 		$arr = explode("-", $url);
 		if(!count($arr)) return NULL;
