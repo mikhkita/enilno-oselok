@@ -164,7 +164,7 @@ class IntegrateController extends Controller
 
                 // if( $advert->type_id == 869 ){
                     Log::debug("Удаление ".$advert->good->fields_assoc[3]->value." в аккаунте ".$account->login);
-                    $result = $place->deleteAdvert( (($place_name == "AVITO")?$advert->link:$advert->url) );
+                    $result = $place->deleteAdvert( $advert->url );
                     if( $result )
                         $advert->delete();
                 // }else{
@@ -191,7 +191,7 @@ class IntegrateController extends Controller
                     $result = $place->updateAdvert($advert->url, $fields, $images);
                 }else{
                     Log::debug("Редактирование ".$advert->good->fields_assoc[3]->value." в аккаунте ".$account->login);
-                    $result = $place->updateAdvert( (($place_name == "AVITO")?$advert->link:$advert->url) ,$fields);
+                    $result = $place->updateAdvert( $advert->url ,$fields);
                 }
 
                 break;
@@ -203,7 +203,7 @@ class IntegrateController extends Controller
                     $result = $place->updateAdvert($advert->url, $fields, $images);
                 }else{
                     Log::debug("Обновление фотографий ".$advert->good->fields_assoc[3]->value." в аккаунте ".$account->login);
-                    $result = $place->updateAdvert( (($place_name == "AVITO")?$advert->link:$advert->url) ,$fields,$images,true);
+                    $result = $place->updateAdvert( $advert->url ,$fields,$images,true);
                 }
 
                 break;
@@ -213,27 +213,27 @@ class IntegrateController extends Controller
                     $result = true;
                 }else{
                     Log::debug("Обновление с фотографиями ".$advert->good->fields_assoc[3]->value." в аккаунте ".$account->login);
-                    $result = $place->updateAdvert( (($place_name == "AVITO")?$advert->link:$advert->url) ,$fields,$images);
+                    $result = $place->updateAdvert( $advert->url ,$fields,$images);
                 }
 
                 break;
             case 'payUp':
 
                 Log::debug("Платное поднятие ".$advert->good->fields_assoc[3]->value." в аккаунте ".$account->login);
-                $result = $place->upPaidAdverts( (($place_name == "AVITO")?$advert->link:$advert->url) );
+                $result = $place->upPaidAdverts( $advert->url );
 
                 break;
             case 'up':
 
                 Log::debug("Поднятие ".$advert->good->fields_assoc[3]->value." в аккаунте ".$account->login);
-                $result = $place->up( (($place_name == "AVITO")?$advert->link:$advert->url) );
+                $result = $place->up( $advert->url );
 
                 break;
             case 'updatePrice':
 
                 Log::debug("Обновление цены ".$advert->good->fields_assoc[3]->value." в аккаунте ".$account->login);
                 if( $place_name == "AVITO" ){
-                    $result = $place->updatePrice($advert->link, $fields);
+                    $result = $place->updatePrice($advert->url, $fields);
                 }else if( $place_name == "DROM" ){
                     $result = $place->updateAdvert($advert->url,$fields);
                 }
@@ -1196,7 +1196,7 @@ class IntegrateController extends Controller
             array(
                 "good_type_id"=>2,
                 "attributes"=>array(
-                    43 => array(2912)
+                    27 => array(1056)
                 )
             )
         )->getPage(
@@ -1208,7 +1208,7 @@ class IntegrateController extends Controller
 
         $drom = new Drom();
         foreach ($goods as $key => $good) {
-            if( $advert = Advert::model()->find("good_id=".$good->id." AND city_id=1074 AND place_id=12") ){
+            if( $advert = Advert::model()->find("good_id=".$good->id." AND city_id=1081 AND place_id=12") ){
                 // if( !$advert->title ){
                 //     $title = $drom->parseTitle($good->fields_assoc[106]->value);
                 //     if( $title ){
@@ -1219,13 +1219,15 @@ class IntegrateController extends Controller
                 // }
                 if( $advert->title ){
                     
-                    Interpreter::isNotIsset($advert->title, $advert);
-                    // if( !$advert->ready ){
-                    //     echo $advert->title."<br>";
-                    //     foreach ($advert->findSimilar() as $i => $title)
-                    //         echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".$title."<br>";
-                    // }
-                    //     // echo $advert->title."<br>";
+                    // Interpreter::isNotIsset($advert->title, $advert);
+
+
+                    if( !$advert->ready ){
+                        echo $advert->title."<br>";
+                        foreach ($advert->findSimilar() as $i => $title)
+                            echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".$title."<br>";
+                    }
+                        // echo $advert->title."<br>";
                 }
             }else{
                 // echo "Не найдено объявление у товара с id ".$good->id;

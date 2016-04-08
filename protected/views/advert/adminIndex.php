@@ -16,6 +16,8 @@
 				</ul>
 			</li>
 			<li><a href="<?php echo $this->createUrl('/advert/adminaction', array('action'=> "delete"))?>" class="ajax-form ajax-update">Удалить</a></li>
+			<li><a href="<?php echo $this->createUrl('/advert/admintitles')?>" class="ajax-form ajax-delete not-ajax-delete" data-warning="Вы действительно хотите сгенерировать заголовки для отфильтрованных объявлений?">Сгенерировать заголовки</a></li>
+			<?if($this->user->usr_id == 1):?><li><a href="<?php echo $this->createUrl('/advert/adminremove', array('lol'=>'1'))?>" class="ajax-form ajax-delete" data-warning="Вы действительно хотите удалить все отфильтрованные объявления к ебеням?">Уничтожить</a></li><?endif;?>
 		</ul>
 	</div>
 </div>
@@ -60,6 +62,7 @@ $form=$this->beginWidget('CActiveForm',array('id'=>'adverts-form',"action" => $t
 			<th><?=$labels["place_id"]?></th>
 			<th><?=$labels["type_id"]?></th>
 			<th><?=$labels["city_id"]?></th>
+			<th><?=$labels["title"]?></th>
 			<th><?=$labels["url"]?></th>
 		</tr>
 		<?if ($adverts_arr):?>
@@ -72,6 +75,7 @@ $form=$this->beginWidget('CActiveForm',array('id'=>'adverts-form',"action" => $t
 						<td><?=$name?></td>
 						<td><?=$advert->type->value?></td>
 						<td><?=$advert->city->value?></td>
+						<td class="<?=(($advert->ready)?("green"):("red"))?>"><?=$advert->title?></td>
 						<td>
 							<? if($advert->url): ?>
 							<a href="<?=$advert->getUrl();?>" target="_blank"><?=$advert->getUrl();?></a>

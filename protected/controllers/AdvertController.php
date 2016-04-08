@@ -13,8 +13,12 @@ class AdvertController extends Controller
 	{
 		return array(
 			array('allow',
-				'actions'=>array('adminIndex','adminUpDrom','adminUpAvito','adminAction','adminFindById'),
+				'actions'=>array('adminIndex','adminUpDrom','adminRemove','admintitles','adminUpAvito','adminAction','adminFindById'),
 				'roles'=>array('manager'),
+			),
+			array('allow',
+				'actions'=>array('admintitle'),
+				'users'=>array('*'),
 			),
 			array('deny',
 				'users'=>array('*'),
@@ -76,7 +80,7 @@ class AdvertController extends Controller
 				if( !in_array($val, $place_ids)) 
 					unset($filter["Place"][$i]);
 		}else
-			$filter["Place"] = array(11);
+			$filter["Place"] = $place_ids;
 		
 		$adverts = Advert::filter($filter,array('type','city','place.category'),array("good_id","id"))->getData();
 
@@ -116,6 +120,19 @@ class AdvertController extends Controller
 			));
 		}
 
+	}
+
+	public function actionAdminRemove(){
+		if( !isset($_SESSION["advert_filter"]) ) $_SESSION["advert_filter"] = array();
+		
+		$adverts = Advert::filter_ids($_SESSION["advert_filter"]);
+
+		if( count($adverts) ){
+			Queue::model()->deleteAll("advert_id IN (".implode(",", $adverts).")");
+			Advert::model()->deleteAll("id IN (".implode(",", $adverts).")");
+		}
+
+		$this->actionAdminIndex(true);
 	}
 
 	public function actionAdminIndex($partial = false, $good_type_id = false)
@@ -195,6 +212,56 @@ class AdvertController extends Controller
 		}else{
 			echo "Объявление не найдено";
 		}
+	}
+
+	public function actionAdminTitles(){
+		if( !isset($_SESSION["advert_filter"]) ) $_SESSION["advert_filter"] = array();
+
+		$filter = $_SESSION["advert_filter"];
+
+		$model = Place::model()->findAll("category_id=2048");
+		$place_ids = array();
+		foreach ($model as $i => $place)
+			array_push($place_ids, $place->id);
+
+		if(isset($filter["Place"])){
+			foreach ($filter["Place"] as $i => $val)
+				if( !in_array($val, $place_ids)) 
+					unset($filter["Place"][$i]);
+		}else
+			$filter["Place"] = $place_ids;
+		
+		$adverts = Advert::filter($filter,array('type','city','place.category'),array("good_id","id","place_id"))->getData();
+
+		$places = PlaceInterpreter::model()->findAll("place_id IN (".implode(",", $place_ids).") AND code='title'");
+		$places = $this->getAssoc($places, "place_id");
+
+		
+		$links = array();
+		if( $adverts )
+			foreach ($adverts as $i => $advert) {
+				array_push($links, "http://".Yii::app()->params['ip'].$this->createUrl('/advert/admintitle',array('advert_id'=> $advert->id, 'interpreter_id' => $places[$advert->place_id]->interpreter_id)));
+			}
+
+		Cron::addAll($links);
+
+		echo json_encode(array("result" => "success", "action" => "updateCronCount", "count" => Cron::model()->count()));
+	}
+
+	public function actionAdminTitle($advert_id, $interpreter_id){
+		$advert = Advert::model()->findByPk($advert_id);
+
+		$dynObjects = $this->getDynObjects(array(
+			38 => $advert->city_id,
+			37 => $advert->type_id,
+			57 => 2048
+		));
+
+		$good = Good::model()->with(array("type","fields.variant","fields.attribute"))->findByPk($advert->good_id);
+
+		Interpreter::generate($interpreter_id, $good, $dynObjects, $advert);
+
+		echo json_encode(array("result" => "success"));
 	}
 
 	public function loadModel($id)
