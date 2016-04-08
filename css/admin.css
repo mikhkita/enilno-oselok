@@ -512,6 +512,12 @@ td.b-photo-td{
         .b-advert-table td{
             padding: 2px 10px;
         }
+        .b-advert-table td.red,.b-advert-table td.green{
+            text-align: left;
+        }
+        .b-advert-table td.green{
+            /*color: #0a0;*/
+        }
         .b-table td.b-empty,
         .b-table td.empty{
             background-color: #B27C5E;

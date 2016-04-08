@@ -26,7 +26,7 @@ class Word extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('value', 'required'),
-			array('value', 'length', 'max'=>30),
+			array('value', 'length', 'max'=>50),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('id, value', 'safe', 'on'=>'search'),
@@ -90,7 +90,7 @@ class Word extends CActiveRecord
 
         $array = explode(" ", $string);
         $array = array_filter($array, function($val){
-            return (mb_strlen(((string) $val),"UTF-8")>3);
+            return (mb_strlen(((string) $val),"UTF-8")>2);
         });
 
         return $array;
@@ -98,6 +98,7 @@ class Word extends CActiveRecord
 
     public function update($words){
     	$values = array();
+    	$words = array_unique($words);
     	foreach ($words as $i => $word){
     		$words[$i] = str_replace(array("ё","Ё"), "е", mb_strtolower($word, "UTF-8"));
     		array_push($values, "'".addslashes($words[$i])."'");
@@ -113,7 +114,7 @@ class Word extends CActiveRecord
     	if( count($words) ){
     		foreach ($words as $i => $word)
     		{
-    			if( mb_strlen($word, "UTF-8") >= 30 ){
+    			if( mb_strlen($word, "UTF-8") >= 50 ){
     				echo $word;
     				die();
     			}

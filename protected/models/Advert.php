@@ -248,11 +248,16 @@ class Advert extends CActiveRecord
 
 	public function findSimilar(){
 		$words = Word::model()->with("adverts")->findAll("adverts.advert_id=".$this->id);
-		$similar = floor(count($words)*Advert::getPercent()/100);
+		if( ! count($words) ){
+			$this->title = NULL;
+			$this->save();
+			return array();
+		}
+		$similar = round(count($words)*Advert::getPercent()/100);
 
 		foreach ($words as $i => $word)
 			$words[$i] = $word->id;
-		
+
 		$criteria=new CDbCriteria();
 		$criteria->group = "advert_id";
 		$criteria->with = "advert";

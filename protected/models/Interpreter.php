@@ -157,7 +157,7 @@ class Interpreter extends CActiveRecord
     	$uniq = 1;
     	while($uniq <= 10){
     		$result = Interpreter::generate($interpreter_id, $model, $dynObjects, 0, $uniq);
-    		$not_isset = Interpreter::isNotIsset($interpreter_id, $result, $advert_id);
+    		$not_isset = Interpreter::isNotIsset($result, $advert_id);
     		if( $not_isset !== false ) return $not_isset;
     		$uniq++;
     	}
@@ -168,7 +168,7 @@ class Interpreter extends CActiveRecord
     	$arr = explode(" ", $result);
         while (mb_strlen($result, "UTF-8") > 50) {
             array_shift($arr);
-            $result = implode(" ", $arr);
+            $result = trim(implode(" ", $arr));
         }
         $result = mb_strtoupper(mb_substr($result, 0, 1, "UTF-8"), "UTF-8").mb_substr($result, 1, NULL, "UTF-8");
 
@@ -213,11 +213,11 @@ class Interpreter extends CActiveRecord
     	if( isset($interpreters[(string)$interpreter_id]) ){
     		if( $interpreters[(string)$interpreter_id]->unique && $uniq === NULL ){
     			if( $advert_id ){
-    				$advert = Advert::model()->findByPk($advert_id, NULL, array("select" => array("select","title")));
+    				$advert = (is_object($advert_id))?$advert_id:Advert::model()->findByPk($advert_id, NULL, array("select" => array("select","title")));
 	    			if( $advert && $advert->ready ){
 	    				return $advert->title;
 	    			}else{
-	    				return Interpreter::generateUnique($interpreter_id, $model, $dynObjects, $advert_id);
+	    				return Interpreter::generateUnique($interpreter_id, $model, $dynObjects, $advert);
 	    			}
     			}
     		}
