@@ -308,7 +308,7 @@ class KolesoOnlineController extends Controller
     }
 
     public function beforeaction(){
-		if( Yii::app()->controller->action->id == "detail" || Yii::app()->controller->action->id == "index" || Yii::app()->controller->action->id == "category" || Yii::app()->controller->action->id == "page" || Yii::app()->controller->action->id == "mail"){
+		if( Yii::app()->controller->action->id == "detail" || Yii::app()->controller->action->id == "index" || Yii::app()->controller->action->id == "category" || Yii::app()->controller->action->id == "page" || Yii::app()->controller->action->id == "mail" || Yii::app()->controller->action->id == "order"){
 			$this->checkCity();
 		}
 		return true;
@@ -730,7 +730,7 @@ class KolesoOnlineController extends Controller
 		    }
 		    
 		    if(count($_SESSION["BASKET"])) {
-			    $goods = Good::model()->with("type","fields.variant","fields.attribute")->findAllByPk($_SESSION["BASKET"]);
+			    $goodss = Good::model()->with("type","fields.variant","fields.attribute")->findAllByPk($_SESSION["BASKET"]);
 			    $array = array();
 			    foreach ($_SESSION["BASKET"] as $key => $value) {
 			        foreach ($goods as $good) {
@@ -741,8 +741,8 @@ class KolesoOnlineController extends Controller
 			    }
 			}
 		}
-		$this->render('order',array(
-			'goods'=> $goods
+		$this->render('kolesoOnline/order',array(
+			'goods'=> $goodss
 		));	
 	}
 

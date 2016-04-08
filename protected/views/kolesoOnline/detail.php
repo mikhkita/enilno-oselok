@@ -40,15 +40,16 @@
 					</div>
 					<div class="clearfix">
 						<div class="left">
-							<? if(isset($_SESSION["BASKET"]) && array_search($good->id, $_SESSION["BASKET"]) !== false): ?>
+						<a href="#" class="fancy b-orange-butt" data-block="#b-popup-buy" data-aftershow="category_buy">Купить</a>
+							<!-- <? if(isset($_SESSION["BASKET"]) && array_search($good->id, $_SESSION["BASKET"]) !== false): ?>
 								<a href="<?=Yii::app()->createUrl('/kolesoOnline/basket',array('id' => $good->id,'add' => true))?>" class="b-orange-butt carted">добавлено</a>
 							<? elseif(mb_strpos($price,"Продано",0,"UTF-8") === false && mb_strpos($price,Yii::app()->params["zeroPrice"],0,"UTF-8") === false): ?>
 		                        <a href="<?=Yii::app()->createUrl('/kolesoOnline/basket',array('id' => $good->id,'add' => true))?>" class="b-orange-butt to-cart">в корзину</a>
-		                    <? elseif(mb_strpos($price,Yii::app()->params["zeroPrice"],0,"UTF-8") !== false): ?>
-		                    	<a href="#" class="fancy b-orange-butt acc" data-block="#b-popup-buy" data-aftershow="category_buy">Уточнить цену</a>
-		                    <? else:?>
+		                    <? elseif(mb_strpos($price,Yii::app()->params["zeroPrice"],0,"UTF-8") !== false): ?> -->
+		                    	<!-- <a href="#" class="fancy b-orange-butt" data-block="#b-popup-buy" data-aftershow="category_buy">Купить</a> -->
+		                   <!--  <? else:?>
 		                    	<a href="#" class="b-orange-butt carted">Продано</a>
-		                    <? endif; ?>
+		                    <? endif; ?> -->
 						</div>
 						<div class="left">
 							<h5 class="b-go" data-block="#shipping">Доставка и оплата</h5>

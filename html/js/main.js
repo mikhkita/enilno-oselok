@@ -427,8 +427,12 @@ $(document).ready(function(){
     }).bind("mouseup",function(){
         if( !open )
             closeBubble();
-        if( !open_cart )
-            $(".b-cart-menu").hide(0).removeClass("opened");
+        if( !open_cart ) {
+            $(".b-cart-menu").removeClass("opened");
+            setTimeout(function(){
+                $(".b-cart-menu").hide(0);
+            },200);
+        }
     });
 
     $(".b-variants-close").on("click touchstart",function(){
