@@ -4,12 +4,18 @@ Class Curl {
 
     public $cookie = NULL;
     public $ip = NULL;
+    public $cookieChanged = false;
 
     function __construct($ip = NULL) {
         if($ip !== NULL) $this->ip = $ip;
         $this->cookie = md5(rand().time());
         $this->removeCookies();
         
+    }
+
+    function __destruct() {
+        if(!$this->cookieChanged)
+            $this->removeCookies();
     }
 
     public function request($url = NULL,$post = NULL){
@@ -89,6 +95,7 @@ Class Curl {
     public function changeCookies($login){
         $this->removeCookies();
         $this->cookie = md5($login);
+        $this->cookieChanged = true;
     }
 
     public function removeCookies(){

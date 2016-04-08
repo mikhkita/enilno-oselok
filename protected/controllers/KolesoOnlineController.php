@@ -308,7 +308,7 @@ class KolesoOnlineController extends Controller
     }
 
     public function beforeaction(){
-		if( Yii::app()->controller->action->id == "detail" || Yii::app()->controller->action->id == "index" || Yii::app()->controller->action->id == "category" || Yii::app()->controller->action->id == "page" || Yii::app()->controller->action->id == "mail" || Yii::app()->controller->action->id == "order"){
+		if( Yii::app()->controller->action->id == "detail" || Yii::app()->controller->action->id == "index" || Yii::app()->controller->action->id == "category" || Yii::app()->controller->action->id == "page" || Yii::app()->controller->action->id == "mail" || Yii::app()->controller->action->id == "basket" || Yii::app()->controller->action->id == "cart"){
 			$this->checkCity();
 		}
 		return true;
@@ -329,7 +329,7 @@ class KolesoOnlineController extends Controller
 				'roles'=>array('manager'),
 			),
 			array('allow',
-				'actions'=>array('index', 'search', 'index2', 'detail','page','mail','category','getCities','setCity','basket','order'),
+				'actions'=>array('index', 'search', 'index2', 'detail','page','mail','category','getCities','setCity','basket','cart'),
 				'users'=>array('*'),
 			),
 			array('deny',
@@ -720,7 +720,7 @@ class KolesoOnlineController extends Controller
 		}	
 	}
 
-	public function actionOrder()
+	public function actionCart()
 	{
 		if(!isset($_SESSION)) session_start();
 		$goods = array();
@@ -730,7 +730,7 @@ class KolesoOnlineController extends Controller
 		    }
 		    
 		    if(count($_SESSION["BASKET"])) {
-			    $goodss = Good::model()->with("type","fields.variant","fields.attribute")->findAllByPk($_SESSION["BASKET"]);
+			    $goods = Good::model()->with("type","fields.variant","fields.attribute")->findAllByPk($_SESSION["BASKET"]);
 			    $array = array();
 			    foreach ($_SESSION["BASKET"] as $key => $value) {
 			        foreach ($goods as $good) {
@@ -741,8 +741,8 @@ class KolesoOnlineController extends Controller
 			    }
 			}
 		}
-		$this->render('kolesoOnline/order',array(
-			'goods'=> $goodss
+		$this->render('cart',array(
+			'goods'=> $goods
 		));	
 	}
 
