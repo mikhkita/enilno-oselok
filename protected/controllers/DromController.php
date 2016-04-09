@@ -227,9 +227,8 @@ class DromController extends Controller
         }
     }
     public function actionAdminVlad(){
-
-        $vk = new Vk();
-        
+        $vk = new Curl("admin:481516@82.146.35.208:1212");
+        print_r($vk->request("http://2ip.ru"));
         // print_r($vk->addAdvert(false,array(1,2,3,4)));
         // $vk->deleteAdvert(163381);
         // $vk->curl->removeCookies();

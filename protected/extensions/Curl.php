@@ -27,6 +27,7 @@ Class Curl {
 
     public function request($url = NULL,$post = NULL){
         $ch = curl_init();
+        curl_setopt($ch, CURLOPT_USERAGENT, "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.110 Safari/537.36");
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 30);
@@ -75,7 +76,6 @@ Class Curl {
         do {
             $i++;
             $result = $this->request("http://www.seogadget.ru/location");
-
             $html = str_get_html($result);
         } while ( !is_object($html) && $i < 5 );
 
@@ -86,7 +86,6 @@ Class Curl {
         $ip = $html->find('.url',0)->value;
 
         $temp_ip = explode(":", $this->proxy_ip);
-        print_r($ip." ".$temp_ip[0]);
         if( $ip == $temp_ip[0]) {
             Log::debug("Прокси ".$ip." успешно установлен");
             return true;
