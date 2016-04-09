@@ -3,11 +3,18 @@
 Class Curl {
 
     public $cookie = NULL;
+    public $proxy_login = NULL;
+    public $proxy_ip = NULL;
     public $ip = NULL;
     public $cookieChanged = false;
 
-    function __construct($ip = NULL) {
-        if($ip !== NULL) $this->ip = $ip;
+    function __construct($type = NULL) {
+        if($type !== NULL) {
+            if(strpos($type, "@")) {
+                $this->proxySet($type);
+                $this->checkProxy();
+            } else $this->ip = $type;
+        }
         $this->cookie = md5(rand().time());
         $this->removeCookies();
         
@@ -27,10 +34,10 @@ Class Curl {
             curl_setopt($ch, CURLOPT_REFERER,"https://www.avito.ru/");
         }
         curl_setopt($ch, CURLOPT_AUTOREFERER,1);
-        // if($this->proxy_login && $this->proxy_ip) {
-        //     curl_setopt($ch, CURLOPT_PROXY, $this->proxy_ip);
-        //     curl_setopt($ch, CURLOPT_PROXYUSERPWD, $this->proxy_login); 
-        // }
+        if($this->proxy_login && $this->proxy_ip) {
+            curl_setopt($ch, CURLOPT_PROXY, $this->proxy_ip);
+            curl_setopt($ch, CURLOPT_PROXYUSERPWD, $this->proxy_login); 
+        }
 
         if($this->ip) {
             curl_setopt($ch, CURLOPT_URL, "http://".$this->ip."/redirect.php");
@@ -45,6 +52,8 @@ Class Curl {
             curl_setopt($ch, CURLOPT_COOKIEFILE,  dirname(__FILE__).'/cookies/'.$this->cookie.'.txt');
         }
         if( $post !== NULL ){
+            if($this->ip)
+                $post = array("json" => json_encode($post));
             curl_setopt($ch, CURLOPT_POST, 1);
             curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
         }
@@ -53,44 +62,44 @@ Class Curl {
         return $result;
     }
 
-    // public function proxySet($proxy) {
-    //     $proxy = explode("@", $proxy);
-    //     $this->proxy_login = $proxy[0];
-    //     $this->proxy_ip = $proxy[1];
-    // }
+    public function proxySet($proxy) {
+        $proxy = explode("@", $proxy);
+        $this->proxy_login = $proxy[0];
+        $this->proxy_ip = $proxy[1];
+    }
 
-    // public function checkProxy(){
-    //     include_once Yii::app()->basePath.'/extensions/simple_html_dom.php';
+    public function checkProxy(){
+        include_once Yii::app()->basePath.'/extensions/simple_html_dom.php';
 
-    //     $i = 0;
-    //     do {
-    //         $i++;
-    //         $result = $this->request("http://www.seogadget.ru/location");
+        $i = 0;
+        do {
+            $i++;
+            $result = $this->request("http://www.seogadget.ru/location");
 
-    //         $html = str_get_html($result);
-    //     } while ( !is_object($html) && $i < 5 );
+            $html = str_get_html($result);
+        } while ( !is_object($html) && $i < 5 );
 
-    //     if( !is_object($html) ){
-    //         Log::debug("Прокси ".$temp_ip[0]." упал");
-    //         return false;
-    //     }
-    //     $ip = $html->find('.url',0)->value;
+        if( !is_object($html) ){
+            Log::debug("Прокси ".$temp_ip[0]." упал");
+            return false;
+        }
+        $ip = $html->find('.url',0)->value;
 
-    //     $temp_ip = explode(":", $this->proxy_ip);
-    //     print_r($ip." ".$temp_ip[0]);
-    //     if( $ip == $temp_ip[0]) {
-    //         Log::debug("Прокси ".$ip." успешно установлен");
-    //         return true;
-    //     }else{
-    //         Log::debug("Прокси ".$temp_ip[0]." не был установлен. Выдало ".$ip);
-    //         return false;
-    //     }
-    // }
+        $temp_ip = explode(":", $this->proxy_ip);
+        print_r($ip." ".$temp_ip[0]);
+        if( $ip == $temp_ip[0]) {
+            Log::debug("Прокси ".$ip." успешно установлен");
+            return true;
+        }else{
+            Log::debug("Прокси ".$temp_ip[0]." не был установлен. Выдало ".$ip);
+            return false;
+        }
+    }
 
-    // public function proxyUnset() {
-    //     $this->$proxy_login = NULL;
-    //     $this->$proxy_ip = NULL;
-    // }
+    public function proxyUnset() {
+        $this->$proxy_login = NULL;
+        $this->$proxy_ip = NULL;
+    }
 
     public function changeCookies($login){
         $this->removeCookies();
