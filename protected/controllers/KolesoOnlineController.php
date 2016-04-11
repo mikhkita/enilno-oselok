@@ -701,13 +701,17 @@ class KolesoOnlineController extends Controller
 		}
 	}
 
-	public function actionBasket($id = NULL,$type = NULL,$add = false)
+	public function actionBasket($id = NULL,$add = false)
 	{
 		if(!isset($_SESSION)) session_start();
 		if($id) {
 			if($add) {
+				if(!isset($_SESSION["BASKET"])) {
+					$_SESSION["BASKET"] = array($id);
+				} elseif(array_search($id, $_SESSION["BASKET"]) === false) {	
+					array_push($_SESSION["BASKET"], $id);
+				}
 				$goods = Good::model()->with("type","fields.variant","fields.attribute")->findAllByPk($id);
-				if(isset($_SESSION["BASKET"])) array_push($_SESSION["BASKET"], $id); else $_SESSION["BASKET"] = array($id);
 				$options = array(
 					'goods'=> $goods,
 					'partial' => true
@@ -715,7 +719,8 @@ class KolesoOnlineController extends Controller
 				$this->renderPartial('_basket',$options);
 			} else {
 				$key = array_search($id, $_SESSION["BASKET"]);
-				unset($_SESSION["BASKET"][$key]);
+				if($key !== false)
+					unset($_SESSION["BASKET"][$key]);
 			}		
 		}	
 	}
@@ -741,8 +746,12 @@ class KolesoOnlineController extends Controller
 			    }
 			}
 		}
+		$dynamic = $this->getDynObjects(array(
+		    38 => Yii::app()->params["city"]->id
+		));
 		$this->render('cart',array(
-			'goods'=> $goods
+			'goods'=> $goods,
+			'dynamic' => $dynamic
 		));	
 	}
 

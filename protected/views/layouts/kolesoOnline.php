@@ -142,7 +142,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
                         <li><a href="<?=Yii::app()->createUrl('/kolesoOnline/category',array('type' => 1))?>">Шины</a></li>
                         <li><a href="<?=Yii::app()->createUrl('/kolesoOnline/category',array('type' => 3))?>">Колеса</a></li>
                     </ul>
-                    <div id="minicart right">
+                    <div id="minicart" class="right">
                         <div class="b-cart-menu-cont">
                             <div class="b-cart-menu gradient-grey">
                                 <ul class="b-cart-items clearfix">

@@ -34,6 +34,6 @@ foreach ($goods as $good) : ?>
             <? $price = Interpreter::generate($this->params[$type]["PRICE_CODE"], $good, $dynamic);?> 
             <h4 data-price="<?=$price?>" class="cart-good-price"><?=number_format($price, 0, ',', ' ' )." р."?></h4>
         </div>
-        <a href="<?=Yii::app()->createUrl('/kolesoOnline/basket',array('id' => $good->id,'type' => $type))?>" data-id="<?=$good->id?>" class="cart-close-btn"></a>
+        <a href="<?=Yii::app()->createUrl('/kolesoOnline/basket',array('id' => $good->id))?>" data-id="<?=$good->id?>" class="cart-close-btn"></a>
     </li>
 <? endforeach; ?>

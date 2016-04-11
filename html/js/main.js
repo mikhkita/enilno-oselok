@@ -713,7 +713,7 @@ $(document).ready(function(){
                     $(".b-total-price span").text(price);
                     if(!$(".b-cart-menu").hasClass("opened")) {
                         $(".b-cart-menu").show(0).addClass("opened"); 
-                    }
+                    }   
                 }
             });
         }
@@ -752,6 +752,38 @@ $(document).ready(function(){
             });
         }
         return false;
-    });   
+    });  
+
+    $("body").on("click",".b-cart-delete",function(){
+        if(block_del) {
+            block_del = false;
+            var selector = $(this);
+            $.ajax({
+                type: "GET",
+                url: selector.attr("href"),
+                success: function(msg){
+                    price -= parseInt(selector.closest("tr").find(".cart-price").attr("data-price"));
+                    selector.closest("tr").remove(); 
+                    $(".total-price span").text(price);
+                    if(!$("td.title").length) {
+                        $(".order-cont").remove();
+                        $(".empty-cart").show();
+                    }
+                    block_del = true;
+                }
+            });
+        }
+        return false;
+    });  
+
+    price = 0;
+    if($(".b-cart").length) {
+        $("#minicart").remove();
+        $(".cart-price").each(function() {
+           price += parseInt($(this).attr("data-price"));      
+        });
+        $(".total-price span").text(price);    
+        
+    }
 
 });

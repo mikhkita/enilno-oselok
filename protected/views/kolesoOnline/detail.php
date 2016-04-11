@@ -48,7 +48,7 @@
 		                    <? elseif(mb_strpos($price,Yii::app()->params["zeroPrice"],0,"UTF-8") !== false): ?>
 		                    	<a href="#" class="fancy b-orange-butt acc" data-block="#b-popup-buy" data-aftershow="category_buy">Уточнить цену</a>
 		                    <? else:?>
-		                    	<a href="#" class="b-orange-butt carted">Продано</a>
+		                    	<a href="#" class="b-orange-butt">Продано</a>
 		                    <? endif; ?>
 						</div>
 						<div class="left">
