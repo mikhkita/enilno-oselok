@@ -882,7 +882,7 @@ class KolesoOnlineController extends Controller
             		if($good_type_id == 1) $title = $good->fields_assoc[16]->value." ".$good->fields_assoc[17]->value;
 	                if($good_type_id == 2) $title = $good->fields_assoc[6]->value;
 	                if($good_type_id == 3) $title = Interpreter::generate($this->params[$good_type_id]["TITLE_CATEGORY"], $good,$dynamic);
-            		$message .= "<div><p><b>Товар: </b><a target='_blank' href='".$href."'>".$href."</a> "$title." ".Interpreter::generate($this->params[$good_type_id]["TITLE_2_CODE"], $good,$dynamic)." код товара: ".$good->fields_assoc[3]->value."</p></div>";
+            		$message .= "<div><p><b>Товар: </b><a target='_blank' href='".$href."'>".$href."</a> ".$title." ".Interpreter::generate($this->params[$good_type_id]["TITLE_2_CODE"], $good,$dynamic)." код товара: ".$good->fields_assoc[3]->value."</p></div>";
             	}
             }
 
