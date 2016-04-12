@@ -308,7 +308,7 @@ class KolesoOnlineController extends Controller
     }
 
     public function beforeaction(){
-		if( Yii::app()->controller->action->id == "detail" || Yii::app()->controller->action->id == "index" || Yii::app()->controller->action->id == "category" || Yii::app()->controller->action->id == "page" || Yii::app()->controller->action->id == "mail" || Yii::app()->controller->action->id == "order"){
+		if( Yii::app()->controller->action->id == "detail" || Yii::app()->controller->action->id == "index" || Yii::app()->controller->action->id == "category" || Yii::app()->controller->action->id == "page" || Yii::app()->controller->action->id == "mail" || Yii::app()->controller->action->id == "basket" || Yii::app()->controller->action->id == "cart"){
 			$this->checkCity();
 		}
 		return true;
@@ -329,7 +329,7 @@ class KolesoOnlineController extends Controller
 				'roles'=>array('manager'),
 			),
 			array('allow',
-				'actions'=>array('index', 'search', 'index2', 'detail','page','mail','category','getCities','setCity','basket','order'),
+				'actions'=>array('index', 'search', 'index2', 'detail','page','mail','category','getCities','setCity','basket','cart'),
 				'users'=>array('*'),
 			),
 			array('deny',
@@ -701,13 +701,17 @@ class KolesoOnlineController extends Controller
 		}
 	}
 
-	public function actionBasket($id = NULL,$type = NULL,$add = false)
+	public function actionBasket($id = NULL,$add = false)
 	{
 		if(!isset($_SESSION)) session_start();
 		if($id) {
 			if($add) {
+				if(!isset($_SESSION["BASKET"])) {
+					$_SESSION["BASKET"] = array($id);
+				} elseif(array_search($id, $_SESSION["BASKET"]) === false) {	
+					array_push($_SESSION["BASKET"], $id);
+				}
 				$goods = Good::model()->with("type","fields.variant","fields.attribute")->findAllByPk($id);
-				if(isset($_SESSION["BASKET"])) array_push($_SESSION["BASKET"], $id); else $_SESSION["BASKET"] = array($id);
 				$options = array(
 					'goods'=> $goods,
 					'partial' => true
@@ -715,22 +719,25 @@ class KolesoOnlineController extends Controller
 				$this->renderPartial('_basket',$options);
 			} else {
 				$key = array_search($id, $_SESSION["BASKET"]);
-				unset($_SESSION["BASKET"][$key]);
+				if($key !== false)
+					unset($_SESSION["BASKET"][$key]);
 			}		
 		}	
 	}
 
-	public function actionOrder()
+	public function actionCart($id = NULL)
 	{
 		if(!isset($_SESSION)) session_start();
 		$goods = array();
+		if($id)
+			$_SESSION["BASKET"] = array($id);
 		if(isset($_SESSION["BASKET"]) && count($_SESSION["BASKET"])) {
 			foreach ($_SESSION["BASKET"] as $key => $value) {
 		        if(Good::model()->findByPk($value,"archive <> 0")) unset($_SESSION["BASKET"][$key]);
 		    }
 		    
 		    if(count($_SESSION["BASKET"])) {
-			    $goodss = Good::model()->with("type","fields.variant","fields.attribute")->findAllByPk($_SESSION["BASKET"]);
+			    $goods = Good::model()->with("type","fields.variant","fields.attribute")->findAllByPk($_SESSION["BASKET"]);
 			    $array = array();
 			    foreach ($_SESSION["BASKET"] as $key => $value) {
 			        foreach ($goods as $good) {
@@ -741,8 +748,13 @@ class KolesoOnlineController extends Controller
 			    }
 			}
 		}
-		$this->render('kolesoOnline/order',array(
-			'goods'=> $goodss
+
+		$dynamic = $this->getDynObjects(array(
+		    38 => Yii::app()->params["city"]->id
+		));
+		$this->render('cart',array(
+			'goods'=> $goods,
+			'dynamic' => $dynamic
 		));	
 	}
 
@@ -822,7 +834,7 @@ class KolesoOnlineController extends Controller
 		return $model;
 	}
 
-	public function actionMail(){
+	public function actionMail($type = NULL){
         require_once("phpmail.php");
 
         // $this->checkCity();
@@ -860,9 +872,21 @@ class KolesoOnlineController extends Controller
 
             if( isset($_POST["good-url"]) )
             	$message .= "<div><p><b>Товар: </b><a target='_blank' href='".$_POST["good-url"]."'>".$_POST["good"]."</a></p></div>";
-                
-            $message .= "</div>";
             
+            if($type == "order") {
+            	foreach ($_SESSION["BASKET"] as $key => $value) {
+            		$good = Good::model()->with("type","fields.variant","fields.attribute")->findByPk($value);
+            		$type = $good->good_type_id; 
+            		$href = Yii::app()->createUrl('/kolesoOnline/detail',array('id' => ($good->code)?$good->code:$good->fields_assoc[3]->value,'type' => $type));
+            		if($type == 1) $title = $good->fields_assoc[16]->value." ".$good->fields_assoc[17]->value;
+	                if($type == 2) $title = $good->fields_assoc[6]->value;
+	                if($type == 3) $title = Interpreter::generate($this->params[$type]["TITLE_CATEGORY"], $good,$dynamic);
+	                $code = ($good->code)?$good->code:$good->fields_assoc[3]->value;
+            		$message .= "<div><p><b>Товар: </b><a target='_blank' href='".$href."'>".$title."</a> ".Interpreter::generate($this->params[$type]["TITLE_2_CODE"], $good,$dynamic)."код товара: ".$code."</p></div>";
+            	}
+            }
+
+            $message .= "</div>";
             if(send_mime_mail("Сайт ".$from,$email_from,$name,$email_admin,'UTF-8','UTF-8',$subject,$message,true)){    
                 echo "1";
             }else{

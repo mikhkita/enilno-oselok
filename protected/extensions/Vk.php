@@ -72,7 +72,6 @@ Class Vk {
         } else {
             $result = ($json->response == 1) ? $edit_id : false;
         }
-        $this->curl->removeCookies();
         return $result;
     }
 
@@ -91,7 +90,6 @@ Class Vk {
         $url .='?'.urldecode(http_build_query($params));  
         $result = json_decode($this->curl->request($url));
         $result = $result->response;
-        $this->curl->removeCookies();
         return ($result == 1);
     }
 

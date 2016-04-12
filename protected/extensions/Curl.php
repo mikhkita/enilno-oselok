@@ -53,6 +53,8 @@ Class Curl {
             curl_setopt($ch, CURLOPT_COOKIEFILE,  dirname(__FILE__).'/cookies/'.$this->cookie.'.txt');
         }
         if( $post !== NULL ){
+            if($this->ip)
+                $post = array("json" => json_encode($post));
             curl_setopt($ch, CURLOPT_POST, 1);
             curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
         }
