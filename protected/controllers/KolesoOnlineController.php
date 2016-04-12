@@ -878,11 +878,13 @@ class KolesoOnlineController extends Controller
             	foreach ($_SESSION["BASKET"] as $key => $value) {
             		$good = Good::model()->with("type","fields.variant","fields.attribute")->findByPk($value);
             		$good_type_id = $good->good_type_id; 
-            		$href = Yii::app()->createUrl('/kolesoOnline/detail',array('id' => $good->fields_assoc[3]->value,'type' => $good_type_id));
+            		$code = ($good->code)?$good->code:$good->fields_assoc[3]->value;
+            		$href = "http://".$_SERVER['HTTP_HOST'].Yii::app()->createUrl('/kolesoOnline/detail',array('id' => $code,'type' => $good_type_id));
             		if($good_type_id == 1) $title = $good->fields_assoc[16]->value." ".$good->fields_assoc[17]->value;
 	                if($good_type_id == 2) $title = $good->fields_assoc[6]->value;
 	                if($good_type_id == 3) $title = Interpreter::generate($this->params[$good_type_id]["TITLE_CATEGORY"], $good,$dynamic);
-            		$message .= "<div><p><b>Товар: </b><a target='_blank' href='".$href."'>".$href."</a> ".$title." ".Interpreter::generate($this->params[$good_type_id]["TITLE_2_CODE"], $good,$dynamic)." код товара: ".$good->fields_assoc[3]->value."</p></div>";
+
+            		$message .= "<div><p><b>Товар: </b>".$title." ".Interpreter::generate($this->params[$good_type_id]["TITLE_2_CODE"], $good,$dynamic)." код товара: ".$good->fields_assoc[3]->value." <a target='_blank' href='".$href."'>(".$href.")</a></p></div>";
             	}
             }
 
