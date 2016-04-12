@@ -44,7 +44,7 @@ $form=$this->beginWidget('CActiveForm',array('id'=>'adverts-form',"action" => $t
 		<div class="b-advert-block">
 			<h3><?=$data['AttrName'][58]?></h3>
 			<div class="clearfix">
-			<?=CHtml::checkBoxList("Attr[58]", $_GET['Attr'][58], $data['Attr'][58],$htmlopt);?>
+			<?=CHtml::checkBoxList("Attr[58]", $_GET['Attr'][58], $data['Attr'][58]+array(0 => "Нет", 3885 => "Да"),$htmlopt);?>
 			</div>
 		</div>
 	</div>
@@ -57,6 +57,7 @@ $form=$this->beginWidget('CActiveForm',array('id'=>'adverts-form',"action" => $t
 <?php $this->endWidget(); ?>
 	<table class="b-table b-advert-table" border=1>
 		<tr>
+			<th>ID</th>
 			<th>Код</th>
 			<th>Тип товара</th>
 			<th><?=$labels["place_id"]?></th>
@@ -70,12 +71,13 @@ $form=$this->beginWidget('CActiveForm',array('id'=>'adverts-form',"action" => $t
 				<? foreach ($place as $code => $adverts): ?>
 					<? foreach ($adverts as $advert): ?>
 					<tr>
+						<td><?=$advert->id?></td>
 						<td><?=$code?></td>
 						<td><?=$advert->place->goodType->name?></td>
 						<td><?=$name?></td>
 						<td><?=$advert->type->value?></td>
 						<td><?=$advert->city->value?></td>
-						<td class="<?=(($advert->ready)?("green"):("red"))?>"><?=$advert->title?></td>
+						<td class="<?=(($advert->ready)?("green"):("red"))?>" id="advert-<?=$advert->id?>"><a href="<?php echo $this->createUrl('/advert/admintitleedit', array('advert_id'=> $advert->id))?>" class="ajax-form ajax-update"><?=$advert->title?></a></td>
 						<td>
 							<? if($advert->url): ?>
 							<a href="<?=$advert->getUrl();?>" target="_blank"><?=$advert->getUrl();?></a>

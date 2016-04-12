@@ -738,6 +738,7 @@ class Good extends GoodFilter
 
 	public function sold($archive = true,$type = 1){
 		$this->archive = $type;
+
 		if($archive) {
 			$code = $this->fields_assoc[3]->value;
 			if($this->good_type_id != 3) {
@@ -766,6 +767,42 @@ class Good extends GoodFilter
 		GoodAttribute::model()->deleteAll('good_id='.$this->id.' AND attribute_id IN (58,59,60,61)');
 		$this->updateAdverts();
 		return $this->save();
+	}
+
+	public function toTempArchive(){
+		$this->date = date("d.m.Y", time());
+		$this->archive = 2;
+		return $this->save();
+	}
+
+	public function soldAllTemp(){
+		for( $i = 1; $i <= 3; $i++ ){
+			$ids = Good::getSoldIds($i);
+			if( $ids ){
+				$goods = Good::model()->filter(
+		            array(
+		                "good_type_id"=>$i
+		            ),
+		            $ids
+		        )->getPage(
+		            array(
+		                'pageSize'=>10000,
+		            )
+		        );
+		        $goods = $goods["items"];
+
+		        foreach ($goods as $index => $good) {
+		        	$good->sold(true, 1);
+		        }
+			}
+		}
+	}
+
+	public function getSoldIds($good_type_id){
+		$ids = GoodFilter::model()->findAll("good_type_id=$good_type_id AND archive=2 AND date < '".date("d.m.Y", time()-24*60*60)."'");
+		if( $ids )
+			return Controller::getIds($ids);
+		return NULL;
 	}
 
 	public function getNewAuctionCode($diametr){

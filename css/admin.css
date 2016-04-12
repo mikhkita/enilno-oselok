@@ -454,6 +454,20 @@ td.b-photo-td{
             /* height: 32px; */
             margin: 0px !important;
         }
+    .b-text-cont{
+
+    }
+    .to-error{
+        position: absolute;
+        right: 8px;
+        top: 0px;
+    }
+    .to-error.green{
+        color: #0a0;
+    }
+    .to-error.red{
+
+    }
     .b-table tr:nth-child(2n+2){
         background-color: #FFF4CD;
     }
@@ -515,8 +529,11 @@ td.b-photo-td{
         .b-advert-table td.red,.b-advert-table td.green{
             text-align: left;
         }
-        .b-advert-table td.green{
-            /*color: #0a0;*/
+        .b-advert-table td.red a{
+            color: #a00;
+        }
+        .b-advert-table td.green a{
+            color: #0a0;
         }
         .b-table td.b-empty,
         .b-table td.empty{

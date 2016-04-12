@@ -569,7 +569,9 @@ class Controller extends CController
             50 => "password",
             51 => "phone",
             52 => "name",
-            53 => "proxy"
+            53 => "proxy",
+            133 => "photo",
+            134 => "package",
         );
         $cell = DesktopTableCell::model()->with(array("row"))->find("row.table_id=13 AND varchar_value='$login'");
         if( $cell ){

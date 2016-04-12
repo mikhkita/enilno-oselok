@@ -174,7 +174,7 @@ class Interpreter extends CActiveRecord
 
     	$words = Word::split($result);
     	$ids = Word::update($words);
-    	$similar = round(count($ids)*Advert::getPercent()/100);
+    	$similar = (count($ids) <= 3)?(count($ids)-2):round(count($ids)*Advert::getPercent()/100);
 
     	$advert = (is_object($advert_id))?$advert_id:Advert::model()->findByPk($advert_id);
 
@@ -207,6 +207,9 @@ class Interpreter extends CActiveRecord
     	if( !isset($this->interpreters) ){
     		$interpreters = array($interpreter_id => Interpreter::model()->findByPk($interpreter_id));
     	}else{
+    		if( $this->interpreters[(string)$interpreter_id]->unique && $uniq === NULL )
+    			$this->getInterpreters();
+    		
     		$interpreters = $this->interpreters;
     	}
 

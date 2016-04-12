@@ -578,6 +578,11 @@ $(document).ready(function(){
             ctrldown = true;
         }
         if( e.keyCode == 27 && $(".fancybox-wrap").length ) $.fancybox.close();
+
+        if( $("#advert-title").length ){
+            result = advertTitleCheck(e.keyCode);
+            if( !result ) return false;
+        }
     }
     function up(e){
         if( e.keyCode == 91 || e.keyCode == 17 ){
@@ -1534,6 +1539,43 @@ $(document).ready(function(){
         return false;
     });
     /* Filter clear buttons ---------------------- Filter clear buttons */
+
+    /* Advert Title ------------------------------ Advert Title */
+    function advertTitleCheck(key){
+        if( key == 13 ){
+            progress.setColor("#FFF");
+            progress.start(1);
+            $.ajax({
+                url: $( ".b-popup form" ).attr("action"),
+                data: $( ".b-popup form" ).serialize(),
+                method: "POST",
+                success: function(msg){
+                    var json = JSON.parse(msg);
+
+                    $("#advert-title").val(json.title);
+
+                    if( json.result == "success" ){
+                        $(".to-error").addClass("green").removeClass("red").text("Успех");
+                        $("#advert-"+json.id).addClass("green").removeClass("red");
+                        $(".b-text-cont").html("");
+                    }else{
+                        $(".to-error").addClass("red").removeClass("green").text("Повтор");
+                        $("#advert-"+json.id).addClass("red").removeClass("green");
+                        $(".b-text-cont").html(json.text);
+                    }
+                    $("#advert-"+json.id+" a").text(json.title);
+                    progress.end();
+                },
+                error: function(){
+                    alert("Ошибка проверки");
+                }
+            });
+            return false;
+        }
+        return true;
+    }
+    /* Advert Title ------------------------------ Advert Title */
+
 
     $("body").on("change","#good-edit-form input[name='Good_attr[3]']",function(){
         progress.setColor("#D26A44");

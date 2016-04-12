@@ -43,6 +43,8 @@ class IntegrateController extends Controller
     }
 
     public function actionQueueNextAvito($debug = false){
+        Queue::checkReady();
+
         $this->doQueueNext($debug, 2048);
     }
 
@@ -103,12 +105,10 @@ class IntegrateController extends Controller
             37 => $advert->type_id
         ));
 
-        $unique = Place::getInters($advert->place->category_id,$advert->good->type->id,true);
         $fields = Place::getValues(Place::getInters($advert->place->category_id,$advert->good->type->id),$advert,$dynamic);
 
         // var_dump($unique);
         // var_dump($fields);
-        // die();
 
         if( $place_name == "AVITO" && $queue->action->code != "delete" && $queue->action->code != "updateImages" ){
             if( $fields["title"] == "not unique" ) $queue->setState("titleNotUnique");
@@ -129,14 +129,24 @@ class IntegrateController extends Controller
             $fields["contacts"] = $account->phone;
         }else if( $place_name == "AVITO" ){
             $account = $this->getAvitoAccount($fields["login"]);
-            $place = new Avito( (isset($account->proxy) && $account->proxy != "")?$account->proxy:NULL );
+            if( $account->proxy == NULL ){
+                $queue->setState("notProxy");
+                return false;
+            }
+            $place = new Avito( $account->proxy  );
             $fields["phone"] = $account->phone;
             $fields["email"] = $account->login;
             $fields["seller_name"] = $account->name;
+
+            if( isset($account->package) ) 
+                $fields["fees[packageId]"] = $account->package;
         }else if( $place_name == "VK" ){
             $place = new Vk();
             $account = true;
         }
+
+        // print_r($place->curl->request("http://api.sypexgeo.net/"));
+        // die();
 
         if( !$account ){
             Log::error("Не найден пользователь с логином \"".$fields["login"]."\"");
@@ -152,12 +162,14 @@ class IntegrateController extends Controller
         }
 
         $fields = $place->generateFields($fields,$advert->good->good_type_id);
+
+        // var_dump($images);
+        // die();
         
         if( $place_name != "VK" ){
             $place->setUser($account->login, $account->password);
             $res = $place->auth();   
         }
-        // die();
         
         switch ($queue->action->code) {
             case 'delete':
@@ -241,31 +253,25 @@ class IntegrateController extends Controller
                 break;
         }
         printf('<br>4Прошло %.4F сек.<br>', microtime(true) - $start); 
-        // var_dump($fields);
-        // die();
-
-        // $result = 1;
 
         if( $result ){
-            if( $place_name == "AVITO" && ($queue->action->code == "add" || $queue->action->code == "update" || $queue->action->code == "updateWithImages") ){
-                $unique_arr = array();
-                foreach ($unique as $i => $u)
-                    $unique_arr[$u] = $fields[$i];
+            // if( $place_name == "AVITO" && ($queue->action->code == "add" || $queue->action->code == "update" || $queue->action->code == "updateWithImages") ){
+                // $unique_arr = array();
+                // foreach ($unique as $i => $u)
+                //     $unique_arr[$u] = $fields[$i];
 
-                $advert->replaceUnique($unique_arr);
-            }else if( $place_name == "DROM" && $advert->type_id == 869 && $queue->action->code == "add" ){
+                // $advert->replaceUnique($unique_arr);
+            // }else 
+            if( $place_name == "DROM" && $advert->type_id == 869 && $queue->action->code == "add" ){
                 $this->dromIncCount($account);
             }
-            // echo "Успешно";
             Log::debug("Действие над ".$advert->good->fields_assoc[3]->value." в аккаунте ".$account->login." прошло успешно");
             $queue->delete();
         }else{
-            // echo "Ошибка";
             Log::debug("Действие над ".$advert->good->fields_assoc[3]->value." в аккаунте ".$account->login." прошло с ОШИБКОЙ");
             $queue->setState("error");
         }
 
-        // $place->curl->removeCookies();
         return true;
     }
 
@@ -1169,9 +1175,14 @@ class IntegrateController extends Controller
     }
 
     public function actionAnalyse(){
-        $text = "#9321-2 лето bridgestone DNA potenza 245/35/19 (Japan) Б/п РФ";
+        $ids = Controller::getIds(AdvertWord::model()->findAll(array("group"=>"advert_id")), "advert_id");
 
-        print_r(Interpreter::isNotIsset(1, $text, 1597));
+        $ids1 = Controller::getIds(Advert::model()->findAll(array("group"=>"id")), "id");
+
+        $diff = array_diff($ids, $ids1);
+        print_r($diff);
+        // if( $diff )
+        // AdvertWord::model()->deleteAll("advert_id IN (".implode(",", $diff).")");
     }
 
     public function actionUpdatePhoto(){
@@ -1196,7 +1207,7 @@ class IntegrateController extends Controller
             array(
                 "good_type_id"=>2,
                 "attributes"=>array(
-                    27 => array(1056)
+                    43 => array(2912)
                 )
             )
         )->getPage(
@@ -1208,27 +1219,27 @@ class IntegrateController extends Controller
 
         $drom = new Drom();
         foreach ($goods as $key => $good) {
-            if( $advert = Advert::model()->find("good_id=".$good->id." AND city_id=1081 AND place_id=12") ){
-                // if( !$advert->title ){
-                //     $title = $drom->parseTitle($good->fields_assoc[106]->value);
-                //     if( $title ){
-                //         Interpreter::isNotIsset($title, $advert);
-                //     }else{
-                //         echo "Не удалось спарсить товар с id ".$good->id." по ссылке ".$good->fields_assoc[106]->value;
-                //     }
-                // }
-                if( $advert->title ){
-                    
-                    // Interpreter::isNotIsset($advert->title, $advert);
-
-
-                    if( !$advert->ready ){
-                        echo $advert->title."<br>";
-                        foreach ($advert->findSimilar() as $i => $title)
-                            echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".$title."<br>";
+            if( $advert = Advert::model()->find("good_id=".$good->id." AND city_id=1069 AND place_id=12") ){
+                if( !$advert->title ){
+                    $title = $drom->parseTitle($good->fields_assoc[106]->value);
+                    if( $title ){
+                        Interpreter::isNotIsset($title, $advert);
+                    }else{
+                        echo "Не удалось спарсить товар с id ".$good->id." по ссылке ".$good->fields_assoc[106]->value;
                     }
-                        // echo $advert->title."<br>";
                 }
+                // if( $advert->title ){
+                    
+                //     // Interpreter::isNotIsset($advert->title, $advert);
+
+
+                //     if( !$advert->ready ){
+                //         echo $advert->title."<br>";
+                //         foreach ($advert->findSimilar() as $i => $title)
+                //             echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".$title."<br>";
+                //     }
+                //         // echo $advert->title."<br>";
+                // }
             }else{
                 // echo "Не найдено объявление у товара с id ".$good->id;
             }

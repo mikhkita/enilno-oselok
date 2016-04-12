@@ -253,7 +253,7 @@ class Advert extends CActiveRecord
 			$this->save();
 			return array();
 		}
-		$similar = round(count($words)*Advert::getPercent()/100);
+		$similar = (count($words) <= 3)?(count($words)-2):round(count($words)*Advert::getPercent()/100);
 
 		foreach ($words as $i => $word)
 			$words[$i] = $word->id;
