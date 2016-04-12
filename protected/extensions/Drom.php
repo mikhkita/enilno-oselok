@@ -423,6 +423,7 @@ Class Drom {
                 'made' => 11,
                 'tireWidthMore' => 98,
                 'tireHeightMore' => 98,
+                'archive' => 998,
                 'images' => 999
                 
         	);
@@ -454,6 +455,7 @@ Class Drom {
                     $params[$fields['type']] = 3;
                     break;
             }
+            $params[$fields['archive']] = 0;
 
             $params[$fields['title']] = "Заголовок: ".trim(str_ireplace($html->find("span[data-field=subject] nobr",0)->plaintext,"",$html->find("span[data-field=subject]",0)->plaintext))."\n\r";
             $params[$fields['state']] .= "Наличие товара: ".trim($html->find("span[data-field=goodPresentState]",0)->plaintext)."\n\r";
@@ -468,7 +470,9 @@ Class Drom {
             	$params[$fields['diskModel']] = $html->find("span[data-field=model]",0)->plaintext;
             	$params[$fields['wheelDiameter']] = str_replace('"',"", $html->find("span[data-field=wheelDiameter]",0)->plaintext);
             	$params[$fields['condition']] = $html->find("span[data-field=condition]",0) ? trim($html->find("span[data-field=condition]",0)->plaintext) : 'Б/п РФ';
+                if( $params[$fields['condition']] == "Новый" ) $params[$fields['archive']] = 1;
                 $params[$fields['condition']] = ($params[$fields['condition']]=="Новый") ? "Новые": $params[$fields['condition']];
+
                 if($params[$fields['condition']] != "Новые" || $params[$fields['condition']] != "Б/у") $params[$fields['condition']] = 'Б/п РФ';
             }
 
