@@ -891,7 +891,7 @@ class KolesoOnlineController extends Controller
             if(send_mime_mail("Сайт ".$from,$email_from,$name,$email_admin,'UTF-8','UTF-8',$subject,$message,true)){    
                 if($type == "order") {
                 	$_SESSION["BASKET"] = array();
-                	$this->redirect(array("index",'thanks' => true));
+                	header("Location: /thanks");
                 }
                 echo "1";
             }else{
