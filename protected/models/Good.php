@@ -562,9 +562,10 @@ class Good extends GoodFilter
 		return $temp;
 	}
 
-	public function addAttributes($params,$good_type_id,$images = NULL)
+	public function addAttributes($params,$good_type_id,$images = NULL,$archive = 0)
 	{
 		$model = new Good;
+		$model->archive = $archive;
 		$model->good_type_id = $good_type_id;
 		$model->save();
 		$fields = array();
