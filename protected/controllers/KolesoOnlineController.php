@@ -360,7 +360,7 @@ class KolesoOnlineController extends Controller
     }
 
 
-	public function actionIndex($countGood = false)
+	public function actionIndex($countGood = false,$thanks = false)
 	{	
 		// $this->checkCity();
 		// var_dump($_GET);
@@ -409,7 +409,8 @@ class KolesoOnlineController extends Controller
 			'wheel_filter' => $wheel_filter,
 			'params' => $this->params,
 			'dynamic' => $dynamic,
-			'mobile' => $this->is_mobile
+			'mobile' => $this->is_mobile,
+			'thanks' => $thanks
 		));		
 	}
 
@@ -876,18 +877,22 @@ class KolesoOnlineController extends Controller
             if($type == "order") {
             	foreach ($_SESSION["BASKET"] as $key => $value) {
             		$good = Good::model()->with("type","fields.variant","fields.attribute")->findByPk($value);
-            		$type = $good->good_type_id; 
-            		$href = Yii::app()->createUrl('/kolesoOnline/detail',array('id' => ($good->code)?$good->code:$good->fields_assoc[3]->value,'type' => $type));
-            		if($type == 1) $title = $good->fields_assoc[16]->value." ".$good->fields_assoc[17]->value;
-	                if($type == 2) $title = $good->fields_assoc[6]->value;
-	                if($type == 3) $title = Interpreter::generate($this->params[$type]["TITLE_CATEGORY"], $good,$dynamic);
+            		$good_type_id = $good->good_type_id; 
+            		$href = Yii::app()->createUrl('/kolesoOnline/detail',array('id' => ($good->code)?$good->code:$good->fields_assoc[3]->value,'type' => $good_type_id));
+            		if($good_type_id == 1) $title = $good->fields_assoc[16]->value." ".$good->fields_assoc[17]->value;
+	                if($good_type_id == 2) $title = $good->fields_assoc[6]->value;
+	                if($good_type_id == 3) $title = Interpreter::generate($this->params[$good_type_id]["TITLE_CATEGORY"], $good,$dynamic);
 	                $code = ($good->code)?$good->code:$good->fields_assoc[3]->value;
-            		$message .= "<div><p><b>Товар: </b><a target='_blank' href='".$href."'>".$title."</a> ".Interpreter::generate($this->params[$type]["TITLE_2_CODE"], $good,$dynamic)."код товара: ".$code."</p></div>";
+            		$message .= "<div><p><b>Товар: </b><a target='_blank' href='".$href."'>".$title."</a> ".Interpreter::generate($this->params[$good_type_id]["TITLE_2_CODE"], $good,$dynamic)."код товара: ".$code."</p></div>";
             	}
             }
 
             $message .= "</div>";
             if(send_mime_mail("Сайт ".$from,$email_from,$name,$email_admin,'UTF-8','UTF-8',$subject,$message,true)){    
+                if($type == "order") {
+                	$_SESSION["BASKET"] = array();
+                	$this->redirect(array("index",'thanks' => true));
+                }
                 echo "1";
             }else{
                 echo "0";

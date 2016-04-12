@@ -284,4 +284,7 @@
             </div>
         </div>
     </div>
+    <?if($thanks):?>
+        <p style="display:none;" id="view-thanks" class="fancy" data-block="#b-popup-2">
+    <? endif; ?> 
 </div>

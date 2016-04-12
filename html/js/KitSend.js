@@ -21,7 +21,7 @@ $(document).ready(function(){
 		$(".detail-photo .fancy-img").removeClass("fancy-img").removeAttr("href");
 	}
 
-	$(".ajax").parents("form").each(function(){
+	$("form").each(function(){
 		$(this).validate({
 			rules: {
 				email: 'email',
