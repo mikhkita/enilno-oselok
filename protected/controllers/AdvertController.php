@@ -289,11 +289,14 @@ class AdvertController extends Controller
 			}
 		}else{
 			$similar = $advert->findSimilar();
+			$names = array(NULL,"shiny","diski","kolesa");
+			$url = "/".$names[$good->good_type_id]."/".$good->code.".html";
 
 			$this->renderPartial('adminTitleEdit',array(
 				'advert' => $advert,
 				'similar' => $similar,
-				'good' => $good
+				'good' => $good,
+				'url' => $url
 			));
 		}
 	}
