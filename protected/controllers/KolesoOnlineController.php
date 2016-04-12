@@ -725,10 +725,12 @@ class KolesoOnlineController extends Controller
 		}	
 	}
 
-	public function actionCart()
+	public function actionCart($id = NULL)
 	{
 		if(!isset($_SESSION)) session_start();
 		$goods = array();
+		if($id)
+			$_SESSION["BASKET"] = array($id);
 		if(isset($_SESSION["BASKET"]) && count($_SESSION["BASKET"])) {
 			foreach ($_SESSION["BASKET"] as $key => $value) {
 		        if(Good::model()->findByPk($value,"archive <> 0")) unset($_SESSION["BASKET"][$key]);
@@ -746,6 +748,7 @@ class KolesoOnlineController extends Controller
 			    }
 			}
 		}
+
 		$dynamic = $this->getDynObjects(array(
 		    38 => Yii::app()->params["city"]->id
 		));
@@ -831,7 +834,7 @@ class KolesoOnlineController extends Controller
 		return $model;
 	}
 
-	public function actionMail(){
+	public function actionMail($type = NULL){
         require_once("phpmail.php");
 
         // $this->checkCity();
@@ -869,9 +872,21 @@ class KolesoOnlineController extends Controller
 
             if( isset($_POST["good-url"]) )
             	$message .= "<div><p><b>Товар: </b><a target='_blank' href='".$_POST["good-url"]."'>".$_POST["good"]."</a></p></div>";
-                
-            $message .= "</div>";
             
+            if($type == "order") {
+            	foreach ($_SESSION["BASKET"] as $key => $value) {
+            		$good = Good::model()->with("type","fields.variant","fields.attribute")->findByPk($value);
+            		$type = $good->good_type_id; 
+            		$href = Yii::app()->createUrl('/kolesoOnline/detail',array('id' => ($good->code)?$good->code:$good->fields_assoc[3]->value,'type' => $type));
+            		if($type == 1) $title = $good->fields_assoc[16]->value." ".$good->fields_assoc[17]->value;
+	                if($type == 2) $title = $good->fields_assoc[6]->value;
+	                if($type == 3) $title = Interpreter::generate($this->params[$type]["TITLE_CATEGORY"], $good,$dynamic);
+	                $code = ($good->code)?$good->code:$good->fields_assoc[3]->value;
+            		$message .= "<div><p><b>Товар: </b><a target='_blank' href='".$href."'>".$title."</a> ".Interpreter::generate($this->params[$type]["TITLE_2_CODE"], $good,$dynamic)."код товара: ".$code."</p></div>";
+            	}
+            }
+
+            $message .= "</div>";
             if(send_mime_mail("Сайт ".$from,$email_from,$name,$email_admin,'UTF-8','UTF-8',$subject,$message,true)){    
                 echo "1";
             }else{

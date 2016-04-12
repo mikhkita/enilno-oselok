@@ -235,17 +235,18 @@ input:-moz-placeholder {
 		.b-header .b-sub-menu .b-block {
 		}
 			.b-header .b-sub-menu .b-block ul {
-
-			/* float: right !important; */margin-left: 35px;}
+				// float: right !important;
+				 // margin-left: 35px;
+			}
 				.b-header .b-sub-menu .b-block ul li {
 					float: left;
-					margin-right: 0px;
+					margin-right: 0px !important;
 					font-size: 37px;
 					margin-left: 45px;
 				}
 					.b-header .b-sub-menu .b-block ul li a{
 						font-weight: 500;
-						padding: 20px;
+						padding: 20px !important;
 						text-transform: none;
 					}
 					.b-header .b-sub-menu .b-block ul li:first-child a {
@@ -754,7 +755,7 @@ padding-top: 30px;}
 					padding-left: 10px;
 				}
 .category-title {
-	font-size: 45px;
+	font-size: 44px;
 	font-weight: 700;
 	width: 700px;
 	text-transform: none;
@@ -1472,6 +1473,7 @@ padding-top: 30px;}
 					padding: 20px 100px 18px;
 					display: inline-block;
 					margin-top: 15px;
+					width: auto;
 				}
 				.good-detail .b-block .detail-wrap .detail-price h5,.good-detail .b-block .detail-wrap .detail-price h6{
 					margin-top: 35px;
@@ -1784,6 +1786,75 @@ padding-top: 30px;}
 		}
 	.navigation li:first-child a:before{
 
+	}
+
+.b-cart .b-block h1 {
+	padding-top: 0;
+}
+.goods .gradient-grey .b-orange-butt.acc {
+	font-size: 28px;
+}
+
+	.b-cart .b-block table tr td {
+		padding: 15px;
+		text-align: center;
+		padding: 30px;
+	}
+		.b-cart .b-block table tr td .img {
+			width: 350px;
+			height: 300px;
+			background-size: cover;
+			background-position: 50%;
+			display: inline-block;
+		}
+			.b-cart .b-block table tr td .mobile-title {
+				font-size: 30px;
+				margin-bottom: 10px;
+			}
+				.b-cart .b-block table tr td h4 {
+					font-size: 28px;
+				}
+				.b-cart .b-block table tr td .cart-price {
+					display: inline-block;
+					font-size: 30px;
+				}
+	.b-cart .b-block .mobile-deliv {
+		font-size: 28px;
+		text-align: left;
+	}
+		.b-cart .b-block .mobile-deliv  span {
+			font-size: 30px;
+		}
+	.b-cart .b-block .order-form {
+
+	}
+		.b-cart .b-block .order-form > div {
+			display: block;
+			float: none;
+			margin-right: 0;
+			margin-top: 20px;
+
+		}
+			.b-cart .b-block .order-form > div label,.b-cart .b-block .order-form > div input[type=text] {
+				font-size: 28px;
+				width: 100%;
+				
+			}
+			.b-cart .b-block .order-form > div label {
+				margin-bottom: 10px;
+			}
+	.b-cart .order-form input[type='submit'] {
+		font-size: 28px;
+		width: 300px;
+		margin-top: 45px;
+	}
+		.b-cart .order-form input[type='submit']:active {
+			margin-top: 45px;
+		}
+	.b-cart .order-form .total-price {
+		font-size: 28px;
+		margin-top: 58px;
+		float: left !important;
 	}
 
 .icon:before,			

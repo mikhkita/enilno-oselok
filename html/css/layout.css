@@ -2596,11 +2596,10 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 }
 
 .b-cart {
-	padding-bottom: 30px;
 }
 	.b-cart .b-block {
 		padding-top: 25px;
-    	padding-bottom: 30px;
+		padding-bottom: 50px;
 	}
 		.b-cart .b-block h1 {
 			border-bottom: none;
@@ -2619,6 +2618,9 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 
 		.b-cart .b-block .empty-cart {
 			display: none;
+			font-size: 20px;
+			line-height: 1.5;
+			margin-top: 20px;
 		}
 		.b-cart .b-block table {
 			width: 100%;
