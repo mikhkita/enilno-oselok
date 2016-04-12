@@ -101,7 +101,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
 	                    <input type="text" name="mail" placeholder="example@mail.ru">
 	                </div>
                     <input type="hidden" name="subject" value="Оплата заказа">
-	                <input type="submit" class="right ajax b-orange-butt" value="Оплатить">
+	                <input type="submit" class="right b-orange-butt" value="Оплатить">
 	                <h4 class="total-price right">Сумма к оплате: <span>0</span> р.</h4>
 	            </form> 
 				<? else: $empty = true;?>

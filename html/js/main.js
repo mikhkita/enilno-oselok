@@ -786,4 +786,8 @@ $(document).ready(function(){
         
     }
 
+    if($("#view-thanks").length) {
+        $("#view-thanks").click().remove();
+    }   
+
 });
