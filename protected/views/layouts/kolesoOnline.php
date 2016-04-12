@@ -152,7 +152,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
                                 </ul>
                                 <div class="b-cart-bottom clearfix">
                                     <div class="b-total-price left"><span>0</span> руб.</div>
-                                    <a id="cart-href" href="<?=Yii::app()->createUrl('/kolesoOnline/cart')?>" class="b-orange-butt right">Оформить</a>
+                                    <a id="cart-href" href="/cart" class="b-orange-butt right">Оформить</a>
                                 </div>
                             </div>
                         </div>
