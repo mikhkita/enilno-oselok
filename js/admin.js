@@ -1543,6 +1543,12 @@ $(document).ready(function(){
     /* Advert Title ------------------------------ Advert Title */
     function advertTitleCheck(key){
         if( key == 13 ){
+            if( $("#advert-title").val().length ){
+                $("#advert-title").removeClass("error");
+            }else{
+                $("#advert-title").addClass("error");
+                return false;
+            }
             progress.setColor("#FFF");
             progress.start(1);
             $.ajax({
@@ -1574,6 +1580,10 @@ $(document).ready(function(){
         }
         return true;
     }
+
+    $("body").on("keyup","#advert-title",function(){
+        $(".b-char-count span").text($(this).val().length);
+    });
     /* Advert Title ------------------------------ Advert Title */
 
 

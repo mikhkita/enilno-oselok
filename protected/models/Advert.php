@@ -201,6 +201,8 @@ class Advert extends CActiveRecord
 	    	$criteria->addInCondition("city_id",$params['Attr'][58]);
 	   	}
 
+	   	$criteria->addCondition("good_id!=0","AND");
+
 	   	$options['criteria'] = $criteria;
 		$dataProvider = new CActiveDataProvider(Advert::tableName(), $options);
 		return $dataProvider;
@@ -298,6 +300,13 @@ class Advert extends CActiveRecord
   		if( $field !== NULL )
   			GoodAttribute::model()->deleteAll("good_id=".$this->good_id." AND attribute_id=$field AND variant_id=".$this->city_id);
 
-  		return parent::beforeDelete();
+  		$this->good_id = 0;
+  		$this->type_id = 0;
+  		$this->city_id = 0;
+
+  		$this->save();
+
+  		return false;
+  		// return parent::beforeDelete();
  	}
 }
