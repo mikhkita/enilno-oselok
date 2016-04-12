@@ -16,6 +16,10 @@ class QueueController extends Controller
 				'actions'=>array('adminIndex','adminToWaiting','adminDelete', 'adminDeleteAll','adminStart','adminStop','adminChangeState','adminFreezeFree','adminUnfreezeAll','adminReturnAll','refreshTime'),
 				'roles'=>array('manager'),
 			),
+			array('allow',
+				'actions'=>array('checkReady'),
+				'users'=>array('*'),
+			),
 			array('deny',
 				'users'=>array('*'),
 			),
@@ -199,6 +203,12 @@ class QueueController extends Controller
 		}else{
 			$this->renderPartial('_table',$options);
 		}
+	}
+
+	public function actionCheckReady(){
+		Queue::checkReady();
+
+		echo json_encode(array("result" => "success"));
 	}
 
 	public function loadModel($id)

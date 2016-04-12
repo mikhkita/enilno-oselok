@@ -22,7 +22,7 @@ class Queue extends CActiveRecord
 		"updatePrice" => 8
 	);
 
-	public $states = array(
+	static public $states = array(
 		"waiting" => 1,
 		"processing" => 2,
 		"error" => 3,
@@ -31,7 +31,8 @@ class Queue extends CActiveRecord
 		"textNotUnique" => 6,
 		"partner" => 7,
 		"noImages" => 8,
-		"limit" => 9
+		"limit" => 9,
+		"notProxy" => 10
 	);
 
 	/**
@@ -319,8 +320,8 @@ class Queue extends CActiveRecord
 	}
 
 	public function	setState($code){
-		if( isset($this->states[$code]) ){
-			$this->state_id = $this->states[$code];
+		if( Queue::getState($code) ){
+			$this->state_id = Queue::getState($code);
 			return $this->save();
 		}else{
 			return Log::error("Не найдено состояние с кодом \"$code\"");
@@ -509,6 +510,24 @@ class Queue extends CActiveRecord
 		if( $days[0]["end"] < time() ) array_shift($days);
 
 		return $days;
+	}
+
+	public function checkReady(){
+		$queue = Queue::model()->with("advert.place")->findAll("place.category_id=2048 AND advert.ready=0 AND advert.title IS NOT NULL AND action_id IN (1,2,6,8) AND state_id=1");
+		if( $queue ){
+			$ids = Controller::getIds($queue);
+			Queue::model()->updateAll(array("state_id" => Queue::getState("titleNotUnique")), "id IN (".implode(",", $ids).")");
+		}
+
+		$queue = Queue::model()->with("advert.place")->findAll("place.category_id=2048 AND advert.ready=1 AND action_id IN (1,2,6,8) AND state_id=5");
+		if( $queue ){
+			$ids = Controller::getIds($queue);
+			Queue::model()->updateAll(array("state_id" => Queue::getState("waiting")), "id IN (".implode(",", $ids).")");
+		}
+	}
+
+	public function getState($code){
+		return self::$states[$code];
 	}
 
 	/**

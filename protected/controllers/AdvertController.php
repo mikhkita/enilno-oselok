@@ -13,7 +13,7 @@ class AdvertController extends Controller
 	{
 		return array(
 			array('allow',
-				'actions'=>array('adminIndex','adminUpDrom','adminRemove','admintitles','adminUpAvito','adminAction','adminFindById'),
+				'actions'=>array('adminIndex','adminTitleEdit','adminUpDrom','adminRemove','admintitles','adminUpAvito','adminAction','adminFindById'),
 				'roles'=>array('manager'),
 			),
 			array('allow',
@@ -243,6 +243,8 @@ class AdvertController extends Controller
 				array_push($links, "http://".Yii::app()->params['ip'].$this->createUrl('/advert/admintitle',array('advert_id'=> $advert->id, 'interpreter_id' => $places[$advert->place_id]->interpreter_id)));
 			}
 
+		array_push($links, "http://".Yii::app()->params['ip'].$this->createUrl('/queue/checkready'));
+
 		Cron::addAll($links);
 
 		echo json_encode(array("result" => "success", "action" => "updateCronCount", "count" => Cron::model()->count()));
@@ -262,6 +264,38 @@ class AdvertController extends Controller
 		Interpreter::generate($interpreter_id, $good, $dynObjects, $advert);
 
 		echo json_encode(array("result" => "success"));
+	}
+
+	public function actionAdminTitleEdit($advert_id){
+		$advert = Advert::model()->findByPk($advert_id);
+
+		$good = GoodFilter::model()->findByPk($advert->good_id);
+
+		if( isset($_POST["title"]) ){
+			Interpreter::isNotIsset($_POST["title"], $advert);
+			$advert = Advert::model()->findByPk($advert_id);
+
+			if( $advert->ready ){
+				echo json_encode(array("result" => "success", "id" => $advert->id, "title" => $advert->title));
+			}else{
+				$similar = $advert->findSimilar();
+
+				$text = "";
+				foreach ($similar as $i => $title) {
+					$text .= ($title."<br>");
+				}
+
+				echo json_encode(array("result" => "error", "id" => $advert->id, "title" => $advert->title, "text" => $text));
+			}
+		}else{
+			$similar = $advert->findSimilar();
+
+			$this->renderPartial('adminTitleEdit',array(
+				'advert' => $advert,
+				'similar' => $similar,
+				'good' => $good
+			));
+		}
 	}
 
 	public function loadModel($id)

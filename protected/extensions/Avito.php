@@ -40,43 +40,57 @@ Class Avito {
     }
 
     public function addAdvert($params,$images = NULL){
-        Log::debug("Шаг 1");
+        print_r("Шаг 1"."<br>");
         if($images !== NULL) {
         	$params = $this->addImages($params,$images);
 		}
-		Log::debug("Шаг 2");
+		print_r("Шаг 2"."<br>");
 		$result = $this->curl->request("https://www.avito.ru/additem");
-		print_r($result);
+		
+		// $result = $this->curl->request("https://www.avito.ru/items/fees",array(
+		// 	'locationId' => "657600",
+		// 	'parentLocationId' => "657310",
+		// 	"categoryId" => 10,
+		// 	'params[5]' => 19,
+		// 	'email' => "vladis1ove81@gmail.com"
+		// 	));
+		// print_r($result);
 		$html = str_get_html($result);
-		Log::debug("Шаг 3");
+		print_r("Шаг 3"."<br>");
 	    $token = array();
 	    $token['name'] = $html->find('input[name^=token]',0)->name;
 	    $token['value'] = $html->find('input[name^=token]',0)->value;
 	    $params[$token['name']] = $token['value'];
 	    $params['source'] = "add";
 
+	    // $params['fees[purchase]'] = "single";
+	    // $params['fees[locationId]'] = "657600";
+	    // $params['fees[parentLocationId]'] = "657310";
+	    // $params['fees[microcategories][]'] = "17";
+	    // $params['fees[quantity]'] = "10";
+
 	    $result = $this->curl->request("https://www.avito.ru/additem",$params);
 	    print_r($result);
 		$html = str_get_html($result);
-		Log::debug("Шаг 4");
+		print_r("Шаг 4"."<br>");
 		$captcha = $html->find('.form-captcha-image',0)->src;
 
         $out = $this->curl->request('https://www.avito.ru'.$captcha);
-        Log::debug("Шаг 5");
+        print_r("Шаг 5"."<br>");
         $captcha_name = md5(time()."koleso");
 	    $captcha_path = Yii::app()->basePath.'/extensions/captcha/'.$captcha_name.'.jpg';  
 	    file_put_contents($captcha_path, $out); 
 
 		$captcha = $this->captcha_curl->request("http://rucaptcha.com/in.php",array('key'=>'0b07ab2862c1ad044df277cbaf7ceb99','file'=> new CurlFile($captcha_path)));
-		Log::debug("Шаг 6");
+		print_r("Шаг 6"."<br>");
 		while ($captcha == 'ERROR_NO_SLOT_AVAILABLE') {
 			var_dump($captcha);
 			sleep(5);
-			Log::debug("Вошли 0");
+			print_r("Вошли 0"."<br>");
 		    $captcha = $this->captcha_curl->request("http://rucaptcha.com/in.php",array('key'=>'0b07ab2862c1ad044df277cbaf7ceb99','file'=> new CurlFile($captcha_path)));
 		} 
 		if(strpos($captcha, "|") !== false) {
-			Log::debug("Вошли");
+			print_r("Вошли"."<br>");
 			$captcha = substr($captcha, 3);
 			$url = "http://rucaptcha.com/res.php?";
 					$url_params = array(
@@ -85,28 +99,45 @@ Class Avito {
 				    	'id' => $captcha
 					);
 			$url .= urldecode(http_build_query($url_params));
-			Log::debug("Вошли 1");
+			print_r("Вошли 1"."<br>");
 			$captcha = $this->captcha_curl->request($url);
 			while ($captcha == 'CAPCHA_NOT_READY') {
 				sleep(2);
 		   		$captcha = $this->captcha_curl->request($url);
 			} 
-			Log::debug("Вошли 2");
-			Log::debug($captcha);
+			print_r("Вошли 2"."<br>");
+			print_r($captcha."<br>");
 			if(strpos($captcha, "|") !== false) {
-				Log::debug("Вошли 3");
+				print_r("Вошли 3"."<br>");
 				$captcha = substr($captcha, 3);
 				$result_array = array(
 					'captcha' => $captcha,
 					'subscribe-position' => '0',
+					'inn' => "",
+					'kpp' => "",
+					'companyName' => "",
+					'legalAddress' => "",
+					'postalAddress' => "",
+					'companyManager' => "",
+					'companyPhone' => "",
+					'bookkeeperAddress' => "",
+					'bookkeeperName' => "",
+					'bookkeeperEmail' => "",
+					'bookkeeperPhone' => "",
+					'legalInfoHash' => "",
+					'companyNameKa' => "",
+					'kppKa' => "",
+					'legalAddressKa' => "",
+					'done' => "",
     				'action' => "company_info"
 				);
 				$result = $this->curl->request("https://www.avito.ru/additem/confirm",$result_array);
+
 				print_r($result);
 				$html = str_get_html($result);
-				Log::debug("Вошли 4");
+				print_r("Вошли 4"."<br>");
 				$id = $html->find('.content-text a[rel="nofollow"]',0)->href;
-				Log::debug($id);
+				print_r($id."<br>");
 				file_put_contents(Yii::app()->basePath."/logs/avito.txt", $result);
 				$id = end(explode("_", $id));
 
@@ -114,7 +145,7 @@ Class Avito {
 				return $id;
 			} else {
 				unlink($captcha_path);
-				Log::debug("Вошли 5");
+				print_r("Вошли 5"."<br>");
 				return false;
 			}
 		} else {
