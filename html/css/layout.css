@@ -2466,6 +2466,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 .b-text {
 	text-align: left;
 	max-height: 10000px;
+	line-height: 1.5;
 }
 	.b-text h1 {
 
@@ -2492,7 +2493,20 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 		.b-text a {
 			display: inline-block;
 			color: #ffba00;
+			font-weight: bold;
 		}
+	.b-text ul {
+		margin: 15px;
+	}
+		.b-text ul li {
+			font-size: 16px;
+		    margin-bottom: 10px;
+
+		}
+		.b-text ul.delivery li{
+			width: 300px;
+		}
+
 .icon:before,			
 .b-filters .b-block .filter-cont .tire-type label:before,
 .b-header .b-header-main .b-block > .left .right h2 a:before,
