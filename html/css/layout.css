@@ -2219,7 +2219,17 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 				text-align: left;
 				font-weight: 500;
 				font-family: Arial;
-				line-height: 1.58;
+				box-shadow: 0px 0px 4.85px 0.15px rgba(32, 32, 32, 0.3);
+    			padding: 15px 30px 30px;
+    			background: rgb(246,246,246);
+			    background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJod…EiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
+			    background: -moz-linear-gradient(top, rgba(246,246,246,1) 0%, rgba(239,239,239,1) 100%);
+			    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(246,246,246,1)), color-stop(100%,rgba(239,239,239,1)));
+			    background: -webkit-linear-gradient(top, rgba(246,246,246,1) 0%,rgba(239,239,239,1) 100%);
+			    background: -o-linear-gradient(top, rgba(246,246,246,1) 0%,rgba(239,239,239,1) 100%);
+			    background: -ms-linear-gradient(top, rgba(246,246,246,1) 0%,rgba(239,239,239,1) 100%);
+			    background: linear-gradient(to bottom, rgba(246,246,246,1) 0%,rgba(239,239,239,1) 100%);
+			    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f6f6f6', endColorstr='#efefef',GradientType=0 );				
 			}
 			.good-detail .b-block .category-title.similar {
 				text-transform: none;
@@ -2487,7 +2497,6 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 	.b-text p{
 		font-size: 14px;
 		line-height: 25px;
-		margin-bottom: 20px;
 		margin-top: 10px;
 	}
 		.b-text a {
@@ -2500,12 +2509,26 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 	}
 		.b-text ul li {
 			font-size: 16px;
-		    margin-bottom: 10px;
+		    margin-bottom: 5px;
+		    list-style: disc;
+    		list-style-position: inside;
 
+		}
+		.b-text ul.delivery {
+			margin-left: 30px;
 		}
 		.b-text ul.delivery li{
 			width: 300px;
+			position: relative;
+			list-style: none;
 		}
+			.b-text ul.delivery li:before {
+				position: absolute;
+			    font-size: 19px;
+			    content: "•";
+			    left: -15px;
+			    top: -1px;
+			}
 
 .icon:before,			
 .b-filters .b-block .filter-cont .tire-type label:before,
@@ -2739,6 +2762,24 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
     box-shadow: 0px 0px 4.85px 0.15px rgba(32, 32, 32, 0.3);
     // border-radius: 2px;
 }
+.desc-desc {
+	line-height: 1.5;
+}
+.desc-desc h2{
+	font-size: 18px;
+	font-weight: 500;
+	margin-top: 15px;	
+}
+	.desc-desc h3{
+		font-size: 16px;
+		font-weight: 300;
+		margin-top: 10px;
+	}
+	.desc-desc p{
+		font-size: 14px;
+		line-height: 25px;
+		margin-top: 10px;
+	}
 
 @media (-webkit-min-device-pixel-ratio: 1.5) {
 	.icon:before,

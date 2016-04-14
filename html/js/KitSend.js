@@ -100,9 +100,6 @@ $(document).ready(function(){
 						if( $this.attr("id") == "b-form-call" ){
 							yaCounter34102235.reachGoal('CALL_REQUEST');
 						}
-						if( $this.attr("id") == "b-form-buy" ){
-							yaCounter34102235.reachGoal('BUY_REQUEST');
-						}
 						if( $this.attr("id") == "b-form-exit" ){
 							yaCounter34102235.reachGoal('EXIT_REQUEST');
 						}
@@ -151,8 +148,6 @@ function fancyInit() {
 				}
 				if( $(".fancybox-inner>div").attr("id") == "b-popup-callback" ){
 					yaCounter34102235.reachGoal('CALL_BUTTON');
-				}else if( $(".fancybox-inner>div").attr("id") == "b-popup-buy" ){
-					yaCounter34102235.reachGoal('BUY_BUTTON');
 				}
 
 				if ( applePie() ) { $('body,html').css({'overflow': 'hidden'}); } 

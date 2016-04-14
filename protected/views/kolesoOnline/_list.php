@@ -6,26 +6,31 @@ if(count($goods)): ?>
             <a href="#"><div class="good-img<?=((isset($partial) && $partial)?"":" after-load-back")?>" <?=((isset($partial) && $partial)?"":"data-")?>style="background-image: url(<? $images = $good->getImages(1, array("small"), NULL, NULL, true); echo $images[0]["small"];?>);"></div></a>
             <div class="params-cont">
                 <a class="params-cont-a" href="<?=Yii::app()->createUrl('/kolesoOnline/detail',array('id' => ($good->code)?$good->code:$good->fields_assoc[3]->value,'type' => $type))?>">
-                <? $price = Interpreter::generate($this->params[$type]["PRICE_CODE"], $good, $dynamic);?>
+                <? 
+                    $price = Interpreter::generate($this->params[$type]["PRICE_CODE"], $good, $dynamic);
+                    $amount = $good->fields_assoc[$params[$type]["CATEGORY"]["AMOUNT"]['ID']]->value." ".$params[$type]["CATEGORY"]["AMOUNT"]['UNIT'];
+                    $price = ($price==0) ? Yii::app()->params["zeroPrice"] : number_format( $price, 0, ',', ' ' )." р. за ".$amount;
+                    
+                ?>
                 <? if($type == 2): ?>
                     <h4><?=$good->fields_assoc[6]->value?></h4>
-                    <h5><span><?=$price==0 ? Yii::app()->params["zeroPrice"] : number_format( $price, 0, ',', ' ' )." р."?></span> 
+                    <h5><span><?=$price?></span> 
                     <!-- <?=Interpreter::generate($this->params[$type]["SHIPPING"], $good,$dynamic);?> -->
                     </h5>
-                    <? $available = Interpreter::generate($this->params[$type]["AVAILABLE"], $good,$dynamic);?>
-                    <h5><?=$available = ($available != "В наличии") ? "Доставка ".$available : $available; ?></h5>
+                    <? $available = Interpreter::generate($this->params[$type]["AVAILABLE"], $good,$dynamic); if(!$good->fields_assoc[27]->value) $available = ""; $available = ($available != "В наличии") ? "Доставка ".$available : $available; ?>
+                    <h5><?=$available;?></h5>
                     <h6><?=Interpreter::generate($this->params[$type]["TITLE_2_CODE"], $good,$dynamic);?></h6>
                     <h3>Состояние: <span><?=$good->fields_assoc[26]->value?></span></h3>
-                    <h3><?=$good->fields_assoc[$params[$type]["CATEGORY"]["AMOUNT"]['ID']]->value." ".$params[$type]["CATEGORY"]["AMOUNT"]['UNIT']?></h3>
+                    <!-- <h3><?=$amount?></h3> -->
                     <h3>Страна: <span><?=(($good->fields_assoc[11])?$good->fields_assoc[11]->value:"Не указано")?></span></h3>
                 <? elseif($type == 1): ?>
                     <h4><?=$good->fields_assoc[16]->value." ".$good->fields_assoc[17]->value?></h4>
-                    <h5><span><?=$price==0 ? Yii::app()->params["zeroPrice"] : number_format( $price, 0, ',', ' ' )." р."?> </span> 
+                    <h5><span><?=$price?></span> 
                     <!-- <?=Interpreter::generate($this->params[$type]["SHIPPING"], $good,$dynamic);?> -->
                     </h5>
-                    <? $available = Interpreter::generate($this->params[$type]["AVAILABLE"], $good,$dynamic);?>
-                    <h5><?=$available = ($available != "В наличии") ? "Доставка ".$available : $available; ?></h5>
-                    <h6><?=Interpreter::generate($this->params[$type]["TITLE_2_CODE"], $good,$dynamic);?> <?=$good->fields_assoc[$params[$type]["CATEGORY"]["AMOUNT"]['ID']]->value." ".$params[$type]["CATEGORY"]["AMOUNT"]['UNIT']?></h6>
+                    <? $available = Interpreter::generate($this->params[$type]["AVAILABLE"], $good,$dynamic); if(!$good->fields_assoc[27]->value) $available = ""; $available = ($available != "В наличии") ? "Доставка ".$available : $available; ?>
+                    <h5><?=$available;?></h5>
+                    <h6><?=Interpreter::generate($this->params[$type]["TITLE_2_CODE"], $good,$dynamic);?></h6>
                     <h3 style="display:block;"><?=$params[$type]["CATEGORY"]["WEAR"]["LABEL"]?>: <span><?=$good->fields_assoc[$params[$type]["CATEGORY"]["WEAR"]['ID']]->value?> %</span></h3>
                     <h3> 
                         <?if($good->fields_assoc[$params[$type]["CATEGORY"]["YEAR"]['ID']]->value): ?> 
@@ -37,18 +42,18 @@ if(count($goods)): ?>
                     </h3>
                 <? elseif($type == 3): ?>
                     <h4><?=Interpreter::generate($this->params[$type]["TITLE_CATEGORY"], $good,$dynamic);?></h4>
-                    <h5><span><?=$price==0 ? Yii::app()->params["zeroPrice"] : number_format( $price, 0, ',', ' ' )." р."?></span> 
+                    <h5><span><?=$price?></span> 
                     <!-- <?=Interpreter::generate($this->params[$type]["SHIPPING"], $good,$dynamic);?> -->
                     </h5>
-                    <? $available = Interpreter::generate($this->params[$type]["AVAILABLE"], $good,$dynamic);?>
-                    <h5><?=$available = ($available != "В наличии") ? "Доставка ".$available : $available; ?></h5>
+                    <? $available = Interpreter::generate($this->params[$type]["AVAILABLE"], $good,$dynamic); if(!$good->fields_assoc[27]->value) $available = ""; $available = ($available != "В наличии") ? "Доставка ".$available : $available; ?>
+                    <h5><?=$available;?></h5>
                     <h6><?=Interpreter::generate($this->params[$type]["TITLE_2_CODE"], $good,$dynamic);?></h6>
                     <h3>Состояние: <span><?=$good->fields_assoc[26]->value?></span></h3>
-                    <h3><?=$good->fields_assoc[$params[$type]["CATEGORY"]["AMOUNT"]['ID']]->value." ".$params[$type]["CATEGORY"]["AMOUNT"]['UNIT']?></h3>
+                    <!-- <h3><?=$amount?></h3> -->
                     <h3>Страна: <span><?=(($good->fields_assoc[11])?$good->fields_assoc[11]->value:"Не указано")?></span></h3>
                 <? endif; ?>
                 </a>
-                <? if($price): ?>
+                <? if($price != Yii::app()->params["zeroPrice"]): ?>
                     <? if(!$mobile): ?>
                         <? if(isset($_SESSION["BASKET"]) && array_search($good->id, $_SESSION["BASKET"]) !== false): ?>
                             <a href="<?=Yii::app()->createUrl('/kolesoOnline/basket',array('id' => $good->id,'add' => true))?>" class="b-orange-butt carted">Оформить</a>
