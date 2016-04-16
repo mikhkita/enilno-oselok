@@ -1507,7 +1507,9 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
   				color: rgba(255, 255, 255, 0.451);
 			}
 				.b-footer .b-footer-sub .b-block h3 a {
-					display: inline-block;
+					display: block;
+					float: right;
+					margin-left: 13px;
 				}
 .b-category	{
 
@@ -2716,9 +2718,25 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 				margin-top: 42px;
     			margin-right: 30px;
 			}
-			
+.b-copyright{margin: -3px 0px -6px;line-height: 22px;}
+	.b-copyright a.b-redder{
+		background-position: 50% 0%;
+		background-repeat: no-repeat;
+		background-image: url('../i/logo-redder.png');
+		width: 127px;
+		height: 22px;
+		background-size: 127px;
+		opacity: 0.7;
+	}
+		.b-copyright a.b-redder:hover{
+			opacity: 1;
+			background-position: 50% 100%;
+		}
 
 @media (-webkit-min-device-pixel-ratio: 1.5) {
+	.b-copyright a.b-redder{
+		background-image: url('../i/logo-redder@2x.png');
+	}
 	.icon:before,
 	.b-filters .b-block .filter-cont .tire-type label:before,
 	.b-header .b-header-main .b-block > .left .right h2 a:before,

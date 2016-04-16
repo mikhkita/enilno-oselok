@@ -223,7 +223,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
         <div class="b-footer-sub">
             <div class="b-block clearfix">
                 <h3 class="left">© 2015 Колесо Онлайн</h3>
-                <!-- <h3 class="right">Разработано в <a href="#">True Media</a></h3> -->
+                <h3 class="right b-copyright">Дизайн и разработка <a href="http://redder.pro/" target="_blank" class="b-redder"></a></h3>
             </div>
         </div>
     </div>
