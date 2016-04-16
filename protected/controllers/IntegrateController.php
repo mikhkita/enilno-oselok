@@ -156,7 +156,7 @@ class IntegrateController extends Controller
 
         $images = $this->getImages(NULL, NULL, (isset($account->photo))?$account->photo:NULL, $advert->good);
 
-        if( !count($images) ){
+        if( !count($images) && !in_array($queue->action->code, array("delete","payUp","up")) ){
             $queue->setState("noImages");
             return false;
         }
@@ -1181,8 +1181,8 @@ class IntegrateController extends Controller
 
         $diff = array_diff($ids, $ids1);
         print_r($diff);
-        // if( $diff )
-        // AdvertWord::model()->deleteAll("advert_id IN (".implode(",", $diff).")");
+        if( $diff )
+        AdvertWord::model()->deleteAll("advert_id IN (".implode(",", $diff).")");
     }
 
     public function actionUpdatePhoto(){

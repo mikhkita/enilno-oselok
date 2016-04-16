@@ -37,7 +37,9 @@ if(count($goods)): ?>
                     </h3>
                 <? elseif($type == 3): ?>
                     <h4><?=Interpreter::generate($this->params[$type]["TITLE_CATEGORY"], $good,$dynamic);?></h4>
-                    <h5><span><?=$price==0 ? Yii::app()->params["zeroPrice"] : number_format( $price, 0, ',', ' ' )." р."?></span> 
+                    <h5><span><?
+                    // $price==0 ? Yii::app()->params["zeroPrice"] : number_format( $price, 0, ',', ' ' )." р."
+                    ?>Уточняйте цену</span> 
                     <!-- <?=Interpreter::generate($this->params[$type]["SHIPPING"], $good,$dynamic);?> -->
                     </h5>
                     <? $available = Interpreter::generate($this->params[$type]["AVAILABLE"], $good,$dynamic);?>

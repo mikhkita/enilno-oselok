@@ -33,7 +33,11 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
 						<? $price = Interpreter::generate($this->params[$_GET['type']]["PRICE_CODE"], $good, $dynamic);?>
 						<? $price = number_format($price, 0, ',', ' ' )." р."; $order = Interpreter::generate($this->params[$_GET['type']]["ORDER"], $good,$dynamic); ?>
 						<? $price = ($good->archive)?(($this->user)?("Продано за ".$price):"Продано"):$price; ?>
-						<h3><?=$price=( !$good->fields_assoc[20]->value || $good->fields_assoc[20]->value == 0 )? Yii::app()->params["zeroPrice"] : $price ?></h3>
+						<?if($good->good_type_id == 3):?>
+							<h3>Уточняйте цену</h3>
+						<? else: ?>
+							<h3><?=$price=( !$good->fields_assoc[20]->value || $good->fields_assoc[20]->value == 0 )? Yii::app()->params["zeroPrice"] : $price ?></h3>
+						<?endif;?>
 						<? $is_available = Interpreter::generate($this->params[$_GET['type']]["AVAILABLE"], $good, $dynamic); ?>
 						<? if(!$good->archive): ?>
 							<? if($is_available != "В наличии"): ?>

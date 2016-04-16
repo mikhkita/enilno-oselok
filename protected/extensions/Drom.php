@@ -224,8 +224,14 @@ Class Drom {
     }
 
     public function deleteAdvert($advert_id) {
-        $html = str_get_html($this->curl->request('https://baza.drom.ru/bulletin/service-configure?ids='.$advert_id.'&applier=deleteBulletin'));
-        
+        echo 'https://baza.drom.ru/bulletin/service-configure?ids='.$advert_id.'&applier=deleteBulletin';
+        $result = $this->curl->request('https://baza.drom.ru/bulletin/service-configure?ids='.$advert_id.'&applier=deleteBulletin');
+        print_r($result);
+        echo "<br><br>";
+        $html = str_get_html($result);
+        echo $html->find('input[name="uid"]', 0)->value;
+        echo "<br><br>";
+
         $del_arr = array(
             'applier' => 'deleteBulletin',
             'uid' => $html->find('input[name="uid"]', 0)->value,
@@ -236,11 +242,13 @@ Class Drom {
         );
 
         $result = iconv('windows-1251', 'utf-8', $this->curl->request('https://baza.drom.ru/bulletin/service-apply',$del_arr));
-        print_r($result);
 
         $html = str_get_html($result);
 
-        return ( ($html->find('.bulletin_expired_notification h2',0) && $html->find('.bulletin_expired_notification h2',0)->plaintext == "Вы удалили объявление") || ($html->find('.alert_r p',0) && $html->find('.alert_r p',0)->plaintext == "Действие уже выполнено") );
+        // echo "<br><br><br>";
+        print_r($result);
+
+        return ( ($html->find('.bulletin_expired_notification h2',0) && $html->find('.bulletin_expired_notification h2',0)->plaintext == "Вы удалили объявление") || ($html->find('.annotation .alert_r p',0) && $html->find('.annotation .alert_r p',0)->plaintext == "Действие уже выполнено") );
     }
 
     public function setOptions($params,$advert_id = NULL,$only_images = false) {

@@ -689,7 +689,7 @@ class KolesoOnlineController extends Controller
 				$nick = Dictionary::get($good->fields_assoc[43]->attribute->label, $good->fields_assoc[43]->variant_id);
 				$partner = array("label" => $nick, "link" => $good->fields_assoc[106]->value);
 			}
-			
+
 			$this->render('detail',array(
 				'good'=>$good,
 				'similar' => $this->similarGoods($good,true),
