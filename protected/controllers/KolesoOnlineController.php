@@ -12,6 +12,7 @@ class KolesoOnlineController extends Controller
 		1 => array(
 			"NAME" => "Шины",
 			"TITLE_CODE" => 66,
+			"HEADER_DESCRIPTION_CODE" => 226,
 			"TITLE_2_CODE" => 30,
 			"DESCRIPTION_CODE" => 72,
 			"GARANTY_CODE" => 70,
@@ -92,6 +93,7 @@ class KolesoOnlineController extends Controller
 		2 => array(
 			"NAME" => "Диски",
 			"TITLE_CODE" => 67,
+			"HEADER_DESCRIPTION_CODE" => 227,
 			"TITLE_2_CODE" => 68,
 			"DESCRIPTION_CODE" => 71,
 			"GARANTY_CODE" => 69,
@@ -180,6 +182,7 @@ class KolesoOnlineController extends Controller
 			"NAME" => "Колеса",
 			"TITLE_CATEGORY" => 170,
 			"TITLE_CODE" => 146,
+			"HEADER_DESCRIPTION_CODE" => 228,
 			"TITLE_2_CODE" => 171,
 			"DESCRIPTION_CODE" => 167,
 			"GARANTY_CODE" => 168,
@@ -677,7 +680,7 @@ class KolesoOnlineController extends Controller
 
 			$good_title = Interpreter::generate($this->params[$_GET['type']]["TITLE_CODE"], $good, $dynamic);
 			$this->title = "Купить ".mb_strtolower(mb_substr($good_title, 0, 1, "UTF-8"),"UTF-8").mb_substr($good_title, 1, strlen($good_title), "UTF-8")." [+IN+]";
-			$this->description = Interpreter::generate($this->params[$_GET['type']]["DESCRIPTION_CODE"], $good, $dynamic);
+			$this->description = Interpreter::generate($this->params[$_GET['type']]["HEADER_DESCRIPTION_CODE"], $good, $dynamic);
 			$this->keywords = Interpreter::generate($this->getParam("SHOP",$good->type->code."_KEYWORDS_CODE"), $good, $dynamic);
 
 			$imgs = $good->getImages(NULL, NULL, NULL, NULL, true);

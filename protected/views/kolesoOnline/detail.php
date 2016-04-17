@@ -77,9 +77,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
 					<ul>
 						<? foreach ($params[$_GET['type']]["CATEGORY"] as $key => $attr): ?>
 						<? if( isset($attr["TYPE"]) && $attr["TYPE"] == "INTER" ): ?>
-							<? if(Interpreter::generate($attr['ID'], $good, $dynamic)): ?>
-								<li><?=$attr['LABEL']?>: <span><? echo Interpreter::generate($attr['ID'], $good, $dynamic); if(Interpreter::generate($attr['ID'], $good, $dynamic) != "Новая резина") echo $attr['UNIT']?></span></li>
-							<? endif; ?>
+							<li><?=$attr['LABEL']?>: <span><?=((Interpreter::generate($attr['ID'], $good, $dynamic)) ? Interpreter::generate($attr['ID'], $good, $dynamic) : "Не указано"); if(Interpreter::generate($attr['ID'], $good, $dynamic) != "Новая резина" && Interpreter::generate($attr['ID'], $good, $dynamic)) echo $attr['UNIT']?></span></li>
 						<? else: ?>
 							<? if(isset($good->fields_assoc[$attr['ID']])): ?>
 								<li><?=$attr['LABEL']?>:<span><?=$good->fields_assoc[$attr['ID']]->value.$attr['UNIT']?></span></li>
