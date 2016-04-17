@@ -55,6 +55,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
     <meta name="msapplication-TileColor" content="#FFFFFF" />
     <meta name="msapplication-TileImage" content="<?php echo Yii::app()->request->baseUrl; ?>/html/icon/mstile-144x144.png" />
     <meta name="msapplication-square70x70logo" content="<?php echo Yii::app()->request->baseUrl; ?>/html/icon/mstile-70x70.png" />
+    <script type="text/javascript" src="//vk.com/js/api/openapi.js?121"></script>
     <? if(isset(Yii::app()->params['server']) && Yii::app()->params['server'] === true): ?>
     <script>
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -79,9 +80,9 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
             <a class="left b-main-logo b-mobile-menu-a" href="<?=Yii::app()->createUrl('/kolesoOnline')?>"></a>
             <ul>
                 <!-- <li><a href="<?=Yii::app()->createUrl('/about')?>" class="b-mobile-menu-a">О магазине</a></li> -->
-                <li><a href="<?=Yii::app()->createUrl('/dostavka.html')?>" class="b-mobile-menu-a">Доставка</a></li>
-                <li><a href="<?=Yii::app()->createUrl('/garantiya.html')?>" class="b-mobile-menu-a">Гарантия</a></li>
-                <li><a href="<?=Yii::app()->createUrl('/oplata.html')?>" class="b-mobile-menu-a">Оплата</a></li>
+                <li><a href="<?=Yii::app()->createUrl('/delivery.html')?>" class="b-mobile-menu-a">Доставка</a></li>
+                <li><a href="<?=Yii::app()->createUrl('/guarantees.html')?>" class="b-mobile-menu-a">Гарантии</a></li>
+                <li><a href="<?=Yii::app()->createUrl('/payment.html')?>" class="b-mobile-menu-a">Оплата</a></li>
                 <li><a href="<?=Yii::app()->createUrl('/contacts.html')?>" class="b-mobile-menu-a">Контакты</a></li>
             </ul>
             <a href="tel:+<?=Yii::app()->params["city"]->phone?>" class="b-menu-call b-orange-butt">Позвонить</a>
@@ -89,9 +90,9 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
         <div class="b b-menu">
             <div class="b-block">
                 <ul class="clearfix not-mobile">
-                    <li><a href="<?=Yii::app()->createUrl('/dostavka.html')?>">Доставка</a></li>
-                    <li><a href="<?=Yii::app()->createUrl('/garantiya.html')?>">Гарантия</a></li>
-                    <li><a href="<?=Yii::app()->createUrl('/oplata.html')?>">Оплата</a></li>
+                    <li><a href="<?=Yii::app()->createUrl('/delivery.html')?>">Доставка</a></li>
+                    <li><a href="<?=Yii::app()->createUrl('/guarantees.html')?>">Гарантии</a></li>
+                    <li><a href="<?=Yii::app()->createUrl('/payment.html')?>">Оплата</a></li>
                     <li><a href="<?=Yii::app()->createUrl('/contacts.html')?>">Контакты</a></li>
                 </ul>
                 <div class="clearfix b-mobile-top-line mobile-only">
@@ -184,7 +185,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
                         <a href="<?=Yii::app()->createUrl('/kolesoOnline')?>" class="footer-logo clearfix">
                             <span class="b-footer-logo"></span>
                         </a>
-                        <p>Лучший выбор автомобильных б/у шин и дисков из Японии в России. Удобный поиск и выгодные цены, а самое главное честное описание и фото. Мы постоянно работаем над расширением географии наших представительств на территории РФ.</p>
+                        <p>Более тысячи позиций <nobr>б/у</nobr>&nbsp;шин и&nbsp;дисков. Полная актуальность всех имеющихся товаров на сайте. Ежедневное пополнение каталога. Достоверные фотографии и&nbsp;описания. Наши фирменные гарантии. Профессионалы своего дела.</p>
                     </li>
                     <li>
                         <h3>Разделы</h3>
@@ -192,9 +193,10 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
                             <li><a href="<?=Yii::app()->createUrl('/kolesoOnline/category',array('type' => 2))?>">Диски</a></li>
                             <li><a href="<?=Yii::app()->createUrl('/kolesoOnline/category',array('type' => 1))?>">Шины</a></li>
                             <li><a href="<?=Yii::app()->createUrl('/kolesoOnline/category',array('type' => 3))?>">Колеса</a></li>
-                            <li><a href="<?=Yii::app()->createUrl('/dostavka.html')?>">Доставка</a></li>
-                            <li><a href="<?=Yii::app()->createUrl('/garantiya.html')?>">Гарантия</a></li>
-                            <li><a href="<?=Yii::app()->createUrl('/oplata.html')?>">Оплата</a></li>
+                            <li><a href="<?=Yii::app()->createUrl('/delivery.html')?>">Доставка</a></li>
+                            <li><a href="<?=Yii::app()->createUrl('/guarantees.html')?>">Гарантии</a></li>
+                            <li><a href="<?=Yii::app()->createUrl('/payment.html')?>">Оплата</a></li>
+                            <li><a href="<?=Yii::app()->createUrl('/contacts.html')?>">Контакты</a></li>
                         </ul>
                     </li>
                     <li>
@@ -206,16 +208,20 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
                         <? else: ?>
                             <br>
                         <? endif; ?>
-                        <!-- <div class="social">
+                       <div class="social clearfix">
                             <h3>Присоединяйтесь к нам</h3>
-                            <div class="social-icon clearfix">
+                            <div id="vk_subscribe"></div>
+                            <script type="text/javascript">
+                            VK.Widgets.Subscribe("vk_subscribe", {soft: 1}, -118079986);
+                            </script>
+                            <!-- <div class="social-icon clearfix">
                                 <a class="tw" href="#"></a>
                                 <a class="yt" href="#"></a>
                                 <a class="inst" href="#"></a>
                                 <a class="vk" href="#"></a>
                                 <a class="fb" href="#"></a>
-                            </div>
-                        </div> -->
+                            </div> -->
+                        </div>
                     </li>
                 </ul>
             </div>
@@ -328,12 +334,14 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
 <script type="text/javascript" src="/html/js/main.js"></script>
 
 <? if(isset(Yii::app()->params['server']) && Yii::app()->params['server'] === true && !isset($this->user->usr_id)): ?>
-<!-- Yandex.Metrika counter --><script type="text/javascript"> (function (d, w, c) { (w[c] = w[c] || []).push(function() { try { w.yaCounter34102235 = new Ya.Metrika({ id:34102235, clickmap:true, trackLinks:true, accurateTrackBounce:true, webvisor:true }); } catch(e) { } }); var n = d.getElementsByTagName("script")[0], s = d.createElement("script"), f = function () { n.parentNode.insertBefore(s, n); }; s.type = "text/javascript"; s.async = true; s.src = "https://mc.yandex.ru/metrika/watch.js"; if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); } })(document, window, "yandex_metrika_callbacks");</script><noscript><div><img src="https://mc.yandex.ru/watch/34102235" style="position:absolute; left:-9999px;" alt="" /></div></noscript><!-- /Yandex.Metrika counter -->
-<!-- BEGIN JIVOSITE CODE {literal} -->
-<script type='text/javascript'>
-(function(){ var widget_id = 'ACaUy3Bqm4';
-var s = document.createElement('script'); s.type = 'text/javascript'; s.async = true; s.src = '//code.jivosite.com/script/widget/'+widget_id; var ss = document.getElementsByTagName('script')[0]; ss.parentNode.insertBefore(s, ss);})();</script>
-<!-- {/literal} END JIVOSITE CODE -->
+    <!-- Yandex.Metrika counter --><script type="text/javascript"> (function (d, w, c) { (w[c] = w[c] || []).push(function() { try { w.yaCounter34102235 = new Ya.Metrika({ id:34102235, clickmap:true, trackLinks:true, accurateTrackBounce:true, webvisor:true }); } catch(e) { } }); var n = d.getElementsByTagName("script")[0], s = d.createElement("script"), f = function () { n.parentNode.insertBefore(s, n); }; s.type = "text/javascript"; s.async = true; s.src = "https://mc.yandex.ru/metrika/watch.js"; if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); } })(document, window, "yandex_metrika_callbacks");</script><noscript><div><img src="https://mc.yandex.ru/watch/34102235" style="position:absolute; left:-9999px;" alt="" /></div></noscript><!-- /Yandex.Metrika counter -->
+    <?if(!$mobile):?>
+        <!-- BEGIN JIVOSITE CODE {literal} -->
+        <script type='text/javascript'>
+        (function(){ var widget_id = 'ACaUy3Bqm4';
+        var s = document.createElement('script'); s.type = 'text/javascript'; s.async = true; s.src = '//code.jivosite.com/script/widget/'+widget_id; var ss = document.getElementsByTagName('script')[0]; ss.parentNode.insertBefore(s, ss);})();</script>
+        <!-- {/literal} END JIVOSITE CODE -->
+    <? endif; ?>
 <? endif; ?>
 </body>
 </html>

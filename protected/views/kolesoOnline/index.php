@@ -2,16 +2,20 @@
     <div class="b b-main-slider">
         <div class="slide" style="background-image: url('<?php echo Yii::app()->request->baseUrl; ?>/html/i/back-main.jpg');">
             <div class="b-block">
-                <h1>Б/У шины и диски из Японии в России</h1>
-                <p>У нас самый большой выбор автомобильных б/у шин и дисков из Японии по доступным ценам.</p>
+                <? if(!$mobile): ?>
+                    <h2>Самый большой в России выбор б/у шин и дисков</h2>
+                    <p>Отправка во все регионы. Широкая сеть представительств. Единая гарантийная политика и стандарты проверки товара. Профессионалы своего дела.</p>
+                <? else: ?>
+                    <h2 style="text-align:center; margin-top: 50px;">Самый большой в России<br>выбор б/у шин и дисков</h2>
+                <? endif; ?>
             </div>
         </div>
-       <!--  <div class="slide" style="background-image: url('<?php echo Yii::app()->request->baseUrl; ?>/html/i/back-main.jpg');">
+        <div class="slide" style="background-image: url('<?php echo Yii::app()->request->baseUrl; ?>/html/i/back-main-2.jpg');">
             <div class="b-block">
-                <h2>Широкий ассортимент</h2>
-                <p>Только в нашем магазине вы найдете именно те колеса, которые вам нужны.</p>
+                <h2>Получи 30 литров бензина за репост!</h2>
+                <p>Все подробности в нашей группе вконтакте:<br><a href="http://vk.com/kolesoonline" target="_blank">http://vk.com/kolesoonline</a></p>
             </div>
-        </div> -->
+        </div>
     </div>
     <div class="b b-filters">
         <div class="b-block gradient-grey main-tabs">
@@ -254,9 +258,13 @@
                         <li><a href="<?=Yii::app()->createUrl('/kolesoOnline/category',array('type' => 3))?>"><span class="wheel-icon icon">Колеса</span></a></li>
                     </ul>
                 </div>
-                <div class="gradient-grey">
-                    <h3>О нас</h3>
-                    <p>Лучший выбор автомобильных б/у шин и дисков из Японии в России.<br>Удобный поиск, доступные цены, честное описание и подробные фото.<br>Мы постоянно работаем над расширением географии наших представительств на территории РФ, что бы доставить товар в короткие сроки и предоставить возможность оплатить покупку удобным для Вас способом.</p>
+                <div  style="box-shadow: none; border-radius: 0px;" class="gradient-grey">
+                <!-- <h3>О нас</h3> -->
+                <div id="vk_groups"></div>
+                <script type="text/javascript">
+                VK.Widgets.Group("vk_groups", {mode: 0, width: "245", height: "361", color1: 'F2F2F2', color2: '3c3c3c', color3: '534F59'}, 118079986);
+                </script>
+                <!-- <p>Лучший выбор автомобильных б/у шин и дисков из Японии в России.<br>Удобный поиск, доступные цены, честное описание и подробные фото.<br>Мы постоянно работаем над расширением географии наших представительств на территории РФ, что бы доставить товар в короткие сроки и предоставить возможность оплатить покупку удобным для Вас способом.</p> -->
                 </div>
             </div>
             <div class="popular-good right main-tabs after-load">

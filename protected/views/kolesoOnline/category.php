@@ -101,6 +101,13 @@
                 </div>
             </div>
             <div class="right good-list">
+                <a href="http://vk.com/kolesoonline" target="_blank" class="b-vk-benz">
+                    <h3>Вступи в нашу <span>группу вк</span> и</h3>
+                    <h2>Выиграй 30 литров</h2>
+                    <div class="b-benz">
+                        <span></span>
+                    </div>
+                </a>
                 <div class="not-mobile">
                     <ul class="navigation clearfix">
                         <li><a href="<?=Yii::app()->createUrl('/kolesoOnline')?>"></a></li>

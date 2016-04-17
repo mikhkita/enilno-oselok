@@ -269,6 +269,7 @@ input:-moz-placeholder {
 				width: 710px;
 				margin-bottom: 14px;
 				text-transform: none;
+				text-align: left !important;
 			}
 			.b-main-slider .slide .b-block p {
 				font-size: 28px;
@@ -2151,6 +2152,85 @@ padding-top: 30px;}
 				top: auto;
 				bottom: 26px;
 			}
+.b-copyright{
+	margin: 4px 0px -6px;
+	line-height: 22px;
+	font-size: 0px !important;
+}
+	.b-copyright a.b-redder{
+		background-position: 50% 0%;
+		background-repeat: no-repeat;
+		background-image: url('../i/logo-redder.png');
+		width: 127px;
+		height: 22px;
+		background-size: 127px;
+		opacity: 0.7;
+	}
+		.b-copyright a.b-redder:hover{
+			opacity: 1;
+			background-position: 50% 100%;
+		}
+.b-vk-benz{
+	position: relative;
+	background-position: 50% 50%;
+	text-align: left;
+	box-sizing: border-box;
+	background-repeat: no-repeat;
+	background-image: url('../i/vk-b@2x.jpg');
+	background-size: 794px;
+	width: 701px;
+	height: 120px;
+	margin-bottom: 22px;
+	padding: 14px 20px;
+	overflow: hidden;
+	margin-top: 30px;
+	display: block;
+	text-decoration: none !important;
+}
+	.b-vk-benz h3{
+		text-decoration: none !important;
+		color: #FFF;
+		font-family: "GothamPro-Bold";
+		font-size: 32px;
+		margin-left: 1px;
+		margin-top: 4px;
+	}
+	.b-vk-benz h3 span{
+		text-decoration: underline;
+	}
+		.b-vk-benz h3 span:hover{
+			text-decoration: none;
+		}
+	.b-vk-benz h2{
+		text-decoration: none !important;
+		color: #FFF;
+		font-family: "GothamPro-Bold";
+		font-size: 47px;
+	}
+	.b-vk-benz .b-benz{
+		background-position: 50% 50%;
+		background-repeat: no-repeat;
+		background-image: url('../i/benz@2x.png');
+		background-size: 190px;
+		width: 190px;
+		height: 110px;
+		position: absolute;
+		right: 0px;
+		bottom: 0px;
+	}
+		.b-vk-benz .b-benz span{
+			position: absolute;
+			left: -4px;
+			top: 17px;
+			background-position: 50% 50%;
+			background-repeat: no-repeat;
+			background-image: url('../i/kap@2x.png');
+			background-size: 25px;
+			width: 25px;
+			height: 36px;
+			display: block;
+		}
+
 
 @media screen and (max-width: 1250px){
 	

@@ -33,16 +33,12 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
 						<? $price = Interpreter::generate($this->params[$_GET['type']]["PRICE_CODE"], $good, $dynamic);?>
 						<? $price = number_format($price, 0, ',', ' ' )." р."; $order = Interpreter::generate($this->params[$_GET['type']]["ORDER"], $good,$dynamic); ?>
 						<? $price = ($good->archive)?(($this->user)?("Продано за ".$price):"Продано"):$price; ?>
-						<?if($good->good_type_id == 3):?>
-							<h3>Уточняйте цену</h3>
-						<? else: ?>
-							<h3><?=$price=( !$good->fields_assoc[20]->value || $good->fields_assoc[20]->value == 0 )? Yii::app()->params["zeroPrice"] : $price ?></h3>
-						<?endif;?>
-						<? $is_available = Interpreter::generate($this->params[$_GET['type']]["AVAILABLE"], $good, $dynamic); ?>
+						<h3><?=(($good->good_type_id == 3)?"Уточняйте цену":(( !$good->fields_assoc[20]->value || $good->fields_assoc[20]->value == 0 )? Yii::app()->params["zeroPrice"] : $price))?></h3>
+						<? $is_available = "(".Interpreter::generate($this->params[$_GET['type']]["AVAILABLE"], $good, $dynamic).")"; if(!$good->fields_assoc[27]->value) $is_available = "";?>
 						<? if(!$good->archive): ?>
-							<? if($is_available != "В наличии"): ?>
+							<? if($is_available != "(В наличии)"): ?>
 								<?if(!$good->archive):?><?$delivery = Interpreter::generate($this->params[$_GET['type']]["SHIPPING"], $good,$dynamic);?>
-								<h4 <?if($delivery=="бесплатная"): $delivery = "+ доставка бесплатно"?>class="b-free-delivery"<?endif;?>> <span> <?=$delivery?></span><?endif;?> (<?=$is_available?>)</h4>
+								<h4 <?if($delivery=="бесплатная"): $delivery = "+ доставка бесплатно"?>class="b-free-delivery"<?endif;?>> <span> <?=$delivery?></span><?endif;?> <?=$is_available?></h4>
 							<? endif; ?>
 						<? endif; ?>
 					</div>
@@ -101,11 +97,11 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
 				<ul class="desc-tabs clearfix">
 					<li class="active gradient-grey"><a href="#tabs-desc">Описание</a><span></span></li>
 					<li class="gradient-grey"><a href="#tabs-shippping">Доставка</a><span></span></li>
-					<li class="gradient-grey"><a href="#tabs-warranty">Гарантия</a><span></span></li>
+					<li class="gradient-grey"><a href="#tabs-warranty">Гарантии</a><span></span></li>
 				</ul>
-				<div id="tabs-desc"><?=$this->replaceToBr(Interpreter::generate($this->params[$_GET['type']]["DESCRIPTION_CODE"], $good,$dynamic));?></div>
-				<div id="tabs-shippping"><?=$this->replaceToBr(Interpreter::generate($this->params[$_GET['type']]["ORDER"], $good,$dynamic));?></div>
-				<div id="tabs-warranty"><?=$this->replaceToBr(Interpreter::generate($this->params[$_GET['type']]["GARANTY_CODE"], $good,$dynamic));?></div>
+				<div id="tabs-desc" class="desc-desc"><?=Interpreter::generate($this->params[$_GET['type']]["DESCRIPTION_CODE"], $good,$dynamic);?></div>
+				<div id="tabs-shippping"><?=Interpreter::generate($this->params[$_GET['type']]["ORDER"], $good,$dynamic);?></div>
+				<div id="tabs-warranty"><?=Interpreter::generate($this->params[$_GET['type']]["GARANTY_CODE"], $good,$dynamic);?></div>
 			</div>
 			<? if(count($similar)): ?>
                 <h3 class="category-title similar">Похожие товары</h3>
