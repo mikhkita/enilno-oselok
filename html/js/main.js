@@ -209,6 +209,9 @@ $(document).ready(function(){
     // };
 
     // var jssor_slider1 = new $JssorSlider$("slider1_container", options);
+    $('.b-main-slider').on('init', function(event, slick, direction){
+        $(".load-slide").show();
+    });
 
     $(".b-main-slider").slick({
         autoplay: true,
@@ -217,6 +220,8 @@ $(document).ready(function(){
         autoplaySpeed: 4000
         // fade: true
     });
+
+
     $( "#shipping" ).tabs();    
         
     $( ".b-block.main-tabs" ).tabs({

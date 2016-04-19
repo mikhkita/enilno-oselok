@@ -1,6 +1,6 @@
 <div class="b-content">
     <div class="b b-main-slider">
-        <div class="slide" style="background-image: url('<?php echo Yii::app()->request->baseUrl; ?>/html/i/back-main.jpg');">
+        <div class="slide load-slide" style="display:none; background-image: url('<?php echo Yii::app()->request->baseUrl; ?>/html/i/back-main.jpg');">
             <div class="b-block">
                 <? if(!$mobile): ?>
                     <h2>Самый большой в России выбор б/у шин и дисков</h2>

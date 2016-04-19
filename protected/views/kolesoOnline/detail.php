@@ -32,8 +32,9 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
 					<div class="clearfix">
 						<? $price = Interpreter::generate($this->params[$_GET['type']]["PRICE_CODE"], $good, $dynamic);?>
 						<? $price = number_format($price, 0, ',', ' ' )." р."; $order = Interpreter::generate($this->params[$_GET['type']]["ORDER"], $good,$dynamic); ?>
+						<? $price = ( !$good->fields_assoc[20]->value || $good->fields_assoc[20]->value == 0 || $good->good_type_id == 3)? Yii::app()->params["zeroPrice"] : $price; ?>
 						<? $price = ($good->archive)?(($this->user)?("Продано за ".$price):"Продано"):$price; ?>
-						<h3><?=(($good->good_type_id == 3)?"Уточняйте цену":(( !$good->fields_assoc[20]->value || $good->fields_assoc[20]->value == 0 )? Yii::app()->params["zeroPrice"] : $price))?></h3>
+						<h3><?=$price; ?></h3>
 						<? $is_available = "(".Interpreter::generate($this->params[$_GET['type']]["AVAILABLE"], $good, $dynamic).")"; if(!$good->fields_assoc[27]->value) $is_available = "";?>
 						<? if(!$good->archive): ?>
 							<? if($is_available != "(В наличии)"): ?>
@@ -97,7 +98,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
 					<li class="gradient-grey"><a href="#tabs-shippping">Доставка</a><span></span></li>
 					<li class="gradient-grey"><a href="#tabs-warranty">Гарантии</a><span></span></li>
 				</ul>
-				<div id="tabs-desc" class="desc-desc"><?=Interpreter::generate($this->params[$_GET['type']]["DESCRIPTION_CODE"], $good,$dynamic);?></div>
+				<div id="tabs-desc"><?=Interpreter::generate($this->params[$_GET['type']]["DESCRIPTION_CODE"], $good,$dynamic);?></div>
 				<div id="tabs-shippping"><?=Interpreter::generate($this->params[$_GET['type']]["ORDER"], $good,$dynamic);?></div>
 				<div id="tabs-warranty"><?=Interpreter::generate($this->params[$_GET['type']]["GARANTY_CODE"], $good,$dynamic);?></div>
 			</div>

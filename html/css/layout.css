@@ -2829,24 +2829,24 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
     box-shadow: 0px 0px 4.85px 0.15px rgba(32, 32, 32, 0.3);
     // border-radius: 2px;
 }
-.desc-desc {
-	line-height: 1.5;
-}
-.desc-desc h2{
-	font-size: 18px;
-	font-weight: 500;
-	margin-top: 15px;	
-}
-	.desc-desc h3{
-		font-size: 16px;
-		font-weight: 300;
-		margin-top: 10px;
-	}
-	.desc-desc p{
-		font-size: 14px;
-		line-height: 25px;
-		margin-top: 10px;
-	}
+// .desc-desc {
+// 	line-height: 1.5;
+// }
+// .desc-desc h2{
+// 	font-size: 18px;
+// 	font-weight: 500;
+// 	margin-top: 15px;	
+// }
+// 	.desc-desc h3{
+// 		font-size: 16px;
+// 		font-weight: 300;
+// 		margin-top: 10px;
+// 	}
+// 	.desc-desc p{
+// 		font-size: 14px;
+// 		line-height: 25px;
+// 		margin-top: 10px;
+// 	}
 
 .b-vk-benz{
 	position: relative;
