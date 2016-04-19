@@ -223,6 +223,7 @@ class Good extends GoodFilter
 
 		// print_r(count($this->ids));
 
+
     	return $this;
 	}
 

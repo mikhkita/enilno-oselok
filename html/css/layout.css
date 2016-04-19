@@ -643,6 +643,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 
 .b-main-slider {
 	height: 300px;
+	overflow: hidden;
 }
 	.b-main-slider .slide {
 		height: 300px;
@@ -2856,7 +2857,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 	background-image: url('../i/vk-b.jpg');
 	background-size: 694px;
 	width: 694px;
-	height: 110px;
+	height: 88px;
 	margin-bottom: 22px;
 	padding: 14px 20px;
 	overflow: hidden;
@@ -2867,8 +2868,10 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 		text-decoration: none !important;
 		color: #FFF;
 		font-family: "GothamPro-Bold";
-		font-size: 30px;
+		font-size: 22px;
 		margin-left: 1px;
+		margin-bottom: 3px;
+		text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
 	}
 	.b-vk-benz h3 span{
 		text-decoration: underline;
@@ -2877,31 +2880,32 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 			text-decoration: none;
 		}
 	.b-vk-benz h2{
+		text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
 		text-decoration: none !important;
 		color: #FFF;
 		font-family: "GothamPro-Bold";
-		font-size: 45px;
+		font-size: 30.2px;
 	}
 	.b-vk-benz .b-benz{
 		background-position: 50% 50%;
 		background-repeat: no-repeat;
 		background-image: url('../i/benz.png');
-		background-size: 190px;
-		width: 190px;
-		height: 110px;
+		background-size: 140px;
+		width: 140px;
+		height: 97px;
 		position: absolute;
 		right: 0px;
 		bottom: -10px;
 	}
 		.b-vk-benz .b-benz span{
 			-webkit-transform-origin: 50% 0%;
-		    -moz-transform-origin: 50% 0%;
-		    -o-transform-origin: 50% 0%;
-		    -ms-transform-origin: 50% 0%;
-		    transform-origin: 50% 0%;
+			-moz-transform-origin: 50% 0%;
+			-o-transform-origin: 50% 0%;
+			-ms-transform-origin: 50% 0%;
+			transform-origin: 55% 20%;
 			position: absolute;
-			left: -4px;
-			top: 17px;
+			left: -9px;
+			top: 13px;
 			background-position: 50% 50%;
 			background-repeat: no-repeat;
 			background-image: url('../i/kap.png');

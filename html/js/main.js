@@ -214,7 +214,7 @@ $(document).ready(function(){
         autoplay: true,
         dots: true,
         arrows: false,
-        autoplaySpeed: 6000
+        autoplaySpeed: 4000
         // fade: true
     });
     $( "#shipping" ).tabs();    

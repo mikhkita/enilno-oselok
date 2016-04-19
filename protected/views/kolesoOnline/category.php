@@ -96,14 +96,13 @@
                         <div class="filter-butt-cont">
                             <input type="submit" class="b-black-butt" value="Найти">
                         </div>
-                          
                     </div>
                 </div>
             </div>
             <div class="right good-list">
-                <a href="http://vk.com/kolesoonline" target="_blank" class="b-vk-benz">
-                    <h3>Вступи в нашу <span>группу вк</span> и</h3>
-                    <h2>Выиграй 30 литров</h2>
+                <a href="http://vk.com/kolesoonline?page=category" target="_blank" class="b-vk-benz">
+                    <h3>Вступи в нашу <?=($mobile)?"<span>группу вк</span>":"группу «<span>Колесо.Онлайн</span>»"?> и</h3>
+                    <h2>Выиграй 30 литров<?=($mobile)?"":" бензина"?></h2>
                     <div class="b-benz">
                         <span></span>
                     </div>
