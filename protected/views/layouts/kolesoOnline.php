@@ -146,6 +146,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
                     <div id="minicart" class="right">
                         <div class="b-cart-menu-cont">
                             <div class="b-cart-menu gradient-grey">
+                                <h2 class="close-cart">Корзина</h2>
                                 <ul class="b-cart-items clearfix">
                                     <?  if(isset($_SESSION["BASKET"]) && $_SESSION["BASKET"]) 
                                         $this->renderPartial('_basket',array('partial' => false)); 

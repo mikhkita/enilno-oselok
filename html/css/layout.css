@@ -558,6 +558,26 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 			    transform: translateY(0px);
 			    
 			}
+			.b-cart-menu .close-cart {
+				position: relative;
+				padding: 10px 15px;
+			    font-size: 16px;
+			    font-weight: bold;
+			    border-bottom: 1px solid #C3C3C3;
+			}
+				// .b-cart-menu .close-cart:after {
+				// 	position: absolute;
+				// 	font-size: 0;
+				// 	content: "";
+				// 	cursor: pointer;
+				// 	background-repeat: no-repeat;
+				// 	width: 12px;
+				// 	height: 12px;
+				// 	background-size: 114px 65px;
+				// 	right: 20px;
+				// 	top: 15px;
+				// 	background-position: -98px -32px;
+				// }
 			.b-cart-menu .b-cart-items {
 				width: 310px;
 				max-height: 327px;
@@ -610,11 +630,15 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 						background-repeat: no-repeat;
 						width: 12px;
 						height: 12px;
-						background-size: 114px 65px;
-						position: absolute;
-						right: 20px;
-						top: 15px;
-						background-position: -98px -32px;
+						background-size: 91px 52px;
+					    position: absolute;
+					    right: 18px;
+					    top: 15px;
+					    background-position: -77px -24px;
+					    opacity: 0.5;
+					}
+					.b-cart-items li .cart-close-btn:hover {
+						opacity: 1;
 					}
 			.b-cart-menu .b-total-price {
 				font-size: 20px;
@@ -2595,7 +2619,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 #similar-slider .b-sim-nav:before,
 .b-category .b-block .good-list .b-sort ul li.active:after,
 .fancybox-close,
-.b-popup-city h4 span:before,.cart-close-btn{
+.b-popup-city h4 span:before,.cart-close-btn,.close-cart:after{
 	background-image: url("../i/sprite.png");
 }
 .mobile-only{
