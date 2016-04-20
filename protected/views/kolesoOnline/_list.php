@@ -36,10 +36,9 @@ if(count($goods)): ?>
                         <span><?=(($good->fields_assoc[$params[$type]["CATEGORY"]["YEAR"]['ID']]->value)) ? $good->fields_assoc[$params[$type]["CATEGORY"]["YEAR"]['ID']]->value : "Не указано"?></span>
                     </h3>
                 <? elseif($type == 3): ?>
+                    <? $price = Yii::app()->params["zeroPrice"];?>
                     <h4><?=Interpreter::generate($this->params[$type]["TITLE_CATEGORY"], $good,$dynamic);?></h4>
-                    <h5><span><?
-                    // $price==0 ? Yii::app()->params["zeroPrice"] : number_format( $price, 0, ',', ' ' )." р."
-                    ?>Уточняйте цену</span> 
+                    <h5><span><?=$price?></span> 
                     <!-- <?=Interpreter::generate($this->params[$type]["SHIPPING"], $good,$dynamic);?> -->
                     </h5>
                     <? $available = Interpreter::generate($this->params[$type]["AVAILABLE"], $good,$dynamic); if(!$good->fields_assoc[27]->value) $available = ""; $available = ($available != "В наличии") ? "Доставка ".$available : $available; ?>

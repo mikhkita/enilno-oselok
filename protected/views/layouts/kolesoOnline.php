@@ -328,6 +328,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
 <script type="text/javascript" src="/html/js/device.js"></script>
 <script type="text/javascript" src="/html/js/select2.full.min.js"></script>
 <script type="text/javascript" src="/html/js/stroll.js"></script>
+<script type="text/javascript" src="/html/js/jquery.zoom.min.js"></script>
 <script type="text/javascript" src="/html/js/i18n/ru.js"></script>
 <script type="text/javascript" src="/html/js/jquery.cookie.js"></script>
 <script type="text/javascript" src="/html/js/KitSend.js"></script>
