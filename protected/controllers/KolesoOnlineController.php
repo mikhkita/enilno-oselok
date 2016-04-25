@@ -686,7 +686,7 @@ class KolesoOnlineController extends Controller
 			$this->description = Interpreter::generate($this->params[$_GET['type']]["HEADER_DESCRIPTION_CODE"], $good, $dynamic);
 			$this->keywords = Interpreter::generate($this->getParam("SHOP",$good->type->code."_KEYWORDS_CODE"), $good, $dynamic);
 
-			$imgs = $good->getImages(NULL, NULL, NULL, NULL, true);
+			$imgs = $good->getImages(NULL, NULL, ($this->user->usr_id == 1)?"all":NULL, NULL, true);
 			$this->image = Yii::app()->getBaseUrl(true).$imgs[0]["big"];
 
 			$partner = NULL;

@@ -12,7 +12,7 @@
 <h1 class="b-with-nav"><?=$good->type->name?> <?=$good->fields_assoc[3]->value?>: фотографии</h1>
 <ul class="photo-sortable  clearfix" data-sort = 'Images[]' id="photo-sortable" data-href="<?=Yii::app()->createUrl('/good/adminphotoupdate',array('id'=>$good->id))?>">
 	<? foreach ($images as $i => $image):?>
-	<li style="background-image: url('<?=$image['small']?>');" data-small="<?=$image['small']?>" data-src="<?=$image['original']?>" data-id="<?=$image['id']?>">
+	<li style="background-image: url('<?=$image['small']?>');"<?if($image["site"]):?> class="b-photo-site"<?endif?> data-small="<?=$image['small']?>" data-src="<?=$image['original']?>" data-id="<?=$image['id']?>">
 		<a href="#" class="b-photo-delete ion-icon ion-close"></a>
 		<input type="hidden" name="Images[]" data-name="Images[]" data-delete="Delete[]" value="<?=$image['id']?>">
 	</li>
@@ -25,7 +25,7 @@
 			<h4><?=$cap->name?></h4>
 			<ul class="photo-sortable photo-sortable-cap clearfix" id="photo-sortable-<?=$cap->id?>" data-sort = 'Caps[<?=$cap->id?>][]'>
 				<? foreach ($cap->images as $i => $image):?>
-				<li style="background-image: url('<?=$image['small']?>');" data-small="<?=$image['small']?>" data-src="<?=$image['original']?>" data-id="<?=$image['id']?>">
+				<li style="background-image: url('<?=$image['small']?>');"<?if($image["site"]):?> class="b-photo-site"<?endif?> data-small="<?=$image['small']?>" data-src="<?=$image['original']?>" data-id="<?=$image['id']?>">
 					<a href="#" class="b-photo-delete ion-icon ion-close"></a>
 					<input type="hidden" name="Caps[<?=$cap->id?>][]" data-name="Caps[<?=$cap->id?>][]" value="<?=$image['id']?>">
 				</li>

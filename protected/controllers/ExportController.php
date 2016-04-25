@@ -287,6 +287,7 @@ class ExportController extends Controller
 	}
 
 	public function generateFields($excel, $goods, $fields, $dynObjects = NULL){
+		if( !$goods ) return $excel;
 		foreach ($goods as $good) {
 			$row = array();
 			foreach ($fields as $field) {

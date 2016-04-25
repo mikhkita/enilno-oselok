@@ -292,7 +292,7 @@ class GoodFilter extends CActiveRecord
 
         $image_path = Yii::app()->params["imageFolder"]."/".GoodType::getCode($good_type_id)."/".$code;
         $cache_path = str_replace("images", "cache", $image_path);
-        if( $cap !== NULL ){
+        if( $cap !== NULL && $cap !== "all" ){
         	$images = array();
         	$model = Yii::app()->db->createCommand()
 	            ->select('i.id,i.good_id,i.site,c.sort,i.ext')
@@ -305,7 +305,7 @@ class GoodFilter extends CActiveRecord
 	        foreach ($model as $key => $image)
 	        	array_push($images, (object) $image);
         }else{
-        	$images = Image::model()->findAll(array("condition" => "good_id='$good_id'", "limit" => $count, "order" => "sort"));
+        	$images = Image::model()->findAll(array("condition" => "good_id='$good_id'".(($cap !== "all")?" AND site=1":""), "limit" => $count, "order" => "sort"));
         }
 		$cache = Cache::model()->with("image")->findAll("good_id='$good_id'");
 
@@ -338,6 +338,8 @@ class GoodFilter extends CActiveRecord
 				}
 				$item["original"] = "/".$image_path."/".$image->id.".".$image->ext;
 				array_push($out, $item);
+			}else{
+				$image->delete();
 			}
 		}
 

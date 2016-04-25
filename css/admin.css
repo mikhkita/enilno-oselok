@@ -3100,7 +3100,9 @@ input[disabled="disabled"] {
             margin-bottom: 10px;
             height: 127px;
         }
-
+.b-photo-site{
+    border: 5px solid #D26A44 !important;
+}
 
 
 

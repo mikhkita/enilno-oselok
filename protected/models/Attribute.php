@@ -39,7 +39,7 @@ class Attribute extends CActiveRecord
 			array('attribute_type_id, multi, list, width, dynamic, required, folder, major, label', 'numerical', 'integerOnly'=>true),
 			array('name', 'length', 'max'=>255),
 			array('group_id', 'length', 'max'=>10),
-			array('alias', 'length', 'max'=>5),
+			array('alias', 'length', 'max'=>15),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('id, name, attribute_type_id, multi, list, width, dynamic, required, group_id, folder, major, alias, label', 'safe', 'on'=>'search'),

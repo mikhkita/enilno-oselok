@@ -47,7 +47,7 @@ Class Avito {
 		}
 		Log::debug("Шаг 2"."<br>");
 		$result = $this->curl->request("https://www.avito.ru/additem");
-		
+		sleep(rand(1,5));
 		// $result = $this->curl->request("https://www.avito.ru/items/fees",array(
 		// 	'locationId' => "657600",
 		// 	'parentLocationId' => "657310",
@@ -71,12 +71,14 @@ Class Avito {
 	    // $params['fees[quantity]'] = "10";
 
 	    $result = $this->curl->request("https://www.avito.ru/additem",$params);
+	    sleep(rand(1,5));
 	    print_r($result);
 		$html = str_get_html($result);
 		Log::debug("Шаг 4"."<br>");
 		$captcha = $html->find('.form-captcha-image',0)->src;
 
         $out = $this->curl->request('https://www.avito.ru'.$captcha);
+        sleep(rand(1,5));
         Log::debug("Шаг 5"."<br>");
         $captcha_name = md5(time()."koleso");
 	    $captcha_path = Yii::app()->basePath.'/extensions/captcha/'.$captcha_name.'.jpg';  
@@ -157,6 +159,7 @@ Class Avito {
 
     public function updateAdvert($advert_id,$params,$images = NULL,$only_images = false){
     	$result = $this->curl->request("https://www.avito.ru/".$advert_id);
+    	sleep(rand(1,5));
 		$html = str_get_html($result);
 		if( !$html->find('meta[property="og:url"]',0) ) return NULL;
 		$href = $html->find('meta[property="og:url"]',0)->getAttribute('content');
@@ -164,7 +167,7 @@ Class Avito {
 
 		$result = $this->curl->request($href);
 		// print_r($result);
-		$html = str_get_html( $this->curl->request($href));
+		$html = str_get_html( $result );
 		$version = $html->find('input[name="version"]',0)->value;
 		if($images !== NULL) {
         	$params = $this->addImages($params,$images);
@@ -178,8 +181,10 @@ Class Avito {
 		$params['source'] = 'edit';		
 
 		$result = $this->curl->request($href,$params);
+		sleep(rand(1,5));
    		// print_r($result);
    		$result = $this->curl->request($href."/confirm",array('done' => "",'subscribe-position' => '1'));
+   		sleep(rand(1,5));
 		$html = str_get_html($result);
 		// print_r($result);
 		$id = $html->find('.content-text a[rel="nofollow"]',0)->href;
@@ -193,6 +198,7 @@ Class Avito {
 
    	public function updatePrice($advert_id,$params,$images = NULL){	
     	$result = $this->curl->request("https://www.avito.ru/".$advert_id);
+    	sleep(rand(1,5));
     	// echo "1111";
     	// print_r($result);
 		$html = str_get_html($result);
@@ -200,6 +206,7 @@ Class Avito {
 		$href = $html->find('meta[property="og:url"]',0)->getAttribute('content');
 		$href = $href."/edit";
 		$result = $this->curl->request($href);
+		sleep(rand(1,5));
 		// echo "2222";
 		// print_r($result);
 		$html = str_get_html( $result , true, true, DEFAULT_TARGET_CHARSET, false);
@@ -234,6 +241,7 @@ Class Avito {
 		$params['source'] = 'edit';		
 
 		$result = $this->curl->request($href,$params);
+		sleep(rand(1,5));
 
 		// echo "3333";
 		// print_r($result);
@@ -264,6 +272,7 @@ Class Avito {
 	            $resizeObj -> saveImage($filename, $quality);
 	            Log::debug("Генерация фотки");
                 array_push($img, json_decode($this->curl->request("https://www.avito.ru/additem/image",array('image' => new CurlFile($filename))))->id);
+                sleep(rand(1,5));
                 Log::debug("Отправка фотки");
             	unlink($filename);
             }
@@ -277,8 +286,10 @@ Class Avito {
 
     public function deleteAdvert($advert_id) {
         $result = $this->curl->request("https://www.avito.ru/profile",array('item_id[]' => $advert_id,'delete' => 'Снять объявление с публикации'));
+        sleep(rand(1,5));
         print_r($result);
         $result = $this->curl->request("https://www.avito.ru/".$advert_id);
+        sleep(rand(1,5));
         print_r("https://www.avito.ru/".$advert_id);
         print_r($result);
 		$html = str_get_html($result);
@@ -297,6 +308,7 @@ Class Avito {
     	do {
     		$i++;
 			$result = $this->curl->request("https://www.avito.ru/profile/items/old?item_id[]=$advert_id&start");
+			sleep(rand(1,5));
         	$html = str_get_html($this->curl->request("https://www.avito.ru/$advert_id"));
         	$tog = ($html->find(".alert-red",0))?false:true;
     		if( $i > 1 ) sleep(10);
@@ -343,6 +355,7 @@ Class Avito {
 
     public function parseAll($src){
     	$html = str_get_html($this->curl->request($src));
+    	sleep(rand(1,5));
     	$links = array();
     	$count = 0;
     	if( $item = $html->find(".tabs-item_active .tabs-item__num", 0) ){
@@ -350,6 +363,7 @@ Class Avito {
     		$num = ceil($count/10);
     		for ($i=1; $i <= $num; $i++) { 
     			$html = str_get_html($this->curl->request($src."/rossiya?p=".$i));
+    			sleep(rand(1,5));
     			if( $images = $html->find(".photo-wrapper") ){
     				foreach ($images as $j => $link) {
     					array_push($links, $link->getAttribute("href"));

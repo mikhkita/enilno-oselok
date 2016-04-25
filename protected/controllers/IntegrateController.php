@@ -303,6 +303,48 @@ class IntegrateController extends Controller
 
         Queue::model()->updateAll(array("state_id" => 1),"state_id=9");
     }
+
+    public function actionAuto(){
+
+        $model = array();
+
+        $goods = Good::model()->filter(
+            array(
+                "good_type_id"=>1,
+                "attributes"=>array(
+                    27 => array(1056)
+                )
+            )
+        )->getPage(
+            array(
+                'pageSize'=>10000,
+            )
+        );
+
+        if( is_array($goods["items"]) )
+            $model = array_merge($model, $goods["items"]);
+
+        $goods = Good::model()->filter(
+            array(
+                "good_type_id"=>2,
+                "attributes"=>array(
+                    27 => array(1056)
+                )
+            )
+        )->getPage(
+            array(
+                'pageSize'=>10000,
+            )
+        );
+        if( is_array($goods["items"]) )
+            $model = array_merge($model, $goods["items"]);
+
+        $links = array();
+        foreach ($model as $i => $good)
+            array_push($links, "http://".Yii::app()->params['ip'].$this->createUrl('/good/adminupdatecities',array('id'=> $good->id, 'Good_attr' => array(58 => array(1081), 60 => array(1081), 61 => array(1081)))));
+
+        Cron::addAll($links);
+    }
 // Выкладка -------------------------------------------------------------- Выкладка
 
 // Фотодоска ------------------------------------------------------------- Фотодоска
@@ -358,8 +400,6 @@ class IntegrateController extends Controller
             sleep(10);
 
             Log::debug("Конец выкладки ".strtolower($this->params[$good_type_code]["NAME_ROD"])." на фотодоску ".$model->title);
-        }else{
-            Log::debug("Нет ".strtolower($this->params[$good_type_code]["NAME_ROD_MN"])." для выкладки на фотодоску");
         }
     }
 
