@@ -906,6 +906,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 					color: #1c1c1c;
 					padding: 24px 60px;
 					position: relative;
+					text-decoration: underline;
 					cursor: pointer;
 				}
 				.b-filters .b-block .filter-cont .tire-type label:before {
@@ -1616,6 +1617,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 						position: relative;
 						cursor: pointer;
 						text-align: left;
+						text-decoration: underline;
 						padding: 18px 0 18px 51px;
 					}
 					.b-category .b-block .grey-block .filter-block .tire-type label:before {
@@ -1643,15 +1645,19 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 						background-position: 42px -3px;
 					}
 					.tire-type label.active,.tire-type label:hover{
-						text-decoration: underline;
+						text-decoration: none !important;
+						color: #ffba00 !important;
 					}
-					.tire-type label.active:before{
+					.tire-type label:nth-child(2).active,.tire-type label:nth-child(3).active,.tire-type label:nth-child(2):hover,.tire-type label:nth-child(3):hover{
+						color: #6DCFF6 !important;
+					}
+					.tire-type label.active:before,.tire-type label:hover:before{
 						background-position: 157px -2px !important;
 					}
-					.tire-type label:nth-child(2).active:before {
+					.tire-type label:nth-child(2).active:before,.tire-type label:nth-child(2):hover:before {
 						background-position: -2px -2px !important;
 					}
-					.tire-type label:nth-child(3).active:before {
+					.tire-type label:nth-child(3).active:before,.tire-type label:nth-child(3):hover:before {
 						background-position: 85px -3px !important;
 					}
 				.b-category .b-block .grey-block .filter-block .filter-item {
