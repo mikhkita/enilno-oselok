@@ -31,7 +31,7 @@ $(document).ready(function(){
     if( device.mobile() )
         new FastClick(document.body);
 
-    if($('#goods li:eq(-1)').attr("data-last") == 0) {
+    if($('#goods li:eq(-1)').attr("data-last") == 0 || $(".b-no-goods").length) {
         if($("#similar").length) $("#similar").show();    
     } 
     if($('#goods li:eq(-1)').attr("data-last") != 0) {
@@ -375,6 +375,7 @@ $(document).ready(function(){
     }else{
         $(".variants ul li").on("click",function(){
             $(this).find("input").click();
+            closeBubble();
         })
     }
 

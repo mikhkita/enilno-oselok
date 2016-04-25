@@ -27,7 +27,7 @@ class KolesoOnlineController extends Controller
 				8 => "Профиль",
 				// 16 => "Модель",
 				28 => "Количество",
-				27 => "Город нахождения"
+				27 => "Город нахождения товара"
 			),
 			"CATEGORY" => array(
 				"ID" => array(
@@ -107,7 +107,7 @@ class KolesoOnlineController extends Controller
 				31 => "Ширина",
 				32 => "Вылет",
 				28 => "Количество",
-				27 => "Город нахождения"
+				27 => "Город нахождения товара"
 			),
 			"CATEGORY" => array(
 				"ID" => array(
@@ -200,7 +200,7 @@ class KolesoOnlineController extends Controller
 				31 => "Ширина диска",
 				32 => "Вылет",
 				28 => "Количество",
-				27 => "Город нахождения"
+				27 => "Город нахождения товара"
 			),
 			"CATEGORY" => array(
 				"ID" => array(
