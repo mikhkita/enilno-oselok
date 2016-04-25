@@ -1,12 +1,6 @@
 <div class="b-content">
     <div class="b b-main-slider">
-    	<div class="slide" style="background-image: url('<?php echo Yii::app()->request->baseUrl; ?>/html/i/back-main-2.jpg');">
-            <div class="b-block">
-                <h2>Получи 30 литров бензина за репост!</h2>
-                <p>Все подробности в нашей группе вконтакте:<br><a href="http://vk.com/kolesoonline?page=main" target="_blank">http://vk.com/kolesoonline</a></p>
-            </div>
-        </div>
-        <div class="slide load-slide" style="display:none; background-image: url('<?php echo Yii::app()->request->baseUrl; ?>/html/i/back-main.jpg');">
+        <div class="slide" style="background-image: url('<?php echo Yii::app()->request->baseUrl; ?>/html/i/back-main.jpg');">
             <div class="b-block">
                 <? if(!$mobile): ?>
                     <h2>Самый большой в России выбор б/у шин и дисков</h2>
@@ -16,7 +10,12 @@
                 <? endif; ?>
             </div>
         </div>
-        
+        <div class="slide load-slide" style="display:none; background-image: url('<?php echo Yii::app()->request->baseUrl; ?>/html/i/back-main-2.jpg');">
+            <div class="b-block">
+                <h2>Получи 30 литров бензина за репост!</h2>
+                <p>Все подробности в нашей группе вконтакте:<br><a href="http://vk.com/kolesoonline?page=main" target="_blank">http://vk.com/kolesoonline</a></p>
+            </div>
+        </div>
     </div>
     <div class="b b-filters">
         <div class="b-block gradient-grey main-tabs">

@@ -1284,8 +1284,8 @@ padding-top: 30px;}
 					background-image: url("../i/sprite@2x.png");
 					background-size: 350px;
 					height: 13px;
-					right: -18px;
-					top: 10px;
+					right: -8px;
+					top: 11px;
 				}
 				.b-category .b-block .good-list .b-sort ul li.active.up:after{
 					background-position: -157px -152px;
@@ -1293,8 +1293,8 @@ padding-top: 30px;}
 				    background-image: url("../i/sprite@2x.png");
 				    background-size: 350px;
 				    height: 13px;
-				    right: -18px;
-				    top: 12px;
+				    right: -8px;
+				    top: 11px;
 				}
 					.b-category .b-block .good-list .b-sort ul li{
 						float: left;
