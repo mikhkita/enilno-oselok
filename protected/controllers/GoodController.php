@@ -906,7 +906,7 @@ class GoodController extends Controller
 
 		$options = array(
 			"good" => $good,
-			"images" => $good->getImages(),
+			"images" => $good->getImages(NULL, NULL, "all"),
 			"partial" => $partial,
 			"caps" => $caps
 		);
@@ -974,6 +974,8 @@ class GoodController extends Controller
 		}
 
 		$this->actionAdminPhoto($id, true);
+
+		$this->checkSitePhoto();
 
 		Task::model()->testGood($this->loadModel($id));
 	}

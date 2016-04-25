@@ -63,7 +63,7 @@ class Controller extends CController
         date_default_timezone_set("Asia/Novosibirsk");
 
         if( $_SERVER["HTTP_HOST"] == "koleso.tomsk.ru" || $_SERVER["HTTP_HOST"] == "xn--e1ajdlcr.xn--80asehdb" ){
-            header("Location: http://koleso.online".$_SERVER["REQUEST_URI"]);
+            header("Location: http://koleso.online".str_replace(array("/tire","/disc","/wheel"), array("/shiny","/diski","/kolesa"), $_SERVER["REQUEST_URI"]));
             die();
         }
         
@@ -667,7 +667,7 @@ class Controller extends CController
         $result = true;
 
         if( count($values) ){
-            $query = Yii::app()->db->createCommand("SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE `table_name` = '".$table_name."' AND `table_schema` = 'koleso'")->query();
+            $query = Yii::app()->db->createCommand("SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE `table_name` = '".$table_name."' AND `table_schema` = '".Yii::app()->params["dbname"]."'")->query();
 
             $structure = array();
             $primary_keys = array();
@@ -783,8 +783,8 @@ class Controller extends CController
     public function checkAdverts($model){
         $model = Good::model()->with(array("fields.variant","fields.attribute"))->findByPk($model->id);
 
-        $check_param_id = $this->getParam("SERVICE",mb_strtoupper($model->type->code,"UTF-8")."_PARAM_ID");
-        $check_city_id = $this->getParam("SERVICE",mb_strtoupper($model->type->code,"UTF-8")."_CITY_ID");
+        $check_param_id = $this->getParam("SERVICE", mb_strtoupper($model->type->code,"UTF-8")."_PARAM_ID");
+        $check_city_id = $this->getParam("SERVICE", mb_strtoupper($model->type->code,"UTF-8")."_CITY_ID");
 
         if( intval(Interpreter::generate($check_param_id,$model)) == 1 ){
             $delete_ids = array();
@@ -1017,6 +1017,14 @@ class Controller extends CController
             }
         }
         return $out;
+    }
+
+    public function checkSitePhoto(){
+        if( !($extra = $this->getParam("SERVICE","EXTRA")) ) return false;
+        $ids = Controller::getIds(ImageCap::model()->findAll(array("select" => "image_id", "condition" => "cap_id=$extra")), "image_id");
+
+        if( count($ids) )
+            Image::model()->updateAll(array("site" => 0), "id IN (".implode(",", $ids).")");
     }
 
     public function getRussianMonth($m){

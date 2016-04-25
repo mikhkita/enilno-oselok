@@ -88,7 +88,7 @@
 			<? endforeach; ?>
 		<? else: ?>
 			<tr>
-				<td colspan=<?=(count($fields)+2)?>>Пусто</td>
+				<td colspan=<?=(count($fields)+5)?>>Пусто</td>
 			</tr>
 		<? endif; ?>
 	</table>

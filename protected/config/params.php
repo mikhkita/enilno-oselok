@@ -16,6 +16,7 @@ return array(
 	'ip'=>'koleso.dev',
 	// the copyright information displayed in the footer section
 	'copyrightInfo'=>'Copyright &copy; 2009 by My Company.',
-	'debug' => false,
-	"zeroPrice" => "Уточняйте цену"
+	'debug' => true,
+	"zeroPrice" => "Уточняйте цену",
+	'dbname' => "koleso"
 );
