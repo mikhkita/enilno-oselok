@@ -158,6 +158,7 @@
                 <div class="load" style="display:none;">Загрузка...</div>
                 <? else: ?>
                     <h3 class="b-no-goods">Товаров не найдено</h3>
+                    <h4 class="no-goods-popup"><a href="#" class="fancy" data-block="#b-popup-exit">Оставьте заявку</a> и наши менеджеры подберут вам дополнительные варианты</h4>
                 <? endif; ?>
                 <? if(count($similar)): ?>
                     <div id="similar" style="display:none;">

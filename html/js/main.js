@@ -263,10 +263,10 @@ $(document).ready(function(){
                 max: max_val,
                 values: [ cur_min_val, cur_max_val ],
                 slide: function( event, ui ) {
-                    (ui.values[ 0 ] == min_val) ? min_input.val('') : min_input.val( Math.round(ui.values[ 0 ]/100)*100 );
-                    (ui.values[ 1 ] == max_val) ? max_input.val('') : max_input.val( Math.round(ui.values[ 1 ]/100)*100 );  
-                    ui.values[ 0 ] = Math.round(ui.values[ 0 ]/100)*100;
-                    ui.values[ 1 ] = Math.round(ui.values[ 1 ]/100)*100;
+                    (ui.values[ 0 ] == min_val) ? min_input.val('') : min_input.val( Math.round(ui.values[ 0 ]/1000)*1000 );
+                    (ui.values[ 1 ] == max_val) ? max_input.val('') : max_input.val( Math.round(ui.values[ 1 ]/1000)*1000 );  
+                    ui.values[ 0 ] = Math.round(ui.values[ 0 ]/1000)*1000;
+                    ui.values[ 1 ] = Math.round(ui.values[ 1 ]/1000)*1000;
                     min_text.text( ui.values[ 0 ] );
                     obj.closest(".slide-type").find(".tt-min").text( ui.values[ 0 ] );
                     max_text.text( ui.values[ 1 ] );
@@ -274,10 +274,10 @@ $(document).ready(function(){
 
                 },
                 change: function( event, ui ) {  
-                    (ui.values[ 0 ] == min_val) ? min_input.val('') : min_input.val( Math.round(ui.values[ 0 ]/100)*100 );
-                    (ui.values[ 1 ] == max_val) ? max_input.val('') : max_input.val( Math.round(ui.values[ 1 ]/100)*100 ); 
-                    ui.values[ 0 ] = Math.round(ui.values[ 0 ]/100)*100;
-                    ui.values[ 1 ] = Math.round(ui.values[ 1 ]/100)*100;      
+                    (ui.values[ 0 ] == min_val) ? min_input.val('') : min_input.val( Math.round(ui.values[ 0 ]/1000)*1000 );
+                    (ui.values[ 1 ] == max_val) ? max_input.val('') : max_input.val( Math.round(ui.values[ 1 ]/1000)*1000 ); 
+                    ui.values[ 0 ] = Math.round(ui.values[ 0 ]/1000)*1000;
+                    ui.values[ 1 ] = Math.round(ui.values[ 1 ]/1000)*1000;      
                     min_text.text( ui.values[ 0 ] );
                     obj.closest(".slide-type").find(".tt-min").text( ui.values[ 0 ] );
                     max_text.text( ui.values[ 1 ] );
@@ -285,10 +285,10 @@ $(document).ready(function(){
 
                 }
             });
-            (cur_min_val == min_val) ? min_input.val('') : min_input.val(Math.round(cur_min_val/100)*100);
-            (cur_max_val == max_val) ? max_input.val('') : max_input.val(Math.round(cur_max_val/100)*100);
-            cur_min_val = Math.round(cur_min_val/100)*100;
-            cur_max_val = Math.round(cur_max_val/100)*100;
+            (cur_min_val == min_val) ? min_input.val('') : min_input.val(Math.round(cur_min_val/1000)*1000);
+            (cur_max_val == max_val) ? max_input.val('') : max_input.val(Math.round(cur_max_val/1000)*1000);
+            cur_min_val = Math.round(cur_min_val/1000)*1000;
+            cur_max_val = Math.round(cur_max_val/1000)*1000;
             min_text.text( cur_min_val );
             obj.closest(".slide-type").find(".tt-min").text( cur_min_val );
             max_text.text( cur_max_val );

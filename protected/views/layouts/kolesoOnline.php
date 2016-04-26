@@ -239,7 +239,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
     <div id="b-popup-exit">
         <div class="for_all b-popup-small">
             <h3>Не нашли подходящий товар?</h3>
-            <h4 class="exit-desc">Оставьте заявку и наши менеджеры предложат вам дополнительные варианты</h4>
+            <h4 class="exit-desc">Оставьте заявку и наши менеджеры подберут вам дополнительные варианты</h4>
             <form action="<?=Yii::app()->createUrl('/kolesoOnline/mail/')?>" id="b-form-exit" method="POST"  data-block="#b-popup-2">
                 <div class="b-popup-form">
                     <label for="phone">Ваш телефон *</label>
