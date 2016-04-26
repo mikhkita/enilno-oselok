@@ -268,7 +268,6 @@ class AdvertController extends Controller
 
 	public function actionAdminTitleEdit($advert_id){
 		$advert = Advert::model()->findByPk($advert_id);
-
 		$good = GoodFilter::model()->findByPk($advert->good_id);
 
 		if( isset($_POST["title"]) ){

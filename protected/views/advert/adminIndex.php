@@ -47,6 +47,12 @@ $form=$this->beginWidget('CActiveForm',array('id'=>'adverts-form',"action" => $t
 			<?=CHtml::checkBoxList("Attr[58]", $_GET['Attr'][58], $data['Attr'][58]+array(0 => "Нет", 3885 => "Да"),$htmlopt);?>
 			</div>
 		</div>
+		<div class="b-advert-block">
+			<h3>Ссылка</h3>
+			<div class="clearfix">
+				<?=CHtml::radioButtonList("url", $_GET['url'], array("" =>"Не важно", 1 => "Есть", 0 => "Нету"),$htmlopt);?>
+			</div>
+		</div>
 	</div>
 </div>	
 <div class="clearfix">

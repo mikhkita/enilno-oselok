@@ -200,6 +200,8 @@ class Advert extends CActiveRecord
 		if(isset($params['Attr'][58])) {
 	    	$criteria->addInCondition("city_id",$params['Attr'][58]);
 	   	}
+	   	if( isset($params["url"]) && $params["url"] != "" )
+	   		$criteria->addCondition("url ".(($params["url"] == 1)?"IS NOT NULL":"IS NULL"), "AND");
 
 	   	$criteria->addCondition("good_id!=0","AND");
 
@@ -250,7 +252,7 @@ class Advert extends CActiveRecord
 
 	public function findSimilar(){
 		$words = Word::model()->with("adverts")->findAll("adverts.advert_id=".$this->id);
-		if( ! count($words) ){
+		if( !count($words) ){
 			$this->title = NULL;
 			$this->save();
 			return array();
@@ -288,6 +290,21 @@ class Advert extends CActiveRecord
 
 	public function getPercent(){
 		return self::$similar_percent;
+	}
+
+	public function validateTitle($title){
+		$title = preg_replace('|([0-9]+),([0-9]+)|', '$1.$2', $title);
+		$title = str_replace(array("#", "''", "*", "'", "\\", ",", "+", " ,"), array("N", '"', "x", '"', "/", ", ", "+ ", ", "), $title);
+		$title = trim(str_replace(array("!", "@", "$", "%", "^", "&", "(", ")", ";", "'", ">", "<", "?", "№", "%", ":", "[", "]", "§", "{", "}", "|", "\n", "\r"), "", $title));
+		if( mb_strripos($title, ".", 0, "UTF-8") == mb_strlen($title, "UTF-8")-1 ) 
+			$title = mb_substr($title, 0, -1, "UTF-8");
+
+    	$arr = explode(" ", $title);
+        while (mb_strlen($title, "UTF-8") > 50) {
+            array_shift($arr);
+            $title = trim(implode(" ", $arr));
+        }
+        return preg_replace('| +|', ' ', mb_strtoupper(mb_substr($title, 0, 1, "UTF-8"), "UTF-8").mb_substr($title, 1, NULL, "UTF-8"));
 	}
 	
 	public function beforeDelete(){

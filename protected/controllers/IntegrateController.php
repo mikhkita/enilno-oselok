@@ -168,7 +168,10 @@ class IntegrateController extends Controller
         
         if( $place_name != "VK" ){
             $place->setUser($account->login, $account->password);
-            $res = $place->auth();   
+            $res = $place->auth();  
+
+            if( $place_name == "AVITO" )
+                $this->parseAvito($place);
         }
         
         switch ($queue->action->code) {
@@ -924,48 +927,48 @@ class IntegrateController extends Controller
         ));
     }
 
-    public function actionParseAvito(){
-        echo "<br>";
-        $place = new Avito("admin:4815162342@185.63.191.103:1212");
-        $place->setUser("kemerovoman@inbox.ru", "specopa45");
-        $res = $place->auth();
-        // $result = $place->parseAll("https://www.avito.ru/profile/items/active");
-        $result = $place->parseAll("https://www.avito.ru/profile/items/old");
+    public function actionValidateTitles(){
+        $model = Advert::model()->findAll("title IS NOT NULL");
+
+        $values = array();
+        foreach ($model as $key => $value){
+            $title = Advert::validateTitle($value->title);
+            // echo "$title<br>";
+            // if( !$title ) echo "asdasd";
+            array_push($values, array($value->id, 1, 1, 1, 1, 1, addslashes($title), 0));
+        }
+
+        Controller::updateRows(Advert::tableName(), $values, array("title"));
+    }
+
+    public function parseAvito($place){
+        $result = $place->parseAll("https://www.avito.ru/profile/items/active");
         $links = $result["links"];
         $count_links = $result["count"];
 
-        // $links = array("/krasnodar/zapchasti_i_aksessuary/komplekt_effektnyh_lityh_diskov_r-18_5x114.3_s_auk_723451217","/krasnodar/zapchasti_i_aksessuary/komplekt_shikarnyh_lit._diskov_5x100_r.18_s_auktsion_723442360","/krasnodar/zapchasti_i_aksessuary/komplekt_super_diskov_r_18_5x100_s_auktsiona_723434740","/krasnodar/zapchasti_i_aksessuary/komplekt_otlichnyh_lit._diskov_5x114.3_r.19_s_auktsi_723424936","/krasnodar/zapchasti_i_aksessuary/komplekt_super_lityh_diskov_5x114.3_r.18_s_auktsion_723417257","/krasnodar/zapchasti_i_aksessuary/komplekt_effektnyh_avtodiskov_r18_5x114.3_s_auktsio_723197306","/krasnodar/zapchasti_i_aksessuary/komplekt_interesnyh_avtodiskov_r-18_5x114.3_s_aukts_723183564","/krasnodar/zapchasti_i_aksessuary/komplekt_otlichnyh_litya_5x114.3-5x100_r_17_s_auktsi_723171098","/krasnodar/zapchasti_i_aksessuary/komplekt_effektnyh_diskov_r.18_5x114.3_s_auktsiona_723163203","/krasnodar/zapchasti_i_aksessuary/komplekt_interesnyh_diskov_5x114.3_r-17_s_auktsiona_723149535","/krasnodar/zapchasti_i_aksessuary/komplekt_otlichnyh_diskov_r.18_5x114.3_s_auktsiona_723126331","/krasnodar/zapchasti_i_aksessuary/komplekt_shikarnyh_litya_r.17_5x114.3_s_auktsiona_723112440","/krasnodar/zapchasti_i_aksessuary/komplekt_super_litya_r-18_5x114.3_s_auktsiona_723089504","/krasnodar/zapchasti_i_aksessuary/komplekt_otlichnyh_diskov_r17_5x114.3_s_auktsiona_723079475","/krasnodar/zapchasti_i_aksessuary/komplekt_super_litya_5x100_r-18_s_auktsiona_723063570","/krasnodar/zapchasti_i_aksessuary/komplekt_interesnyh_lit._diskov_5x114.3_r_18_s_auk_723052033","/krasnodar/zapchasti_i_aksessuary/komplekt_otlichnyh_diskov_5x114.3_r_18_s_auktsiona_723040316","/krasnodar/zapchasti_i_aksessuary/komplekt_effektnyh_diskov_5x114.3_r-18_s_auktsiona_723028781","/krasnodar/zapchasti_i_aksessuary/komplekt_super_diskov_r.17_4x114.3_s_auktsiona_722994757","/krasnodar/zapchasti_i_aksessuary/komplekt_effektnyh_diskov_5x114.3_r.18_s_auktsiona_722981346","/krasnodar/zapchasti_i_aksessuary/komplekt_shikarnyh_diskov_5x114.3_r.17_s_auktsiona_722967503","/krasnodar/zapchasti_i_aksessuary/komplekt_shikarnyh_lit._diskov_5x114.3_r17_s_auktsio_722949791","/krasnodar/zapchasti_i_aksessuary/komplekt_shikarnyh_diskov_5x100_r17_s_auktsiona_718165070","/krasnodar/zapchasti_i_aksessuary/komplekt_shikarnyh_avtodiskov_5x114.3_r_18_s_auktsio_718156002","/krasnodar/zapchasti_i_aksessuary/komplekt_interesnyh_lityh_diskov_r-19_5x114.3_s_au_718144655","/krasnodar/zapchasti_i_aksessuary/komplekt_effektnyh_lit._diskov_r.18_5x114.3_s_aukts_718133136","/krasnodar/zapchasti_i_aksessuary/komplekt_shikarnyh_lit._diskov_5x114.3_r.19_s_auktsi_718119911","/krasnodar/zapchasti_i_aksessuary/komplekt_effektnyh_litya_5x100_r.18_s_auktsiona_718105433","/krasnodar/zapchasti_i_aksessuary/komplekt_interesnyh_avtodiskov_r-19_5x114.3_s_aukts_718096872","/krasnodar/zapchasti_i_aksessuary/komplekt_shikarnyh_lit._diskov_r19_5x114.3-4x114.3_71807689");
         $delete = array();
         $count = 0;
+        $new = array();
         if( count($links) ){
-            foreach ($links as $i => $link) {
-                $code = substr($link, strripos($link, "_")+1);
+            foreach ($links as $code => $title) {
+                if( !AvitoAdvert::model()->count("url='$code'") ){
+                    $av_ad = new AvitoAdvert();
+                    $av_ad->url = $code;
+                    if( $model = Advert::model()->find("title='$title'") ){
+                        $model->url = $code;
+                        $av_ad->advert_id = $model->id;
+                        $model->save();
 
-                $model = Advert::model()->find("url='$code'");
-                if( $model ){
-                    $model->link = $link;
-                    if( $model->save() ){
-                        $count++;
+                        Queue::model()->deleteAll("advert_id='".$model->id."' AND action_id=1");
                     }
-                }else{
-                    array_push($delete, $link);
-                }
-            }
+                    $av_ad->save();
 
-            $errors = array();
-            foreach ($delete as $i => $link) {
-                if( !$place->deleteAdvert($link) ){
-                    array_push($errors, $link);
-                }
+                    array_push($new, $code);
+                }else
+                    break;
             }
-
-            if( !count($errors) ){
-                echo "Парсинг прошел успешно, получено ссылок: $count из $count_links.<br>";
-                echo "Удалено объявлений: ".count($delete);
-            }else{
-                echo "Возникли ошибки удаления, получено ссылок: $count из $count_links.<br>";
-                print_r($errors);
-            }
+            if( count($new) )
+                Log::debug("Получены новые объявления на авито ".implode(", ", $new));
         }
     }
 
