@@ -200,9 +200,7 @@ class IntegrateController extends Controller
                 break;
             case 'update':
 
-                if( $place_name == "AVITO" ){
-                    $result = true;
-                }else if( $place_name == "VK" ){
+                if( $place_name == "VK" ){
                     $result = $place->updateAdvert($advert->url, $fields, $images);
                 }else{
                     Log::debug("Редактирование ".$advert->good->fields_assoc[3]->value." в аккаунте ".$account->login);
@@ -212,9 +210,7 @@ class IntegrateController extends Controller
                 break;
             case 'updateImages':
 
-                if( $place_name == "AVITO" ){
-                    $result = true;
-                }else if( $place_name == "VK" ){
+                if( $place_name == "VK" ){
                     $result = $place->updateAdvert($advert->url, $fields, $images);
                 }else{
                     Log::debug("Обновление фотографий ".$advert->good->fields_assoc[3]->value." в аккаунте ".$account->login);
@@ -224,12 +220,9 @@ class IntegrateController extends Controller
                 break;
             case 'updateWithImages':
 
-                if( $place_name == "AVITO" ){
-                    $result = true;
-                }else{
-                    Log::debug("Обновление с фотографиями ".$advert->good->fields_assoc[3]->value." в аккаунте ".$account->login);
-                    $result = $place->updateAdvert( $advert->url ,$fields,$images);
-                }
+                
+                Log::debug("Обновление с фотографиями ".$advert->good->fields_assoc[3]->value." в аккаунте ".$account->login);
+                $result = $place->updateAdvert( $advert->url ,$fields,$images);
 
                 break;
             case 'payUp':
