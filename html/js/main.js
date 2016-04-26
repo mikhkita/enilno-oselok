@@ -20,7 +20,7 @@ $(document).ready(function(){
 
         if( isMobile )
             $(".variants ul").css("height",myHeight-280);
-        $(".b-content").css("min-height",myHeight-$(".b-header").height()-$(".b-footer").height());
+        // $(".b-content").css("min-height",myHeight-$(".b-header").height()-$(".b-footer").height());
     }
 
     $(window).resize(resize);
@@ -115,7 +115,7 @@ $(document).ready(function(){
         $(".after-load").fadeIn(300);
         // $(".after-load").removeClass("after-load");
 
-        $(".b-content").css("min-height",myHeight-$(".b-header").height()-$(".b-footer").height());
+        // $(".b-content").css("min-height",myHeight-$(".b-header").height()-$(".b-footer").height());
     });
 
     $( ".city-tabs" ).tabs({

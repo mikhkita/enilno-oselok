@@ -10,12 +10,12 @@
                 <? endif; ?>
             </div>
         </div>
-        <div class="slide load-slide" style="display:none; background-image: url('<?php echo Yii::app()->request->baseUrl; ?>/html/i/back-main-2.jpg');">
+       <!--  <div class="slide load-slide" style="display:none; background-image: url('<?php echo Yii::app()->request->baseUrl; ?>/html/i/back-main-2.jpg');">
             <div class="b-block">
                 <h2>Получи 30 литров бензина за репост!</h2>
                 <p>Все подробности в нашей группе вконтакте:<br><a href="http://vk.com/kolesoonline?page=main" target="_blank">http://vk.com/kolesoonline</a></p>
             </div>
-        </div>
+        </div> -->
     </div>
     <div class="b b-filters">
         <div class="b-block gradient-grey main-tabs">

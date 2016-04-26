@@ -301,6 +301,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 		border-bottom: none;
 		
 	}
+
 .b-header{
 	text-align: left;
 }
@@ -664,7 +665,9 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
     			margin-top: 17px;
 			}
 				
-
+.b-content {
+	min-height: 331px;
+}
 .b-main-slider {
 	height: 300px;
 	overflow: hidden;

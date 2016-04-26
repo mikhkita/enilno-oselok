@@ -82,7 +82,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
                 <!-- <li><a href="<?=Yii::app()->createUrl('/about')?>" class="b-mobile-menu-a">О магазине</a></li> -->
                 <li><a href="<?=Yii::app()->createUrl('/delivery.html')?>" class="b-mobile-menu-a">Доставка</a></li>
                 <li><a href="<?=Yii::app()->createUrl('/guarantees.html')?>" class="b-mobile-menu-a">Гарантии</a></li>
-                <li><a href="<?=Yii::app()->createUrl('/payment.html')?>" class="b-mobile-menu-a">Оплата</a></li>
+                <li><a href="<?=Yii::app()->createUrl('/payment.html')?>" class="b-mobile-menu-a">Способы оплаты</a></li>
                 <li><a href="<?=Yii::app()->createUrl('/contacts.html')?>" class="b-mobile-menu-a">Контакты</a></li>
             </ul>
             <a href="tel:+<?=Yii::app()->params["city"]->phone?>" class="b-menu-call b-orange-butt">Позвонить</a>
@@ -92,7 +92,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
                 <ul class="clearfix not-mobile">
                     <li><a href="<?=Yii::app()->createUrl('/delivery.html')?>">Доставка</a></li>
                     <li><a href="<?=Yii::app()->createUrl('/guarantees.html')?>">Гарантии</a></li>
-                    <li><a href="<?=Yii::app()->createUrl('/payment.html')?>">Оплата</a></li>
+                    <li><a href="<?=Yii::app()->createUrl('/payment.html')?>">Способы оплаты</a></li>
                     <li><a href="<?=Yii::app()->createUrl('/contacts.html')?>">Контакты</a></li>
                 </ul>
                 <div class="clearfix b-mobile-top-line mobile-only">
@@ -196,7 +196,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
                             <li><a href="<?=Yii::app()->createUrl('/kolesoOnline/category',array('type' => 3))?>">Колеса</a></li>
                             <li><a href="<?=Yii::app()->createUrl('/delivery.html')?>">Доставка</a></li>
                             <li><a href="<?=Yii::app()->createUrl('/guarantees.html')?>">Гарантии</a></li>
-                            <li><a href="<?=Yii::app()->createUrl('/payment.html')?>">Оплата</a></li>
+                            <li><a href="<?=Yii::app()->createUrl('/payment.html')?>">Способы оплаты</a></li>
                             <li><a href="<?=Yii::app()->createUrl('/contacts.html')?>">Контакты</a></li>
                         </ul>
                     </li>
@@ -210,11 +210,11 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
                             <br>
                         <? endif; ?>
                        <div class="social clearfix">
-                            <h3>Присоединяйтесь к нам</h3>
+                            <!-- <h3>Присоединяйтесь к нам</h3>
                             <div id="vk_subscribe"></div>
                             <script type="text/javascript">
                             VK.Widgets.Subscribe("vk_subscribe", {soft: 1}, -118079986);
-                            </script>
+                            </script> -->
                             <!-- <div class="social-icon clearfix">
                                 <a class="tw" href="#"></a>
                                 <a class="yt" href="#"></a>
