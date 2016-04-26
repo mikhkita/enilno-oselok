@@ -261,7 +261,9 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
     <div id="b-popup-callback">
         <div class="for_all b-popup-small">
             <h3>Заказать звонок</h3>
-            <h4>Оставьте заявку и мы Вам перезвоним<br>в ближайшее время:</h4>
+            <h4>Для получения подробной информации Вы можете позвонить по телефону:</h4>
+            <h5><a href='tel:+<?=Yii::app()->params["city"]->phone?>'>+<?=$phone?></a></h5>
+            <h4>Или оставить заявку и мы Вам перезвоним в ближайшее время:</h4>
             <form action="<?=Yii::app()->createUrl('/kolesoOnline/mail/')?>" id="b-form-call" method="POST"  data-block="#b-popup-2">
                 <div class="b-popup-form">
                     <label for="name">Ваше имя *</label>
