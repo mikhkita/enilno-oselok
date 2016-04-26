@@ -43,11 +43,13 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
 									<? $is_available = Interpreter::generate($this->params[$type]["AVAILABLE"], $good, $dynamic); ?>
 									<? if($is_available != "В наличии"): ?>
 										<? $delivery = Interpreter::generate($this->params[$type]["SHIPPING"], $good,$dynamic);?>
-										<h4 <?if($delivery=="бесплатная"): $delivery = "+ доставка бесплатно"?>class="b-free-delivery"<?endif;?>> <span> <?=$delivery?></span> (<?=$is_available?>)</h4>
+										<? if($delivery):?>
+											<h4 <?if($delivery=="бесплатная"): $delivery = "+ доставка бесплатно"?>class="b-free-delivery"<?endif;?>> <span> <?=$delivery?></span> (<?=$is_available?>)</h4>
+										<? endif; ?>
 									<? endif; ?>
 								</td>
 								<td>
-									<a href="<?=Yii::app()->createUrl('/kolesoOnline/basket',array('id' => $good->id,'type' => $type))?>" class="b-orange-butt b-cart-delete">Удалить</a>
+									<a href="<?=Yii::app()->createUrl('/kolesoOnline/basket',array('id' => $good->id))?>" class="b-orange-butt b-cart-delete">Удалить</a>
 								</td>		
 							</tr>
 							<? else:?>
@@ -75,7 +77,9 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
 									<? $is_available = Interpreter::generate($this->params[$type]["AVAILABLE"], $good, $dynamic); ?>
 									<? if($is_available != "В наличии"): ?>
 										<? $delivery = Interpreter::generate($this->params[$type]["SHIPPING"], $good,$dynamic);?>
-										<h4 <?if($delivery=="бесплатная"): $delivery = "+ доставка бесплатно"?>class="b-free-delivery"<?endif;?>> <span> <?=$delivery?></span>	(<?=$is_available?>)</h4>
+										<? if($delivery):?>
+											<h4 <?if($delivery=="бесплатная"): $delivery = "+ доставка бесплатно"?>class="b-free-delivery"<?endif;?>> <span> <?=$delivery?></span>	(<?=$is_available?>)</h4>
+										<? endif; ?>
 									<?endif;?> 
 								</td>
 							</tr>

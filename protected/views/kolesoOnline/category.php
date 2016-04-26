@@ -100,13 +100,13 @@
                 </div>
             </div>
             <div class="right good-list">
-                <a href="http://vk.com/kolesoonline?page=category" target="_blank" class="b-vk-benz">
+                <!-- <a href="http://vk.com/kolesoonline?page=category" target="_blank" class="b-vk-benz">
                     <h3>Вступи в нашу <?=($mobile)?"<span>группу вк</span>":"группу «<span>Колесо.Онлайн</span>»"?> и</h3>
                     <h2>Выиграй 30 литров<?=($mobile)?"":" бензина"?></h2>
                     <div class="b-benz">
                         <span></span>
                     </div>
-                </a>
+                </a> -->
                 <div class="not-mobile">
                     <ul class="navigation clearfix">
                         <li><a href="<?=Yii::app()->createUrl('/kolesoOnline')?>"></a></li>
@@ -158,6 +158,7 @@
                 <div class="load" style="display:none;">Загрузка...</div>
                 <? else: ?>
                     <h3 class="b-no-goods">Товаров не найдено</h3>
+                    <h4 class="no-goods-popup"><a href="#" class="fancy" data-block="#b-popup-exit">Оставьте заявку</a> и наши менеджеры подберут вам дополнительные варианты</h4>
                 <? endif; ?>
                 <? if(count($similar)): ?>
                     <div id="similar" style="display:none;">

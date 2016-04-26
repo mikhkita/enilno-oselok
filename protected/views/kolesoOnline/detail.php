@@ -29,20 +29,24 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
 					</ul>
 				</div>
 				<div class="detail-price gradient-grey right">
-					<div class="clearfix">
-						<? $price = Interpreter::generate($this->params[$_GET['type']]["PRICE_CODE"], $good, $dynamic);?>
+					<? $price = Interpreter::generate($this->params[$_GET['type']]["PRICE_CODE"], $good, $dynamic);?>
 						<? $price = number_format($price, 0, ',', ' ' )." р."; $order = Interpreter::generate($this->params[$_GET['type']]["ORDER"], $good,$dynamic); ?>
 						<? $price = ( !$good->fields_assoc[20]->value || $good->fields_assoc[20]->value == 0 || $good->good_type_id == 3)? Yii::app()->params["zeroPrice"] : $price; ?>
-						<? $price = ($good->archive)?(($this->user)?("Продано за ".$price):"Продано"):$price; ?>
-						<h3><?=$price; ?></h3>
-						<? $is_available = "(".Interpreter::generate($this->params[$_GET['type']]["AVAILABLE"], $good, $dynamic).")"; if(!$good->fields_assoc[27]->value) $is_available = "";?>
-						<? if(!$good->archive): ?>
-							<? if($is_available != "(В наличии)"): ?>
-								<?if(!$good->archive):?><?$delivery = Interpreter::generate($this->params[$_GET['type']]["SHIPPING"], $good,$dynamic);?>
-								<h4 <?if($delivery=="бесплатная"): $delivery = "+ доставка бесплатно"?>class="b-free-delivery"<?endif;?>> <span> <?=$delivery?></span><?endif;?> <?=$is_available?></h4>
+						<? $price = ($good->archive)?(($this->user)?("Продано за ".$price):""):$price; ?>
+					<?if($price && $price != Yii::app()->params["zeroPrice"]):?>
+						<div class="clearfix">	
+							<h3><?=$price;?></h3>
+							<? $is_available = "(".Interpreter::generate($this->params[$_GET['type']]["AVAILABLE"], $good, $dynamic).")"; if(!$good->fields_assoc[27]->value) $is_available = "";?>
+							<? if(!$good->archive): ?>
+								<? if($is_available != "(В наличии)"): ?>
+									<?if(!$good->archive):?><?$delivery = Interpreter::generate($this->params[$_GET['type']]["SHIPPING"], $good,$dynamic);?>
+									<? if($delivery):?>
+										<h4 <?if($delivery=="бесплатная"): $delivery = "+ доставка бесплатно"?>class="b-free-delivery"<?endif;?>> <span> <?=$delivery?></span><?endif;?> <?=$is_available?></h4>
+									<? endif; ?>
+								<? endif; ?>
 							<? endif; ?>
-						<? endif; ?>
-					</div>
+						</div>
+					<? endif; ?>
 					<div class="clearfix">
 						<div class="left">
 							<? if(isset($_SESSION["BASKET"]) && array_search($good->id, $_SESSION["BASKET"]) !== false): ?>
@@ -51,7 +55,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
 								<? else:?>
 		                    		<a href="<?=Yii::app()->createUrl('/kolesoOnline/cart',array('id' => $good->id))?>" class="b-orange-butt">Купить</a>
 		                    	<? endif;?>
-							<? elseif(mb_strpos($price,"Продано",0,"UTF-8") === false && mb_strpos($price,Yii::app()->params["zeroPrice"],0,"UTF-8") === false): ?>
+							<? elseif($price && mb_strpos($price,Yii::app()->params["zeroPrice"],0,"UTF-8") === false): ?>
 								<? if(!$mobile): ?>
 		                        	<a href="<?=Yii::app()->createUrl('/kolesoOnline/basket',array('id' => $good->id,'add' => true))?>" class="b-orange-butt to-cart">в корзину</a>
 		                    	<? else:?>
@@ -60,7 +64,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
 		                    <? elseif(mb_strpos($price,Yii::app()->params["zeroPrice"],0,"UTF-8") !== false): ?>
 		                    	<a href="#" class="fancy b-orange-butt acc" data-block="#b-popup-buy" data-aftershow="category_buy">Уточнить цену</a>
 		                    <? else:?>
-		                    	<a href="#" class="b-orange-butt">Продано</a>
+		                    	<a href="#" class="b-orange-butt fancy" data-block="#b-popup-callback">Уточнить наличие</a>
 		                    <? endif; ?>
 						</div>
 						<div class="left">
