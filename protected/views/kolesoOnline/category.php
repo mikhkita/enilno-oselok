@@ -83,7 +83,7 @@
                         <? endforeach; ?>
                         </div>
                         <div class="clearfix">
-                            <h5>Ценовой диапазон</h5>
+                            <h5>Цена (за комплект)</h5>
                             <div class="slide-type">
                                 <input class="min-val price" type="text" maxlength="6" name="int[20][min]" placeholder="Мин.">
                                 <span class="dash">-</span>
