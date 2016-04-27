@@ -1333,7 +1333,17 @@ padding-top: 30px;}
 					.b-category .b-block .good-list .b-sort > .right .list-view:before {
 
 					}
-
+	.b-category .b-no-goods {
+		font-size: 45px;
+		font-weight: bold;
+	}
+	.b-category .no-goods-popup {
+		font-size: 36px;
+    	line-height: 1.5;
+	}
+#similar {
+	margin-top: 50px;
+}	
 .good-detail {
 
 }
@@ -1460,10 +1470,10 @@ padding-top: 30px;}
 					position: relative;
 					top: 0px;
 					color: #777;
-					margin-left: 8px;
+					margin-left: 4px;
 				}
 				.good-detail .b-block .detail-wrap .detail-price h4.b-free-delivery{
-					font-size: 30px;
+					font-size: 29px;
 				}
 				.good-detail .b-block .detail-wrap .detail-price a{
 					font-weight: 500;
@@ -1471,10 +1481,10 @@ padding-top: 30px;}
 					font-size: 28px;
 					text-transform: none;
 					border-bottom: 2px solid #f69303;
-					padding: 20px 100px 18px;
-					display: inline-block;
-					margin-top: 15px;
-					width: auto;
+					padding: 20px 0px 18px;
+				    display: inline-block;
+				    margin-top: 15px;
+				    width: 293px;
 				}
 				.good-detail .b-block .detail-wrap .detail-price h5,.good-detail .b-block .detail-wrap .detail-price h6{
 					margin-top: 35px;
@@ -1528,7 +1538,7 @@ padding-top: 30px;}
 			}
 			.good-detail .b-block .main-tabs .desc-tabs li span {
 				position: absolute;
-				bottom: -10px;
+				bottom: -9px;
 				overflow: hidden;
 				width: 36px;
 				height: 10px;
@@ -1635,12 +1645,13 @@ padding-top: 30px;}
 		font-size: 44px;
 		margin-bottom: 20px;
 	}
-	.b-popup-small h4 {
+	.b-popup-small h4,.b-popup-small h4.exit-desc {
 		line-height: 1.429;
 		margin-bottom: 30px;
 		font-size: 28px;
 		color: #414141;
 	}
+
 	.b-popup-small h5 {
 		line-height: 2;
 		margin-bottom: 37px;
@@ -1650,6 +1661,7 @@ padding-top: 30px;}
 		.b-popup-small .b-popup-form {
 			margin-bottom: 17px;
 		}
+
 		.b-popup-small .b-popup-form label {
 			display: block;
 			font-size: 28px;
@@ -1665,6 +1677,11 @@ padding-top: 30px;}
 			border-radius: 2px;
 			font-size: 28px;
 		}
+		.b-popup-small .b-popup-form textarea {
+			padding: 14px;
+			font-size: 28px;
+			resize:none;
+		}
 		.b-popup-small input[type=submit] {
 			display: block;
 			width: 100%;
@@ -1672,6 +1689,7 @@ padding-top: 30px;}
 			border-radius: 2px;
 			border-bottom: 2px solid #f69303;
 		}
+
 .b-popup-city {
 	text-align: left;
 	width: 700px;	
@@ -1979,6 +1997,9 @@ padding-top: 30px;}
     top: -1px;
     left: 0px;
     height: 31px;
+}
+.good-detail .b-block .detail-wrap .detail-price h4 span {
+	color: #414141;
 }
 .b-mobile-menu{
 	background-color: rgba(0,0,0,0.9);
