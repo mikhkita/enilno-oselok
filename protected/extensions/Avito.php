@@ -358,17 +358,25 @@ Class Avito {
     	sleep(rand(1,5));
     	$links = array();
     	$count = 0;
-    	if( $item = $html->find(".tabs-item_active .tabs-item__num", 0) ){
-    		$count = intval($item->plaintext);
+    	if( $tabs = $html->find(".tabs-item") ){
+    		foreach ($tabs as $key => $tab)
+    			if( $tab->find("span.tabs-item-title",0) )
+    				$count = intval($tab->find(".tabs-item-num",0)->plaintext);
+
     		$num = ceil($count/10);
     		for ($i=1; $i <= $num; $i++) { 
     			$html = str_get_html($this->curl->request($src."/rossiya?p=".$i));
     			sleep(rand(1,5));
-    			if( $images = $html->find(".photo-wrapper") ){
+    			if( $images = $html->find(".profile-item-title a") ){
+    				$code = "lololo";
     				foreach ($images as $j => $link) {
-    					array_push($links, $link->getAttribute("href"));
+    					$href = $link->getAttribute("href");
+    					$code = substr($href, strripos($href, "_")+1);
+    					$links[$code] = str_replace("&quot;", '"', trim($link->plaintext));
     				}
+    				if( AvitoAdvert::model()->count("url='$code'") ) break;
     			}
+
     		}
     	}
     	

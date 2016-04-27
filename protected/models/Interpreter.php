@@ -165,12 +165,7 @@ class Interpreter extends CActiveRecord
     }
 
     public function isNotIsset($result, $advert_id){
-    	$arr = explode(" ", $result);
-        while (mb_strlen($result, "UTF-8") > 50) {
-            array_shift($arr);
-            $result = trim(implode(" ", $arr));
-        }
-        $result = mb_strtoupper(mb_substr($result, 0, 1, "UTF-8"), "UTF-8").mb_substr($result, 1, NULL, "UTF-8");
+    	$result = Advert::validateTitle($result);
 
     	$words = Word::split($result);
     	$ids = Word::update($words);
