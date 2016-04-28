@@ -907,7 +907,7 @@ class KolesoOnlineController extends Controller
         }
     }
 
-    public function actionSearch($search){
+    public function actionSearch($search,$query){
     	$criteria=new CDbCriteria();
 		$search = explode(" ", $search);
 		// if( !$this->user ){
@@ -953,7 +953,8 @@ class KolesoOnlineController extends Controller
 
     	$this->renderPartial('search',array(
 			'goods' => $goods,
-			'titles' => $titles
+			'titles' => $titles,
+			'query' => $query
 		));
     }
 }

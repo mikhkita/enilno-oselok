@@ -5,3 +5,4 @@
 <? else: ?>    
     <li><span>Товаров не найдено</span></li>
 <? endif; ?>
+<input type="hidden" name="query" id="query" value="<?=$query?>">
