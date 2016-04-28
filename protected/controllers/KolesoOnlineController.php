@@ -950,7 +950,8 @@ class KolesoOnlineController extends Controller
 	            ->order("a.varchar_value ASC")
 	            ->queryAll();
 		}
-
+		// print_r($goods);
+		// die();
     	$this->renderPartial('search',array(
 			'goods' => $goods,
 			'titles' => $titles,
