@@ -2843,6 +2843,44 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 				margin-top: 42px;
     			margin-right: 30px;
 			}
+.b-search {
+
+}
+	.b-search .b-block {
+	    padding-top: 25px;
+		padding-bottom: 50px;
+	}
+		.b-search .b-block h1 {
+	    	margin-bottom: 20px;
+	    }
+		.b-search .b-block form {
+	    	margin-bottom: 20px;
+	    }
+	    .b-search .b-block input {
+	    	width: 500px;
+ 			box-sizing: border-box;
+		    padding: 7px;
+		    border: 1px solid rgb(140, 140, 140);
+		    border-radius: 2px;
+		    background-color: #f4f4f4;
+	    }
+	    .b-search .b-block button {
+	    	text-transform: none;
+	    	padding: 8px 25px;
+	    	border-radius: 2px;
+	    	margin-left: 5px;
+	    }
+
+	    .b-search .b-block .goods {
+	    	width: 872px;
+	    	display: inline-block;
+	    }
+	    .b-search .b-block .goods .gradient-grey:nth-child(4n) {
+	    	margin-right: 18px;
+	    }
+	    .b-search .b-block .goods .gradient-grey:nth-child(5n) {
+	    	margin-right: 0;
+	    }
 .b-copyright{
 	margin: -3px 0px -6px;
 	line-height: 22px;

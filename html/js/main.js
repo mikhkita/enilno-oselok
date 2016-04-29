@@ -122,6 +122,7 @@ $(document).ready(function(){
         active: false,
         collapsible :true
     });
+    $( ".search-tabs" ).tabs();
     $(".city-tabs>ul.ui-corner-all li").click(function(){
         if ($(this).hasClass("ui-state-active")) {
             $(".city-top h4 span").show();
