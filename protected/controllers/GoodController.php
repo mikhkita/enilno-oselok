@@ -918,15 +918,16 @@ class GoodController extends Controller
 	}
 
 	public function actionAdminPhotoUpdate($id){
-		$fields = Yii::app()->db->createCommand()->select('varchar_value')->from(GoodAttribute::tableName().' t')->where("t.attribute_id=3 AND t.good_id=$id")->queryAll();
+		$attribute = Attribute::model()->with("type")->find("t.id=3");
+		$fields = Yii::app()->db->createCommand()->select($attribute->type->code.'_value')->from(GoodAttribute::tableName().' t')->where("t.attribute_id=3 AND t.good_id=$id")->queryAll();
 		$goodType = Yii::app()->db->createCommand()->select('t.code')->from(Good::tableName().' g')->join(GoodType::tableName().' t', 'g.good_type_id=t.id')->where("g.id=$id")->queryAll();
 
-		if( !is_array($goodType) || !isset($goodType[0]["code"]) || !is_array($fields) || !isset($fields[0]["varchar_value"]) ){
+		if( !is_array($goodType) || !isset($goodType[0]["code"]) || !is_array($fields) || !isset($fields[0][$attribute->type->code."_value"]) ){
 			echo json_encode(array("result" => "error", "message" => "Не найден товар с кодом $id"));
 			return true;
 		}
 
-		$code = $fields[0]["varchar_value"];
+		$code = $fields[0][$attribute->type->code."_value"];
 		$goodType = $goodType[0]["code"];
 		$path = Yii::app()->params["imageFolder"]."/".$goodType."s/".$code;
 
@@ -995,7 +996,9 @@ class GoodController extends Controller
 	public function actionAdminCheckCode($good_type_id){
 		if( !isset($_GET["Good_attr"]) || !isset($_GET["Good_attr"][3]) ) echo json_encode(array("result" => "error", "message" => "Не передан код"));
 		$code = $_GET["Good_attr"][3];
-		if( GoodAttribute::model()->with("good")->count("good.good_type_id=$good_type_id AND varchar_value='$code'") ){
+		$attribute = Attribute::model()->with("type")->find("t.id=3");
+
+		if( GoodAttribute::model()->with("good")->count("good.good_type_id=$good_type_id AND ".$attribute->type->code."_value='$code'") ){
 			echo json_encode(array("result" => "error", "message" => "Товар с таким кодом уже существует"));
 		}else{
 			echo json_encode(array("result" => "success"));

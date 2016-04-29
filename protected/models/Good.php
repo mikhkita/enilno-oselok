@@ -549,16 +549,18 @@ class Good extends GoodFilter
 	}
 
 	public function getIdbyCode($good_codes,$good_type_id = NULL){
+		$attribute = Attribute::model()->with("type")->find("t.id=3");
+
 		$criteria = new CDbCriteria();
 		$criteria->with = array("fields");
 		$criteria->condition = "fields.attribute_id=3";
 		if($good_type_id && !empty($good_type_id)) $criteria->addInCondition('good_type_id',$good_type_id); 
-		$criteria->addInCondition('fields.varchar_value',$good_codes); 
-		$criteria->order = "field(fields.varchar_value,".implode(",", array_reverse($good_codes)).") DESC, t.id DESC";
+		$criteria->addInCondition('fields.'.$attribute->type->code.'_value',$good_codes); 
+		$criteria->order = "field(fields.".$attribute->type->code."_value,".implode(",", array_reverse($good_codes)).") DESC, t.id DESC";
 		$temp = array();
 		$model = GoodFilter::model()->findAll($criteria);
 		foreach($model as $good) {
-			$temp[$good->fields[0]->varchar_value] = $good->id;
+			$temp[$good->fields[0][$attribute->type->code."_value"]] = $good->id;
 		}
 		return $temp;
 	}
@@ -740,7 +742,6 @@ class Good extends GoodFilter
 
 	public function sold($archive = true,$type = 1){
 		$this->archive = $type;
-
 		if($archive) {
 			$code = $this->fields_assoc[3]->value;
 			if($this->good_type_id != 3) {

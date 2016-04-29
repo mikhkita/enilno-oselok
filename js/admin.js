@@ -562,10 +562,12 @@ $(document).ready(function(){
     function down(e){
         // alert(e.keyCode);
         if( e.keyCode == 13 && ctrldown ){
-            if( !$(".b-popup form").length ){
-                $(".ajax-create").click();
-            }else{
-                $(".fancybox-wrap form").trigger("submit",false);
+            if( $(".ajax-create").length ){
+                if( !$(".b-popup form").length ){
+                    $(".ajax-create").click();
+                }else{
+                    $(".fancybox-wrap form").trigger("submit",false);
+                }
             }
         }
         if( e.keyCode == 16 ){

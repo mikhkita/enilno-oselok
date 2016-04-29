@@ -85,7 +85,7 @@ class GoodTypeController extends Controller
 
 	public function actionAdminCodeDel($id)
 	{
-		
+		$attribute = Attribute::model()->with("type")->find("t.id=3");
 		if(isset($_POST['GoodType']['CodeDel']))
 		{
 			$arr = explode(PHP_EOL,$_POST['GoodType']['CodeDel']);
@@ -97,8 +97,8 @@ class GoodTypeController extends Controller
 			$criteria=new CDbCriteria();
 			$criteria->condition = '(good_type_id='.$id.' AND fields.attribute_id=3)';
 			$criteria->select = 'id';
-			$criteria->with = array('fields' => array( 'select' => 'attribute_id, varchar_value'));
-			$criteria->addInCondition('fields.varchar_value',$arr); 
+			$criteria->with = array('fields' => array( 'select' => 'attribute_id, '.$attribute->type->code.'_value'));
+			$criteria->addInCondition('fields.'.$attribute->type->code.'_value',$arr);
 
 			$model = Good::model()->findAll($criteria);
 

@@ -216,8 +216,8 @@ class Queue extends CActiveRecord
 					$item = array("advert_id" => isset($advert->id)?$advert->id:$advert, "action_id" => Queue::model()->codes[$code], "start" => NULL );
 						$item["start"] = NULL;
 
-					if( $advert->place->category_id == 2048 && in_array($item["action_id"], array(2,6)) )
-						$item["action_id"] = 8;
+					// if( $advert->place->category_id == 2048 && in_array($item["action_id"], array(2,6)) )
+					// 	$item["action_id"] = 8;
 
 					if( $code == "delete" && $advert->url === NULL ){
 						array_push($toDelete, $advert);	
@@ -370,7 +370,7 @@ class Queue extends CActiveRecord
 				array_push($city_ids, $value["city_id"]);
 
 			// Обновляем время выполнения объявлений, который нужно обновить или удалить
-			Queue::refreshUpdateTime($category_id, $city_ids, (($queue === NULL)?false:true) );
+			Queue::refreshUpdateTime($category_id, $city_ids, (($queue === true)?true:false) );
 		}
 	}
 
@@ -443,8 +443,9 @@ class Queue extends CActiveRecord
 		foreach ($city_ids as $i => $city_id) {
 			$queue = Queue::model()->with(array("advert.place"))->findAll("advert.city_id=$city_id AND action_id IN (2,3,4,6,8) AND state_id=1 AND place.category_id=$category_id".( ($not_full)?(" AND start IS NULL"):("") ));
 
-			// echo count($queue);
 			if( $queue ){
+				shuffle($queue);
+
 				$city_params = $cities[$city_id];
 				$city_params["interval"] = 1;
 				$days = Queue::getDays($city_params);
@@ -461,7 +462,7 @@ class Queue extends CActiveRecord
 				}
 
 				foreach ($queue as $key => $item) {
-					$cur_time += $city_params["interval"]*60;
+					$cur_time += rand(1*60,7*60);
 					if( $cur_time < $days[$cur_day]["start"] ){
 						$cur_time = $days[$cur_day]["start"];
 					}else if( $cur_time > $days[$cur_day]["end"]){
@@ -488,7 +489,7 @@ class Queue extends CActiveRecord
 	}
 
 	public function getDayByTime($time, $end){
-		$end = strtotime(str_replace("#", $params["end"], date("Y-m-d #:00", $time)));
+		$end = strtotime(str_replace("#", $end, date("Y-m-d #:00", $time)));
 		$i = 0;
 		while ( 1 ) {
 			if( $time <= $end ) return $i;

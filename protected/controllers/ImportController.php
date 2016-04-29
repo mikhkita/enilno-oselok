@@ -156,8 +156,10 @@ class ImportController extends Controller
 			$codes[] = $xls[$i][array_search($this->codeId, $sorted_titles)];
 		}
 
+		$attribute = Attribute::model()->with("type")->find("t.id=3");
 		$criteria = new CDbCriteria();
-    	$criteria->addInCondition("varchar_value",$codes);
+		$criteria->condition = "attribute_id=3";
+    	$criteria->addInCondition($attribute->type->code."_value",$codes);
 
 		$attrs = GoodAttributeFilter::model()->findAll($criteria);
 		foreach ($attrs as $item) {
@@ -176,9 +178,9 @@ class ImportController extends Controller
 
 		$goods = $data["items"];
 
-		foreach ($goods as $key => $good) {
-			$all_goods[$good->fields_assoc[3]->value] = $good;
-		}
+		if( $goods )
+			foreach ($goods as $key => $good)
+				$all_goods[$good->fields_assoc[3]->value] = $good;
 
 		$arResult["TITLES"] = $xls[0];
 
@@ -349,6 +351,7 @@ class ImportController extends Controller
 			        		}
 
 							$addFields[] = "('".$id."','".$key."',".implode(",", $val).",".((is_array($title["VARIANTS"]))?("'".$title["VARIANTS"][mb_strtolower($value,'UTF-8')]."'"):"NULL").")";
+							if( $key == 3 ) $goodCode = $value;
 						}
 		        	}
 		        }
