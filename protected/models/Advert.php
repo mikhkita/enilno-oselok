@@ -295,7 +295,7 @@ class Advert extends CActiveRecord
 	public function validateTitle($title){
 		$title = preg_replace('|([0-9]+),([0-9]+)|', '$1.$2', $title);
 		$title = str_replace(array("#", "''", "*", "'", "\\", ",", "+", " ,"), array("N", '"', "x", '"', "/", ", ", "+ ", ", "), $title);
-		$title = trim(str_replace(array("!", "@", "$", "%", "^", "&", "(", ")", ";", "'", ">", "<", "?", "№", "%", ":", "[", "]", "§", "{", "}", "|", "\n", "\r"), "", $title));
+		$title = trim(str_replace(array("!", "@", "$", "%", "^", "&", ";", "'", ">", "<", "?", "№", "%", ":", "[", "]", "§", "{", "}", "|", "\n", "\r"), "", $title));
 		if( mb_strripos($title, ".", 0, "UTF-8") == mb_strlen($title, "UTF-8")-1 ) 
 			$title = mb_substr($title, 0, -1, "UTF-8");
 
