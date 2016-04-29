@@ -476,6 +476,14 @@ $(document).ready(function(){
         $("#good").val($(el).parent().find("h4").text());
         $("#good-url").val(window.location.host+$(el).closest(".params-cont").find(".params-cont-a").attr("href"));
     }
+    customHandlers["detail_buy"] = function(el){
+        var popup = $(el.attr("data-block"));
+
+        popup.find("input[name='subject']").val("Покупка "+$("#buy-title").text());
+
+        $("#good").val($("#buy-title").text());
+        $("#good-url").val(window.location.href);
+    }
 
     customHandlers["detail_buy"] = function(el){
         var popup = $(el.attr("data-block"));
@@ -581,8 +589,10 @@ $(document).ready(function(){
         return false;
     });
 
+    var query = 0;
     $("#search").keyup(function(e){
         if( [36, 38, 39, 40, 13].indexOf(e.keyCode) == -1 ){
+            query++;
             $form = $(this).parents("form");
 
             if( $(this).val() == "" ){
@@ -592,13 +602,16 @@ $(document).ready(function(){
 
             if( $(".b-search-results li").length < 1 )
                 $(".b-search-results").fadeIn(150).html("<li><span>Загрузка...</span></li>");
+
             $.ajax({
                 type: "GET",
                 url: $form.attr("action"),
-                data: $form.serialize(),
+                data: $form.serialize()+"&query="+query,
                 success: function(msg){
-                    // console.log(msg);
-                    $(".b-search-results").fadeIn(150).html(msg);
+                    if($(msg).eq(-1).val() == query) 
+                        $(".b-search-results").fadeIn(150).html(msg);
+                    
+                    
                 }
             });
         }

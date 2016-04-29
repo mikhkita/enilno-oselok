@@ -55,14 +55,14 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
 								<? else:?>
 		                    		<a href="<?=Yii::app()->createUrl('/kolesoOnline/cart',array('id' => $good->id))?>" class="b-orange-butt">Купить</a>
 		                    	<? endif;?>
-							<? elseif($price && mb_strpos($price,Yii::app()->params["zeroPrice"],0,"UTF-8") === false): ?>
+							<? elseif($price && mb_strpos($price,Yii::app()->params["zeroPrice"],0,"UTF-8") === false && mb_strpos($price,"Продано за",0,"UTF-8") === false): ?>
 								<? if(!$mobile): ?>
 		                        	<a href="<?=Yii::app()->createUrl('/kolesoOnline/basket',array('id' => $good->id,'add' => true))?>" class="b-orange-butt to-cart">в корзину</a>
 		                    	<? else:?>
 		                    		<a href="<?=Yii::app()->createUrl('/kolesoOnline/cart',array('id' => $good->id))?>" class="b-orange-butt">Купить</a>
 		                    	<? endif;?>
 		                    <? elseif(mb_strpos($price,Yii::app()->params["zeroPrice"],0,"UTF-8") !== false): ?>
-		                    	<a href="#" class="fancy b-orange-butt acc" data-block="#b-popup-buy" data-aftershow="category_buy">Уточнить цену</a>
+		                    	<a href="#" class="fancy b-orange-butt acc" data-block="#b-popup-buy" data-aftershow="detail_buy">Уточнить цену</a>
 		                    <? else:?>
 		                    	<a href="#" class="b-orange-butt fancy" data-block="#b-popup-callback">Уточнить наличие</a>
 		                    <? endif; ?>
