@@ -907,7 +907,7 @@ class KolesoOnlineController extends Controller
         }
     }
 
-    public function actionSearch($search,$query){
+    public function actionSearch($search,$query,$partial = false){
     	$criteria=new CDbCriteria();
 		$search = explode(" ", $search);
 		// if( !$this->user ){
@@ -917,13 +917,13 @@ class KolesoOnlineController extends Controller
 		foreach ($search as $i => $val) {
 			array_push($values, "value LIKE '%$val%'");
 		}
-
+		if($partial) $limit = 15; else $limit = 100;
 		$data = Yii::app()->db->createCommand()
             ->select('*')
             ->from(Search::tableName().' s')
             ->join(Good::tableName().' g', 'g.id=s.good_id')
             ->where(implode(" AND ", $values))
-            ->limit(15)
+            ->limit($limit)
             ->queryAll();
 
         $model = array();
@@ -952,10 +952,17 @@ class KolesoOnlineController extends Controller
 		}
 		// print_r($goods);
 		// die();
-    	$this->renderPartial('search',array(
-			'goods' => $goods,
-			'titles' => $titles,
-			'query' => $query
-		));
+		if($partial) {
+	    	$this->renderPartial('_search',array(
+				'goods' => $goods,
+				'titles' => $titles,
+				'query' => $query
+			));
+    	} else {
+    		$this->render('search',array(
+				'goods' => $goods,
+				'titles' => $titles
+			));
+    	}
     }
 }

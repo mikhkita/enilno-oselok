@@ -227,12 +227,13 @@ class DromController extends Controller
         }
     }
     public function actionAdminVlad(){
-        $vk = new Curl("admin:481516@82.146.35.208:1212");
-        print_r($vk->request("http://2ip.ru"));
-        // print_r($vk->addAdvert(false,array(1,2,3,4)));
-        // $vk->deleteAdvert(163381);
-        // $vk->curl->removeCookies();
-        die();
+        
+        $drom = new Drom();
+        $drom->setUser("wheels70","u8atas5c");
+        $drom->auth();
+        $drom->upAdverts();
+        $drom->curl->removeCookies();
+
         // https://oauth.vk.com/access_token?client_id=5378578&client_secret=KI6VRCmR4BRiXpkBtVr9&redirect_uri=http://tomsk.koleso.online&code=f270032aaa3dd3a7cf
         // $photodoska = new Photodoska("82.146.35.208");
         // print_r($photodoska->auth());

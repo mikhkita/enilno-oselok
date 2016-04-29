@@ -39,10 +39,9 @@ Class Drom {
         return iconv('windows-1251', 'utf-8', $this->curl->request("https://www.farpost.ru/sign?mode=openid&return=".urlencode($redirect)."&login_by_password=1",$params));
     }
 
-    public function upAdverts(){
-        $links = $this->parseExpired();
+    public function upFreeAdverts($links){
         $upLinks = array();
-        Log::debug("Пользователь ".$this->login." ".count($links)." неактивных объявлений");
+        Log::debug("Пользователь ".$this->login." ".count($links)." неактивных бесплатных объявлений");
 
         foreach ($links as $key => $value) {
             $index = floor($key/50);
@@ -52,6 +51,54 @@ Class Drom {
         foreach ($upLinks as $key => $value) {
             $url = "http://baza.drom.ru/bulletin/service-configure?return_to=%2Fpersonal%2Fnon_active%2Fbulletins%3Fpage%3D2&from=personal.non_active&applier%5BprolongBulletin%5D=prolongBulletin".$value."=on&note=";
             $this->curl->request($url);
+        }
+    }
+
+    public function upAdverts(){
+        $links = $this->parseExpired();
+        $model = Advert::model()->with("good_filter")->findAll("url IN (".implode(",", $links).")");
+        $free = array();
+        $pay = array();
+        foreach ($model as $key => $item) {
+            if($item->good_filter->archive == 1) {
+                $this->deleteAdvert($item->url);
+            } else {
+                if($item->type_id == 869) {
+                    array_push($free, $item->url);
+                } else array_push($pay, $item->url);
+            }
+        }
+        if($free) {
+            $this->upFreeAdverts($free);
+        }
+        if($pay) {
+            $links = $pay;
+            $upLinks = array();
+            Log::debug("Пользователь ".$this->login." ".count($links)." неактивных платных объявлений");
+
+            foreach ($links as $key => $value) {
+                $index = floor($key/50);
+                $upLinks[$index] = $upLinks[$index]."&bulletin%5B".$value."%5D=on";
+            }
+
+            foreach ($upLinks as $key => $value) {
+                $url = "http://baza.drom.ru/bulletin/service-configure?return_to=%2Fpersonal%2Fnon_active%2Fbulletins%3Fpage%3D2&from=personal.non_active&applier%5BupBulletin%5D=upBulletin".$value."=on&note=";
+                $html = str_get_html(iconv('windows-1251', 'utf-8', $this->curl->request($url)));
+                $url = "https://baza.drom.ru/bulletin/service-apply";
+                $params = array();
+                foreach ($html->find('.paid-service form input[type="hidden"]') as $key => $item) {
+                    $params[$item->getAttribute("name")] = $item->getAttribute("value");
+                    if($item->getAttribute("name") == "price") $price = $item->getAttribute("value");
+                }
+                if($price > 50) {
+                    Log::debug("Поднятие объвлений больше 1р/шт.");
+                    return false;
+                }
+                foreach ($html->find('.paid-service form .viewdirBulletinTable input') as $key => $item) {
+                    $params[$item->getAttribute("name")] = "on";
+                }
+                $this->curl->request($url,$params);
+            }
         }
     }
 
