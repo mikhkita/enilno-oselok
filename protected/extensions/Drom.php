@@ -92,7 +92,7 @@ Class Drom {
                 }
                 if($price > 50) {
                     Log::debug("Поднятие объвлений больше 1р/шт.");
-                    return false;
+                    continue;
                 }
                 foreach ($html->find('.paid-service form .viewdirBulletinTable input') as $key => $item) {
                     $params[$item->getAttribute("name")] = "on";
