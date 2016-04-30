@@ -75,7 +75,7 @@ class Advert extends CActiveRecord
 			'url' => 'Ссылка',
 			'type_id' => 'Тип объявления',
 			'city_id' => 'Город',
-			'title' => 'Название',
+			'title' => 'Заголовок',
 			'ready' => 'Готовность',
 		);
 	}

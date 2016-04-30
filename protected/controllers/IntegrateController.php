@@ -772,8 +772,9 @@ class IntegrateController extends Controller
             $this->setParam( "SERVICE", "TASK_TIME", time() );
 
             if( !$this->doTask() ){
-                $this->setParam( "SERVICE", "TASK_TIME", 0 );
-                return true;
+                sleep(10);
+                // $this->setParam( "SERVICE", "TASK_TIME", 0 );
+                // return true;
             }
             if( $debug ) return true;
         }

@@ -96,6 +96,7 @@ class GoodType extends CActiveRecord
 			1 => "tires",
 			2 => "discs",
 			3 => "wheels",
+			101 => "parts",
 		);
 		return $codes[intval($id)];
 	}

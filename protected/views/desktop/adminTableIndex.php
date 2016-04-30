@@ -34,7 +34,7 @@
 			<? endforeach; ?>
 		<? else: ?>
 			<tr>
-				<td colspan=10>Пусто</td>
+				<td colspan=20>Пусто</td>
 			</tr>
 		<? endif; ?>
 	</table>

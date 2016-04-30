@@ -919,6 +919,7 @@ $(document).ready(function(){
                 tmpArr = val.split("\n"),
                 tmpError = new Array();
             for( var i in tmpArr ){
+                tmpArr[i] = tmpArr[i].trim();
                 if( !tryToAddVariant(tmpArr[i]) && tmpArr[i] != "" ){
                     tmpError.push(tmpArr[i]);
                 }

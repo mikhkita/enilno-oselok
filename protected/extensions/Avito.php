@@ -5,6 +5,11 @@ Class Avito {
     private $password = "";
     public $curl;
     public $captcha_curl;
+    public $cat_codes = array(
+    	1 => 19,
+    	2 => 19,
+    	101 => 18
+    );
     public $dir_codes = array(
         1 => 10048,
         2 => 10046
@@ -341,7 +346,7 @@ Class Avito {
 		$fields['metro_id'] = "";
 		$fields['district_id'] = "";
 		$fields['road_id'] = "";
-		$fields['params[5]'] = 19;
+		$fields['params[5]'] = $this->cat_codes[intval($good_type_id)];
 		$fields['params[709]'] = $this->dir_codes[intval($good_type_id)];
 		$fields['image'] = "";
 		$fields['videoUrl'] = "";

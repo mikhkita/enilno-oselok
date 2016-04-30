@@ -339,7 +339,8 @@ class GoodFilter extends CActiveRecord
 				$item["original"] = "/".$image_path."/".$image->id.".".$image->ext;
 				array_push($out, $item);
 			}else{
-				$image->delete();
+				// $image->delete();
+				echo "Удаление";
 			}
 		}
 
