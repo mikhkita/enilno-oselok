@@ -514,15 +514,13 @@ class IntegrateController extends Controller
 // Дром ------------------------------------------------------------------ Дром
     public function actionDromUp(){
         Log::debug("Начало автоподнятия дром");
-        $drom = new Drom();
-
+    
         $users = $this->getDromAccount();
 
         foreach ($users as $user) {
-            if( !isset($user->ip) ){
-                $drom->setUser($user->login,$user->password);
-                $drom->upAdverts();
-            }
+            $drom = new Drom((isset($user->ip)) ? $user->ip : NULL);
+            $drom->setUser($user->login,$user->password);
+            $drom->upAdverts();
         }
 
         Log::debug("Кончало автоподнятия дром");

@@ -123,9 +123,9 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
                         <a href="mailto:info@koleso.online" class="left mail">info@koleso.online</a>
                         <!-- <a href="#" class="right basket">Корзина (0)</a> -->
                     </div>
-                    <form action="<?=Yii::app()->createUrl('kolesoOnline/search')?>" method="GET" class="b-search-form">
+                    <form action="<?=Yii::app()->createUrl('kolesoOnline/search')?>" method="GET" id="search-form" class="b-search-form">
                         <input type="text" id="search" autocomplete="off" name="search" placeholder="Поиск">
-                        <button class="icon b-orange-butt">Поиск</button>
+                        <button type="submit" class="icon b-orange-butt">Поиск</button>
                         <ul class="b-search-results"></ul>
                         <a href="#" class="b-orange-butt b-search-close">Закрыть</a>
                     </form>
