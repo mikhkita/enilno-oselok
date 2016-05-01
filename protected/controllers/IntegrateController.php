@@ -60,7 +60,7 @@ class IntegrateController extends Controller
             if( !$this->getNext($category_id, $nth) ){
                 sleep(5);
             }else{
-                if( !$debug && $category_id == 2047 ) sleep(rand(40,120));
+                if( !$debug && $category_id == 2047 ) sleep(rand(30,70));
             }
               
             if( $debug ) return true;
@@ -69,8 +69,8 @@ class IntegrateController extends Controller
 
     public function checkTime($category_id = NULL){
         if( $category_id == 2047 ){
-            $date = (object) getdate();
-            if( $date->hours >= 0 && $date->hours < 12 ) return false;
+            // $date = (object) getdate();
+            // if( $date->hours >= 0 && $date->hours < 12 ) return false;
         }
         return true;
     }
