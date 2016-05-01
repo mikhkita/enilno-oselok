@@ -515,9 +515,9 @@ Class Drom {
             $params[$fields['title']] = "Заголовок: ".trim(str_ireplace($html->find("span[data-field=subject] nobr",0)->plaintext,"",$html->find("span[data-field=subject]",0)->plaintext))."\n\r";
             $params[$fields['state']] .= "Наличие товара: ".trim($html->find("span[data-field=goodPresentState]",0)->plaintext)."\n\r";
         	$params[$fields['code']] = $good_code;
-        	$params[$fields['realisation']] = $user_id;
+        	$params[$fields['realisation']] = $user_id; intval(str_replace(" ","", $str));
             $params[$fields['city']] = str_ireplace(array('в ','во '," "),"", $html->find("span[data-field=subject] nobr",0)->plaintext);
-            $params[$fields['price']] = $html->find("div[itemprop=price]",0) ? $html->find("div[itemprop=price]",0)->getAttribute('content') : NULL;
+            $params[$fields['price']] = $html->find('span[data-field="price"]',0) ? intval(str_replace(" ","",$html->find('span[data-field="price"]',0)->plaintext)) : NULL;
             $params[$fields['inSetQuantity']] = $html->find("span[data-field=inSetQuantity]",0) ? array_shift(explode(" ш", $html->find("span[data-field=inSetQuantity]",0)->plaintext)) : NULL;   
             $params[$fields['quantity']] .= "Количество комплектов: ".trim(array_shift(explode(" ш", $html->find("span[data-field=quantity]",0)->plaintext)))."\n\r";
 

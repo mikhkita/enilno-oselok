@@ -228,11 +228,14 @@ class DromController extends Controller
     }
     public function actionAdminVlad(){
         
-        $drom = new Drom();
-        $drom->setUser("wheels70","u8atas5c");
-        $drom->auth();
-        $drom->upAdverts();
-        $drom->curl->removeCookies();
+        $str = "  25 500 р.  ";
+        $int = intval(str_replace(" ","", $str));
+        print_r($int);
+        // $drom = new Drom();
+        // $drom->setUser("wheels70","u8atas5c");
+        // $drom->auth();
+        // $drom->upAdverts();
+        // $drom->curl->removeCookies();
 
         // https://oauth.vk.com/access_token?client_id=5378578&client_secret=KI6VRCmR4BRiXpkBtVr9&redirect_uri=http://tomsk.koleso.online&code=f270032aaa3dd3a7cf
         // $photodoska = new Photodoska("82.146.35.208");
