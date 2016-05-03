@@ -3043,7 +3043,15 @@ input[disabled="disabled"] {
         right: 8px;
         top: 5px;
     }
-    .photo-sortable li .b-photo-delete:hover{
+    .photo-sortable li .b-photo-paint{
+        opacity: 0.5;
+        color: #FFF;
+        font-size: 30px;
+        position: absolute;
+        left: 8px;
+        top: 5px;
+    }
+    .photo-sortable li .b-photo-delete:hover,.photo-sortable li .b-photo-paint:hover{
         opacity: 1;
     }
     .photo-sortable li.sortable-ghost{
@@ -3103,9 +3111,33 @@ input[disabled="disabled"] {
 .b-photo-site{
     border: 5px solid #D26A44 !important;
 }
-
-
-
+.photo-edit-cont {
+    margin-top: 50px;
+    width:1000px; 
+    height:1000px; 
+    overflow-y: auto; 
+    display: inline-block;
+}
+#color {
+    height: 17px;
+}
+#myCanvas {
+    position: relative;
+    display: inline-block;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+#myCanvas .rect {
+    position: absolute;
+    display: block;
+    z-index: 100;
+}
+#myCanvas .helper {
+    position: absolute;
+    display: none;
+    border: 1px dotted red;
+    z-index: 101;
+}
 
 
 

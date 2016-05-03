@@ -1853,4 +1853,80 @@ $(document).ready(function(){
         }
     });
 
+
+    if($( "#myCanvas" ).length) {
+        var isDrawing = false,beginX = null,beginY = null,endX,endY,top,left,width,height,Y,X,coords = [];
+        $( "body" ).on("mousemove","#myCanvas", function(event) {
+          if (!isDrawing) return;
+            if(!(beginX && beginY)) {
+                beginX = event.pageX;
+                beginY = event.pageY;
+            }
+            $("#myCanvas .helper").show();
+            endX = event.pageX;
+            endY = event.pageY;
+            X = (endX > beginX) ? beginX : endX; 
+            Y = (endY > beginY) ? beginY : endY; 
+            top = Y - $( "#myCanvas" ).offset().top;
+            left = X - $( "#myCanvas" ).offset().left;
+            width = Math.abs(endX - beginX);
+            height = Math.abs(endY - beginY);
+            $("#myCanvas .helper").css("top",top);
+            $("#myCanvas .helper").css("left",left);
+            $("#myCanvas .helper").css("width",width);
+            $("#myCanvas .helper").css("height",height);
+        });
+
+        $( "body" ).on("mousedown","#myCanvas", function() {
+            isDrawing = true;
+        });
+        
+        $( "body" ).on("mouseup","#myCanvas", function() {
+            if(isDrawing && beginX != endX && beginY != endY) {
+                var color = $("#color").val();
+                $( "#myCanvas" ).append("<div style='top:"+top+"px; left:"+left+"px; width:"+width+"px; height:"+height+"px; background: "+color+";' class='rect'></div>");
+                coords.push({top: top, left: left, width: width, height: height,color: color});
+                beginX = null; 
+                beginY = null;
+            }
+
+            $("#myCanvas .helper").hide();
+            isDrawing = false;
+        });
+        $("#b-photo-save").click(function() {
+            progress.setColor("#D26A44");
+            progress.start(1);
+            $.ajax({
+                url: $( "#myCanvas" ).attr("data-href"),
+                type: "POST",
+                data: {coords: coords},
+                success: function(msg){
+                    progress.end(function(){
+                        $(".photo-edit-cont").html(msg);
+                    });
+                }
+            });
+        });
+
+        $(document).bind("keydown",function( event ) {
+            if ( event.which == 90 ) {
+                $("#rect-cancel").click();
+                return false;
+            }
+        });
+
+        $("#rect-cancel").click(function(){
+            if(coords.length) {
+                coords.pop();
+                $( "#myCanvas .rect:last" ).remove(); 
+            }
+        });
+
+         $( "body" ).on("mouseleave","#myCanvas", function() {
+            beginX = null; 
+            beginY = null;
+            $("#myCanvas .helper").hide();
+            isDrawing = false;
+        });
+    }
 });
