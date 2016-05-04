@@ -486,15 +486,6 @@ $(document).ready(function(){
         $("#good-url").val(window.location.href);
     }
 
-    customHandlers["detail_buy"] = function(el){
-        var popup = $(el.attr("data-block"));
-
-        popup.find("input[name='subject']").val("Покупка "+$("#buy-title").text());
-
-        $("#good").val($("#buy-title").text());
-        $("#good-url").val(window.location.href);
-    }
-
     $('.detail-slider-for').slick({
         slidesToShow: 1,
         slidesToScroll: 1,
