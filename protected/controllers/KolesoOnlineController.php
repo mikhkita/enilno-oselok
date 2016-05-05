@@ -907,7 +907,7 @@ class KolesoOnlineController extends Controller
         }
     }
 
-    public function actionSearch($search,$query,$partial = false){
+    public function actionSearch($search,$query = NULL,$type= NULL, $partial = false){
     	$criteria=new CDbCriteria();
     	$search_str = $search;
 		$search = explode(" ", $search);
@@ -927,9 +927,9 @@ class KolesoOnlineController extends Controller
 		            ->where(implode(" AND ", $values))
 		            ->group("good_type_id")
 		            ->queryAll();
-		        if($data[0]['COUNT(good_type_id)'] > $data[1]['COUNT(good_type_id)'] && $data[0]['COUNT(good_type_id)'] > $data[2]['COUNT(good_type_id)']) $type = 1;
-		        if($data[1]['COUNT(good_type_id)'] > $data[2]['COUNT(good_type_id)'] && $data[1]['COUNT(good_type_id)'] > $data[0]['COUNT(good_type_id)']) $type = 2;
-		        if($data[2]['COUNT(good_type_id)'] > $data[1]['COUNT(good_type_id)'] && $data[2]['COUNT(good_type_id)'] > $data[0]['COUNT(good_type_id)']) $type = 3;
+		        if($data[0]['COUNT(good_type_id)'] >= $data[1]['COUNT(good_type_id)'] && $data[0]['COUNT(good_type_id)'] >= $data[2]['COUNT(good_type_id)']) $type = 1;
+		        if($data[1]['COUNT(good_type_id)'] >= $data[2]['COUNT(good_type_id)'] && $data[1]['COUNT(good_type_id)'] >= $data[0]['COUNT(good_type_id)']) $type = 2;
+		        if($data[2]['COUNT(good_type_id)'] >= $data[1]['COUNT(good_type_id)'] && $data[2]['COUNT(good_type_id)'] >= $data[0]['COUNT(good_type_id)']) $type = 3;
 		    }
 		    $data = Yii::app()->db->createCommand()
 	        ->select('*')
@@ -979,6 +979,7 @@ class KolesoOnlineController extends Controller
 		    	$goods = $this->getGoods(100,$type,NULL,NULL,$ids);
 		    }
 		}
+
 
 		if($partial) {
 	    	$this->renderPartial('_search',array(
