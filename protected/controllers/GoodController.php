@@ -13,7 +13,7 @@ class GoodController extends Controller
 	{
 		return array(
 			array('allow',
-				'actions'=>array('adminIndex','adminPhoto','adminCheckCode', 'adminPhotoUpdate','adminToArchive','adminChangeType','adminTest','updatePrices','updateAuctionLinks','adminCreate','adminUpdate','adminDelete','adminEdit','getAttrType','getAttr','adminAdverts','adminUpdateImages',"adminAddCheckbox","adminRemoveCheckbox","adminAddAllCheckbox","adminRemoveAllCheckbox", "adminRemoveManyCheckbox",'adminUpdateAll','adminAddSomeCheckbox','adminAddManyCheckbox','adminUpdateAdverts','adminViewSettings','adminSold','adminArchive','adminJoin','adminDeleteAll','adminSale','adminCustomer','adminArchiveAll','adminSaleTable','adminSaleDelete'),
+				'actions'=>array('adminIndex','adminPhoto','adminCheckCode', 'adminPhotoUpdate','adminToArchive','adminChangeType','adminTest','updatePrices','updateAuctionLinks','adminCreate','adminUpdate','adminDelete','adminEdit','getAttrType','getAttr','adminAdverts','adminUpdateImages',"adminAddCheckbox","adminRemoveCheckbox","adminAddAllCheckbox","adminRemoveAllCheckbox", "adminRemoveManyCheckbox",'adminUpdateAll','adminAddSomeCheckbox','adminAddManyCheckbox','adminUpdateAdverts','adminViewSettings','adminSold','adminArchive','adminJoin','adminDeleteAll','adminSale','adminCustomer','adminArchiveAll','adminSaleTable','adminSaleDelete',"adminPhotoEdit"),
 				'roles'=>array('manager'),
 			),
 			array('allow',
@@ -979,6 +979,52 @@ class GoodController extends Controller
 		$this->checkSitePhoto();
 
 		Task::model()->testGood($this->loadModel($id));
+	}
+
+	public function actionAdminPhotoEdit($id, $save = false, $partial = false){
+		$image = Image::model()->with("good")->findByPk($id);
+		$image_path = Yii::app()->params["imageFolder"]."/".GoodType::getCode($image->good->good_type_id)."/".$image->good->fields_assoc[3]->value."/".$id.".".$image->ext;
+		$size = getimagesize($image_path);
+		$percent = (1000/$size[0] > 1) ? 1 : 1000/$size[0];
+		$width = $size[0]*$percent;
+		$height = $size[1]*$percent;
+		if($save) {
+			if($image->ext == "jpg") $img = imagecreatefromjpeg($image_path); 
+		    if($image->ext == "png") $img = imagecreatefrompng($image_path); 
+			$img = imagecreatefromjpeg($image_path); 
+	        if($_POST['coords']) {
+	        	foreach ($_POST['coords'] as $key => $coord) {
+	        		$x1 = $coord['left']/$percent;
+	        		$y1 = $coord['top']/$percent;
+	        		$x2 = $x1 + $coord['width']/$percent;
+	        		$y2 = $y1 + $coord['height']/$percent;
+	        		$hex = substr($coord['color'],1);
+				    $a = hexdec(substr($hex,0,2)); 
+				    $b = hexdec(substr($hex,2,2)); 
+				    $c = hexdec(substr($hex,4,2)); 
+				    $color = imagecolorallocate($img, $a, $b, $c);
+	        		imagefilledrectangle($img, $x1, $y1, $x2, $y2, $color);
+	        		imagecolordeallocate($img, $color);
+	        	}
+		        if($image->ext == "jpg") imagejpeg($img, $image_path);
+		        if($image->ext == "png") imagepng($img, $image_path);
+		        imagedestroy($img);
+		    }
+	    }
+	    $image_path = Yii::app()->params["imageFolder"]."/".GoodType::getCode($image->good->good_type_id)."/".$image->good->fields_assoc[3]->value."/".$id.".".$image->ext;
+		$options = array(
+			"good_id" => $image->good->id,
+			"image_path" => $image_path,
+			"id" => $id,
+			'width' => $width,
+			'height' => $height,
+			'save' => $save
+		);
+		if( $save ){
+			$this->renderPartial('adminPhotoEdit', $options);
+		}else{
+			$this->render('adminPhotoEdit', $options);
+		}
 	}
 
 	public function actionAdminAddCheckbox($id = NULL){

@@ -227,10 +227,16 @@ class DromController extends Controller
         }
     }
     public function actionAdminVlad(){
+        $img = imagecreatefromjpeg(Yii::app()->basePath.'/1.jpg');
         
-        $str = "  25 500 р.  ";
-        $int = intval(str_replace(" ","", $str));
-        print_r($int);
+        $black = imagecolorallocate($img, 0, 0, 0);
+
+        // Рисование прямоугольника
+        imagefilledrectangle($img, 0, 0, 1.1, 1.1, $black);
+
+        // Сохранение изображения
+        imagejpeg($img, Yii::app()->basePath.'/11.jpg');
+        imagedestroy($img);
         // $drom = new Drom();
         // $drom->setUser("wheels70","u8atas5c");
         // $drom->auth();

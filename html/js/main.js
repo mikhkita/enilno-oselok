@@ -475,17 +475,8 @@ $(document).ready(function(){
         popup.find("input[name='subject']").val("Покупка "+$(el).parent().find("h4").text());
 
         $("#good").val($(el).parent().find("h4").text());
-        $("#good-url").val(window.location.host+$(el).closest(".params-cont").find(".params-cont-a").attr("href"));
+        $("#good-url").val("http://"+window.location.host+$(el).closest(".params-cont").find(".params-cont-a").attr("href"));
     }
-    customHandlers["detail_buy"] = function(el){
-        var popup = $(el.attr("data-block"));
-
-        popup.find("input[name='subject']").val("Покупка "+$("#buy-title").text());
-
-        $("#good").val($("#buy-title").text());
-        $("#good-url").val(window.location.href);
-    }
-
     customHandlers["detail_buy"] = function(el){
         var popup = $(el.attr("data-block"));
 
