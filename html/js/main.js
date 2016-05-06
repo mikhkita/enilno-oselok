@@ -122,7 +122,7 @@ $(document).ready(function(){
         active: false,
         collapsible :true
     });
-    $( ".search-tabs" ).tabs();
+    
     $(".city-tabs>ul.ui-corner-all li").click(function(){
         if ($(this).hasClass("ui-state-active")) {
             $(".city-top h4 span").show();
@@ -554,13 +554,12 @@ $(document).ready(function(){
                     $(".b-search-results li").eq(0).find("a").addClass("focus");
                 }
             }
-        }else if( e.keyCode == 13 ){
-            $("#search-form").submit();
-            // if( $(".b-search-results li a.focus").length ){
-            //     window.location.href = $(".b-search-results li a.focus").attr("href");
-            // }else if( $(".b-search-results li a").length ){
-            //     window.location.href = $(".b-search-results li:first a").attr("href");
-            // }
+        }else if( e.keyCode == 13 ){ 
+            if( $(".b-search-results li a.focus").length ){
+                window.location.href = $(".b-search-results li a.focus").attr("href");
+            }else if( $(".b-search-results li a").length ){
+                $("#search-form").submit();
+            }
             return false;
         }
     });
