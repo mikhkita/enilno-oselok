@@ -57,6 +57,9 @@ class User extends CActiveRecord
 		return array(
 			'role' => array(self::BELONGS_TO, 'Role', 'usr_rol_id'),
 			'settings' => array(self::HAS_MANY, 'UserSettings', 'user_id'),
+			'orders' => array(self::HAS_MANY, 'Order', 'user_id'),
+			'from_notes' => array(self::HAS_MANY, 'Note', 'from_user_id'),
+			'to_notes' => array(self::HAS_MANY, 'Note', 'to_user_id'),
 		);
 	}
 
