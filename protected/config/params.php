@@ -7,6 +7,7 @@ return array(
 	// this is used in error pages
 	'adminEmail'=>'webmaster@example.com',
 	'imageFolder'=>'upload/images',
+	'cacheFolder'=>'upload/cache',
 	'tempFolder'=>'upload/temp',
 	'adminPanel'=>'/admin/',
 	'defaultAdminRedirect'=>'/admin/desktop',

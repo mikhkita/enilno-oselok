@@ -740,9 +740,28 @@ class Good extends GoodFilter
 
 		// print_r($result);
 	}
+	public function removeDirectory($dir) {
+		if(is_dir($dir)) {
+		    if ($objs = glob($dir."/*")) {
+		       foreach($objs as $obj) {
+		         is_dir($obj) ? $this->removeDirectory($obj) : unlink($obj);
+		       }
+		    }
+		    rmdir($dir);
+		}
+	}
 
 	public function sold($archive = true,$type = 1){
 		$this->archive = $type;
+		$code = $this->fields_assoc[3]->value;
+		if($type == 1 && iconv_strlen($code) > 4 && stripos($code, "-") === false) {
+			$goodType = GoodType::getCode($this->good_type_id);
+			$cache = Yii::app()->params["cacheFolder"]."/".$goodType."/".$code;
+			$imgs = Yii::app()->params["imageFolder"]."/".$goodType."/".$code;
+			$this->removeDirectory($cache);
+			$this->removeDirectory($imgs);
+			Image::model()->deleteAll("good_id=".$this->id);
+		}
 		if($archive) {
 			$code = $this->fields_assoc[3]->value;
 			if($this->good_type_id != 3) {
