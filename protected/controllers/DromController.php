@@ -233,15 +233,14 @@ class DromController extends Controller
             $goodType = GoodType::getCode($good->good_type_id);
             $cache = Yii::app()->params["cacheFolder"]."/".$goodType."/".$code;
             $imgs = Yii::app()->params["imageFolder"]."/".$goodType."/".$code;
-            Good::removeDirectory($cache);
-            Good::removeDirectory($imgs);
+            $this->removeDirectory($cache);
+            $this->removeDirectory($imgs);
             $images = Image::model()->with("caps","cache")->findAll("good_id=".$good->id);
-            if($images)
             foreach ($images as $key => $image) {
                 $image->delete();
             }
             
-        }
+        }   
         // $drom = new Drom();
         // $drom->setUser("wheels70","u8atas5c");
         // $drom->auth();

@@ -1053,4 +1053,15 @@ class Controller extends CController
 
         return str_replace(array("[+CITY+]","[+IN+]","[+PHONE+]"), array(Yii::app()->params["city"]->name,Yii::app()->params["city"]->in,$phone), $str);
     }
+
+    public function removeDirectory($dir) {
+        if(is_dir($dir)) {
+            if ($objs = glob($dir."/*")) {
+               foreach($objs as $obj) {
+                 is_dir($obj) ? $this->removeDirectory($obj) : unlink($obj);
+               }
+            }
+            rmdir($dir);
+        }
+    }
 }

@@ -740,16 +740,6 @@ class Good extends GoodFilter
 
 		// print_r($result);
 	}
-	public function removeDirectory($dir) {
-		if(is_dir($dir)) {
-		    if ($objs = glob($dir."/*")) {
-		       foreach($objs as $obj) {
-		         is_dir($obj) ? $this->removeDirectory($obj) : unlink($obj);
-		       }
-		    }
-		    rmdir($dir);
-		}
-	}
 
 	public function sold($archive = true,$type = 1){
 		$this->archive = $type;
@@ -761,7 +751,6 @@ class Good extends GoodFilter
 			$this->removeDirectory($cache);
 			$this->removeDirectory($imgs);
 			$images = Image::model()->with("caps","cache")->findAll("good_id=".$this->id);
-			if($images)
 			foreach ($images as $key => $image) {
 				$image->delete();
 			}
