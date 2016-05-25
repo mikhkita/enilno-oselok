@@ -49,6 +49,7 @@ class Good extends GoodFilter
 			'type' => array(self::BELONGS_TO, 'GoodType', 'good_type_id'),
 			'adverts' => array(self::HAS_MANY, 'Advert', 'good_id'),
 			'sale' => array(self::HAS_ONE, 'Sale', 'good_id'),
+			'orders' => array(self::HAS_MANY, 'OrderGood', 'good_id'),
 			'images' => array(self::HAS_MANY, 'Image', 'good_id'),
 		);
 	}

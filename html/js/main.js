@@ -472,7 +472,7 @@ $(document).ready(function(){
     customHandlers["category_buy"] = function(el){
         var popup = $(el.attr("data-block"));
 
-        popup.find("input[name='subject']").val("Покупка "+$(el).parent().find("h4").text());
+        popup.find("input[name='subject']").val("Уточнить цену "+$(el).parent().find("h4").text());
 
         $("#good").val($(el).parent().find("h4").text());
         $("#good-url").val("http://"+window.location.host+$(el).closest(".params-cont").find(".params-cont-a").attr("href"));
@@ -480,7 +480,7 @@ $(document).ready(function(){
     customHandlers["detail_buy"] = function(el){
         var popup = $(el.attr("data-block"));
 
-        popup.find("input[name='subject']").val("Покупка "+$("#buy-title").text());
+        popup.find("input[name='subject']").val("Уточнить цену "+$("#buy-title").text());
 
         $("#good").val($("#buy-title").text());
         $("#good-url").val(window.location.href);
