@@ -228,6 +228,8 @@ class DromController extends Controller
     }
     public function actionAdminVlad(){
         $model = Good::model()->with("fields")->findAll("archive=1 AND attribute_id=3 AND LENGTH(varchar_value) = 5");
+        print_r($model);
+        die();
         foreach ($model as $key => $good) {
             $code = $good->fields_assoc[3]->value;
             $goodType = GoodType::getCode($good->good_type_id);
@@ -236,6 +238,7 @@ class DromController extends Controller
             Good::removeDirectory($cache);
             Good::removeDirectory($imgs);
             $images = Image::model()->with("caps","cache")->findAll("good_id=".$good->id);
+            if($images)
             foreach ($images as $key => $image) {
                 $image->delete();
             }

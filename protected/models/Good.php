@@ -761,6 +761,7 @@ class Good extends GoodFilter
 			$this->removeDirectory($cache);
 			$this->removeDirectory($imgs);
 			$images = Image::model()->with("caps","cache")->findAll("good_id=".$this->id);
+			if($images)
 			foreach ($images as $key => $image) {
 				$image->delete();
 			}
