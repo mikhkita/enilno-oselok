@@ -770,9 +770,9 @@ class IntegrateController extends Controller
             $this->setParam( "SERVICE", "TASK_TIME", time() );
 
             if( !$this->doTask() ){
-                sleep(10);
-                // $this->setParam( "SERVICE", "TASK_TIME", 0 );
-                // return true;
+                // sleep(10);
+                $this->setParam( "SERVICE", "TASK_TIME", 0 );
+                return true;
             }
             if( $debug ) return true;
         }
@@ -912,7 +912,7 @@ class IntegrateController extends Controller
 
         $good->getImages();
 
-        sleep(2);
+        // sleep(2);
 
         echo json_encode(array(
             "result" => "success"

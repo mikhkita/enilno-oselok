@@ -15,8 +15,6 @@
  */
 class Advert extends CActiveRecord
 {
-	static public $similar_percent = 50;
-
 	/**
 	 * @return string the associated database table name
 	 */
@@ -289,7 +287,11 @@ class Advert extends CActiveRecord
 	}
 
 	public function getPercent(){
-		return self::$similar_percent;
+		if( !isset(Yii::app()->params["avito_percent"]) ){
+			$percent = Controller::getForcedParam("AVITO", "PERCENT");
+			Yii::app()->params["avito_percent"] = ($percent)?$percent:50;
+		}
+		return Yii::app()->params["avito_percent"];
 	}
 
 	public function validateTitle($title){

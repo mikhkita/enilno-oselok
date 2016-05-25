@@ -13,7 +13,7 @@ class GoodController extends Controller
 	{
 		return array(
 			array('allow',
-				'actions'=>array('adminIndex','adminPhoto','adminCheckCode', 'adminPhotoUpdate','adminToArchive','adminChangeType','adminTest','updatePrices','updateAuctionLinks','adminCreate','adminUpdate','adminDelete','adminEdit','getAttrType','getAttr','adminAdverts','adminUpdateImages',"adminAddCheckbox","adminRemoveCheckbox","adminAddAllCheckbox","adminRemoveAllCheckbox", "adminRemoveManyCheckbox",'adminUpdateAll','adminAddSomeCheckbox','adminAddManyCheckbox','adminUpdateAdverts','adminViewSettings','adminSold','adminArchive','adminJoin','adminDeleteAll','adminSale','adminCustomer','adminArchiveAll','adminSaleTable','adminSaleDelete',"adminPhotoEdit"),
+				'actions'=>array('adminIndex','adminPhoto','adminGetNextPhoto','adminCheckCode', 'adminPhotoUpdate','adminToArchive','adminChangeType','adminTest','updatePrices','updateAuctionLinks','adminCreate','adminUpdate','adminDelete','adminEdit','getAttrType','getAttr','adminAdverts','adminUpdateImages',"adminAddCheckbox","adminRemoveCheckbox","adminAddAllCheckbox","adminRemoveAllCheckbox", "adminRemoveManyCheckbox",'adminUpdateAll','adminAddSomeCheckbox','adminAddManyCheckbox','adminUpdateAdverts','adminViewSettings','adminSold','adminArchive','adminJoin','adminDeleteAll','adminSale','adminCustomer','adminArchiveAll','adminSaleTable','adminSaleDelete',"adminPhotoEdit"),
 				'roles'=>array('manager'),
 			),
 			array('allow',
@@ -981,7 +981,22 @@ class GoodController extends Controller
 		Task::model()->testGood($this->loadModel($id));
 	}
 
-	public function actionAdminPhotoEdit($id, $save = false, $partial = false){
+	public function actionAdminGetNextPhoto($prev = NULL){
+		if( $prev !== NULL ){
+			$model = Image::model()->find("id=$prev");
+			$model = Image::model()->find("site=0".(($model)?" AND good_id=".$model->good_id:""));
+			if( !$model ) $model = Image::model()->find("site=0");
+		}else{
+			$model = Image::model()->find("site=0");
+		}
+		if( $model ){
+			$this->redirect( Yii::app()->createUrl('good/adminphotoedit',array('id'=>$model->id)) );
+		}else{
+			echo "Не найдено необработанных фотографий";
+		}
+	}
+
+	public function actionAdminPhotoEdit($id, $save = false, $partial = false, $next = false){
 		$image = Image::model()->with("good")->findByPk($id);
 		$image_path = Yii::app()->params["imageFolder"]."/".GoodType::getCode($image->good->good_type_id)."/".$image->good->fields_assoc[3]->value."/".$id.".".$image->ext;
 		$size = getimagesize($image_path);
@@ -989,6 +1004,9 @@ class GoodController extends Controller
 		$width = $size[0]*$percent;
 		$height = $size[1]*$percent;
 		if($save) {
+			if( Yii::app()->params["host"] != "koleso.online" ){
+				Image::model()->updateAll(array("site" => 1),"id=$id");
+			}
 			if($image->ext == "jpg") $img = imagecreatefromjpeg($image_path); 
 		    if($image->ext == "png") $img = imagecreatefrompng($image_path); 
 			$img = imagecreatefromjpeg($image_path); 
@@ -1010,6 +1028,11 @@ class GoodController extends Controller
 		        if($image->ext == "png") imagepng($img, $image_path);
 		        imagedestroy($img);
 		    }
+		    if( isset($_POST["next"]) && $_POST["next"] == 1 ) {
+		    	echo "http://".Yii::app()->params["host"].Yii::app()->createUrl('good/admingetnextphoto',array('prev'=>$id));
+		    	die();
+		    }
+
 	    }
 	    $image_path = Yii::app()->params["imageFolder"]."/".GoodType::getCode($image->good->good_type_id)."/".$image->good->fields_assoc[3]->value."/".$id.".".$image->ext;
 		$options = array(

@@ -36,7 +36,7 @@
 					<td class="align-left"><?=$item->id?></td>
 					<td><input type="checkbox" name="good_id" class="b-sess-checkbox" data-block="#b-sess-checkbox-list" <? if($item->isChecked()): ?>checked="checked"<? endif; ?> value="<?=$item->id?>"></td>
 					<? if($with_photos): ?>
-						<? $images = $item->getImages(1, array("small"), NULL, NULL, true);?>
+						<? $images = $item->getImages(1, array("small"), "all", NULL, true);?>
 						<td class="b-photo-td">
 							<a href="<?=$images[0]["original"]?>" class="fancy-img" rel="<?=$item->id?>"><img src="<?=$images[0]["small"]?>" alt=""></a>
 							<? foreach ($images as $key => $img): ?>
@@ -46,7 +46,7 @@
 					<? endif; ?>
 					<? if($filter_new_only): ?>
 						<td class="b-tool-nav">
-							<span href="<?php echo Yii::app()->createUrl('/good/admintoarchive',array('id' => $item->id))?>" class="ajax-request b-adverts-link"><p class="advert-info">-1</p></span>
+							<span href="<?php echo Yii::app()->createUrl('/good/admintoarchive',array('id' => $item->id))?>" class="ajax-request b-adverts-link"><p class="avert-info">-1</p></span>
 							<? foreach ($type_variants as $key => $var): ?>
 								<span href="<?php echo Yii::app()->createUrl('/good/adminchangetype',array('id' => $item->id, 'type' => $var->variant_id))?>" class="ajax-request b-adverts-link"><p class="advert-info"><?=$var->variant->value?></p></span>
 							<? endforeach; ?>
@@ -54,9 +54,9 @@
 					<? endif; ?>
 					<td style="min-width: 161px" class="b-tool-nav">
 						<? if($item->count_all_adverts): ?>
-							<span href="<?php echo Yii::app()->createUrl('/good/adminadverts',array('id'=>$item->id,'good_type_id'=> $_GET["good_type_id"],'GoodFilter_page' => ($pages->currentPage+1)))?>" class="ajax-form ajax-update b-adverts-link b-tooltip" title="Объявления"><p class="advert-info"><?=$item->count_all_adverts?> (<?=(!$item->count_url_adverts)?0:$item->count_url_adverts?>)</p></span>
+							<span href="<?php echo Yii::app()->createUrl('/good/adminadverts',array('id'=>$item->id,'good_type_id'=> $_GET["good_type_id"],'GoodFilter_page' => ($pages->currentPage+1)))?>" class="ajax-form ajax-update b-adverts-link b-tooltip" title="Объявления"><p class="avert-info"><?=$item->count_all_adverts?> (<?=(!$item->count_url_adverts)?0:$item->count_url_adverts?>)</p></span>
 						<? else: ?>
-							<p class="advert-info b-tooltip" title="Нет объявлений">0 (0)</p>
+							<p class="avert-info b-tooltip" title="Нет объявлений">0 (0)</p>
 						<? endif; ?>
 						<a href="<?php echo Yii::app()->createUrl('/good/adminphoto',array('id'=>$item->id))?>" class="b-tool b-tool-photo"></a>
 						<span href="<?php echo Yii::app()->createUrl('/good/adminsold',array('id'=>$item->id,'good_type_id' => $_GET['good_type_id']))?>" class="ajax-form ajax-create b-tool b-tool-sale" data-warning="Вы действительно хотите перенести товар &quot;<?=$item->fields_assoc[3]->value?>&quot; в архив?" title="Продано"></span>

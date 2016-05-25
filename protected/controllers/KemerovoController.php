@@ -66,4 +66,28 @@ class KemerovoController extends Controller
 
 		print_r(count($goods)." ".$ind);
 	}
+
+	public function actionPhoto(){
+		$images = Image::model()->with("caps")->findAll("site=1");
+		$ids = Controller::getIds($images, "good_id");
+
+		$goods = Good::model()
+			->filter( array("good_type_id"=>101), $ids )
+			->getPage( array('pageSize'=>10000) );
+		$goods = $goods["items"];
+		
+		print_r(count($images));
+
+		foreach ($goods as $i => $good) {
+			$images = $good->getImages();
+			foreach ($images as $i => $image) {
+				echo "<img src='".$image["big"]."' height=400>";
+			}
+		}
+
+		// Image::model()->updateAll(array("site" => 1), "id IN (".implode(",", $ids).")");
+		// ImageCap::model()->deleteAll();
+		// echo "<br>";
+		// print_r(Image::model()->count("site=1"));
+	}
 }

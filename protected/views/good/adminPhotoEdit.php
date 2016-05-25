@@ -3,9 +3,10 @@
 	<div class="b-section-nav-back clearfix">
 		<ul class="b-section-menu clearfix left" style="border-left: 0px; margin-right: 20px;">
 		    <li><a href="<? echo Yii::app()->createUrl('/good/adminphoto',array("id" => $good_id)); ?>">К фотографиям</a></li>
-			<li><a href="#" id="b-photo-save">Сохранить</a></li>
-			<li><a href="#" id="rect-cancel">Отменить (Ctrl + z)</a></li>
-			<li><a href="#"><input type="color" id="color" name="color" value="#000"></a></li>
+			<li><a href="#" class="b-photo-save">Сохранить</a></li>
+			<li><a href="#" class="b-photo-save b-photo-save-next b-save-button">Сохранить и продолжить (Ctrl + S)</a></li>
+			<li><a href="#" class="b-cancel-button" id="rect-cancel">Отменить (Ctrl + Z)</a></li>
+			<li><a href="#"><input type="color" id="color" name="color" value="#eee3d8"></a></li>
 		</ul>
 	</div>
 </div>

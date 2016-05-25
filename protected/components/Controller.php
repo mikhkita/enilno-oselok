@@ -440,6 +440,21 @@ class Controller extends CController
         return ( isset($this->settings[$category_code][$param_code]) )?$this->settings[$category_code][$param_code]:"";
     }
 
+    public function getForcedParam($category,$code){
+        $model = Yii::app()->db->createCommand()
+            ->select('*')
+            ->from(Settings::tableName().' s')
+            ->join(Category::tableName().' c', 'c.id=s.category_id')
+            ->where("c.code='$category' AND s.code='$code'")
+            ->queryAll();
+
+        if( !$model ){
+            return NULL;
+        }else{
+            return $model[0]["value"];
+        }
+    }
+
     public function getUserParam($code, $reload = false, $int_assoc = false){
         if( $this->user_settings == NULL || $reload ) $this->getUserSettings();
 

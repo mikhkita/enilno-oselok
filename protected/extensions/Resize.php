@@ -17,6 +17,7 @@ Class Resize {
         //     echo $fileName;
         //     die();
         // }
+
         $this->width  = imagesx($this->image);
         $this->height = imagesy($this->image);
     }

@@ -581,6 +581,18 @@ $(document).ready(function(){
         }
         if( e.keyCode == 27 && $(".fancybox-wrap").length ) $.fancybox.close();
 
+        if( e.keyCode == 90 && ctrldown ) {
+            if( $(".b-cancel-button").length ){
+                $(".b-cancel-button").click();
+                return false;
+            }
+        }else if( e.keyCode == 83 && ctrldown ){
+            if( $(".b-save-button").length ){
+                $(".b-save-button").click();
+                return false;
+            }
+        }
+
         if( $("#advert-title").length ){
             result = advertTitleCheck(e.keyCode);
             if( !result ) return false;
@@ -1856,63 +1868,82 @@ $(document).ready(function(){
 
     if($( "#myCanvas" ).length) {
         var isDrawing = false,beginX = null,beginY = null,endX,endY,top,left,width,height,Y,X,coords = [];
-        $( "body" ).on("mousemove","#myCanvas", function(event) {
-          if (!isDrawing) return;
-            if(!(beginX && beginY)) {
-                beginX = event.pageX;
-                beginY = event.pageY;
+        $( "body" ).on("mousemove", function(event) {
+            if( $("#myCanvas").length ){
+                if (!isDrawing) return;
+                if(!(beginX && beginY)) {
+                    beginX = event.pageX;
+                    beginY = event.pageY;
+                }
+                $("#myCanvas .helper").show();
+                endX = event.pageX;
+                endY = event.pageY;
+                X = (endX > beginX) ? beginX : endX; 
+                Y = (endY > beginY) ? beginY : endY; 
+                top = Y - $( "#myCanvas" ).offset().top;
+                left = X - $( "#myCanvas" ).offset().left;
+                width = Math.abs(endX - beginX);
+                height = Math.abs(endY - beginY);
+                $("#myCanvas .helper").css({
+                    "top" : top,
+                    "left" : left,
+                    "width" : width,
+                    "height" : height,
+                    "background" : $("#color").val()
+                });
             }
-            $("#myCanvas .helper").show();
-            endX = event.pageX;
-            endY = event.pageY;
-            X = (endX > beginX) ? beginX : endX; 
-            Y = (endY > beginY) ? beginY : endY; 
-            top = Y - $( "#myCanvas" ).offset().top;
-            left = X - $( "#myCanvas" ).offset().left;
-            width = Math.abs(endX - beginX);
-            height = Math.abs(endY - beginY);
-            $("#myCanvas .helper").css("top",top);
-            $("#myCanvas .helper").css("left",left);
-            $("#myCanvas .helper").css("width",width);
-            $("#myCanvas .helper").css("height",height);
         });
 
-        $( "body" ).on("mousedown","#myCanvas", function() {
-            isDrawing = true;
+        if( $("#color").length ){
+            if( $.cookie('color') ) $("#color").val($.cookie('color'));
+            $("#color").change(function(){
+                $.cookie('color',$("#color").val(), { expires: 7, path: '/' });
+            });
+        }
+
+        document.body.onselectstart = function(){
+            if( $("#myCanvas").length ) return false;
+        }
+
+        $( "body" ).on("mousedown", function() {
+            if( $("#myCanvas").length )
+                isDrawing = true;
         });
         
-        $( "body" ).on("mouseup","#myCanvas", function() {
-            if(isDrawing && beginX != endX && beginY != endY) {
-                var color = $("#color").val();
-                $( "#myCanvas" ).append("<div style='top:"+top+"px; left:"+left+"px; width:"+width+"px; height:"+height+"px; background: "+color+";' class='rect'></div>");
-                coords.push({top: top, left: left, width: width, height: height,color: color});
-                beginX = null; 
-                beginY = null;
-            }
+        $( "body" ).on("mouseup", function() {
+            if( $("#myCanvas").length ){
+                if(isDrawing && beginX != endX && beginY != endY) {
+                    var color = $("#color").val();
+                    $( "#myCanvas" ).append("<div style='top:"+top+"px; left:"+left+"px; width:"+width+"px; height:"+height+"px; background: "+color+";' class='rect'></div>");
+                    coords.push({top: top, left: left, width: width, height: height,color: color});
+                    beginX = null; 
+                    beginY = null;
+                }
 
-            $("#myCanvas .helper").hide();
-            isDrawing = false;
+                $("#myCanvas .helper").hide();
+                isDrawing = false;
+            }
         });
-        $("#b-photo-save").click(function() {
+        $(".b-photo-save").click(function() {
+            var $this = $(this);
             progress.setColor("#D26A44");
             progress.start(1);
+
             $.ajax({
                 url: $( "#myCanvas" ).attr("data-href"),
                 type: "POST",
-                data: {coords: coords},
+                data: {coords: coords, next: ($this.hasClass("b-photo-save-next"))?1:0 },
                 success: function(msg){
-                    progress.end(function(){
-                        $(".photo-edit-cont").html(msg);
-                    });
+                    if( $this.hasClass("b-photo-save-next") ){
+                        window.location.href = msg;
+                        progress.end(function(){});
+                    }else{
+                        progress.end(function(){
+                            $(".photo-edit-cont").html(msg);
+                        });
+                    }
                 }
             });
-        });
-
-        $(document).bind("keydown",function( event ) {
-            if ( event.which == 90 ) {
-                $("#rect-cancel").click();
-                return false;
-            }
         });
 
         $("#rect-cancel").click(function(){
@@ -1922,11 +1953,11 @@ $(document).ready(function(){
             }
         });
 
-         $( "body" ).on("mouseleave","#myCanvas", function() {
-            beginX = null; 
-            beginY = null;
-            $("#myCanvas .helper").hide();
-            isDrawing = false;
-        });
+        // $( "body" ).on("mouseleave","#myCanvas", function() {
+        //     beginX = null; 
+        //     beginY = null;
+        //     $("#myCanvas .helper").hide();
+        //     isDrawing = false;
+        // });
     }
 });

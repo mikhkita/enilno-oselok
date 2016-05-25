@@ -555,7 +555,7 @@ td.b-photo-td{
             background-color: #000000 !important;
             color: #FCEFBE;
         }
-        .b-table tr td .advert-info{
+        .b-table tr td .avert-info{
             display: inline-block;
             margin: 1px 3px 0px;
             vertical-align: top;
@@ -3125,6 +3125,7 @@ input[disabled="disabled"] {
     position: relative;
     display: inline-block;
     background-size: contain;
+    overflow: hidden;
     background-repeat: no-repeat;
 }
 #myCanvas .rect {
@@ -3135,8 +3136,8 @@ input[disabled="disabled"] {
 #myCanvas .helper {
     position: absolute;
     display: none;
-    border: 1px dotted red;
     z-index: 101;
+    opacity: 0.5;
 }
 
 
