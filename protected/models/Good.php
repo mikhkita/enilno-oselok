@@ -760,7 +760,11 @@ class Good extends GoodFilter
 			$imgs = Yii::app()->params["imageFolder"]."/".$goodType."/".$code;
 			$this->removeDirectory($cache);
 			$this->removeDirectory($imgs);
-			Image::model()->deleteAll("good_id=".$this->id);
+			$images = Image::model()->with("caps","cache")->findAll("good_id=".$this->id);
+			foreach ($images as $key => $image) {
+				$image->delete();
+			}
+			
 		}
 		if($archive) {
 			$code = $this->fields_assoc[3]->value;

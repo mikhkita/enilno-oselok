@@ -235,7 +235,10 @@ class DromController extends Controller
             $imgs = Yii::app()->params["imageFolder"]."/".$goodType."/".$code;
             Good::removeDirectory($cache);
             Good::removeDirectory($imgs);
-            Image::model()->deleteAll("good_id=".$good->id);
+            $images = Image::model()->with("caps","cache")->findAll("good_id=".$good->id);
+            foreach ($images as $key => $image) {
+                $image->delete();
+            }
             
         }
         // $drom = new Drom();
