@@ -743,6 +743,19 @@ class Good extends GoodFilter
 
 	public function sold($archive = true,$type = 1){
 		$this->archive = $type;
+		$code = $this->fields_assoc[3]->value;
+		if($type == 1 && iconv_strlen($code) > 4 && stripos($code, "-") === false) {
+			$goodType = GoodType::getCode($this->good_type_id);
+			$cache = Yii::app()->params["cacheFolder"]."/".$goodType."/".$code;
+			$imgs = Yii::app()->params["imageFolder"]."/".$goodType."/".$code;
+			$this->removeDirectory($cache);
+			$this->removeDirectory($imgs);
+			$images = Image::model()->with("caps","cache")->findAll("good_id=".$this->id);
+			foreach ($images as $key => $image) {
+				$image->delete();
+			}
+			
+		}
 		if($archive) {
 			$code = $this->fields_assoc[3]->value;
 			if($this->good_type_id != 3) {

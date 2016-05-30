@@ -227,16 +227,20 @@ class DromController extends Controller
         }
     }
     public function actionAdminVlad(){
-        $img = imagecreatefromjpeg(Yii::app()->basePath.'/1.jpg');
-        
-        $black = imagecolorallocate($img, 0, 0, 0);
-
-        // Рисование прямоугольника
-        imagefilledrectangle($img, 0, 0, 1.1, 1.1, $black);
-
-        // Сохранение изображения
-        imagejpeg($img, Yii::app()->basePath.'/11.jpg');
-        imagedestroy($img);
+        $model = Good::model()->with("fields")->findAll("archive=1 AND attribute_id=3 AND LENGTH(varchar_value) = 5");
+        foreach ($model as $key => $good) {
+            $code = $good->fields_assoc[3]->value;
+            $goodType = GoodType::getCode($good->good_type_id);
+            $cache = Yii::app()->params["cacheFolder"]."/".$goodType."/".$code;
+            $imgs = Yii::app()->params["imageFolder"]."/".$goodType."/".$code;
+            $this->removeDirectory($cache);
+            $this->removeDirectory($imgs);
+            $images = Image::model()->with("caps","cache")->findAll("good_id=".$good->id);
+            foreach ($images as $key => $image) {
+                $image->delete();
+            }
+            
+        }   
         // $drom = new Drom();
         // $drom->setUser("wheels70","u8atas5c");
         // $drom->auth();
