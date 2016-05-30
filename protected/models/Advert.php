@@ -139,12 +139,13 @@ class Advert extends CActiveRecord
 		return $this->save();
 	}
 
-	public function getUrl(){
-		if( $this->place->category_id == 2047 ){
+	public function getUrl($category_id = NULL){
+		$category_id = ($category_id === NULL)?$this->place->category_id:$category_id;
+		if( $category_id == 2047 ){
 			return "http://baza.drom.ru/".$this->url.".html";
-		}else if( $this->place->category_id == 2048 ){
+		}else if( $category_id == 2048 ){
 			return "http://avito.ru/".$this->url;
-		}else if( $this->place->category_id == 3875 ){
+		}else if( $category_id == 3875 ){
 			return "https://vk.com/market-118079986?w=product-118079986_".$this->url;
 		}
 	}
@@ -172,8 +173,10 @@ class Advert extends CActiveRecord
 			$options['pagination'] = false;
 		} else {
 			$options['pagination'] = array('pageSize' => 300);
-			$criteria->with = $with;
 		}
+
+		if( $with )
+			$criteria->with = $with;
 
 		if(isset($params['Place'])) {
 	    	$criteria->addInCondition("place_id",$params['Place']);

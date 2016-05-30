@@ -13,7 +13,7 @@ class AdvertController extends Controller
 	{
 		return array(
 			array('allow',
-				'actions'=>array('adminIndex','adminTitleEdit','adminUpDrom','adminRemove','admintitles','adminUpAvito','adminAction','adminFindById'),
+				'actions'=>array('adminIndex','adminSee','adminSeeList','adminTitleEdit','adminUpDrom','adminRemove','admintitles','adminUpAvito','adminAction','adminFindById'),
 				'roles'=>array('manager'),
 			),
 			array('allow',
@@ -87,6 +87,53 @@ class AdvertController extends Controller
 		Queue::addAll($adverts, "up", 0, 0);
 
 		echo json_encode(array("result" => "success"));
+	}
+
+	public function actionAdminSee(){
+		$this->render('adminSee',array(
+			'model' => GoodType::model()->findAll()
+		));
+	}
+
+	public function actionAdminSeeList($good_type_id){
+		$model = Place::model()->findAll("good_type_id=$good_type_id");
+
+		if( !$model ) throw new CHttpException(404,'Не найдены площадки');
+
+		$place = array(
+			"Дром Платные" => array( "code" => 2047, "type" => array(868, 2129) ),
+			"Дром Бесплатные" => array( "code" => 2047, "type" => array(869) ),
+			"Авито" => array( "code" => 2048 ),
+			"ВК" => array( "code" => 3875 )
+		);
+
+		$filter = array("Place" => array(), "Attr" => array( 58 => array(1081) ));
+
+		foreach ($model as $key => $value)
+			array_push($filter["Place"], $value->id);
+
+		$dataProvider = Advert::filter($filter,array('type','city','place.category','place.goodType'),"*");
+
+		$data = $dataProvider->getData();
+
+		$temp = GoodAttribute::getCodeById( Controller::getIds($data, "good_id") );
+
+		$goods = array();
+		foreach ($data as $key => $value){
+			if( !isset($goods[ $temp[$value->good_id] ]) ){
+				$goods[ $temp[$value->good_id] ] = $place;
+			}
+			foreach ($place as $i => $item) {
+				if( $item["code"] == $value->place->category->id && (!isset($item["type"]) || in_array($value->type_id, $item["type"])) ){
+					$goods[$temp[$value->good_id]][$i]["url"] = $value->url;
+				}
+			}
+		}
+
+		$this->render('adminSeeList',array(
+			'place' => $place,
+			'goods' => $goods
+		));
 	}
 
 	public function actionAdminAction($action){
