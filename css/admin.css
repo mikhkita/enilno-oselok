@@ -503,6 +503,14 @@ td.b-photo-td{
             border-left: 0px;
             padding-left: 0px;
         }
+        .b-table td.grey{
+            background-color: #ccc;
+        }
+        .b-table td a.green{
+            color: #0b0;
+            display: block;
+            text-align: center;
+        }
         .b-table td b{
             color: #D26A44;
             /*font-weight: 700 !important;*/

@@ -5,19 +5,19 @@
 		</ul>
 	</div>
 </div>
-<h1 class="b-with-nav">Охват</h1>
+<h1 class="b-with-nav">Охват (Томск)</h1>
 <table class="b-table" border="1">
 	<tr>
-		<th>Товары</th>
+		<th>Все товары (<?=count($goods)?>)</th>
 		<? foreach ($place as $city => $item): ?>
-			<th><?=$city?></th>
+			<th><?=$city?> (<span title="Выложено">В: <?=$item["count"]?></span>, <span title="Не выложено">Н: <?=(count($goods)-$item["count"]-$item["grey"])?></span>, <span title="Дублей">Д: <?=$item["double"]?>)</span></th>
 		<? endforeach; ?>
 	</tr>
 	<? foreach ($goods as $code => $good): ?>
 		<tr>
-			<td><?=$code?></td>
-		<? foreach ($good as $city => $item): ?>
-			<td><? if(isset($item["url"])): ?>+<? endif; ?></td>
+			<td><?=$good["good"]->fields_assoc[3]->value?></td>
+		<? foreach ($good["adverts"] as $city => $item): ?>
+			<td <? if( $item["grey"] === true ): ?>class="grey"<? endif; ?>> <a href="#" class="green"><? if(isset($item["url"])): ?>Ссылка<? endif; ?></a></td>
 		<? endforeach; ?>
 		</tr>
 	<? endforeach; ?>

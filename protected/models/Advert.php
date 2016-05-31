@@ -195,6 +195,9 @@ class Advert extends CActiveRecord
 			if( count($good_ids) )
 				$criteria->order = "field(good_id,".implode(",", array_reverse($good_ids)).") DESC, t.id DESC";
 		}
+		if(isset($params['ids'])) {
+			$criteria->addInCondition("good_id", $params['ids']);
+		}
 		if(isset($params['Attr'][37])) {
 	    	$criteria->addInCondition("type_id",$params['Attr'][37]);
 	    }

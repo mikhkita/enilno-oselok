@@ -96,39 +96,60 @@ class AdvertController extends Controller
 	}
 
 	public function actionAdminSeeList($good_type_id){
-		$model = Place::model()->findAll("good_type_id=$good_type_id");
-
-		if( !$model ) throw new CHttpException(404,'Не найдены площадки');
-
 		$place = array(
-			"Дром Платные" => array( "code" => 2047, "type" => array(868, 2129) ),
-			"Дром Бесплатные" => array( "code" => 2047, "type" => array(869) ),
-			"Авито" => array( "code" => 2048 ),
-			"ВК" => array( "code" => 3875 )
+			"Дром Платные" => array( "code" => 2047, "type" => array(868, 2129), "double" => 0, "grey" => 0, "count" => 0 ),
+			"Дром Бесплатные" => array( "code" => 2047, "type" => array(869), "double" => 0, "grey" => 0, "count" => 0 ),
+			"Авито Томск" => array( "code" => 2048, "double" => 0, "grey" => 0, "count" => 0 ),
+			"ВК" => array( "code" => 3875, "double" => 0, "grey" => 0, "count" => 0 )
 		);
 
-		$filter = array("Place" => array(), "Attr" => array( 58 => array(1081) ));
+		$goods = Good::model()
+			->filter( array("good_type_id"=>$good_type_id, "attributes"=>array( 43 => array(1860, 1857, 1419, 1418) )) )
+			->sort(array(
+				"field"=>3,
+				"type"=>"ASC",
+			))->getPage(
+				array(
+			    	'pageSize'=>10000,
+			    )
+			);
+		$goods = Controller::getAssoc($goods["items"], "id");
 
-		foreach ($model as $key => $value)
-			array_push($filter["Place"], $value->id);
-
-		$dataProvider = Advert::filter($filter,array('type','city','place.category','place.goodType'),"*");
+		$dataProvider = Advert::filter(array("ids" => Controller::getIds($goods), "Attr" => array(58 => array(3885, 1081)) ), array('type','city','place.category','place.goodType'), "*");
 
 		$data = $dataProvider->getData();
 
-		$temp = GoodAttribute::getCodeById( Controller::getIds($data, "good_id") );
+		// $temp = GoodAttribute::getCodeById( Controller::getIds($data, "good_id") );
 
-		$goods = array();
+		foreach ($goods as $key => $value) {
+			$goods[ $key ] = array(
+				"adverts" => $place,
+				"good" => $goods[ $key ]
+			);
+		}
+
+		$double = 0;
 		foreach ($data as $key => $value){
-			if( !isset($goods[ $temp[$value->good_id] ]) ){
-				$goods[ $temp[$value->good_id] ] = $place;
-			}
 			foreach ($place as $i => $item) {
 				if( $item["code"] == $value->place->category->id && (!isset($item["type"]) || in_array($value->type_id, $item["type"])) ){
-					$goods[$temp[$value->good_id]][$i]["url"] = $value->url;
+					if( isset($goods[$value->good_id]["adverts"][$i]["url"]) ){
+						// echo $temp[$value->good_id]."<br>";
+						$place[$i]["double"] = $place[$i]["double"]+1;
+					}else{
+						$goods[$value->good_id]["adverts"][$i]["url"] = $value->url;
+						$place[$i]["count"] = $place[$i]["count"]+1;
+					}
+					
 				}
 			}
 		}
+
+		foreach ($goods as &$good)
+			foreach ($good["adverts"] as $city => $item)
+				if( ( in_array($city, array("Дром Бесплатные", "Авито Томск")) ) && $good["good"]->fields_assoc[27]->value != "Томск" ){
+					$good["adverts"][$city]["grey"] = true;
+					$place[$city]["grey"] = $place[$city]["grey"]+1;
+				}		
 
 		$this->render('adminSeeList',array(
 			'place' => $place,
