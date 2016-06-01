@@ -115,7 +115,7 @@ class AdvertController extends Controller
 			);
 		$goods = Controller::getAssoc($goods["items"], "id");
 
-		$dataProvider = Advert::filter(array("ids" => Controller::getIds($goods), "Attr" => array(58 => array(3885, 1081)) ), array('type','city','place.category','place.goodType'), "*");
+		$dataProvider = Advert::filter(array("ids" => Controller::getIds($goods), "Attr" => array(58 => array(3885, 1081)), "url" => 1 ), array('type','city','place.category','place.goodType'), "*");
 
 		$data = $dataProvider->getData();
 
@@ -129,17 +129,21 @@ class AdvertController extends Controller
 		}
 
 		$double = 0;
+		$double_arr = array();
 		foreach ($data as $key => $value){
 			foreach ($place as $i => $item) {
 				if( $item["code"] == $value->place->category->id && (!isset($item["type"]) || in_array($value->type_id, $item["type"])) ){
 					if( isset($goods[$value->good_id]["adverts"][$i]["url"]) ){
-						// echo $temp[$value->good_id]."<br>";
+
+						if( !in_array($goods[$value->good_id]["good"]->fields_assoc[3]->value, $double_arr) )
+							array_push($double_arr, $goods[$value->good_id]["good"]->fields_assoc[3]->value);
+
 						$place[$i]["double"] = $place[$i]["double"]+1;
+						$goods[$value->good_id]["adverts"][$i]["double"] = true;
 					}else{
 						$goods[$value->good_id]["adverts"][$i]["url"] = $value->url;
 						$place[$i]["count"] = $place[$i]["count"]+1;
 					}
-					
 				}
 			}
 		}
@@ -153,7 +157,8 @@ class AdvertController extends Controller
 
 		$this->render('adminSeeList',array(
 			'place' => $place,
-			'goods' => $goods
+			'goods' => $goods,
+			'double_arr' => $double_arr
 		));
 	}
 
