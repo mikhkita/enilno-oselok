@@ -62,7 +62,7 @@ class Order extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'id' => 'ID',
+			'id' => 'Код',
 			'date' => 'Дата',
 			'contact_id' => 'Контакт',
 			'channel_id' => 'Канал продажи',
@@ -103,6 +103,25 @@ class Order extends CActiveRecord
 		));
 	}
 
+	public function add($attributes,$id){
+			if( !isset($attributes["date"]) )
+				$attributes['date'] = date('d.m.Y');
+
+			$attributes['date'] = date_format($attributes['date'], 'Y-m-d H:i:s');
+			if( !isset($attributes['channel_id']) || $attributes['channel_id'] == "" ) $attributes['channel_id'] = NULL;
+			if( !isset($attributes['state_id']) || $attributes['state_id'] == "" ) $attributes['state_id'] = NULL;
+			if(!$order = Order::model()->findByPk($id)) $order = new Order;
+			
+			$order->attributes = $attributes;
+			$order->save();
+			return $order->id;
+		// }else throw new CHttpException(404, 'Не указана сумма продажи');
+	}
+
+	public function beforeDelete() {
+		OrderGood::model()->deleteAll("order_id=".$this->id);
+		return parent::beforeDelete();
+	}
 	/**
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!

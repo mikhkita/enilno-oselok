@@ -311,7 +311,7 @@ class KolesoOnlineController extends Controller
     }
 
     public function beforeaction(){
-		if( Yii::app()->controller->action->id == "detail" || Yii::app()->controller->action->id == "index" || Yii::app()->controller->action->id == "category" || Yii::app()->controller->action->id == "page" || Yii::app()->controller->action->id == "mail" || Yii::app()->controller->action->id == "basket" || Yii::app()->controller->action->id == "cart"){
+		if( Yii::app()->controller->action->id == "detail" || Yii::app()->controller->action->id == "index" || Yii::app()->controller->action->id == "category" || Yii::app()->controller->action->id == "page" || Yii::app()->controller->action->id == "mail" || Yii::app()->controller->action->id == "basket" || Yii::app()->controller->action->id == "cart" || Yii::app()->controller->action->id == "search" || Yii::app()->controller->action->id == "pay"){
 			$this->checkCity();
 		}
 		return true;
@@ -332,7 +332,7 @@ class KolesoOnlineController extends Controller
 				'roles'=>array('manager'),
 			),
 			array('allow',
-				'actions'=>array('index', 'search', 'index2', 'detail','page','mail','category','getCities','setCity','basket','cart'),
+				'actions'=>array('index', 'search', 'index2', 'detail','page','mail','category','getCities','setCity','basket','cart','pay'),
 				'users'=>array('*'),
 			),
 			array('deny',
@@ -996,4 +996,33 @@ class KolesoOnlineController extends Controller
 			));
     	}
     }
+
+    public function actionPay($order_id = NULL) {
+    	if($order_id) {
+    		$goods = OrderGood::model()->findAll("order_id=$order_id");
+    		if($goods) {
+	    		$price = 0;
+	    		foreach ( $goods as $key => $value) {
+	    			$price += $value->price;
+	    		}
+	    		$good_ids = array();
+	    		foreach ($goods as $key => $value) {
+	    			array_push($good_ids, $value->good_id);
+	    		}
+	    		$goods = Good::model()->with("type","fields.variant","fields.attribute")->findAll("t.id IN(".implode (',',$good_ids).") AND archive = 0");
+	    	}
+	    	$this->renderPartial('pay',array(
+				'goods'=> $goods,
+				'dynamic' => $dynamic,
+				'partial' => true,
+				'total_price' => $price,
+				'order_id' => $order_id
+			));
+    	} else {
+    		$this->render('pay',array(
+				'goods'=> array(),
+				'partial' => false
+			));
+    	}
+	}
 }

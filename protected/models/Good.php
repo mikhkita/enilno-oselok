@@ -744,6 +744,7 @@ class Good extends GoodFilter
 
 	public function sold($archive = true,$type = 1){
 		$this->archive = $type;
+		$this->date = date_format(date_create(), 'Y-m-d H:i:s');
 		$code = $this->fields_assoc[3]->value;
 		if($type == 1 && iconv_strlen($code) > 4 && stripos($code, "-") === false) {
 			$goodType = GoodType::getCode($this->good_type_id);
@@ -788,7 +789,7 @@ class Good extends GoodFilter
 	}
 
 	public function toTempArchive(){
-		$this->date = date("d.m.Y", time());
+		$this->date = date_format(date_create(), 'Y-m-d H:i:s');
 		$this->archive = 2;
 		return $this->save();
 	}

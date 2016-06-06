@@ -22,7 +22,7 @@
 					<? endforeach; ?>
 				</td>
 				<td style="min-width: 100px; text-align: center;">
-					<div><? if($item->sale->date) echo date_format(date_create($item->sale->date), 'd.m.Y H:i:s');?></div>
+					<div><? if($item->date) echo date_format(date_create($item->date), 'd.m.Y H:i:s');?></div>
 				</td>
 			</tr>
 		<? endforeach; ?>

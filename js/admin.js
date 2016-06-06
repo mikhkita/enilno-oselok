@@ -351,8 +351,8 @@ $(document).ready(function(){
         $( "#datepicker" ).datepicker( $.datepicker.regional[ "ru" ] );
         $( "#datepicker" ).datepicker();
 
+        var cities = [];
         if($(".autocomplete-input").length) {
-            var cities = [];
             $("#cities p").each(function() {
                 cities.push($(this).text());
             }); 
@@ -373,13 +373,31 @@ $(document).ready(function(){
                     url: $("#Customer-form").attr("data-url"),
                     data: {phone: $("#Customer_phone").val()},
                     success: function(msg){
-                        $("#Customer-form").html(msg);
+                        $("#Customer-form").html(msg); 
                     }
                 });
             }
         });
 
         $("#Customer_phone").keyup();
+
+        $("#Contact_phone").keyup(function() {
+            n = $(this).val().match( /\d/g );
+            n = n ? n = n.length : 0;
+
+            if( n == 11 ){
+                $.ajax({
+                    type: "GET",
+                    url: $("#Contact-form").attr("data-url"),
+                    data: {phone: $("#Contact_phone").val()},
+                    success: function(msg){
+                        $("#Contact-form").html(msg);
+                    }
+                });
+            }
+        });
+
+        $("#Contact_phone").keyup();
 
         $(".numeric").numericInput({ allowFloat: true, allowNegative: true });
 

@@ -84,6 +84,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
                 <li><a href="<?=Yii::app()->createUrl('/guarantees.html')?>" class="b-mobile-menu-a">Гарантии</a></li>
                 <li><a href="<?=Yii::app()->createUrl('/payment.html')?>" class="b-mobile-menu-a">Способы оплаты</a></li>
                 <li><a href="<?=Yii::app()->createUrl('/contacts.html')?>" class="b-mobile-menu-a">Контакты</a></li>
+                <!-- <li><a href="<?=Yii::app()->createUrl('/kolesoOnline/pay')?>" class="b-mobile-menu-a">Оплата заказа</a></li> -->
             </ul>
             <a href="tel:+<?=Yii::app()->params["city"]->phone?>" class="b-menu-call b-orange-butt">Позвонить</a>
         </div>
@@ -94,6 +95,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
                     <li><a href="<?=Yii::app()->createUrl('/guarantees.html')?>">Гарантии</a></li>
                     <li><a href="<?=Yii::app()->createUrl('/payment.html')?>">Способы оплаты</a></li>
                     <li><a href="<?=Yii::app()->createUrl('/contacts.html')?>">Контакты</a></li>
+                    <!-- <li><a href="<?=Yii::app()->createUrl('/kolesoOnline/pay')?>">Оплата заказа</a></li> -->
                 </ul>
                 <div class="clearfix b-mobile-top-line mobile-only">
                     <h2 class="left">Вы находитесь в г. <a href="#" class="icon fancy" data-block="#b-popup-city"><?=Yii::app()->params["city"]->name?></a></h2>
@@ -297,6 +299,20 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
                     <input type="submit" style="display:none;">
                 </div>
                 <a href="#" class="ajax b-orange-butt" onclick="$('#b-form-buy').submit(); return false;">Отправить</a>
+                <!-- <input type="submit" class="ajax b-orange-butt" value="Отправить"> -->
+            </form>
+        </div>
+    </div>
+    <div id="b-popup-pay">
+        <div class="for_all b-popup-small">
+            <h3>Оплата заказа</h3>
+            <form action="<?=Yii::app()->createUrl('/kolesoOnline/pay')?>" id="b-form-pay" method="POST" data-block="#b-popup-2">
+                <div class="b-popup-form">
+                    <label for="name">Номер заказа *</label>
+                    <input type="text" name="name" required placeholder="1234"/>
+                    <input type="submit" style="display:none;">
+                </div>
+                <a href="#" class="ajax b-orange-butt" onclick="$('#b-form-pay').submit(); return false;">Оплатить</a>
                 <!-- <input type="submit" class="ajax b-orange-butt" value="Отправить"> -->
             </form>
         </div>

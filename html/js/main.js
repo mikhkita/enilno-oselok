@@ -796,4 +796,20 @@ $(document).ready(function(){
         $("#view-thanks").click().remove();
     }   
 
+    $("#order-number").submit(function(){
+        var form = $(this);
+        if($(this).find("input[name='order_id']").val()) {
+            form.find("input[type=submit]").prop('disabled',true);
+            $.ajax({
+                type: form.attr('method'),
+                url: form.attr('action'),
+                data: form.serialize(),
+                success: function(msg){
+                    $(".order-desc").html(msg);
+                    form.find("input[type=submit]").prop('disabled',false);
+                }
+            });
+            return false;
+        }
+    }); 
 });
