@@ -561,7 +561,8 @@ class Good extends GoodFilter
 		$temp = array();
 		$model = GoodFilter::model()->findAll($criteria);
 		foreach($model as $good) {
-			$temp[$good->fields[0][$attribute->type->code."_value"]] = $good->id;
+			array_push($temp, $good->id);
+			// $temp[$good->fields[0][$attribute->type->code."_value"]] = $good->id;
 		}
 		return $temp;
 	}

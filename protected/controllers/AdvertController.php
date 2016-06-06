@@ -149,11 +149,22 @@ class AdvertController extends Controller
 		}
 
 		foreach ($goods as &$good)
-			foreach ($good["adverts"] as $city => $item)
-				if( ( in_array($city, array("Дром Бесплатные", "Авито Томск")) ) && $good["good"]->fields_assoc[27]->value != "Томск" ){
-					$good["adverts"][$city]["grey"] = true;
-					$place[$city]["grey"] = $place[$city]["grey"]+1;
-				}		
+			foreach ($good["adverts"] as $city => $item){
+				switch ($good_type_id) {
+					case 1:
+						if( (( in_array($city, array("Дром Бесплатные", "Авито Томск")) ) && $good["good"]->fields_assoc[27]->value != "Томск") || ($city == "Дром Платные" && $good["good"]->fields_assoc[23]->value != "Летние") ){
+							$good["adverts"][$city]["grey"] = true;
+							if( !isset($good["adverts"][$city]["url"]) ) $place[$city]["grey"] = $place[$city]["grey"]+1;
+						}	
+					break;
+					case 2:
+						if( ( in_array($city, array("Дром Бесплатные", "Авито Томск")) ) && $good["good"]->fields_assoc[27]->value != "Томск" ){
+							$good["adverts"][$city]["grey"] = true;
+							if( !isset($good["adverts"][$city]["url"]) ) $place[$city]["grey"] = $place[$city]["grey"]+1;
+						}				
+					break;
+				}	
+			}
 
 		$this->render('adminSeeList',array(
 			'place' => $place,

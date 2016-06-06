@@ -139,14 +139,15 @@ class Advert extends CActiveRecord
 		return $this->save();
 	}
 
-	public function getUrl($category_id = NULL){
+	public function getUrl($category_id = NULL, $url = NULL){
+		$url = ($url === NULL)?$this->url:$url;
 		$category_id = ($category_id === NULL)?$this->place->category_id:$category_id;
 		if( $category_id == 2047 ){
-			return "http://baza.drom.ru/".$this->url.".html";
+			return "http://baza.drom.ru/".$url.".html";
 		}else if( $category_id == 2048 ){
-			return "http://avito.ru/".$this->url;
+			return "http://avito.ru/".$url;
 		}else if( $category_id == 3875 ){
-			return "https://vk.com/market-118079986?w=product-118079986_".$this->url;
+			return "https://vk.com/market-118079986?w=product-118079986_".$url;
 		}
 	}
 
@@ -191,6 +192,8 @@ class Advert extends CActiveRecord
 				$arr[$key] = trim($value);
 			}
 			$good_ids = Good::getIdbyCode($arr,$good_type_id);
+			print_r($good_ids);
+			// die;
 			$criteria->addInCondition("good_id", $good_ids);
 			if( count($good_ids) )
 				$criteria->order = "field(good_id,".implode(",", array_reverse($good_ids)).") DESC, t.id DESC";
@@ -207,7 +210,7 @@ class Advert extends CActiveRecord
 	   	if( isset($params["url"]) && $params["url"] != "" )
 	   		$criteria->addCondition("url ".(($params["url"] == 1)?"IS NOT NULL":"IS NULL"), "AND");
 
-	   	$criteria->addCondition("good_id!=0","AND");
+	   	// $criteria->addCondition("good_id!=0","AND");
 
 	   	$options['criteria'] = $criteria;
 		$dataProvider = new CActiveDataProvider(Advert::tableName(), $options);

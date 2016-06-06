@@ -58,9 +58,9 @@ class IntegrateController extends Controller
         while( ($this->allowed($category_id) && $this->checkTime($category_id)) || $debug ){
             $this->writeTime($category_id, $nth);
             if( !$this->getNext($category_id, $nth) ){
-                sleep(5);
+                return true;
             }else{
-                if( !$debug && $category_id == 2047 ) sleep(rand(30,70));
+                if( !$debug && $category_id == 2047 ) sleep(rand(10,40));
             }
               
             if( $debug ) return true;
@@ -308,6 +308,7 @@ class IntegrateController extends Controller
             array(
                 "good_type_id"=>1,
                 "attributes"=>array(
+                    23 => array(463),
                     27 => array(1056)
                 )
             )
@@ -1147,7 +1148,7 @@ class IntegrateController extends Controller
     public function actionGoodTest(){
         $model = Good::model()->filter(
             array(
-                "good_type_id"=>1,
+                "good_type_id"=>2,
                 "attributes"=>array(
                     27 => array(1056)
                 )

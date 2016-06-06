@@ -17,7 +17,7 @@
 		<tr>
 			<td><?=$good["good"]->fields_assoc[3]->value?></td>
 		<? foreach ($good["adverts"] as $city => $item): ?>
-			<td <? if( $item["grey"] === true ): ?>class="grey"<? endif; ?>><? if( $item["double"] === true ): ?><span class="red">Дубли</span><?elseif(isset($item["url"])): ?><a href="#" class="green">Ссылка</a><? endif; ?></td>
+			<td <? if( $item["grey"] === true ): ?>class="grey"<? endif; ?>><? if( $item["double"] === true ): ?><span class="red">Дубли</span><?elseif(isset($item["url"])): ?><a href="<?=Advert::getUrl($item["code"],$item["url"]);?>" target="_blank" class="green">Ссылка</a><? endif; ?></td>
 		<? endforeach; ?>
 		</tr>
 	<? endforeach; ?>

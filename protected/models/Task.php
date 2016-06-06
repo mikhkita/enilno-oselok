@@ -190,7 +190,6 @@ class Task extends CActiveRecord
 				Task::remove($good->id, "necessary");
 			}
 
-
 			// Проверка цены
 			$not_exist = $this->checkFields($good, $params->price);
 			$price_exist = count($not_exist)?false:true;
@@ -232,19 +231,19 @@ class Task extends CActiveRecord
 				Task::remove($good->id, "extra");
 			}
 		}else{
-			if( is_object($good->fields_assoc[43]) && $good->fields_assoc[43]->variant_id == 2912 ){
-				if( !$this->checkCap($good,1) || !$this->checkCap($good,2) ){
-					Task::add($good->id, "extra");
-				}else{
-					Task::remove($good->id, "extra");
-				}
-			}else if( is_object($good->fields_assoc[43]) && in_array($good->fields_assoc[43]->variant_id, array(2915,3003,3001,2914)) ){
-				if( !$this->checkCap($good,1) || !$this->checkCap($good,2) ){
-					Task::add($good->id, "extra", NULL, 12);
-				}else{
-					Task::remove($good->id, "extra");
-				}
-			}
+			// if( is_object($good->fields_assoc[43]) && $good->fields_assoc[43]->variant_id == 2912 ){
+			// 	if( !$this->checkCap($good,1) || !$this->checkCap($good,2) ){
+			// 		Task::add($good->id, "extra");
+			// 	}else{
+			// 		Task::remove($good->id, "extra");
+			// 	}
+			// }else if( is_object($good->fields_assoc[43]) && in_array($good->fields_assoc[43]->variant_id, array(2915,3003,3001,2914)) ){
+			// 	if( !$this->checkCap($good,1) || !$this->checkCap($good,2) ){
+			// 		Task::add($good->id, "extra", NULL, 12);
+			// 	}else{
+			// 		Task::remove($good->id, "extra");
+			// 	}
+			// }
 		}
 	}
 
