@@ -332,7 +332,7 @@ class KolesoOnlineController extends Controller
 				'roles'=>array('manager'),
 			),
 			array('allow',
-				'actions'=>array('index', 'search', 'index2', 'detail','page','mail','category','getCities','setCity','basket','cart','pay'),
+				'actions'=>array('index', 'search', 'index2', 'detail','page','mail','category','getCities','setCity','basket','cart','pay','paymentNotification'),
 				'users'=>array('*'),
 			),
 			array('deny',
@@ -1019,5 +1019,37 @@ class KolesoOnlineController extends Controller
 				'partial' => false
 			));
     	}
+	}
+
+	public function actionPaymentNotification() {
+		if( $order = Order::model()->findByPk($_POST['LMI_PAYMENT_NO']) ) {
+			$hash = "";
+			$names = array(
+				'LMI_MERCHANT_ID', 
+				'LMI_PAYMENT_NO', 
+				'LMI_SYS_PAYMENT_ID', 
+				'LMI_SYS_PAYMENT_DATE', 
+				'LMI_PAYMENT_AMOUNT', 
+				'LMI_CURRENCY', 
+				'LMI_PAID_AMOUNT', 
+				'LMI_PAID_CURRENCY', 
+				'LMI_PAYMENT_SYSTEM', 
+				'LMI_SIM_MODE'
+			);
+			foreach ($names as $name) {
+				if(isset($_POST[$name])) $hash .= $_POST[$name];
+				$hash .= ";";
+			}
+			$hash .= "acrobat";
+			if($_POST['LMI_HASH'] == base64_encode(md5($hash, true))) {
+				$order->state_id = 167;
+				$order->save();
+				foreach ($order->goods as $key => $item) {
+					$good = Good::model()->with(array("type","fields.variant","fields.attribute"))->findByPk($item->good_id);
+					if($good->archive != 1) $good->sold();
+				}
+				
+			}
+		}
 	}
 }

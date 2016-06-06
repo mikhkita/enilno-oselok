@@ -812,6 +812,7 @@ $(document).ready(function(){
                     });
                     $(".total-price span").text(price);  
                     $("input[name='LMI_PAYMENT_AMOUNT']").val(price);
+                    price = 0;
                 }
             });
             return false;

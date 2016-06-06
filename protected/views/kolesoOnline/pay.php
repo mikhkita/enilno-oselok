@@ -114,7 +114,6 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
                     <input type="hidden" name="LMI_CURRENCY" value="RUB">
                     <input type="hidden" name="LMI_PAYMENT_NO" value="<?=$order_id?>">
                     <input type="hidden" name="LMI_PAYMENT_DESC" value="Оплата заказа №<?=$order_id?>">
-                    <input type="hidden" name="LMI_SIM_MODE" value="0">
 	                <input type="submit" class="right b-orange-butt" value="Оплатить">
 	                <h4 class="total-price right">Сумма к оплате: <span>0</span> р.</h4>
 	            </form> 
