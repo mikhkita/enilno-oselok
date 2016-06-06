@@ -13,7 +13,7 @@ class GoodController extends Controller
 	{
 		return array(
 			array('allow',
-				'actions'=>array('adminIndex','adminPhoto','adminGetNextPhoto','adminCheckCode', 'adminPhotoUpdate','adminToArchive','adminChangeType','adminTest','updatePrices','updateAuctionLinks','adminCreate','adminUpdate','adminDelete','adminEdit','getAttrType','getAttr','adminAdverts','adminUpdateImages',"adminAddCheckbox","adminRemoveCheckbox","adminAddAllCheckbox","adminRemoveAllCheckbox", "adminRemoveManyCheckbox",'adminUpdateAll','adminAddSomeCheckbox','adminAddManyCheckbox','adminUpdateAdverts','adminViewSettings','adminSold','adminArchive','adminJoin','adminDeleteAll','adminSale','adminCustomer','adminArchiveAll','adminSaleTable','adminSaleDelete',"adminPhotoEdit"),
+				'actions'=>array('adminIndex','adminPhoto','adminGetNextPhoto','adminCheckCode', 'adminPhotoUpdate','adminToArchive','adminChangeType','adminTest','updatePrices','updateAuctionLinks','adminCreate','adminUpdate','adminDelete','adminEdit','getAttrType','getAttr','adminAdverts','adminUpdateImages',"adminAddCheckbox","adminRemoveCheckbox","adminAddAllCheckbox","adminRemoveAllCheckbox", "adminRemoveManyCheckbox",'adminUpdateAll','adminAddSomeCheckbox','adminAddManyCheckbox','adminUpdateAdverts','adminViewSettings','adminSold','adminArchive','adminJoin','adminDeleteAll','adminSale','adminCustomer','adminArchiveAll','adminSaleTable','adminSaleDelete',"adminPhotoEdit","adminOrder",'adminContact','adminOrderTable','adminOrderDelete'),
 				'roles'=>array('manager'),
 			),
 			array('allow',
@@ -36,7 +36,7 @@ class GoodController extends Controller
 			$model->save();
 			Sale::model()->deleteByPk($id);
 		}
-		$goods = Good::model()->with(array("fields.variant","fields.attribute","sale"))->findAll(array("condition" => "good_type_id=".$good_type_id." AND archive=1","order" => "sale.date DESC"));
+		$goods = Good::model()->with(array("fields.variant","fields.attribute","sale"))->findAll(array("condition" => "good_type_id=".$good_type_id." AND archive=1","order" => "t.date DESC"));
 		$options = array(
 			'data'=>$goods,
 			'name'=>$goodType->name
@@ -124,6 +124,96 @@ class GoodController extends Controller
 		$this->renderPartial('adminCustomer',array(
 			'model'=>$model
 		));
+	}
+
+	public function actionAdminContact($phone) {
+		$phone = str_replace(array("(",")"," ","-","+"),"", $phone);
+		$model = Contact::model()->with('phones')->find("phone='".$phone."'");
+		$model = ($model) ? $model : new Contact;
+		$this->renderPartial('adminContact',array(
+			'model'=>$model
+		));
+	}
+
+	public function actionAdminOrderTable($partial = NULL) 
+	{
+		$this->pageTitle = "Заказы";
+		$orders = Order::model()->findAll();
+		$options = array(
+			'data'=>$orders,
+			'labels'=>Order::attributeLabels()
+		);
+		if($partial){	
+			$this->renderPartial('adminOrderTable',$options);
+		} else $this->render('adminOrderTable',$options);
+
+	}
+
+	public function actionAdminOrderDelete($id)
+	{
+		$model = Order::model()->findByPk($id);
+		$model->delete();
+		$this->actionAdminOrderTable(true);
+	}
+
+	public function actionAdminOrder($id = NULL,$good_id = NULL,$good_type_id = NULL,$update = NULL,$order_good = NULL)
+	{
+		if($_POST['Order']) {
+			if($_POST['Contact']['phone'][0]) {
+				$contact_id = Contact::addOrUpdate($_POST["Contact"]);	
+				$_POST['Order']['contact_id'] = $contact_id;
+			}
+			if(!$update) {
+				$_POST['Order']['good_id'] = $good_id;
+			}
+			$_POST['Order']['date'] = date_create_from_format('d.m.Y', $_POST['Order']['date']);
+			$_POST['Order']['user_id'] = $this->user->usr_id;
+
+			if( $id = Order::add($_POST["Order"],$id) ){
+				if(!$order_good = OrderGood::model()->find("order_id=$id")) {
+					$order_good = new OrderGood;
+					$order_good->order_id = $id;
+					$order_good->good_id = $good_id;
+					if( !isset($_POST['OrderGood']['tk_id']) || $_POST['OrderGood']['tk_id'] == "" ) $_POST['OrderGood']['tk_id'] = NULL;
+				}
+				$order_good->attributes = $_POST['OrderGood'];
+				$order_good->save();
+				if($_POST['Order']['state_id'] > 165) {
+					$good = $this->loadModel($order_good->good_id);
+					if($good->archive != 1) $good->sold();
+					if(!$update) {
+						echo json_encode(array(
+							"result" => "success",
+							"action" => "delete", 
+							"selector" => "#id-".$good_id
+						));
+					} else $this->actionAdminOrderTable(true);
+				}
+			}		
+		} else {
+			if( $update && $model = Order::model()->findByPk($id)) {				
+				$model->date = date_format(date_create($model->date), 'd.m.Y');	
+				$order_good = $model->goods[0];
+			} else {
+				$model = new Order;
+				$model->date = date("d.m.Y");
+				if($good_id) {
+					$order_good = new OrderGood;
+					$order_good->order_id = $model->id;
+					$order_good->good_id = $good_id;
+				}
+			}
+
+			$cities = AttributeVariant::model()->with("variant")->findAll("attribute_id=27");
+	        foreach ($cities as &$item)
+	        	$item = $item->value;
+
+			$this->renderPartial('adminOrder',array(
+				'model'=>$model,
+				'order_good' =>$order_good,
+				'cities' => $cities
+			));
+		}
 	}
 
 	public function actionAdminCreate($good_type_id)

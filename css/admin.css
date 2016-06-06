@@ -729,6 +729,9 @@ td.b-photo-td{
             display: block;
             margin-bottom: 0px;
         }
+        .fancybox-skin input[type="radio"]+label {
+            display: inline-block;
+        }
         .fancybox-skin input[type="text"],
         .fancybox-skin input[type="number"],
         .fancybox-skin input[type="submit"],
@@ -854,6 +857,7 @@ td.b-photo-td{
             }
                 .row label{
                     cursor: pointer;
+                    margin-bottom: 3px;
                 }
                 .checkbox-row label{
                     float: left;

@@ -227,20 +227,36 @@ class DromController extends Controller
         }
     }
     public function actionAdminVlad(){
-        $model = Good::model()->with("fields")->findAll("archive=1 AND attribute_id=3 AND LENGTH(varchar_value) = 5");
-        foreach ($model as $key => $good) {
-            $code = $good->fields_assoc[3]->value;
-            $goodType = GoodType::getCode($good->good_type_id);
-            $cache = Yii::app()->params["cacheFolder"]."/".$goodType."/".$code;
-            $imgs = Yii::app()->params["imageFolder"]."/".$goodType."/".$code;
-            $this->removeDirectory($cache);
-            $this->removeDirectory($imgs);
-            $images = Image::model()->with("caps","cache")->findAll("good_id=".$good->id);
-            foreach ($images as $key => $image) {
-                $image->delete();
-            }
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 30);
+        curl_setopt($ch, CURLOPT_URL, "https://api.instagram.com/oauth/access_token");
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, array(
+            "client_id" => "a28fb915609b456ab475a036b9c7772a",
+            "client_secret"=> "ed1ce07367f447108df13dacd121e53d",
+            "grant_type" => "authorization_code",
+            "redirect_uri" => "http://hashbox.ru",
+            "code" => "c50deeb393e34dda8090b175c3b779b7"
+            ));
+        $result = curl_exec($ch);
+        print_r($result);
+        curl_close( $ch );
+        // $model = Good::model()->with("fields")->findAll("archive=1 AND attribute_id=3 AND LENGTH(varchar_value) = 5");
+        // foreach ($model as $key => $good) {
+        //     $code = $good->fields_assoc[3]->value;
+        //     $goodType = GoodType::getCode($good->good_type_id);
+        //     $cache = Yii::app()->params["cacheFolder"]."/".$goodType."/".$code;
+        //     $imgs = Yii::app()->params["imageFolder"]."/".$goodType."/".$code;
+        //     $this->removeDirectory($cache);
+        //     $this->removeDirectory($imgs);
+        //     $images = Image::model()->with("caps","cache")->findAll("good_id=".$good->id);
+        //     foreach ($images as $key => $image) {
+        //         $image->delete();
+        //     }
             
-        }   
+        // }   
         // $drom = new Drom();
         // $drom->setUser("wheels70","u8atas5c");
         // $drom->auth();

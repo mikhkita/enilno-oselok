@@ -54,8 +54,8 @@ class Contact extends CActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
 			'orders' => array(self::HAS_MANY, 'Order', 'contact_id'),
-			'phone' => array(self::HAS_MANY, 'Order', 'contact_id'),
-			'email' => array(self::HAS_MANY, 'Order', 'contact_id'),
+			'phones' => array(self::HAS_MANY, 'ContactPhone', 'contact_id'),
+			'emails' => array(self::HAS_MANY, 'ContactEmail', 'contact_id'),
 		);
 	}
 
@@ -110,6 +110,37 @@ class Contact extends CActiveRecord
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 		));
+	}
+
+	public function addOrUpdate($attributes){
+		if( isset($attributes['phone'][0]) ){
+			$attributes['phone'][0] = str_replace(array("(",")"," ","-","+"),"", $attributes['phone'][0]);
+			$contact = ContactPhone::model()->find("phone='".$attributes['phone'][0]."'");
+			if($contact) {
+				$contact = Contact::model()->findbyPk($contact->contact_id);
+			} else {
+				$contact = new Contact; 
+				$contactPhone = new ContactPhone;
+				$contactPhone->phone = $attributes['phone'][0];
+				$contact->create_date = date_format(date_create(), 'Y-m-d H:i:s');
+			}
+			if( !isset($attributes['source_id']) || $attributes['source_id'] == "" ) $attributes['source_id'] = NULL;
+			if( !isset($attributes['client_type_id']) || $attributes['client_type_id'] == "" ) $attributes['client_type_id'] = NULL;
+			$contact->attributes = $attributes;
+			if( $contact->save() ){	
+				if($contactPhone) {
+					$contactPhone->contact_id = $contact->id;
+					$contactPhone->save();
+				}
+				return $contact->id;
+			}else throw new CHttpException(500, 'Не удалось создать клиента');
+		}else throw new CHttpException(404, 'Не указан телефон клиента');
+	}
+
+	public function beforeDelete() {
+		ContactPhone::model()->deleteAll("contact_id=".$this->id);
+		ContactEmail::model()->deleteAll("contact_id=".$this->id);
+		return parent::beforeDelete();
 	}
 
 	/**
