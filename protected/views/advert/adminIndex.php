@@ -17,6 +17,9 @@
 			</li>
 			<li><a href="<?php echo $this->createUrl('/advert/adminaction', array('action'=> "delete"))?>" class="ajax-form ajax-update">Удалить</a></li>
 			<li><a href="<?php echo $this->createUrl('/advert/admintitles')?>" class="ajax-form ajax-delete not-ajax-delete" data-warning="Вы действительно хотите сгенерировать заголовки для отфильтрованных объявлений?">Сгенерировать заголовки</a></li>
+		</ul>
+		<ul style="border-right: 0px;" class="b-section-menu clearfix right">
+			<li><a href="<?php echo $this->createUrl('/advert/adminsee')?>">Охват</a></li>
 			<?if($this->user->usr_id == 1):?><li><a href="<?php echo $this->createUrl('/advert/adminremove', array('lol'=>'1'))?>" class="ajax-form ajax-delete" data-warning="Вы действительно хотите удалить все отфильтрованные объявления к ебеням?">Уничтожить</a></li><?endif;?>
 		</ul>
 	</div>
