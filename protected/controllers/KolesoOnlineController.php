@@ -1001,10 +1001,6 @@ class KolesoOnlineController extends Controller
     	if($order_id) {
     		$goods = OrderGood::model()->findAll("order_id=$order_id");
     		if($goods) {
-	    		$price = 0;
-	    		foreach ( $goods as $key => $value) {
-	    			$price += $value->price;
-	    		}
 	    		$good_ids = array();
 	    		foreach ($goods as $key => $value) {
 	    			array_push($good_ids, $value->good_id);
@@ -1015,7 +1011,6 @@ class KolesoOnlineController extends Controller
 				'goods'=> $goods,
 				'dynamic' => $dynamic,
 				'partial' => true,
-				'total_price' => $price,
 				'order_id' => $order_id
 			));
     	} else {

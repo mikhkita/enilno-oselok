@@ -41,8 +41,10 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
 										<h4><?=Interpreter::generate($this->params[$type]["TITLE_2_CODE"], $good,$dynamic);?> <?if($type == 1) echo $good->fields_assoc[$this->params[$type]["CATEGORY"]["AMOUNT"]['ID']]->value." ".$this->params[$type]["CATEGORY"]["AMOUNT"]['UNIT']?></h4>
 									</div>
 								</td>
+								<td>&nbsp;					
+								</td>
 								<td class="price"><? $price = Interpreter::generate($this->params[$type]["PRICE_CODE"], $good, $dynamic); ?>
-									<!-- <h3 data-price="<?=$price?>" class="cart-price"><?=number_format($price, 0, ',', ' ' )." р."; ?></h3> -->
+									<h3 data-price="<?=$price?>" class="cart-price"><?=number_format($price, 0, ',', ' ' )." р."; ?></h3>
 									<? $is_available = Interpreter::generate($this->params[$type]["AVAILABLE"], $good, $dynamic); ?>
 									<? if($is_available != "В наличии"): ?>
 										<? $delivery = Interpreter::generate($this->params[$type]["SHIPPING"], $good,$dynamic);?>
@@ -51,9 +53,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
 										<? endif; ?>
 									<? endif; ?>
 								</td>
-								<!-- <td>
-									<a href="<?=Yii::app()->createUrl('/kolesoOnline/basket',array('id' => $good->id))?>" class="b-orange-butt b-cart-delete">Удалить</a>
-								</td>		 -->
+								
 							</tr>
 							<? else:?>
 							<tr>
@@ -75,8 +75,8 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
 								</td>
 							</tr>
 							<tr>
-								<td><? $price = Interpreter::generate($this->params[$type]["PRICE_CODE"], $good, $dynamic); ?>
-									<!-- <h3 data-price="<?=$price?>" class="cart-price"><?=number_format($price, 0, ',', ' ' )." р."; ?></h3> -->
+								<td><? $price = Interpreter::generate($this->params[$type]["PRICE_CODE"], $good, $dynamic);?>
+									<h3 data-price="<?=$price?>" class="cart-price"><?=number_format($price, 0, ',', ' ' )." р."; ?></h3>
 									<? $is_available = Interpreter::generate($this->params[$type]["AVAILABLE"], $good, $dynamic); ?>
 									<? if($is_available != "В наличии"): ?>
 										<? $delivery = Interpreter::generate($this->params[$type]["SHIPPING"], $good,$dynamic);?>
@@ -110,13 +110,13 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
                     <input type="hidden" name="subject" value="Оформление заказа"> -->
 
                     <input type="hidden" name="LMI_MERCHANT_ID" value="054d638b-fe9a-4a62-8a48-1f722ce4fdbb">
-                    <input type="hidden" name="LMI_PAYMENT_AMOUNT" value="<?=$total_price?>">
+                    <input type="hidden" name="LMI_PAYMENT_AMOUNT">
                     <input type="hidden" name="LMI_CURRENCY" value="RUB">
                     <input type="hidden" name="LMI_PAYMENT_NO" value="<?=$order_id?>">
                     <input type="hidden" name="LMI_PAYMENT_DESC" value="Оплата заказа №<?=$order_id?>">
                     <input type="hidden" name="LMI_SIM_MODE" value="0">
 	                <input type="submit" class="right b-orange-butt" value="Оплатить">
-	                <h4 class="total-price right">Сумма к оплате: <span><?=$total_price?></span> р.</h4>
+	                <h4 class="total-price right">Сумма к оплате: <span>0</span> р.</h4>
 	            </form> 
 				<? elseif($order_id): ?>
 				    <p class="empty-cart" style="display:block;">Заказ не найден</p>
