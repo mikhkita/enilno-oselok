@@ -113,15 +113,15 @@ class Contact extends CActiveRecord
 	}
 
 	public function addOrUpdate($attributes){
-		if( isset($attributes['phone'][0]) ){
-			$attributes['phone'][0] = str_replace(array("(",")"," ","-","+"),"", $attributes['phone'][0]);
-			$contact = ContactPhone::model()->find("phone='".$attributes['phone'][0]."'");
+		if( isset($attributes['phone']) ){
+			$attributes['phone'] = str_replace(array("(",")"," ","-","+"),"", $attributes['phone']);
+			$contact = ContactPhone::model()->find("phone='".$attributes['phone']."'");
 			if($contact) {
 				$contact = Contact::model()->findbyPk($contact->contact_id);
 			} else {
 				$contact = new Contact; 
 				$contactPhone = new ContactPhone;
-				$contactPhone->phone = $attributes['phone'][0];
+				$contactPhone->phone = $attributes['phone'];
 				$contact->create_date = date_format(date_create(), 'Y-m-d H:i:s');
 			}
 			if( !isset($attributes['source_id']) || $attributes['source_id'] == "" ) $attributes['source_id'] = NULL;
@@ -132,6 +132,12 @@ class Contact extends CActiveRecord
 					$contactPhone->contact_id = $contact->id;
 					$contactPhone->save();
 				}
+				if(!$email = ContactEmail::model()->find("contact_id=$contact->id AND email='".$attributes['email']."'")) {
+					$email = new ContactEmail;
+				}
+				$email->email = $attributes['email'];
+				$email->contact_id = $contact->id;
+				$email->save();
 				return $contact->id;
 			}else throw new CHttpException(500, 'Не удалось создать клиента');
 		}else throw new CHttpException(404, 'Не указан телефон клиента');

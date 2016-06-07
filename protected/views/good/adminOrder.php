@@ -32,14 +32,17 @@
                     <?php echo $form->error($model,'state_id'); ?>
                 </div>
             </div>
-            <? if($order_good):?>  
-                 <?php $this->renderPartial('_orderGood', array('order_good' => $order_good)); ?>
-            <? endif; ?>
+            <? foreach ($order_goods as $key => $order_good) {
+                $this->renderPartial('_orderGood', array('order_good' => $order_good)); 
+            }?>  
             <div class="row">
                 <label for="Contact_phone">Телефон клиента</label>
-                <? $contact=""; if(isset($model->contact)) {
+                <? if(isset($model->contact)) {
                     $phone = str_split($model->contact->phones[0]->phone); $phone = "+".$phone[0]." (".$phone[1].$phone[2].$phone[3].") ".$phone[4].$phone[5].$phone[6]."-".$phone[7].$phone[8]."-".$phone[9].$phone[10];
-                }echo Chtml::textField("Contact[phone][]",$phone,array('maxlength'=>25,'class' => 'phone','id' => 'Contact_phone')); ?>
+                    echo Chtml::textField("Contact[phone]",$phone,array('maxlength'=>25,'class' => 'phone','id' => 'Contact_phone','disabled'=> 'disabled')); 
+                    } else {
+                        echo Chtml::textField("Contact[phone]","",array('maxlength'=>25,'class' => 'phone','id' => 'Contact_phone')); 
+                    }?>
             </div>
             <div id="Contact-form" data-url="<?=$this->createUrl('/good/admincontact')?>"></div>
         	<div class="row buttons">

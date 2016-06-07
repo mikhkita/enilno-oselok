@@ -159,7 +159,7 @@ class GoodController extends Controller
 	public function actionAdminOrder($id = NULL,$good_id = NULL,$good_type_id = NULL,$update = NULL,$order_good = NULL)
 	{
 		if($_POST['Order']) {
-			if($_POST['Contact']['phone'][0]) {
+			if($_POST['Contact']['phone']) {
 				$contact_id = Contact::addOrUpdate($_POST["Contact"]);	
 				$_POST['Order']['contact_id'] = $contact_id;
 			}
@@ -170,14 +170,18 @@ class GoodController extends Controller
 			$_POST['Order']['user_id'] = $this->user->usr_id;
 
 			if( $id = Order::add($_POST["Order"],$id) ){
-				if(!$order_good = OrderGood::model()->find("order_id=$id")) {
-					$order_good = new OrderGood;
-					$order_good->order_id = $id;
-					$order_good->good_id = $good_id;
-					if( !isset($_POST['OrderGood']['tk_id']) || $_POST['OrderGood']['tk_id'] == "" ) $_POST['OrderGood']['tk_id'] = NULL;
+				if(!$order_goods = OrderGood::model()->findAll("order_id=$id")) {
+					$order_goods = array();
+					$order_goods[0]= new OrderGood;
+					$order_goods[0]->order_id = $id;
+					$order_goods[0]->good_id = $good_id;
+					if( !isset($_POST['OrderGood'][$good_id]['tk_id']) || $_POST['OrderGood'][$good_id]['tk_id'] == "" ) $_POST['OrderGood'][$good_id]['tk_id'] = NULL;
 				}
-				$order_good->attributes = $_POST['OrderGood'];
-				$order_good->save();
+				foreach ($order_goods as $key => $order_good) {
+					$order_good->attributes = $_POST['OrderGood'][$order_good->good_id];
+					$order_good->save();
+				}
+				
 				if($_POST['Order']['state_id'] > 165) {
 					$good = $this->loadModel($order_good->good_id);
 					if($good->archive != 1) $good->sold();
@@ -191,16 +195,17 @@ class GoodController extends Controller
 				}
 			}		
 		} else {
+			$order_goods = array();
 			if( $update && $model = Order::model()->findByPk($id)) {				
 				$model->date = date_format(date_create($model->date), 'd.m.Y');	
-				$order_good = $model->goods[0];
+				$order_goods = $model->goods;
 			} else {
 				$model = new Order;
 				$model->date = date("d.m.Y");
 				if($good_id) {
-					$order_good = new OrderGood;
-					$order_good->order_id = $model->id;
-					$order_good->good_id = $good_id;
+					$order_goods[0] = new OrderGood;
+					$order_goods[0]->order_id = $model->id;
+					$order_goods[0]->good_id = $good_id;
 				}
 			}
 
@@ -210,7 +215,7 @@ class GoodController extends Controller
 
 			$this->renderPartial('adminOrder',array(
 				'model'=>$model,
-				'order_good' =>$order_good,
+				'order_goods' =>$order_goods,
 				'cities' => $cities
 			));
 		}
