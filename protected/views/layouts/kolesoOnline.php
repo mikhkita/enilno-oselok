@@ -107,14 +107,18 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
             <div class="b-block clearfix">
                 <span class="stamp"></span>
                 <div class="left">
-                    <div class="clearfix">
-                        <a class="left b-main-logo" href="<?=Yii::app()->createUrl('/kolesoOnline')?>"></a>
-                        <div class="right">
-                            <h1>Колесо<span>онлайн</span></h1>
-                            <h2>Вы находитесь в г. <a href="#" class="fancy" data-block="#b-popup-city"><?=Yii::app()->params["city"]->name?></a></h2>
+                    <? if(Yii::app()->params["region"]): ?>
+                        <?  $this->renderPartial(Yii::app()->params["city"]->code.'/_logo'); ?>
+                    <? else: ?>
+                        <div class="clearfix">
+                            <a class="left b-main-logo" href="<?=Yii::app()->createUrl('/kolesoOnline')?>"></a>
+                            <div class="right">
+                                <h2>Вы находитесь в г. <a href="#" class="fancy" data-block="#b-popup-city"><?=Yii::app()->params["city"]->name?></a></h2>
+                            </div>
                         </div>
-                    </div>
+                    <? endif; ?>
                 </div>
+                <h1>Колесо.Томск.Ру - БУ шины и диски в Томске</h1>
                 <div class="right">
                     <div class="clearfix contacts">
                         <? 
@@ -185,10 +189,15 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
                 <ul class="sections clearfix">
                     <li>
                         <h3>О магазине</h3>
-                        <a href="<?=Yii::app()->createUrl('/kolesoOnline')?>" class="footer-logo clearfix">
-                            <span class="b-footer-logo"></span>
-                        </a>
-                        <p>Более тысячи позиций <nobr>б/у</nobr>&nbsp;шин и&nbsp;дисков. Полная актуальность всех имеющихся товаров на сайте. Ежедневное пополнение каталога. Достоверные фотографии и&nbsp;описания. Наши фирменные гарантии. Профессионалы своего дела.</p>
+                        <? if(Yii::app()->params["region"]): ?>
+                            <?  $this->renderPartial(Yii::app()->params["city"]->code.'/_logo'); ?>
+                            <p>Ежедневное пополнение каталога.<br>Достоверные фотографии и описания.<br>Наши фирменные гарантии.<br>Профессионалы своего дела.</p>
+                        <? else: ?>
+                            <a href="<?=Yii::app()->createUrl('/kolesoOnline')?>" class="footer-logo clearfix">
+                                <span class="b-footer-logo"></span>
+                            </a>
+                            <p>Более тысячи позиций <nobr>б/у</nobr>&nbsp;шин и&nbsp;дисков. Полная актуальность всех имеющихся товаров на сайте. Ежедневное пополнение каталога. Достоверные фотографии и&nbsp;описания. Наши фирменные гарантии. Профессионалы своего дела.</p>
+                        <? endif; ?>
                     </li>
                     <li>
                         <h3>Разделы</h3>
@@ -231,7 +240,11 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
         </div>
         <div class="b-footer-sub">
             <div class="b-block clearfix">
-                <h3 class="left">© 2015 Колесо Онлайн</h3>
+                <? if(Yii::app()->params["region"]): ?>
+                    <h3 class="left"><?  $this->renderPartial(Yii::app()->params["city"]->code.'/_copyright'); ?></h3>
+                <? else: ?>
+                    <h3 class="left">© 2015 Колесо Онлайн</h3>
+                <? endif; ?>
                 <h3 class="right b-copyright">Дизайн и разработка <a href="http://redder.pro/" target="_blank" class="b-redder"></a></h3>
             </div>
         </div>

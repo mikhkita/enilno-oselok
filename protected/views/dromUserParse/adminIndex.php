@@ -12,7 +12,7 @@
 			<input id="disc_inp" type="checkbox" name="good_types[]" value="2" checked>
 			<label for="disc_inp">Диски</label>
 			<input id="wheel_inp" type="checkbox" name="good_types[]" value="3">
-			<label for="disc_inp">Колеса</label>
+			<label for="wheel_inp">Колеса</label>
 			<p><br>Строка для парсинга должна быть представлена в следующем виде: "http://baza.drom.ru/petropavlovsk-kamchatskii/wheel/tire/dsaf-41562222.html"</p>
 			<textarea id="links" name="links"></textarea>
 		</div>

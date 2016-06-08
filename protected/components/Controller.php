@@ -66,6 +66,14 @@ class Controller extends CController
             header("Location: http://koleso.online".str_replace(array("/tire","/disc","/wheel"), array("/shiny","/diski","/kolesa"), $_SERVER["REQUEST_URI"]));
             die();
         }
+
+        if( $_SERVER["HTTP_HOST"] == "koleso.tomsk.dev" ){
+            $_GET['city'] = "tomsk";
+            Yii::app()->params["region"] = true;
+        }elseif( $_SERVER["HTTP_HOST"] == "true-media.ru" ){
+            $_GET['city'] = "vladivostok";
+            Yii::app()->params["region"] = true;
+        }
         
         $this->user = User::model()->with("role")->findByPk(Yii::app()->user->id);
 
@@ -897,6 +905,25 @@ class Controller extends CController
             "popup" => $show
         );
         unset($_GET['city']);
+    }
+
+    public function regionFilter(){
+        if( Yii::app()->params["region"] ){
+            switch (Yii::app()->params["city"]->code) {
+                case 'tomsk':
+                    return array(27 => array(1056));
+                    break;
+                case 'vladivostok':
+                    return array(27 => array(1034));
+                    break;
+                
+                default:
+                    # code...
+                    break;
+            }
+        }else{
+            return array();
+        }
     }
 
     public function visualInter($template){

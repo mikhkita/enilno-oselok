@@ -76,7 +76,7 @@ class SiteController extends Controller
 	public function actionLogin()
 	{
         $this->layout='service';
-		if( !Yii::app()->user->isGuest ) $this->redirect($this->createUrl(Yii::app()->params['defaultAdminRedirect']));
+		if( !Yii::app()->user->isGuest ) $this->redirect($this->createUrl($this->getRedirect($user)));
 
 		// $this->layout='admin';
 		if (!defined('CRYPT_BLOWFISH')||!CRYPT_BLOWFISH)
@@ -97,7 +97,9 @@ class SiteController extends Controller
 			$model->attributes=$_POST['LoginForm'];
 			// validate user input and redirect to the previous page if valid
 			if($model->validate() && $model->login()) {
-                $referer = $this->createUrl(Yii::app()->params['defaultAdminRedirect']);
+                $user = User::model()->find("usr_login='".$model->username."'");
+
+                $referer = $this->createUrl($this->getRedirect($user));
                 if(stripos($_POST['LoginForm']['referer'], "admin")) $referer = $_POST['LoginForm']['referer'];
 				$this->redirect($referer);
             }
@@ -105,6 +107,17 @@ class SiteController extends Controller
 		// display the login form
 		$this->render('login',array('model'=>$model));
 	}
+
+    public function getRedirect($user = NULL){
+        if( $user === NULL ){
+            $user = User::model()->find("usr_login='".Yii::app()->user->usr_login."'");
+        }
+        $out = Yii::app()->params['defaultAdminRedirect'];
+        if(isset($user->usr_models))
+            $out = "/admin/".array_shift(explode(",",$user->usr_models));
+        
+        return $out;
+    }
 
 	/**
 	 * Logs out the current user and redirect to homepage.
