@@ -807,6 +807,12 @@ $(document).ready(function(){
                 success: function(msg){
                     $(".order-desc").html(msg);
                     form.find("input[type=submit]").prop('disabled',false);
+                    $(".cart-price").each(function() {
+                       price += parseInt($(this).attr("data-price"));      
+                    });
+                    $(".total-price span").text(price);  
+                    $("input[name='LMI_PAYMENT_AMOUNT']").val(price);
+                    price = 0;
                 }
             });
             return false;

@@ -1,3 +1,4 @@
+       
 <div class="row">
 	<?php echo CHtml::activeLabelEx($model,'name'); ?>
 	<?php echo CHtml::activeTextField($model,'name',array('maxlength'=>255)); ?>
@@ -13,6 +14,12 @@
     <?php echo CHtml::activeTextField($model,'car',array('maxlength'=>50)); ?>
     <?php echo CHtml::error($model,'car'); ?>
 </div>
+<div class="row">
+    <label for="Contact_email">E-mail клиента</label>
+    <? $email = ($model->emails) ? $model->emails[0]->email : "";
+       echo Chtml::textField("Contact[email]",$email,array('id' => 'Contact_email')); 
+    ?>
+</div>
 <div class="clearfix">
     <div class="row row-half">
         <?php echo CHtml::activeLabelEx($model,'source_id'); ?>
@@ -21,8 +28,9 @@
     </div>
     <div class="row row-half">
         <?php echo CHtml::activeLabelEx($model,'client_type_id'); ?>
-        <?php echo CHtml::activeDropDownList($model, 'client_type_id', CHtml::listData(Desktop::getList(135), 'row_id', 'value'),array("empty" => "Не задано")); ?>
+        <?php echo CHtml::activeDropDownList($model, 'client_type_id', CHtml::listData(Desktop::getList(135), 'row_id', 'value'),array("empty" => "Не задано")); ?> 
         <?php echo CHtml::error($model,'client_type_id'); ?>
+        <!-- 123 -->
     </div>
 </div>
 <div class="row">

@@ -399,6 +399,30 @@ $(document).ready(function(){
 
         $("#Contact_phone").keyup();
 
+
+        $(".good-to-order input[type=button]").click(function(){
+            if($(".good-to-order input[name='good_code']").val()) {
+                $.ajax({
+                    type: "GET",
+                    url: $(".good-to-order input[type=button]").attr("data-url"),
+                    data: {good_type_id: $(".good-to-order input[name='good_type_id']:checked").val(), good_code : $(".good-to-order input[name='good_code']").val()},
+                    success: function(msg){
+                        if(msg == 0) {
+                            alert("Товар не найден");
+                        }else {
+                            $(".good-to-order").before(msg);
+                            $(".delete-good").show();
+                        }
+                    }
+                }); 
+            }
+        });
+        if($(".delete-good").length != 1) $(".delete-good").show();
+        $("body").on("click",".delete-good",function(){
+            $(this).closest(".order-good").remove();
+            if($(".delete-good").length == 1) $(".delete-good").hide();
+        });
+
         $(".numeric").numericInput({ allowFloat: true, allowNegative: true });
 
         $form.submit(function(e,a){
@@ -1977,5 +2001,6 @@ $(document).ready(function(){
         //     $("#myCanvas .helper").hide();
         //     isDrawing = false;
         // });
+
     }
 });

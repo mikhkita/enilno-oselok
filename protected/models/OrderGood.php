@@ -6,7 +6,6 @@
  * The followings are the available columns in table 'order_good':
  * @property string $order_id
  * @property string $good_id
- * @property string $price
  * @property string $waybill
  * @property string $waybill_photo
  * @property string $tk_id
@@ -30,13 +29,12 @@ class OrderGood extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('order_id, good_id', 'required'),
-			array('price', 'length', 'max'=>6),
 			array('order_id, good_id, tk_id', 'length', 'max'=>10),
 			array('waybill', 'length', 'max'=>25),
 			array('waybill_photo', 'length', 'max'=>100),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('order_id, good_id, price, waybill, waybill_photo, tk_id', 'safe', 'on'=>'search'),
+			array('order_id, good_id, waybill, waybill_photo, tk_id', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -61,7 +59,6 @@ class OrderGood extends CActiveRecord
 		return array(
 			'order_id' => 'Номер заказа',
 			'good_id' => 'Код товара',
-			'price' => "Цена",
 			'waybill' => 'Номер накладной',
 			'waybill_photo' => 'Фото накладной',
 			'tk_id' => 'ТК',
@@ -88,7 +85,6 @@ class OrderGood extends CActiveRecord
 
 		$criteria->compare('order_id',$this->order_id,true);
 		$criteria->compare('good_id',$this->good_id,true);
-		$criteria->compare('price',$this->price,true);
 		$criteria->compare('waybill',$this->waybill,true);
 		$criteria->compare('waybill_photo',$this->waybill_photo,true);
 		$criteria->compare('tk_id',$this->tk_id,true);

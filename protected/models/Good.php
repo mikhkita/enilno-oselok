@@ -744,6 +744,9 @@ class Good extends GoodFilter
 
 	public function sold($archive = true,$type = 1){
 		$this->archive = $type;
+		// if($type == 1) {
+		// 	OrderGood::model()->deleteAll("good_id=".$this->id);
+		// }
 		$this->date = date_format(date_create(), 'Y-m-d H:i:s');
 		$code = $this->fields_assoc[3]->value;
 		if($type == 1 && iconv_strlen($code) > 4 && stripos($code, "-") === false) {
@@ -759,7 +762,6 @@ class Good extends GoodFilter
 			
 		}
 		if($archive) {
-			$code = $this->fields_assoc[3]->value;
 			if($this->good_type_id != 3) {
 				$code = array_shift(explode("-", $code));
 				if($model = Good::model()->with("fields")->find("good_type_id=3 AND archive=0 AND fields.attribute_id=3 AND fields.varchar_value='".$code."'"))	
