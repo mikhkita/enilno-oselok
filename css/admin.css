@@ -752,7 +752,9 @@ td.b-photo-td{
             padding: 2px 10px 2px;
             font-size: 14px;
             display: block;
-            width: 420px;
+            // width: 420px;
+            width: 100%;
+            box-sizing: border-box;
         }
         .fancybox-skin select{
             padding: 4px 10px 6px;
@@ -764,6 +766,24 @@ td.b-photo-td{
             width: auto;
             height: 32px;
         }
+        .fancybox-skin .order-good {
+            box-shadow: inset 0px 0px 5px 0px #452716;
+            margin-top: 15px;
+            padding: 0px 0 10px;
+        }
+            .fancybox-skin .order-good .good-link {
+                display: inline-block;
+                margin-top: 25px;
+            }
+        .fancybox-skin #good-to-order {
+
+        }  
+            .fancybox-skin .good-to-order input[type=text]{
+                width: 63%;
+                margin-right: 5%;
+                float: left;
+                padding: 11px 15px 10px;
+            }  
 
         .fancybox-skin .select2-choices,.fancybox-skin .select2-choice{
             border-radius: 5px;
@@ -809,7 +829,8 @@ td.b-photo-td{
         margin-top: 15px;
     }
         .fancybox-skin .buttons input[type='submit'],
-        .fancybox-skin .buttons input[type='button']{
+        .fancybox-skin .buttons input[type='button'],
+        .fancybox-skin .good-to-order input[type='button']{
             border: 0px;
             cursor: pointer; 
             background-color: #452716;
@@ -833,7 +854,8 @@ td.b-photo-td{
             width: 100px;
         }
             .fancybox-skin .buttons input[type='submit']:hover,
-            .fancybox-skin .buttons input[type='button']:hover{
+            .fancybox-skin .buttons input[type='button']:hover,
+            .fancybox-skin .good-to-order input[type='button']:hover{
                 background-color: #D26A44;
             }
         .fancybox-skin .buttons .blocked{
@@ -894,13 +916,13 @@ td.b-photo-td{
                     width: 340px !important;
                 }
                 .row-half:nth-child(1){
-                    margin-right: 10px;
+                    margin-right: 40px;
                 }
                 .row-half input{
                     width: 190px !important;
                 }
                 .row-half select{
-                    width: 210px !important;
+                    width: 100% !important;
                 }
                 .b-full-width .row-half input{
                     width: 320px !important;
@@ -950,7 +972,7 @@ td.b-photo-td{
         .b-good-form .clearfix .row input[type="password"],
         .b-good-form .clearfix .row select
         .b-good-form .clearfix .row span.required{
-            width: 200px;
+            width: 222px;
         }
         .b-good-form .clearfix .row textarea{
             height: 115px;

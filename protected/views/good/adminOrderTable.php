@@ -1,6 +1,7 @@
 <h1>Заказы</h1>
 <table class="b-table b-sale-table b-good-table" border="1">
 	<tr>
+		<th style="min-width: 52px;">Коды товаров</th>
 		<? foreach ($labels as $item): ?>
 			<th style="min-width: 80px;"><?=$item?></th>
 		<? endforeach; ?>
@@ -9,6 +10,14 @@
 	<? if( count($data) ): ?>
 		<? foreach ($data as $key => $item): ?>
 			<tr>
+				<td>
+					<?	$goods="";
+						foreach ($item->goods as $key => $order_good) {
+							$goods.= $order_good->good->fields_assoc[3]->value." | ";
+						}
+					?>
+					<div><?=$goods?></div>
+				</td>
 				<td>
 					<div><?=$item->id?></div>		
 				</td>
@@ -31,7 +40,7 @@
 				</td>
 				
 				<td>
-					<a href="<?php echo Yii::app()->createUrl('/good/adminorder',array('id'=>$item->id,'update' => true));?>" class="ajax-form ajax-update b-tool b-tool-update"></a>
+					<a href="<?php echo Yii::app()->createUrl('/good/adminorder',array('id'=>$item->id));?>" class="ajax-form ajax-update b-tool b-tool-update"></a>
 					<a href="<?php echo Yii::app()->createUrl('/good/adminorderdelete',array('id'=>$item->id));?>" class="ajax-form ajax-delete b-tool b-tool-delete"></a>
 				</td>
 			</tr>

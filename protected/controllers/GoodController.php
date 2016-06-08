@@ -13,7 +13,7 @@ class GoodController extends Controller
 	{
 		return array(
 			array('allow',
-				'actions'=>array('adminIndex','adminPhoto','adminGetNextPhoto','adminCheckCode', 'adminPhotoUpdate','adminToArchive','adminChangeType','adminTest','updatePrices','updateAuctionLinks','adminCreate','adminUpdate','adminDelete','adminEdit','getAttrType','getAttr','adminAdverts','adminUpdateImages',"adminAddCheckbox","adminRemoveCheckbox","adminAddAllCheckbox","adminRemoveAllCheckbox", "adminRemoveManyCheckbox",'adminUpdateAll','adminAddSomeCheckbox','adminAddManyCheckbox','adminUpdateAdverts','adminViewSettings','adminSold','adminArchive','adminJoin','adminDeleteAll','adminSale','adminCustomer','adminArchiveAll','adminSaleTable','adminSaleDelete',"adminPhotoEdit","adminOrder",'adminContact','adminOrderTable','adminOrderDelete'),
+				'actions'=>array('adminIndex','adminPhoto','adminGetNextPhoto','adminCheckCode', 'adminPhotoUpdate','adminToArchive','adminChangeType','adminTest','updatePrices','updateAuctionLinks','adminCreate','adminUpdate','adminDelete','adminEdit','getAttrType','getAttr','adminAdverts','adminUpdateImages',"adminAddCheckbox","adminRemoveCheckbox","adminAddAllCheckbox","adminRemoveAllCheckbox", "adminRemoveManyCheckbox",'adminUpdateAll','adminAddSomeCheckbox','adminAddManyCheckbox','adminUpdateAdverts','adminViewSettings','adminSold','adminArchive','adminJoin','adminDeleteAll','adminSale','adminCustomer','adminArchiveAll','adminSaleTable','adminSaleDelete',"adminPhotoEdit","adminOrder",'adminContact','adminOrderTable','adminOrderDelete','adminGoodToOrder'),
 				'roles'=>array('manager'),
 			),
 			array('allow',
@@ -156,47 +156,60 @@ class GoodController extends Controller
 		$this->actionAdminOrderTable(true);
 	}
 
-	public function actionAdminOrder($id = NULL,$good_id = NULL,$good_type_id = NULL,$update = NULL,$order_good = NULL)
+	public function actionAdminGoodToOrder($good_type_id,$good_code) 
+	{
+		$goodAttr = GoodFilter::model()->with("fields")->find("good_type_id=".$good_type_id." AND attribute_id=3 AND varchar_value='".$good_code."'");
+		if($goodAttr) {
+			$order_good = new OrderGood;
+			$order_good->good_id = $goodAttr->id;
+			$this->renderPartial('_orderGood',array(
+				'order_good' =>$order_good
+			));
+		} else echo "0";
+	}
+
+	public function actionAdminOrder($id = NULL,$good_id = NULL,$good_type_id = NULL,$order_good = NULL)
 	{
 		if($_POST['Order']) {
+			$order_goods = array();
 			if($_POST['Contact']['phone']) {
-				$contact_id = Contact::addOrUpdate($_POST["Contact"]);	
-				$_POST['Order']['contact_id'] = $contact_id;
+				if($id && isset(Order::model()->findbyPk($id)->contact)) {
+					$contact_id = Order::model()->findbyPk($id)->contact_id;
+					Contact::updateContact($_POST["Contact"],$contact_id);
+				} else {
+					$_POST['Order']['contact_id'] = Contact::add($_POST["Contact"]);
+				}
 			}
-			if(!$update) {
-				$_POST['Order']['good_id'] = $good_id;
-			}
+
 			$_POST['Order']['date'] = date_create_from_format('d.m.Y', $_POST['Order']['date']);
 			$_POST['Order']['user_id'] = $this->user->usr_id;
 
 			if( $id = Order::add($_POST["Order"],$id) ){
-				if(!$order_goods = OrderGood::model()->findAll("order_id=$id")) {
-					$order_goods = array();
-					$order_goods[0]= new OrderGood;
-					$order_goods[0]->order_id = $id;
-					$order_goods[0]->good_id = $good_id;
-					if( !isset($_POST['OrderGood'][$good_id]['tk_id']) || $_POST['OrderGood'][$good_id]['tk_id'] == "" ) $_POST['OrderGood'][$good_id]['tk_id'] = NULL;
+				if(OrderGood::model()->findAll("order_id=$id")) {
+					OrderGood::model()->deleteAll("order_id=$id");
 				}
-				foreach ($order_goods as $key => $order_good) {
-					$order_good->attributes = $_POST['OrderGood'][$order_good->good_id];
-					$order_good->save();
+				foreach ($_POST['OrderGood'] as $key => $order_good) {
+					$price = GoodAttribute::model()->find('attribute_id=20 AND good_id='.$key);
+					$price->int_value = $order_good['price'];
+					$price->save();
+					$order_goods[$key] = new OrderGood;
+					$order_goods[$key]->order_id = $id;
+					$order_goods[$key]->good_id = $key;
+					if( !isset($order_good['tk_id']) || $order_good['tk_id'] == "" ) $order_good['tk_id'] = NULL;
+					$order_goods[$key]->attributes = $order_good;
+					$order_goods[$key]->save();
 				}
 				
 				if($_POST['Order']['state_id'] > 165) {
-					$good = $this->loadModel($order_good->good_id);
-					if($good->archive != 1) $good->sold();
-					if(!$update) {
-						echo json_encode(array(
-							"result" => "success",
-							"action" => "delete", 
-							"selector" => "#id-".$good_id
-						));
-					} else $this->actionAdminOrderTable(true);
+					foreach ($order_goods as $key => $value) {
+						$good = $this->loadModel($key);
+						if($good->archive != 1) $good->sold();	
+					}
 				}
+				$this->actionAdminOrderTable(true);
 			}		
 		} else {
-			$order_goods = array();
-			if( $update && $model = Order::model()->findByPk($id)) {				
+			if($id && $model = Order::model()->findByPk($id)) {				
 				$model->date = date_format(date_create($model->date), 'd.m.Y');	
 				$order_goods = $model->goods;
 			} else {
@@ -204,7 +217,6 @@ class GoodController extends Controller
 				$model->date = date("d.m.Y");
 				if($good_id) {
 					$order_goods[0] = new OrderGood;
-					$order_goods[0]->order_id = $model->id;
 					$order_goods[0]->good_id = $good_id;
 				}
 			}

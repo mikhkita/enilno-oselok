@@ -112,35 +112,50 @@ class Contact extends CActiveRecord
 		));
 	}
 
-	public function addOrUpdate($attributes){
-		if( isset($attributes['phone']) ){
-			$attributes['phone'] = str_replace(array("(",")"," ","-","+"),"", $attributes['phone']);
-			$contact = ContactPhone::model()->find("phone='".$attributes['phone']."'");
-			if($contact) {
-				$contact = Contact::model()->findbyPk($contact->contact_id);
-			} else {
-				$contact = new Contact; 
-				$contactPhone = new ContactPhone;
-				$contactPhone->phone = $attributes['phone'];
-				$contact->create_date = date_format(date_create(), 'Y-m-d H:i:s');
-			}
-			if( !isset($attributes['source_id']) || $attributes['source_id'] == "" ) $attributes['source_id'] = NULL;
-			if( !isset($attributes['client_type_id']) || $attributes['client_type_id'] == "" ) $attributes['client_type_id'] = NULL;
-			$contact->attributes = $attributes;
-			if( $contact->save() ){	
-				if($contactPhone) {
-					$contactPhone->contact_id = $contact->id;
-					$contactPhone->save();
-				}
-				if(!$email = ContactEmail::model()->find("contact_id=$contact->id AND email='".$attributes['email']."'")) {
-					$email = new ContactEmail;
-				}
+	public function add($attributes){
+		$attributes['phone'] = str_replace(array("(",")"," ","-","+"),"", $attributes['phone']);
+		$contact = new Contact; 
+		$contact->create_date = date_format(date_create(), 'Y-m-d H:i:s');
+		if( !isset($attributes['source_id']) || $attributes['source_id'] == "" ) $attributes['source_id'] = NULL;
+		if( !isset($attributes['client_type_id']) || $attributes['client_type_id'] == "" ) $attributes['client_type_id'] = NULL;
+		$contact->attributes = $attributes;
+		if( $contact->save() ){	
+			$phone = new ContactPhone;
+			$phone->phone = $attributes['phone'];
+			$phone->contact_id = $contact->id;
+			$phone->save();
+			if($attributes['email']) {
+				$email = new ContactEmail;
 				$email->email = $attributes['email'];
 				$email->contact_id = $contact->id;
 				$email->save();
-				return $contact->id;
-			}else throw new CHttpException(500, 'Не удалось создать клиента');
-		}else throw new CHttpException(404, 'Не указан телефон клиента');
+			}
+			return $contact->id;
+		}else throw new CHttpException(500, 'Не удалось создать клиента');
+	}
+
+	public function updateContact($attributes,$contact_id){
+		$contact = Contact::model()->findbyPk($contact_id);
+		$attributes['phone'] = str_replace(array("(",")"," ","-","+"),"", $attributes['phone']);
+		if( !isset($attributes['source_id']) || $attributes['source_id'] == "" ) $attributes['source_id'] = NULL;
+		if( !isset($attributes['client_type_id']) || $attributes['client_type_id'] == "" ) $attributes['client_type_id'] = NULL;
+		$contact->attributes = $attributes;
+		if( $contact->save() ){	
+			$contactPhone = ContactPhone::model()->find('contact_id='.$contact_id);
+			$contactPhone->phone = $attributes['phone'];
+			$contactPhone->save();
+			if($attributes['email']) {
+				if(!$email = ContactEmail::model()->find("contact_id=".$contact_id." AND email='".$attributes['email']."'")) {
+					$email = new ContactEmail;
+				}
+				$email->email = $attributes['email'];
+				$email->contact_id = $contact_id;
+				$email->save();
+			} else {
+				ContactEmail::model()->delete("contact_id=".$contact_id." AND email='".$attributes['email']."'");
+			}
+			return $contact->id;
+		}else throw new CHttpException(500, 'Не удалось создать клиента');
 	}
 
 	public function beforeDelete() {

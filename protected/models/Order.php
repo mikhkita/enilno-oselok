@@ -62,8 +62,8 @@ class Order extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'id' => 'Код',
-			'date' => 'Дата',
+			'id' => 'Код заказа',
+			'date' => 'Дата создания',
 			'contact_id' => 'Контакт',
 			'channel_id' => 'Канал продажи',
 			'user_id' => 'Менеджер',
@@ -104,18 +104,17 @@ class Order extends CActiveRecord
 	}
 
 	public function add($attributes,$id){
-			if( !isset($attributes["date"]) )
-				$attributes['date'] = date('d.m.Y');
+		if( !isset($attributes["date"]) )
+			$attributes['date'] = date('d.m.Y');
 
-			$attributes['date'] = date_format($attributes['date'], 'Y-m-d H:i:s');
-			if( !isset($attributes['channel_id']) || $attributes['channel_id'] == "" ) $attributes['channel_id'] = NULL;
-			if( !isset($attributes['state_id']) || $attributes['state_id'] == "" ) $attributes['state_id'] = NULL;
-			if(!$order = Order::model()->findByPk($id)) $order = new Order;
-			
-			$order->attributes = $attributes;
-			$order->save();
-			return $order->id;
-		// }else throw new CHttpException(404, 'Не указана сумма продажи');
+		$attributes['date'] = date_format($attributes['date'], 'Y-m-d H:i:s');
+		if( !isset($attributes['channel_id']) || $attributes['channel_id'] == "" ) $attributes['channel_id'] = NULL;
+		if( !isset($attributes['state_id']) || $attributes['state_id'] == "" ) $attributes['state_id'] = NULL;
+		if(!$order = Order::model()->findByPk($id)) $order = new Order;
+		
+		$order->attributes = $attributes;
+		$order->save();
+		return $order->id;
 	}
 
 	public function beforeDelete() {
