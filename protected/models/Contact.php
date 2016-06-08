@@ -114,18 +114,27 @@ class Contact extends CActiveRecord
 
 	public function add($attributes){
 		$attributes['phone'] = str_replace(array("(",")"," ","-","+"),"", $attributes['phone']);
-		$contact = new Contact; 
-		$contact->create_date = date_format(date_create(), 'Y-m-d H:i:s');
+		$phone = ContactPhone::model()->find("phone='".$attributes['phone']."'");
+		if($phone) {
+			$contact = Contact::model()->findbyPk($phone->contact_id);
+		} else {
+			$contact = new Contact; 
+			$contact->create_date = date_format(date_create(), 'Y-m-d H:i:s');
+		}
 		if( !isset($attributes['source_id']) || $attributes['source_id'] == "" ) $attributes['source_id'] = NULL;
 		if( !isset($attributes['client_type_id']) || $attributes['client_type_id'] == "" ) $attributes['client_type_id'] = NULL;
 		$contact->attributes = $attributes;
 		if( $contact->save() ){	
-			$phone = new ContactPhone;
+			if(!$phone) {
+				$phone = new ContactPhone;
+			}
 			$phone->phone = $attributes['phone'];
 			$phone->contact_id = $contact->id;
 			$phone->save();
 			if($attributes['email']) {
-				$email = new ContactEmail;
+				if(!$email = ContactEmail::model()->find("contact_id=".$contact->id." AND email='".$attributes['email']."'")) {
+					$email = new ContactEmail;
+				}
 				$email->email = $attributes['email'];
 				$email->contact_id = $contact->id;
 				$email->save();
