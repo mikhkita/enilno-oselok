@@ -775,6 +775,11 @@ td.b-photo-td{
                 display: inline-block;
                 margin-top: 25px;
             }
+            .fancybox-skin .delete-good {
+                display: none;
+                position: absolute;
+                right: 0;
+            }
         .fancybox-skin #good-to-order {
 
         }  

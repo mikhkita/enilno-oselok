@@ -7,7 +7,8 @@
             <?php echo CHtml::error($order_good,'tk_id'); ?>
         </div>
         <div class="row row-half">    
-            <a target="_blank" class="good-link" href="<?=Yii::app()->createUrl('/kolesoOnline/detail',array('id' => ($good->code)?$good->code:$good->fields_assoc[3]->value,'type' => $good->good_type_id))?>"><?=$goodType." ".$good->fields_assoc[3]->value?></a>    
+            <a target="_blank" class="good-link" href="<?=Yii::app()->createUrl('/kolesoOnline/detail',array('id' => ($good->code)?$good->code:$good->fields_assoc[3]->value,'type' => $good->good_type_id))?>"><?=$goodType." ".$good->fields_assoc[3]->value?></a>   
+            <a href="#" class="delete-good">убрать товар</a> 
         </div>   
     </div>   
     <div class="row">

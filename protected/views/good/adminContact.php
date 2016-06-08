@@ -28,9 +28,9 @@
     </div>
     <div class="row row-half">
         <?php echo CHtml::activeLabelEx($model,'client_type_id'); ?>
-        <?php echo CHtml::activeDropDownList($model, 'client_type_id', CHtml::listData(Desktop::getList(123), 'row_id', 'value'),array("empty" => "Не задано")); ?> 
+        <?php echo CHtml::activeDropDownList($model, 'client_type_id', CHtml::listData(Desktop::getList(135), 'row_id', 'value'),array("empty" => "Не задано")); ?> 
         <?php echo CHtml::error($model,'client_type_id'); ?>
-        <!-- 135 -->
+        <!-- 123 -->
     </div>
 </div>
 <div class="row">

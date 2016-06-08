@@ -399,6 +399,7 @@ $(document).ready(function(){
 
         $("#Contact_phone").keyup();
 
+
         $(".good-to-order input[type=button]").click(function(){
             if($(".good-to-order input[name='good_code']").val()) {
                 $.ajax({
@@ -408,10 +409,18 @@ $(document).ready(function(){
                     success: function(msg){
                         if(msg == 0) {
                             alert("Товар не найден");
-                        }else $(".good-to-order").before(msg);
+                        }else {
+                            $(".good-to-order").before(msg);
+                            $(".delete-good").show();
+                        }
                     }
                 }); 
             }
+        });
+        if($(".delete-good").length != 1) $(".delete-good").show();
+        $("body").on("click",".delete-good",function(){
+            $(this).closest(".order-good").remove();
+            if($(".delete-good").length == 1) $(".delete-good").hide();
         });
 
         $(".numeric").numericInput({ allowFloat: true, allowNegative: true });
