@@ -46,7 +46,7 @@ class Auction extends CActiveRecord
 			array('state, price, current_price, archive', 'numerical', 'integerOnly'=>true),
 			array('code', 'length', 'max'=>100),
 			array('name', 'length', 'max'=>1000),
-			array('image', 'length', 'max'=>255),
+			array('image', 'length', 'max'=>1000),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('id, code, name, date, state, image, price, current_price, archive', 'safe', 'on'=>'search'),

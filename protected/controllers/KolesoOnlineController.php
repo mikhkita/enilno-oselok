@@ -4,8 +4,8 @@ class KolesoOnlineController extends Controller
 {
 	public $layout='//layouts/kolesoOnline';
 	public $title = "Купить колеса, шины и диски [+IN+] в магазине Колесо.Онлайн";
-	public $description = "Лучший выбор автомобильных б/у шин и дисков из Японии. Удобный поиск и выгодные цены, а самое главное честное описание и фото. Мы постоянно работаем над расширением географии наших представительств на территории РФ.";
-	public $keywords = "Лучший выбор автомобильных б/у шин и дисков из Японии. Удобный поиск и выгодные цены, а самое главное честное описание и фото. Мы постоянно работаем над расширением географии наших представительств на территории РФ.";
+	public $description = "Лучший выбор автомобильных бу шин и дисков из Японии. Удобный поиск и выгодные цены, а самое главное честное описание и фото. Мы постоянно работаем над расширением географии наших представительств на территории РФ.";
+	public $keywords = "Лучший выбор автомобильных бу шин и дисков из Японии. Удобный поиск и выгодные цены, а самое главное честное описание и фото. Мы постоянно работаем над расширением географии наших представительств на территории РФ.";
 	public $image = "";
 
 	public $params = array(
@@ -379,19 +379,19 @@ class KolesoOnlineController extends Controller
 		$wheel_filter =  $this->getFilter(3);
        	$tires = $this->getGoods(8,1,array(
 			"good_type_id"=>1,
-			"attributes"=>array( 43 => array(1418,1419,1857,1860))
+			"attributes" => array()
 		),array("field"=>46,"type"=>"DESC")); 
 		$tires = $tires['items'];
 
 		$discs = $this->getGoods(8,2,array(
 			"good_type_id"=>2,
-			"attributes"=>array(78=>2486,77=>array(2478,2479,2480,2481,2482), 43 => array(1418,1419,1857,1860))
+			"attributes"=> array()
 		),array("field"=>46,"type"=>"DESC"));
 		$discs = $discs['items'];
 
 		$wheels = $this->getGoods(8,3,array(
 			"good_type_id"=>3,
-			"attributes"=>array( 43 => array(1418,1419,1857,1860))
+			"attributes"=> array()
 		));
 		$wheels = $wheels['items'];
 
@@ -789,6 +789,12 @@ class KolesoOnlineController extends Controller
 				"attributes"=>isset($_SESSION["FILTER"][$type]['arr']) ? $_SESSION["FILTER"][$type]['arr'] : array(),
 				"int_attributes"=>isset($_SESSION["FILTER"][$type]['int']) ? $_SESSION["FILTER"][$type]['int'] : array(),
 			);
+
+		if( !isset($filter["attributes"]) ){
+			$filter["attributes"] = $this->regionFilter();
+		}else{
+			$filter["attributes"] = $filter["attributes"] + $this->regionFilter();
+		}
 
 		$goods = Good::model()->filter(
 			$filter,NULL,$ids

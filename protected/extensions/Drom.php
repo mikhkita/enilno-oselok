@@ -485,7 +485,9 @@ Class Drom {
 
             $params = array();
             $marking = 1;
-            $html = str_get_html(iconv('windows-1251', 'utf-8', $this->curl->request($page)));
+            // print_r($link);
+            // die();
+            $html = str_get_html(iconv('windows-1251', 'utf-8', $this->curl->request("http://baza.drom.ru".$page)));
             $params[$fields['link']] = $link;
             if($user_id === NULL) {
                 $user_id = $html->find("div.ownerInfoInner",0)->getAttribute("data-id");

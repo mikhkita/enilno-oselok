@@ -19,5 +19,6 @@ return array(
 	'copyrightInfo'=>'Copyright &copy; 2009 by My Company.',
 	'debug' => true,
 	"zeroPrice" => "Уточняйте цену",
-	'dbname' => "koleso"
+	'dbname' => "koleso",
+	"region" => false
 );

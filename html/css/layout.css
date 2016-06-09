@@ -333,6 +333,10 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 		/* overflow: hidden; */
 		z-index: 100;
 	}
+	.b-header .b-header-main h1{
+		font-size: 0px;
+		opacity: 0;
+	}
 	/*.b-header .b-header-main {
 		background-image: url("../i/back-asphalt@2x.jpg");
 	}*/
@@ -352,6 +356,41 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 			.b-header .b-header-main .b-block > .left{
 
 			}
+.b-logo-tomsk{
+	display: block;
+	text-decoration: none !important;
+	position: relative;
+}
+	.b-logo-tomsk i{
+		display: block;
+		background-position: 50% 50%;
+		background-repeat: no-repeat;
+		background-image: url('../i/logo-tomsk.png');
+		width: 49px;
+		background-size: 49px;
+		height: 78px;
+		position: absolute;
+		left: 0px;
+		top: -4px;
+	}
+	.b-logo-tomsk div{
+		display: block;
+		font-size: 26px;
+		margin-left: 61px;
+		color: #FFF;
+		font-family: "Roboto";
+		text-transform: uppercase;
+		font-weight: 900;
+	}
+	.b-logo-tomsk div.b-logo-tomsk-koleso{
+		font-size: 26px;
+		line-height: 31px;
+		padding-top: 5px;
+	}
+	.b-logo-tomsk div.b-logo-tomsk-tomsk{letter-spacing: 0px;margin-top: -1px;}
+		.b-logo-tomsk div.b-logo-tomsk-tomsk span{
+			color: #FFC512;
+		}
 				.b-main-logo {
 					margin-top: 2px;
 					width: 220px;
@@ -360,6 +399,10 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 					background-repeat: no-repeat;
 					background-image: url('../i/logo.png');
 					display: block;
+				}
+				.b-footer .b-logo-tomsk{
+					margin-bottom: 28px;
+					margin-top: 26px;
 				}
 				.b-header .b-header-main .b-block > .left .right {
 					margin-left: 10px;
@@ -687,10 +730,11 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 			.b-main-slider .slide .b-block h2,
 			.b-main-slider .slide .b-block h1 {
 				font-size: 38px;
-				font-family: "museo_sans_cyrl700";
+				font-family: "Roboto";
 				color: rgb(255, 255, 255);
 				line-height: 1.073;
 				width: 960px;
+				font-weight: 400;
 				margin-bottom: 14px;
 			}
 			.b-main-slider .slide .b-block.b-black-text h2,
@@ -1469,13 +1513,11 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 						}
 					.b-footer .b-footer-main .b-block .sections > li p {
 						color: rgba(255, 255, 255, 0.902);
-						line-height: 1.6;
+						line-height: 1.8;
 						margin-bottom: 22px;
 						max-height: 10000px;
 					}
-					.b-footer .b-footer-main .b-block .sections > li ul {
-
-					margin-top: -5px;}
+					.b-footer .b-footer-main .b-block .sections > li ul {margin-top: -5px;margin-bottom: 18px;}
 						.b-footer .b-footer-main .b-block .sections > li ul li {
 
 						}
@@ -2574,20 +2616,21 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 	.b-text h2 {
 		font-size: 18px;
 		font-weight: 500;
-		margin-top: 15px;
+		margin-top: 5px;
+		margin-bottom: 15px;
 	}
 	.b-text h3 {
 		font-size: 16px;
 		font-weight: 300;
-		margin-top: 10px;
+		margin-bottom: 15px;
 	}
 		.b-text h3 span {
 			font-weight: bold;
 		}
 	.b-text p{
-		font-size: 14px;
-		line-height: 25px;
-		margin-top: 10px;
+		font-size: 16px;
+		line-height: 28px;
+		margin-bottom: 20px;
 	}
 		.b-text a {
 			display: inline-block;
@@ -2599,10 +2642,9 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 	}
 		.b-text ul li {
 			font-size: 16px;
-		    margin-bottom: 5px;
-		    list-style: disc;
-    		list-style-position: inside;
-
+			margin-bottom: 5px;
+			list-style: disc;
+			list-style-position: inside;
 		}
 		.b-text ul.delivery {
 			margin-left: 30px;
