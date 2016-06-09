@@ -84,7 +84,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
                 <li><a href="<?=Yii::app()->createUrl('/guarantees.html')?>" class="b-mobile-menu-a">Гарантии</a></li>
                 <li><a href="<?=Yii::app()->createUrl('/payment.html')?>" class="b-mobile-menu-a">Способы оплаты</a></li>
                 <li><a href="<?=Yii::app()->createUrl('/contacts.html')?>" class="b-mobile-menu-a">Контакты</a></li>
-                <!-- <li><a href="<?=Yii::app()->createUrl('/kolesoOnline/pay')?>" class="b-mobile-menu-a">Оплата заказа</a></li> -->
+                <li><a href="<?=Yii::app()->createUrl('/kolesoOnline/pay')?>" class="b-mobile-menu-a">Оплата заказа</a></li>
             </ul>
             <a href="tel:+<?=Yii::app()->params["city"]->phone?>" class="b-menu-call b-orange-butt">Позвонить</a>
         </div>
@@ -95,7 +95,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
                     <li><a href="<?=Yii::app()->createUrl('/guarantees.html')?>">Гарантии</a></li>
                     <li><a href="<?=Yii::app()->createUrl('/payment.html')?>">Способы оплаты</a></li>
                     <li><a href="<?=Yii::app()->createUrl('/contacts.html')?>">Контакты</a></li>
-                    <!-- <li><a href="<?=Yii::app()->createUrl('/kolesoOnline/pay')?>">Оплата заказа</a></li> -->
+                    <li><a href="<?=Yii::app()->createUrl('/kolesoOnline/pay')?>">Оплата заказа</a></li>
                 </ul>
                 <div class="clearfix b-mobile-top-line mobile-only">
                     <h2 class="left">Вы находитесь в г. <a href="#" class="icon fancy" data-block="#b-popup-city"><?=Yii::app()->params["city"]->name?></a></h2>
