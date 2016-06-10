@@ -25,7 +25,7 @@
 			</li>
 			<li><a href="<?php echo $this->createUrl('/good/adminupdateall',array('good_type_id'=> $_GET["good_type_id"],'GoodFilter_page' => ($pages->currentPage+1) ))?>" class="ajax-form ajax-create" data-block=".b-popup-filter">Города</a></li>
 			<li><a href="<?php echo $this->createUrl('/advert/adminindex',array('good_type_id'=> $_GET["good_type_id"]))?>">Объявления</a></li>
-			<? if($_GET["good_type_id"] == 1 || $_GET["good_type_id"] == 2): ?>
+			<? if($_GET["good_type_id"] == 1 || $_GET["good_type_id"] == 2 && 0): ?>
 				<li><a href="<?php echo $this->createUrl('/good/adminjoin')?>">Склеить</a></li>
 			<? endif; ?>
 			<li><a>Экспорт</a>
@@ -35,7 +35,7 @@
 					<? endforeach; ?>
 				</ul>
 			</li>
-			<?if( Yii::app()->params["host"] != "koleso.online" ):?>
+			<?if( Yii::app()->params["host"] != "koleso.online" && 0 ):?>
 			<li><a href="<?php echo $this->createUrl('/good/admingetnextphoto')?>">Модерация</a></li>
 			<?endif;?>
 			<li><a>Убрать</a>

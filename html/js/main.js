@@ -236,7 +236,7 @@ $(document).ready(function(){
 
     $( ".popular-good.main-tabs" ).tabs({
         activate: function( event, ui ) {
-            $( ".b-block.main-tabs" ).tabs( "option", "active", $(".popular-good.main-tabs").tabs('option', 'active') );
+            // $( ".b-block.main-tabs" ).tabs( "option", "active", $(".popular-good.main-tabs").tabs('option', 'active') );
         }
     });
 
