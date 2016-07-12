@@ -192,7 +192,7 @@ class Advert extends CActiveRecord
 				$arr[$key] = trim($value);
 			}
 			$good_ids = Good::getIdbyCode($arr,$good_type_id);
-			print_r($good_ids);
+			// print_r($good_ids);
 			// die;
 			$criteria->addInCondition("good_id", $good_ids);
 			if( count($good_ids) )

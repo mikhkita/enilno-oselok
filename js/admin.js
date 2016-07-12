@@ -129,7 +129,7 @@ $(document).ready(function(){
         afterShow: function(){
             var $form = $(".fancybox-inner form");
             bindVariants();
-            $(".fancybox-inner").find("input").eq(($form.attr("data-input"))?($form.attr("data-input")*1):0).focus();
+            $(".fancybox-inner").find("input[type='text'],input[type='number'],input[type='date'],input[type='email'],textarea").eq(($form.attr("data-input"))?($form.attr("data-input")*1):0).focus();
         }
     });
 
@@ -517,7 +517,6 @@ $(document).ready(function(){
     }
 
     function jsonHandler(msg){
-        // alert(msg);
         var json = JSON.parse(msg);
         if( json.result == "success" ){
             switch (json.action) {
@@ -1428,12 +1427,13 @@ $(document).ready(function(){
     /* Visual Interpreter ------------------------ Visual Interpreter */
 
     /* Photo sortable ---------------------------- Photo sortable */
+    var mainSortable = null,
+        mainOrder;
     function photo_init() {
         if( $("#photo-sortable").length ) {
             var el = document.getElementById('photo-sortable');
-            var el2 = document.getElementById('photo-sortable-2');
-            var sortable = Sortable.create(el, {
-                sort: false,
+            mainSortable = Sortable.create(el, {
+                sort: true,
                 group: {
                     name: 'photo-sortable',
                     pull: 'clone'
@@ -1443,6 +1443,7 @@ $(document).ready(function(){
                     $(evt.item).find("input").attr("name",$(evt.to).attr("data-id")).attr("data-name",$(evt.to).attr("data-id"));
                 }
             });
+            mainOrder = mainSortable.toArray();
 
             $(".photo-sortable-cap").each(function(){
                 var el = document.getElementById($(this).attr("id"));
@@ -1464,6 +1465,8 @@ $(document).ready(function(){
 
                         $(evt.item).find("input").attr("name",$(evt.to).attr("data-sort")).attr("data-name",$(evt.to).attr("data-id"));
                         $(evt.item).find("input").eq(1).remove();
+                        mainSortable.sort(mainOrder);
+                        mainOrder = mainSortable.toArray();
                     }
                 });
             });

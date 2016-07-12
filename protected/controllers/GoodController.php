@@ -205,8 +205,10 @@ class GoodController extends Controller
 						$good = $this->loadModel($key);
 						if($good->archive != 1) $good->sold();	
 					}
+					echo json_encode(array("result" => "success", "action" => "delete", "selector" => "#id-".$good->id));
+				}else{
+					echo json_encode(array("result" => "success"));
 				}
-				$this->actionAdminOrderTable(true);
 			}		
 		} else {
 			if($id && $model = Order::model()->findByPk($id)) {				
@@ -331,7 +333,7 @@ class GoodController extends Controller
 			Task::model()->testGood($this->loadModel($model->id));
 
 			if( isset($_POST["to_task"]) ){
-				$this->redirect( Yii::app()->createUrl('task/adminindex', array('partial' => true)) );
+				$this->redirect( Yii::app()->createUrl('task/adminindex', array('partial' => true, 'get_next' => true)) );
 			}else{
 				$this->redirect( Yii::app()->createUrl('good/adminindex',array('good_type_id'=>$good_type_id,'partial'=>true,'GoodFilter_page' => $_GET["GoodFilter_page"])) );
 			}
@@ -696,62 +698,10 @@ class GoodController extends Controller
 
 	public function actionAdminTest($partial = false, $good_type_id = false)
 	{
-		$start = microtime(true);
+		$good = Good::model()->with(array("type","fields.variant","fields.attribute"))->findByPk(227);
 
-		// ini_set("memory_limit", "420M");
-
-		$attributes = array(
-			9 => array(1317,1318,1319,1320,1321,1322,1323,1324),
-			5 => array(1262,1263,1367,1264,1265,1266,1384,1267,1269,1270,1372,1473,1368,1271),
-			31 => array(1307,1308,1309,1310,1311,1312,1313,1314,1315,1316,1432,1630),
-		);
-
-		// $attributes = array(
-		// 	9 => array(1322),
-		// 	5 => array(1264,1269),
-		// 	31 => array(1312),
-		// );
-
-		$filter = array("good_type_id"=>2,"attributes"=>$attributes);	
-
-		$data = Good::model()->filter(
-			array(
-				"good_type_id"=>2,
-				"attributes"=>$attributes,
-			)
-		)->sort(
-			array(
-				"field"=>9,
-				"type"=>"DESC",
-			)
-		)->getPage(
-			array(
-		    	'pageSize'=>13,
-		    )
-		);
-
-		$model = $data["items"];
-
-		echo count($model);
-
-		foreach ($model as $item) {
-			// print_r($item);
-			// echo "<br>";
-			// echo $item->fields_assoc[9]->value."<br>";
-		}
-
-
-
-		// $model = Good::model()->with(array("fields.attribute","fields.variant"))->findAll(array("condition"=>"good_type_id='1'"));
-
-		// echo $this->filterGoods($filter);
-
-
-
-
-		list($queryCount, $queryTime) = Yii::app()->db->getStats();
-		echo "Query count: $queryCount, Total query time: ".sprintf('%0.5f',$queryTime)."s";
-		printf('<br>Прошло %.4F сек.<br>', microtime(true) - $start);		
+        $images = $good->getImages(NULL,NULL,1,NULL,false,true);
+        print_r($images);
 	}
 
 	public function actionAdminDelete($id){
@@ -1006,7 +956,7 @@ class GoodController extends Controller
 	public function actionAdminPhoto($id, $partial = false){
 		$good = $this->loadModel($id);
 
-		$caps = Yii::app()->db->createCommand()->select('*')->from(Cap::tableName().' c')->queryAll();
+		$caps = Yii::app()->db->createCommand()->select('*')->from(Cap::tableName().' c')->order("sort ASC")->queryAll();
 		$caps = Controller::getAssocByAssoc($caps, "id");
 		foreach ($caps as $i => $cap)
 			$caps[$i] = (object) ($cap+array("images" => $good->getImages(100,array("small"),$cap["id"])));

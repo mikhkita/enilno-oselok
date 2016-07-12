@@ -35,4 +35,7 @@
 			</tr>
 		<? endif; ?>
 	</table>
+<? if($get_next): ?>
+	<script> $(".b-table .ajax-update").eq(0).click(); </script>
+<? endif; ?>
 <?php $this->endWidget(); ?>

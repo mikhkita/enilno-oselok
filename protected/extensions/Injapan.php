@@ -21,11 +21,12 @@ Class Injapan {
         $query = $html->find('#rowInfoEnddate td[class=l]');
         $arr = explode(" ",strip_tags($query[0]->innertext));
         $d = explode("/",$arr[0]);
-        $result["main"]["date"] = date("Y-m-d H:i:s", strtotime($d[2]."-".$d[1]."-".$d[0]." ".$arr[1].":00") + 3*60*60);
+        $result["main"]["date"] = date("Y-m-d H:i:s", strtotime($d[2]."-".$d[1]."-".$d[0]." ".$arr[1].":00") + 4*60*60);
 
         // Получение первой фотографии
         $query = $html->find('.left_previews td img');
         $result["main"]["image"] = $query[0]->src;
+        if( $result["main"]["image"] == "" || !$result["main"]["image"]) $result["main"]["image"] = "upload/wheels/default.jpg";
 
         // Получение шага ставки
         $query = $html->find("#spanInfoStep");

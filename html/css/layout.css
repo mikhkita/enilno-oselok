@@ -531,7 +531,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 		.b-header .b-sub-menu.b-relative-top.fixed {
 			position: fixed;
 			width: 100%;
-			z-index: 100;
+			z-index: 501;
 			top: 0;
 		}
 		.b-header .b-sub-menu .b-block {
@@ -846,7 +846,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe57f', end
 		position: absolute;
 		font-size: 0;
 		content: "";
-		top: -4px;
+		top: -2px;
 		left: 0px;
 		height: 24px;
 	}

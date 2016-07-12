@@ -344,6 +344,9 @@ class Interpreter extends CActiveRecord
 		shuffle($matches[1]);
 		$template = str_replace($matches[0], $matches[1], $template);
 
+		// Заменяем @@ на знак +
+		$template = str_replace("@@", "+", $template);
+
 		$template = Interpreter::calculateAll($template);
 
 		return $template;

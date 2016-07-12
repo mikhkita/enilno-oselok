@@ -154,7 +154,7 @@ class IntegrateController extends Controller
             return true;
         }
 
-        $images = $this->getImages(NULL, NULL, (isset($account->photo))?$account->photo:NULL, $advert->good);
+        $images = $this->getImages(NULL, NULL, (isset($account->photo))?$account->photo:NULL, $advert->good, false, (isset($account->adding) && intval($account->adding) == 1) );
 
         if( !count($images) && !in_array($queue->action->code, array("delete","payUp","up")) ){
             $queue->setState("noImages");
@@ -683,7 +683,7 @@ class IntegrateController extends Controller
     }
 
     public function convertTime($time){
-        return date("Y-m-d H:i:s", date_timestamp_get(date_create(substr(str_replace("T", " ", $time), 0, strpos($time, "+"))))-3*60*60);
+        return date("Y-m-d H:i:s", date_timestamp_get(date_create(substr(str_replace("T", " ", $time), 0, strpos($time, "+"))))-2*60*60);
     }
 // Yahoo ----------------------------------------------------------------- Yahoo
 
@@ -753,7 +753,7 @@ class IntegrateController extends Controller
                     }
                 }
                 file_put_contents("sitemap/".$city->value.".xml", $sitemap);
-                $robots = "User-agent: *\nDisallow: \nSitemap: http://".$city->value.".koleso.online/sitemap.xml";
+                $robots = "User-agent: *\nDisallow: /\nSitemap: http://tomsk.koleso.online/sitemap.xml\nUser-agent: Yandex\nDisallow: \nUser-agent: Googlebot\nDisallow: \nUser-agent: googlebot-image\nDisallow: ";
                 file_put_contents("robots/".$city->value.".txt", $robots);
                 $sitemap = "";
             }
@@ -1146,6 +1146,24 @@ class IntegrateController extends Controller
 // Остальное ------------------------------------------------------------- Остальное
 
     public function actionGoodTest(){
+        $model = Good::model()->filter(
+            array(
+                "good_type_id"=>1,
+                "attributes"=>array(
+                    27 => array(1056)
+                )
+            )
+        )->getPage(
+            array(
+                'pageSize'=>10000,
+            )
+        );
+        $goods = $model["items"];
+
+        foreach ($goods as $i => $good) {
+            Task::model()->testGood($good);
+        }
+
         $model = Good::model()->filter(
             array(
                 "good_type_id"=>2,
