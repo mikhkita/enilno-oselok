@@ -2692,14 +2692,12 @@ input:-moz-placeholder {
 						font-size: 16px;
 					}
 					.b-cart .b-block table tr .b-cart-delete {
-						padding: 10px 0 7px;
-					    font-size: 12px;
-					    margin-right: 20px;
-					    border-radius: 2px;
-    					border-bottom: 2px solid #f69303;
+						padding: 10px 0 9px;
+						font-size: 12px;
+						margin-right: 20px;
 					}
 						.b-cart .b-block table tr .b-cart-delete:active {
-							margin-top: 2px;
+							margin-top: 0px;
 						}
 		.b-cart .order-form {
 			margin-top: 30px;
@@ -2721,24 +2719,21 @@ input:-moz-placeholder {
 			.b-cart .order-form input[type='text'] {
 				box-sizing: border-box;
 				width: 300px;
-			    padding: 14px;
-			    border: 1px solid rgb(140, 140, 140);
-			    border-radius: 2px;
-			    background-color: #f4f4f4;
+				padding: 14px;
+				border: 1px solid rgb(140, 140, 140);
+				background-color: #f4f4f4;
 			}
 			.b-cart .order-form input[type='submit'] {
-				color: #181818;
-			    text-decoration: none;
-			    text-transform: uppercase;
-			    font-weight: 500;
-			    border-radius: 2px;
-			    border-bottom: 2px solid #f69303;
-				padding: 12px 0 9px;
+				color: #FFF;
+				text-decoration: none;
+				text-transform: uppercase;
+				font-weight: 500;
+				padding: 12px 0 11px;
 				margin-top: 30px;
 				width: 150px;
 			}
 				.b-cart .order-form input[type='submit']:active {
-					margin-top: 32px;
+					margin-top: 30px;
 				}
 			.b-cart .order-form h4 {
 				font-size: 16px;
