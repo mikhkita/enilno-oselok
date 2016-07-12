@@ -533,6 +533,9 @@ class Controller extends CController
     }
 
     public function getPage($code){
+        if( Yii::app()->params["region"] )
+            $code = Yii::app()->params["city"]->code."_".$code;
+
         $cols = array(
             69 => "title",
             70 => "description",
