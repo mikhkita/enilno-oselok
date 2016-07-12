@@ -1737,7 +1737,7 @@ input:-moz-placeholder {
 							font-weight: 500;	
 						}
 						.slide-type .slider-range {
-							width: 210px;
+							width: 211px;
 							margin-top: 0px;
 							margin-left: 8px;
 						}
@@ -1759,13 +1759,13 @@ input:-moz-placeholder {
 				.b-category .b-block .grey-block .filter-block .slider-range-cont {
 					height: 14px;
 					margin-top: 22px;
-					border: 2px solid #d7d7d7;
+					border: 1px solid #d7d7d7;
 					background-color: #fff;
 					border-radius: 10px;
 					cursor: pointer;
 					display: inline-block;
 					margin-bottom: 0;
-					width: 226px;
+					width: 228px;
 					margin-left: 0;
 				}
 				.b-filters .filter-butt-cont {

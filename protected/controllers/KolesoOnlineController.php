@@ -835,7 +835,7 @@ class KolesoOnlineController extends Controller
 		if( $page ){
 			// $this->checkCity();
 
-			$page = $this->getPage($page);
+			$page = $this->getPage( $page );
 
 			if ($page) {
 				$this->keywords = $page->keywords;

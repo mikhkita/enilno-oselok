@@ -426,7 +426,7 @@ $(document).ready(function(){
         open = true;
 
     });
-    $("body").on("mouseup",".b-cart-menu *,.fixed-link.basket,.b-orange-butt.to-cart",function(){
+    $("body").on("mouseup",".b-cart-menu *,.fixed-link.basket,.to-cart",function(){
         open_cart = true;
         
     });
