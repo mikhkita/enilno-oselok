@@ -951,11 +951,12 @@ class KolesoOnlineController extends Controller
 		            ->group("good_type_id")
 		            ->queryAll();
 		        $max = max($data[0]['COUNT(good_type_id)'],$data[1]['COUNT(good_type_id)'],$data[2]['COUNT(good_type_id)']);
-		        if($max == $data[0]['COUNT(good_type_id)']) $type = $data[0]['good_type_id'];
-		        if($max == $data[1]['COUNT(good_type_id)']) $type = $data[1]['good_type_id'];
-		        if($max == $data[2]['COUNT(good_type_id)']) $type = $data[2]['good_type_id'];
+		        if($max) {
+			        if($max == $data[0]['COUNT(good_type_id)']) $type = $data[0]['good_type_id'];
+			        if($max == $data[1]['COUNT(good_type_id)']) $type = $data[1]['good_type_id'];
+			        if($max == $data[2]['COUNT(good_type_id)']) $type = $data[2]['good_type_id'];
+			    } else $type = 2;
 		    }
-
 		    $data = Yii::app()->db->createCommand()
 	        ->select('*')
 	        ->from(Search::tableName().' s')
