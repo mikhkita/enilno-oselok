@@ -62,15 +62,15 @@ class Controller extends CController
 
         date_default_timezone_set("Asia/Krasnoyarsk");
 
-        if( $_SERVER["HTTP_HOST"] == "koleso.tomsk.ru" || $_SERVER["HTTP_HOST"] == "xn--e1ajdlcr.xn--80asehdb" ){
+        if( $_SERVER["HTTP_HOST"] == "xn--e1ajdlcr.xn--80asehdb" ){
             header("Location: http://koleso.online".str_replace(array("/tire","/disc","/wheel"), array("/shiny","/diski","/kolesa"), $_SERVER["REQUEST_URI"]));
             die();
         }
 
-        if( $_SERVER["HTTP_HOST"] == "koleso.tomsk.dev" ){
+        if( $_SERVER["HTTP_HOST"] == "koleso.tomsk.dev" || $_SERVER["HTTP_HOST"] == "koleso.tomsk.ru" ){
             $_GET['city'] = "tomsk";
             Yii::app()->params["region"] = true;
-        }elseif( $_SERVER["HTTP_HOST"] == "true-media.ru" ){
+        }elseif( $_SERVER["HTTP_HOST"] == "true-media.ru" || $_SERVER["HTTP_HOST"] == "shikon.dev" ){
             $_GET['city'] = "vladivostok";
             Yii::app()->params["region"] = true;
         }
@@ -103,8 +103,8 @@ class Controller extends CController
         if( !Yii::app()->user->isGuest ) $this->checkModelAccess();
     }
 
-    public function getImages($count = NULL, $sizes = NULL, $cap = NULL, $good = NULL, $get_default = false){
-        $images = Good::getImages($count, $size, $cap, $good, $get_default);
+    public function getImages($count = NULL, $sizes = NULL, $cap = NULL, $good = NULL, $get_default = false, $adding = false){
+        $images = Good::getImages($count, $size, $cap, $good, $get_default, $adding);
 
         $out = array();
         if( count($images) )
@@ -569,6 +569,7 @@ class Controller extends CController
             114 => "ip",
             121 => "count",
             122 => "photo",
+            136 => "adding"
         );
         $cells = DesktopTableCell::model()->with(array("row.cells"))->findAll("row.table_id=12".(($login)?" AND t.varchar_value='$login'":""));
         if( $cells ){
@@ -595,6 +596,7 @@ class Controller extends CController
             53 => "proxy",
             133 => "photo",
             134 => "package",
+            137 => "adding"
         );
         $cell = DesktopTableCell::model()->with(array("row"))->find("row.table_id=13 AND varchar_value='$login'");
         if( $cell ){

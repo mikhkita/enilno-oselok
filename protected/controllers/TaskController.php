@@ -69,7 +69,7 @@ class TaskController extends Controller
 		$this->actionAdminIndex(true);
 	}
 
-	public function actionAdminIndex($partial = false)
+	public function actionAdminIndex($partial = false, $get_next = false)
 	{
 		if( !$partial ){
 			$this->layout = 'admin';
@@ -83,13 +83,15 @@ class TaskController extends Controller
 			$this->render('adminIndex',array(
 				'data'=>$model,
 				'filter'=>$filter,
-				'labels'=>Task::attributeLabels()
+				'labels'=>Task::attributeLabels(),
+				'get_next'=>$get_next
 			));
 		}else{
 			$this->renderPartial('adminIndex',array(
 				'data'=>$model,
 				'filter'=>$filter,
-				'labels'=>Task::attributeLabels()
+				'labels'=>Task::attributeLabels(),
+				'get_next'=>$get_next
 			));
 		}
 	}

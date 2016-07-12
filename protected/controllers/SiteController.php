@@ -76,7 +76,8 @@ class SiteController extends Controller
 	public function actionLogin()
 	{
         $this->layout='service';
-		if( !Yii::app()->user->isGuest ) $this->redirect($this->createUrl($this->getRedirect($user)));
+		if( !Yii::app()->user->isGuest )
+            $this->redirect($this->createUrl( $this->getRedirect($user) ));
 
 		// $this->layout='admin';
 		if (!defined('CRYPT_BLOWFISH')||!CRYPT_BLOWFISH)
@@ -110,10 +111,10 @@ class SiteController extends Controller
 
     public function getRedirect($user = NULL){
         if( $user === NULL ){
-            $user = User::model()->find("usr_login='".Yii::app()->user->usr_login."'");
+            $user = $this->user;
         }
         $out = Yii::app()->params['defaultAdminRedirect'];
-        if(isset($user->usr_models))
+        if(isset($user->usr_models) && $user->usr_models != "")
             $out = "/admin/".array_shift(explode(",",$user->usr_models));
         
         return $out;

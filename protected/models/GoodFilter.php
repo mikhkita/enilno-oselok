@@ -269,7 +269,7 @@ class GoodFilter extends CActiveRecord
 		return false;
 	}
 
-	public function getImages($count = NULL, $sizes = NULL, $cap = NULL, $good = NULL, $get_default = false){
+	public function getImages($count = NULL, $sizes = NULL, $cap = NULL, $good = NULL, $get_default = false, $adding = false){
 		$count = ($count === NULL)?100:$count;
 		ini_set("display_errors", 1);
 		$default_sizes = array(
@@ -304,6 +304,11 @@ class GoodFilter extends CActiveRecord
 
 	        foreach ($model as $key => $image)
 	        	array_push($images, (object) $image);
+
+	        if( $adding && count($model) ){
+	        	$adding = Image::model()->findAll(array("condition" => "good_id='$good_id' AND site=1 AND id NOT IN (".implode(",", Controller::getIds($model, "id")).")", "limit" => $count, "order" => "sort"));	
+				$images = array_merge($images, $adding);
+	        }
         }else{
         	$images = Image::model()->findAll(array("condition" => "good_id='$good_id'".(($cap !== "all")?" AND site=1":""), "limit" => $count, "order" => "sort"));
         }
@@ -340,7 +345,7 @@ class GoodFilter extends CActiveRecord
 				array_push($out, $item);
 			}else{
 				// $image->delete();
-				echo "Удаление";
+				// echo "Удаление";
 			}
 		}
 

@@ -56,48 +56,52 @@ Class Drom {
 
     public function upAdverts(){
         $links = $this->parseExpired();
-        $model = Advert::model()->with("good_filter")->findAll("url IN (".implode(",", $links).")");
-        $free = array();
-        $pay = array();
-        foreach ($model as $key => $item) {
-            if($item->good_filter->archive == 1) {
-                $this->deleteAdvert($item->url);
-            } else {
-                if($item->type_id == 869) {
-                    array_push($free, $item->url);
-                } else array_push($pay, $item->url);
+        if( $links ){
+            $model = Advert::model()->with("good_filter")->findAll("url IN (".implode(",", $links).")");
+            $free = array();
+            $pay = array();
+            foreach ($model as $key => $item) {
+                if($item->good_filter->archive == 1) {
+                    $this->deleteAdvert($item->url);
+                } else {
+                    if($item->type_id == 869) {
+                        array_push($free, $item->url);
+                    } else array_push($pay, $item->url);
+                }
             }
-        }
-        if($free) {
-            $this->upFreeAdverts($free);
-        }
-        if($pay) {
-            $links = $pay;
-            $upLinks = array();
-            Log::debug("Пользователь ".$this->login." ".count($links)." неактивных платных объявлений");
-
-            foreach ($links as $key => $value) {
-                $index = floor($key/50);
-                $upLinks[$index] = $upLinks[$index]."&bulletin%5B".$value."%5D=on";
+            if($free) {
+                $this->upFreeAdverts($free);
             }
+            if($pay) {
+                $links = $pay;
+                $upLinks = array();
+                Log::debug("Пользователь ".$this->login." ".count($links)." неактивных платных объявлений");
 
-            foreach ($upLinks as $key => $value) {
-                $url = "http://baza.drom.ru/bulletin/service-configure?return_to=%2Fpersonal%2Fnon_active%2Fbulletins%3Fpage%3D2&from=personal.non_active&applier%5BupBulletin%5D=upBulletin".$value."=on&note=";
-                $html = str_get_html(iconv('windows-1251', 'utf-8', $this->curl->request($url)));
-                $url = "https://baza.drom.ru/bulletin/service-apply";
-                $params = array();
-                foreach ($html->find('.paid-service form input[type="hidden"]') as $key => $item) {
-                    $params[$item->getAttribute("name")] = $item->getAttribute("value");
-                    if($item->getAttribute("name") == "price") $price = $item->getAttribute("value");
+                foreach ($links as $key => $value) {
+                    $index = floor($key/50);
+                    $upLinks[$index] = $upLinks[$index]."&bulletin%5B".$value."%5D=on";
                 }
-                if($price > 50) {
-                    Log::debug("Поднятие объвлений больше 1р/шт.");
-                    continue;
+
+                foreach ($upLinks as $key => $value) {
+                    $url = "http://baza.drom.ru/bulletin/service-configure?return_to=%2Fpersonal%2Fnon_active%2Fbulletins%3Fpage%3D2&from=personal.non_active&applier%5BpayBulletin%5D=upBulletin".$value."=on&note=";
+                    $request = iconv('windows-1251', 'utf-8', $this->curl->request($url));
+                    print_r($request);
+                    $html = str_get_html($request);
+                    $url = "https://baza.drom.ru/bulletin/service-apply";
+                    $params = array();
+                    foreach ($html->find('.paid-service form input[type="hidden"]') as $key => $item) {
+                        $params[$item->getAttribute("name")] = $item->getAttribute("value");
+                        if($item->getAttribute("name") == "price") $price = $item->getAttribute("value");
+                    }
+                    if($price > 50) {
+                        Log::debug("Поднятие объвлений больше 1р/шт.");
+                        continue;
+                    }
+                    foreach ($html->find('.paid-service form .viewdirBulletinTable input') as $key => $item) {
+                        $params[$item->getAttribute("name")] = "on";
+                    }
+                    $this->curl->request($url,$params);
                 }
-                foreach ($html->find('.paid-service form .viewdirBulletinTable input') as $key => $item) {
-                    $params[$item->getAttribute("name")] = "on";
-                }
-                $this->curl->request($url,$params);
             }
         }
     }

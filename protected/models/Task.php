@@ -14,15 +14,15 @@ class Task extends CActiveRecord
 	static public $params = array(
 		1 => array(
 			"necessary" => array(16,17,9,8,7,28,43),
-			"price" => array(20),
+			"price" => array(20,36),
 		),
 		2 => array(
 			"necessary" => array(9,6,28,43),
-			"price" => array(20),
+			"price" => array(20,36),
 		),
 		3 => array(
 			"necessary" => array(16,17,9,8,7,28,6,43),
-			"price" => array(20),
+			"price" => array(20,36),
 		)
 	);
 
