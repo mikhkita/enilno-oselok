@@ -946,7 +946,7 @@ class KolesoOnlineController extends Controller
 				$data = Yii::app()->db->createCommand()
 		            ->select(array('COUNT(good_type_id)','good_type_id'))
 		            ->from(Search::tableName().' s')
-		            ->join(Good::tableName().' g', 'g.id=s.good_id')
+		            ->join(Good::tableName().' g', 'g.id=s.good_id AND g.archive=0')
 		            ->where(implode(" AND ", $values))
 		            ->group("good_type_id")
 		            ->queryAll();
@@ -959,7 +959,7 @@ class KolesoOnlineController extends Controller
 		    $data = Yii::app()->db->createCommand()
 	        ->select('*')
 	        ->from(Search::tableName().' s')
-	        ->join(Good::tableName().' g', 'g.id=s.good_id AND g.good_type_id='.$type)
+	        ->join(Good::tableName().' g', 'g.id=s.good_id AND g.archive=0 AND g.good_type_id='.$type)
 	        ->where(implode(" AND ", $values))
 	        ->limit(100)
 	        ->queryAll();
@@ -967,7 +967,7 @@ class KolesoOnlineController extends Controller
 		    $data = Yii::app()->db->createCommand()
 		        ->select('*')
 		        ->from(Search::tableName().' s')
-		        ->join(Good::tableName().' g', 'g.id=s.good_id')
+		        ->join(Good::tableName().' g', 'g.id=s.good_id AND g.archive=0')
 		        ->where(implode(" AND ", $values))
 		        ->limit(15)
 		        ->queryAll();
