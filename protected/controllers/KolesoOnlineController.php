@@ -796,7 +796,7 @@ class KolesoOnlineController extends Controller
 		return $last;
 	}
 
-	public function getGoods($page_size = 8,$type = 2,$filter = NULL,$sort = NULL,$ids = NULL) {
+	public function getGoods($page_size = 8,$type = 2,$filter = NULL,$sort = NULL,$ids = NULL,$need_ids = NULL) {
 		if( $sort === NULL )
 			$sort = isset($_SESSION["FILTER"][$type]['sort']) ? $_SESSION["FILTER"][$type]['sort'] : NULL;
 
@@ -814,7 +814,7 @@ class KolesoOnlineController extends Controller
 		}
 
 		$goods = Good::model()->filter(
-			$filter,NULL,$ids
+			$filter,$need_ids,$ids
 		);
 
 		if($ids === true) $ids_arr = $goods->ids;
@@ -944,28 +944,30 @@ class KolesoOnlineController extends Controller
 		if(!$partial) {
 			if(!$type) {
 				$data = Yii::app()->db->createCommand()
-		            ->select('COUNT(good_type_id)')
+		            ->select(array('COUNT(good_type_id)','good_type_id'))
 		            ->from(Search::tableName().' s')
-		            ->join(Good::tableName().' g', 'g.id=s.good_id')
+		            ->join(Good::tableName().' g', 'g.id=s.good_id AND g.archive=0')
 		            ->where(implode(" AND ", $values))
 		            ->group("good_type_id")
 		            ->queryAll();
-		        if($data[0]['COUNT(good_type_id)'] >= $data[1]['COUNT(good_type_id)'] && $data[0]['COUNT(good_type_id)'] >= $data[2]['COUNT(good_type_id)']) $type = 1;
-		        if($data[1]['COUNT(good_type_id)'] >= $data[2]['COUNT(good_type_id)'] && $data[1]['COUNT(good_type_id)'] >= $data[0]['COUNT(good_type_id)']) $type = 2;
-		        if($data[2]['COUNT(good_type_id)'] >= $data[1]['COUNT(good_type_id)'] && $data[2]['COUNT(good_type_id)'] >= $data[0]['COUNT(good_type_id)']) $type = 3;
+		        $max = max($data[0]['COUNT(good_type_id)'],$data[1]['COUNT(good_type_id)'],$data[2]['COUNT(good_type_id)']);
+		        if($max == $data[0]['COUNT(good_type_id)']) $type = $data[0]['good_type_id'];
+		        if($max == $data[1]['COUNT(good_type_id)']) $type = $data[1]['good_type_id'];
+		        if($max == $data[2]['COUNT(good_type_id)']) $type = $data[2]['good_type_id'];
 		    }
+
 		    $data = Yii::app()->db->createCommand()
 	        ->select('*')
 	        ->from(Search::tableName().' s')
-	        ->join(Good::tableName().' g', 'g.id=s.good_id')
-	        ->where(implode(" AND ", $values)."AND g.good_type_id=".$type)
+	        ->join(Good::tableName().' g', 'g.id=s.good_id AND g.archive=0 AND g.good_type_id='.$type)
+	        ->where(implode(" AND ", $values))
 	        ->limit(100)
 	        ->queryAll();
 	    } else {
 		    $data = Yii::app()->db->createCommand()
 		        ->select('*')
 		        ->from(Search::tableName().' s')
-		        ->join(Good::tableName().' g', 'g.id=s.good_id')
+		        ->join(Good::tableName().' g', 'g.id=s.good_id AND g.archive=0')
 		        ->where(implode(" AND ", $values))
 		        ->limit(15)
 		        ->queryAll();
@@ -975,9 +977,9 @@ class KolesoOnlineController extends Controller
         foreach ($data as $i => $value){
         	array_push($model, (object) $value);
     	}
-
 		$ids = array();
 		$titles = array();
+
 		foreach ($model as $key => $value){
 			array_push($ids, $value->good_id);
 			$tmp = explode(" ", $value->value);
@@ -999,7 +1001,7 @@ class KolesoOnlineController extends Controller
 		    	$dynamic = $this->getDynObjects(array(
 		            38 => Yii::app()->params["city"]->id
 		    	));
-		    	$goods = $this->getGoods(100,$type,NULL,NULL,$ids);
+		    	$goods = $this->getGoods(100,$type,NULL,NULL,NULL,$ids);
 		    }
 		}
 
