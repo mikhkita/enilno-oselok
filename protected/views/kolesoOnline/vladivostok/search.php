@@ -17,7 +17,7 @@
             </div>
             <? if(count($goods)): ?>
                 <ul class="goods clearfix">
-    	           	<?$this->renderPartial('tomsk/_list',array(
+    	           	<?$this->renderPartial('vladivostok/_list',array(
     					'goods'=> $goods,
     					'last' => 0,
     					'type' => $type,

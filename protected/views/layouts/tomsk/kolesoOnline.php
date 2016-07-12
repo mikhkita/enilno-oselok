@@ -100,7 +100,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
                     <li><a href="<?=Yii::app()->createUrl('/kolesoOnline/pay')?>">Оплата заказа</a></li>
                 </ul>
                 <div class="clearfix b-mobile-top-line mobile-only">
-                    <h2 class="left">Вы находитесь в г. <a href="#" class="icon fancy" data-block="#b-popup-city"><?=Yii::app()->params["city"]->name?></a></h2>
+                    <!-- <h2 class="left">Вы находитесь в г. <a href="#" class="icon fancy" data-block="#b-popup-city"><?=Yii::app()->params["city"]->name?></a></h2> -->
                     <a href="#" class="right icon b-mobile-search-top-icon">Поиск</a>
                 </div>
             </div>  

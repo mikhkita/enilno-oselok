@@ -1,6 +1,7 @@
 <?
 
 $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino/i',$_SERVER['HTTP_USER_AGENT'])||preg_match('/1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i',substr($_SERVER['HTTP_USER_AGENT'],0,4)));
+// $mobile = true;
 ?>
 <!DOCTYPE html>
 <html>
@@ -28,9 +29,9 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
     <link rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/html/css/jquery.mobile.custom.theme.css?<?=$css_version?>" type="text/css">
     <link rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/html/css/stroll.css?<?=$css_version?>" type="text/css">
     <link rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/html/css/KitAnimate.css?<?=$css_version?>" type="text/css">
-    <link rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/html/css/layout.css?<?=$css_version?>" type="text/css">
+    <link rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/html/vladivostok/css/layout.css?<?=$css_version?>" type="text/css">
 
-    <link rel="stylesheet" media="screen and (min-width: 240px) and (max-width: 767px)" href="<?php echo Yii::app()->request->baseUrl; ?>/html/css/layout-mobile.css" />
+    <link rel="stylesheet" media="screen and (min-width: 240px) and (max-width: 767px)" href="<?php echo Yii::app()->request->baseUrl; ?>/html/vladivostok/css/layout-mobile.css" />
     <!-- <link rel="stylesheet" media="screen and (min-width: 768px) and (max-width: 1000px)" href="<?php echo Yii::app()->request->baseUrl; ?>/html/css/layout-tablet.css" /> -->
 
     <meta property="og:url" content="<?=Yii::app()->getBaseUrl(true).Yii::app()->request->requestUri?>">
@@ -98,15 +99,14 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
                     <li><a href="<?=Yii::app()->createUrl('/contacts.html')?>">Контакты</a></li>
                     <li><a href="<?=Yii::app()->createUrl('/kolesoOnline/pay')?>">Оплата заказа</a></li>
                 </ul>
-                <div class="clearfix b-mobile-top-line mobile-only">
+              <!--   <div class="clearfix b-mobile-top-line mobile-only">
                     <h2 class="left">Вы находитесь в г. <a href="#" class="icon fancy" data-block="#b-popup-city"><?=Yii::app()->params["city"]->name?></a></h2>
                     <a href="#" class="right icon b-mobile-search-top-icon">Поиск</a>
-                </div>
+                </div> -->
             </div>  
         </div>
         <div class="b b-header-main">
             <div class="b-block clearfix">
-                <span class="stamp"></span>
                 <div class="left">
                     <? if(Yii::app()->params["region"]): ?>
                         <?  $this->renderPartial(Yii::app()->params["city"]->code.'/_logo'); ?>
@@ -126,8 +126,9 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
                             $phone = str_split(Yii::app()->params["city"]->phone); 
                             $phone = $phone[0]." (".$phone[1].$phone[2].$phone[3].") ".$phone[4].$phone[5].$phone[6]."-".$phone[7].$phone[8]."-".$phone[9].$phone[10];
                         ?>
-                        <a href="tel:+<?=Yii::app()->params["city"]->phone?>" class="mobile-not-fancy fancy left" data-block="#b-popup-callback">+<?=$phone?></a>
-                        <a href="mailto:info@koleso.online" class="left mail">info@koleso.online</a>
+                        <a href="tel:+73822575756" class="mobile-not-fancy fancy left" data-block="#b-popup-callback">+7 (3822) 57-57-56</a>
+                        <a href="tel:+73822977327" class="mobile-not-fancy fancy left" data-block="#b-popup-callback">+7 (3822) 977-327</a>
+                        <a href="mailto:rezina70@mail.ru" class="right mail">rezina70@mail.ru</a>
                         <!-- <a href="#" class="right basket">Корзина (0)</a> -->
                     </div>
                     <form action="<?=Yii::app()->createUrl('kolesoOnline/search')?>" method="GET" id="search-form" class="b-search-form">
@@ -141,13 +142,16 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
             </div>
         </div>
         <div class="b-sub-menu-cont">
-            <div class="b b-sub-menu b-relative-top gradient-orange">
+            <div class="b b-sub-menu b-relative-top">
                 <div class="b-block clearfix">
                     <a href="#" class="b-burger icon left"></a>
                     <ul class="b-sub-menu-list clearfix left">
-                        <li><a href="<?=Yii::app()->createUrl('/kolesoOnline/category',array('type' => 2))?>">Диски</a></li>
                         <li><a href="<?=Yii::app()->createUrl('/kolesoOnline/category',array('type' => 1))?>">Шины</a></li>
+                        <li><a href="<?=Yii::app()->createUrl('/kolesoOnline/category',array('type' => 2))?>">Диски</a></li>
                         <li><a href="<?=Yii::app()->createUrl('/kolesoOnline/category',array('type' => 3))?>">Колеса</a></li>
+                        <li class="not-mobile"><a href="<?=Yii::app()->createUrl('/pravka.html')?>">Правка дисков</a></li>
+                        <li class="not-mobile"><a href="<?=Yii::app()->createUrl('/vikup.html')?>">Выкуп</a></li>
+                        <!-- <li class="not-mobile"><a href="<?=Yii::app()->createUrl('/comission.html')?>">Комиссия</a></li> -->
                     </ul>
                     <? if(!$mobile):?>
                     <div id="minicart" class="right">
@@ -168,7 +172,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
                         <? $count = (isset($_SESSION["BASKET"]) && count($_SESSION["BASKET"])) ? count($_SESSION["BASKET"]) : 0; ?>
                         <a href="#" class="fixed-link basket right <? if(!$count) echo 'empty'; ?>">Корзина (<span><?=$count?></span>)</a>    
                     </div>
-                    <a class="fixed-link right fancy" href="#" data-block="#b-popup-callback">Заказать звонок</a>
+                    <a class="fixed-link right fancy b-get-request" href="#" data-block="#b-popup-callback">Заказать звонок</a>
                     <? endif;?>
                 </div>
             </div>
@@ -176,7 +180,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
         <div class="b b-sub-menu b-fixed-top gradient-orange mobile-only">
             <div class="b-block clearfix">
                 <a href="#" class="b-burger icon left"></a>
-                <a href="tel:+<?=Yii::app()->params["city"]->phone?>" class="mobile-not-fancy fancy b-phone-center left" data-block="#b-popup-callback">+<?=$phone?></a>
+                <a href="tel:+73822575756" class="mobile-not-fancy fancy b-phone-center left" data-block="#b-popup-callback">+7 (3822) 57-57-56</a>
                 <a href="#" class="b-search-icon icon right"></a>
             </div>
         </div>
@@ -185,27 +189,17 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
     <div class="b b-footer">
         <div class="b-footer-main">
             <div class="b-block">
-                <span class="stamp stamp-left"></span>
-                <span class="stamp stamp-right"></span>
                 <ul class="sections clearfix">
                     <li>
-                        <h3>О магазине</h3>
-                        <? if(Yii::app()->params["region"]): ?>
-                            <?  $this->renderPartial(Yii::app()->params["city"]->code.'/_logo'); ?>
-                            <p>Ежедневное пополнение каталога.<br>Достоверные фотографии и описания.<br>Наши фирменные гарантии.<br>Профессионалы своего дела.</p>
-                        <? else: ?>
-                            <a href="<?=Yii::app()->createUrl('/kolesoOnline')?>" class="footer-logo clearfix">
-                                <span class="b-footer-logo"></span>
-                            </a>
-                            <p>Более тысячи позиций <nobr>б/у</nobr>&nbsp;шин и&nbsp;дисков. Полная актуальность всех имеющихся товаров на сайте. Ежедневное пополнение каталога. Достоверные фотографии и&nbsp;описания. Наши фирменные гарантии. Профессионалы своего дела.</p>
-                        <? endif; ?>
+                        <h3>О нас</h3>
+                        <p>Самый большой в Томске выбор БУ шин и дисков R16-R18, колеса с японских аукционов, шиномонтаж, правка дисков, покупка и комиссия ваших колес</p>
                     </li>
                     <li>
                         <h3>Разделы</h3>
                         <ul>
-                            <li><a href="<?=Yii::app()->createUrl('/kolesoOnline/category',array('type' => 2))?>">Диски</a></li>
+                            <!-- <li><a href="<?=Yii::app()->createUrl('/kolesoOnline/category',array('type' => 2))?>">Диски</a></li>
                             <li><a href="<?=Yii::app()->createUrl('/kolesoOnline/category',array('type' => 1))?>">Шины</a></li>
-                            <li><a href="<?=Yii::app()->createUrl('/kolesoOnline/category',array('type' => 3))?>">Колеса</a></li>
+                            <li><a href="<?=Yii::app()->createUrl('/kolesoOnline/category',array('type' => 3))?>">Колеса</a></li> -->
                             <li><a href="<?=Yii::app()->createUrl('/delivery.html')?>">Доставка</a></li>
                             <li><a href="<?=Yii::app()->createUrl('/guarantees.html')?>">Гарантии</a></li>
                             <li><a href="<?=Yii::app()->createUrl('/payment.html')?>">Способы оплаты</a></li>
@@ -214,10 +208,11 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
                     </li>
                     <li>
                         <h3>Контактная информация</h3>
-                        <a class="footer-contacts mail" href="mailto:info@koleso.online">info@koleso.online</a>
-                        <a class="mobile-not-fancy fancy footer-contacts phone" data-block="#b-popup-callback" href="tel:+<?=Yii::app()->params["city"]->phone?>">+<?=$phone?></a>
+                        <a class="footer-contacts mail" href="mailto:rezina70@mail.ru">rezina70@mail.ru</a>
+                        <a class="mobile-not-fancy fancy footer-contacts phone" data-block="#b-popup-callback" href="tel:+73822575756">+7 (3822) 57-57-56</a>
+                        <a class="mobile-not-fancy fancy footer-contacts phone" data-block="#b-popup-callback" href="tel:+73822977327">+7 (3822) 977-327</a>
                         <? if(Yii::app()->params["city"]->id == 1081): ?>
-                            <span class="footer-contacts map">г. Томск, улица Мокрушина, 9 ст. 42</span>
+                            <span class="footer-contacts map">г. Томск, Комсомольский проспект, 7, стр. 9</span>
                         <? else: ?>
                             <br>
                         <? endif; ?>
@@ -244,7 +239,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
                 <? if(Yii::app()->params["region"]): ?>
                     <h3 class="left"><?  $this->renderPartial(Yii::app()->params["city"]->code.'/_copyright'); ?></h3>
                 <? else: ?>
-                    <h3 class="left">© 2015 Колесо Онлайн</h3>
+                    <h3 class="left">© 2015 Колесо.Томск.Ру</h3>
                 <? endif; ?>
                 <h3 class="right b-copyright">Дизайн и разработка <a href="http://redder.pro/" target="_blank" class="b-redder"></a></h3>
             </div>
@@ -271,14 +266,12 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
             </form>
         </div>
     </div>
-    <div id="b-popup-city">
-        <?php $this->renderPartial('_cities', array('cities' => $this->getCityGroups(),"show" => Yii::app()->params["city"]->popup )); ?>
-    </div>
     <div id="b-popup-callback">
         <div class="for_all b-popup-small">
             <h3>Заказать звонок</h3>
-            <h4>Для получения подробной информации Вы можете позвонить по телефону:</h4>
-            <h5><a href='tel:+<?=Yii::app()->params["city"]->phone?>'>+<?=$phone?></a></h5>
+            <h4>Для получения подробной информации Вы можете позвонить по одному из телефонов:</h4>
+            <h5><a href="tel:+73822575756">+7 (3822) 57-57-56</a>
+                <a href="tel:+73822977327">+7 (3822) 977-327</a></h5>
             <h4>Или оставить заявку и мы Вам перезвоним в ближайшее время:</h4>
             <form action="<?=Yii::app()->createUrl('/kolesoOnline/mail/')?>" id="b-form-call" method="POST"  data-block="#b-popup-2">
                 <div class="b-popup-form">
@@ -295,8 +288,9 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
     <div id="b-popup-buy">
         <div class="for_all b-popup-small">
             <h3>Уточнить цену</h3>
-            <h4>Для получения подробной информации Вы можете позвонить по телефону:</h4>
-            <h5><a href='tel:+<?=Yii::app()->params["city"]->phone?>'>+<?=$phone?></a></h5>
+            <h4>Для получения подробной информации Вы можете позвонить по одному из телефонов:</h4>
+            <h5><a href="tel:+73822575756">+7 (3822) 57-57-56</a>
+                <a href="tel:+73822977327">+7 (3822) 977-327</a></h5>
             <h4>Или оставить заявку и мы Вам перезвоним в ближайшее время:</h4>
             <form action="<?=Yii::app()->createUrl('/kolesoOnline/mail/')?>" id="b-form-buy" method="POST" data-block="#b-popup-2">
                 <div class="b-popup-form">
@@ -365,7 +359,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
 <script type="text/javascript" src="/html/js/i18n/ru.js"></script>
 <script type="text/javascript" src="/html/js/jquery.cookie.js"></script>
 <script type="text/javascript" src="/html/js/KitSend.js"></script>
-<script type="text/javascript" src="/html/js/main.js"></script>
+<script type="text/javascript" src="/html/vladivostok/js/main.js"></script>
 
 <? if(isset(Yii::app()->params['server']) && Yii::app()->params['server'] === true && !isset($this->user->usr_id)): ?>
     <!-- Yandex.Metrika counter --><script type="text/javascript"> (function (d, w, c) { (w[c] = w[c] || []).push(function() { try { w.yaCounter34102235 = new Ya.Metrika({ id:34102235, clickmap:true, trackLinks:true, accurateTrackBounce:true, webvisor:true }); } catch(e) { } }); var n = d.getElementsByTagName("script")[0], s = d.createElement("script"), f = function () { n.parentNode.insertBefore(s, n); }; s.type = "text/javascript"; s.async = true; s.src = "https://mc.yandex.ru/metrika/watch.js"; if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); } })(document, window, "yandex_metrika_callbacks");</script><noscript><div><img src="https://mc.yandex.ru/watch/34102235" style="position:absolute; left:-9999px;" alt="" /></div></noscript><!-- /Yandex.Metrika counter -->
