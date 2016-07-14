@@ -23,7 +23,8 @@
     	<? foreach ($model as $item): ?>
 			<li class="" data-id="<?=$item->id?>" title="<?=$item->title?>">
                 <div class="image-cont track" style="background-image:url('<?=$item->img?>');">
-                    <span><b><?=$this->wheel_type[$item->type]?></b></span>
+                    <span class="price-type type-<?=$item->price_type?>"></span>
+                    <span class="good-type"><b><?=$this->wheel_type[$item->type]?></b></span>
                     <a href="http://baza.drom.ru/<?=$item->id?>" target="_blank" title="Посмотреть объявление"></a>
                     <div class="b-nav clearfix">
                         <span class="b-nav-delete b-tooltip b-delete-<?=$item->id?>" style="width: 100%;" title="В архив"></span>
@@ -32,7 +33,7 @@
                 </div>
                 <div class="clearfix">
                     <h4 class="left">Цена: <b><?=($item->price) ? $item->price : "?"; ?></b></h4>
-                    <h5 class="right"><b><?=($item->amount) ? $item->amount : "?"; ?> шт.</b></h5>
+                    <h5 class="right"><b><?=($item->amount) ? $item->amount." шт." : ""; ?></b></h5>
                 </div>
                 <div class="clearfix text-overflow">
                     <h4><?=$item->params?></h4>
@@ -40,7 +41,7 @@
                 </div>
                 <div class="clearfix">
                     <h4 class="left"><?=date_format(date_create($item->date), 'd.m.Y');?></h4>
-                    <h5 class="right"><?=$item->views?> прос.</h5>
+                    <h5 class="right"><?=($item->views != "") ? $item->views." прос." : ""; ?></h5>
                 </div>
 			</li>
 		<? endforeach; ?>

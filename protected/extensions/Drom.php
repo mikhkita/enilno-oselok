@@ -165,7 +165,7 @@ Class Drom {
                         'platform' => 1
                     );
                     $tmp['params'] = ($element->find(".annotation",0)) ? $element->find(".annotation",0)->plaintext : NULL;
-                    $tmp['price'] = ($element->find(".finalPrice span",0)) ? intval(str_replace(" ","",$element->find(".finalPrice span",0)->plaintext)) : NULL;
+                    $tmp['price'] = ($element->find("span.finalPrice",0)) ? intval(str_replace(" ","",$element->find("span.finalPrice",0)->plaintext)) : NULL;
                     $tmp['views'] = ($element->find(".views",0)) ? intval(str_replace(" ","",$element->find(".views",0)->plaintext)) : NULL;
                     $tmp['amount'] = ($element->find(".quantity",0)) ? intval(preg_replace('~\D+~','',$element->find(".quantity",0)->plaintext)) : NULL;
                     if($element->find(".imageExists noscript",0)) {
@@ -177,7 +177,9 @@ Class Drom {
                     if($element->find(".fixedPrice",0)) $tmp['price_type'] = 1;
                     if($element->find(".bestOffer",0)) $tmp['price_type'] = 2;
                     if($element->find(".regular",0)) $tmp['price_type'] = 3;
-
+                    if(!$tmp['price_type']) {
+                       $tmp['price'] = ($element->find(".finalPrice span",0)) ? intval(str_replace(" ","",$element->find(".finalPrice span",0)->plaintext)) : NULL; 
+                    }
                     if(!$tmp['seller']) $links[$element->find(".bulletinLink",0)->name] = $tmp; 
                 }else{
                     array_push($links, $element->find(".bulletinLink",0)->getAttribute($attr) );
@@ -712,10 +714,10 @@ Class Drom {
                 foreach($goods as $advert_id => $good) {
                     array_push($rows, array($advert_id,$good['title'],$good['params'],$good['price'],$good['views'],$good['amount'],$good['img'],$good['date'],$good['type'],$good['state'],$good['price_type'],$good['seller'],$good['platform']));
                 }    
-                Controller::updateRows(Track::tableName(),$rows,array('title','params','price','views','amount','img','type','price_type','seller'));
-            
-            
+                Controller::updateRows(Track::tableName(),$rows,array('title','params','price','views','amount','img','type','price_type','seller'));  
+            Log::debug("отслеживание $good_type завершено");
         } 
+
     }
 
     public function self(){
