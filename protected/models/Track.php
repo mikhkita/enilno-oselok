@@ -1,9 +1,9 @@
 <?php
 
 /**
- * This is the model class for table "parse_good".
+ * This is the model class for table "track".
  *
- * The followings are the available columns in table 'parse_good':
+ * The followings are the available columns in table 'track':
  * @property string $id
  * @property string $title
  * @property string $params
@@ -15,16 +15,17 @@
  * @property integer $type
  * @property integer $state
  * @property integer $price_type
+ * @property integer $platform
  * @property string $seller
  */
-class ParseGood extends CActiveRecord
+class Track extends CActiveRecord
 {
 	/**
 	 * @return string the associated database table name
 	 */
 	public function tableName()
 	{
-		return 'parse_good';
+		return 'track';
 	}
 
 	/**
@@ -43,7 +44,7 @@ class ParseGood extends CActiveRecord
 			array('date', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, title, params, price, views, amount, img, date, type, state, price_type, seller', 'safe', 'on'=>'search'),
+			array('id, title, params, price, views, amount, img, date, type, state, price_type, seller','platform', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -65,17 +66,18 @@ class ParseGood extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'title' => 'Title',
-			'params' => 'Params',
-			'price' => 'Price',
-			'views' => 'Views',
-			'amount' => 'Amount',
-			'img' => 'Img',
-			'date' => 'Date',
-			'type' => 'Type',
-			'state' => 'State',
-			'price_type' => 'Price Type',
-			'seller' => 'Seller',
+			'title' => 'Заголовок',
+			'params' => 'Параметры',
+			'price' => 'Цена',
+			'views' => 'Просмотры',
+			'amount' => 'Количество',
+			'img' => 'Изображение',
+			'date' => 'Дата',
+			'type' => 'Тип',
+			'state' => 'Состояние',
+			'price_type' => 'Тип торгов',
+			'seller' => 'Продавец',
+			'platform' => "Платформа"
 		);
 	}
 
@@ -109,17 +111,27 @@ class ParseGood extends CActiveRecord
 		$criteria->compare('state',$this->state);
 		$criteria->compare('price_type',$this->price_type);
 		$criteria->compare('seller',$this->seller,true);
+		$criteria->compare('platform',$this->platform);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 		));
 	}
 
+	public function filter(){
+		return array(
+			"platform" => array("TYPE" => "CHECKBOX", "VIEW" => "CHECKBOX", "FROM" => array("1" => "Дром","2" => "Авито") ),
+			"type" => array("TYPE" => "CHECKBOX", "VIEW" => "CHECKBOX", "FROM" => GoodType::tableName(), "FIELDS" => array("id","name") ),
+			"amount" => array("TYPE" => "CHECKBOX", "VIEW" => "CHECKBOX", "FROM" => array("1" => 1,"2" => 2,"3"=>3,"4"=>4,"5"=>5,"6"=>6,"7"=>7,"8"=>8) ),
+			"price" => array("TYPE"=>"FROMTO", "VIEW" => "FROMTO")
+		);
+	}
+
 	/**
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return ParseGood the static model class
+	 * @return Track the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{

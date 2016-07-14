@@ -185,6 +185,13 @@ $(document).ready(function(){
         return false;
     });
     
+   $(".text-overflow").each(function(){
+        if($(this).height() > 20) {
+            $(this).closest("li").addClass('track');
+        }
+        $(this).find("h4").addClass("track");
+   }); 
+
     function blockTr(el){
         el.addClass("b-refresh");
         el.click(function(){
@@ -1233,21 +1240,22 @@ $(document).ready(function(){
         $("body").on("click",".b-filter-pagination .yiiPager a",function(){
             $("#b-filter-form").attr("action",$(this).attr("href")).submit();
             return false;
-        });
-        $("body").on("click",".b-clear-filter-form",function(){
-            $("#b-filter-form input[class!='hidden'], #b-filter-form select[class!='hidden']").remove();
-            $("#b-filter-form").submit();
-            return false;
-        });
-        $("body").on("change","#b-sort-1",function(){
-            $("#b-sort-2").val($(this).val());
-            $("#b-filter-form").submit();
-        });
-        $("body").on("change","#b-order-1",function(){
-            $("#b-order-2").val($(this).val());
-            $("#b-filter-form").submit();
-        });
+        });   
     }
+
+    $("body").on("change","#b-sort-1",function(){
+        $("#b-sort-2").val($(this).val());
+        $("#b-filter-form").submit();
+    });
+    $("body").on("change","#b-order-1",function(){
+        $("#b-order-2").val($(this).val());
+        $("#b-filter-form").submit();
+    });
+    $("body").on("click",".b-clear-filter-form",function(){
+        $("#b-filter-form input[class!='hidden'], #b-filter-form select[class!='hidden']").remove();
+        $("#b-filter-form").submit();
+        return false;
+    });
     /* Filter Pagination ------------------------- Filter Pagination */
 
     /* Live -------------------------------------- Live */

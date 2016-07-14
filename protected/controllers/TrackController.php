@@ -3,10 +3,15 @@
 class TrackController extends Controller
 {
 	private $sort_fields = array(
-		"sort" => "По дате",
-		"cur_price" => "По текущей цене",
-		"bids" => "По количеству ставок",
-		"end_time" => "По времени окончания",
+		"price" => 'Цена',
+		"amount" => 'Количество в комплекте',
+		"date" => "Дата",
+		"views" => "Просмотры"
+	);
+	public $wheel_type = array(
+		"1" => "Ш",
+		"2" => "Д",
+		"3" => "К"
 	);
 
 	public function filters()
@@ -37,27 +42,26 @@ class TrackController extends Controller
 	{	
 		session_start();
 		if( !($_POST["sort"]) ){
-			if( isset($_SESSION["POST"]) ) $_POST = $_SESSION["POST"];
+			if( isset($_SESSION["TRACK"]) ) $_POST = $_SESSION["TRACK"];
 		}else{
-			$_SESSION["POST"] = $_POST;
+			$_SESSION["TRACK"] = $_POST;
 		}
 		unset($_GET["partial"]);
 
-		if( !isset($_POST["sort"]) ) $_POST["sort"] = "sort";
+		if( !isset($_POST["sort"]) ) $_POST["sort"] = "amount";
 		if( !isset($_POST["order"]) ) $_POST["order"] = "DESC";
 
 		if( isset($_POST['delete']) ){
-			Yii::app()->db->createCommand()->update(YahooLot::tableName(), array(
-			    'state'=>1,
+			Yii::app()->db->createCommand()->update(Track::tableName(), array(
+			    'state'=>2,
 			), array('in', 'id', json_decode($_POST['delete'])));
 		}
 
-		$filter = YahooLot::filter();
-		$labels = YahooLot::attributeLabels();
-		$arr_name = "YL";
+		$filter = Track::filter();
+		$labels = Track::attributeLabels();
+		$arr_name = "Track";
 		$filter_values = isset( $_POST[$arr_name] )?$_POST[$arr_name]:array();
 
-		YahooLot::model()->deleteAll("end_time<'".date("Y-m-d H:i:s", time()-60*60*5)."'");
 		$criteria=new CDbCriteria();
 
 	   	if( count($filter_values) ){
@@ -65,22 +69,17 @@ class TrackController extends Controller
 	   	}
 
 	   	$criteria->addCondition("state='0'");
-	   	$criteria->addCondition("end_time>'".date("Y-m-d H:i:s", time())."'");
 	   	$criteria->order = $_POST["sort"].' '.$_POST["order"];
 
-	   	$pagination = array('pageSize'=>40,'route' => 'yahoo/adminindex');
+	   	$pagination = array('pageSize'=>40,'route' => 'track/adminindex');
 
-	   	$lot_count = YahooLot::model()->count($criteria);
+	   	$lot_count = Track::model()->count($criteria);
 
-		$dataProvider = new CActiveDataProvider('YahooLot', array(
+		$dataProvider = new CActiveDataProvider('Track', array(
 		    'criteria'=>$criteria,
 		    'pagination'=>$pagination
 		));
 		$data = $dataProvider->getData();
-		foreach ($data as &$item) {
-			$item->title = preg_replace("/[^A-z0-9]/", " ", $item->title);
-			$item->end_time = $this->getTextTime((strtotime($item->end_time)-time()));
-		}
 
 		foreach ($filter as &$item) {
 			if( isset($item["FROM"]) && !is_array($item["FROM"]) ){
@@ -97,7 +96,7 @@ class TrackController extends Controller
 			'arr_name' => $arr_name,
 			'filter'=>$filter,
 			'filter_values'=>$filter_values,
-			'filter_list'=>$this->getFilterList($filter_values,$filter,$labels),
+			'filter_list'=>$this->getFilterList($filter_values,$filter,$labels)
 		);
 		if($partial) {
 			$this->renderPartial('adminIndex',$options);		

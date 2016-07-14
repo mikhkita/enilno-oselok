@@ -2191,12 +2191,17 @@ td.b-inter-visual-td .b-inter-visual{
         margin: 0px 0px -1px -1px;
         vertical-align: top;
         text-align: left;
+        position: relative;
     }
     .yahoo-list li:hover{
         background-color: #D26A44;
     }
     .yahoo-list li.selected{
         background-color: #452617;
+    }
+    .yahoo-list li.track:hover {
+        margin-bottom: -40px;
+        z-index: 100;
     }
         .yahoo-list li .image-cont{
             width: 144px;
@@ -2208,6 +2213,12 @@ td.b-inter-visual-td .b-inter-visual{
             background-repeat: no-repeat;
             margin-bottom: 3px;
             position: relative;
+        }
+        .yahoo-list li .image-cont > span{
+            position: absolute;
+            right: 0;
+            top: 0;
+
         }
             .yahoo-list li .image-cont>a{
                 display: block;
@@ -2257,11 +2268,21 @@ td.b-inter-visual-td .b-inter-visual{
                 .yahoo-list .b-nav .b-nav-sniper{
                     background-image: url("../images/sight.png");
                 }
+                    
         .yahoo-list li h5,
         .yahoo-list li h4{
             margin-top: 0px;
             font-size: 14px;
         }
+        .yahoo-list li h4.track {
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+            min-height: 19px;
+        }
+            .yahoo-list li.track:hover h4.track {
+                white-space: normal;
+            }
         .yahoo-list li h5.red,
         .yahoo-list li h4.red{
             color: #E70000;

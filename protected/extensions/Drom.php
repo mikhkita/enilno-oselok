@@ -131,7 +131,6 @@ Class Drom {
 
     public function parseAllItems($link, $user_id = NULL, $auth = true, $get_id = false, $get_object = false,$goods_parse = false){
         if($auth) $this->auth("https://baza.drom.ru/partner/sign");
-        $sellers = 0;
         $html = str_get_html(iconv('windows-1251', 'utf-8', $this->curl->request($link)));
 
         $links = array();
@@ -139,7 +138,7 @@ Class Drom {
         if(!$goods_parse)
             if( !$html->find('.userProfile',0) || trim($html->find('.userProfile',0)->getAttribute("data-view-dir-user-id")) != trim($user_id) ) return $links;
 
-        $pageLinks = $html->find('#bulletins .bull-item');
+        $pageLinks = $html->find('#bulletins tr.bull-item');
         $page = 1;
         if($get_id) {
             $attr = "name";
@@ -162,32 +161,38 @@ Class Drom {
                         'date' => date('Y-m-d H:i:s'),
                         'type' => $goods_parse,
                         'state' => 0,
-                        'price_type' => 0
+                        'price_type' => 0,
+                        'platform' => 1
                     );
                     $tmp['params'] = ($element->find(".annotation",0)) ? $element->find(".annotation",0)->plaintext : NULL;
                     $tmp['price'] = ($element->find(".finalPrice span",0)) ? intval(str_replace(" ","",$element->find(".finalPrice span",0)->plaintext)) : NULL;
                     $tmp['views'] = ($element->find(".views",0)) ? intval(str_replace(" ","",$element->find(".views",0)->plaintext)) : NULL;
                     $tmp['amount'] = ($element->find(".quantity",0)) ? intval(preg_replace('~\D+~','',$element->find(".quantity",0)->plaintext)) : NULL;
-                    $tmp['img'] = ($element->find(".imageExists img",0)) ? $element->find(".imageExists img",0)->src : Yii::app()->params["imageFolder"]."/default.jpg";
+                    if($element->find(".imageExists noscript",0)) {
+                        $tmp['img'] = str_get_html($element->find(".imageExists noscript",0)->innertext)->find("img",0)->src;
+                    } elseif($element->find(".imageExists img",0)) {
+                        $tmp['img'] = $element->find(".imageExists img",0)->src;
+                    } else $tmp['img'] = "/".Yii::app()->params["imageFolder"]."/default.jpg";
                     $tmp['seller'] = ($element->find(".owner a",0)) ? str_replace(array('/','user'),"",$element->find(".owner a",0)->href) : NULL;
                     if($element->find(".fixedPrice",0)) $tmp['price_type'] = 1;
                     if($element->find(".bestOffer",0)) $tmp['price_type'] = 2;
                     if($element->find(".regular",0)) $tmp['price_type'] = 3;
 
-                    if(!$tmp['seller']) $links[$element->find(".bulletinLink",0)->name] = $tmp; else $sellers++; 
+                    if(!$tmp['seller']) $links[$element->find(".bulletinLink",0)->name] = $tmp; 
                 }else{
                     array_push($links, $element->find(".bulletinLink",0)->getAttribute($attr) );
+
                 }
             }
             $page++;
             if(strpos($link,"&") === false)
                $html = str_get_html(iconv('windows-1251', 'utf-8', $this->curl->request($link."?page=".$page)));
             else $html = str_get_html(iconv('windows-1251', 'utf-8', $this->curl->request($link."&page=".$page)));
-            $pageLinks = $html->find('#bulletins .bull-item');
+            $pageLinks = $html->find('#bulletins tr.bull-item');
         }
 
-        if($get_id && $html->find('#itemsCount_placeholder strong',0)) {
-            if((count($links)+$sellers) != array_shift(explode(" пр", $html->find('#itemsCount_placeholder strong',0)->plaintext)))
+        if($get_id && $html->find('#itemsCount_placeholder strong',0) && !$goods_parse) {
+            if(count($links) != array_shift(explode(" пр", $html->find('#itemsCount_placeholder strong',0)->plaintext)))
                 return false;
         }
 
@@ -678,32 +683,38 @@ Class Drom {
     }
 
     public function parseCategory() {
-        $good_types = array("wheel");
+        $good_types = array("tire","disc","wheel");
         foreach ($good_types as $key => $good_type) {
-            $url = "http://baza.drom.ru/tomsk/wheel/$good_type/?";
-            $url_params = array(
-                'condition[]' => 'used',
-                'goodPresentState[]' => 'present'
-            );
-            $url .= http_build_query($url_params);
-            $good_type_id = 3;
-            $goods = $this->parseAllItems($url,NULL,false, true,false,$good_type_id);
-            $model = ParseGood::model()->findAll("type=$good_type_id");
-            foreach ($model as $good) {
-                if(!isset($goods[$good->id])) {
-                    $good->state = 1;
-                    $good->save();
-                } elseif($good->state == 1) {
-                    $good->state = 0;
-                    $good->save();
-                }
-            }
-            $rows = array();
-            
-            foreach($goods as $advert_id => $good) {
-                array_push($rows, array($advert_id,$good['title'],$good['params'],$good['price'],$good['views'],$good['amount'],$good['img'],$good['date'],$good['type'],$good['state'],$good['price_type'],$good['seller']));
+            $good_type_id = $key+1;
+            $goods = array();
+            for ($i=0; $i <= 1; $i++) { 
+                $url = "http://baza.drom.ru/tomsk/wheel/$good_type/?";
+                $url_params = array(
+                    'condition[]' => 'used',
+                    'goodPresentState[]' => 'present'
+                );
+                if($i) $url_params['price_min'] = 6001; else $url_params['price_max'] = 6000; 
+                $url .= http_build_query($url_params);
+                $goods[$i] = $this->parseAllItems($url,NULL,false,true,false,$good_type_id);
             }    
-            Controller::updateRows(ParseGood::tableName(),$rows,array('title','params','price','views','amount','img','price_type','seller'));
+                $goods = $goods[0] + $goods[1];
+                $model = Track::model()->findAll("type=$good_type_id AND platform=1");
+                foreach ($model as $good) {
+                    if(!isset($goods[$good->id])) {
+                        $good->state = 1;
+                        $good->save();
+                    } elseif($good->state == 1) {
+                        $good->state = 0;
+                        $good->save();
+                    }
+                }
+                $rows = array();
+                foreach($goods as $advert_id => $good) {
+                    array_push($rows, array($advert_id,$good['title'],$good['params'],$good['price'],$good['views'],$good['amount'],$good['img'],$good['date'],$good['type'],$good['state'],$good['price_type'],$good['seller'],$good['platform']));
+                }    
+                Controller::updateRows(Track::tableName(),$rows,array('title','params','price','views','amount','img','type','price_type','seller'));
+            
+            
         } 
     }
 
