@@ -178,19 +178,18 @@ $(document).ready(function(){
                 progress.end(function(){
                     setResult(msg);
                     $(".qtip").remove();
+                    $(".text-overflow").each(function(){
+                        if($(this).height() > 20) {
+                            $(this).closest("li").addClass('track');
+                        }
+                        $(this).find("h4").addClass("track");
+                    }); 
                 });
             }
         });
 
         return false;
     });
-    
-   $(".text-overflow").each(function(){
-        if($(this).height() > 20) {
-            $(this).closest("li").addClass('track');
-        }
-        $(this).find("h4").addClass("track");
-   }); 
 
     function blockTr(el){
         el.addClass("b-refresh");
@@ -1242,7 +1241,12 @@ $(document).ready(function(){
             return false;
         });   
     }
-
+    $(".text-overflow").each(function(){
+        if($(this).height() > 20) {
+            $(this).closest("li").addClass('track');
+        }
+        $(this).find("h4").addClass("track");
+    }); 
     $("body").on("change","#b-sort-1",function(){
         $("#b-sort-2").val($(this).val());
         $("#b-filter-form").submit();
