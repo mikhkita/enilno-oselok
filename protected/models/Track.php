@@ -15,8 +15,9 @@
  * @property integer $type
  * @property integer $state
  * @property integer $price_type
- * @property integer $platform
  * @property string $seller
+ * @property integer $platform
+ * @property integer $folder
  */
 class Track extends CActiveRecord
 {
@@ -37,14 +38,14 @@ class Track extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('id, title, type', 'required'),
-			array('amount, type, state, price_type', 'numerical', 'integerOnly'=>true),
+			array('amount, type, state, price_type, platform, folder', 'numerical', 'integerOnly'=>true),
 			array('id, views', 'length', 'max'=>10),
 			array('title, params, img, seller', 'length', 'max'=>255),
 			array('price', 'length', 'max'=>6),
 			array('date', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, title, params, price, views, amount, img, date, type, state, price_type, seller','platform', 'safe', 'on'=>'search'),
+			array('id, title, params, price, views, amount, img, date, type, state, price_type, seller, platform, folder', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -77,7 +78,8 @@ class Track extends CActiveRecord
 			'state' => 'Состояние',
 			'price_type' => 'Тип торгов',
 			'seller' => 'Продавец',
-			'platform' => "Платформа"
+			'platform' => "Платформа",
+			'folder' => "Папка"
 		);
 	}
 
@@ -112,6 +114,7 @@ class Track extends CActiveRecord
 		$criteria->compare('price_type',$this->price_type);
 		$criteria->compare('seller',$this->seller,true);
 		$criteria->compare('platform',$this->platform);
+		$criteria->compare('folder',$this->folder);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -123,6 +126,7 @@ class Track extends CActiveRecord
 			"platform" => array("TYPE" => "CHECKBOX", "VIEW" => "CHECKBOX", "FROM" => array("1" => "Дром","2" => "Авито") ),
 			"type" => array("TYPE" => "CHECKBOX", "VIEW" => "CHECKBOX", "FROM" => GoodType::tableName(), "FIELDS" => array("id","name") ),
 			"amount" => array("TYPE" => "CHECKBOX", "VIEW" => "CHECKBOX", "FROM" => array("1" => 1,"2" => 2,"3"=>3,"4"=>4,"5"=>5,"6"=>6,"7"=>7,"8"=>8) ),
+			"price_type" => array("TYPE" => "CHECKBOX", "VIEW" => "CHECKBOX", "FROM" => array("1" => "Фиксированная цена","2" => "Торг", "3" => "Аукцион") ),
 			"price" => array("TYPE"=>"FROMTO", "VIEW" => "FROMTO")
 		);
 	}

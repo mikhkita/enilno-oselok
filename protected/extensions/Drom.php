@@ -129,13 +129,13 @@ Class Drom {
         return $links;
     }
 
-    public function parseAllItems($link, $user_id = NULL, $auth = true, $get_id = false, $get_object = false,$goods_parse = false){
+    public function parseAllItems($link, $user_id = NULL, $auth = true, $get_id = false, $get_object = false,$good_type_id = NULL){
         if($auth) $this->auth("https://baza.drom.ru/partner/sign");
         $html = str_get_html(iconv('windows-1251', 'utf-8', $this->curl->request($link)));
 
         $links = array();
         $first = NULL;
-        if(!$goods_parse)
+        if(!$good_type_id)
             if( !$html->find('.userProfile',0) || trim($html->find('.userProfile',0)->getAttribute("data-view-dir-user-id")) != trim($user_id) ) return $links;
 
         $pageLinks = $html->find('#bulletins tr.bull-item');
@@ -155,14 +155,15 @@ Class Drom {
                         "title" => $element->find(".bulletinLink",0)->plaintext
                     );
                     array_push($links, (object)$tmp);
-                }elseif($goods_parse) {
+                }elseif($good_type_id) {
                     $tmp = array(
                         'title' => $element->find(".bulletinLink",0)->plaintext,
                         'date' => date('Y-m-d H:i:s'),
-                        'type' => $goods_parse,
+                        'type' => $good_type_id,
                         'state' => 0,
                         'price_type' => 0,
-                        'platform' => 1
+                        'platform' => 1,
+                        'folder' => NULL
                     );
                     $tmp['params'] = ($element->find(".annotation",0)) ? $element->find(".annotation",0)->plaintext : NULL;
                     $tmp['price'] = ($element->find("span.finalPrice",0)) ? intval(str_replace(" ","",$element->find("span.finalPrice",0)->plaintext)) : NULL;
@@ -193,7 +194,7 @@ Class Drom {
             $pageLinks = $html->find('#bulletins tr.bull-item');
         }
 
-        if($get_id && $html->find('#itemsCount_placeholder strong',0) && !$goods_parse) {
+        if($get_id && $html->find('#itemsCount_placeholder strong',0) && !$good_type_id) {
             if(count($links) != array_shift(explode(" пр", $html->find('#itemsCount_placeholder strong',0)->plaintext)))
                 return false;
         }
@@ -712,7 +713,7 @@ Class Drom {
                 }
                 $rows = array();
                 foreach($goods as $advert_id => $good) {
-                    array_push($rows, array($advert_id,$good['title'],$good['params'],$good['price'],$good['views'],$good['amount'],$good['img'],$good['date'],$good['type'],$good['state'],$good['price_type'],$good['seller'],$good['platform']));
+                    array_push($rows, array($advert_id,$good['title'],$good['params'],$good['price'],$good['views'],$good['amount'],$good['img'],$good['date'],$good['type'],$good['state'],$good['price_type'],$good['seller'],$good['platform'],$good['folder']));
                 }    
                 Controller::updateRows(Track::tableName(),$rows,array('title','params','price','views','amount','img','type','price_type','seller'));  
             Log::debug("отслеживание $good_type завершено");

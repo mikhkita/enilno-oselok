@@ -2214,25 +2214,31 @@ td.b-inter-visual-td .b-inter-visual{
             margin-bottom: 3px;
             position: relative;
         }
-        .yahoo-list li .image-cont > span.price-type{
+        .yahoo-list li .track-price h4.type-1,.yahoo-list li .track-price h4.type-2,.yahoo-list li .track-price h4.type-3 {
+            padding-left: 11px;
+            position: relative;
+        }
+        .yahoo-list li .track-price h4:before{
             position: absolute;
+            content: "";
+            font-size: 0;
             left: 0;
-            top: 0;
+            top: 6px;
             height: 13px;
             width: 8px;
             background-image: url("../i/drom-price.png");
 
         }
-            .yahoo-list li .image-cont > span.type-0{
+            .yahoo-list li .track-price h4.type-0:before{
                 display: none;
             }
-            .yahoo-list li .image-cont > span.type-1{
+            .yahoo-list li .track-price h4.type-1:before{
                 background-position: 0px 50%;
             }
-            .yahoo-list li .image-cont > span.type-2{
+            .yahoo-list li .track-price h4.type-2:before{
                 background-position: -8px 50%;
             }
-            .yahoo-list li .image-cont > span.type-3{
+            .yahoo-list li .track-price h4.type-3:before{
                 background-position: -16px 50%;
             }
         .yahoo-list li .image-cont > span.good-type {
@@ -2288,11 +2294,13 @@ td.b-inter-visual-td .b-inter-visual{
                 .yahoo-list .b-nav .b-nav-sniper{
                     background-image: url("../images/sight.png");
                 }
-                    
-        .yahoo-list li h5,
+        .yahoo-list li h5,     
         .yahoo-list li h4{
             margin-top: 0px;
             font-size: 14px;
+        }
+        .yahoo-list li .track-price h5 {
+            margin-top: 4px;
         }
         .yahoo-list li h4.track {
             text-overflow: ellipsis;

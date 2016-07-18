@@ -109,7 +109,7 @@ class TrackController extends Controller
 
 		foreach ($fields as $key => $value) {
 			if( $filter[$key]["TYPE"] == "CHECKBOX" ){
-				$criteria->addInCondition($key, $value, 'OR');
+				$criteria->addInCondition($key, $value);
 			}else if( $filter[$key]["TYPE"] == "FROMTO" ){
 				if( $value["FROM"] != "" ) $criteria->addCondition($key.">='".$value["FROM"]."'");
 				if( $value["TO"] != "" ) $criteria->addCondition($key."<='".$value["TO"]."'");

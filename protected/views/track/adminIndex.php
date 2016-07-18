@@ -23,21 +23,21 @@
     	<? foreach ($model as $item): ?>
 			<li class="" data-id="<?=$item->id?>" title="<?=$item->title?>">
                 <div class="image-cont track" style="background-image:url('<?=$item->img?>');">
-                    <span class="price-type type-<?=$item->price_type?>"></span>
                     <span class="good-type"><b><?=$this->wheel_type[$item->type]?></b></span>
-                    <a href="http://baza.drom.ru/<?=$item->id?>" target="_blank" title="Посмотреть объявление"></a>
+                    <? if($item->platform == "1") $link = "http://baza.drom.ru/"; else $link = "http://avito.ru/"; ?>
+                    <a href="<?=$link.$item->id?>" target="_blank" title="Посмотреть объявление"></a>
                     <div class="b-nav clearfix">
                         <span class="b-nav-delete b-tooltip b-delete-<?=$item->id?>" style="width: 100%;" title="В архив"></span>
                         
                     </div>
                 </div>
-                <div class="clearfix">
-                    <h4 class="left">Цена: <b><?=($item->price) ? $item->price : "?"; ?></b></h4>
-                    <h5 class="right"><b><?=($item->amount) ? $item->amount." шт." : ""; ?></b></h5>
+                <div class="clearfix track-price">
+                    <h4 class="left type-<?=$item->price_type?>">Цена: <b><?=($item->price) ? $item->price : "?"; ?></b></h4>
+                    <h5 class="right"><?=($item->amount) ? $item->amount." шт." : ""; ?></h5>
                 </div>
                 <div class="clearfix text-overflow">
-                    <h4><?=$item->params?></h4>
-
+                    <? if($item->platform == "1") $par = $item->params; else $par = $item->title; ?>
+                    <h4><?=$par?></h4>
                 </div>
                 <div class="clearfix">
                     <h4 class="left"><?=date_format(date_create($item->date), 'd.m.Y');?></h4>
@@ -55,9 +55,9 @@
             'prevPageLabel' => '< назад',
             'nextPageLabel' => 'далее >'
         )) ?>
-        <div class="b-lot-count">Всего лотов: <?=$lot_count?></div>
+        <div class="b-lot-count">Всего объявлений: <?=$lot_count?></div>
     </div>
 </div>  
 <? else: ?>
-    <h3 class="b-no-goods">Лотов не найдено</h3>
+    <h3 class="b-no-goods">Объявлений не найдено</h3>
 <? endif; ?>
