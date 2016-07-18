@@ -387,6 +387,70 @@ Class Avito {
     	
     	return array("links" => $links, "count" => $count);
     }
+
+    public function parseAllItems($link,$good_type_id = NULL){
+        $html = str_get_html($this->curl->request($link));
+        sleep(rand(1,5));
+        $links = array();
+        $first = NULL;
+        $pageLinks = $html->find('.item_table');
+        $page = 1;
+        while(count($pageLinks)){
+            foreach($pageLinks as $element){
+            	if($good_type_id) {
+	                $tmp = array(
+	                    'title' => trim($element->find(".item-description-title-link",0)->plaintext),
+	                    'date' => date('Y-m-d H:i:s'),
+	                    'type' => $good_type_id,
+	                    'params' => NULL,
+	                    'views' => NULL,
+	                    'amount' => NULL,
+	                    'state' => 0,
+	                    'price_type' => 0,
+	                    'seller' => NULL,
+	                    'platform' => 2,
+	                    'folder' => NULL
+	                );
+	                $tmp['price'] = (trim($element->find(".description .about",0))) ? intval(str_replace(" ","",$element->find(".description .about",0)->plaintext)) : NULL;   	          
+	                $tmp['img'] = ($element->find(".photo-wrapper img",0)) ? $element->find(".photo-wrapper img",0)->src : "/".Yii::app()->params["imageFolder"]."/default.jpg";            
+	                if($element->find(".data p",0)->plaintext != "Магазин") $links[substr($element->id, 1)] = $tmp; 
+	            }
+        	}
+            $page++;
+            if(strpos($link,"&") === false)
+               $html = str_get_html($this->curl->request($link."?p=".$page));
+            else $html = str_get_html($this->curl->request($link."&p=".$page));
+            $pageLinks = $html->find('.item_table');
+        }
+        return $links;
+    }
+
+    public function parseCategory() {
+        $good_types = array("shiny","diski","kolesa");
+        foreach ($good_types as $key => $good_type) {
+            $good_type_id = $key+1;
+            $goods = array();
+            $url = "https://www.avito.ru/tomsk/zapchasti_i_aksessuary/shiny_diski_i_kolesa/$good_type";
+            $goods = $this->parseAllItems($url,$good_type_id);   
+            $model = Track::model()->findAll("type=$good_type_id AND platform=2");
+            foreach ($model as $good) {
+                if(!isset($goods[$good->id])) {
+                    $good->state = 1;
+                    $good->save();
+                } elseif($good->state == 1) {
+                    $good->state = 0;
+                    $good->save();
+                }
+            }
+            $rows = array();
+            foreach($goods as $advert_id => $good) {
+                array_push($rows, array($advert_id,$good['title'],$good['params'],$good['price'],$good['views'],$good['amount'],$good['img'],$good['date'],$good['type'],$good['state'],$good['price_type'],$good['seller'],$good['platform'],$good['folder']));
+            }    
+            Controller::updateRows(Track::tableName(),$rows,array('title','price','img'));  
+        	Log::debug("отслеживание $good_type завершено");
+        } 
+
+    }
 }
 
 ?>

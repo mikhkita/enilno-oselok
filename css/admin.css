@@ -2191,12 +2191,17 @@ td.b-inter-visual-td .b-inter-visual{
         margin: 0px 0px -1px -1px;
         vertical-align: top;
         text-align: left;
+        position: relative;
     }
     .yahoo-list li:hover{
         background-color: #D26A44;
     }
     .yahoo-list li.selected{
         background-color: #452617;
+    }
+    .yahoo-list li.track:hover {
+        margin-bottom: -40px;
+        z-index: 100;
     }
         .yahoo-list li .image-cont{
             width: 144px;
@@ -2208,6 +2213,38 @@ td.b-inter-visual-td .b-inter-visual{
             background-repeat: no-repeat;
             margin-bottom: 3px;
             position: relative;
+        }
+        .yahoo-list li .track-price h4.type-1,.yahoo-list li .track-price h4.type-2,.yahoo-list li .track-price h4.type-3 {
+            padding-left: 11px;
+            position: relative;
+        }
+        .yahoo-list li .track-price h4:before{
+            position: absolute;
+            content: "";
+            font-size: 0;
+            left: 0;
+            top: 6px;
+            height: 13px;
+            width: 8px;
+            background-image: url("../i/drom-price.png");
+
+        }
+            .yahoo-list li .track-price h4.type-0:before{
+                display: none;
+            }
+            .yahoo-list li .track-price h4.type-1:before{
+                background-position: 0px 50%;
+            }
+            .yahoo-list li .track-price h4.type-2:before{
+                background-position: -8px 50%;
+            }
+            .yahoo-list li .track-price h4.type-3:before{
+                background-position: -16px 50%;
+            }
+        .yahoo-list li .image-cont > span.good-type {
+            position: absolute;
+            right: 0;
+            top: -5px;
         }
             .yahoo-list li .image-cont>a{
                 display: block;
@@ -2257,11 +2294,23 @@ td.b-inter-visual-td .b-inter-visual{
                 .yahoo-list .b-nav .b-nav-sniper{
                     background-image: url("../images/sight.png");
                 }
-        .yahoo-list li h5,
+        .yahoo-list li h5,     
         .yahoo-list li h4{
             margin-top: 0px;
             font-size: 14px;
         }
+        .yahoo-list li .track-price h5 {
+            margin-top: 4px;
+        }
+        .yahoo-list li h4.track {
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+            min-height: 19px;
+        }
+            .yahoo-list li.track:hover h4.track {
+                white-space: normal;
+            }
         .yahoo-list li h5.red,
         .yahoo-list li h4.red{
             color: #E70000;
