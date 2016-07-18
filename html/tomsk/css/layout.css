@@ -1153,6 +1153,7 @@ input:-moz-placeholder {
 	text-align: left;
 	padding-bottom: 15px;
 	border-bottom: 1px solid #e9e9e9;
+	margin-bottom: 10px;
 }	
 .similar-title {
 	font-size: 18px;

@@ -65,7 +65,7 @@ class Task extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('good_id, user_id, action_id', 'required'),
+			array('user_id, action_id', 'required'),
 			array('action_id', 'numerical', 'integerOnly'=>true),
 			array('good_id, user_id', 'length', 'max'=>10),
 			array('data', 'length', 'max'=>10000),
@@ -103,10 +103,9 @@ class Task extends CActiveRecord
 
 	public function filter($user_id = NULL){
 		$model = Yii::app()->db->createCommand()
-            ->select('t.id, t.data, t.good_id, t.action_id, t.user_id, g.good_type_id, ta.name')
+            ->select('t.id, t.data, t.good_id, t.action_id, t.user_id, ta.name')
             ->from(Task::tableName().' t')
             ->join(TaskAction::tableName().' ta', 'ta.id=t.action_id')
-            ->join(Good::tableName().' g', 'g.id=t.good_id')
             ->where( (($user_id !== NULL)?"t.user_id=$user_id AND ":"")."1=1")
             ->order("t.id ASC")
             ->limit(1000)
@@ -115,15 +114,19 @@ class Task extends CActiveRecord
         if( count($model) ){
         	$ids = array();
         	foreach ($model as $i => $task)
-        		array_push($ids, $task["good_id"]);
+        		if( $task["good_id"] )
+        			array_push($ids, $task["good_id"]);
 
-        	$goods = Yii::app()->db->createCommand()
-	            ->select('t.varchar_value, t.good_id')
-	            ->from(GoodAttribute::tableName().' t')
-	            ->where("t.attribute_id=3 AND t.good_id IN (".implode(",", $ids).")")
-	            ->queryAll();
+        	if( count($ids) ){
+        		$goods = Yii::app()->db->createCommand()
+		            ->select('t.varchar_value, t.good_id, g.good_type_id')
+		            ->from(GoodAttribute::tableName().' t')
+		            ->join(Good::tableName().' g', "t.good_id=g.id")
+		            ->where("t.attribute_id=3 AND t.good_id IN (".implode(",", $ids).")")
+		            ->queryAll();
 
-	       	$goods = Controller::getAssocByAssoc($goods, "good_id");
+		       	$goods = Controller::getAssocByAssoc($goods, "good_id");
+        	}
         }
 
         $goodTypes = Controller::getAssoc(GoodType::model()->findAll(), "id");
@@ -138,12 +141,14 @@ class Task extends CActiveRecord
         				array_push($attributes, $val);
         	}
 
-        	$model[$i]["good"] = (object) array(
-        		"id" => $value["good_id"],
-        		"code" => (isset($goods[$value["good_id"]])?$goods[$value["good_id"]]["varchar_value"]:""),
-        		"good_type_id" => $value["good_type_id"]
-        	);
-        	$model[$i]["good_type"] = $goodTypes[$value["good_type_id"]]->name;
+        	if( $value["good_id"] ){
+        		$model[$i]["good"] = (object) array(
+	        		"id" => $value["good_id"],
+	        		"code" => (isset($goods[$value["good_id"]])?$goods[$value["good_id"]]["varchar_value"]:""),
+	        		"good_type_id" => (isset($goods[$value["good_id"]])?$goods[$value["good_id"]]["good_type_id"]:"")
+	        	);
+        	}
+        	$model[$i]["good_type"] = $goodTypes[$model[$i]["good"]->good_type_id]->name;
         	unset($model[$i]["varchar_value"]);
         	unset($model[$i]["good_type_id"]);
         	$model[$i] = (object) $model[$i];
@@ -159,7 +164,7 @@ class Task extends CActiveRecord
 	        $attributes = Controller::getAssocByAssoc($attributes, "id");
 
 	        foreach ($model as $i => $value) {
-	        	if($value->data !== NULL){
+	        	if( in_array($value->action_id, array(1,2,3,4,5)) && $value->data !== NULL){
 	        		$names = array();
 
 	        		$tmp = explode(",", $value->data);

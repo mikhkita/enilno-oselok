@@ -56,6 +56,12 @@ $form=$this->beginWidget('CActiveForm',array('id'=>'adverts-form',"action" => $t
 				<?=CHtml::radioButtonList("url", $_GET['url'], array("" =>"Не важно", 1 => "Есть", 0 => "Нету"),$htmlopt);?>
 			</div>
 		</div>
+		<div class="b-advert-block">
+			<h3>Активно</h3>
+			<div class="clearfix">
+				<?=CHtml::radioButtonList("active", $_GET['active'], array("" =>"Не важно", 1 => "Да", 0 => "Нет"),$htmlopt);?>
+			</div>
+		</div>
 	</div>
 </div>	
 <div class="clearfix">

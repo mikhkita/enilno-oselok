@@ -725,6 +725,10 @@ Class Drom {
         return new Drom();
     }
 
+    public function getCodeFromURL($url){
+        return array_shift(explode(".", array_pop(explode("-", $url))));
+    }
+
     public function registration(){
         print_r( iconv('windows-1251', 'utf-8', $this->curl->request("http://baza.drom.ru/personal/email_confirmation_request")) );
     }
