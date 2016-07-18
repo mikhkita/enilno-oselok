@@ -12,7 +12,6 @@
  * @property string $city_id
  * @property string $title
  * @property integer $ready
- * @property integer $active
  */
 class Advert extends CActiveRecord
 {
@@ -33,24 +32,15 @@ class Advert extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('good_id, place_id, type_id, city_id', 'required'),
-			array('ready, active', 'numerical', 'integerOnly'=>true),
+			array('ready', 'numerical', 'integerOnly'=>true),
 			array('good_id, place_id, type_id, city_id', 'length', 'max'=>10),
 			array('url', 'length', 'max'=>255),
 			array('title', 'length', 'max'=>100),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, good_id, place_id, url, type_id, city_id, title, ready, active', 'safe', 'on'=>'search'),
+			array('id, good_id, place_id, url, type_id, city_id, title, ready', 'safe', 'on'=>'search'),
 		);
 	}
-
-	public function scopes()
-    {
-        return array(
-        	'actual'=>array(
-                'condition'=>'good_id > 0'
-            ),
-        );
-    }
 
 	/**
 	 * @return array relational rules.
@@ -84,8 +74,7 @@ class Advert extends CActiveRecord
 			'type_id' => 'Тип объявления',
 			'city_id' => 'Город',
 			'title' => 'Заголовок',
-			'ready' => 'Готово',
-			'active' => 'Активно',
+			'ready' => 'Готовность',
 		);
 	}
 
@@ -115,7 +104,6 @@ class Advert extends CActiveRecord
 		$criteria->compare('city_id',$this->city_id,true);
 		$criteria->compare('title',$this->title,true);
 		$criteria->compare('ready',$this->ready);
-		$criteria->compare('active',$this->active);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -210,8 +198,6 @@ class Advert extends CActiveRecord
 			if( count($good_ids) )
 				$criteria->order = "field(good_id,".implode(",", array_reverse($good_ids)).") DESC, t.id DESC";
 		}
-		$criteria->addCondition("good_id > 0", "AND");
-
 		if(isset($params['ids'])) {
 			$criteria->addInCondition("good_id", $params['ids']);
 		}
@@ -223,8 +209,6 @@ class Advert extends CActiveRecord
 	   	}
 	   	if( isset($params["url"]) && $params["url"] != "" )
 	   		$criteria->addCondition("url ".(($params["url"] == 1)?"IS NOT NULL":"IS NULL"), "AND");
-	   	if( isset($params["active"]) && $params["active"] != "" )
-	   		$criteria->addCondition("active = '".$params["active"]."'", "AND");
 
 	   	// $criteria->addCondition("good_id!=0","AND");
 

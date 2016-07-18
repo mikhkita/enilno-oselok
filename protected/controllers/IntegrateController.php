@@ -528,26 +528,89 @@ class IntegrateController extends Controller
     }
 
     public function actionDromParseAll(){
-        $drom = new Drom();
+        ini_set('memory_limit', '-1');
 
-        $ids = array();
-        $ids2 = array();
-        
-        $drom->setUser("wheels70","u8atas5c");
-        $links = $drom->parseAllItems("http://baza.drom.ru/personal/all/bulletins");
+        $users = $this->getDromAccount();
+        $codes = array();
+        $codes_to_sql = array();
+        $adverts_to_delete = array();
+        $isset_adverts = array();
 
-        foreach ($links as $key => $link) {
-            $tmp = explode("-", $link);
-            $tmp = array_pop(explode("/", $tmp[0]));
-            if( ctype_digit($tmp) ){
-                $ids[$tmp] = "1";
-                array_push($ids2, $tmp);
+        foreach ($users as $user) {
+            if($user->id !== NULL){
+                $drom = new Drom();
+                $links = $drom->parseAllItems("http://baza.drom.ru/user/".$user->login."/", $user->id, false);
+
+                foreach ($links as &$link)
+                    $link = Drom::getCodeFromURL($link);
+
+                $codes = array_merge($codes, $links);
             }
         }
 
-        foreach ($ids as $id => $seller) {
-            file_put_contents(Yii::app()->basePath."/drom-links.txt", $id."\n", FILE_APPEND);
+        echo "Получено объявлений: ".count($codes)."<br>";
+
+        foreach ($codes as $code)
+            array_push($codes_to_sql, "'".$code."'");
+
+        if( count($codes_to_sql) ){
+            $isset_adverts = Controller::getIds(Advert::model()->actual()->with("good_filter")->findAll("url IN (".implode(",", $codes_to_sql).") AND good_filter.archive = 0"), "url");
+            $adverts_to_delete = array_diff($codes, $isset_adverts);
         }
+
+        $places = Controller::getIds(Place::model()->findAll("category_id = '2047'"), "id");
+        if( !count($places) ) Log::debug("Не найдена площадка");
+
+        $all_adverts = Controller::getAssoc(Advert::model()->actual()->findAll("place_id IN (".implode(",", $places).")"), "url");
+
+        $update = array(
+            0 => array(),
+            1 => array(),
+        );
+        foreach ($all_adverts as $i => $advert)
+            array_push($update[in_array($advert->url, $codes) ? 1 : 0], $advert->id);
+
+        foreach ($update as $active => $array)
+            if( count($array) )
+                Advert::model()->updateAll(array( "active" => $active ), "id IN (".implode(",", $array).")");
+
+        echo "Активно объявлений: ".count($update[1])."<br>";
+        echo "Неактивно объявлений: ".count($update[0])."<br>";
+
+        if( count($update[0]) ){
+            $task = Task::model()->find("action_id = '7'");
+            if( !$task )
+                $task = new Task();
+
+            $task->data = count($update[0]);
+            $task->action_id = 7;
+            $task->user_id = 9;
+            $task->save();
+        }else{
+            Task::model()->deleteAll("action_id = '7'");
+        }
+
+        // Удаление заданий "Лишнее объявление", которые появились в платформе
+        if( count($adverts_to_delete) ){
+            $urls = array();
+            foreach ($adverts_to_delete as &$url)
+                array_push($urls, "'".$url."'");
+            
+            Task::model()->deleteAll("action_id = '6' AND data NOT IN (".implode(",", $urls).")");
+        }
+
+        // Если есть объявления, которые присутствуют в базе какого-либо аккаунта, но нет на платформе
+        if( count($adverts_to_delete) ){
+            echo "Лишних объявлений: ".count($adverts_to_delete)."<br>";
+            $adverts_to_delete = array_diff($adverts_to_delete, Controller::getIds(Task::model()->findAll("action_id = '6'"), "data"));
+            $values = array();
+            foreach ($adverts_to_delete as $key => $advert) {
+                array_push($values, array("data" => $advert, "action_id" => 6, "user_id" => 9));
+            }
+            Controller::insertValues(Task::tableName(), $values);
+        }
+
+        Log::debug("Парсинг дрома. Всего: ".count($codes).". Активно: ".count($update[1]).". Неактивно: ".count($update[0]));
     }
 // Дром ------------------------------------------------------------------ Дром
 

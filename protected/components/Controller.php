@@ -572,7 +572,8 @@ class Controller extends CController
             114 => "ip",
             121 => "count",
             122 => "photo",
-            136 => "adding"
+            136 => "adding",
+            138 => "id",
         );
         $cells = DesktopTableCell::model()->with(array("row.cells"))->findAll("row.table_id=12".(($login)?" AND t.varchar_value='$login'":""));
         if( $cells ){

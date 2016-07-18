@@ -753,8 +753,8 @@ class Good extends GoodFilter
 			$goodType = GoodType::getCode($this->good_type_id);
 			$cache = Yii::app()->params["cacheFolder"]."/".$goodType."/".$code;
 			$imgs = Yii::app()->params["imageFolder"]."/".$goodType."/".$code;
-			$this->removeDirectory($cache);
-			$this->removeDirectory($imgs);
+			Controller::removeDirectory($cache);
+			Controller::removeDirectory($imgs);
 			$images = Image::model()->with("caps","cache")->findAll("good_id=".$this->id);
 			foreach ($images as $key => $image) {
 				$image->delete();
