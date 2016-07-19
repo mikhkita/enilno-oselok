@@ -6,7 +6,7 @@
 		<tr>
 			<th style="width: 30px;"><? echo $labels['id']; ?></th>
 			<th style="width: 80px;">Тип товара</th>
-			<th style="width: 50px;">Код</th>
+			<th style="width: 55px;">Код</th>
 			<th><? echo $labels['action_id']; ?></th>
 			<!-- <th style="width: 150px;"></th> -->
 		</tr>
