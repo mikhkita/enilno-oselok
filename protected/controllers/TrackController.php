@@ -25,19 +25,25 @@ class TrackController extends Controller
 	{
 		return array(
 			array('allow',
-				'actions'=>array('adminAuctionCreate','adminDetail'),
-				'roles'=>array('root'),
-			),
-			array('allow',
 				'actions'=>array('adminIndex'),
 				'roles'=>array('manager'),
+			),
+			array('allow',
+				'actions'=>array('parse'),
+				'users'=>array('*'),
 			),
 			array('deny',
 				'users'=>array('*'),
 			),
 		);
 	}
-
+	public function actionParse()
+	{
+		$drom = new Drom();
+        $avito = new Avito("tomsk:Sd8as9fhsd@91.226.83.143:9320");
+        $drom->parseCategory();
+        $avito->parseCategory();
+	}
 	public function actionAdminIndex($partial = false)
 	{	
 		session_start();
