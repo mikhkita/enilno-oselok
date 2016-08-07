@@ -20,5 +20,6 @@ return array(
 	'debug' => true,
 	"zeroPrice" => "Уточняйте цену",
 	'dbname' => "koleso",
+	'site' => 'koleso',
 	"region" => false
 );

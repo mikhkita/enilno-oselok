@@ -62,7 +62,7 @@
 						<span href="<?php echo Yii::app()->createUrl('/good/adminsold',array('id'=>$item->id,'good_type_id' => $_GET['good_type_id']))?>" class="ajax-form ajax-create b-tool b-tool-sale" data-warning="Вы действительно хотите перенести товар &quot;<?=$item->fields_assoc[3]->value?>&quot; в архив?" title="Продано"></span>
 						<!-- <span href="<?php echo Yii::app()->createUrl('/good/adminupdateimages',array('id'=>$item->id))?>" class="ajax-form ajax-update ajax-photodoska b-tool b-tool-photo" title="Обновить фотографии"></span> -->
 						<span href="<?php echo Yii::app()->createUrl('/good/adminupdate',array('id'=>$item->id,'good_type_id' => $_GET['good_type_id'],'GoodFilter_page' => ($pages->currentPage+1) ))?>" class="ajax-form ajax-update b-tool b-tool-update" title="Редактировать"></span>
-						<? if($this->user->role->code == "root"): ?><span href="<?php echo Yii::app()->createUrl('/good/admindelete',array('id'=>$item->id))?>" class="ajax-form ajax-delete b-tool b-tool-delete not-ajax-delete" data-warning="Вы действительно хотите удалить товар &quot;<?=$item->fields_assoc[3]->value?>&quot;?" title="Удалить"></span><? endif; ?>
+						<? if($this->user->role->code == "root"): ?><span href="<?php echo Yii::app()->createUrl('/good/admindelete',array('id'=>$item->id))?>" class="ajax-form ajax-delete b-tool b-tool-delete not-ajax-delete" data-warning="Вы действительно хотите убрать в архив товар &quot;<?=$item->fields_assoc[3]->value?>&quot;?" title="В архив"></span><? endif; ?>
 					</td>
 					<? foreach ($fields as $field): ?>
 						<td<?if($tog):?> style="min-width: <?=$field->attribute->width?>px;"<?endif;?> <?=(($field->attribute->required && !isset($item->fields_assoc[$field->attribute->id]))?('class="empty"'):(""))?>>

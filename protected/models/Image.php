@@ -48,6 +48,7 @@ class Image extends CActiveRecord
 		return array(
 			'caps' => array(self::HAS_MANY, 'ImageCap', 'image_id'),
 			'good' => array(self::BELONGS_TO, 'Good', 'good_id'),
+			'good_filter' => array(self::BELONGS_TO, 'GoodFilter', 'good_id'),
 			'cache' => array(self::HAS_MANY, 'Cache', 'image_id'),
 		);
 	}
@@ -177,6 +178,14 @@ class Image extends CActiveRecord
  	}
 
  	public function beforeDelete(){
+  		$good = GoodFilter::model()->findByPk($this->good_id);
+  		$code = GoodAttributeFilter::model()->find("attribute_id=3 AND good_id=".$this->good_id);
+  		if( $good && $code ){
+  			@unlink(Yii::app()->params["imageFolder"]."/".Controller::getTypeCode($good->good_type_id)."/".$code->varchar_value."/".$this->id.".".$this->ext);
+  			foreach ($this->cache as $key => $cache)
+  				@unlink(Yii::app()->params["cacheFolder"]."/".Controller::getTypeCode($good->good_type_id)."/".$code->varchar_value."/".$this->id."_".$cache->size.".".strtolower($this->ext) );
+  		}
+
   		foreach ($this->cache as $key => $value)
   			$value->delete();
 

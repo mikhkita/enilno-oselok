@@ -19,11 +19,18 @@ Class Resize {
         // }
 
         $this->width  = imagesx($this->image);
-        $this->height = imagesy($this->image);
+        $this->height = imagesy($this->image);   
     }
 
     private function openImage($file) {
         $extension = strtolower(strrchr($file, '.'));
+
+        // if( $extension == ".c" ){
+        //     $arr = explode(".", $file);
+        //     $arr[ count($arr) - 1] = "jpg";
+        //     rename($file, implode(".", $arr));
+        //     $extension = ".jpg";
+        // }
      
         switch($extension) {
             case '.jpg':

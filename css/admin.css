@@ -1978,6 +1978,12 @@ li.ui-autocomplete-category {
         .live-processing{
             color: #D26A44 !important;
         }
+        .b-see-list td.red{
+            background-color: #C00;
+        }
+            .b-see-list td.red a{
+                color: #452716 !important;
+            }
 .b-get-xls{
     margin-bottom: 10px;
     border: 2px solid #452716;

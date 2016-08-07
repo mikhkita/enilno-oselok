@@ -224,7 +224,6 @@ class Good extends GoodFilter
 
 		// print_r(count($this->ids));
 
-
     	return $this;
 	}
 
@@ -239,7 +238,10 @@ class Good extends GoodFilter
 			}else{
 				$attribute = Attribute::model()->with("type")->findByPk($options["field"]);
 
-				if( !$attribute ) throw new CHttpException(404,'Не найден атрибут с кодом "'.$options["field"].'"');
+				if( !$attribute ){
+					echo 'Не найден атрибут с кодом "'.$options["field"].'"';
+					die();
+				}
 
 				$criteria=new CDbCriteria();
 				$criteria->select = 't.id';
@@ -840,11 +842,24 @@ class Good extends GoodFilter
 	}
 
 	public function beforeDelete(){
+  		$images = Image::model()->findAll("good_id=".$this->id);
+  		if( $images )
+	  		foreach ($images as $key => $value)
+	  			$value->delete();
+
+  		Task::model()->deleteAll("good_id=".$this->id);
+
+  		Controller::removeDirectory(Yii::app()->params["imageFolder"]."/".Controller::getTypeCode($this->good_type_id)."/".$this->fields_assoc[3]->value);
+  		Controller::removeDirectory(Yii::app()->params["cacheFolder"]."/".Controller::getTypeCode($this->good_type_id)."/".$this->fields_assoc[3]->value);
+
   		foreach ($this->fields as $key => $value) {
   			$value->delete();
   		}
-  		Task::model()->deleteAll("good_id=".$this->id);
   		
+  		foreach ($this->adverts as $key => $value) {
+  			$value->delete();
+  		}
+
   		return parent::beforeDelete();
  	}
 }

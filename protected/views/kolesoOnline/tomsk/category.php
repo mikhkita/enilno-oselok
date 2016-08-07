@@ -63,7 +63,7 @@
                                     <? if($mobile): ?>
                                     <h4><?=$label?></h4>
                                     <? endif; ?>
-                                    <? foreach ($filter[$attr_id] as $key => $col): ?>
+                                    <? if( $filter[$attr_id] ) foreach ($filter[$attr_id] as $key => $col): ?>
                                         <ul class="wave">
                                             <? foreach ($col as $item): ?>
                                                 <li>
@@ -153,7 +153,7 @@
                     </div> -->
                 </div>
                 <ul class="goods clearfix" id="goods">  
-                    <?php $this->renderPartial('tomsk/_list', array('goods' => $goods,'last' => $last,'params' => $params,'type' => $_GET['type'],'dynamic'=>$dynamic)); ?>
+                    <?php $this->renderPartial('vladivostok/_list', array('goods' => $goods,'last' => $last,'params' => $params,'type' => $_GET['type'],'dynamic'=>$dynamic)); ?>
                 </ul>
                 <div class="load" style="display:none;">Загрузка...</div>
                 <? else: ?>
@@ -164,7 +164,7 @@
                     <div id="similar" style="display:none;">
                         <h3 class="similar-title">Похожие товары</h3>
                         <ul class="goods clearfix">  
-                            <?php $this->renderPartial('tomsk/_list', array('goods' => $similar,'last' => 0,'params' => $params,'type' => $_GET['type'],'dynamic'=>$dynamic)); ?>
+                            <?php $this->renderPartial('vladivostok/_list', array('goods' => $similar,'last' => 0,'params' => $params,'type' => $_GET['type'],'dynamic'=>$dynamic)); ?>
                         </ul>
                     </div>
                 <? endif; ?>

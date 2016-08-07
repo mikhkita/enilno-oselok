@@ -25,7 +25,8 @@ Class Log {
         Log::set("sniper",$message,$error);
     }
 
-    public function debug($message,$error = false){
+    public function debug($message,$error = false,$echo = false){
+        if( $echo ) echo $message;
         Log::set("debug",$message,$error);
     }
     public function error($message){

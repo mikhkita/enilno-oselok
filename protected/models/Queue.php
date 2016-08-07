@@ -513,6 +513,76 @@ class Queue extends CActiveRecord
 		return $days;
 	}
 
+	public function returnAdverts($code, $state_to, $state_from = NULL){
+		$filter = array(
+			"Codes" => $code,
+			"Place" => array(9, 10),
+			"Attr" => array(
+				37 => array(869),
+				58 => array(1081)
+			),
+			"category_id" => 2047
+		);
+		if( $state_from !== NULL )
+			$filter["Attr"]["state"] = array($state_from);
+
+		$queue = Queue::filter($filter, true);
+		if( count($queue) ){
+			Queue::model()->updateAll(['state_id' => $state_to], "id IN (".implode(",", $queue).")" );
+			Queue::refreshTime(2047, $queue);
+		}
+
+		$filter["Place"] = array(11, 12);
+		$filter["category_id"] = 2048;
+
+		$queue = Queue::filter($filter, true);
+		if( count($queue) ){
+			Queue::model()->updateAll(['state_id' => $state_to], "id IN (".implode(",", $queue).")" );
+		}
+	}
+
+	public function addByFilter($tires_filter = NULL, $disc_filter = NULL, $good_attr){
+		$model = array();
+
+		if( $tires_filter !== NULL ){
+			$goods = Good::model()->filter(
+	            array(
+	                "good_type_id"=>1,
+	                "attributes"=>$tires_filter
+	            )
+	        )->getPage(
+	            array(
+	                'pageSize'=>10000,
+	            )
+	        );
+
+	        if( is_array($goods["items"]) )
+	            $model = array_merge($model, $goods["items"]);
+		}
+
+		if( $disc_filter !== NULL ){
+	        $goods = Good::model()->filter(
+	            array(
+	                "good_type_id"=>2,
+	                "attributes"=>$disc_filter
+	            )
+	        )->getPage(
+	            array(
+	                'pageSize'=>10000,
+	            )
+	        );
+	        if( is_array($goods["items"]) )
+	            $model = array_merge($model, $goods["items"]);
+	    }
+
+        $links = array();
+        foreach ($model as $i => $good)
+            array_push($links, "http://".Yii::app()->params['ip'].Controller::createUrl('/good/adminupdatecities',array('id'=> $good->id, 'Good_attr' => $good_attr)));
+
+        if( count($links) )
+        	Cron::addAll($links);
+	}
+
 	public function checkReady(){
 		$queue = Queue::model()->with("advert.place")->findAll("place.category_id=2048 AND advert.ready=0 AND advert.title IS NOT NULL AND action_id IN (1,2,6,8) AND state_id=1");
 		if( $queue ){

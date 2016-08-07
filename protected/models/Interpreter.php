@@ -192,12 +192,21 @@ class Interpreter extends CActiveRecord
 		Advert::model()->updateAll(array("ready" => (($model >= 1)?0:1), "title" => $result), "id=".$advert->id);
 		AdvertWord::update($ids, $advert->id);
 
+		if( $model >= 1 ){
+			Task::add($advert->good_id, "title", $advert->id);
+		}else{
+			Task::remove($advert->good_id, "title");
+		}
+
 		return (($model >= 1)?false:$result);
     }
 
     public function generate($interpreter_id, $model, $dynObjects = NULL, $advert_id = 0, $uniq = NULL){
     	$attributes = (isset($model->fields_assoc))?$model->fields_assoc:$model;
-    	if( $dynObjects !== NULL ) $attributes = $attributes + $dynObjects;
+    	if( !is_array($attributes) ){
+    		return "";
+    	}
+    	if( is_array($dynObjects) ) $attributes = $attributes + $dynObjects;
 
     	if( !isset($this->interpreters) ){
     		$interpreters = array($interpreter_id => Interpreter::model()->findByPk($interpreter_id));

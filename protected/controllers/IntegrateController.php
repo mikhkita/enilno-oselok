@@ -60,7 +60,7 @@ class IntegrateController extends Controller
             if( !$this->getNext($category_id, $nth) ){
                 return true;
             }else{
-                if( !$debug && $category_id == 2047 ) sleep(rand(10,40));
+                if( !$debug && $category_id == 2047 ) sleep(rand(5,15));
             }
               
             if( $debug ) return true;
@@ -94,6 +94,12 @@ class IntegrateController extends Controller
 
         if( !$queue ) return false;
         $advert = $queue->advert;
+
+        if( !isset($advert->good) ){
+            Log::debug("Удаление объявления ".$advert->id, false, true);
+            $advert->delete();
+            return false;
+        }
 
         $place_name = $this->getPlaceName($advert->place->category_id);
 
@@ -163,8 +169,8 @@ class IntegrateController extends Controller
 
         $fields = $place->generateFields($fields,$advert->good->good_type_id);
 
-        // var_dump($images);
-        // die();
+        print_r($fields);
+        echo "<br>";
         
         if( $place_name != "VK" ){
             $place->setUser($account->login, $account->password);
@@ -301,46 +307,19 @@ class IntegrateController extends Controller
     }
 
     public function actionAuto(){
-
-        $model = array();
-
-        $goods = Good::model()->filter(
-            array(
-                "good_type_id"=>1,
-                "attributes"=>array(
-                    23 => array(463),
-                    27 => array(1056)
-                )
-            )
-        )->getPage(
-            array(
-                'pageSize'=>10000,
-            )
+        // Все выкладывать на дром платный, дром бесплатный и авито
+        Queue::model()->addByFilter(
+            array( 27 => array(1056) ),
+            array( 27 => array(1056) ),
+            array( 58 => array(1081), 60 => array(1081), 61 => array(1081) )
         );
 
-        if( is_array($goods["items"]) )
-            $model = array_merge($model, $goods["items"]);
-
-        $goods = Good::model()->filter(
-            array(
-                "good_type_id"=>2,
-                "attributes"=>array(
-                    27 => array(1056)
-                )
-            )
-        )->getPage(
-            array(
-                'pageSize'=>10000,
-            )
-        );
-        if( is_array($goods["items"]) )
-            $model = array_merge($model, $goods["items"]);
-
-        $links = array();
-        foreach ($model as $i => $good)
-            array_push($links, "http://".Yii::app()->params['ip'].$this->createUrl('/good/adminupdatecities',array('id'=> $good->id, 'Good_attr' => array(58 => array(1081), 60 => array(1081), 61 => array(1081)))));
-
-        Cron::addAll($links);
+        // // Все зимние выкладывать на дром платный, дром бесплатный и авито
+        // Queue::model()->addByFilter(
+        //     array( 23 => array(465, 762), 27 => array(1056) ),
+        //     NULL,
+        //     array(60 => array(1081), 58 => array(1081))
+        // );
     }
 // Выкладка -------------------------------------------------------------- Выкладка
 
@@ -590,13 +569,15 @@ class IntegrateController extends Controller
             Task::model()->deleteAll("action_id = '7'");
         }
 
-        // Удаление заданий "Лишнее объявление", которые появились в платформе
+        // Удаление заданий "Лишнее объявление", которые появились в платформе или которые удалились из базы
         if( count($adverts_to_delete) ){
             $urls = array();
             foreach ($adverts_to_delete as &$url)
                 array_push($urls, "'".$url."'");
             
             Task::model()->deleteAll("action_id = '6' AND data NOT IN (".implode(",", $urls).")");
+        }else{
+            Task::model()->deleteAll("action_id = '6'");
         }
 
         // Если есть объявления, которые присутствуют в базе какого-либо аккаунта, но нет на платформе
@@ -1280,17 +1261,6 @@ class IntegrateController extends Controller
         print_r( iconv('windows-1251', 'utf-8', $place->curl->request("http://baza.drom.ru/tomsk/wheel/tire/b-u-letnjaja-para-yokohama-dna-ecos-es300-215-40-17-japonija-43479729.html")) );
     }
 
-    public function actionKsk(){
-        $place = new Drom();
-        $links = $place->parseAllItems("http://baza.drom.ru/user/ksknik/wheel/disc/", "270426", false, false, true);
-
-        $titles = array();
-        // print_r($links);
-        foreach ($links as $key => $item) {
-            echo $item->title."<br>";
-        }
-    }
-
     public function actionAnalyse(){
         $ids = Controller::getIds(AdvertWord::model()->findAll(array("group"=>"advert_id")), "advert_id");
 
@@ -1317,6 +1287,56 @@ class IntegrateController extends Controller
         foreach ($goods as $key => $good) {
             Image::updateImages($good);
         }
+    }
+
+    public function actionDeletePhoto(){
+        // $model = Good::model()->with("fields")->findAll("archive=1 AND attribute_id=3 AND LENGTH(varchar_value) = 5");
+        // foreach ($model as $key => $good) {
+        //     $code = $good->fields_assoc[3]->value;
+        //     $goodType = GoodType::getCode($good->good_type_id);
+        //     $cache = Yii::app()->params["cacheFolder"]."/".$goodType."/".$code;
+        //     $imgs = Yii::app()->params["imageFolder"]."/".$goodType."/".$code;
+        //     $this->removeDirectory($cache);
+        //     $this->removeDirectory($imgs);
+        //     $images = Image::model()->with("caps","cache")->findAll("good_id=".$good->id);
+        //     foreach ($images as $key => $image) {
+        //         $image->delete();
+        //     }
+            
+        // } 
+
+        $good_ids = Controller::getIds(GoodFilter::model()->findAll("good_type_id=1"), "id");
+        $ids = Controller::getIds(Image::model()->findAll("good_id NOT IN (".implode(",", $good_ids).")"), "id");
+        print_r($ids); 
+    }
+
+    public function actionDeleteImages(){
+        $good_type_code = "tires";
+        $good_type_id = 1;
+
+        $dir = Controller::getFolders(Yii::app()->params["imageFolder"]."/".$good_type_code);
+        $dir_sql = array();
+        foreach ($dir as $i => $item) {
+            array_push($dir_sql, "'".$item."'");
+        }
+        $model = Controller::getIds( GoodAttributeFilter::model()->with("good_filter")->findAll("good_filter.id > 0 AND good_filter.good_type_id=".$good_type_id." AND t.attribute_id=3 AND t.varchar_value IN (".implode(",", $dir_sql).")"), "varchar_value");
+        print_r( count($dir) );
+        echo "<br><br>";
+        print_r( count($model) );
+        echo "<br><br>";
+        $diff = array_diff($dir, $model);
+        print_r( count($diff) );
+        echo "<br><br>";
+        print_r($diff);
+        // $this->removeDirectories($diff, Yii::app()->params["imageFolder"]."/".$good_type_code);
+
+        $images = Controller::getFolders(Yii::app()->params["imageFolder"]."/".$good_type_code);
+        $cache = Controller::getFolders(Yii::app()->params["cacheFolder"]."/".$good_type_code);
+        $diff_cache = array_diff($cache, $images);
+        echo "<br><br>";
+        print_r($diff_cache);
+
+        // $this->removeDirectories($diff_cache, Yii::app()->params["cacheFolder"]."/".$good_type_code);
     }
 
     public function actionParseTitles(){

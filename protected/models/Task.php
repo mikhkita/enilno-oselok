@@ -11,44 +11,6 @@
  */
 class Task extends CActiveRecord
 {
-	static public $params = array(
-		1 => array(
-			"necessary" => array(16,17,9,8,7,28,43),
-			"price" => array(20,36),
-		),
-		2 => array(
-			"necessary" => array(9,6,28,43),
-			"price" => array(20,36),
-		),
-		3 => array(
-			"necessary" => array(16,17,9,8,7,28,6,43),
-			"price" => array(20,36),
-		)
-	);
-
-	static public $actions = array(
-		"photo" => array(
-			"id" => 1,
-			"user_id" => 10,
-		),
-		"necessary" => array(
-			"id" => 2,
-			"user_id" => 10,
-		),
-		"price" => array(
-			"id" => 3,
-			"user_id" => 9,
-		),
-		"required" => array(
-			"id" => 4,
-			"user_id" => 10,
-		),
-		"extra" => array(
-			"id" => 5,
-			"user_id" => 10,
-		),
-	);
-
 	/**
 	 * @return string the associated database table name
 	 */
@@ -119,7 +81,7 @@ class Task extends CActiveRecord
 
         	if( count($ids) ){
         		$goods = Yii::app()->db->createCommand()
-		            ->select('t.varchar_value, t.good_id, g.good_type_id')
+		            ->select('t.varchar_value, t.good_id, g.good_type_id, g.archive')
 		            ->from(GoodAttribute::tableName().' t')
 		            ->join(Good::tableName().' g', "t.good_id=g.id")
 		            ->where("t.attribute_id=3 AND t.good_id IN (".implode(",", $ids).")")
@@ -145,7 +107,8 @@ class Task extends CActiveRecord
         		$model[$i]["good"] = (object) array(
 	        		"id" => $value["good_id"],
 	        		"code" => (isset($goods[$value["good_id"]])?$goods[$value["good_id"]]["varchar_value"]:""),
-	        		"good_type_id" => (isset($goods[$value["good_id"]])?$goods[$value["good_id"]]["good_type_id"]:"")
+	        		"good_type_id" => (isset($goods[$value["good_id"]])?$goods[$value["good_id"]]["good_type_id"]:""),
+	        		"archive" => (isset($goods[$value["good_id"]])?$goods[$value["good_id"]]["archive"]:"")
 	        	);
         	}
         	$model[$i]["good_type"] = $goodTypes[$model[$i]["good"]->good_type_id]->name;
@@ -183,72 +146,105 @@ class Task extends CActiveRecord
 	}
 
 	public function testGood($good){
-		if( is_object($good->fields_assoc[27]) && $good->fields_assoc[27]->variant_id == 1056 ){
-			$params = $this->getParams($good->good_type_id);
+		switch (Yii::app()->params["site"]) {
+			case 'koleso':
+				if( is_object($good->fields_assoc[27]) && $good->fields_assoc[27]->variant_id == 1056 ){
+					$params = $this->getParams($good->good_type_id);
 
-			// Проверка первичных атрибутов
-			$not_exist = $this->checkFields($good, $params->necessary);
-			$necessary_exist = count($not_exist)?false:true;
-			if( !$necessary_exist ){
-				Task::add($good->id, "necessary", implode(",", $not_exist));
-			}else{
-				Task::remove($good->id, "necessary");
-			}
+					// Проверка первичных атрибутов
+					$not_exist = $this->checkFields($good, $params->necessary);
+					$necessary_exist = count($not_exist)?false:true;
+					if( !$necessary_exist ){
+						Task::add($good->id, "necessary", implode(",", $not_exist));
+					}else{
+						Task::remove($good->id, "necessary");
+					}
 
-			// Проверка цены
-			$not_exist = $this->checkFields($good, $params->price);
-			$price_exist = count($not_exist)?false:true;
-			if( !$price_exist ){
-				if( $necessary_exist ){
-					Task::add($good->id, "price", implode(",", $not_exist));
-				}else{
-					Task::edit($good->id, "price", implode(",", $not_exist));
+					// Проверка цены
+					$not_exist = $this->checkFields($good, $params->price);
+					$price_exist = count($not_exist)?false:true;
+					if( !$price_exist ){
+						if( $necessary_exist ){
+							Task::add($good->id, "price", implode(",", $not_exist));
+						}else{
+							Task::edit($good->id, "price", implode(",", $not_exist));
+						}
+					}else{
+						Task::remove($good->id, "price");
+					}
+
+					$required = $this->getRequired($good);
+
+					// Проверка обязательных атрибутов
+					$not_exist = $this->checkFields($good, array_diff($required, $params->price, $params->necessary));
+					if( count($not_exist) ){
+						if( $necessary_exist && $price_exist ) {
+							Task::add($good->id, "required", implode(",", $not_exist));
+						}else{
+							Task::edit($good->id, "required", implode(",", $not_exist));
+						}
+					}else{
+						Task::remove($good->id, "required");
+					}
+
+					// Проверка фотографий
+					if( !$this->checkPhoto($good) ){
+						Task::add($good->id, "photo");
+					}else{
+						Task::remove($good->id, "photo");
+
+						Queue::returnAdverts( $good->fields_assoc[3]->value, 1, 8 );
+					}
+
+					// Проверка дополнительных фотографий
+					if( !$this->checkCap($good,3) ){
+						Task::add($good->id, "extra");
+
+						// Queue::returnAdverts( $good->fields_assoc[3]->value, 8 );
+					}else{
+						Task::remove($good->id, "extra");
+
+						Queue::returnAdverts( $good->fields_assoc[3]->value, 1, 8 );
+					}
 				}
-			}else{
-				Task::remove($good->id, "price");
-			}
+				break;
+			
+			case 'shikon':
+				$params = $this->getParams($good->good_type_id);
 
-			$required = $this->getRequired($good->good_type_id);
-
-			// Проверка обязательных атрибутов
-			$not_exist = $this->checkFields($good, array_diff($required, $params->price, $params->necessary));
-			if( count($not_exist) ){
-				if( $necessary_exist && $price_exist ) {
-					Task::add($good->id, "required", implode(",", $not_exist));
+				// Проверка первичных атрибутов
+				$not_exist = $this->checkFields($good, $params->necessary);
+				$necessary_exist = count($not_exist)?false:true;
+				if( !$necessary_exist ){
+					Task::add($good->id, "necessary", implode(",", $not_exist));
 				}else{
-					Task::edit($good->id, "required", implode(",", $not_exist));
+					Task::remove($good->id, "necessary");
 				}
-			}else{
-				Task::remove($good->id, "required");
-			}
 
-			// Проверка фотографий
-			if( !$this->checkPhoto($good) ){
-				Task::add($good->id, "photo");
-			}else{
-				Task::remove($good->id, "photo");
-			}
+				$required = $this->getRequired($good);
 
-			// Проверка дополнительных фотографий
-			if( !$this->checkCap($good,3) ){
-				Task::add($good->id, "extra");
-			}else{
-				Task::remove($good->id, "extra");
-			}
-		}else{
-			// if( is_object($good->fields_assoc[43]) && $good->fields_assoc[43]->variant_id == 2912 ){
-			// 	if( !$this->checkCap($good,1) || !$this->checkCap($good,2) ){
-			// 		Task::add($good->id, "extra");
-			// 	}else{
-			// 		Task::remove($good->id, "extra");
-			// 	}
-			// }else if( is_object($good->fields_assoc[43]) && in_array($good->fields_assoc[43]->variant_id, array(2915,3003,3001,2914)) ){
-			// 	if( !$this->checkCap($good,1) || !$this->checkCap($good,2) ){
-			// 		Task::add($good->id, "extra", NULL, 12);
-			// 	}else{
-			// 		Task::remove($good->id, "extra");
-			// 	}
-			// }
+				// Проверка обязательных атрибутов
+				$not_exist = $this->checkFields($good, array_diff($required, $params->necessary));
+				if( count($not_exist) ){
+					if( $necessary_exist && $price_exist ) {
+						Task::add($good->id, "required", implode(",", $not_exist));
+					}else{
+						Task::edit($good->id, "required", implode(",", $not_exist));
+					}
+				}else{
+					Task::remove($good->id, "required");
+				}
+
+				// Проверка фотографий
+				if( !$this->checkPhoto($good) ){
+					Task::add($good->id, "photo");
+				}else{
+					Task::remove($good->id, "photo");
+
+					Queue::returnAdverts( $good->fields_assoc[3]->value, 1, 8 );
+				}
+
+				break;
 		}
 	}
 
@@ -274,12 +270,14 @@ class Task extends CActiveRecord
 		return count($good->getImages(NULL, NULL, $cap))?true:false;
 	}
 
-	public function getRequired($good_type_id){
+	public function getRequired($good, $site = NULL){
+		$good_type_id = $good->good_type_id;
+		$shtamp = ( $site == "koleso" && $good_type_id == 2 && in_array($good->fields_assoc[6]->value, array("Штамповки", "Штамповка")) );
 		$model = Yii::app()->db->createCommand()
             ->select('a.id')
             ->from(Attribute::tableName().' a')
             ->join(GoodTypeAttribute::tableName().' t', 'a.id=t.attribute_id')
-            ->where("a.required=1 AND t.good_type_id=$good_type_id")
+            ->where("a.required=1 AND t.good_type_id=$good_type_id".( ($shtamp)?" AND a.id != 32":"" ))
             ->order("t.sort ASC")
             ->queryAll();
 
@@ -327,11 +325,102 @@ class Task extends CActiveRecord
 	}
 
 	public function getParams($good_type_id){
-		return (object) self::$params[$good_type_id];
+		switch (Yii::app()->params["site"]) {
+			case 'koleso':
+				$params = array(
+					1 => array(
+						"necessary" => array(16,17,9,8,7,28,43),
+						"price" => array(20,36),
+					),
+					2 => array(
+						"necessary" => array(9,6,28,43),
+						"price" => array(20,36),
+					),
+					3 => array(
+						"necessary" => array(16,17,9,8,7,28,6,43),
+						"price" => array(20,36),
+					)
+				);
+				break;
+			
+			case 'shikon':
+				$params = array(
+					1 => array(
+						"necessary" => array(20,16,17,9,8,7,28),
+					),
+					2 => array(
+						"necessary" => array(20,9,6,28),
+					),
+					3 => array(
+						"necessary" => array(20,16,17,9,8,7,28,6),
+					)
+				);
+				break;
+			default:
+				echo "Сайт не найден. Task.php";
+				die();
+				break;
+		}
+		return (object) $params[$good_type_id];
 	}
 
 	public function getAction($code){
-		return (object) self::$actions[$code];
+		switch (Yii::app()->params["site"]) {
+			case 'koleso':
+				$actions = array(
+					"photo" => array(
+						"id" => 1,
+						"user_id" => 10,
+					),
+					"necessary" => array(
+						"id" => 2,
+						"user_id" => 10,
+					),
+					"price" => array(
+						"id" => 3,
+						"user_id" => 9,
+					),
+					"required" => array(
+						"id" => 4,
+						"user_id" => 10,
+					),
+					"extra" => array(
+						"id" => 5,
+						"user_id" => 10,
+					),
+					"title" => array(
+						"id" => 8,
+						"user_id" => 9,
+					),
+				);
+				break;
+
+			case 'shikon':
+				$actions = array(
+					"photo" => array(
+						"id" => 1,
+						"user_id" => 14,
+					),
+					"necessary" => array(
+						"id" => 2,
+						"user_id" => 14,
+					),
+					"required" => array(
+						"id" => 4,
+						"user_id" => 14,
+					),
+					"title" => array(
+						"id" => 8,
+						"user_id" => 14,
+					),
+				);
+				break;
+			default:
+				echo "Сайт не найден. Task.php";
+				die();
+				break;
+		}
+		return (object) $actions[$code];
 	}
 
 	/**

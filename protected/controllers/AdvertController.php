@@ -95,7 +95,7 @@ class AdvertController extends Controller
 		));
 	}
 
-	public function actionAdminSeeList($good_type_id){
+	public function actionAdminSeeList($good_type_id, $problem_only = false){ 
 		$place = array(
 			"Дром Платные" => array( "code" => 2047, "type" => array(868, 2129), "double" => 0, "grey" => 0, "count" => 0 ),
 			"Дром Бесплатные" => array( "code" => 2047, "type" => array(869), "double" => 0, "grey" => 0, "count" => 0 ),
@@ -104,7 +104,10 @@ class AdvertController extends Controller
 		);
 
 		$goods = Good::model()
-			->filter( array("good_type_id"=>$good_type_id, "attributes"=>array( 43 => array(1860, 1857, 1419, 1418) )) )
+			->filter( array("good_type_id"=>$good_type_id, "attributes"=>array( 
+				// 43 => array(1860, 1857, 1419, 1418) 
+				27 => array(1056)
+			)) )
 			->sort(array(
 				"field"=>3,
 				"type"=>"ASC",
@@ -115,9 +118,13 @@ class AdvertController extends Controller
 			);
 		$goods = Controller::getAssoc($goods["items"], "id");
 
-		$dataProvider = Advert::filter(array("ids" => Controller::getIds($goods), "Attr" => array(58 => array(3885, 1081)), "url" => 1 ), array('type','city','place.category','place.goodType'), "*");
+		$dataProvider = Advert::filter(array("ids" => Controller::getIds($goods), "Attr" => array(58 => array(3885, 1081)) ), array('type','city','place.category','place.goodType'), "*");
 
 		$data = $dataProvider->getData();
+
+		$tasks_extra_images = Controller::getIds(Task::model()->findAll("action_id=5"), "good_id");
+		$tasks_main_images = Controller::getIds(Task::model()->findAll("action_id=1"), "good_id");
+		$tasks_params = Controller::getIds(Task::model()->findAll("action_id IN (2,3,4)"), "good_id");
 
 		// $temp = GoodAttribute::getCodeById( Controller::getIds($data, "good_id") );
 
@@ -141,18 +148,51 @@ class AdvertController extends Controller
 						$place[$i]["double"] = $place[$i]["double"]+1;
 						$goods[$value->good_id]["adverts"][$i]["double"] = true;
 					}else{
-						$goods[$value->good_id]["adverts"][$i]["url"] = $value->url;
+						if( !$value->url ){
+							if( !$value->ready && $value->title != NULL && $goods[$value->good_id]["adverts"][$i]["code"] == 2048 ){
+								$goods[$value->good_id]["adverts"][$i]["title"] = true;
+							}
+							if( in_array($value->good_id, $tasks_extra_images) && ( in_array($i, array("Дром Бесплатные", "Авито Томск")) ) ){
+								$goods[$value->good_id]["adverts"][$i]["image"] = true;	
+							}
+							if( in_array($value->good_id, $tasks_main_images) && $i == "Дром Платные" ){
+								$goods[$value->good_id]["adverts"][$i]["image"] = true;	
+							}
+						}else{
+							$goods[$value->good_id]["adverts"][$i]["url"] = $value->url;
+						}
+						$goods[$value->good_id]["adverts"][$i]["id"] = $value->id;
+						$goods[$value->good_id]["adverts"][$i]["not_active"] = ( ($item["code"] == 2047 && $value->url && $value->active == 0)?true:false ) ;
 						$place[$i]["count"] = $place[$i]["count"]+1;
 					}
 				}
 			}
 		}
 
-		foreach ($goods as &$good)
+		foreach ($goods as $key => &$good){
+			$problem = false;
 			foreach ($good["adverts"] as $city => $item){
+				if( $city == "Дром Платные" && $good["good"]->fields_assoc[27]->value != "Томск" )
+					$item["city"] = true;
+
+				if( in_array($good["good"]->id, $tasks_params) )
+					$item["params"] = true;	
+
+				if( $item["title"] || $item["image"] || $item["city"] || $item["params"] ){
+					$error = array();
+					if( $item["title"] ) array_push($error, "<a href='".$this->createUrl('/advert/admintitleedit', array('advert_id'=> $item["id"]))."' class='ajax-form ajax-update'>Не уникальный заголовок</a>");
+					if( $item["image"] ) array_push($error, "<a href=".Yii::app()->createUrl('/good/adminphoto',array('id'=>$good['good']->id))." target='_blank'>Нет фото</a>");
+					if( $item["city"] ) array_push($error, "Не в Томске");
+					if( $item["params"] ) array_push($error, "Не заполнены параметры");
+					$good["adverts"][$city]["error"] = $error;
+
+					$problem = true;
+				}
+				if( (!$item["url"] || $item["not_active"]) && $item["code"] != 3875 ) $problem = true;
+
 				switch ($good_type_id) {
 					case 1:
-						if( (( in_array($city, array("Дром Бесплатные", "Авито Томск")) ) && $good["good"]->fields_assoc[27]->value != "Томск") || ($city == "Дром Платные" && $good["good"]->fields_assoc[23]->value != "Летние") ){
+						if( (( in_array($city, array("Дром Бесплатные", "Авито Томск")) ) && $good["good"]->fields_assoc[27]->value != "Томск") ){
 							$good["adverts"][$city]["grey"] = true;
 							if( !isset($good["adverts"][$city]["url"]) ) $place[$city]["grey"] = $place[$city]["grey"]+1;
 						}	
@@ -165,6 +205,8 @@ class AdvertController extends Controller
 					break;
 				}	
 			}
+			if( $problem_only && !$problem ) unset($goods[$key]);
+		}
 
 		$this->render('adminSeeList',array(
 			'place' => $place,
