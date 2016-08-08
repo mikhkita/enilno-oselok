@@ -25,16 +25,29 @@ Class Curl {
             $this->removeCookies();
     }
 
-    public function request($url = NULL,$post = NULL){
+    public function request($url = NULL,$post = NULL){  
+        $header =  array(
+            'Accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+            'Accept-Encoding' => 'gzip, deflate, sdch, br',
+            'Accept-Language' => 'ru-RU,ru;q=0.8,en-US;q=0.6,en;q=0.4',
+            'Connection' => 'keep-alive',
+            'Host' => 'www.avito.ru',
+            'Upgrade-Insecure-Requests' => 1,
+            'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.106 Safari/537.36'
+        );       
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_USERAGENT, "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.110 Safari/537.36");
+        curl_setopt($ch, CURLOPT_AUTOREFERER, 1);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 30);
+
         if(strpos($url, "avito") !== false) {
-            curl_setopt($ch, CURLOPT_REFERER,"https://www.avito.ru/");
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $header);           
+        } elseif(strpos($url, "drom") !== false) {
+            $header['Accept-Encoding'] = 'gzip, deflate, sdch';
+            $header['Host'] = 'baza.drom.ru';
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $header);   
         }
-        curl_setopt($ch, CURLOPT_AUTOREFERER,1);
         if($this->proxy_login && $this->proxy_ip) {
             curl_setopt($ch, CURLOPT_PROXY, $this->proxy_ip);
             curl_setopt($ch, CURLOPT_PROXYUSERPWD, $this->proxy_login); 

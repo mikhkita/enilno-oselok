@@ -1,7 +1,7 @@
 <h1 class="b-hide-title"><?=$this->adminMenu["cur"]->name?></h1>
 <div class="b-link-back">
     <a href="#" class="b-select-all">Выделить все</a>
-    <a href="<?php echo Yii::app()->createUrl('/'.$this->adminMenu["cur"]->code.'/adminindex')?>" class="b-delete-selected">Удалить выбранное</a>
+    <a href="<?php echo Yii::app()->createUrl("/{$this->adminMenu['cur']->code}/adminindex")?>" class="b-delete-selected">Удалить выбранное</a>
 </div>
 <div class="b-top-butt clearfix">
     <div class="b-sort-cont left">
@@ -27,8 +27,8 @@
                     <? if($item->platform == "1") $link = "http://baza.drom.ru/"; else $link = "http://avito.ru/"; ?>
                     <a href="<?=$link.$item->id?>" target="_blank" title="Посмотреть объявление"></a>
                     <div class="b-nav clearfix">
-                        <span class="b-nav-delete b-tooltip b-delete-<?=$item->id?>" style="width: 100%;" title="В архив"></span>
-                        
+                        <span class="b-nav-delete b-tooltip b-delete-<?=$item->id?>" title="В архив"></span>
+                         <span class="b-nav-delete b-tooltip b-delete-<?=$item->id?>" title="В архив"></span>
                     </div>
                 </div>
                 <div class="clearfix track-price">

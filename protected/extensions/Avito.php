@@ -390,7 +390,7 @@ Class Avito {
 
     public function parseAllItems($link,$good_type_id = NULL){
         $html = str_get_html($this->curl->request($link));
-        sleep(rand(1,5));
+        sleep(rand(3,5));
         $links = array();
         $first = NULL;
         $pageLinks = $html->find('.item_table');
@@ -409,7 +409,7 @@ Class Avito {
 	                    'price_type' => 0,
 	                    'seller' => NULL,
 	                    'platform' => 2,
-	                    'folder' => NULL
+	                    'folder' => 0
 	                );
 	                $tmp['price'] = (trim($element->find(".description .about",0))) ? intval(str_replace(" ","",$element->find(".description .about",0)->plaintext)) : NULL;   	          
 	                $tmp['img'] = ($element->find(".photo-wrapper img",0)) ? $element->find(".photo-wrapper img",0)->src : "/".Yii::app()->params["imageFolder"]."/default.jpg";            
@@ -422,6 +422,7 @@ Class Avito {
             else $html = str_get_html($this->curl->request($link."&p=".$page));
             $pageLinks = $html->find('.item_table');
         }
+        print_r(count($links));
         return $links;
     }
 
@@ -432,7 +433,7 @@ Class Avito {
             $goods = array();
             $url = "https://www.avito.ru/tomsk/zapchasti_i_aksessuary/shiny_diski_i_kolesa/$good_type";
             $goods = $this->parseAllItems($url,$good_type_id);   
-            $model = Track::model()->findAll("type=$good_type_id AND platform=2");
+            $model = Track::model()->findAll("type=$good_type_id AND platform=2 AND state<>2");
             foreach ($model as $good) {
                 if(!isset($goods[$good->id])) {
                     $good->state = 1;
