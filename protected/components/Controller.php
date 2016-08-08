@@ -40,7 +40,7 @@ class Controller extends CController
 
     public $place_states = array();
 
-    public $type_codes = array(
+    static public $type_codes = array(
         1 => "tires",
         2 => "discs",
         3 => "wheels",
@@ -832,8 +832,9 @@ class Controller extends CController
                             array_push($delete_ids, $city->id);
                     }
             }
-            if( count($delete_ids) )
+            if( count($delete_ids) ){
                 GoodAttribute::model()->deleteAll("id IN (".implode(",", $delete_ids).")");
+            }
         }else{
             $city_field_ids = array();
             foreach (Place::model()->cities as $i => $value)
@@ -913,6 +914,15 @@ class Controller extends CController
         unset($_GET['city']);
     }
 
+    public function getFolders($folder){
+        $dir = array_diff(scandir($folder), array('..', '.'));
+        foreach ($dir as $i => $item) {
+            if( strpos($item, ".") !== false )
+                unset($dir[$i]);
+        }
+        return $dir;
+    }
+
     public function regionFilter(){
         if( Yii::app()->params["region"] ){
             switch (Yii::app()->params["city"]->code) {
@@ -920,7 +930,7 @@ class Controller extends CController
                     return array(27 => array(1056));
                     break;
                 case 'vladivostok':
-                    return array(27 => array(1034));
+                    return array();
                     break;
                 
                 default:
@@ -1087,14 +1097,27 @@ class Controller extends CController
         return str_replace(array("[+CITY+]","[+IN+]","[+PHONE+]"), array(Yii::app()->params["city"]->name,Yii::app()->params["city"]->in,$phone), $str);
     }
 
+    public function getTypeCode($good_type_id){
+        return self::$type_codes[$good_type_id];
+    }
+
     public function removeDirectory($dir) {
+        if( strpos($dir, "//") !== false || substr($dir, -1, 1) == "/" ){
+            echo "Ошибка удаления папки ".$dir;
+            die();
+        }
         if(is_dir($dir)) {
             if ($objs = glob($dir."/*")) {
                foreach($objs as $obj) {
-                 is_dir($obj) ? $this->removeDirectory($obj) : unlink($obj);
+                 is_dir($obj) ? Controller::removeDirectory($obj) : unlink($obj);
                }
             }
             rmdir($dir);
         }
+    }
+
+    public function removeDirectories($codes, $path){
+        foreach ($codes as $i => $code)
+            Controller::removeDirectory($path."/".$code);
     }
 }

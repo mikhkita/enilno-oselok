@@ -52,6 +52,7 @@ class GoodAttributeFilter extends CActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
 			'good' => array(self::BELONGS_TO, 'Good', 'good_id'),
+			'good_filter' => array(self::BELONGS_TO, 'GoodFilter', 'good_id'),
 			'attribute' => array(self::BELONGS_TO, 'Attribute', 'attribute_id'),
 			'variant' => array(self::BELONGS_TO, 'Variant', 'variant_id')
 		);

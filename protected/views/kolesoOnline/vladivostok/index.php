@@ -44,7 +44,7 @@
                                         <? if($mobile): ?>
                                         <h4><?=$label?></h4>
                                         <? endif; ?>
-                                        <? foreach ($disc_filter[$attr_id] as $key => $col): ?>
+                                        <? if(count($disc_filter[$attr_id])) foreach ($disc_filter[$attr_id] as $key => $col): ?>
                                             <ul class="wave">
                                                 <? foreach ($col as $item): ?>
                                                 <li>
@@ -111,7 +111,7 @@
                                     <? if($mobile): ?>
                                     <h4><?=$label?></h4>
                                     <? endif; ?>
-                                    <? foreach ($tire_filter[$attr_id] as $key => $col): ?>
+                                    <? if(count($tire_filter[$attr_id])) foreach ($tire_filter[$attr_id] as $key => $col): ?>
                                         <ul class="wave">
                                             <? foreach ($col as $item): ?>
                                                 <li>
@@ -177,7 +177,7 @@
                                     <? if($mobile): ?>
                                     <h4><?=$label?></h4>
                                     <? endif; ?>
-                                    <? foreach ($wheel_filter[$attr_id] as $key => $col): ?>
+                                    <? if(count($wheel_filter[$attr_id])) foreach ($wheel_filter[$attr_id] as $key => $col): ?>
                                         <ul class="wave">
                                             <? foreach ($col as $item): ?>
                                                 <li>

@@ -260,7 +260,9 @@ class GoodController extends Controller
 							$values[] = array("good_id"=>$model->id,"attribute_id"=>$attr_id,"int_value"=>NULL,"varchar_value"=>NULL,"float_value"=>NULL,"text_value"=>NULL,"variant_id"=>$variant);
 				}
 			}
-			$this->insertValues(GoodAttribute::tableName(),$values);
+			$this->insertValues(GoodAttribute::tableName(), $values);
+
+			Task::model()->testGood($this->loadModel($model->id));
 
 			$this->redirect( Yii::app()->createUrl('good/adminindex',array('good_type_id'=>$good_type_id,'partial'=>true)) );
 
@@ -333,7 +335,7 @@ class GoodController extends Controller
 			Task::model()->testGood($this->loadModel($model->id));
 
 			if( isset($_POST["to_task"]) ){
-				$this->redirect( Yii::app()->createUrl('task/adminindex', array('partial' => true, 'get_next' => true)) );
+				$this->redirect( Yii::app()->createUrl('task/adminindex', array('partial' => true, 'get_next' => $_POST["to_task"])) );
 			}else{
 				$this->redirect( Yii::app()->createUrl('good/adminindex',array('good_type_id'=>$good_type_id,'partial'=>true,'GoodFilter_page' => $_GET["GoodFilter_page"])) );
 			}
@@ -705,7 +707,9 @@ class GoodController extends Controller
 	}
 
 	public function actionAdminDelete($id){
-		Good::model()->findByPk($id)->delete();
+		Good::model()->updateAll(array("archive" => 1), "id = $id");
+
+		Cron::add("http://".Yii::app()->params['ip'].$this->createUrl('/good/admindeleteadverts',array('id'=> $id)));
 
 		echo json_encode(array(
 			"result" => "success",
@@ -1036,6 +1040,18 @@ class GoodController extends Controller
 		$this->checkSitePhoto();
 
 		Task::model()->testGood($this->loadModel($id));
+
+		$adverts = Advert::model()->findAll("good_id=".$id);
+		if( count($adverts) ){
+			$queue = Controller::getIds(Queue::model()->findAll("advert_id IN (".implode(",", Controller::getIds($adverts)).") AND action_id IN (1,3,4,6)"), "advert_id");
+			Queue::model()->deleteAll("advert_id IN (".implode(",", Controller::getIds($adverts)).") AND action_id=2");
+			if( count($queue) )
+				foreach ($adverts as $key => $advert)
+					if( in_array($advert->id, $queue) )
+						unset($adverts[$key]);
+
+			Queue::addAll($adverts, "updateWithImages");
+		}
 	}
 
 	public function actionAdminGetNextPhoto($prev = NULL){

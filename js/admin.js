@@ -2019,3 +2019,20 @@ $(document).ready(function(){
 
     }
 });
+
+function clickNextTask(id){
+    if( id == 0 ){
+        $(".b-table .ajax-update").eq(0).click();
+    }else{
+        var tog = false;
+        $(".b-table tr").each(function(){
+            if( tog && $(this).hasClass("b-ajax-tr") ){
+                $(this).find(".ajax-update").click();
+                return false;
+            }
+
+            if( $(this).attr("id") == ("id-"+id) ) tog = true;
+        });
+    }
+    
+}

@@ -2,11 +2,16 @@
 	<div class="b-section-nav-back clearfix">
 		<ul style="border-left: 0px;" class="b-section-menu clearfix left">
 			<li><a href="<?php echo $this->createUrl('/advert/adminSee')?>">Назад</a></li>
+			<? if($_GET["problem_only"]): ?>
+				<li><a href="<?php echo $this->createUrl('/advert/adminSeeList', array("good_type_id" => $_GET["good_type_id"]))?>" class="b-link left">Все объявления</a></li>
+			<? else: ?>
+				<li><a href="<?php echo $this->createUrl('/advert/adminSeeList', array("good_type_id" => $_GET["good_type_id"], "problem_only" => true))?>" class="b-link left">Только проблемные</a></li>
+			<? endif; ?>
 		</ul>
 	</div>
 </div>
-<h1 class="b-with-nav">Охват (Томск)</h1>
-<table class="b-table" border="1">
+<h1 class="b-with-nav">Охват (Томск). <?=(($_GET["problem_only"])?"Проблемных":"Всего")?> объявлений: <?=count($goods)?></h1>
+<table class="b-table b-see-list" border="1">
 	<tr>
 		<th>Все товары (<?=count($goods)?>)</th>
 		<? foreach ($place as $city => $item): ?>
@@ -17,7 +22,13 @@
 		<tr>
 			<td><?=$good["good"]->fields_assoc[3]->value?></td>
 		<? foreach ($good["adverts"] as $city => $item): ?>
-			<td <? if( $item["grey"] === true ): ?>class="grey"<? endif; ?>><? if( $item["double"] === true ): ?><span class="red">Дубли</span><?elseif(isset($item["url"])): ?><a href="<?=Advert::getUrl($item["code"],$item["url"]);?>" target="_blank" class="green">Ссылка</a><? endif; ?></td>
+			<? if( $item["error"]): ?>
+				<td>
+					<?=implode(", ", $item["error"])?>
+				</td>
+			<? else: ?>
+				<td class="<? if( $item["grey"] === true ): ?>grey<? endif; ?><?if($item["not_active"]):?> red<?endif;?>"><? if( $item["double"] === true ): ?><span class="red">Дубли</span><?elseif(isset($item["url"])): ?><a href="<?=Advert::getUrl($item["code"],$item["url"]);?>" target="_blank" class="green">Ссылка</a><? endif; ?></td>
+			<? endif; ?>
 		<? endforeach; ?>
 		</tr>
 	<? endforeach; ?>

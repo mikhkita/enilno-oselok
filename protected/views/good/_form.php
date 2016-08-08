@@ -7,7 +7,7 @@
     ),
 )); ?>
 	<?if($_GET["to_task"]):?>
-		<input type="hidden" name="to_task" value="1">
+		<input type="hidden" name="to_task" value="<?=$_GET["to_task"]?>">
 	<?endif;?>
 	<div class="row buttons">
 		<?php echo CHtml::submitButton($model->isNewRecord ? 'Добавить' : 'Сохранить'); ?>

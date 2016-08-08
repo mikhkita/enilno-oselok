@@ -224,6 +224,8 @@ $(document).ready(function(){
 
 
     $( "#shipping" ).tabs();    
+
+    $(".b-subtabs").tabs();
         
     $( ".b-block.main-tabs" ).tabs({
         load: function( event, ui ) {

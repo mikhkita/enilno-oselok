@@ -31,13 +31,28 @@ Class Drom {
         $this->curl->removeCookies();
 
         $params = array(
-        	'radio' => 'sign',
+            'radio' => 'sign',
             'sign' => $this->login,
             'password' => $this->password
         );
 
         return iconv('windows-1251', 'utf-8', $this->curl->request("https://www.farpost.ru/sign?mode=openid&return=".urlencode($redirect)."&login_by_password=1",$params));
     }
+    
+    // public function upFreeAdverts($links){
+    //     $upLinks = array();
+    //     Log::debug("Пользователь ".$this->login." ".count($links)." неактивных бесплатных объявлений");
+
+    //     foreach ($links as $key => $value) {
+    //         $index = floor($key/50);
+    //         $upLinks[$index] = $upLinks[$index]."&bulletin%5B".$value."%5D=on";
+    //     }
+
+    //     foreach ($upLinks as $key => $value) {
+    //         $url = "http://baza.drom.ru/bulletin/service-configure?return_to=%2Fpersonal%2Fnon_active%2Fbulletins%3Fpage%3D2&from=personal.non_active&applier%5BprolongBulletin%5D=prolongBulletin".$value."=on&note=";
+    //         $this->curl->request($url);
+    //     }
+    // }
 
     public function upFreeAdverts($links){
         $upLinks = array();
@@ -50,7 +65,26 @@ Class Drom {
 
         foreach ($upLinks as $key => $value) {
             $url = "http://baza.drom.ru/bulletin/service-configure?return_to=%2Fpersonal%2Fnon_active%2Fbulletins%3Fpage%3D2&from=personal.non_active&applier%5BprolongBulletin%5D=prolongBulletin".$value."=on&note=";
-            $this->curl->request($url);
+            $html = str_get_html( iconv('windows-1251', 'utf-8', $this->curl->request($url)) );
+
+            if( $html->find('.paid-service form input[name="uid"]',0) && $uid = $html->find('.paid-service form input[name="uid"]',0)->getAttribute("value") ){
+                $url = "https://baza.drom.ru/bulletin/service-apply";
+                $params = array(
+                    'return_to' => $html->find("input[name=return_to]",0)->value,
+                    'applier' => $html->find("input[name=applier]",0)->value,
+                    'uid' => $html->find("input[name=uid]",0)->value,
+                    'price' => $html->find("input[name=price]",0)->value,
+                    'order_id' => $html->find("input[name=order_id]",0)->value,
+                );
+                foreach ($html->find(".imageCell") as $i => $item) {
+                    $params["bulletin[".$item->getAttribute("data-bulletin-id")."]"] = "on";
+                }
+                // print_r($params);
+                // die();
+                print_r(iconv('windows-1251', 'utf-8', $this->curl->request($url, $params)));
+            }else{
+                Log::debug("Ошибка поднятия: ".$this->login.". Не удается получить uid");
+            }
         }
     }
 
@@ -64,15 +98,16 @@ Class Drom {
                 if($item->good_filter->archive == 1) {
                     $this->deleteAdvert($item->url);
                 } else {
-                    if($item->type_id == 869) {
+                    // if($item->type_id == 869) {
                         array_push($free, $item->url);
-                    } else array_push($pay, $item->url);
+                    // } else 
+                        // array_push($pay, $item->url);
                 }
             }
-            if($free) {
+            if( count($free) ) {
                 $this->upFreeAdverts($free);
             }
-            if($pay) {
+            if( count($pay) ) {
                 $links = $pay;
                 $upLinks = array();
                 Log::debug("Пользователь ".$this->login." ".count($links)." неактивных платных объявлений");
@@ -213,39 +248,39 @@ Class Drom {
         $this->updateAdvert($advert_id,$params,$images);
 
         if($params["advert_type"] == 'bestOffer' || $params["advert_type"] == 'fixedPrice') {
-        	
-        	$url = "https://baza.drom.ru/bulletin/service-configure?";
-			$url_params = array(
-		    	'ids' => $advert_id,
-		    	'applier' => 'publishBulletinWithDealCapabilities',
-		    	'return_to' => 'bulletin',
-		    	'from' => 'adding.publish__publishBulletinWithDealCapabilities',
-		    	'auctionType' => $params["advert_type"],
-		    	'buyitnowPrice' => $params['price'][0],
-		    	'currency' => 'RUB',
-		    	'isAutoExtension' => 'false',
-		    	'isAutoRecreation' => 'false'
+            
+            $url = "https://baza.drom.ru/bulletin/service-configure?";
+            $url_params = array(
+                'ids' => $advert_id,
+                'applier' => 'publishBulletinWithDealCapabilities',
+                'return_to' => 'bulletin',
+                'from' => 'adding.publish__publishBulletinWithDealCapabilities',
+                'auctionType' => $params["advert_type"],
+                'buyitnowPrice' => $params['price'][0],
+                'currency' => 'RUB',
+                'isAutoExtension' => 'false',
+                'isAutoRecreation' => 'false'
 
-			);
+            );
 
-			$url .= http_build_query($url_params);
+            $url .= http_build_query($url_params);
             $result = iconv('windows-1251', 'utf-8', $this->curl->request($url));
 
-			$html = str_get_html($result);
+            $html = str_get_html($result);
 
-			$auction = array(
-				'return_to' => $html->find("input[name=return_to]",0)->value,
-				'applier' => $html->find("input[name=applier]",0)->value,
-				'uid' => $html->find("input[name=uid]",0)->value,
-				'price' => $html->find("input[name=price]",0)->value,
-				'order_id' => $html->find("input[name=order_id]",0)->value,
-				'bulletin['.$advert_id.']' => 'on',
-				'auctionType' => $params["advert_type"],
-				'buyitnowPrice' => $params['price'][0],
-				'currency' => 'RUB',
-				'nextUp' => 0
-			);
-        	$result = iconv('windows-1251', 'utf-8', $this->curl->request("https://baza.drom.ru/bulletin/service-apply",$auction));
+            $auction = array(
+                'return_to' => $html->find("input[name=return_to]",0)->value,
+                'applier' => $html->find("input[name=applier]",0)->value,
+                'uid' => $html->find("input[name=uid]",0)->value,
+                'price' => $html->find("input[name=price]",0)->value,
+                'order_id' => $html->find("input[name=order_id]",0)->value,
+                'bulletin['.$advert_id.']' => 'on',
+                'auctionType' => $params["advert_type"],
+                'buyitnowPrice' => $params['price'][0],
+                'currency' => 'RUB',
+                'nextUp' => 0
+            );
+            $result = iconv('windows-1251', 'utf-8', $this->curl->request("https://baza.drom.ru/bulletin/service-apply",$auction));
         } else $result = iconv('windows-1251', 'utf-8', $this->curl->request("http://baza.drom.ru/bulletin/".$advert_id."/draft/publish?from=draft.publish",array('from'=>'adding.publish')));
 
         print_r($result);
@@ -288,6 +323,8 @@ Class Drom {
     }
 
     public function updateAdvert($advert_id,$params,$images = NULL,$only_images = false) {
+        print_r($params);
+        // die();
         if($images) {
             foreach ($images as &$image_path) {
                 $image_path = json_decode($this->curl->request("http://baza.drom.ru/upload-image-jquery",array('debug' => true,'up[]' => new CurlFile(Yii::app()->basePath.DIRECTORY_SEPARATOR.'..'.$image_path))))->id;
@@ -353,12 +390,15 @@ Class Drom {
             }
             $options['id'] = $advert_id;
         }
+        $api_opt = array(
+                "canUsePersistentSettings" => true
+            );
+        if( !$advert_id ){
+            $api_opt["fieldSetVariation"] = "full_set";
+        }
         $options = array(
             'changeDescription' => json_encode($options),
-            'APIOptions' => json_encode(array(
-                "fieldSetVariation" => "full_set",
-                "canUsePersistentSettings" => true
-            ))
+            'APIOptions' => json_encode($api_opt)
         );
 
         $options['client_type'] = ($advert_id) ? 'v2:editing' : "v2:adding";
@@ -372,7 +412,8 @@ Class Drom {
         $fields['quantity'] = 1;
         $fields['contacts'] =  array("email" => "","is_email_hidden" => false,"contactInfo" => $fields['contacts']);
         $fields['delivery'] = array("pickupAddress" => $fields['pickupAddress'],"localPrice" => $fields['localPrice'],"minPostalPrice" => $fields['minPostalPrice'],"comment" => $fields['comment']);
-        unset($fields['pickupAddress'],$fields['localPrice'],$fields['minPostalPrice'],$fields['comment']);
+        $fields["pickupAddress"] = array("address" => $fields['pickupAddress'], "coordinates" => NULL, "isUserLandmark" => false);
+        unset($fields['localPrice'],$fields['minPostalPrice'],$fields['comment']);
 
         if( isset($fields["disc_width"]) ){
             $disc_width = explode("/",$fields['disc_width']);
@@ -405,34 +446,34 @@ Class Drom {
         $restore_count = 0;
 
         foreach ($Users as $user) {
-        	if(DictionaryVariant::model()->find("dictionary_id=139 AND attribute_1='".$user->variant_id."' AND value=1")) {
-	            $good_type = 1;
-	            foreach ($wheel_array as $type) {
-	                $model = Good::model()->filter(
-	                    array(
-	                        "good_type_id"=>$good_type,
-	                        "archive" => 'all',
-	                        "attributes"=>array(
-	                            43 => array($user->variant_id)
-	                        )
-	                    )
-	                )->getPage(
-	                    array(
-	                        'pageSize'=>10000,
-	                    )
-	                );
-	                   
-	                if($model = $model['items']) {
-	                    $goods = array();
-	                    $links = array();
-	                    $drom_ids = $this->parseAllItems('http://baza.drom.ru/user/'.$user->variant->value.'/wheel/'.$type, $user->variant->value, false,true);
-	                    $drom_ids = ($drom_ids) ? $drom_ids : array(); 
+            if(DictionaryVariant::model()->find("dictionary_id=139 AND attribute_1='".$user->variant_id."' AND value=1")) {
+                $good_type = 1;
+                foreach ($wheel_array as $type) {
+                    $model = Good::model()->filter(
+                        array(
+                            "good_type_id"=>$good_type,
+                            "archive" => 'all',
+                            "attributes"=>array(
+                                43 => array($user->variant_id)
+                            )
+                        )
+                    )->getPage(
+                        array(
+                            'pageSize'=>10000,
+                        )
+                    );
+                       
+                    if($model = $model['items']) {
+                        $goods = array();
+                        $links = array();
+                        $drom_ids = $this->parseAllItems('http://baza.drom.ru/user/'.$user->variant->value.'/wheel/'.$type, $user->variant->value, false,true);
+                        $drom_ids = ($drom_ids) ? $drom_ids : array(); 
 
-	                    foreach ($model as $key => $item) {
-	                        $code = str_replace(".html","", array_pop(explode("/", $item->fields_assoc[106]->value)));
-	                        array_push($goods, $code);
-	                        if(array_search($code, $drom_ids) === false) {
-	                            if($archive = Good::model()->with(array("type","fields.variant","fields.attribute"))->find("t.id=".$key." AND t.archive=0")) {
+                        foreach ($model as $key => $item) {
+                            $code = str_replace(".html","", array_pop(explode("/", $item->fields_assoc[106]->value)));
+                            array_push($goods, $code);
+                            if(array_search($code, $drom_ids) === false) {
+                                if($archive = Good::model()->with(array("type","fields.variant","fields.attribute"))->find("t.id=".$key." AND t.archive=0")) {
                                     // if( !$archive ){
                                     //     echo $key." ".$code." ";
                                     //     die();
@@ -441,37 +482,37 @@ Class Drom {
                                         Log::debug("Убирание товара во временный архив ".$archive->fields_assoc[3]->value);
                                         $delete_count++;
                                     }
-	                            }
-	                        } 
+                                }
+                            } 
                             else {
-	                            if($item->archive == 2) {
-	                                $item->archive = 0;
+                                if($item->archive == 2) {
+                                    $item->archive = 0;
                                     $item->date = NULL;
-	                                if($item->save()) {
-	                                    Log::debug("Восстановление товара из временного архива ".$item->fields_assoc[3]->value);
-	                                    $restore_count++;
-	                                }  
-	                            }
-	                        }
-	                    }
+                                    if($item->save()) {
+                                        Log::debug("Восстановление товара из временного архива ".$item->fields_assoc[3]->value);
+                                        $restore_count++;
+                                    }  
+                                }
+                            }
+                        }
 
-	                    foreach ($drom_ids as $key => $code) {
-	                        if(array_search($code, $goods) === false) {
-	                        	$link = "http://".Yii::app()->params['ip'].Controller::createUrl('/dromUserParse/parse',array('page'=> 'http://baza.drom.ru/'.$code,'user_id' => $user->variant->value));
-	                        	if(Cron::model()->count("link='".addslashes($link)."'")) {
-									Log::debug("Объявление ".$code." уже добавлено в очередь на парсинг");	
-								} else {
-	                                Log::debug("Товар добавлен в очередь на парсинг ".$link);
-	                                array_push($links, $link);     
-	                            }
-	                        }
-	                    }
-	                    Cron::addAll($links);    
-	                    $add_count += count($links);
-	                }
-	                $good_type++;
-	            } 
-	        }    
+                        foreach ($drom_ids as $key => $code) {
+                            if(array_search($code, $goods) === false) {
+                                $link = "http://".Yii::app()->params['ip'].Controller::createUrl('/dromUserParse/parse',array('page'=> 'http://baza.drom.ru/'.$code,'user_id' => $user->variant->value));
+                                if(Cron::model()->count("link='".addslashes($link)."'")) {
+                                    Log::debug("Объявление ".$code." уже добавлено в очередь на парсинг");  
+                                } else {
+                                    Log::debug("Товар добавлен в очередь на парсинг ".$link);
+                                    array_push($links, $link);     
+                                }
+                            }
+                        }
+                        Cron::addAll($links);    
+                        $add_count += count($links);
+                    }
+                    $good_type++;
+                } 
+            }    
         }
         Good::soldAllTemp();
 
@@ -487,26 +528,26 @@ Class Drom {
             $fields = array(
                 'type' => 0,
                 'link' => 106,
-        		'code' => 3,
-        		'realisation' => 43,
+                'code' => 3,
+                'realisation' => 43,
                 'diffWidth' => 73,
                 'diffVilet' => 80,
                 'title' => 98,
                 'state' => 98,
                 'city' => 27,
-        		'price' => 20,
-        		'inSetQuantity' => 28,
-        		'quantity' => 98,
+                'price' => 20,
+                'inSetQuantity' => 28,
+                'quantity' => 98,
                 'diskModel' => 6,
-        		'wheelDiameter' => 9,
-        		'condition' => 26,
-        		'wheelWeight' => 34,
-        		'wheelWidth' => 31,
-        		'wheelVilet' => 32,
-        		'wheelPcd' => 5,
+                'wheelDiameter' => 9,
+                'condition' => 26,
+                'wheelWeight' => 34,
+                'wheelWidth' => 31,
+                'wheelVilet' => 32,
+                'wheelPcd' => 5,
                 'diskType' => 41,
-        		'diskHoleDiameter' => 33,
-        		'desc' => 52,
+                'diskHoleDiameter' => 33,
+                'desc' => 52,
                 'tireModel' => 16,
                 'year' => 10,
                 'wheelSeason' => 23,
@@ -520,7 +561,7 @@ Class Drom {
                 'archive' => 998,
                 'images' => 999
                 
-        	);
+            );
 
             $params = array();
             $marking = 1;
@@ -555,17 +596,17 @@ Class Drom {
 
             $params[$fields['title']] = "Заголовок: ".trim(str_ireplace($html->find("span[data-field=subject] nobr",0)->plaintext,"",$html->find("span[data-field=subject]",0)->plaintext))."\n\r";
             $params[$fields['state']] .= "Наличие товара: ".trim($html->find("span[data-field=goodPresentState]",0)->plaintext)."\n\r";
-        	$params[$fields['code']] = $good_code;
-        	$params[$fields['realisation']] = $user_id; intval(str_replace(" ","", $str));
+            $params[$fields['code']] = $good_code;
+            $params[$fields['realisation']] = $user_id; intval(str_replace(" ","", $str));
             $params[$fields['city']] = str_ireplace(array('в ','во '," "),"", $html->find("span[data-field=subject] nobr",0)->plaintext);
             $params[$fields['price']] = $html->find('span[data-field="price"]',0) ? intval(str_replace(" ","",$html->find('span[data-field="price"]',0)->plaintext)) : NULL;
             $params[$fields['inSetQuantity']] = $html->find("span[data-field=inSetQuantity]",0) ? array_shift(explode(" ш", $html->find("span[data-field=inSetQuantity]",0)->plaintext)) : NULL;   
             $params[$fields['quantity']] .= "Количество комплектов: ".trim(array_shift(explode(" ш", $html->find("span[data-field=quantity]",0)->plaintext)))."\n\r";
 
             if($params[$fields['type']] == 2) {
-            	$params[$fields['diskModel']] = $html->find("span[data-field=model]",0)->plaintext;
-            	$params[$fields['wheelDiameter']] = str_replace('"',"", $html->find("span[data-field=wheelDiameter]",0)->plaintext);
-            	$params[$fields['condition']] = $html->find("span[data-field=condition]",0) ? trim($html->find("span[data-field=condition]",0)->plaintext) : 'Б/п РФ';
+                $params[$fields['diskModel']] = $html->find("span[data-field=model]",0)->plaintext;
+                $params[$fields['wheelDiameter']] = str_replace('"',"", $html->find("span[data-field=wheelDiameter]",0)->plaintext);
+                $params[$fields['condition']] = $html->find("span[data-field=condition]",0) ? trim($html->find("span[data-field=condition]",0)->plaintext) : 'Б/п РФ';
                 if( $params[$fields['condition']] == "Новый" ) $params[$fields['archive']] = 1;
                 $params[$fields['condition']] = ($params[$fields['condition']]=="Новый") ? "Новые": $params[$fields['condition']];
 
@@ -573,34 +614,34 @@ Class Drom {
             }
 
             if($params[$fields['type']] != 1) {
-    	        $params[$fields['wheelWeight']] = $html->find("span[data-field=wheelWeight]",0) ? str_replace(',','.',str_replace('кг.',"", $html->find("span[data-field=wheelWeight]",0)->plaintext)) : NULL;
-    	        $params[$fields['wheelWidth']] = $html->find("div[data-field=discParameters] .value span",0) ? explode("/",str_replace('"',"", trim($html->find("div[data-field=discParameters] .value span",0)->plaintext))) : NULL;
-    	        if($params[$fields['wheelWidth']]) {
-    	        	foreach ($params[$fields['wheelWidth']] as $key => &$width) {
-    	        		$width = floatval($width);
-    	        	}
+                $params[$fields['wheelWeight']] = $html->find("span[data-field=wheelWeight]",0) ? str_replace(',','.',str_replace('кг.',"", $html->find("span[data-field=wheelWeight]",0)->plaintext)) : NULL;
+                $params[$fields['wheelWidth']] = $html->find("div[data-field=discParameters] .value span",0) ? explode("/",str_replace('"',"", trim($html->find("div[data-field=discParameters] .value span",0)->plaintext))) : NULL;
+                if($params[$fields['wheelWidth']]) {
+                    foreach ($params[$fields['wheelWidth']] as $key => &$width) {
+                        $width = floatval($width);
+                    }
                     if(count($params[$fields['wheelWidth']]) == 2) $params[$fields['diffWidth']] = 1;
-    	        }
-    	        $params[$fields['wheelVilet']] = $html->find("div[data-field=discParameters] .value span",1) ? explode("/",str_replace(' мм.',"", trim($html->find("div[data-field=discParameters] .value span",1)->plaintext))) : NULL;
-    	        if(count($params[$fields['wheelVilet']]) == 2) $params[$fields['diffVilet']] = 1;
+                }
+                $params[$fields['wheelVilet']] = $html->find("div[data-field=discParameters] .value span",1) ? explode("/",str_replace(' мм.',"", trim($html->find("div[data-field=discParameters] .value span",1)->plaintext))) : NULL;
+                if(count($params[$fields['wheelVilet']]) == 2) $params[$fields['diffVilet']] = 1;
                 $params[$fields['wheelPcd']] = $html->find("span[data-field=wheelPcd]",0) ? explode(", ",trim($html->find("span[data-field=wheelPcd]",0)->plaintext)) : NULL;
-    	        if($params[$fields['wheelPcd']]) {				   
-    	        	foreach ($params[$fields['wheelPcd']] as $key => &$item) {
-    	        		$item = explode('x',$item);
-    	        		$item = $item[1]."*".floatval($item[0]);
-    	        	}
+                if($params[$fields['wheelPcd']]) {                 
+                    foreach ($params[$fields['wheelPcd']] as $key => &$item) {
+                        $item = explode('x',$item);
+                        $item = $item[1]."*".floatval($item[0]);
+                    }
                     
-    	        }
-    	        $params[$fields['diskType']] = $html->find("span[data-field=diskType]",0) ? trim($html->find("span[data-field=diskType]",0)->plaintext) : NULL;
+                }
+                $params[$fields['diskType']] = $html->find("span[data-field=diskType]",0) ? trim($html->find("span[data-field=diskType]",0)->plaintext) : NULL;
                 if($params[$fields['diskType']] == "Литой") $params[$fields['diskType']] = 1;
                 if($params[$fields['diskType']] == "Кованый") $params[$fields['diskType']] = 2;
                 if($params[$fields['diskType']] == "Штампованный") $params[$fields['diskType']] = 4;
-    	        $params[$fields['diskHoleDiameter']] = $html->find("span[data-field=diskHoleDiameter]",0) ? array_shift(explode(" м", $html->find("span[data-field=diskHoleDiameter]",0)->plaintext)) : NULL;
-    	    	if($params[$fields['diskHoleDiameter']]) $params[$fields['diskHoleDiameter']] = floatval(str_replace(',', '.', $params[$fields['diskHoleDiameter']]));
-    	    }
+                $params[$fields['diskHoleDiameter']] = $html->find("span[data-field=diskHoleDiameter]",0) ? array_shift(explode(" м", $html->find("span[data-field=diskHoleDiameter]",0)->plaintext)) : NULL;
+                if($params[$fields['diskHoleDiameter']]) $params[$fields['diskHoleDiameter']] = floatval(str_replace(',', '.', $params[$fields['diskHoleDiameter']]));
+            }
 
             if($params[$fields['type']] == 1) {
-            	$params[$fields['tireModel']] = trim(str_ireplace($html->find("span[data-field=model] div",0)->plaintext,"",$html->find("span[data-field=model]",0)->plaintext));
+                $params[$fields['tireModel']] = trim(str_ireplace($html->find("span[data-field=model] div",0)->plaintext,"",$html->find("span[data-field=model]",0)->plaintext));
                 if(count($html->find("span[data-field=marking]")) == 5) {
                     $params[$fields['wheelDiameter']] = $html->find("span[data-field=marking] a",0)->plaintext;
                     $marking = 2;
@@ -616,17 +657,17 @@ Class Drom {
             }
 
             if($params[$fields['type']] != 2) {
-    	        $params[$fields['year']] = $html->find("span[data-field=year]",0) ? $html->find("span[data-field=year]",0)->plaintext : NULL;
-    	        $params[$fields['wheelSeason']] = $html->find("span[data-field=wheelSeason]",0) ? trim($html->find("span[data-field=wheelSeason]",0)->plaintext) : NULL;
+                $params[$fields['year']] = $html->find("span[data-field=year]",0) ? $html->find("span[data-field=year]",0)->plaintext : NULL;
+                $params[$fields['wheelSeason']] = $html->find("span[data-field=wheelSeason]",0) ? trim($html->find("span[data-field=wheelSeason]",0)->plaintext) : NULL;
                 if($params[$fields['wheelSeason']] == "Зимние") {
                     if($html->find("span[data-field=wheelSpike]",0)) {
                         $params[$fields['wheelSeason']] = trim($html->find("span[data-field=wheelSpike]",0)->plaintext);
                         if($params[$fields['wheelSeason']] == "Без шипов") $params[$fields['wheelSeason']] = "Нешипованные";
                     }
                 }
-    	        $params[$fields['wheelTireWear']] = $html->find("span[data-field=wheelTireWear]",0) ? trim(str_replace('%',"",$html->find("span[data-field=wheelTireWear]",0)->plaintext)) : NULL;
+                $params[$fields['wheelTireWear']] = $html->find("span[data-field=wheelTireWear]",0) ? trim(str_replace('%',"",$html->find("span[data-field=wheelTireWear]",0)->plaintext)) : NULL;
                 if($params[$fields['wheelTireWear']] == "Без износа") $params[$fields['wheelTireWear']] = 0;
-    	        if($params[$fields['wheelTireWear']] || $params[$fields['wheelTireWear']] == 0) $params[$fields['condition']] = ($params[$fields['wheelTireWear']] == 0) ? "Новые" : "Б/у";
+                if($params[$fields['wheelTireWear']] || $params[$fields['wheelTireWear']] == 0) $params[$fields['condition']] = ($params[$fields['wheelTireWear']] == 0) ? "Новые" : "Б/у";
                 if(strripos(trim($html->find("span[data-field=marking]",$marking)->plaintext), "мм.")) {
                     $params[$fields['tireWidth']] = explode("/",trim(str_replace(array('мм.','"'),"",$html->find("span[data-field=marking]",$marking)->plaintext)));
                     if(count($params[$fields['tireWidth']]) > 1) {
@@ -651,11 +692,11 @@ Class Drom {
                     }
                     $params[$fields['tireHeight']] = $params[$fields['tireHeight']][0];
                 } else $params[$fields['tireWidth']] = str_replace(array('"','%'),"",$html->find("span[data-field=marking]",($marking+1))->plaintext);
-    	        // $params['tireСarcase'] = str_replace(array('%','"'),"",$html->find("span[data-field=marking]",3)->plaintext);
-    	        $params[$fields['predestination']] .= "Тип шины: ".trim($html->find("span[data-field=predestination]",0)->plaintext)."\n\r";
-        	}
+                // $params['tireСarcase'] = str_replace(array('%','"'),"",$html->find("span[data-field=marking]",3)->plaintext);
+                $params[$fields['predestination']] .= "Тип шины: ".trim($html->find("span[data-field=predestination]",0)->plaintext)."\n\r";
+            }
 
-        	
+            
 
             $params[$fields['desc']] = str_replace('<br />',"\n", trim($html->find("p[data-field=text]",0)->innertext));
             $params[$fields['made']] = "Не указано";
@@ -668,7 +709,7 @@ Class Drom {
 
             if($html->find(".bulletinImages img")) {
                 $params[$fields['images']] = array();
-    	        foreach ($html->find(".bulletinImages img") as $i => $img) {
+                foreach ($html->find(".bulletinImages img") as $i => $img) {
                     if($img->getAttribute("data-zoom-image")) {
                         array_push($params[$fields['images']], $img->getAttribute("data-zoom-image"));
                     } else array_push($params[$fields['images']], $img->src);
@@ -677,7 +718,7 @@ Class Drom {
             return $params;
         } else return false;
         
-	}
+    }
 
     public function parseTitle($link){
         $html = str_get_html(iconv('windows-1251', 'utf-8', $this->curl->request($link)));
@@ -735,6 +776,19 @@ Class Drom {
             Log::debug("отслеживание $good_type завершено");
         } 
 
+    }
+
+    public function postComment($advert_id, $question){
+
+        $url = "http://biysk.drom.ru/auto/";
+        $params = array(
+            "question" => $question,
+            "bull_id" => $advert_id,
+            "crossdomain_ajax_request" => "2",
+            "request" => "ajax_ask_question",
+        );
+
+        print_r( iconv('windows-1251', 'utf-8', $this->curl->request($url, $params)) );
     }
 
     public function self(){

@@ -69,15 +69,26 @@ class TaskController extends Controller
 		$this->actionAdminIndex(true);
 	}
 
-	public function actionAdminIndex($partial = false, $get_next = false)
+	public function actionAdminIndex($partial = false, $get_next = false, $user_id = NULL)
 	{
 		if( !$partial ){
 			$this->layout = 'admin';
 			$this->scripts[] = 'Task';
 		}
 
-		$user_id = ($this->user->usr_id == 1)?NULL:$this->user->usr_id;
+		$user_id = ($user_id !== NULL)?$user_id:(($this->user->usr_id == 1)?NULL:$this->user->usr_id);
         $model = Task::model()->filter($user_id);
+
+        $to_delete = array();
+        foreach ($model as $task)
+        	if( $task->good->archive != 0 )
+        		array_push($to_delete, $task->id);
+
+        if( count($to_delete) ){
+        	Task::model()->deleteAll("id IN (".implode(",", $to_delete).")");
+
+        	$model = Task::model()->filter($user_id);
+        }
 
 		if( !$partial ){
 			$this->render('adminIndex',array(

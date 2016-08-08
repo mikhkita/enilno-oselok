@@ -25,7 +25,8 @@ class KolesoOnlineController extends Controller
 				9 => "Диаметр",
 				7 => "Ширина",
 				8 => "Профиль",
-				// 16 => "Модель",
+				16 => "Модель",
+				10 => "Год выпуска шины",
 				28 => "Количество в комплекте",
 				27 => "Город нахождения товара"
 			),
@@ -366,7 +367,6 @@ class KolesoOnlineController extends Controller
 	public function actionIndex($countGood = false,$thanks = false)
 	{	
 		// if($this->beginCache(Yii::app()->params["city"]->id."_".$this->is_mobile, array('duration'=>5*60))) { 
-
 		$this->keywords = $this->getParam("SHOP","MAIN_KEYWORDS");
 		$this->description = $this->getParam("SHOP","MAIN_DESCRIPTION");
 
@@ -376,13 +376,13 @@ class KolesoOnlineController extends Controller
        	$tires = $this->getGoods(8,1,array(
 			"good_type_id"=>1,
 			"attributes" => array()
-		),array("field"=>46,"type"=>"DESC")); 
+		),array("field"=>3,"type"=>"DESC")); 
 		$tires = $tires['items'];
 
 		$discs = $this->getGoods(8,2,array(
 			"good_type_id"=>2,
 			"attributes"=> array()
-		),array("field"=>46,"type"=>"DESC"));
+		),array("field"=>3,"type"=>"DESC"));
 		$discs = $discs['items'];
 
 		$wheels = $this->getGoods(8,3,array(
@@ -423,7 +423,10 @@ class KolesoOnlineController extends Controller
 	}
 
 	public function actionCategory($partial = false, $countGood = false) {
-
+		if(isset($_GET["arr"])) foreach ($_GET["arr"] as $i => $item) {
+			if( count($item) == 1 && $item[0] == "" )
+				unset($_GET["arr"][$i]);
+		}
 		$cache_name = Yii::app()->params["city"]->id."_".$this->is_mobile;
 		if( isset($_POST) )
 			$cache_name .= ("_".md5(json_encode($_POST)));
@@ -610,22 +613,32 @@ class KolesoOnlineController extends Controller
 	
 		$criteria->condition = 't.attribute_id=9 OR t.attribute_id=43 OR t.attribute_id=27 OR t.attribute_id=28 OR ';
         if($type==1) {
-        	$criteria->condition .= 't.attribute_id=7 OR t.attribute_id=8 OR t.attribute_id=23 OR t.attribute_id=16';
+        	$criteria->condition .= 't.attribute_id=7 OR t.attribute_id=8 OR t.attribute_id=23 OR t.attribute_id=16 OR t.attribute_id=10';
     	}	
     	if($type==2) {
         	$criteria->condition .= 't.attribute_id=6 OR t.attribute_id=5 OR t.attribute_id=31 OR t.attribute_id=32';
     	}	
     	if($type==3) {
-        	$criteria->condition .= 't.attribute_id=7 OR t.attribute_id=8 OR t.attribute_id=23 OR t.attribute_id=16 OR t.attribute_id=6 OR t.attribute_id=5 OR t.attribute_id=31 OR t.attribute_id=32';
+        	$criteria->condition .= 't.attribute_id=7 OR t.attribute_id=8 OR t.attribute_id=23 OR t.attribute_id=16 OR t.attribute_id=10 OR t.attribute_id=6 OR t.attribute_id=5 OR t.attribute_id=31 OR t.attribute_id=32';
     	}	
     	$criteria->group = 't.variant_id';
         $criteria->order = 'variant.sort ASC';
 
+        if( Yii::app()->params["region"] ){
+        	$ids = Good::model()->filter(
+	            array(
+	                "good_type_id"=>$type,
+	                "attributes"=>$this->regionFilter()
+	            )
+	        )->ids;
+	        if( count($ids) ) 
+	        	$criteria->addInCondition("good_id", $ids);
+        }
         $model = GoodAttribute::model()->findAll($criteria);
-
         $filter = array();
 
 		foreach ($model as $i => $item) {
+			if( $item->value == "" && !$item->value ) continue;
 			if(!isset($filter[$item->attribute_id])) {
 				$filter[$item->attribute_id] = array();
 				$temp = array();
@@ -649,15 +662,23 @@ class KolesoOnlineController extends Controller
 			}
 		}
 
-		foreach ($filter as &$attr) {
-			if( !$this->is_mobile ){
-				if(count($attr) > 15) {
-					$attr = $this->splitByRows(10,$attr);
-				} else $attr = $this->splitByRows(5,$attr);
-			}else{
-				$attr = array($attr);
+		// if( Yii::app()->params["region"] ){
+		// 	foreach ($filter as $key => &$attr) {
+		// 		if($key == 16) {
+		// 			$attr = $this->splitByCols(8,$attr);
+		// 		} else $attr = $this->splitByRows(3,$attr);
+		// 	}
+		// }else{
+			foreach ($filter as &$attr) {
+				if( !$this->is_mobile ){
+					if(count($attr) > 15) {
+						$attr = $this->splitByRows(10,$attr);
+					} else $attr = $this->splitByRows(5,$attr);
+				}else{
+					$attr = array($attr);
+				}
 			}
-		}
+		// }
 
 		return $filter;
 	}

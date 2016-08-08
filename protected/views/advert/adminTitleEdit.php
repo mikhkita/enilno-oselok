@@ -4,7 +4,6 @@
 	<?php $form=$this->beginWidget('CActiveForm', array(
 		'id'=>'faculties-form',
 		'enableAjaxValidation'=>false,
-		'htmlOptions' => array("data-input" => 1)
 	)); ?>
 		<input type="hidden" name="data" value="1">
 		<div class="row">

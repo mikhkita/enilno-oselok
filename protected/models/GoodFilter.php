@@ -220,7 +220,7 @@ class GoodFilter extends CActiveRecord
 		}
 
 		// Log::debug(count($newModel->fields_assoc)." ".count($this->fields_assoc));
-		// if( count($newModel->fields_assoc) != count($this->fields_assoc) ) return true;
+		if( count($newModel->fields_assoc) != count($this->fields_assoc) ) return true;
 
 		if( $this->compareModels($this,$newModel,$dynamic) ) return true;
 		if( $this->compareModels($newModel,$this,$dynamic) ) return true;
