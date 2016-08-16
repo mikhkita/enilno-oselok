@@ -2363,7 +2363,9 @@ padding-top: 30px;}
 			height: 36px;
 			display: block;
 		}
-
+.b-header .b-sub-menu .b-block .fixed-link{
+	display: none;
+}
 
 @media screen and (max-width: 1250px){
 	

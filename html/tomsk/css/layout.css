@@ -2560,8 +2560,8 @@ input:-moz-placeholder {
 }
 	.b-not-found h1{
 		font-size: 70px;
-	    font-weight: 700;
-	    color: #FFB31D;
+		font-weight: 700;
+		color: #db001b;
 	}
 	.b-not-found h2{
 		font-size: 40px;
@@ -2572,9 +2572,9 @@ input:-moz-placeholder {
     	font-size: 16px;
 	}
 		.b-not-found h3 a{
-			color: #FFB31D;
-    		text-decoration: underline;
-    		display: inline-block;
+			color: #5cade5;
+			text-decoration: underline;
+			display: inline-block;
 		}
 			.b-not-found h3 a:hover{
 				text-decoration: none;

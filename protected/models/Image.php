@@ -195,6 +195,22 @@ class Image extends CActiveRecord
   		return parent::beforeDelete();
  	}
 
+ 	public function renameFolder($good_type_id, $from, $to){
+ 		$filename_from = Yii::app()->params["imageFolder"]."/".Controller::getTypeCode($good_type_id)."/".$from;
+ 		$filename_to = Yii::app()->params["imageFolder"]."/".Controller::getTypeCode($good_type_id)."/".$to;
+ 		if( file_exists($filename_to) ){
+ 			Controller::removeDirectory($filename_to);
+ 		}
+ 		rename($filename_from, $filename_to);
+
+ 		$filename_from = Yii::app()->params["cacheFolder"]."/".Controller::getTypeCode($good_type_id)."/".$from;
+ 		$filename_to = Yii::app()->params["cacheFolder"]."/".Controller::getTypeCode($good_type_id)."/".$to;
+ 		if( file_exists($filename_to) ){
+ 			Controller::removeDirectory($filename_to);
+ 		}
+ 		rename($filename_from, $filename_to);
+ 	}
+
 	/**
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!

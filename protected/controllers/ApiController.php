@@ -52,7 +52,7 @@ class ApiController extends Controller
             $date = explode(".", $date);
             $sale[$i]["date"] = $date[0]." ".$this->getRussianMonth($date[1])." ".$date[2];
 
-            $images = Good::getImages(NULL, NULL, array("code"=>$sale[$i]["varchar_value"], "good_type_id"=>$sale[$i]["good_type_id"]));
+            $images = Good::getImages(NULL, NULL, NULL, (object) array("id" => $sale[$i]["good_id"], "fields_assoc" => array(3 => (object)array("value" => $sale[$i]["varchar_value"])), "good_type_id"=>$sale[$i]["good_type_id"]));
             foreach ($images as $key => $image)
                 foreach ($images[$key] as $key2 => $href)
                     $images[$key][$key2] = "http://".Yii::app()->params["host"].$href;

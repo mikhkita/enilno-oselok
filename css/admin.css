@@ -3234,7 +3234,30 @@ input[disabled="disabled"] {
     z-index: 101;
     opacity: 0.5;
 }
+.b-popup-title-edit{
 
+}
+.b-popup-title-edit .b-iframe-cont{
+    width: 375px;
+    height: 700px;
+    overflow: hidden;
+    padding: 29px 10px 10px 20px;
+}
+.b-popup-title-edit iframe{
+    width: 750px;
+    height: 1400px;
+    background-color: #FFF;
+    -webkit-transform-origin: 0 0;
+    -moz-transform-origin: 0 0;
+    -o-transform-origin: 0 0;
+    -ms-transform-origin: 0 0;
+    transform-origin: 0 0;
+    -webkit-transform: scale(0.5);
+       -moz-transform: scale(0.5);
+        -ms-transform: scale(0.5);
+            -o-transform: scale(0.5);
+            transform: scale(0.5);
+}
 
 
 

@@ -109,7 +109,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
             <div class="b-block clearfix">
                 <div class="left">
                     <? if(Yii::app()->params["region"]): ?>
-                        <?  $this->renderPartial(Yii::app()->params["city"]->code.'/_logo'); ?>
+                        <?  $this->renderPartial("/kolesoOnline/".Yii::app()->params["city"]->code.'/_logo'); ?>
                     <? else: ?>
                         <div class="clearfix">
                             <a class="left b-main-logo" href="<?=Yii::app()->createUrl('/kolesoOnline')?>"></a>

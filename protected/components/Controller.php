@@ -103,6 +103,14 @@ class Controller extends CController
         if( !Yii::app()->user->isGuest ) $this->checkModelAccess();
     }
 
+    public function getView($action){
+        if( Yii::app()->params["region"] ){
+            $this->layout = '//layouts/'.Yii::app()->params["city"]->code.'/kolesoOnline';
+            $action = Yii::app()->params["city"]->code."/".$action;
+        }
+        return $action;
+    }
+
     public function getImages($count = NULL, $sizes = NULL, $cap = NULL, $good = NULL, $get_default = false, $adding = false){
         $images = Good::getImages($count, $size, $cap, $good, $get_default, $adding);
 

@@ -26,6 +26,14 @@ $(document).ready(function(){
     $(window).resize(resize);
     resize();
 
+    window.onload = function() {
+        if( window.location.hash == "#task" ){
+            $("body, html").animate({
+                scrollTop : $(".good-detail .b-block .detail-wrap .detail-price").offset().top-130
+            },300);
+        }
+    };
+
     var blocked = false,blocked_s = false;
 
     if( device.mobile() )

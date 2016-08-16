@@ -6,7 +6,7 @@
         "data-type" => ((isset($json_type))?"json":"none")
     ),
 )); ?>
-	<?if($_GET["to_task"]):?>
+	<?if(isset($_GET["to_task"])):?>
 		<input type="hidden" name="to_task" value="<?=$_GET["to_task"]?>">
 	<?endif;?>
 	<div class="row buttons">

@@ -297,6 +297,10 @@ class GoodController extends Controller
 
 		if(isset($_POST['Good_attr']) || isset($_POST["to_task"]))
 		{
+			$good_code = GoodAttributeFilter::model()->find("good_id=$id AND attribute_id=3");
+			if( isset($_POST['Good_attr'][3]) && $good_code->varchar_value != $_POST['Good_attr'][3] )
+				Image::renameFolder($good_type_id, $good_code->varchar_value, $_POST['Good_attr'][3]);
+
 			if( isset($_POST['Good_attr']) ){
 				if( $attributes === NULL ){
 					GoodAttribute::model()->deleteAll("good_id=".$id);
@@ -1267,12 +1271,15 @@ class GoodController extends Controller
 			$filter = ($goodFilter) ? "GOOD_TYPE_FILTER_".$good_type_id : "GOOD_TYPE_".$good_type_id;
 			$fields = (isset($_POST["view_fields"])) ? $_POST["view_fields"] : array();
 			if( isset($_POST["submit"]) ){
+				if( count($fields) )
+					array_push($fields, 3);
 				$this->setUserParam($filter,$fields);
 				$this->actionAdminIndex(true,$good_type_id);
 			}else{
-				$good_type = GoodType::model()->with("fields.attribute")->findByPk($good_type_id);
+				$good_type = GoodType::model()->findByPk($good_type_id);
+				$attributes = GoodTypeAttribute::model()->with("attribute")->findAll("good_type_id=$good_type_id AND attribute_id!=3");
 
-				$attributes = $this->splitByCols(2,CHtml::listData($good_type->fields, 'attribute_id', 'attribute.name'));
+				$attributes = $this->splitByCols(2,CHtml::listData($attributes, 'attribute_id', 'attribute.name'));
 
 				$this->renderPartial('_viewSettings',array(
 					'good_type'=>$good_type,

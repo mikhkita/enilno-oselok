@@ -26,7 +26,7 @@ Class Log {
     }
 
     public function debug($message,$error = false,$echo = false){
-        if( $echo ) echo $message;
+        if( $echo ) echo $message."<br>";
         Log::set("debug",$message,$error);
     }
     public function error($message){

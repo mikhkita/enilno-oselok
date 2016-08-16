@@ -559,6 +559,7 @@ $(document).ready(function(){
                     $(".b-input-image").val($(".b-input-image-img").attr("data-path")+"/"+$("input[name='uploaderPj_0_tmpname']").val()).trigger("change");
                 });
             });
+            return false;
         });
     }
 

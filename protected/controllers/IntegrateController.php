@@ -49,6 +49,8 @@ class IntegrateController extends Controller
     }
 
     public function actionQueueNextDrom($debug = false){
+        Queue::checkReady(true);
+
         $this->doQueueNext($debug, 2047);
     }
 
@@ -60,7 +62,7 @@ class IntegrateController extends Controller
             if( !$this->getNext($category_id, $nth) ){
                 return true;
             }else{
-                if( !$debug && $category_id == 2047 ) sleep(rand(5,15));
+                if( !$debug && $category_id == 2047 ) sleep(rand(2,7));
             }
               
             if( $debug ) return true;
@@ -91,6 +93,8 @@ class IntegrateController extends Controller
 
     public function getNext($category_id, $nth = ""){
         $queue = Queue::getNext($category_id);
+        // var_dump($queue);
+        // die();
 
         if( !$queue ) return false;
         $advert = $queue->advert;

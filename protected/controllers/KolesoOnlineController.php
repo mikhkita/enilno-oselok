@@ -312,7 +312,7 @@ class KolesoOnlineController extends Controller
     }
 
     public function beforeaction(){
-		if( Yii::app()->controller->action->id == "detail" || Yii::app()->controller->action->id == "index" || Yii::app()->controller->action->id == "category" || Yii::app()->controller->action->id == "page" || Yii::app()->controller->action->id == "mail" || Yii::app()->controller->action->id == "basket" || Yii::app()->controller->action->id == "cart" || Yii::app()->controller->action->id == "search" || Yii::app()->controller->action->id == "pay"){
+		if( Yii::app()->controller->action->id == "detail" || Yii::app()->controller->action->id == "index" || Yii::app()->controller->action->id == "category" || Yii::app()->controller->action->id == "page" || Yii::app()->controller->action->id == "mail" || Yii::app()->controller->action->id == "basket" || Yii::app()->controller->action->id == "cart" || Yii::app()->controller->action->id == "search" || Yii::app()->controller->action->id == "pay" || Yii::app()->controller->action->id == "thanks"){
 			$this->checkCity();
 		}
 		return true;
@@ -366,7 +366,7 @@ class KolesoOnlineController extends Controller
 
 	public function actionIndex($countGood = false,$thanks = false)
 	{	
-		// if($this->beginCache(Yii::app()->params["city"]->id."_".$this->is_mobile, array('duration'=>5*60))) { 
+		if($this->beginCache(Yii::app()->params["region"]."_".Yii::app()->params["city"]->id."_".$this->is_mobile.( (isset($_GET["thanks"]))?"_t":"_n" ), array('duration'=>5*60))) { 
 		$this->keywords = $this->getParam("SHOP","MAIN_KEYWORDS");
 		$this->description = $this->getParam("SHOP","MAIN_DESCRIPTION");
 
@@ -411,15 +411,7 @@ class KolesoOnlineController extends Controller
 			'mobile' => $this->is_mobile,
 			'thanks' => $thanks
 		));		
-		// $this->endCache(); }
-	}
-
-	public function getView($action){
-		if( Yii::app()->params["region"] ){
-			$this->layout = '//layouts/'.Yii::app()->params["city"]->code.'/kolesoOnline';
-			$action = Yii::app()->params["city"]->code."/".$action;
-		}
-		return $action;
+		$this->endCache(); }
 	}
 
 	public function actionCategory($partial = false, $countGood = false) {
@@ -437,7 +429,7 @@ class KolesoOnlineController extends Controller
 		// Для избежания проблем с кэшированием
 		unset($_SESSION["FILTER"][$_GET['type']]);
 
-		// if($this->beginCache($cache_name, array('duration'=>5*60))) { 
+		if($this->beginCache($cache_name, array('duration'=>5*60))) { 
 			$start = microtime(true);	
 			if(!isset($_SESSION)) session_start();
 
@@ -523,8 +515,8 @@ class KolesoOnlineController extends Controller
 			// 	echo "Query count: $queryCount, Total query time: ".sprintf('%0.5f',$queryTime)."s";
 			// 	printf('<br>Прошло %.4F сек.<br>', microtime(true) - $start);
 			// }
-			// $this->endCache(); 
-		// }
+			$this->endCache(); 
+		}
 	}
 
 

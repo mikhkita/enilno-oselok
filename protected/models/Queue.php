@@ -583,18 +583,20 @@ class Queue extends CActiveRecord
         	Cron::addAll($links);
 	}
 
-	public function checkReady(){
-		$queue = Queue::model()->with("advert.place")->findAll("place.category_id=2048 AND advert.ready=0 AND advert.title IS NOT NULL AND action_id IN (1,2,6,8) AND state_id=1");
-		if( $queue ){
-			$ids = Controller::getIds($queue);
-			Queue::model()->updateAll(array("state_id" => Queue::getState("titleNotUnique")), "id IN (".implode(",", $ids).")");
+	public function checkReady($only_delete = false){
+		if( !$only_delete ){
+			$queue = Queue::model()->with("advert.place")->findAll("place.category_id=2048 AND advert.ready=0 AND advert.title IS NOT NULL AND action_id IN (1,2,6,8) AND state_id=1");
+			if( $queue )
+				Queue::model()->updateAll(array("state_id" => Queue::getState("titleNotUnique")), "id IN (".implode(",", Controller::getIds($queue)).")");
+
+			$queue = Queue::model()->with("advert.place")->findAll("place.category_id=2048 AND advert.ready=1 AND action_id IN (1,2,6,8) AND state_id=5");
+			if( $queue )
+				Queue::model()->updateAll(array("state_id" => Queue::getState("waiting")), "id IN (".implode(",", Controller::getIds($queue)).")");
 		}
 
-		$queue = Queue::model()->with("advert.place")->findAll("place.category_id=2048 AND advert.ready=1 AND action_id IN (1,2,6,8) AND state_id=5");
-		if( $queue ){
-			$ids = Controller::getIds($queue);
-			Queue::model()->updateAll(array("state_id" => Queue::getState("waiting")), "id IN (".implode(",", $ids).")");
-		}
+		$queue = Queue::model()->with("advert")->findAll("advert.good_id=0 AND action_id != 3");
+		if( $queue )
+			Queue::model()->deleteAll("id IN (".implode(",", Controller::getIds($queue)).")");
 	}
 
 	public function getState($code){

@@ -337,7 +337,7 @@ Class Drom {
         $options = $this->setOptions($params,$advert_id,$only_images);    
 
         $result = json_decode($this->curl->request("http://baza.drom.ru/api/1.0/save/bulletin",$options));
-        // print_r($result);
+        print_r($result);
 
         return $result->id;
     }

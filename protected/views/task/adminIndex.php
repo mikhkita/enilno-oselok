@@ -1,10 +1,10 @@
 <!-- <h1><?=$this->adminMenu["cur"]->name?></h1> -->
-<h1>Задачи</h1>
+<h1>Задания<?if($this->user->usr_id != 10 && $user_id == 10):?> Сергея<?endif;?></h1>
 <? if($this->user->usr_id != 10 && Yii::app()->params["site"] == "koleso"): ?>
-	<? if( !isset($_GET["user_id"]) ): ?>
+	<? if( $user_id != 10 ): ?>
 		<a href="<?php echo $this->createUrl('/'.$this->adminMenu["cur"]->code.'/adminindex', array("user_id" => 10))?>" class="b-butt b-top-butt">Задания Сергея</a>
 	<? else: ?>
-		<a href="<?php echo $this->createUrl('/'.$this->adminMenu["cur"]->code.'/adminindex')?>" class="b-butt b-top-butt">Мои задания</a>
+		<a href="<?php echo $this->createUrl('/'.$this->adminMenu["cur"]->code.'/adminindex', array("user_id" => "my"))?>" class="b-butt b-top-butt">Мои задания</a>
 	<? endif; ?>
 <? endif; ?>
 <?php $form=$this->beginWidget('CActiveForm'); ?>

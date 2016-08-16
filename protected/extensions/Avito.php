@@ -290,9 +290,18 @@ Class Avito {
     }
 
     public function deleteAdvert($advert_id) {
-        $result = $this->curl->request("https://www.avito.ru/profile",array('item_id[]' => $advert_id,'delete' => 'Снять объявление с публикации'));
+        $result = $this->curl->request("https://www.avito.ru/".$advert_id."/delete");
         sleep(rand(1,5));
         print_r($result);
+        $html = str_get_html($result);
+        $params = array(
+        	"item_id[]" => $advert_id,
+        	"delete" => "Снять объявление с публикации"
+        );
+	    $params[$html->find('input[name^=token]',0)->name] = $html->find('input[name^=token]',0)->value;
+	    $result = $this->curl->request("https://www.avito.ru/".$advert_id."/delete", $params);
+	    print_r($result);
+
         $result = $this->curl->request("https://www.avito.ru/".$advert_id);
         sleep(rand(1,5));
         print_r("https://www.avito.ru/".$advert_id);

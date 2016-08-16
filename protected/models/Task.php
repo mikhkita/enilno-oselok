@@ -173,7 +173,7 @@ class Task extends CActiveRecord
 						Task::remove($good->id, "price");
 					}
 
-					$required = $this->getRequired($good);
+					$required = $this->getRequired($good, "koleso");
 
 					// Проверка обязательных атрибутов
 					$not_exist = $this->checkFields($good, array_diff($required, $params->price, $params->necessary));
@@ -252,7 +252,8 @@ class Task extends CActiveRecord
 		$not_exist = array();
 		$rules = array(
 			20 => array(0),
-			108 => array(0)
+			108 => array(0),
+			46 => array(0)
 		);
 		foreach ($fields as $i => $attr_id)
 			if( !isset($good->fields_assoc[$attr_id]) || (isset($rules[$attr_id]) && is_array($rules[$attr_id]) && in_array($good->fields_assoc[$attr_id]->value, $rules[$attr_id])) || ( !is_array($good->fields_assoc[$attr_id]) && $good->fields_assoc[$attr_id]->value === NULL ) ){
@@ -330,15 +331,15 @@ class Task extends CActiveRecord
 				$params = array(
 					1 => array(
 						"necessary" => array(16,17,9,8,7,28,43),
-						"price" => array(20,36),
+						"price" => array(20,36,46),
 					),
 					2 => array(
 						"necessary" => array(9,6,28,43),
-						"price" => array(20,36),
+						"price" => array(20,36,46),
 					),
 					3 => array(
 						"necessary" => array(16,17,9,8,7,28,6,43),
-						"price" => array(20,36),
+						"price" => array(20,36,46),
 					)
 				);
 				break;

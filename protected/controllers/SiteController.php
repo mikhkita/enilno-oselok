@@ -32,8 +32,9 @@ class SiteController extends Controller
 	    if($error=Yii::app()->errorHandler->error)
 	    {
             if( strpos($_SERVER["REDIRECT_URL"], "admin") === false && strpos($_SERVER["REDIRECT_URL"], "integrate") === false && $error["code"] == 404 ){
-                $this->layout='kolesoOnline';
-                $this->render('/kolesoOnline/404', $error);
+                if( in_array($_SERVER["HTTP_HOST"], array("koleso.tomsk.ru", "koleso.tomsk.dev") ) )
+                    $this->checkCity();
+                $this->render("/kolesoOnline/".$this->getView("404"), $error);
             }else{
                 $this->layout='service';
 

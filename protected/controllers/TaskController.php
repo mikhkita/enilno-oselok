@@ -76,6 +76,14 @@ class TaskController extends Controller
 			$this->scripts[] = 'Task';
 		}
 
+		if( $user_id == "my" ){
+			unset($_SESSION["task_user_id"]);
+			$user_id = NULL;
+		}else if( $user_id )
+			$_SESSION["task_user_id"] = $user_id;
+
+		$user_id = ( $user_id === NULL )?( (isset($_SESSION["task_user_id"]))?$_SESSION["task_user_id"]:NULL ):$user_id;
+
 		$user_id = ($user_id !== NULL)?$user_id:(($this->user->usr_id == 1)?NULL:$this->user->usr_id);
         $model = Task::model()->filter($user_id);
 
@@ -95,14 +103,16 @@ class TaskController extends Controller
 				'data'=>$model,
 				'filter'=>$filter,
 				'labels'=>Task::attributeLabels(),
-				'get_next'=>$get_next
+				'get_next'=>$get_next,
+				'user_id'=>$user_id,
 			));
 		}else{
 			$this->renderPartial('adminIndex',array(
 				'data'=>$model,
 				'filter'=>$filter,
 				'labels'=>Task::attributeLabels(),
-				'get_next'=>$get_next
+				'get_next'=>$get_next,
+				'user_id'=>$user_id,
 			));
 		}
 	}

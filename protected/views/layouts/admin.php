@@ -90,7 +90,7 @@
             <div class="b-modules-cont">
                 <ul class="modules">
                     <?foreach ($this->adminMenu["items"] as $i => $menuItem):?>
-                        <li data-name="<?=$menuItem->code?>"><a href="<?php echo $this->createUrl('/'.$menuItem->code.'/adminindex')?>"><?=$menuItem->name?></a></li>
+                        <li data-name="<?=$menuItem->code?>"><a href="<?php echo $this->createUrl('/'.$menuItem->code.'/adminindex', ($menuItem->code == "task")?array("user_id" => "my"):array() )?>"><?=$menuItem->name?></a></li>
                     <?endforeach;?>
                 </ul>
                 <? if(Yii::app()->params['debug']): ?>
