@@ -228,9 +228,10 @@ class DromController extends Controller
     }
     public function actionAdminVlad(){
         $drom = new Drom();
-        $avito = new Avito("tomsk:Sd8as9fhsd@91.226.83.143:9320");
         $drom->parseCategory();
-        $avito->parseCategory();
+        // $avito = new Avito("tomsk:Sd8as9fhsd@91.226.83.143:9320");
+        
+        // $avito->parseCategory();
         // $model = Good::model()->with("fields")->findAll("archive=1 AND attribute_id=3 AND LENGTH(varchar_value) = 5");
         // foreach ($model as $key => $good) {
         //     $code = $good->fields_assoc[3]->value;

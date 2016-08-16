@@ -44,7 +44,7 @@ class TrackController extends Controller
         $drom->parseCategory();
         $avito->parseCategory();
 	}
-	public function actionAdminIndex($partial = false)
+	public function actionAdminIndex($partial = false,$folder = 0)
 	{	
 		session_start();
 		if( !($_POST["sort"]) ){
@@ -62,6 +62,11 @@ class TrackController extends Controller
 			    'state'=>2,
 			), array('in', 'id', json_decode($_POST['delete'])));
 		}
+		if( isset($_POST['liked']) ){
+			Yii::app()->db->createCommand()->update(Track::tableName(), array(
+			    'folder'=>1,
+			), array('in', 'id', json_decode($_POST['liked'])));
+		}
 
 		$filter = Track::filter();
 		$labels = Track::attributeLabels();
@@ -74,7 +79,7 @@ class TrackController extends Controller
 	   		$criteria = $this->filterYL($criteria,$filter,$filter_values);
 	   	}
 
-	   	$criteria->addCondition("state='0'");
+	   	$criteria->addCondition("state='0' AND folder='$folder'");
 	   	$criteria->order = $_POST["sort"].' '.$_POST["order"];
 
 	   	$pagination = array('pageSize'=>40,'route' => 'track/adminindex');

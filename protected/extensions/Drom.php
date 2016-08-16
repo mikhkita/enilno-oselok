@@ -191,35 +191,39 @@ Class Drom {
                     );
                     array_push($links, (object)$tmp);
                 }elseif($good_type_id) {
-                    $tmp = array(
-                        'title' => $element->find(".bulletinLink",0)->plaintext,
-                        'date' => date('Y-m-d H:i:s'),
-                        'type' => $good_type_id,
-                        'state' => 0,
-                        'price_type' => 0,
-                        'platform' => 1,
-                        'folder' => NULL
-                    );
-                    $tmp['params'] = ($element->find(".annotation",0)) ? $element->find(".annotation",0)->plaintext : NULL;
-                    $tmp['price'] = ($element->find("span.finalPrice",0)) ? intval(str_replace(" ","",$element->find("span.finalPrice",0)->plaintext)) : NULL;
-                    $tmp['views'] = ($element->find(".views",0)) ? intval(str_replace(" ","",$element->find(".views",0)->plaintext)) : NULL;
-                    $tmp['amount'] = ($element->find(".quantity",0)) ? intval(preg_replace('~\D+~','',$element->find(".quantity",0)->plaintext)) : NULL;
-                    if($element->find(".imageExists noscript",0)) {
-                        $tmp['img'] = str_get_html($element->find(".imageExists noscript",0)->innertext)->find("img",0)->src;
-                    } elseif($element->find(".imageExists img",0)) {
-                        $tmp['img'] = $element->find(".imageExists img",0)->src;
-                    } else $tmp['img'] = "/".Yii::app()->params["imageFolder"]."/default.jpg";
-                    $tmp['seller'] = ($element->find(".owner a",0)) ? str_replace(array('/','user'),"",$element->find(".owner a",0)->href) : NULL;
-                    if($element->find(".fixedPrice",0)) $tmp['price_type'] = 1;
-                    if($element->find(".bestOffer",0)) $tmp['price_type'] = 2;
-                    if($element->find(".regular",0)) $tmp['price_type'] = 3;
-                    if(!$tmp['price_type']) {
-                       $tmp['price'] = ($element->find(".finalPrice span",0)) ? intval(str_replace(" ","",$element->find(".finalPrice span",0)->plaintext)) : NULL; 
+                    if(!$element->find(".owner a",0)) {
+                        $tmp = array(
+                            'title' => $element->find(".bulletinLink",0)->plaintext,
+                            'date' => date('Y-m-d H:i:s'),
+                            'type' => $good_type_id,
+                            'state' => 0,
+                            'price_type' => 0,
+                            'platform' => 1,
+                            'folder' => 0,
+                            'seller' => NULL
+                        );
+                        $tmp['params'] = ($element->find(".annotation",0)) ? $element->find(".annotation",0)->plaintext : NULL;
+                        $tmp['price'] = ($element->find("span.finalPrice",0)) ? intval(str_replace(" ","",$element->find("span.finalPrice",0)->plaintext)) : NULL;
+                        $tmp['views'] = ($element->find(".views",0)) ? intval(str_replace(" ","",$element->find(".views",0)->plaintext)) : NULL;
+                        $tmp['amount'] = ($element->find(".quantity",0)) ? intval(preg_replace('~\D+~','',$element->find(".quantity",0)->plaintext)) : NULL;
+                        if($element->find(".imageExists noscript",0)) {
+                            $tmp['img'] = str_get_html($element->find(".imageExists noscript",0)->innertext)->find("img",0)->src;
+                        } elseif($element->find(".imageExists img",0)) {
+                            $tmp['img'] = $element->find(".imageExists img",0)->src;
+                        } else $tmp['img'] = "/".Yii::app()->params["imageFolder"]."/default.jpg";
+                        if($element->find(".fixedPrice",0)) $tmp['price_type'] = 1;
+                        if($element->find(".bestOffer",0)) $tmp['price_type'] = 2;
+                        if($element->find(".regular",0)) $tmp['price_type'] = 3;
+                        if(!$tmp['price_type']) {
+                           $tmp['price'] = ($element->find(".finalPrice span",0)) ? intval(str_replace(" ","",$element->find(".finalPrice span",0)->plaintext)) : NULL; 
+                        }
+                        $links[$element->find(".bulletinLink",0)->name] = $tmp; 
+                        $html = str_get_html(iconv('windows-1251', 'utf-8', $this->curl->request("http://baza.drom.ru/{$element->find('.bulletinLink',0)->name}")));
                     }
-                    if(!$tmp['seller']) $links[$element->find(".bulletinLink",0)->name] = $tmp; 
                 }else{
                     array_push($links, $element->find(".bulletinLink",0)->getAttribute($attr) );
-
+                    print_r($links);
+                    die();
                 }
             }
             $page++;
@@ -727,9 +731,9 @@ Class Drom {
     }
 
     public function parseCategory() {
-        $good_types = array("tire","disc","wheel");
+        $good_types = array("wheel");
         foreach ($good_types as $key => $good_type) {
-            $good_type_id = $key+1;
+            $good_type_id = 3;
             $goods = array();
             for ($i=0; $i <= 1; $i++) { 
                 $url = "http://baza.drom.ru/tomsk/wheel/$good_type/?";
@@ -742,7 +746,7 @@ Class Drom {
                 $goods[$i] = $this->parseAllItems($url,NULL,false,true,false,$good_type_id);
             }    
                 $goods = $goods[0] + $goods[1];
-                $model = Track::model()->findAll("type=$good_type_id AND platform=1");
+                $model = Track::model()->findAll("type=$good_type_id AND platform=1 AND state<>2");
                 foreach ($model as $good) {
                     if(!isset($goods[$good->id])) {
                         $good->state = 1;
@@ -752,11 +756,23 @@ Class Drom {
                         $good->save();
                     }
                 }
+                foreach ($goods as $key => &$item) {
+                    foreach ($model as $i => $good) {
+                        if($good->id != $key) {
+                            if($i == (count($model)-1)) {
+                                $url = "http://baza.drom.ru/$key";
+                                $html = str_get_html(iconv('windows-1251', 'utf-8', $this->curl->request($url)));
+                                $item['seller'] = trim($html->find(".userNick a",0)->plaintext);
+                            }
+                        } else break;
+                    }
+                }
                 $rows = array();
+
                 foreach($goods as $advert_id => $good) {
                     array_push($rows, array($advert_id,$good['title'],$good['params'],$good['price'],$good['views'],$good['amount'],$good['img'],$good['date'],$good['type'],$good['state'],$good['price_type'],$good['seller'],$good['platform'],$good['folder']));
                 }    
-                Controller::updateRows(Track::tableName(),$rows,array('title','params','price','views','amount','img','type','price_type','seller'));  
+                Controller::updateRows(Track::tableName(),$rows,array('title','params','price','views','amount','img','type','price_type'));  
             Log::debug("отслеживание $good_type завершено");
         } 
 
