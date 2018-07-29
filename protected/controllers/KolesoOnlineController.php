@@ -307,11 +307,19 @@ class KolesoOnlineController extends Controller
 	public function init() {
         parent::init();
 
+        if( Yii::app()->params["site"] == "shikon" && isset($this->params) ){
+            $this->params[1]["HEADER_DESCRIPTION_CODE"] = 230;
+        }
+
         $this->image = Yii::app()->getBaseUrl(true)."/html/i/logo-vk.jpg";
 
     }
 
-    public function beforeaction(){
+    public function beforeaction($action){
+    	if (!parent::beforeAction($action)) {
+	        return false;
+	    }
+	    
 		if( Yii::app()->controller->action->id == "detail" || Yii::app()->controller->action->id == "index" || Yii::app()->controller->action->id == "category" || Yii::app()->controller->action->id == "page" || Yii::app()->controller->action->id == "mail" || Yii::app()->controller->action->id == "basket" || Yii::app()->controller->action->id == "cart" || Yii::app()->controller->action->id == "search" || Yii::app()->controller->action->id == "pay" || Yii::app()->controller->action->id == "thanks"){
 			$this->checkCity();
 		}
@@ -366,26 +374,30 @@ class KolesoOnlineController extends Controller
 
 	public function actionIndex($countGood = false,$thanks = false)
 	{	
-		if($this->beginCache(Yii::app()->params["region"]."_".Yii::app()->params["city"]->id."_".$this->is_mobile.( (isset($_GET["thanks"]))?"_t":"_n" ), array('duration'=>5*60))) { 
+		if( Yii::app()->params["site"] == "shikon" ){
+			$this->title = "Шикон - Купить колеса, шины и диски [+IN+]";
+		}
+		// if($this->beginCache(Yii::app()->params["region"]."_".Yii::app()->params["city"]->id."_".$this->is_mobile.( (isset($_GET["thanks"]))?"_t":"_n" ), array('duration'=>5*60))) { 
 		$this->keywords = $this->getParam("SHOP","MAIN_KEYWORDS");
 		$this->description = $this->getParam("SHOP","MAIN_DESCRIPTION");
 
+		$count = (Yii::app()->params["site"] == "shikon")?10:8;
 		$tire_filter = $this->getFilter(1);
 		$disc_filter =  $this->getFilter(2);
 		$wheel_filter =  $this->getFilter(3);
-       	$tires = $this->getGoods(8,1,array(
+       	$tires = $this->getGoods($count,1,array(
 			"good_type_id"=>1,
 			"attributes" => array()
 		),array("field"=>3,"type"=>"DESC")); 
 		$tires = $tires['items'];
 
-		$discs = $this->getGoods(8,2,array(
+		$discs = $this->getGoods($count,2,array(
 			"good_type_id"=>2,
 			"attributes"=> array()
 		),array("field"=>3,"type"=>"DESC"));
 		$discs = $discs['items'];
 
-		$wheels = $this->getGoods(8,3,array(
+		$wheels = $this->getGoods($count,3,array(
 			"good_type_id"=>3,
 			"attributes"=> array( 27 => array(1037, 1034) )
 		));
@@ -411,7 +423,7 @@ class KolesoOnlineController extends Controller
 			'mobile' => $this->is_mobile,
 			'thanks' => $thanks
 		));		
-		$this->endCache(); }
+		// $this->endCache(); }
 	}
 
 	public function actionCategory($partial = false, $countGood = false) {
@@ -419,7 +431,7 @@ class KolesoOnlineController extends Controller
 			if( count($item) == 1 && $item[0] == "" )
 				unset($_GET["arr"][$i]);
 		}
-		$cache_name = Yii::app()->params["city"]->id."_".$this->is_mobile;
+		$cache_name = Yii::app()->params["region"]."_".Yii::app()->params["city"]->id."_".$this->is_mobile;
 		if( isset($_POST) )
 			$cache_name .= ("_".md5(json_encode($_POST)));
 
@@ -429,7 +441,7 @@ class KolesoOnlineController extends Controller
 		// Для избежания проблем с кэшированием
 		unset($_SESSION["FILTER"][$_GET['type']]);
 
-		if($this->beginCache($cache_name, array('duration'=>5*60))) { 
+		// if($this->beginCache($cache_name, array('duration'=>5*60))) { 
 			$start = microtime(true);	
 			if(!isset($_SESSION)) session_start();
 
@@ -440,7 +452,11 @@ class KolesoOnlineController extends Controller
 
 			$_GET['type'] = isset($_GET['type']) ? $_GET['type'] : 2;
 		  	
-			$this->title = "Купить ".mb_strtolower(GoodType::model()->find(array("limit"=>1,"condition"=>"id=".$_GET['type']))->name, "UTF-8")." [+IN+] в магазине Колесо.Онлайн";
+		  	if( Yii::app()->params["site"] == "shikon" ){
+		  		$this->title = "Шикон - купить ".mb_strtolower(GoodType::model()->find(array("limit"=>1,"condition"=>"id=".$_GET['type']))->name, "UTF-8")." [+IN+]";
+		  	}else{
+		  		$this->title = "Купить ".mb_strtolower(GoodType::model()->find(array("limit"=>1,"condition"=>"id=".$_GET['type']))->name, "UTF-8")." [+IN+] в магазине Колесо.Онлайн";
+		  	}
 
 			$filter = $this->getFilter($_GET['type']);
 
@@ -515,8 +531,8 @@ class KolesoOnlineController extends Controller
 			// 	echo "Query count: $queryCount, Total query time: ".sprintf('%0.5f',$queryTime)."s";
 			// 	printf('<br>Прошло %.4F сек.<br>', microtime(true) - $start);
 			// }
-			$this->endCache(); 
-		}
+			// $this->endCache(); 
+		// }
 	}
 
 
@@ -716,7 +732,11 @@ class KolesoOnlineController extends Controller
 			$this->description = Interpreter::generate($this->params[$_GET['type']]["HEADER_DESCRIPTION_CODE"], $good, $dynamic);
 			$this->keywords = Interpreter::generate($this->getParam("SHOP",$good->type->code."_KEYWORDS_CODE"), $good, $dynamic);
 
-			$imgs = $good->getImages(NULL, NULL, ($this->user->usr_id == 1)?"all":NULL, NULL, true);
+			if( $this->user || Yii::app()->params["site"] == "shikon" ){
+				$imgs = $good->getImages(NULL, NULL, "all", NULL, true);
+			}else{
+				$imgs = $good->getImages(NULL, NULL, 1, NULL, true);
+			}
 			$this->image = Yii::app()->getBaseUrl(true).$imgs[0]["big"];
 
 			$partner = NULL;
@@ -754,7 +774,7 @@ class KolesoOnlineController extends Controller
 					'partial' => true
 				);
 				$this->renderPartial($this->getView('_basket'),$options);
-			} else {
+			} else if( $_SESSION["BASKET"] != NULL ){
 				$key = array_search($id, $_SESSION["BASKET"]);
 				if($key !== false)
 					unset($_SESSION["BASKET"][$key]);
@@ -853,7 +873,11 @@ class KolesoOnlineController extends Controller
 			if ($page) {
 				$this->keywords = $page->keywords;
 				$this->description = $page->description;
-				$this->title = "Колесо Онлайн - ".$page->title;
+				if( Yii::app()->params["site"] == "shikon" ){
+					$this->title = "Шикон - ".$page->title;
+				}else{
+					$this->title = "Колесо Онлайн - ".$page->title;
+				}
 				
 				$this->render($this->getView('page'),array(
 					"page" => $page
@@ -884,8 +908,8 @@ class KolesoOnlineController extends Controller
 
         $email_admin = $this->getParam("SHOP","EMAILS");
 
-        $from = "Колесо Онлайн";
-        $email_from = "koleso@tomsk.ru";
+        $from = "Шикон";
+        $email_from = "shikon@shikon.ru";
 
         $deafult = array("name"=>"Имя","phone"=>"Телефон", "email"=>"E-mail");
 
@@ -1037,6 +1061,7 @@ class KolesoOnlineController extends Controller
     }
 
     public function actionPay($order_id = NULL) {
+    	// header('Status: 200 Ok');
     	if($order_id) {
     		$goods = OrderGood::model()->findAll("order_id=$order_id");
     		if($goods) {

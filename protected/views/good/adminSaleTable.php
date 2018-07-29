@@ -15,11 +15,11 @@
 				<td>
 					<div><?=$item->good->fields_assoc[3]->value?></div>
 				</td>
-				<td >
-					<div><?=$item->summ?></div>
+				<td class="price">
+					<div><?=number_format( $item->summ, 0, ',', ' ' )?></div>
 				</td>
-				<td>
-					<div><?=$item->extra?></div>
+				<td class="price">
+					<div><?=number_format( $item->extra, 0, ',', ' ' )?></div>
 				</td>
 				<td>
 					<div><? if($item->date) echo date_format(date_create($item->date), 'd.m.Y');?></div>

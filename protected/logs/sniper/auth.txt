@@ -1,254 +1,218 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd"> 
-<html><head>
-<title>Аукцион Yahoo</title>
-<meta name="description" CONTENT="">
-<meta name="keywords" CONTENT="">
-<meta content="text/html; charset=utf-8" http-equiv=Content-Type>
-<meta name="viewport" content="width=device-width, initial-scale=1"><link rel="shortcut icon" href="http://www.yahon.ru/favicon.ico" type="image/x-icon">
-<link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css">
-<link rel="stylesheet" type="text/css" href="/assets/body.v506.css">
-<link rel="stylesheet" type="text/css" href="/assets/5cols.v506.css">
-<link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
-<script language="javascript" type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-<script language="javascript" type="text/javascript" src="/assets/checks.v506.js"></script>
-<script language="javascript" type="text/javascript" src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
-<script language="javascript" type="text/javascript" src="/lib/js/awesomplete.min.js"></script>
-<script language="javascript" type="text/javascript" src="/lib/js/awesomplete-ajax.js"></script>
-<script language="javascript" type="text/javascript" src="/lib/js/elastislide/js/jquery.elastislide.js"></script>
-<script language="javascript" type="text/javascript" src="/lib/js/elastislide/js/jquerypp.custom.js"></script>
-<script language="javascript" type="text/javascript" src="/lib/js/elastislide/js/modernizr.custom.17475.js"></script>
-<script language="javascript" type="text/javascript" src="/lib/js/elastislide/js/jquery.elastislide.js"></script>
-<script language="javascript" type="text/javascript" src="/lib/js/elastislide/js/jquerypp.custom.js"></script>
-<script language="javascript" type="text/javascript" src="/lib/js/elastislide/js/modernizr.custom.17475.js"></script>
-<!--[if lt IE 7]>
-<![if gte IE 5.5]>
-<script type="text/javascript" src="/lib/js/fixpng.js"></script>
-<style type="text/css">
-.png, IMG { filter:expression(fixPNG(this)); }
-.png A { position: relative; }
-</style>
-<![endif]>
-<![endif]-->
 
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head>
+<title>Японский аукцион Yahoo - полностью на русском языке с возможностью самостоятельно делать ставки.</title>
+<meta name="google-site-verification" content="fb07NZk269eez84bT5Za0p9Z7IaJ_j-q6pwkHY5fPCs" />
+<meta name="yandex-verification" content="475f69388c77868e" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta name="description" content="Японские товары на аукционе yahoo по-русски -
+хорошие товары из японского интернет-магазина. Мы предлагаем товары из Японии с
+доставкой в Россию. Японский аукцион Yahoo — это лучшие товары из Японии. Японский аукцион Yahoo - полностью на русском языке с возможностью самостоятельно делать ставки." />
+<meta name="keywords" content="японский аукцион запчастей, японские товары, аукционы yahoo, японский-интернет -магазин" />
+<link rel="stylesheet" type="text/css" href="/img/reset-fonts-grids.css">
+<link rel="stylesheet" type="text/css" href="/img/design.v2.20.css">
+<link rel="stylesheet" type="text/css" href="/img/more.v2.20.css">
+<link rel="stylesheet" type="text/css" href="/img/um.css">
+<script language="javascript" type="text/javascript" src="//yandex.st/jquery/1.7.1/jquery.min.js"></script>
 </head>
 <body>
+<div id="doc3" class="yui-t6">
 
-<script>
-window.onload = function() {
-    var searchBox = document.querySelector('.awesomplete input');
-    var ajaxAwesome = new Awesomplete(searchBox);
-    ajaxAwesome.ajaxUrl = '/lib/data_request/autocomplete.php';
-}
-</script>
+<div id="hd"><div id="hdenvelope">
+<a id="logo" href="/"><span>На главную</span></a>
+<div id="rightheader"><div id="rightheader-container">
 
-<nav class="navbar navbar-inverse" role="navigation">
-    <div class="container">
-        <div class="navbar-header">
-                  <a class="navbar-brand" href="/">Yahon.ru</a>
-        </div>
-        <form class="navbar-form navbar-left" role="search" action="/yahoo/search">
-            <div class="input-group" id="search">
-                <span class="input-group-btn">
-                <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-expanded="false">Категории <span class="caret"></span></button>
-                <ul class="dropdown-menu cat-menu" role="menu">
-                    <li>
-                        <ul class="list-unstyled col-sm-3 cat">
-                            <li><h4><a href="/yahoo/part_26318.html">Авто мото</a></h4></li>
-                            <li><a href="/yahoo/part_26322.html">Запчасти</a></li>
-                            <li><a href="/yahoo/part_2084300257.html">Шины, колеса</a></li>
-                            <li><a href="/yahoo/part_23852.html">Car Audio</a></li>
-                            <li><a href="/yahoo/part_26320.html">Аксессуары</a></li>
-                        </ul>
-                        <ul class="list-unstyled col-sm-4 cat">
-                            <li><h4><a href="/yahoo/part_23140.html">Часы, аксессуары</a></h4></li>
-                            <li><a href="/yahoo/part_2084005359.html">Женские аксессуары</a></li>
-                            <li><a href="/yahoo/part_2084005358.html">Мужские аксессуары</a></li>
-                            <li><a href="/yahoo/part_2084006476.html">Детские аксессуары</a></li>
-                            <li><a href="/yahoo/part_23260.html">Брендовые часы</a></li>
-                        </ul>
-                        <ul class="list-unstyled col-sm-4 cat">
-                            <li><h4><a href="/yahoo/part_23632.html">Видео, аудио</a></h4></li>
-                            <li><a href="/yahoo/part_23880.html">Видео</a></li>
-                            <li><a href="/yahoo/part_23764.html">Аудио</a></li>
-                            <li><a href="/yahoo/part_23636.html">Фотоаппараты, оптика</a></li>
-                            <li><a href="/yahoo/part_23960.html">Мобильные телефоны</a></li>
-                            <li><span id="all_cat"><a href="/yahoo/part_0.html">Все категории</a></span></li>
-                        </ul>
-                    </li>
-                </ul>
-                </span>
-                <input type="search" autofocus class="awesomplete form-control" list="mylist" autocomplete="off" data-autofirst placeholder="" name="q" value="">
-                <input type="hidden" name="code" value="0">
-                <span class="input-group-btn">
-                <button class="btn btn-search">Найти</button>
-                </span>
-                </div>
-            </form>
-            <form class="navbar-form navbar-right" role="form">
-                <ul class="nav">
-                                    <li>
-                    	<a href="/delivery">Тарифы</a>
-                	</li>
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" id="cabinet-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> Мой кабинет<span class="caret"></span></a>
-                        <ul class="dropdown-menu" role="menu">
-                            <li><a href="/personal/bids"><i class="fa fa-gavel"></i> Ставки</a></li>
-                            <li><a href="/personal/favourites"><i class="fa fa-heart"></i> Избранные лоты</a></li>
-                            <li><a href="/personal/orders"><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span> Заказы</a></li>
-                            <li><a href="/personal/messages">
-                    <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> Сообщения</a></li>
-                                            <li><a href="/personal/purse"><i class="fa fa-jpy"></i> Кошелек</a></li>
-                        <li class="divider"></li>
-                        <li><a href="/personal/pasport"><i class="fa fa-cog"></i> Профиль <small>(svc1)</small></a></li>
-                        <li><a href="/request">Заказ доставки</a></li>
-                        <li><a href="/requestBuying">Заказ покупки</a></li>
-                        <li><a href="/orderParts">Новые запчасти</a></li>
-                    </ul>
-                </li>
-                <li><a href="/?logout=1"><small>Выйти</small></a></li>
-                            </ul>
-        </form>
-        </div><!--/.navbar-collapse -->
-    </div>
-</nav>
+<ul class="navicons">
+<li><a href="/sitemap"><img src="/img/icon_sitemap.png" alt="" /></a></li>
+<li><a href="/contacts/jp"><img src="/img/icon_mail.png" alt="" /></a></li>
+<!-- <li><a href="/forum"><img src="/img/icon_people.png" alt="" /></a></li> -->
+<li><a href="/"><img src="/img/icon_home.png" alt="" /></a></li>
+</ul>
+
+<div id="logininfo">
+
+<div id="greeting">Здравствуйте, Косинов Сергей Александрович (<a href="http://www.bestjapan.ru?logout=1">выход</a>)</div><ul id="personal_menu"><li><a href="https://www.bestjapan.ru/personal/favourites">Избранное</a></li><li><a href="https://www.bestjapan.ru/personal/messages"><img src="http://www.bestjapan.ru/templates/frontend/img/new_message_blink.gif" class="pic" border="0" align="absmiddle" alt="Есть новые сообщения!">&#8202;Сообщения</a></li><li><a href="https://www.bestjapan.ru/personal/bids">Ставки</a></li><li><a href="https://www.bestjapan.ru/personal">Кабинет:</a></li></ul><ul id="balance_state"><li><a href="//www.bestjapan.ru/personal/purse">В кошельке</a>: <b>¥&#8202;&#8202;19&#8202;&#8202;203</b></li><li><small>всего ¥&#8202;&#8202;40&#8202;&#8202;006 с учетом кредита</small></li></ul><div id="basket_state"></div>
 
 
-
-
-
-
-
-
-
-
-     
-
-
- <div class="container">
-
- 
-
-<div class="row">
-    <h2 class="frontpage-header">Yahon.ru — сервис доставки товаров из Японии.
-                <br>Каждый год мы перевозим <i>тысячи</i> комплектов колес и других крупногабаритных товаров.</h2>
 </div>
+
+
+</div></div>
+
+<div id="rulermeny">
+<ul>
+<li><a href="https://www.bestjapan.ru/about">О компании</a></li><li><a href="https://www.bestjapan.ru/help/opt">Программы для оптовых покупателей</a></li><li><a href="https://www.bestjapan.ru/help/auc">Помощь </a></li></ul>
+
+
 </div>
-<div style="background: #D0D6D8; width:100%;padding-bottom:30px; margin-top:20px; min-height: 300px">
-<div class="container">
-<div class="row">
-    <ul class="nav nav-pills" id="pills">
-        <li><a href="/lib/data_request/ajaxCategories.php?id=tires" data-target="#tires" class="media_node active span" id="tires_tab" data-toggle="tabajax" rel="tooltip">Колеса </a></li>
-        <li><a href="/lib/data_request/ajaxCategories.php?id=wheels" data-target="#wheels" class="media_node span" id="wheels_tab" data-toggle="tabajax" rel="tooltip">Диски</a></li>
-        <li><a href="/lib/data_request/ajaxCategories.php?id=cars" data-target="#cars" class="media_node span" id="cars_tab" data-toggle="tabajax" rel="tooltip">Автомобили</a></li>
-        <li><a href="/yahoo/part_0.html" rel="tooltip"><big>Все категории</big></a></li>
-    </ul>
-    <div class="tab-content">
-        <div class="tab-pane active" id="tires">
+</div></div>
+
+
+<div id="basket_popup"><div id="basket_popup_holder"><div id="basket_preview" style="display:none; z-index:100; width:500px;">&nbsp;</div></div></div>
+
+<div id="bd">
+
+<div class="yui-gc">
+<div class="yui-u first">
+
+
+<!-- searchform start -->
+<div id="searchform"><div id="searchform_right"><div id="searchform_contents">
+
+<form action="//www.bestjapan.ru/auction/search" method="GET">
+
+<table border="0"><tr><td class="title">
+
+Поиск: </td><td class="input_field">
+
+    <div class="searchContainer">
+        <div class="searchOptions">
+            <input name="f" value="0x4" type="checkbox" ><a class="tooltips hint--right question_mark hint--success hint--rounded hint--bounce" data-hint="Поиск в описании">?</a>
         </div>
-        <div class="tab-pane" id="wheels">
-        </div>
-        <div class="tab-pane" id="cars">
+        <div class="searchInput">
+            <input name="q" type="text" value="">
         </div>
     </div>
+
+</td><td>
+<select name="part_id" class="part_select"><option value="0" SELECTED>во всех разделах</option><option value="26318" >Авто-мото, запчасти</option><option value="23632" >Бытовая техника</option><option value="23976" >Еда, напитки</option><option value="25464" >Игры и игрушки</option><option value="21600" >Книги, журналы</option><option value="20000" >Коллекционирование</option><option value="20060" >Комиксы и аниме товары</option><option value="23336" >Компьютеры</option><option value="42177" >Красота и  здоровье</option><option value="22152" >Музыка</option><option value="23000" >Одежда и обувь</option><option value="24698" >Спорт, активный отдых</option><option value="24202" >Товары для детей</option><option value="24198" >Товары для дома</option><option value="22896" >Товары для офиса</option><option value="2084032594" >Товары для фанатов</option><option value="21964" >Фильмы, видео</option><option value="24242" >Хобби, увлечения</option><option value="26086" >Цветы и садоводство</option><option value="23140" >Часы и аксессуары</option><option value="26084" >Прочее</option></select></td><td class="search_button">
+<input type="image" class="search_button" src="/img/button_search.png" alt="Найти"/>
+</td></tr></table></form>
+
+<form action="//www.bestjapan.ru/auction/search" method="GET" onsubmit="this.num_lot.value = this.num_lot.value.replace(/(^\s+)|(\s+$)/g, ''); if(this.num_lot.value.length > 5) {location.href = '/auction/item_' + this.num_lot.value.toLowerCase() + '.html';} return false;">
+<table border="0"><tr><td class="title">
+Номер лота:</td><td class="input_field"><input type="text" name="num_lot" size="12"></td><td class="left">
+
+<input type="image" class="open_button" src="/img/button_open_item.png" alt="Открыть лот"/></td><td><img src="/img/parts_search.gif"></td><td><a href="http://www.bestjapan.ru/auction/parts_search/" style="color: #ab1013; font-weight: bold;"">поиск запчастей</a></td>
+</tr>
+
+
+</table>
+</form>
+			
+				
+</div></div></div><!-- searchform end -->
+
+<!-- advert start -->
+<div class="adv1"><span class="cornerleft"></span><span class="cornerright"></span>
+<div class="rightborder">
+<table class="yahoo_ad">
+<tr>
+<td class="img_logo"><img src="/img/logo_yahoo.png" alt="Yahoo! Auction Japan"/></td>
+<td>
+<ul>
+<li><div align=center><b><a href="//www.bestjapan.ru/blog?id=262">Мы гарантируем лучшие условия сотрудничества!</a></b><br></div></li>
+<!--  
+	<li>Более 5`000`000 товаров!</li>
+    <li>Описание лотов на русском языке!</li>
+    <li>Открытый доступ - ставку на лот вы делаете сами!</li>
+-->
+</ul>
+
+</td>
+
+</tr>
+</table>
+
+</div></div>
+<!-- advert end --><div id="content"><!-- CONTENT -->
+
+			
+<div class="yahoo_part float_left"><h2><a href="/auction/section_26318.html">Автозапчасти и тюнинг</a></h2><a href="/auction/section_26322.html" class="ya_subpart">Запчасти и тюнинг</a>, <a href="/auction/section_2084300257.html" class="ya_subpart">Колёса, шины, диски</a>, <a href="/auction/section_23852.html" class="ya_subpart">Автозвук</a>, <a href="/auction/section_26320.html" class="ya_subpart">Аксессуары</a>, <a href="/auction/section_2084005798.html" class="ya_subpart">Безопасность</a>, <a href="/auction/section_24650.html" class="ya_subpart">Инструменты</a>, <a href="/auction/section_26092.html" class="ya_subpart">Эксплуатация</a>, <a href="/auction/section_2084005546.html" class="ya_subpart">Товары для автолюбителей</a></div><div class="yahoo_part float_right"><h2><a href="/auction/section_26308.html">Мотоциклы и запчасти</a></h2><a href="/auction/section_26316.html" class="ya_subpart">Мотоциклы</a>, <a href="/auction/section_26312.html" class="ya_subpart">Запчасти для мотоциклов</a>, <a href="/auction/section_2084012431.html" class="ya_subpart">Экипировка</a>, <a href="/auction/section_26310.html" class="ya_subpart">Аксессуары</a>, <a href="/auction/section_2084012441.html" class="ya_subpart">Сигнализация и безопасность</a>, <a href="/auction/section_2084042022.html" class="ya_subpart">Инструменты</a>, <a href="/auction/section_2084005548.html" class="ya_subpart">Прочее</a></div><div class="yahoo_part float_left"><h2><a href="/auction/section_23636.html">Фототовары</a></h2><a href="/auction/section_2084261634.html" class="ya_subpart">Цифровые зеркальные фотокамеры</a>, <a href="/auction/section_23684.html" class="ya_subpart">Объективы для зеркальных фотокамер</a>, <a href="/auction/section_23720.html" class="ya_subpart">Аксессуары и студийное оборудование</a>, <a href="/auction/section_23562.html" class="ya_subpart">Цифровые компактные фотокамеры</a>, <a href="/auction/section_23640.html" class="ya_subpart">Аналоговые фотокамеры</a></div><div class="yahoo_part float_right"><h2><a href="/auction/section_23764.html">Аудио-аппаратура</a></h2><a href="//www.bestjapan.ru/auction/table_23772.html" class="ya_subpart">CD-деки</a>, <a href="//www.bestjapan.ru/auction/table_2084019005.html" class="ya_subpart">Битбоксы</a>, <a href="//www.bestjapan.ru/auction/table_2084019004.html" class="ya_subpart">Тонгенераторы</a>, <a href="//www.bestjapan.ru/auction/table_2084286799.html" class="ya_subpart">Бобинные магнитофоны</a>, <a href="//www.bestjapan.ru/auction/table_44764.html" class="ya_subpart">Кассетные магнитолы</a>, <a href="//www.bestjapan.ru/auction/table_2084024093.html" class="ya_subpart">Кассетные деки</a>, <a href="//www.bestjapan.ru/auction/table_23800.html" class="ya_subpart">Эквалайзеры</a>, <a href="//www.bestjapan.ru/auction/table_2084019011.html" class="ya_subpart">Эффекторы</a>, <a href="//www.bestjapan.ru/auction/table_2084019013.html" class="ya_subpart">Микшеры</a>, <a href="//www.bestjapan.ru/auction/table_2084019012.html" class="ya_subpart">Многодорожечные рекордеры</a></div><div class="yahoo_part float_left"><h2><a href="/auction/section_24698.html">Спорт, активный отдых</a></h2><a href="/auction/section_25180.html" class="ya_subpart">Товары для рыбалки</a>, <a href="/auction/section_24702.html" class="ya_subpart">Всё для кемпинга и туризма</a>, <a href="/auction/section_25152.html" class="ya_subpart">Спортивная экипировка</a>, <a href="/auction/section_2084005280.html" class="ya_subpart">Спортивная одежда</a>, <a href="/auction/section_26222.html" class="ya_subpart">Товары для велоспорта</a>, <a href="/auction/section_26214.html" class="ya_subpart">Водномоторная техника</a>, <a href="/auction/section_2084214045.html" class="ya_subpart">Солнцезащитные очки </a></div><div class="yahoo_part float_right"><h2><a href="/auction/section_23336.html">Компьютеры, ноутбуки, КПК</a></h2><a href="//www.bestjapan.ru/auction/table_23408.html" class="ya_subpart">Настольные компьютеры Windows</a>, <a href="/auction/section_23412.html" class="ya_subpart">Ноутбуки</a>, <a href="//www.bestjapan.ru/auction/table_2084239341.html" class="ya_subpart">Нетбуки</a>, <a href="/auction/section_2084039798.html" class="ya_subpart">Apple</a>, <a href="//www.bestjapan.ru/auction/table_2084219502.html" class="ya_subpart">Серверы</a>, <a href="/auction/section_23557.html" class="ya_subpart">КПК</a>, <a href="/auction/section_2084039561.html" class="ya_subpart">Периферия</a>, <a href="/auction/section_2084039480.html" class="ya_subpart">Комплектующие</a>, <a href="/auction/section_2084039561.html" class="ya_subpart">Периферийные устройства</a>, <a href="/auction/section_2084039461.html" class="ya_subpart"> Расходные материалы</a></div><div class="yahoo_part float_left"><h2><a href="/auction/section_22436.html">Музыкальные инструменты</a></h2><a href="/auction/section_2084019019.html" class="ya_subpart">Электрогитары</a>, <a href="/auction/section_2084046544.html" class="ya_subpart">Акустические гитары</a>, <a href="/auction/section_22572.html" class="ya_subpart"> Струнные инструменты</a>, <a href="/auction/section_22440.html" class="ya_subpart">Духовые инструменты</a>, <a href="/auction/section_22532.html" class="ya_subpart">Клавишные инструменты</a>, <a href="/auction/section_22500.html" class="ya_subpart">Ударные инструменты</a>, <a href="/auction/section_2084261081.html" class="ya_subpart">DJ оборудование</a>, <a href="/auction/section_22544.html" class="ya_subpart">Оборудование MIDI</a>, <a href="/auction/section_2084005286.html" class="ya_subpart">Усилители</a></div><div class="yahoo_part float_right"><h2><a href="/auction/section_23632.html">Бытовая техника</a></h2><a href="/auction/section_23880.html" class="ya_subpart">Видео-аппаратура</a>, <a href="/auction/section_23764.html" class="ya_subpart">Аудио-аппаратура</a>, <a href="/auction/section_2084008356.html" class="ya_subpart">Климатическое оборудование</a>, <a href="/auction/section_23632.html" class="ya_subpart">Кухонные приборы</a>, <a href="/auction/section_2084044954.html" class="ya_subpart">Аккумуляторы</a>, <a href="//www.bestjapan.ru/auction/table_2084044958.html" class="ya_subpart">Трансформаторы и адаптеры</a>, <a href="/auction/section_2084042675.html" class="ya_subpart">Утюги и сушильные машины</a></div><div class="yahoo_part float_left"><h2><a href="/auction/section_24202.html">Товары для детей</a></h2><a href="/auction/section_2084042548.html" class="ya_subpart">Товары для перемещения ребёнка</a>, <a href="/auction/section_2084042546.html" class="ya_subpart">Пеленки и предметы туалета</a>, <a href="/auction/section_2084008379.html" class="ya_subpart"> Предметы для купания</a>, <a href="/auction/section_2084008387.html" class="ya_subpart">Товары для безопастности</a>, <a href="/auction/section_2084008393.html" class="ya_subpart">Детская мебель</a></div><div class="yahoo_part float_right"><h2><a href="/auction/section_25464.html">Игры, игрушки</a></h2><a href="/auction/section_2084251212.html" class="ya_subpart">Радиоуправляемые модели</a>, <a href="/auction/section_2084251269.html" class="ya_subpart">Радиоуправляемые игрушки </a>, <a href="/auction/section_2084250263.html" class="ya_subpart">Пластиковые модели</a>, <a href="/auction/section_2084259579.html" class="ya_subpart">Железная дорога</a>, <a href="/auction/section_26018.html" class="ya_subpart">Головоломки, паззлы</a>, <a href="/auction/section_25864.html" class="ya_subpart">Куклы</a>, <a href="/auction/section_2084007247.html" class="ya_subpart">Для малышей</a></div><div class="yahoo_part float_left"><h2><a href="/auction/section_23000.html">Одежда, обувь</a></h2><a href="/auction/section_23288.html" class="ya_subpart">Одежда для женщин</a>, <a href="/auction/section_23176.html" class="ya_subpart">Одежда для мужчин</a>, <a href="/auction/section_23044.html" class="ya_subpart">Одежда для детей</a>, <a href="/auction/section_24210.html" class="ya_subpart">Одежда для младенцев</a>, <a href="/auction/section_23312.html" class="ya_subpart">Обувь для женщин</a>, <a href="/auction/section_23200.html" class="ya_subpart">Обувь для мужчин</a>, <a href="/auction/section_42195.html" class="ya_subpart">Обувь для детей</a>, <a href="/auction/section_2084005310.html" class="ya_subpart">Обувь для младенцев</a></div><div class="yahoo_part float_right"><h2><a href="/auction/section_23761.html">Любительская радиосвязь</a></h2><a href="//www.bestjapan.ru/auction/table_2084036891.html" class="ya_subpart">Приёмники</a>, <a href="//www.bestjapan.ru/auction/table_2084036854.html" class="ya_subpart">Трансиверы мобильные</a>, <a href="//www.bestjapan.ru/auction/table_2084036861.html" class="ya_subpart">Трансиверы ручные</a>, <a href="//www.bestjapan.ru/auction/table_2084036843.html" class="ya_subpart">Трансиверы стационарные</a>, <a href="//www.bestjapan.ru/auction/table_2084036890.html" class="ya_subpart">Аксессуары</a></div><h3><a href="/auction/section_0.html">Все разделы &rarr;</a></h3>
+
+
+<!-- CONTENT END -->
+<!-- CONTENT END -->				
+
+
 </div>
-</div>
+</div>	
+	
+			<div class="yui-u right-column">
+				<ul class="rightnav"><li><a href="https://www.bestjapan.ru/auctions">Аукционы Yahoo!</a></li><li><a href="https://www.bestjapan.ru/crooooberPromo">Покупки на CROOOOBER.com</a></li></ul>
+			
+				<div class="rightpanel"><span class="cornerleft"><!--  --></span><span class="cornerright"><!--  --></span><div class="rightborder"> 
+				
+<!-- RIGHT PANEL START -->
+
+<!-- RIGHT PANEL START -->
+<img style="float:left" src="./img/icon_wheels.png" border="0">
+<h1 id="shop_header" align="center">Колёса и диски</h1>
+
+<div align="center">
+    <p class="shop_header"><b>
+            <a href="/diski">Поиски колёс и литых дисков</a>
+                    </b>
+    </p>
 </div>
 
-<div class="container">
-<div class="row">
-    <h2 class="frontpage-header">Витамины и бады из Японии.</h2>
-</div>
-</div>
-<div style="background: #BBC4C7; width:100%;">
-<div class="container" style="min-height: 200px; padding-bottom:30px;">
-<div class="row">
-    <div class="tab-content">
+<table id="currency_list">
+    <tbody>
+    <tr>
+        <td rowspan="2" style="width: 50px;"><a href="/help/currentRates"><img src="/img/icon_question.png" border="0"></a></td>
+        <td>100¥ = <b>56.66</b> руб. (Курс ЦБРФ)</td>
+    </tr>
+    <tr>
+        <td>1 руб. = <b>1.6888</b>¥</td>
+    </tr>
+    </tbody>
+</table>
 
-<a href="/stock/item?number=17"><div class="frontpageAggregator rakuten"><img src="http://www.yahon.ru/images/stock/1903037237.jpg" alt="Сквален  "><br><p>Сквален<br><br></p><p class="price" style="font-size:18px;">1311 <span class="rur">p<span>уб.</span></p>
-    </div></a><a href="/stock/item?number=18"><div class="frontpageAggregator rakuten"><img src="http://www.yahon.ru/images/stock/2076215271.jpg" alt="Коллаген Фукоидан"><br><p>Коллаген<br>Фукоидан</p><p class="price" style="font-size:18px;">1616 <span class="rur">p<span>уб.</span></p>
-    </div></a><a href="/stock/item?number=20"><div class="frontpageAggregator rakuten"><img src="http://www.yahon.ru/images/stock/1601870318.jpg" alt="Детские витамины"><br><p>Детские<br>витамины</p><p class="price" style="font-size:18px;">346 <span class="rur">p<span>уб.</span></p>
-    </div></a><a href="/stock/item?number=22"><div class="frontpageAggregator rakuten"><img src="http://www.yahon.ru/images/stock/1365417946.jpg" alt="Глюкозамин  "><br><p>Глюкозамин<br><br></p><p class="price" style="font-size:18px;">1689 <span class="rur">p<span>уб.</span></p>
-    </div></a><a href="/stock/item?number=23"><div class="frontpageAggregator rakuten"><img src="http://www.yahon.ru/images/stock/989912265.jpg" alt="Глюкозамин MSM "><br><p>Глюкозамин<br>MSM<br></p><p class="price" style="font-size:18px;">1506 <span class="rur">p<span>уб.</span></p>
-    </div></a><a href="/stock/item?number=24"><div class="frontpageAggregator rakuten"><img src="http://www.yahon.ru/images/stock/224107424.jpg" alt="Мазь Анмеруцу"><br><p>Мазь<br>Анмеруцу</p><p class="price" style="font-size:18px;">337 <span class="rur">p<span>уб.</span></p>
-    </div></a><a href="/stock/item?number=25"><div class="frontpageAggregator rakuten"><img src="http://www.yahon.ru/images/stock/1235073034.jpg" alt="Рыбий жир"><br><p>Рыбий<br>жир</p><p class="price" style="font-size:18px;">987 <span class="rur">p<span>уб.</span></p>
-    </div></a><a href="/stock/item?number=26"><div class="frontpageAggregator rakuten"><img src="http://www.yahon.ru/images/stock/1512862082.jpg" alt="Витамины HelloKitty"><br><p>Витамины<br>HelloKitty</p><p class="price" style="font-size:18px;">346 <span class="rur">p<span>уб.</span></p>
-    </div></a></div>
-</div>
-</div>
+
+<div id="paysystems"></div>
+<div align="center"><b>Присоединяйтесь к нам</b><br><br>
+<!--<a href="http://www.facebook.com/pages/BestJapanru/229511290406038" target="_blank"><img src="./img/facebook.png" border="0"></a>-->
+<a href="http://vkontakte.ru/club20583781" target="_blank"><img src="./img/vkontakte.png" border="0"></a>
+<a href="http://twitter.com/bj_ru" target="_blank"><img src="./img/twitter.png" border="0"></a>
 </div>
 
-<div style="background: #A8B3B7; width:100%; ">
-<div class="container" style="min-height: 300px; padding-bottom:30px;">
-<div class="row">
-    <ul class="nav nav-pills" id="pills">
-        <li><a href="/lib/data_request/ajaxCategories.php?id=fishingRods" data-target="#fishingRods" class="media_node span" id="fishingRods_tab" data-toggle="tabajax" rel="tooltip">Удочки</a></li>
-        <li><a href="/lib/data_request/ajaxCategories.php?id=iphones" data-target="#iphones" class="media_node span" id="iphones_tab" data-toggle="tabajax" rel="tooltip">Айфоны</a></li>
-        <li><a href="/yahoo/part_0.html" rel="tooltip"><big>Все категории</big></a></li>
-       </ul>
-    <div class="tab-content">
-        <div class="tab-pane" id="fishingRods">
-        </div>
-        <div class="tab-pane" id="iphones">
-        </div>
-    </div>
-</div>
-</div>
-</div>
+<h1 id="news_header"><a href="/news" class="red">Новости</a></h1>
+<div class="news_fp"><span class="news_fp_date">14 июля 2018</span><span class="news_fp_header"><a href="//www.bestjapan.ru/news?id=293">Важная информация по колесам и дискам!</a></span><span class="news_fp_anons">Без ограничений можно покупать только колеса и диски сделанные в Японии. </span></div><div class="news_fp"><span class="news_fp_date">03 июля 2018</span><span class="news_fp_header"><a href="//www.bestjapan.ru/news?id=291">Временные ограничения на покупку колес и дисков.</a></span><span class="news_fp_anons">с 3 по 9 июля 2018 года вводятся ограничения на покупку колес и дисков. </span></div><div class="news_fp"><span class="news_fp_date">08 июня 2018</span><span class="news_fp_header"><a href="//www.bestjapan.ru/news?id=290">День России</a></span><span class="news_fp_anons">График работы компании в праздник</span></div><!-- RIGHT PANEL END -->
+				
+				
+				</div>
+				</div>
+			</div>
+	
+		</div>
 
+
+
+
+</div> 
+
+
+
+
+<div id="ft">
+<div class="ftwrp">
+<p><b>&copy; 2009-2018 bestjapan.ru - Аукцион Yahoo.</b> <span style="padding-left: 30px;">Лицензия 古物商: 501110007738 [Toyama/富山県公安委員会]</span></p>
+
+<p>Информация на сайте носит исключительно информационный характер и не является публичной офертой. Для получения подробной информации о стоимости лота на аукционе yahoo просьба обращаться к менеджерам компании. <span style="color:white;">0.258s</p>
+</div>
+</div> 
+
+</div><!-- id="doc3" -->
 
 <script type="text/javascript">
 
-jQuery('[data-toggle="tabajax"]').click(function(e) {
-    var $this = jQuery(this),
-        loadurl = $this.attr('href'),
-        targ = $this.attr('data-target');
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-18864726-1']);
+  _gaq.push(['_trackPageview']);
 
-    jQuery.get(loadurl, function(data) {
-        jQuery(targ).html(data);
-    });
-    $this.tab('show');
-    return false;
-});
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
 
-jQuery(document).ready(function(){
-jQuery("#tires_tab").click();
-jQuery("#instruments_tab").click();
-jQuery("#fishingRods_tab").click();
-});
 </script>
 
-
-
-<div class="container">
-    <hr>
-    <footer>
-        <div class="row">
-            <div class="col-md-4">
-                <address> <span class="phones">8-423-254-82-29
-                <br>8-914-326-67-20</span>
-                <br>Владивосток, ул. Шошина, д. 6 (<a href="http://maps.yandex.ru/-/CVeo7X1m">карта</a>)</address>
-            </div>
-            <div class="col-md-4">
-                    <small><p>100 &yen; — 54.8 <span class="rur">p<span>уб.</span><br>
-                    1 $ — 120.8 ¥</p>
-                    Следующий пароход пока неизвестен                    </small>
-                
-            </div>
-            <div class="col-md-4">
-                <p><small>Почта: <a href="mailto:info@yahon.ru">info@yahon.ru</a><br>
-                Yahon.ru — доставка товаров с японских аукционов.</small></p>
-                <img src="https://www.paypalobjects.com/webstatic/mktg/logo/bdg_now_accepting_pp_2line_w.png" height="40" width="138" alt="Now Accepting PayPal">
-            </div>
-        </div>
-    </footer>
-</div>
-<script>
-(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-ga('create', 'UA-56018864-1', 'auto');
-ga('send', 'pageview');
-</script>
-</body>
-
+<!-- Yandex.Metrika -->
+<script src="//mc.yandex.ru/metrika/watch.js" type="text/javascript"></script>
+<div style="display:none;"><script type="text/javascript">
+try { var yaCounter1380421 = new Ya.Metrika(1380421); } catch(e){}
+</script></div>
+<noscript><div style="position:absolute"><img src="//mc.yandex.ru/watch/1380421" alt="" /></div></noscript>
+<!-- /Yandex.Metrika -->
+</body></html>

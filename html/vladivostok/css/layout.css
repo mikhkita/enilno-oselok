@@ -312,7 +312,7 @@ input:-moz-placeholder {
 	.b-logo-tomsk div.b-logo-tomsk-koleso{
 		font-size: 26px;
 		line-height: 31px;
-		padding-top: 5px;
+		padding-top: 19px;
 	}
 	.b-logo-tomsk div.b-logo-tomsk-tomsk{letter-spacing: 0px;margin-top: -1px;}
 		.b-logo-tomsk div.b-logo-tomsk-tomsk span{
@@ -1117,7 +1117,7 @@ input:-moz-placeholder {
 					text-align: left;
 				}
 		.b-popular .b-block .popular-good {
-			width: 695px;
+			width: 100%;
 		}
 			.b-popular .b-block .popular-good .popular-category {
 
@@ -1181,6 +1181,9 @@ input:-moz-placeholder {
 		background: #FFF;
 		overflow: hidden;
 	}	
+	.popular-good .goods .gradient-grey{
+		width: 177px !important;
+	}
 
 	.goods .gradient-grey.b-good-type-2,.goods .gradient-grey.b-good-type-3{
 		height: 286px;
@@ -1189,8 +1192,14 @@ input:-moz-placeholder {
 	.goods .gradient-grey:nth-child(4n) {
 		margin-right: 0;
 	}
+	.popular-good .goods .gradient-grey:nth-child(4n) {
+		margin-right: 18px;
+	}
+	.popular-good .goods .gradient-grey:nth-child(5n) {
+		margin-right: 0;
+	}
 		.goods .gradient-grey .good-img{
-			width: 160px;
+			width: 100%;
 			height: 118px;
 			background-size: cover;
 			background-position: 50%;
@@ -1204,6 +1213,9 @@ input:-moz-placeholder {
 			-o-transition: all .3s;
 			transition: all .3s;
 		}
+			.popular-good .goods .gradient-grey .params-cont{
+				width: 177px;
+			}
 		.goods .gradient-grey .params-cont a.params-cont-a{
 			display: block;
 			padding: 15px 0px 0px;
@@ -1235,6 +1247,9 @@ input:-moz-placeholder {
 				margin-top: 8px;
 				font-size: 13px;
 				margin-bottom: 12px;
+				white-space: nowrap;
+				overflow: hidden;
+				text-overflow: ellipsis;
 			}
 			/*.goods .gradient-grey.b-good-type-2 h6,*/
 			.goods .gradient-grey.b-good-type-3 h6{
@@ -1264,7 +1279,7 @@ input:-moz-placeholder {
 				text-transform: uppercase;
 				font-weight: 500;
 				margin-top: 0px;
-				width: 160px;
+				width: 100%;
 				padding: 12px 0 12px;
 				display: inline-block;
 			}
@@ -1275,18 +1290,17 @@ input:-moz-placeholder {
 				.goods .gradient-grey .b-black-butt:active {
 					border-bottom: 0px solid #FFD900;
 				}
-				// .goods .gradient-grey .b-black-butt.carted,.goods .gradient-grey .b-black-butt.carted:active {
-				// 	margin-top: 20px;
-				// 	padding: 13px 0 10px;
-				// }
+				.goods .gradient-grey .b-black-butt.carted,.goods .gradient-grey .b-black-butt.carted:active {
+					/* margin-top: 20px; */
+					padding: 13px 0 10px;
+				}
 				.goods .gradient-grey .b-black-butt.carted,.good-detail .b-block .detail-wrap .detail-price a.carted{
-					// background: rgb(227, 228, 232);
-				 //    cursor: default;
-				 //    box-shadow: inset 0px 0px 3px;
-				 //    border-bottom: 0px !important;    
-				    border-bottom: 2px solid #000;
-				    color: #fff;
-				   /* background: #4d414b;
+					background: rgb(219, 2, 27);
+					cursor: pointer;
+					/* box-shadow: inset 0px 0px 3px; */
+					border-bottom: 1px solid rgb(219, 2, 27);
+					color: #fff;
+					/* background: #4d414b;
 				    background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJod…EiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
 				    background: -moz-linear-gradient(top, #4d414b 0%, #231d23 100%);
 				    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#4d414b), color-stop(100%,#231d23));
@@ -1586,13 +1600,13 @@ input:-moz-placeholder {
 						color: #6DCFF6 !important;
 					}
 					.tire-type label.active:before,.tire-type label:hover:before{
-						background-position: 157px -2px !important;
+						background-position: 155px -1px !important;
 					}
 					.tire-type label:nth-child(2).active:before,.tire-type label:nth-child(2):hover:before {
-						background-position: -2px -2px !important;
+						background-position: -1px -1px !important;
 					}
 					.tire-type label:nth-child(3).active:before,.tire-type label:nth-child(3):hover:before {
-						background-position: 85px -3px !important;
+						background-position: 82px -2px !important;
 					}
 				.b-category .b-block .grey-block .filter-block .filter-item {
 					margin-bottom: 25px;
@@ -2666,10 +2680,10 @@ input:-moz-placeholder {
 					padding: 15px;
 				}
 				.b-cart .b-block table tr .title {
-					width: 45%;
+					width: 56%;
 				}
 				.b-cart .b-block table tr .price {
-					width: 40%;
+					width: 27%;
 				}
 					.b-cart .b-block table tr .title .img {
 						width: 140px;
@@ -3066,7 +3080,7 @@ input:-moz-placeholder {
 		background-position: -1px -1px !important;
 	}
 	.tire-type label:nth-child(3).active:before{
-		background-position: 83px -2px !important;
+		background-position: 82px -2px !important;
 	}
 
 	.b-header .b-header-main,

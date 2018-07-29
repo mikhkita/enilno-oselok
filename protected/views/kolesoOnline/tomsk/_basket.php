@@ -22,7 +22,7 @@ $dynamic = $this->getDynObjects(array(
 foreach ($goods as $good) : ?>
     <? $type = $good->good_type_id; $href = Yii::app()->createUrl('/kolesoOnline/detail',array('id' => ($good->code)?$good->code:$good->fields_assoc[3]->value,'type' => $type));?>
     <li class="clearfix">
-        <div class="img left" target="_blank" style="background-image: url(<? $images = $good->getImages(1, array("small"), NULL, NULL, true); echo $images[0]["small"];?>);" href="<?=$href?>"></div>
+        <div class="img left" target="_blank" style="background-image: url(<? $images = $good->getImages(1, array("small"), 1, NULL, true); echo $images[0]["small"];?>);" href="<?=$href?>"></div>
         <div class="b-desc left">
             <? 
                 if($type == 1) $title = $good->fields_assoc[16]->value." ".$good->fields_assoc[17]->value;

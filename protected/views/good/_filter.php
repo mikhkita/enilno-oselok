@@ -1,7 +1,7 @@
 <div style="display:none;">
 	<div class="b-popup-filter b-popup-good-filter b-popup">
 		<h1>Фильтр<a href="#" class="b-filter-clear-all" style="margin-left: 20px;">Сбросить выделение</a></h1>
-	<?=CHTML::beginForm(Yii::app()->createUrl('/good/adminindex',array('good_type_id' => $_GET['good_type_id'])),'POST',array('id'=>'b-filter-form'))?>
+	<?=CHTML::beginForm(Yii::app()->createUrl('/good/adminindex',array('good_type_id' => $_GET['good_type_id'],'archive' => (isset($_GET["archive"]))?$_GET["archive"]:false) ),'POST',array('id'=>'b-filter-form'))?>
 		<div class="row b-filter-top-buttons buttons">
 			<?=CHTML::submitButton('Применить')?>
 			<input type="hidden" name="filter-active" value="1">

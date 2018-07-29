@@ -359,6 +359,11 @@ class GoodFilter extends CActiveRecord
 			}
 		}
 
+		if( $good->fields_assoc[3]->value == "3348" ){
+        	// print_r(array("count" => $count, "sizes" => $sizes, "cap" => $cap, "good" => $good, "get_default" => $get_default, "adding" => $adding) );
+        	// die();
+        }
+
 		return $out;
 	}
 

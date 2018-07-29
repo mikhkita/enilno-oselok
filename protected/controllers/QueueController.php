@@ -142,7 +142,7 @@ class QueueController extends Controller
 		echo json_encode(array("result" => "success", "action" => "updateQueue"));
 	}
 
-	public function actionAdminIndex($partial = false, $category_id = 2048)
+	public function actionAdminIndex($partial = false, $category_id = 2047)
 	{
 		if( !$partial ){
 			$this->layout='admin';

@@ -14,7 +14,7 @@ class TestController extends Controller
     {
         return array(
             array('allow',
-                'users'=>array('*'),
+                'roles'=>array('root'),
             ),
         );
     }
@@ -52,6 +52,27 @@ class TestController extends Controller
         foreach ($models as $key => $value) {
             echo $value."<br>";
         }
+    }
+
+    public function actionAdminSitePhoto(){
+        $model = Image::model()->findAll("site=1");
+        $values = array();
+        foreach ($model as $i => $image){
+            array_push($values, array("image_id" => $image->id, "cap_id" => 1, "sort" => $image->sort));
+            array_push($values, array("image_id" => $image->id, "cap_id" => 2, "sort" => $image->sort));
+        }
+
+        Controller::insertValues(ImageCap::tableName(), $values);
+    }
+
+    public function actionAdminAvitoPhoto(){
+        $model = ImageCap::model()->findAll("cap_id=3");
+        $values = array();
+        foreach ($model as $i => $image){
+            array_push($values, array("image_id" => $image->image_id, "cap_id" => 4, "sort" => $image->sort));
+        }
+
+        Controller::insertValues(ImageCap::tableName(), $values);
     }
 
     public function actionModels(){
@@ -96,5 +117,13 @@ class TestController extends Controller
         $text = "Здравствуйте, обмен интересен?";
         $advert_id = "21910583";
         $drom->postComment($advert_id, $text);
+    }
+
+    public function actionAdminAvitoLogin(){
+        $avito = new Avito("tomsk:Sd8as9fhsd@91.226.83.143:9320");
+        $avito->setUser("tomskdiski@yandex.ru", "aksldjfng1");
+        $res = $avito->auth();
+
+        print_r($res);
     }
 }

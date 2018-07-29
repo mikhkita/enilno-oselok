@@ -559,6 +559,9 @@ class Good extends GoodFilter
 		$criteria->condition = "fields.attribute_id=3";
 		if($good_type_id && !empty($good_type_id)) $criteria->addInCondition('good_type_id',$good_type_id); 
 		$criteria->addInCondition('fields.'.$attribute->type->code.'_value',$good_codes); 
+		foreach ($good_codes as $key => $value)
+			$good_codes[$key] = "'".$value."'";
+		
 		$criteria->order = "field(fields.".$attribute->type->code."_value,".implode(",", array_reverse($good_codes)).") DESC, t.id DESC";
 		$temp = array();
 		$model = GoodFilter::model()->findAll($criteria);
@@ -612,7 +615,7 @@ class Good extends GoodFilter
 			}
 		}
 		$this->insertValues(GoodAttribute::tableName(),$fields);
-		return true;
+		return $model->id;
 	}
 
 	public function addAttribute($good_id,$attr_id,$attr_type,$value,$fields) {
@@ -634,7 +637,8 @@ class Good extends GoodFilter
 				$temp["variant_id"] = ($attr_id == 27) ? $model->attribute_1 : $model->variants[0]->variant_id; 
 				array_push($fields, $temp);
 			} else {
-				if($attr_id == 16 || $attr_id == 6) {
+				$allowed = ( Yii::app()->params["site"] == "shikon" )?array(6, 16, 17, 31, 32, 9):array(6, 16, 17);
+				if( in_array($attr_id, $allowed) ) {
 					$variant = new Variant;
 					$variant->value = $value;
 					$variant->sort = 999999;
@@ -780,6 +784,9 @@ class Good extends GoodFilter
 					$code."-4",
 					$code."-5"
 				);
+
+				foreach ($code as $i => $value)
+					$code[$i] = "'".$value."'";
 
 				if($model = Good::model()->with("fields")->findAll("good_type_id=1 AND archive=0 AND fields.attribute_id=3 AND fields.varchar_value IN (".implode(",",$code).")" ))
 					foreach ($model as $value) 

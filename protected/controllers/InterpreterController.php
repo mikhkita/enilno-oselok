@@ -91,7 +91,7 @@ class InterpreterController extends Controller
             }
         }
 
-        $criteria->order = 'id DESC';
+        $criteria->order = 'rank ASC';
 
         $criteria_inter = clone $criteria;
         $criteria_inter->addCondition("service=0");

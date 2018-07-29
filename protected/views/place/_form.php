@@ -29,7 +29,7 @@
 			<ul class="b-add-items">
 				<? foreach ($inter as $key => $value): ?>
 				<li>
-					<p><span><?=$value->code?> (<?=$value->interpreter->name?>)</span><a href="#" class="b-add-remove">Удалить</a></p>
+					<p><span><?=$value->code?> (<?=$value->interpreter->id?> <?=$value->interpreter->name?>)</span><a href="#" class="b-add-remove">Удалить</a></p>
 					<input type="hidden" name="inter[<?=$value->interpreter_id?>]" value="<?=$value->code?>">
 				</li>
 		        <? endforeach; ?>
@@ -40,7 +40,7 @@
 			<input type="text" class="left" name="add-code" id="add-code">
 			<select name="add" class="left" id="add-inter">
 				<? foreach ($allInter as $key => $value): ?>
-					<option value="<?=$value->id?>"><?=$value->name?></option>
+					<option value="<?=$value->id?>"><?=$value->id?> <?=$value->name?></option>
 		        <? endforeach; ?>
 			</select>
 			<div class="buttons left">

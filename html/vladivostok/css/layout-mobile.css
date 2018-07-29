@@ -565,6 +565,8 @@ input:-moz-placeholder {
 							box-sizing: border-box;
 							bottom: 65px;
 							top: auto !important;
+							padding: 30px 0px;
+							background: #db001b;
 						}
 							.b-menu-call:active{
 								bottom: 63px !important;
@@ -779,7 +781,8 @@ padding-top: 30px;}
 // 	width: 712px;
 // 	margin-left: -12px;
 // }
-	.goods .gradient-grey {
+	.goods .gradient-grey,
+	.popular-good .goods .gradient-grey {
 		float: left;
 		width: 337px !important;
 		position: relative;
@@ -789,11 +792,19 @@ padding-top: 30px;}
 		overflow: hidden;
 		border-radius: 0px;
 	}	
-
-	.goods .gradient-grey:nth-child(4n) {
+	.b-get-request{
+		display: none;
+	}
+	.b-header .b-sub-menu .b-block ul.b-sub-menu-list li a, .b-header .b-sub-menu .b-block .fixed-link{
+		font-size: 32px;
+		line-height: 45px;
+	}
+	.goods .gradient-grey:nth-child(4n),
+	.popular-good .goods .gradient-grey:nth-child(5n) {
 		margin-right: 18px;
 	}
-	.goods .gradient-grey:nth-child(2n) {
+	.goods .gradient-grey:nth-child(2n),
+	.popular-good .goods .gradient-grey:nth-child(2n) {
 		margin-right: 0px;
 	}
 		.goods .gradient-grey.b-good-type-2 h6, .goods .gradient-grey.b-good-type-3 h6{
@@ -804,7 +815,8 @@ padding-top: 30px;}
 			height: 250px;
 			margin: 0px;
 		}
-		.goods .gradient-grey .params-cont {
+		.goods .gradient-grey .params-cont,
+		.popular-good .goods .gradient-grey .params-cont {
 			width: 337px;
 		}
 		.goods .gradient-grey .params-cont a.params-cont-a{
@@ -869,7 +881,7 @@ padding-top: 30px;}
 	    text-transform: uppercase;
 	    font-weight: 500;
 	    margin-top: 0px;
-	    padding: 22px 0 22px;
+	    padding: 22px 0 22px !important;
 	    display: block;
 	    width: 100%;
 	}
@@ -1991,7 +2003,7 @@ padding-top: 30px;}
 	display: block;
 	text-decoration: none !important;
 	position: relative;
-	margin-top: 18px;
+	margin-top: 23px;
 }
 	.b-logo-tomsk i{
 		display: block;
@@ -2017,7 +2029,7 @@ padding-top: 30px;}
 	.b-logo-tomsk div.b-logo-tomsk-koleso{
 		font-size: 46px;
 		line-height: 50px;
-		padding-top: 2px;
+		padding-top: 24px;
 	}
 	.b-logo-tomsk div.b-logo-tomsk-tomsk{letter-spacing: 0px;margin-top: -1px;}
 		.b-logo-tomsk div.b-logo-tomsk-tomsk span{
@@ -2082,10 +2094,10 @@ padding-top: 30px;}
 }
 	.b-mobile-menu ul{
 		margin-top: 20px;
-		border-top: 2px solid rgba(255, 255, 255, 0.53);
+		/* border-top: 2px solid rgba(255, 255, 255, 0.53); */
 		width: 600px;
 		display: inline-block;
-		padding-top: 20px;
+		padding-top: 90px;
 	}
 		.b-mobile-menu ul li{
 			/*margin-bottom: 30px;*/
@@ -2101,7 +2113,7 @@ padding-top: 30px;}
 			}
 				.b-mobile-menu ul li a:hover,
 				.b-mobile-menu ul li a:active{
-					color: #FFB800;
+					color: #a2a2a2;
 				}
 			.b-mobile-menu ul li:last-child a{
 				border-bottom: 0px;
@@ -2110,7 +2122,7 @@ padding-top: 30px;}
 	width: 400px;
 	height: 200px;
 	background-size: 400px;
-	display: inline-block !important;
+	display: none;
 	float: none !important;
 	margin-top: 60px;
 	/* border-top: 2px solid #FFF; */

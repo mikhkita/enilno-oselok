@@ -126,7 +126,7 @@ class AuctionController extends Controller
 
 			if( intval($fields["main"]["state"]) == 0 ){ // ПОПРАВИТЬ НА 0
 				if( strtotime($fields["main"]["date"]) < time()+$this->minutes_before*60 ){
-					$result = $yahon->setBid($auction->code,$fields["main"]["current_price"],$fields["other"]["step"],$auction->price);
+					$result = $yahon->setBid($auction->code, $fields["main"]["current_price"], $fields["other"]["step"], $auction->price);
 
 					Log::debug("state=".$result["result"]."; cur_price = ".$cur_price);
 						

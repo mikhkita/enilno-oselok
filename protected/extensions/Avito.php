@@ -2,6 +2,7 @@
 
 Class Avito {
     private $login = "";
+    private $name = "";
     private $password = "";
     public $curl;
     public $captcha_curl;
@@ -21,16 +22,17 @@ Class Avito {
         $this->captcha_curl = new Curl();
     }
 
-    public function setUser($login,$password){
+    public function setUser($login,$password,$name){
     	$this->curl->changeCookies($login);
         $this->login = $login;
         $this->password = $password;
+        $this->name = $name;
     }
 
     public function auth(){
     	$html = str_get_html($this->curl->request("https://www.avito.ru/"));
 
-        if( is_object($html) && $html->find(".userinfo-details",0) && trim($html->find(".userinfo-details",0)->plaintext) == $this->login )
+        if( is_object($html) && $html->find('a[data-marker="header/username-button"]',0) && trim($html->find('a[data-marker="header/username-button"]',0)->plaintext) == $this->login )
         	return true;
 
         echo "Авторизация ".$this->login;
@@ -41,7 +43,23 @@ Class Avito {
 			'login'=>$this->login,
 			'password'=>$this->password
         );
+        print_r($params);
+        echo "<br>";
+        print_r($this->curl->request("https://www.avito.ru/profile/login",$params));
+
         return $this->curl->request("https://www.avito.ru/profile/login",$params);
+    }
+
+    public function isAuth(){
+    	$result = $this->curl->request("https://www.avito.ru/");
+    	$html = str_get_html($result);
+    	print_r($result);
+    	// var_dump( trim($html->find('a[data-marker="header/username-button"]',0)->plaintext) . " " . $this->name );
+
+
+        if( is_object($html) && ( ($html->find('a[data-marker="header/username-button"]',0) && trim($html->find('a[data-marker="header/username-button"]',0)->plaintext) == $this->name) || ( $html->find(".header-services-profile__username",0) && trim($html->find(".header-services-profile__username",0)->plaintext) == $this->name ) ) )
+        	return true;
+        return false;
     }
 
     public function addAdvert($params,$images = NULL){
@@ -77,12 +95,13 @@ Class Avito {
 
 	    $result = $this->curl->request("https://www.avito.ru/additem",$params);
 	    sleep(rand(1,5));
-	    print_r($result);
+	    // print_r($result);
 		$html = str_get_html($result);
 		Log::debug("Шаг 4"."<br>");
 		$captcha = $html->find('.form-captcha-image',0)->src;
+		print_r('https://www.avito.ru'.$captcha);
 
-        $out = $this->curl->request('https://www.avito.ru'.$captcha);
+        $out = $this->curl->request('https://www.avito.ru'.$captcha, "image");
         sleep(rand(1,5));
         Log::debug("Шаг 5"."<br>");
         $captcha_name = md5(time()."koleso");
@@ -156,8 +175,9 @@ Class Avito {
 				return false;
 			}
 		} else {
-			unlink($captcha_path);
-			// Log::debug("Вошли 6");
+			print_r($captcha);
+			// unlink($captcha_path);
+			Log::debug("Вошли 6");
 			return false;
 		}
     }
@@ -165,13 +185,23 @@ Class Avito {
     public function updateAdvert($advert_id,$params,$images = NULL,$only_images = false){
     	$result = $this->curl->request("https://www.avito.ru/".$advert_id);
     	sleep(rand(1,5));
-		$html = str_get_html($result);
+
+        print_r("https://www.avito.ru/".$advert_id);
+        print_r($result);
+        echo "<br>--------------------------------------------------------<br>";
+        $html = str_get_html($result);
+
+        // $html = $this->upAdvert($advert_id, $params);
+
 		if( !$html->find('meta[property="og:url"]',0) ) return NULL;
 		$href = $html->find('meta[property="og:url"]',0)->getAttribute('content');
 		$href = $href."/edit";
+		print_r($href."<br>");
+		echo "<br>--------------------------------------------------------<br>";
 
 		$result = $this->curl->request($href);
-		// print_r($result);
+		print_r($result);
+		echo "<br>--------------------------------------------------------<br>";
 		$html = str_get_html( $result );
 		$version = $html->find('input[name="version"]',0)->value;
 		if($images !== NULL) {
@@ -187,25 +217,47 @@ Class Avito {
 
 		$result = $this->curl->request($href,$params);
 		sleep(rand(1,5));
-   		// print_r($result);
+   		print_r($result);
+   		echo "<br>--------------------------------------------------------<br>";
    		$result = $this->curl->request($href."/confirm",array('done' => "",'subscribe-position' => '1'));
    		sleep(rand(1,5));
 		$html = str_get_html($result);
-		// print_r($result);
+		print_r($result);
+		echo "<br>--------------------------------------------------------<br>";
 		$id = $html->find('.content-text a[rel="nofollow"]',0)->href;
 		$id = end(explode("_", $id));
-		// print_r($id);
+		print_r($id);
+		echo "<br>--------------------------------------------------------<br>";
 		if( $html->find(".alert-warning-big a",0) && $html->find(".alert-warning-big a",0)->plaintext == "активировать его" ){
 			$result = $this->curl->request("https://www.avito.ru/profile/items/old?item_id[]=$advert_id&start");
 		}
 		return $id;
     }
 
+    public function upAdvert($advert_id, $fields){
+    	$result = $this->curl->request("https://www.avito.ru/".$advert_id);
+    	sleep(rand(1,5));
+        print_r("https://www.avito.ru/".$advert_id);
+        print_r($result);
+        $html = str_get_html($result);
+
+    	if(is_object($html) && is_object($html->find('.has-bold',0)) && trim($html->find('.has-bold',0)->plaintext) == "Срок размещения этого объявления истёк"){
+			$params = array("fees[packageId]" => $fields["fees[packageId]"]);
+    		$result = $this->curl->request("https://www.avito.ru/account/pay_fee?item_id=".$advert_id, $params);
+
+			$result = $this->curl->request("https://www.avito.ru/".$advert_id);
+        	sleep(rand(1,5));
+        	$html = str_get_html($result);
+		}
+		return $html;
+    }
+
    	public function updatePrice($advert_id,$params,$images = NULL){	
     	$result = $this->curl->request("https://www.avito.ru/".$advert_id);
     	sleep(rand(1,5));
     	// echo "1111";
-    	// print_r($result);
+    	print_r($result);
+    	echo "<br>--------------------------------------------------------<br>";
 		$html = str_get_html($result);
 		if( !$html->find('meta[property="og:url"]',0) ) return NULL;
 		$href = $html->find('meta[property="og:url"]',0)->getAttribute('content');
@@ -213,7 +265,8 @@ Class Avito {
 		$result = $this->curl->request($href);
 		sleep(rand(1,5));
 		// echo "2222";
-		// print_r($result);
+		print_r($result);
+		echo "<br>--------------------------------------------------------<br>";
 		$html = str_get_html( $result , true, true, DEFAULT_TARGET_CHARSET, false);
 		$fields = Advert::model()->with('place.interpreters')->find("url=".$advert_id);
 		foreach ($fields->place->interpreters as $key => $value) {
@@ -230,7 +283,8 @@ Class Avito {
 					$params[$value->code] = $html->find('[name="'.$value->code.'"] option[selected=""]',0)->value;
 			}
 		}
-		// var_dump($params);
+		var_dump($params);
+		echo "<br>--------------------------------------------------------<br>";
 		// $params['price'] = $price;
 		unset($params['login']);
 		if($images !== NULL) {
@@ -249,16 +303,19 @@ Class Avito {
 		sleep(rand(1,5));
 
 		// echo "3333";
-		// print_r($result);
+		print_r($result);
+		echo "<br>--------------------------------------------------------<br>";
    		$result = $this->curl->request($href."/confirm",array('done' => "",'subscribe-position' => '1'));
    		// echo "4444";
-   		// print_r($result);
+   		print_r($result);
+   		echo "<br>--------------------------------------------------------<br>";
 		$html = str_get_html($result);
 
 		$id = $html->find('.content-text a[rel="nofollow"]',0)->href;
 		$id = end(explode("_", $id));
 		// echo "5555";
-		// print_r($id);
+		print_r($id);
+		echo "<br>--------------------------------------------------------<br>";
 		if( $html->find(".alert-warning-big a",0) && $html->find(".alert-warning-big a",0)->plaintext == "активировать его" ){
 			$result = $this->curl->request("https://www.avito.ru/profile/items/old?item_id[]=$advert_id&start");
 		}
@@ -281,11 +338,28 @@ Class Avito {
                 Log::debug("Отправка фотки");
             	unlink($filename);
             }
-            shuffle($img);
+            // shuffle($img);
             foreach ( $img as $i => $image) {
 				$params['images['.$i.']'] = $image;
 			}
             return $params;
+        }
+    }
+
+    public function resizeImages($images = NULL) {
+        if($images) {
+        	$img = array();
+            foreach ($images as $key => $image_path) {
+            	if($key == 5) break;
+            	$filename = Yii::app()->params['tempFolder']."/".md5(time().rand()).".jpg";
+	            $resizeObj = new Resize(Yii::app()->basePath.DIRECTORY_SEPARATOR.'..'.$image_path);
+	            $resizeObj -> resizeImageAvito();
+	            $quality = rand(65,95);
+	            $resizeObj -> saveImage($filename, $quality);
+	            array_push($img, "/".$filename);
+            }
+
+            return $img;
         }
     }
 
@@ -311,24 +385,17 @@ Class Avito {
 		if( !is_object($html) ) return false;
 		$delete = trim($html->find('.has-bold',0)->plaintext);
 
+		$is404 = $html->find('.b-404', 0);
+		if( isset($is404) ) 
+			return true;
+
 		$result = $this->curl->request("https://www.avito.ru/profile/items/old?item_id[]=$advert_id&remove");
-		return ($delete == "Срок размещения этого объявления истёк" || $delete == "Вы закрыли это объявление" || $delete == "Вы удалили это объявление навсегда.");
+		return ($delete == "Срок размещения этого объявления истёк" || $delete == "Вы закрыли это объявление" || $delete == "Вы удалили это объявление навсегда." || $delete == "Вы удалили это объявление");
     }
 
-    public function up($advert_id){
-
-    	$i = 0;
-    	$tog = false;
-    	do {
-    		$i++;
-			$result = $this->curl->request("https://www.avito.ru/profile/items/old?item_id[]=$advert_id&start");
-			sleep(rand(1,5));
-        	$html = str_get_html($this->curl->request("https://www.avito.ru/$advert_id"));
-        	$tog = ($html->find(".alert-red",0))?false:true;
-    		if( $i > 1 ) sleep(10);
-    	}while( $i < 3 && !$tog );
-        
-        return $tog;
+    public function up($advert_id, $fields){
+    	$html = $this->upAdvert($advert_id, $fields);
+    	return ( is_object($html->find('.item_self-ops',0)) )?true:false;
     }
 
     public function parseMessages(){
@@ -357,10 +424,18 @@ Class Avito {
 		$fields['road_id'] = "";
 		$fields['params[5]'] = $this->cat_codes[intval($good_type_id)];
 		$fields['params[709]'] = $this->dir_codes[intval($good_type_id)];
+		$fields['params[2811]'] = "19989";
 		$fields['image'] = "";
 		$fields['videoUrl'] = "";
 		$fields['service_code'] = 'free';
         return $fields;
+    }
+
+    public function convertFields($fields){
+    	$out = array();
+    	foreach ($fields as $key => $value)
+    		$out[str_replace(array("[","]"), array("",""), $key)] = $value;
+    	return $out;
     }
 
     public function self(){

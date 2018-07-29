@@ -111,6 +111,10 @@ class Image extends CActiveRecord
 
 	public function updateImages($good)
     {   
+    	if( is_string($good) || is_numeric($good) ){
+    		$good = Good::model()->findByPk($good);
+    	}
+
         if( is_object($good) ){
             $code = $good->fields_assoc[3]->value;
             $good_type_id = $good->good_type_id;
@@ -118,6 +122,7 @@ class Image extends CActiveRecord
             $code = $good["code"];
             $good_type_id = $good["good_type_id"];
         }
+        
         $imgs = array();
         $path = Yii::app()->params["imageFolder"]."/".GoodType::getCode($good_type_id);
         if($extra) {
@@ -128,6 +133,7 @@ class Image extends CActiveRecord
         $dir2 = $dir;
         $index = 1;
         Image::model()->deleteAll("good_id='$good_id'");
+        
         if (is_dir($dir)) {
             $imgs = array_values(array_diff(scandir($dir), array('..', '.', 'Thumbs.db', '.DS_Store')));
             $dir = Yii::app()->request->baseUrl."/".$path."/".$code;
@@ -165,6 +171,13 @@ class Image extends CActiveRecord
         }
     }
 
+    public function clearCache($image_id = NULL){
+		if( $image_id === NULL ) $image_id = $this->id;
+		if( $image_id && Cache::model()->count("image_id='$image_id'") ){
+			Cache::model()->updateAll(array("hash"=>"NULL"),"image_id='$image_id'");
+		}
+	}
+
     public function remove($id, $path){
     	$image = Image::model()->with("caps","cache")->findByPk($id);
 
@@ -201,14 +214,16 @@ class Image extends CActiveRecord
  		if( file_exists($filename_to) ){
  			Controller::removeDirectory($filename_to);
  		}
- 		rename($filename_from, $filename_to);
+ 		if( file_exists($filename_from) )
+ 			rename($filename_from, $filename_to);
 
  		$filename_from = Yii::app()->params["cacheFolder"]."/".Controller::getTypeCode($good_type_id)."/".$from;
  		$filename_to = Yii::app()->params["cacheFolder"]."/".Controller::getTypeCode($good_type_id)."/".$to;
  		if( file_exists($filename_to) ){
  			Controller::removeDirectory($filename_to);
  		}
- 		rename($filename_from, $filename_to);
+ 		if( file_exists($filename_from) )
+ 			rename($filename_from, $filename_to);
  	}
 
 	/**

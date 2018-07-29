@@ -4,14 +4,18 @@
 	<table class="b-table" border="1">
 		<tr>
 			<th style="width: 30px;"><? echo $labels['id']; ?></th>
+			<th style="width: 30px;"><? echo $labels['rank']; ?></th>
 			<th><? echo $labels['name']; ?></th>
+			<th><? echo $labels['category_id']; ?></th>
 			<th><? echo $labels['good_type_id']; ?></th>
 			<th><? echo $labels['template']; ?></th>
 			<th style="min-width: 120px;">Действия</th>
 		</tr>
 		<tr class="b-filter">
 			<td></td>
+			<td></td>
 			<td><?php echo CHtml::activeTextField($filter, 'name'); ?></td>
+			<td><?php echo CHtml::activeDropDownList($filter, 'category_id', array(""=>"Все группы")+CHtml::listData(InterpreterCategory::model()->findAll(), 'id', 'name')); ?></td>
 			<td><?php echo CHtml::activeDropDownList($filter, 'good_type_id', array(""=>"Все типы товаров")+CHtml::listData(GoodType::model()->findAll(), 'id', 'name')); ?></td>
 			<td><?php echo CHtml::activeTextField($filter, 'template'); ?></td>
 			<td><a href="#" class="b-clear-filter">Сбросить фильтр</a></td>
@@ -20,7 +24,9 @@
 			<? foreach ($inter as $i => $item): ?>
 				<tr<?if(isset($_GET["id"]) && $item->id == $_GET["id"]):?> class="b-refresh"<?endif;?>>
 					<td><?=$item->id?></td>
+					<td><?=$item->rank?></td>
 					<td class="align-left"><?=$item->name?></td>
+					<td class="align-left"><?=$item->category->name?></td>
 					<td class="align-left"><?=$item->goodType->name?></td>
 					<td class="align-left b-inter-visual-highlight"><? if($this->checkAccess($item,true)) echo $this->visualInter($this->replaceToBr($this->cutText($item->template,1000))); ?></td>
 					<td class="b-tool-cont">
@@ -38,7 +44,9 @@
 			<? foreach ($service as $i => $item): ?>
 				<tr<?if(isset($_GET["id"]) && $item->id == $_GET["id"]):?> class="b-refresh"<?endif;?>>
 					<td><?=$item->id?></td>
+					<td><?=$item->rank?></td>
 					<td class="align-left"><?=$item->name?></td>
+					<td class="align-left"><?=$item->category->name?></td>
 					<td class="align-left"><?=$item->goodType->name?></td>
 					<td class="align-left b-inter-visual-highlight"><? if($this->checkAccess($item,true)) echo $this->visualInter($this->replaceToBr($this->cutText($item->template,1000))); ?></td>
 					<td class="b-tool-cont">

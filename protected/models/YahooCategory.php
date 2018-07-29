@@ -11,6 +11,13 @@
  */
 class YahooCategory extends CActiveRecord
 {
+	public $rate = "";
+	public $rates = array(
+		6 => "Колёса и диски эконом",
+		7 => "Шины + свои диски",
+		9 => "Диски под шиномонтаж"
+	);
+
 	/**
 	 * @return string the associated database table name
 	 */
@@ -27,13 +34,13 @@ class YahooCategory extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('code, name, max_price', 'required'),
-			array('max_price', 'numerical', 'integerOnly'=>true),
+			array('code, name, max_price, rate_id', 'required'),
+			array('max_price, rate_id', 'numerical', 'integerOnly'=>true),
 			array('code', 'length', 'max'=>11),
 			array('name', 'length', 'max'=>255),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, code, name, max_price', 'safe', 'on'=>'search'),
+			array('id, code, name, max_price, rate_id', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -59,6 +66,7 @@ class YahooCategory extends CActiveRecord
 			'code' => 'Код категории',
 			'name' => 'Название',
 			'max_price' => 'Максимальная цена',
+			'rate_id' => 'Тариф',
 		);
 	}
 
@@ -84,10 +92,17 @@ class YahooCategory extends CActiveRecord
 		$criteria->compare('code',$this->code,true);
 		$criteria->compare('name',$this->name,true);
 		$criteria->compare('max_price',$this->max_price);
+		$criteria->compare('rate_id',$this->rate_id);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 		));
+	}
+
+	public function afterFind(){
+		parent::afterFind();
+
+		$this->rate = $this->rates[$this->rate_id];
 	}
 
 	/**

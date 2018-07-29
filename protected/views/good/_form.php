@@ -9,6 +9,9 @@
 	<?if(isset($_GET["to_task"])):?>
 		<input type="hidden" name="to_task" value="<?=$_GET["to_task"]?>">
 	<?endif;?>
+	<?if(isset($_GET["archive"])):?>
+		<input type="hidden" name="archive" value="<?=$_GET["archive"]?>">
+	<?endif;?>
 	<div class="row buttons">
 		<?php echo CHtml::submitButton($model->isNewRecord ? 'Добавить' : 'Сохранить'); ?>
 		<input type="button" onclick="$.fancybox.close(); return false;" value="Отменить">
@@ -40,11 +43,11 @@
 							<?php echo Chtml::dropDownList("Good_attr[".$item->attribute_id."][single]", $attr_id, (($only_cities)?(array("-"=>"Нет")):(array())) + $dropdown[$item->attribute_id],array('class'=> 'select2',"empty" => "Не задано")); ?>
 						<? endif; ?>
 					<? elseif($item->attribute->type->code == "text"):?>
-						<?php echo Chtml::textArea("Good_attr[".$item->attribute_id."]",$attr_id,array('rows'=>4,"required"=>($item->attribute_id==3), "disabled" => (!$model->isNewRecord && $item->attribute_id==3 && 0) )); ?>
+						<?php echo Chtml::textArea("Good_attr[".$item->attribute_id."]",$attr_id,array('rows'=>4,"required"=>($item->attribute_id==3), "disabled" => (!$model->isNewRecord && $item->attribute_id==3 && 0), "class" => ($item->attribute->width == -1)?"double":"" )); ?>
 					<? elseif($item->attribute->type->code == "int"):?>
-						<?php echo Chtml::numberField("Good_attr[".$item->attribute_id."]",$attr_id,array('maxlength'=>255,"required"=>($item->attribute_id==3), "disabled" => (!$model->isNewRecord && $item->attribute_id==3 && 0) )); ?>
+						<?php echo Chtml::numberField("Good_attr[".$item->attribute_id."]",$attr_id,array('maxlength'=>255,"required"=>($item->attribute_id==3), "disabled" => (!$model->isNewRecord && $item->attribute_id==3 && 0), "class" => ($item->attribute->width == -1)?"double":"" )); ?>
 					<? else: ?>
-						<?php echo Chtml::textField("Good_attr[".$item->attribute_id."]",$attr_id,array('maxlength'=>255,"required"=>($item->attribute_id==3), "disabled" => (!$model->isNewRecord && $item->attribute_id==3 && 0) )); ?>
+						<?php echo Chtml::textField("Good_attr[".$item->attribute_id."]",$attr_id,array('maxlength'=>255,"required"=>($item->attribute_id==3), "disabled" => (!$model->isNewRecord && $item->attribute_id==3 && 0), "class" => ($item->attribute->width == -1)?"double":"" )); ?>
 					<?endif;?>
 				</div>
 			<?endif;?>

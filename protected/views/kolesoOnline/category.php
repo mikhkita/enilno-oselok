@@ -40,14 +40,16 @@
                         <div class="clearfix">
                         <? if($_GET['type'] == 1 || $_GET['type'] == 3): ?>
                             <div class="tire-type clearfix">    
-                                <? foreach ($filter[$params[$_GET['type']]["SEASON"]] as $key => $col): ?>
-                                    <? foreach ($col as $item): ?>     
-                                        <label>
-                                            <?=$item['value']?>
-                                            <input type="checkbox" name="arr[<?=$params[$_GET['type']]["SEASON"]?>][]" value="<?=$item['variant_id']?>" <?=$item['checked']?>>
-                                        </label>
+                                <? if($filter): ?>
+                                    <? foreach ($filter[$params[$_GET['type']]["SEASON"]] as $key => $col): ?>
+                                        <? foreach ($col as $item): ?>     
+                                            <label>
+                                                <?=$item['value']?>
+                                                <input type="checkbox" name="arr[<?=$params[$_GET['type']]["SEASON"]?>][]" value="<?=$item['variant_id']?>" <?=$item['checked']?>>
+                                            </label>
+                                        <? endforeach; ?>
                                     <? endforeach; ?>
-                                <? endforeach; ?>
+                                <? endif; ?>
                                 <!-- <input id="tire-spike" type="checkbox" name="arr[23][]" value="762">
                                 <label for="tire-spike">Зимние шипованные</label>
                                 <input id="tire-summer" type="checkbox" name="arr[23][]" value="463">
@@ -63,18 +65,20 @@
                                     <? if($mobile): ?>
                                     <h4><?=$label?></h4>
                                     <? endif; ?>
-                                    <? foreach ($filter[$attr_id] as $key => $col): ?>
-                                        <ul class="wave">
-                                            <? foreach ($col as $item): ?>
-                                                <li>
-                                                    <div>
-                                                            <input type="checkbox" id="var_<?=$item['variant_id']?>" name="arr[<?=$attr_id?>][]" value="<?=$item['variant_id']?>" <?=$item['checked']?>>
-                                                        <span onselectstart="return false;"><?=str_replace(" ", "&nbsp;", $item['value'])?></span>
-                                                    </div>
-                                                </li>
-                                            <? endforeach; ?>
-                                        </ul>
-                                    <? endforeach; ?>
+                                    <? if($filter): ?>
+                                        <? foreach ($filter[$attr_id] as $key => $col): ?>
+                                            <ul class="wave">
+                                                <? foreach ($col as $item): ?>
+                                                    <li>
+                                                        <div>
+                                                                <input type="checkbox" id="var_<?=$item['variant_id']?>" name="arr[<?=$attr_id?>][]" value="<?=$item['variant_id']?>" <?=$item['checked']?>>
+                                                            <span onselectstart="return false;"><?=str_replace(" ", "&nbsp;", $item['value'])?></span>
+                                                        </div>
+                                                    </li>
+                                                <? endforeach; ?>
+                                            </ul>
+                                        <? endforeach; ?>
+                                    <? endif; ?>
                                     <? if($mobile): ?>
                                     <a href="#" class="b-variants-close b-orange-butt">Выбрать</a>
                                     <? endif; ?>

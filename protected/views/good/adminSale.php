@@ -1,5 +1,5 @@
 <div class="b-popup">
-    <h1>Продажа</h1>
+    <h1>Продажа (<?=$good->type->name?> <?=$good->fields_assoc[3]->value?>)</h1>
     <div class="form">
         <?php $form=$this->beginWidget('CActiveForm', array(
         	'id'=>'faculties-form',

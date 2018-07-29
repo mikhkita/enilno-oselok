@@ -19,6 +19,7 @@ class User extends CActiveRecord
 
 	public $prevRole = null;
 	public $prevPass = null;
+	public $rules = array();
 
 	/**
 	 * @return string the associated database table name

@@ -13,7 +13,7 @@ class GoodController extends Controller
 	{
 		return array(
 			array('allow',
-				'actions'=>array('adminIndex','adminPhoto','adminGetNextPhoto','adminCheckCode', 'adminPhotoUpdate','adminToArchive','adminChangeType','adminTest','updatePrices','updateAuctionLinks','adminCreate','adminUpdate','adminDelete','adminEdit','getAttrType','getAttr','adminAdverts','adminUpdateImages',"adminAddCheckbox","adminRemoveCheckbox","adminAddAllCheckbox","adminRemoveAllCheckbox", "adminRemoveManyCheckbox",'adminUpdateAll','adminAddSomeCheckbox','adminAddManyCheckbox','adminUpdateAdverts','adminViewSettings','adminSold','adminArchive','adminJoin','adminDeleteAll','adminSale','adminCustomer','adminArchiveAll','adminSaleTable','adminSaleDelete',"adminPhotoEdit","adminOrder",'adminContact','adminOrderTable','adminOrderDelete','adminGoodToOrder'),
+				'actions'=>array('adminIndex','adminPhoto','adminGetNextPhoto','adminPhotoDownload','adminCheckCode', 'adminPhotoUpdate', 'adminPhotoRotate','adminToArchive','adminChangeType','adminTest','updatePrices','updateAuctionLinks','adminCreate','adminUpdate','adminDelete','adminEdit','getAttrType','getAttr','adminAdverts','adminUpdateImages',"adminAddCheckbox","adminRemoveCheckbox","adminAddAllCheckbox","adminRemoveAllCheckbox", "adminRemoveManyCheckbox",'adminUpdateAll','adminAddSomeCheckbox','adminAddManyCheckbox','adminUpdateAdverts','adminViewSettings','adminSold','adminArchive','adminJoin','adminDeleteAll','adminSale','adminCustomer','adminArchiveAll','adminSaleTable','adminSaleDelete',"adminPhotoEdit","adminOrder",'adminContact','adminOrderTable','adminOrderDelete','adminGoodToOrder'),
 				'roles'=>array('manager'),
 			),
 			array('allow',
@@ -26,24 +26,17 @@ class GoodController extends Controller
 		);
 	}
 
-	public function actionAdminArchive($id = NULL, $good_type_id) 
+	public function actionAdminArchive($id = NULL) 
 	{
-		$goodType = GoodType::model()->with("fields")->findByPk($good_type_id);
-		if($id) {
-			$model = $this->loadModel($id);
-			$model->archive = 0;
-			$model->date = NULL;
-			$model->save();
-			Sale::model()->deleteByPk($id);
+		if( $id ){
+			if( Good::model()->updateAll(array("archive" => 0), "id='$id'") ){
+				echo json_encode(array(
+					"result" => "success",
+					"action" => "delete", 
+					"selector" => "#id-".$id
+				));
+			}
 		}
-		$goods = Good::model()->with(array("fields.variant","fields.attribute","sale"))->findAll(array("condition" => "good_type_id=".$good_type_id." AND archive=1","order" => "t.date DESC"));
-		$options = array(
-			'data'=>$goods,
-			'name'=>$goodType->name
-		);
-
-		$this->render('adminArchive',$options);
-
 	}
 
 	public function actionAdminSaleTable($good_type_id = NULL,$partial = NULL) 
@@ -107,7 +100,8 @@ class GoodController extends Controller
 
 			$this->renderPartial('adminSale',array(
 				'model'=>$model,
-				'cities' => $cities
+				'cities' => $cities,
+				'good' => $this->loadModel($id)
 			));
 		}
 	}
@@ -283,7 +277,7 @@ class GoodController extends Controller
 
 	}
 
-	public function actionAdminUpdate($id, $good_type_id, $attributes = NULL)
+	public function actionAdminUpdate($id, $good_type_id, $attributes = NULL, $archive = false)
 	{
 		$view = array(
 			1 => array(3,26,27,16,17,9,8,7,28,10,29,11,20,36,43,101,98,110),
@@ -341,7 +335,7 @@ class GoodController extends Controller
 			if( isset($_POST["to_task"]) ){
 				$this->redirect( Yii::app()->createUrl('task/adminindex', array('partial' => true, 'get_next' => $_POST["to_task"])) );
 			}else{
-				$this->redirect( Yii::app()->createUrl('good/adminindex',array('good_type_id'=>$good_type_id,'partial'=>true,'GoodFilter_page' => $_GET["GoodFilter_page"])) );
+				$this->redirect( Yii::app()->createUrl('good/adminindex',array('good_type_id'=>$good_type_id,'archive' => $archive,'partial'=>true,'GoodFilter_page' => $_GET["GoodFilter_page"])) );
 			}
 		}else{
 			$fields = $model->type->fields;
@@ -523,7 +517,7 @@ class GoodController extends Controller
 		}
 		$Good_attr = $_GET["Good_attr"];
 
-		$good = $this->loadModel($id);
+		$good = $this->loadModel($id, false);
 
 		if( !$good ){
 			echo json_encode(array("result" => "error", "message" => "Не найден товар с ID=$id"));
@@ -722,7 +716,7 @@ class GoodController extends Controller
 		));
 	}
 
-	public function actionAdminIndex($partial = false, $good_type_id = false,$sort_field = NULL,$sort_type = "ASC",$with_photos = NULL)
+	public function actionAdminIndex($partial = false,$good_type_id = false,$sort_field = NULL,$sort_type = "ASC",$with_photos = NULL,$archive = false)
 	{
 		$attr_arr = 'filter';
 		$int_attr_arr = "int";
@@ -815,11 +809,14 @@ class GoodController extends Controller
 			if( $filter_new_only )
 				$filter_params["not_contain"] = 107;
 
+			if( $archive )
+				$filter_params["archive"] = 1;				
+
 			$goods = Good::model()->filter($filter_params)->sort( 
 				$sort
 			)->getPage(
 				array(
-			    	'pageSize'=>250,
+			    	'pageSize'=>$this->getParam( "VIEW", "GOOD_COUNT", true ),
 			    ), 
 			    $this->getUserParam("GOOD_TYPE_".$good_type_id),
 			    true
@@ -853,7 +850,8 @@ class GoodController extends Controller
 			'sort_field' => $sort['field'],
 			'sort_type' => $sort_type,
 			'with_photos' => $with_photos,
-			'export' => $export
+			'export' => $export,
+			'archive' => $archive
 		);
 
 		if( !$partial ){
@@ -982,6 +980,15 @@ class GoodController extends Controller
 		}
 	}
 
+	public function actionAdminPhotoDownload($file){
+		if( substr($file, 0, 1) == "/" ) $file = substr($file, 1);
+
+		header('Content-Type: image/jpeg');
+		header("Content-Length:".filesize($file));
+		header('Content-Disposition: attachment; filename="'.$file.'"');
+		readfile($file); 
+	}
+
 	public function actionAdminPhotoUpdate($id){
 		$attribute = Attribute::model()->with("type")->find("t.id=3");
 		$fields = Yii::app()->db->createCommand()->select($attribute->type->code.'_value')->from(GoodAttribute::tableName().' t')->where("t.attribute_id=3 AND t.good_id=$id")->queryAll();
@@ -1021,7 +1028,7 @@ class GoodController extends Controller
 					array_push($values, array($image,1,1,$i+1,1));
 				}
 			}
-			if( count($image_ids) )
+			if( count($image_ids) && $this->access("photo", "cap") )
 				ImageCap::model()->deleteAll("image_id IN (".implode(",", $image_ids).")");
 
 			if( count($values) ) 
@@ -1056,6 +1063,23 @@ class GoodController extends Controller
 
 			Queue::addAll($adverts, "updateWithImages");
 		}
+	}
+
+	public function actionAdminPhotoRotate($id, $side = "right"){
+		$image = Image::model()->with("good")->findByPk($id);
+		$image_path = Yii::app()->params["imageFolder"]."/".GoodType::getCode($image->good->good_type_id)."/".$image->good->fields_assoc[3]->value."/".$id.".".$image->ext;
+
+		$resize = new Resize($image_path);
+		$resize->rotate( (( $side == "left" )?90:-90) );
+		$resize->saveImage($image_path, 100);
+
+		$image->clearCache();
+
+		echo json_encode(array(
+			"result" => "success",
+			"action" => "updateImage", 
+			"id" => $id
+		));
 	}
 
 	public function actionAdminGetNextPhoto($prev = NULL){
@@ -1205,10 +1229,10 @@ class GoodController extends Controller
 		return json_encode($result);
 	}
 
-	public function loadModel($id)
+	public function loadModel($id, $error = true)
 	{
 		$model=Good::model()->with(array("type","fields.variant","fields.attribute"))->findByPk($id);
-		if($model===null)
+		if($model===null && $error)
 			throw new CHttpException(404,'The requested page does not exist.');
 		return $model;
 	}
@@ -1266,7 +1290,7 @@ class GoodController extends Controller
 		return $cities;
 	}
 
-	public function actionAdminViewSettings($good_type_id = NULL,$goodFilter = false){
+	public function actionAdminViewSettings($good_type_id = NULL,$goodFilter = false,$archive = false){
 		if( $good_type_id ){
 			$filter = ($goodFilter) ? "GOOD_TYPE_FILTER_".$good_type_id : "GOOD_TYPE_".$good_type_id;
 			$fields = (isset($_POST["view_fields"])) ? $_POST["view_fields"] : array();
@@ -1274,12 +1298,12 @@ class GoodController extends Controller
 				if( count($fields) )
 					array_push($fields, 3);
 				$this->setUserParam($filter,$fields);
-				$this->actionAdminIndex(true,$good_type_id);
+				$this->redirect( Yii::app()->createUrl('good/adminindex',array('good_type_id'=>$good_type_id,'partial'=>true,'archive' => $archive)) );
 			}else{
 				$good_type = GoodType::model()->findByPk($good_type_id);
-				$attributes = GoodTypeAttribute::model()->with("attribute")->findAll("good_type_id=$good_type_id AND attribute_id!=3");
+				$attributes = GoodTypeAttribute::model()->with("attribute")->findAll(array("condition" => "good_type_id=$good_type_id AND attribute_id!=3", "order" => "sort ASC") );
 
-				$attributes = $this->splitByCols(2,CHtml::listData($attributes, 'attribute_id', 'attribute.name'));
+				$attributes = $this->splitByCols(2, CHtml::listData($attributes, 'attribute_id', 'attribute.name'));
 
 				$this->renderPartial('_viewSettings',array(
 					'good_type'=>$good_type,

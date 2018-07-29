@@ -21,7 +21,8 @@
     					'goods'=> $goods,
     					'last' => 0,
     					'type' => $type,
-    					'dynamic' => $dynamic
+    					'dynamic' => $dynamic,
+                        'params' => $this->params
     				)); ?>
     			</ul>
             <? else: ?>    

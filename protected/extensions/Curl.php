@@ -42,6 +42,33 @@ Class Curl {
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 30);
 
         if(strpos($url, "avito") !== false) {
+            if( $post == "image" ){
+                $header = array(
+                    "Accept" => "image/webp,image/*,*/*;q=0.8",
+                    "Accept-Encoding" => "gzip, deflate, sdch, br",
+                    "Accept-Language" => "ru-RU,ru;q=0.8,en-US;q=0.6,en;q=0.4",
+                    "Connection" => "keep-alive",
+                    "Host" => "www.avito.ru",
+                    "Referer" => "https://www.avito.ru/additem/confirm",
+                    "User-Agent" => "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36",
+                );
+            }else{
+                $header = array(
+                    "Accept" => "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+                    "Accept-Encoding" => "gzip, deflate, br",
+                    "Accept-Language" => "ru-RU,ru;q=0.8,en-US;q=0.6,en;q=0.4",
+                    "Cache-Control" => "no-cache",
+                    "Connection" => "keep-alive",
+                    "Content-Length" => "60",
+                    "Content-Type" => "application/x-www-form-urlencoded",
+                    "Host" => "www.avito.ru",
+                    "Origin" => "https://www.avito.ru",
+                    "Pragma" => "no-cache",
+                    "Referer" => "https://www.avito.ru/profile/login?next=/Fprofile",
+                    "Upgrade-Insecure-Requests" => "1",
+                    "User-Agent" => "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.99 Safari/537.36",
+                );
+            }
             curl_setopt($ch, CURLOPT_HTTPHEADER, $header);           
         } elseif(strpos($url, "drom") !== false) {
             $header['Accept-Encoding'] = 'gzip, deflate, sdch';
@@ -65,7 +92,7 @@ Class Curl {
             curl_setopt($ch, CURLOPT_COOKIEJAR, dirname(__FILE__).'/cookies/'.$this->cookie.'.txt');
             curl_setopt($ch, CURLOPT_COOKIEFILE,  dirname(__FILE__).'/cookies/'.$this->cookie.'.txt');
         }
-        if( $post !== NULL ){
+        if( is_array($post) ){
             // if($this->ip)
                 // $post = array("json" => json_encode($post));
             curl_setopt($ch, CURLOPT_POST, 1);
@@ -117,6 +144,8 @@ Class Curl {
         $this->removeCookies();
         $this->cookie = md5($login);
         $this->cookieChanged = true;
+        print_r($this->cookie);
+        echo " ";
     }
 
     public function removeCookies(){

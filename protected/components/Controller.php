@@ -58,24 +58,30 @@ class Controller extends CController
     public function init() {
         parent::init();
 
+        $serverHost = (strpos($_SERVER["HTTP_HOST"], ":"))?array_shift(explode(":", $_SERVER["HTTP_HOST"])):$_SERVER["HTTP_HOST"];
+
         $this->is_mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino/i',$_SERVER['HTTP_USER_AGENT'])||preg_match('/1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i',substr($_SERVER['HTTP_USER_AGENT'],0,4)));
 
         date_default_timezone_set("Asia/Krasnoyarsk");
 
-        if( $_SERVER["HTTP_HOST"] == "xn--e1ajdlcr.xn--80asehdb" ){
+        if( $serverHost == "xn--e1ajdlcr.xn--80asehdb" ){
             header("Location: http://koleso.online".str_replace(array("/tire","/disc","/wheel"), array("/shiny","/diski","/kolesa"), $_SERVER["REQUEST_URI"]));
             die();
         }
 
-        if( $_SERVER["HTTP_HOST"] == "koleso.tomsk.dev" || $_SERVER["HTTP_HOST"] == "koleso.tomsk.ru" ){
+        if( $serverHost == "koleso.tomsk.com" || $serverHost == "koleso.tomsk.ru" ){
             $_GET['city'] = "tomsk";
             Yii::app()->params["region"] = true;
-        }elseif( $_SERVER["HTTP_HOST"] == "true-media.ru" || $_SERVER["HTTP_HOST"] == "shikon.dev" ){
+        }elseif( $serverHost == "true-media.ru" ||  $serverHost == "shikon.ru" || $serverHost == "shikon.com" ){
+            date_default_timezone_set("Asia/Vladivostok");
+            // Yii::app()->params["city"] = "vladivostok";
             $_GET['city'] = "vladivostok";
             Yii::app()->params["region"] = true;
         }
         
         $this->user = User::model()->with("role")->findByPk(Yii::app()->user->id);
+
+        $this->getRules();
 
         $model = ModelNames::model()->findAll(array("order" => "sort ASC"));
         $this->adminMenu["items"] = $this->removeExcess($model,true);
@@ -88,7 +94,7 @@ class Controller extends CController
             }
         }
 
-        $this->place_states[2048] = $this->place_states["AVITO"] = $this->getParam("AVITO","TOGGLE");
+        $this->place_states[2048] = $this->place_states["AVITO"] = ( $this->getParam("AVITO","AUTH") == "on" )?$this->getParam("AVITO","TOGGLE"):"not_auth";
         $this->place_states[2047] = $this->place_states["DROM"] = $this->getParam("DROM","TOGGLE");
         $this->place_states[3875] = $this->place_states["VK"] = $this->getParam("VK","TOGGLE");
 
@@ -103,9 +109,42 @@ class Controller extends CController
         if( !Yii::app()->user->isGuest ) $this->checkModelAccess();
     }
 
+    public function getRules(){
+        if( $this->user == NULL ) return false;
+        $this->user->rules = array();
+
+        if( $this->user->usr_login == "photo" ){
+            $this->user->rules = array(
+                "photo" => array("upload" => true),
+                "good" => true
+            );            
+        }else{
+            $this->user->rules = array(
+                "photo" => array("upload" => true, "cap" => true), 
+                "sales" => true, "adverts" => true, 
+                "good" => array("change" => true, "remove" => true)
+            );            
+        }
+    }
+
+    public function access($param1, $param2 = NULL, $param3 = NULL){
+        if( isset($this->user->rules[$param1]) ){
+            if( $param2 !== NULL ){
+                if( isset($this->user->rules[$param1][$param2]) ){
+                    if( $param3 !== NULL ){
+                        if( isset($this->user->rules[$param1][$param2][$param3]) )
+                            return true;
+                    }else return true;
+                }
+            } else return true;
+        }
+        return false;
+    }
+
     public function getView($action){
         if( Yii::app()->params["region"] ){
             $this->layout = '//layouts/'.Yii::app()->params["city"]->code.'/kolesoOnline';
+            // print_r(Yii::app()->params["city"]->code);
             $action = Yii::app()->params["city"]->code."/".$action;
         }
         return $action;
@@ -120,6 +159,33 @@ class Controller extends CController
                 array_push($out, $image["original"]);
 
         return $out;
+    }
+
+    public function setWatermark($images, $watermark){
+        $out = array();
+        foreach ($images as $i => $image) {
+            // print_r($image);
+            $image = substr($image, 1);
+
+            $arr = explode("/", $image);
+            $name_arr = explode(".", $arr[4]);
+            $new_path = $arr[0]."/temp/".md5(rand().time()).".".strtolower($name_arr[1]);
+
+            $resize = new Resize($image);
+            $resize->setWatermark($watermark);
+            $resize->saveImage($new_path, 80);
+            $out[] = "/".$new_path;
+        }
+        return $out;
+    }
+
+    public function removeWatermark($images){
+        foreach ($images as $i => $image) {
+            $image = substr($image, 1);
+            if( strpos($image, "temp") ){
+                @unlink($image);
+            }
+        }
     }
 
     public function beforeRender($view){
@@ -159,7 +225,7 @@ class Controller extends CController
         return $el;
     }
 
-    public function insertValues($tableName,$values){
+    public function insertValues($tableName, $values){
         if( !count($values) ) return true;
 
         $values = array_values($values);
@@ -577,11 +643,12 @@ class Controller extends CController
             46 => "login",
             47 => "password",
             48 => "phone",
-            114 => "ip",
+            114 => "proxy",
             121 => "count",
             122 => "photo",
             136 => "adding",
             138 => "id",
+            139 => "watermark",
         );
         $cells = DesktopTableCell::model()->with(array("row.cells"))->findAll("row.table_id=12".(($login)?" AND t.varchar_value='$login'":""));
         if( $cells ){
@@ -854,6 +921,10 @@ class Controller extends CController
     }
 
     public function cleanDir($dir) {
+        if( strpos($dir, "//") !== false || substr($dir, -1, 1) == "/" ){
+            echo "Ошибка удаления папки ".$dir;
+            die();
+        }
         $files = glob($dir."/*");
         $c = count($files);
         if (count($files) > 0) {

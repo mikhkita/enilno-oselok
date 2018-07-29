@@ -33,6 +33,7 @@ Class Drom {
         $params = array(
             'radio' => 'sign',
             'sign' => $this->login,
+            'farpostOnly' => '0',
             'password' => $this->password
         );
 
@@ -147,6 +148,7 @@ Class Drom {
         $html = str_get_html(iconv('windows-1251', 'utf-8', $this->curl->request("https://baza.drom.ru/personal/non_active/bulletins")));
 
         $links = array();
+        if( !is_object($html) ) return $links;
         $pageLinks = $html->find('.bullNotPublished');
         $page = 1;
         while(count($pageLinks)){
@@ -206,10 +208,10 @@ Class Drom {
                         $tmp['price'] = ($element->find("span.finalPrice",0)) ? intval(str_replace(" ","",$element->find("span.finalPrice",0)->plaintext)) : NULL;
                         $tmp['views'] = ($element->find(".views",0)) ? intval(str_replace(" ","",$element->find(".views",0)->plaintext)) : NULL;
                         $tmp['amount'] = ($element->find(".quantity",0)) ? intval(preg_replace('~\D+~','',$element->find(".quantity",0)->plaintext)) : NULL;
-                        if($element->find(".imageExists noscript",0)) {
-                            $tmp['img'] = str_get_html($element->find(".imageExists noscript",0)->innertext)->find("img",0)->src;
-                        } elseif($element->find(".imageExists img",0)) {
-                            $tmp['img'] = $element->find(".imageExists img",0)->src;
+                        if($element->find(".imagesExBig noscript",0)) {
+                            $tmp['img'] = str_get_html($element->find(".imagesExBig noscript",0)->innertext)->find("img",0)->src;
+                        } elseif($element->find(".imageCell img",0)) {
+                            $tmp['img'] = $element->find(".imageCell img",0)->src;
                         } else $tmp['img'] = "/".Yii::app()->params["imageFolder"]."/default.jpg";
                         if($element->find(".fixedPrice",0)) $tmp['price_type'] = 1;
                         if($element->find(".bestOffer",0)) $tmp['price_type'] = 2;
@@ -218,12 +220,10 @@ Class Drom {
                            $tmp['price'] = ($element->find(".finalPrice span",0)) ? intval(str_replace(" ","",$element->find(".finalPrice span",0)->plaintext)) : NULL; 
                         }
                         $links[$element->find(".bulletinLink",0)->name] = $tmp; 
-                        $html = str_get_html(iconv('windows-1251', 'utf-8', $this->curl->request("http://baza.drom.ru/{$element->find('.bulletinLink',0)->name}")));
+                        // $html = str_get_html(iconv('windows-1251', 'utf-8', $this->curl->request("http://baza.drom.ru/{$element->find('.bulletinLink',0)->name}")));
                     }
                 }else{
                     array_push($links, $element->find(".bulletinLink",0)->getAttribute($attr) );
-                    print_r($links);
-                    die();
                 }
             }
             $page++;
@@ -231,12 +231,18 @@ Class Drom {
                $html = str_get_html(iconv('windows-1251', 'utf-8', $this->curl->request($link."?page=".$page)));
             else $html = str_get_html(iconv('windows-1251', 'utf-8', $this->curl->request($link."&page=".$page)));
             $pageLinks = $html->find('#bulletins tr.bull-item');
+
+            // print_r($links);
+            // die();
+            // break;
         }
 
         if($get_id && $html->find('#itemsCount_placeholder strong',0) && !$good_type_id) {
             if(count($links) != array_shift(explode(" пр", $html->find('#itemsCount_placeholder strong',0)->plaintext)))
                 return false;
         }
+        // print_r($links);
+        // die();
 
         return $links;
     }
@@ -548,7 +554,8 @@ Class Drom {
                 'diskType' => 41,
                 'diskHoleDiameter' => 33,
                 'desc' => 52,
-                'tireModel' => 16,
+                'tireMark' => 16,
+                'tireModel' => 17,
                 'year' => 10,
                 'wheelSeason' => 23,
                 'wheelTireWear' => 29,
@@ -641,7 +648,12 @@ Class Drom {
             }
 
             if($params[$fields['type']] == 1) {
-                $params[$fields['tireModel']] = trim(str_ireplace($html->find("span[data-field=model] div",0)->plaintext,"",$html->find("span[data-field=model]",0)->plaintext));
+                $model = trim(str_ireplace($html->find("span[data-field=model] div",0)->plaintext,"",$html->find("span[data-field=model]",0)->plaintext));
+                $model = explode(" ", $model);
+                $params[$fields['tireMark']] = array_shift($model);
+                if( count($model) )
+                    $params[$fields['tireModel']] = implode(" ", $model);
+
                 if(count($html->find("span[data-field=marking]")) == 5) {
                     $params[$fields['wheelDiameter']] = $html->find("span[data-field=marking] a",0)->plaintext;
                     $marking = 2;
@@ -741,7 +753,7 @@ Class Drom {
                     'condition[]' => 'used',
                     'goodPresentState[]' => 'present'
                 );
-                if($i) $url_params['price_min'] = 6001; else $url_params['price_max'] = 6000; 
+                // if($i) $url_params['price_min'] = 6001; else $url_params['price_max'] = 6000; 
                 $url .= http_build_query($url_params);
                 $goods[$i] = $this->parseAllItems($url,NULL,false,true,false,$good_type_id);
             }    

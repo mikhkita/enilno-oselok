@@ -4,26 +4,28 @@
 				<?if($sort_field=="id"):?>
 					<a class="good-sort active <? if($sort_type=='DESC') echo ' up'; ?>" href="<?=$this->createUrl('/good/adminindex',array('sort_type' => $sort_type,'sort_field' => 'id','good_type_id'=> $_GET["good_type_id"]))?>">ID</a>
 				<? else:?>
-					<a href="<?=$this->createUrl('/good/adminindex',array('sort_field' => 'id', 'sort_type' => 'DESC','good_type_id'=> $_GET["good_type_id"]))?>">ID</a>
+					<a href="<?=$this->createUrl('/good/adminindex',array('sort_field' => 'id', 'archive' => $archive, 'sort_type' => 'DESC','good_type_id'=> $_GET["good_type_id"]))?>">ID</a>
 				<? endif;?>
 			</th>
 			<? $ids = array(); if( count($data) ) foreach ($data as $i => $item) array_push($ids, $item->id); ?>
+			<? if( $this->access("good", "change") ): ?>
 			<th style="vertical-align:bottom; min-width: 20px;">
 				<!-- <input type="checkbox" name="goods_id" class="b-sess-checkbox check-page" data-block="#b-sess-checkbox-list" value="<?=implode(',',$ids)?>"> -->
 			</th>
+			<? endif; ?>
 			<? if($with_photos): ?>
 				<th>Фотографии</th>
 			<? endif; ?>
 			<? if($filter_new_only): ?>
 				<th style="min-width: 160px;">Отсмотр</th>
 			<? endif; ?>
-			<th style="min-width: 110px;max-width: 110px;width: 110px;"><span href="<?php echo Yii::app()->createUrl('/good/adminviewsettings',array('id'=>$item->id,'good_type_id'=>$_GET["good_type_id"]))?>" class="ajax-form ajax-update b-tool b-tool-settings" title="Настройки отображения"></span></th>
+			<th><span href="<?php echo Yii::app()->createUrl('/good/adminviewsettings',array('id'=>$item->id,'good_type_id'=>$_GET["good_type_id"]))?>" class="ajax-form ajax-update b-tool b-tool-settings" title="Настройки отображения"></span></th>
 			<? foreach ($fields as $field): ?>
 				<th <?if($field->attribute_id == 3):?>style="min-width: 55px;"<?endif;?> <? if($field->attribute->alias): ?>class="b-tooltip" title="<?=$field->attribute->name?>"<?endif;?>>
 					<?if($sort_field==$field->attribute_id):?>
-						<a class="good-sort active <? if($sort_type=='DESC') echo ' up'; ?>" href="<?=$this->createUrl('/good/adminindex',array('sort_type' => $sort_type,'sort_field' => $field->attribute_id,'good_type_id'=> $_GET["good_type_id"]))?>"><?=($field->attribute->alias)?$field->attribute->alias:$field->attribute->name; ?></a>
+						<a class="good-sort active <? if($sort_type=='DESC') echo ' up'; ?>" href="<?=$this->createUrl('/good/adminindex',array('sort_type' => $sort_type,'sort_field' => $field->attribute_id, 'archive' => $archive,'good_type_id'=> $_GET["good_type_id"]))?>"><?=($field->attribute->alias)?$field->attribute->alias:$field->attribute->name; ?></a>
 					<? else:?>
-						<a href="<?=$this->createUrl('/good/adminindex',array('sort_field' => $field->attribute_id,'good_type_id'=> $_GET["good_type_id"]))?>"><?=($field->attribute->alias)?$field->attribute->alias:$field->attribute->name; ?></a>
+						<a href="<?=$this->createUrl('/good/adminindex',array('sort_field' => $field->attribute_id, 'archive' => $archive,'good_type_id'=> $_GET["good_type_id"]))?>"><?=($field->attribute->alias)?$field->attribute->alias:$field->attribute->name; ?></a>
 					<? endif;?>
 					
 				</th>
@@ -34,7 +36,9 @@
 			<? foreach ($data as $i => $item): ?>
 				<tr id="id-<?=$item->id?>">
 					<td class="align-left"><?=$item->id?></td>
-					<td><input type="checkbox" name="good_id" class="b-sess-checkbox" data-block="#b-sess-checkbox-list" <? if($item->isChecked()): ?>checked="checked"<? endif; ?> value="<?=$item->id?>"></td>
+					<? if( $this->access("good", "change") ): ?>
+						<td><input type="checkbox" name="good_id" class="b-sess-checkbox" data-block="#b-sess-checkbox-list" <? if($item->isChecked()): ?>checked="checked"<? endif; ?> value="<?=$item->id?>"></td>
+					<? endif; ?>
 					<? if($with_photos): ?>
 						<? $images = $item->getImages(1, array("small"), "all", NULL, true);?>
 						<td class="b-photo-td">
@@ -52,20 +56,35 @@
 							<? endforeach; ?>
 						</td>
 					<? endif; ?>
-					<td style="min-width: 161px" class="b-tool-nav">
-						<? if($item->count_all_adverts): ?>
-							<span href="<?php echo Yii::app()->createUrl('/good/adminadverts',array('id'=>$item->id,'good_type_id'=> $_GET["good_type_id"],'GoodFilter_page' => ($pages->currentPage+1)))?>" class="ajax-form ajax-update b-adverts-link b-tooltip" title="Объявления"><p class="avert-info"><?=$item->count_all_adverts?> (<?=(!$item->count_url_adverts)?0:$item->count_url_adverts?>)</p></span>
-						<? else: ?>
-							<p class="avert-info b-tooltip" title="Нет объявлений">0 (0)</p>
+					<td style="<? if( $this->access("adverts") ): ?>min-width: 135px<? endif; ?>" class="b-tool-nav">
+						<? if( $this->access("adverts") ): ?>
+							<? if($item->count_all_adverts): ?>
+								<span href="<?php echo Yii::app()->createUrl('/good/adminadverts',array('id'=>$item->id, 'archive' => $archive,'good_type_id'=> $_GET["good_type_id"],'GoodFilter_page' => ($pages->currentPage+1)))?>" class="ajax-form ajax-update b-adverts-link b-tooltip" title="Объявления"><p class="avert-info"><?=$item->count_all_adverts?> (<?=(!$item->count_url_adverts)?0:$item->count_url_adverts?>)</p></span>
+							<? else: ?>
+								<p class="avert-info b-tooltip" title="Нет объявлений">0 (0)</p>
+							<? endif; ?>
 						<? endif; ?>
-						<a href="<?php echo Yii::app()->createUrl('/good/adminphoto',array('id'=>$item->id))?>" class="b-tool b-tool-photo"></a>
-						<span href="<?php echo Yii::app()->createUrl('/good/adminsold',array('id'=>$item->id,'good_type_id' => $_GET['good_type_id']))?>" class="ajax-form ajax-create b-tool b-tool-sale" data-warning="Вы действительно хотите перенести товар &quot;<?=$item->fields_assoc[3]->value?>&quot; в архив?" title="Продано"></span>
+						<? if( $this->access("photo") ): ?>
+							<a href="<?php echo Yii::app()->createUrl('/good/adminphoto',array('id'=>$item->id, 'archive' => $archive))?>" class="b-tool b-tool-photo"></a>
+						<? endif; ?>
+						<? if( $this->access("sales") ): ?>
+							<? if(!$archive): ?>
+								<span href="<?php echo Yii::app()->createUrl('/good/adminsold',array('id'=>$item->id, 'archive' => $archive,'good_type_id' => $_GET['good_type_id']))?>" class="ajax-form ajax-create b-tool b-tool-sale" data-warning="Вы действительно хотите перенести товар &quot;<?=$item->fields_assoc[3]->value?>&quot; в архив?" title="Продано"></span>
+								<span href="<?php echo Yii::app()->createUrl('/good/adminorder',array('good_id'=>$item->id, 'archive' => $archive,'good_type_id' => $_GET['good_type_id']))?>" class="ajax-form ajax-create b-tool b-tool-sale" data-warning="" title="В заказ"></span>
+							<? endif; ?>
+						<? endif; ?>
 						<!-- <span href="<?php echo Yii::app()->createUrl('/good/adminupdateimages',array('id'=>$item->id))?>" class="ajax-form ajax-update ajax-photodoska b-tool b-tool-photo" title="Обновить фотографии"></span> -->
-						<span href="<?php echo Yii::app()->createUrl('/good/adminupdate',array('id'=>$item->id,'good_type_id' => $_GET['good_type_id'],'GoodFilter_page' => ($pages->currentPage+1) ))?>" class="ajax-form ajax-update b-tool b-tool-update" title="Редактировать"></span>
-						<? if($this->user->role->code == "root"): ?><span href="<?php echo Yii::app()->createUrl('/good/admindelete',array('id'=>$item->id))?>" class="ajax-form ajax-delete b-tool b-tool-delete not-ajax-delete" data-warning="Вы действительно хотите убрать в архив товар &quot;<?=$item->fields_assoc[3]->value?>&quot;?" title="В архив"></span><? endif; ?>
+						<? if( $this->access("good", "change") ): ?>
+							<span href="<?php echo Yii::app()->createUrl('/good/adminupdate',array('id'=>$item->id, 'archive' => $archive,'good_type_id' => $_GET['good_type_id'],'GoodFilter_page' => ($pages->currentPage+1) ))?>" class="ajax-form ajax-update b-tool b-tool-update" title="Редактировать"></span>
+							<? if($archive): ?>
+								<a href="<?=$this->createUrl('/good/adminarchive',array('id' => $item->id, 'archive' => $archive))?>" class="ajax-form ajax-delete not-ajax-delete" data-warning="Вы действительно хотите вернуть товар &quot;<?=$item->fields_assoc[3]->value?>&quot; из?">Вернуть</span>
+							<? else: ?>
+								<? if($this->user->role->code == "root"): ?><span href="<?php echo Yii::app()->createUrl('/good/admindelete',array('id'=>$item->id, 'archive' => $archive))?>" class="ajax-form ajax-delete b-tool b-tool-delete not-ajax-delete" data-warning="Вы действительно хотите убрать в архив товар &quot;<?=$item->fields_assoc[3]->value?>&quot;?" title="В архив"></span><? endif; ?>
+							<? endif; ?>
+						<? endif; ?>
 					</td>
 					<? foreach ($fields as $field): ?>
-						<td<?if($tog):?> style="min-width: <?=$field->attribute->width?>px;"<?endif;?> <?=(($field->attribute->required && !isset($item->fields_assoc[$field->attribute->id]))?('class="empty"'):(""))?>>
+						<td<?if($tog):?> style="min-width: <?=$field->attribute->width?>px;"<?endif;?> class="<?=((($field->attribute->required && !isset($item->fields_assoc[$field->attribute->id])) || ($field->attribute->id == 20 && !$item->fields_assoc[$field->attribute->id]->value ) )?('empty'):(""))?> <?=( ($field->attribute->id == 20)?"price":"" )?>">
 							<? if( isset($item->fields_assoc[$field->attribute->id]) ): ?>
 								<? if( is_array($item->fields_assoc[$field->attribute->id]) ): ?>
 									<? foreach ($item->fields_assoc[$field->attribute->id] as $attr): ?>
@@ -76,6 +95,8 @@
 										<div><a href="<?=$item->fields_assoc[$field->attribute->id]->value?>" target="_blank"><?=$this->cutText($item->fields_assoc[$field->attribute->id]->value,30)?></a></div>
 									<? elseif( $field->attribute->id == 69 ): ?>
 										<div><a href="https://injapan.ru/auction/<?=$item->fields_assoc[$field->attribute->id]->value?>.html" target="_blank"><?=$item->fields_assoc[$field->attribute->id]->value?></a></div>
+									<? elseif( $field->attribute->id == 20 ): ?>
+										<div><?=number_format( $item->fields_assoc[$field->attribute->id]->value, 0, ',', ' ' )?></div>
 									<? else: ?>
 										<div><?=$item->fields_assoc[$field->attribute->id]->value?></div>
 									<? endif; ?>

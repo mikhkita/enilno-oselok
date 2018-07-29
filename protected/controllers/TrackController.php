@@ -40,9 +40,9 @@ class TrackController extends Controller
 	public function actionParse()
 	{
 		$drom = new Drom();
-        $avito = new Avito("tomsk:Sd8as9fhsd@91.226.83.143:9320");
+        // $avito = new Avito("admin:4815162342@185.93.109.62:1212");
         $drom->parseCategory();
-        $avito->parseCategory();
+        // $avito->parseCategory();
 	}
 	public function actionAdminIndex($partial = false,$folder = 0)
 	{	

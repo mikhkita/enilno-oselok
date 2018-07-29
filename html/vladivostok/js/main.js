@@ -21,6 +21,8 @@ $(document).ready(function(){
         if( isMobile )
             $(".variants ul").css("height",myHeight-280);
         // $(".b-content").css("min-height",myHeight-$(".b-header").height()-$(".b-footer").height());
+
+        $(".b-content").css("min-height", myHeight-516);
     }
 
     $(window).resize(resize);
@@ -68,7 +70,8 @@ $(document).ready(function(){
             }
         }
         if($(".b-category #goods").length) {
-            if($("body").scrollTop() > ($("#goods").offset().top+$("#goods").height()-myHeight*3)) {
+            var scroll = (document.documentElement && document.documentElement.scrollTop) || document.body.scrollTop;
+            if(scroll > ($("#goods").offset().top+$("#goods").height()-myHeight*3)) {
                 if($('#goods li:eq(-1)').attr("data-last") != 0 && !blocked) {
                     blocked = true;
                     $.ajax({
@@ -558,10 +561,15 @@ $(document).ready(function(){
             if( $(".b-search-results li a.focus").length ){
                 window.location.href = $(".b-search-results li a.focus").attr("href");
             }else if( $(".b-search-results li a").length ){
-                $("#search-form").submit();
+                // $("#search-form").submit();
             }
             return false;
         }
+    });
+
+    $("#search-form .b-orange-butt").click(function(){
+        search();
+        return false;
     });
 
     $("body").on("mouseover", ".b-search-results", function(){
@@ -579,30 +587,34 @@ $(document).ready(function(){
     var query = 0;
     $("#search").keyup(function(e){
         if( [36, 38, 39, 40, 13].indexOf(e.keyCode) == -1 ){
-            query++;
-            $form = $(this).parents("form");
-
-            if( $(this).val() == "" ){
-                $(".b-search-results").fadeOut(150);
-                return false;
-            }
-
-            if( $(".b-search-results li").length < 1 )
-                $(".b-search-results").fadeIn(150).html("<li><span>Загрузка...</span></li>");
-
-            $.ajax({
-                type: "GET",
-                url: $form.attr("action"),
-                data: $form.serialize()+"&partial=1&query="+query,
-                success: function(msg){
-                    if($(msg).eq(-1).val() == query) 
-                        $(".b-search-results").fadeIn(150).html(msg);
-                    
-                    
-                }
-            });
+            search();
         }
     });
+
+    function search(){
+        query++;
+        $form = $("#search").parents("form");
+
+        if( $("#search").val() == "" ){
+            $(".b-search-results").fadeOut(150);
+            return false;
+        }
+
+        if( $(".b-search-results li").length < 1 )
+            $(".b-search-results").fadeIn(150).html("<li><span>Загрузка...</span></li>");
+
+        $.ajax({
+            type: "GET",
+            url: $form.attr("action"),
+            data: $form.serialize()+"&partial=1&query="+query,
+            success: function(msg){
+                if($(msg).eq(-1).val() == query) 
+                    $(".b-search-results").fadeIn(150).html(msg);
+                
+                
+            }
+        });
+    }
 
     $("#search").focus(function(){
         focusIn = true;

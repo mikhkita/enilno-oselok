@@ -1,5 +1,5 @@
 <div style="display:none;">
-	<div class="b-popup-filter b-popup">
+	<div class="b-popup-filter b-popup" id="b-popup-filter">
 		<h1>Фильтр</h1>
 	<?=CHTML::beginForm(substr($_SERVER["REQUEST_URI"], 0, strpos($_SERVER["REQUEST_URI"], "?")),'POST',array('id'=>'b-filter-form'))?>
 		<? foreach ($filter as $field => $item): ?>

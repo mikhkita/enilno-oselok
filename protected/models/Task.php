@@ -63,13 +63,13 @@ class Task extends CActiveRecord
 		);
 	}
 
-	public function filter($user_id = NULL){
+	public function filter($user_id = NULL, $order_type = "ASC"){
 		$model = Yii::app()->db->createCommand()
             ->select('t.id, t.data, t.good_id, t.action_id, t.user_id, ta.name')
             ->from(Task::tableName().' t')
             ->join(TaskAction::tableName().' ta', 'ta.id=t.action_id')
             ->where( (($user_id !== NULL)?"t.user_id=$user_id AND ":"")."1=1")
-            ->order("t.id ASC")
+            ->order("t.id ".$order_type)
             ->limit(1000)
             ->queryAll();
 
@@ -97,10 +97,11 @@ class Task extends CActiveRecord
         foreach ($model as $i => $value) {
         	if($value["data"] !== NULL){
         		$model[$i]["data"] = json_decode($value["data"]);
-
-        		foreach (explode(",", $model[$i]["data"]) as $key => $val)
-        			if( !in_array($val, $attributes) )
-        				array_push($attributes, $val);
+        		if( !isset($model[$i]["data"]->message) && !is_array($model[$i]["data"]) ){
+        			foreach (explode(",", $model[$i]["data"]) as $key => $val)
+	        			if( !in_array($val, $attributes) )
+	        				array_push($attributes, $val);
+        		}
         	}
 
         	if( $value["good_id"] ){
@@ -127,7 +128,7 @@ class Task extends CActiveRecord
 	        $attributes = Controller::getAssocByAssoc($attributes, "id");
 
 	        foreach ($model as $i => $value) {
-	        	if( in_array($value->action_id, array(1,2,3,4,5)) && $value->data !== NULL){
+	        	if( in_array($value->action_id, array(1,2,3,4)) && $value->data !== NULL && !is_array($value->data)){
 	        		$names = array();
 
 	        		$tmp = explode(",", $value->data);
@@ -148,6 +149,11 @@ class Task extends CActiveRecord
 	public function testGood($good){
 		switch (Yii::app()->params["site"]) {
 			case 'koleso':
+				if( is_object($good->fields_assoc[117]) && $good->fields_assoc[117]->variant_id == 4312 ){
+					Task::remove($good->id);
+					break;
+				}
+
 				if( is_object($good->fields_assoc[27]) && $good->fields_assoc[27]->variant_id == 1056 ){
 					$params = $this->getParams($good->good_type_id);
 
@@ -155,7 +161,7 @@ class Task extends CActiveRecord
 					$not_exist = $this->checkFields($good, $params->necessary);
 					$necessary_exist = count($not_exist)?false:true;
 					if( !$necessary_exist ){
-						Task::add($good->id, "necessary", implode(",", $not_exist));
+						Task::addMulti($good->id, "necessary", $not_exist);
 					}else{
 						Task::remove($good->id, "necessary");
 					}
@@ -165,9 +171,9 @@ class Task extends CActiveRecord
 					$price_exist = count($not_exist)?false:true;
 					if( !$price_exist ){
 						if( $necessary_exist ){
-							Task::add($good->id, "price", implode(",", $not_exist));
+							Task::addMulti($good->id, "price", $not_exist);
 						}else{
-							Task::edit($good->id, "price", implode(",", $not_exist));
+							Task::edit($good->id, "price", $not_exist);
 						}
 					}else{
 						Task::remove($good->id, "price");
@@ -179,16 +185,16 @@ class Task extends CActiveRecord
 					$not_exist = $this->checkFields($good, array_diff($required, $params->price, $params->necessary));
 					if( count($not_exist) ){
 						if( $necessary_exist && $price_exist ) {
-							Task::add($good->id, "required", implode(",", $not_exist));
+							Task::addMulti($good->id, "required", $not_exist);
 						}else{
-							Task::edit($good->id, "required", implode(",", $not_exist));
+							Task::edit($good->id, "required", $not_exist);
 						}
 					}else{
 						Task::remove($good->id, "required");
 					}
 
 					// Проверка фотографий
-					if( !$this->checkPhoto($good) ){
+					if( !($photo_exist = $this->checkPhoto($good,2)) ){
 						Task::add($good->id, "photo");
 					}else{
 						Task::remove($good->id, "photo");
@@ -197,10 +203,16 @@ class Task extends CActiveRecord
 					}
 
 					// Проверка дополнительных фотографий
-					if( !$this->checkCap($good,3) ){
-						Task::add($good->id, "extra");
+					$caps = Cap::model()->findAll();
+					$data = array();
+					foreach ($caps as $i => $cap) {
+						if( !$this->checkCap($good,$cap->id) && !in_array($cap->id, array(7,8,9,10)) ){
+							array_push($data, $cap->name);
+						}
+					}
 
-						// Queue::returnAdverts( $good->fields_assoc[3]->value, 8 );
+					if( count($data) && $photo_exist ){
+						Task::add($good->id, "extra", array("message" => mb_strtolower(implode(", ", $data),"UTF-8")));
 					}else{
 						Task::remove($good->id, "extra");
 
@@ -216,7 +228,7 @@ class Task extends CActiveRecord
 				$not_exist = $this->checkFields($good, $params->necessary);
 				$necessary_exist = count($not_exist)?false:true;
 				if( !$necessary_exist ){
-					Task::add($good->id, "necessary", implode(",", $not_exist));
+					Task::addMulti($good->id, "necessary", $not_exist);
 				}else{
 					Task::remove($good->id, "necessary");
 				}
@@ -227,7 +239,7 @@ class Task extends CActiveRecord
 				$not_exist = $this->checkFields($good, array_diff($required, $params->necessary));
 				if( count($not_exist) ){
 					if( $necessary_exist && $price_exist ) {
-						Task::add($good->id, "required", implode(",", $not_exist));
+						Task::addMulti($good->id, "required", $not_exist);
 					}else{
 						Task::edit($good->id, "required", implode(",", $not_exist));
 					}
@@ -253,7 +265,8 @@ class Task extends CActiveRecord
 		$rules = array(
 			20 => array(0),
 			108 => array(0),
-			46 => array(0)
+			46 => array(0),
+			111 => array(0)
 		);
 		foreach ($fields as $i => $attr_id)
 			if( !isset($good->fields_assoc[$attr_id]) || (isset($rules[$attr_id]) && is_array($rules[$attr_id]) && in_array($good->fields_assoc[$attr_id]->value, $rules[$attr_id])) || ( !is_array($good->fields_assoc[$attr_id]) && $good->fields_assoc[$attr_id]->value === NULL ) ){
@@ -264,7 +277,7 @@ class Task extends CActiveRecord
 	}
 
 	public function checkPhoto($good){
-		return count($good->getImages(NULL))?true:false;
+		return count($good->getImages(NULL, NULL, "all"))?true:false;
 	}
 
 	public function checkCap($good,$cap){
@@ -288,14 +301,16 @@ class Task extends CActiveRecord
 	public function add($good_id, $action, $data = NULL, $user_id = NULL){
 		$action = Task::getAction($action);
 
-		if( $task = Task::model()->find("good_id=$good_id AND action_id=".$action->id) ){
+		$user_id = ($user_id !== NULL)?$user_id:$action->user_id;
+
+		if( $task = Task::model()->find("good_id=$good_id AND action_id=".$action->id." AND user_id=".$user_id) ){
 			if( !$data && (!isset($task->data) || !$task->data) )
 				return $task->id;
 		}else{
 			$task = new Task;
 			$task->good_id = $good_id;
 			$task->action_id = $action->id;
-			$task->user_id = ($user_id !== NULL)?$user_id:$action->user_id;
+			$task->user_id = $user_id;
 		}
 		
 		$task->data = ($data === NULL)?$data:json_encode($data);
@@ -304,6 +319,31 @@ class Task extends CActiveRecord
 			return $task->id;
 		
 		return false;
+	}
+
+	public function addMulti($good_id, $act, $dataMulti = NULL, $user_id = NULL){
+		$action = Task::getAction($act);
+
+		$users = array();
+		$user_id_not = array();
+		foreach ($dataMulti as $key => $field) {
+			if( isset($action->fields[$field]) ){
+				$curUser = $action->fields[$field];
+			}else{
+				$curUser = $action->user_id;
+			}
+
+			if( !isset($users[$curUser]) )
+				$users[$curUser] = array();
+
+			array_push($users[$curUser], $field);
+			array_push($user_id_not, $curUser);
+		}
+
+		foreach ($users as $user => $data)
+			Task::add($good_id, $act, implode(",", $data), $user);
+
+		Task::remove($good_id, $act, $user_id_not);
 	}
 
 	public function edit($good_id, $action, $data = NULL){
@@ -319,10 +359,13 @@ class Task extends CActiveRecord
 		}
 	}
 
-	public function remove($good_id, $action){
-		$action = Task::getAction($action);
-
-		Task::model()->deleteAll("good_id=$good_id AND action_id=".$action->id);
+	public function remove($good_id, $action = false, $user_id_not = false){
+		if( $action === false ){
+			Task::model()->deleteAll("good_id=$good_id");
+		}else{
+			$action = Task::getAction($action);
+			Task::model()->deleteAll("good_id=$good_id AND action_id=".$action->id.( (is_array($user_id_not) && count($user_id_not))?" AND user_id NOT IN (".implode(",", $user_id_not).")":"" ));
+		}
 	}
 
 	public function getParams($good_type_id){
@@ -330,16 +373,16 @@ class Task extends CActiveRecord
 			case 'koleso':
 				$params = array(
 					1 => array(
-						"necessary" => array(16,17,9,8,7,28,43),
-						"price" => array(20,36,46),
+						"necessary" => array(16,17,9,8,7,28,43,29),
+						"price" => array(20,36,111),
 					),
 					2 => array(
 						"necessary" => array(9,6,28,43),
-						"price" => array(20,36,46),
+						"price" => array(20,36,111),
 					),
 					3 => array(
 						"necessary" => array(16,17,9,8,7,28,6,43),
-						"price" => array(20,36,46),
+						"price" => array(20,36,111),
 					)
 				);
 				break;
@@ -365,6 +408,14 @@ class Task extends CActiveRecord
 		return (object) $params[$good_type_id];
 	}
 
+	public function toDelete($task){
+		if( $task->action_id == 8 ){
+			if( !$task->data || $task->data == "" ) return true;
+			if( !Advert::model()->count("id='".$task->data."' AND good_id!=0") ) return true;
+		}
+		return false;
+	}
+
 	public function getAction($code){
 		switch (Yii::app()->params["site"]) {
 			case 'koleso':
@@ -383,6 +434,10 @@ class Task extends CActiveRecord
 					),
 					"required" => array(
 						"id" => 4,
+						"fields" => array(
+							110 => 14,
+							23 => 16,
+						),
 						"user_id" => 10,
 					),
 					"extra" => array(

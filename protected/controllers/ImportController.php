@@ -180,7 +180,7 @@ class ImportController extends Controller
 
 		if( $goods )
 			foreach ($goods as $key => $good)
-				$all_goods[$good->fields_assoc[3]->value] = $good;
+				$all_goods[strval(trim($good->fields_assoc[3]->value))] = $good;
 
 		$arResult["TITLES"] = $xls[0];
 
@@ -188,7 +188,7 @@ class ImportController extends Controller
 
 		for($i = 1; $i < count($xls); $i++) {
 			$code = $xls[$i][array_search($this->codeId, $sorted_titles)];
-			$isset = isset($all_goods[$code]);
+			$isset = isset($all_goods[strval(trim($code))]);
 			$error = false;
 
 			// Кладем в каждую ячейку матрицы массив данных об этой ячейке вида:
@@ -213,12 +213,14 @@ class ImportController extends Controller
         		);
         	}
 
-        	$arResult["ROWS"][] = array(
-        		// Если уже есть элемент с таким кодом, то выделяем всю строку
-				"HIGHLIGHT" => ($error)?("error"):(($isset)?"exist":NULL),
-				"COLS" => $xls[$i],
-				"ID" => ($isset)?$all_goods[$code]->id:NULL
-			);
+        	// if( $isset ){
+        		$arResult["ROWS"][] = array(
+	        		// Если уже есть элемент с таким кодом, то выделяем всю строку
+					"HIGHLIGHT" => ($error)?("error"):(($isset)?"exist":NULL),
+					"COLS" => $xls[$i],
+					"ID" => ($isset)?$all_goods[$code]->id:NULL
+				);
+        	// }
         }
 
         $arResult["REPORT"] = $report;

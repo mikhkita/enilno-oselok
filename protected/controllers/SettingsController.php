@@ -30,6 +30,10 @@ class SettingsController extends Controller
 	{
 		$model=new YahooCategory;
 
+		if( $model->isNewRecord ){
+			$model->rate_id = 6;
+		}
+
 		if(isset($_POST['YahooCategory']))
 		{
 			$model->attributes=$_POST['YahooCategory'];

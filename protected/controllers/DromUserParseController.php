@@ -80,16 +80,24 @@ class DromUserParseController extends Controller
     public function actionParse($page,$user_id = NULL) {
     	$page = urldecode($page);	
     	$drom = new Drom();
-        $good_code = $this->getParam( "OTHER", "PARTNERS_LAST_CODE", true);
-        $params = $drom->parseAdvert($page,$good_code,$user_id);
+        $params = $drom->parseAdvert($page,1,$user_id);
+        if( $user_id == "2212992" ){
+            $arr = explode("\n", $params[52]);
+            $params[3] = array_pop(explode(" ", $arr[0]));
+        }else{
+            $params[3] = $good_code = $this->getParam( "OTHER", "PARTNERS_LAST_CODE", true);
+        }
         $drom->curl->removeCookies();
         if($params) {
             $archive = $params[998];
             $images = $params[999];
             $good_type_id = $params[0];
             unset($params[998],$params[999],$params[0]);
-            if(Good::addAttributes($params,$good_type_id,$images,$archive) === true) {
+            if($good_id = Good::addAttributes($params,$good_type_id,$images,$archive)) {
                 $this->setParam( "OTHER", "PARTNERS_LAST_CODE",($good_code+1));
+
+                Task::model()->testGood(Good::model()->with(array("type","fields.variant","fields.attribute"))->findByPk($good_id));
+
                 echo json_encode(array("result" => "success"));
             } else echo json_encode(array("result" => "error","message" => "Ошибка при добавлении товара"));
         } else if($params === false) {

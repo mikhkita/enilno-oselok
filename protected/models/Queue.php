@@ -54,6 +54,10 @@ class Queue extends CActiveRecord
                 'condition'=>"state_id = 1 AND start < '".date("Y-m-d H:i:s", time())."'",
                 'limit' => 1
             ),
+            'nextAvito'=>array(
+                'condition'=>"state_id = 1",
+                'limit' => 1
+            ),
             // 'next'=>array(
             //     'condition'=>'action_id != 3 AND state_id = 1',
             // ),
@@ -304,7 +308,7 @@ class Queue extends CActiveRecord
 				}
 				
 				$criteria = new CDbCriteria();
-				$criteria->condition = "action_id=".Queue::model()->codes[$code]." AND state_id != 2";
+				$criteria->condition = "action_id=".Queue::model()->codes[$code];
 	    		$criteria->addInCondition("advert_id", $advert_ids);
 
 	    		Queue::model()->deleteAll($criteria);
@@ -329,10 +333,19 @@ class Queue extends CActiveRecord
 	}
 
 	public function getNext($category_id, $exclude = NULL){
-		$queue = Queue::model()->with(array("advert.good.fields.variant","advert.good.fields.attribute","advert.good.type","advert.place","action"))->nextStart()->find(array("condition"=>"place.category_id=$category_id".( (is_array($exclude) && count($exclude))?(" AND advert.city_id NOT IN (".implode(",", $exclude).")"):"" ),"order"=>"t.start ASC"));
+		if( $category_id == 2048 ){
+			$queue = Queue::model()->with(array("advert.good.fields.variant","advert.good.fields.attribute","advert.good.type","advert.place","action"))->nextStart()->find(array("condition"=>"place.category_id=$category_id AND t.action_id!=1".( (is_array($exclude) && count($exclude))?(" AND advert.city_id NOT IN (".implode(",", $exclude).")"):"" ),"order"=>"t.start ASC"));
+		}else{
+			$queue = Queue::model()->with(array("advert.good.fields.variant","advert.good.fields.attribute","advert.good.type","advert.place","action"))->nextStart()->find(array("condition"=>"place.category_id=$category_id".( (is_array($exclude) && count($exclude))?(" AND advert.city_id NOT IN (".implode(",", $exclude).")"):"" ),"order"=>"t.start ASC"));
+		}
 		if( !count($queue) && $category_id != 2048 ){
 			$queue = Queue::model()->with(array("advert.good.fields.variant","advert.good.fields.attribute","advert.good.type","advert.place","action"))->next()->find(array("condition"=>"place.category_id=$category_id","order"=>"t.id ASC"));
 		}
+		return $queue;
+	}
+
+	public function getAvitoAddNext(){
+		$queue = Queue::model()->with(array("advert.good.fields.variant","advert.good.fields.attribute","advert.good.type","advert.place","action"))->nextAvito()->find(array("condition"=>"place.category_id=2048 AND action_id=1","order"=>"t.start ASC"));
 		return $queue;
 	}
 
@@ -450,7 +463,7 @@ class Queue extends CActiveRecord
 				$city_params["interval"] = 1;
 				$days = Queue::getDays($city_params);
 
-				$cur_time = time()+rand(0, 1*60*60);
+				$cur_time = time()+rand(0, 10);
 				$cur_day = 0;
 				if( $not_full ){
 					$last_time = Queue::getLastUpdateTime($category_id, $city_id);
@@ -462,7 +475,7 @@ class Queue extends CActiveRecord
 				}
 
 				foreach ($queue as $key => $item) {
-					$cur_time += rand(1*60,7*60);
+					$cur_time += rand(10,60);
 					if( $cur_time < $days[$cur_day]["start"] ){
 						$cur_time = $days[$cur_day]["start"];
 					}else if( $cur_time > $days[$cur_day]["end"]){
@@ -541,31 +554,40 @@ class Queue extends CActiveRecord
 		}
 	}
 
-	public function addByFilter($tires_filter = NULL, $disc_filter = NULL, $good_attr){
+	public function addByFilter($tire_filter = NULL, $disc_filter = NULL, $good_attr, $tire_int_filter = NULL, $disc_int_filter = NULL){
 		$model = array();
 
-		if( $tires_filter !== NULL ){
+		if( $tire_filter !== NULL ){
+			$filter_arr = array(
+                "good_type_id" => 1,
+                "attributes" => $tire_filter,
+                "int_attributes" => $tire_int_filter,
+            );
+			if( Yii::app()->params["site"] == "koleso" ){
+				$filter_arr["not_contain"] = 117;
+			}
 			$goods = Good::model()->filter(
-	            array(
-	                "good_type_id"=>1,
-	                "attributes"=>$tires_filter
-	            )
+	            $filter_arr
 	        )->getPage(
 	            array(
 	                'pageSize'=>10000,
 	            )
 	        );
-
 	        if( is_array($goods["items"]) )
 	            $model = array_merge($model, $goods["items"]);
 		}
 
 		if( $disc_filter !== NULL ){
+			$filter_arr = array(
+                "good_type_id"=>2,
+                "attributes"=>$disc_filter,
+                "int_attributes" => $disc_int_filter,
+            );
+			if( Yii::app()->params["site"] == "koleso" ){
+				$filter_arr["not_contain"] = 117;
+			}
 	        $goods = Good::model()->filter(
-	            array(
-	                "good_type_id"=>2,
-	                "attributes"=>$disc_filter
-	            )
+	            $filter_arr
 	        )->getPage(
 	            array(
 	                'pageSize'=>10000,

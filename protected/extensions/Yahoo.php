@@ -1,6 +1,6 @@
 <?
 
-Class Yahoo {
+Class YahooCategory {
     private $curl;
     private $cur_page;
     private $tog;

@@ -2,7 +2,7 @@
 	<h1><?=$item->title?></h1>
 	<div class="row buttons">
 		<input type="button" onclick="$.fancybox.close(); return false;" value="Ясно">
-		<input type="button" onclick="$('.b-delete-<?=$code?>').click(); $.fancybox.close(); return false;" value="Не показывать">
+		<input type="button" onclick="$('.b-delete-<?=$code?>').trigger('click', true); $.fancybox.close(); return false;" value="Не показывать">
 		<form action="/admin/yahoo/auctioncreate?id=<?=$code?><?=((isset($_GET["YahooLot_page"]))?("&YahooLot_page=".$_GET['YahooLot_page']):"")?>" method="POST" data-not-scroll="1">>
 			<input type="number" required="true" name="Auction[price]" placeholder="Цена выкупа">
 			<input type="hidden" name="Auction[code]" value="<?=$code?>">

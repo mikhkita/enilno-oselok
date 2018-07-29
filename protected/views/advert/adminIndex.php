@@ -19,8 +19,7 @@
 			<li><a href="<?php echo $this->createUrl('/advert/admintitles')?>" class="ajax-form ajax-delete not-ajax-delete" data-warning="Вы действительно хотите сгенерировать заголовки для отфильтрованных объявлений?">Сгенерировать заголовки</a></li>
 		</ul>
 		<ul style="border-right: 0px;" class="b-section-menu clearfix right">
-			<li><a href="<?php echo $this->createUrl('/advert/adminsee')?>">Охват</a></li>
-			<?if($this->user->usr_id == 1):?><li><a href="<?php echo $this->createUrl('/advert/adminremove', array('lol'=>'1'))?>" class="ajax-form ajax-delete" data-warning="Вы действительно хотите удалить все отфильтрованные объявления к ебеням?">Уничтожить</a></li><?endif;?>
+			<?if( in_array($this->user->usr_id, array(1, 9)) ):?><li><a href="<?php echo $this->createUrl('/advert/adminremove', array('lol'=>'1'))?>" class="ajax-form ajax-delete" data-warning="Вы действительно хотите удалить все отфильтрованные объявления к ебеням?">Уничтожить</a></li><?endif;?>
 		</ul>
 	</div>
 </div>
@@ -73,13 +72,14 @@ $form=$this->beginWidget('CActiveForm',array('id'=>'adverts-form',"action" => $t
 	<table class="b-table b-advert-table" border=1>
 		<tr>
 			<th>ID</th>
-			<th>Код</th>
+			<th style="min-width: 56px;">Код</th>
 			<th>Тип товара</th>
 			<th><?=$labels["place_id"]?></th>
 			<th><?=$labels["type_id"]?></th>
 			<th><?=$labels["city_id"]?></th>
 			<th><?=$labels["title"]?></th>
 			<th><?=$labels["url"]?></th>
+			<th></th>
 		</tr>
 		<?if ($adverts_arr):?>
 			<? foreach ($adverts_arr as $name => $place): ?>
@@ -92,11 +92,16 @@ $form=$this->beginWidget('CActiveForm',array('id'=>'adverts-form',"action" => $t
 						<td><?=$name?></td>
 						<td><?=$advert->type->value?></td>
 						<td><?=$advert->city->value?></td>
-						<td class="<?=(($advert->ready)?("green"):("red"))?>" id="advert-<?=$advert->id?>"><a href="<?php echo $this->createUrl('/advert/admintitleedit', array('advert_id'=> $advert->id))?>" class="ajax-form ajax-update"><?=$advert->title?></a></td>
+						<td class="<?=(($advert->ready)?("green"):("red"))?>" id="advert-<?=$advert->id?>">
+							<a href="<?php echo $this->createUrl('/advert/admintitleedit', array('advert_id'=> $advert->id))?>" class="ajax-form ajax-update"><?=( ($advert->title == "" && $advert->place->category_id == 2048)?"-":$advert->title )?></a>
+						</td>
 						<td>
 							<? if($advert->url): ?>
 							<a href="<?=$advert->getUrl();?>" target="_blank"><?=$advert->getUrl();?></a>
 							<? endif; ?>
+						</td>
+						<td>
+							<span href="<?php echo Yii::app()->createUrl('/advert/adminupdate',array('id'=>$advert->id))?>" class="ajax-form ajax-update b-tool b-tool-update" title="Редактировать"></span>
 						</td>
 					</tr>
 					<? endforeach; ?>

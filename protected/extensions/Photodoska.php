@@ -53,6 +53,8 @@ Class Photodoska {
             'data[13][name]' => 'comment_permission',
             'data[13][value]' => 0
         );
+        print_r($data);
+
         $this->curl->request("http://photodoska.ru/?a=add_ad",$data);
     }
 

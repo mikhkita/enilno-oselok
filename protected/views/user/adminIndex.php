@@ -1,4 +1,6 @@
-<a href="<?php echo $this->createUrl('/user/adminCreate')?>" class="ajax-form ajax-create b-butt b-top-butt">Добавить</a>
+<div class="b-top-butt clearfix">
+	<a href="<?php echo $this->createUrl('/user/adminCreate')?>" class="ajax-form ajax-create b-butt">Добавить</a>
+</div>
 <h1>Пользователи</h1>
 <table class="b-table" border="1">
 	<tr>

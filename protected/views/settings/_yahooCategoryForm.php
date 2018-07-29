@@ -24,6 +24,12 @@
 		<?php echo $form->error($model,'max_price'); ?>
 	</div>
 
+	<div class="row">
+		<?php echo $form->labelEx($model,'rate_id'); ?>
+		<?php echo $form->radioButtonList($model,'rate_id', $model->rates, array("separator" => "", "template" => '<div class="line-item">{input}{label}</div>')); ?>
+		<?php echo $form->error($model,'rate_id'); ?>
+	</div>
+
 	<div class="row buttons">
 		<?php echo CHtml::submitButton($model->isNewRecord ? 'Добавить' : 'Сохранить'); ?>
 		<input type="button" onclick="$.fancybox.close(); return false;" value="Отменить">

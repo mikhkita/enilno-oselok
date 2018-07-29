@@ -27,7 +27,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
 							<? if(!$mobile): ?>
 							<tr>		
 								<td class="clearfix title">
-									<a target="_blank" href="<?=$href?>" class="img left" style="background-image: url(<? $images = $good->getImages(1, array("small"), NULL, NULL, true); echo $images[0]["small"];?>);" href="<?=$href?>"></a>
+									<a target="_blank" href="<?=$href?>" class="img left" style="background-image: url(<? $images = $good->getImages(1, array("small"), 1, NULL, true); echo $images[0]["small"];?>);" href="<?=$href?>"></a>
 									<? 
 						                if($type == 1) $title = $good->fields_assoc[16]->value." ".$good->fields_assoc[17]->value;
 						                if($type == 2) $title = $good->fields_assoc[6]->value;
@@ -55,7 +55,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
 							<? else:?>
 							<tr>
 								<td>
-									<a target="_blank" href="<?=$href?>" class="img" style="background-image: url(<? $images = $good->getImages(1, array("small"), NULL, NULL, true); echo $images[0]["small"];?>);" href="<?=$href?>"></a>
+									<a target="_blank" href="<?=$href?>" class="img" style="background-image: url(<? $images = $good->getImages(1, array("small"), 1, NULL, true); echo $images[0]["small"];?>);" href="<?=$href?>"></a>
 								</td>
 							</tr>
 							<tr>

@@ -88,7 +88,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
                 <li><a href="<?=Yii::app()->createUrl('/contacts.html')?>" class="b-mobile-menu-a">Контакты</a></li>
                 <li><a href="<?=Yii::app()->createUrl('/kolesoOnline/pay')?>" class="b-mobile-menu-a">Оплата заказа</a></li>
             </ul>
-            <a href="tel:+<?=Yii::app()->params["city"]->phone?>" class="b-menu-call b-orange-butt">Позвонить</a>
+            <a href="tel:+79147933137" class="b-menu-call b-orange-butt">Позвонить</a>
         </div>
         <div class="b b-menu">
             <div class="b-block">
@@ -119,16 +119,16 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
                         </div>
                     <? endif; ?>
                 </div>
-                <h1>Колесо.Томск.Ру - БУ шины и диски в Томске</h1>
+                <h1>Шикон - БУ шины и диски во Владивостоке</h1>
                 <div class="right">
                     <div class="clearfix contacts">
                         <? 
                             $phone = str_split(Yii::app()->params["city"]->phone); 
                             $phone = $phone[0]." (".$phone[1].$phone[2].$phone[3].") ".$phone[4].$phone[5].$phone[6]."-".$phone[7].$phone[8]."-".$phone[9].$phone[10];
                         ?>
-                        <a href="tel:+73822575756" class="mobile-not-fancy fancy left" data-block="#b-popup-callback">+7 (3822) 57-57-56</a>
-                        <a href="tel:+73822977327" class="mobile-not-fancy fancy left" data-block="#b-popup-callback">+7 (3822) 977-327</a>
-                        <a href="mailto:rezina70@mail.ru" class="right mail">rezina70@mail.ru</a>
+                        <a href="tel:+74232087777" class="mobile-not-fancy fancy left" data-block="#b-popup-callback">+7 (423) 208-77-77</a>
+                        <a href="tel:+79147933137" class="mobile-not-fancy fancy left" data-block="#b-popup-callback">+7 (914) 793-31-37</a>
+                        <a href="mailto:rezina70@mail.ru" class="right mail">shikon-vl@mail.ru</a>
                         <!-- <a href="#" class="right basket">Корзина (0)</a> -->
                     </div>
                     <form action="<?=Yii::app()->createUrl('kolesoOnline/search')?>" method="GET" id="search-form" class="b-search-form">
@@ -148,19 +148,17 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
                     <ul class="b-sub-menu-list clearfix left">
                         <li><a href="<?=Yii::app()->createUrl('/kolesoOnline/category',array('type' => 1))?>">Шины</a></li>
                         <li><a href="<?=Yii::app()->createUrl('/kolesoOnline/category',array('type' => 2))?>">Диски</a></li>
-                        <li><a href="<?=Yii::app()->createUrl('/kolesoOnline/category',array('type' => 3))?>">Колеса</a></li>
-                        <li class="not-mobile"><a href="<?=Yii::app()->createUrl('/pravka.html')?>">Правка дисков</a></li>
                         <li class="not-mobile"><a href="<?=Yii::app()->createUrl('/vikup.html')?>">Выкуп</a></li>
                         <!-- <li class="not-mobile"><a href="<?=Yii::app()->createUrl('/comission.html')?>">Комиссия</a></li> -->
                     </ul>
-                    <? if(!$mobile):?>
+                    <? if(1):?>
                     <div id="minicart" class="right">
                         <div class="b-cart-menu-cont">
                             <div class="b-cart-menu gradient-grey">
                                 <h2 class="close-cart">Корзина</h2>
                                 <ul class="b-cart-items clearfix">
                                     <?  if(isset($_SESSION["BASKET"]) && $_SESSION["BASKET"]) 
-                                        $this->renderPartial('_basket',array('partial' => false)); 
+                                        $this->renderPartial('vladivostok/_basket',array('partial' => false)); 
                                     ?>
                                 </ul>
                                 <div class="b-cart-bottom clearfix">
@@ -180,7 +178,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
         <div class="b b-sub-menu b-fixed-top gradient-orange mobile-only">
             <div class="b-block clearfix">
                 <a href="#" class="b-burger icon left"></a>
-                <a href="tel:+73822575756" class="mobile-not-fancy fancy b-phone-center left" data-block="#b-popup-callback">+7 (3822) 57-57-56</a>
+                <a href="tel:+79147933137" class="mobile-not-fancy fancy b-phone-center left" data-block="#b-popup-callback">+7 (914) 793 31-37</a>
                 <a href="#" class="b-search-icon icon right"></a>
             </div>
         </div>
@@ -192,7 +190,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
                 <ul class="sections clearfix">
                     <li>
                         <h3>О нас</h3>
-                        <p>Самый большой в Томске выбор БУ шин и дисков R16-R18, колеса с японских аукционов, шиномонтаж, правка дисков, покупка и комиссия ваших колес</p>
+                        <p>Самый большой во Владивостоке выбор БУ шин и дисков R16-R18, колеса с японских аукционов, покупка и комиссия ваших колес</p>
                     </li>
                     <li>
                         <h3>Разделы</h3>
@@ -208,14 +206,10 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
                     </li>
                     <li>
                         <h3>Контактная информация</h3>
-                        <a class="footer-contacts mail" href="mailto:rezina70@mail.ru">rezina70@mail.ru</a>
-                        <a class="mobile-not-fancy fancy footer-contacts phone" data-block="#b-popup-callback" href="tel:+73822575756">+7 (3822) 57-57-56</a>
-                        <a class="mobile-not-fancy fancy footer-contacts phone" data-block="#b-popup-callback" href="tel:+73822977327">+7 (3822) 977-327</a>
-                        <? if(Yii::app()->params["city"]->id == 1081): ?>
-                            <span class="footer-contacts map">г. Томск, Комсомольский проспект, 7, стр. 9</span>
-                        <? else: ?>
-                            <br>
-                        <? endif; ?>
+                        <a class="footer-contacts mail" href="mailto:shikon-vl@mail.ru">shikon-vl@mail.ru</a>
+                        <a class="mobile-not-fancy fancy footer-contacts phone" data-block="#b-popup-callback" href="tel:+74232087777">+7 (423) 208-77-77</a>
+                        <a class="mobile-not-fancy fancy footer-contacts phone" data-block="#b-popup-callback" href="tel:+79147933137">+7 (914) 793-31-37</a>
+                        <span class="footer-contacts map">г. Владивосток, улица Западная, 22</span>
                        <div class="social clearfix">
                             <!-- <h3>Присоединяйтесь к нам</h3>
                             <div id="vk_subscribe"></div>
@@ -236,12 +230,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
         </div>
         <div class="b-footer-sub">
             <div class="b-block clearfix">
-                <? if(Yii::app()->params["region"]): ?>
-                    <h3 class="left"><?  $this->renderPartial(Yii::app()->params["city"]->code.'/_copyright'); ?></h3>
-                <? else: ?>
-                    <h3 class="left">© 2015 Колесо.Томск.Ру</h3>
-                <? endif; ?>
-                <h3 class="right b-copyright">Дизайн и разработка <a href="http://redder.pro/" target="_blank" class="b-redder"></a></h3>
+                <h3 class="left">© 2018 Шикон</h3>
             </div>
         </div>
     </div>
@@ -256,7 +245,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
                     <label for="phone">Ваш телефон *</label>
                     <input type="text" name="phone" required placeholder="+7 (___) ___-__-__"/>               
                     <label for="email">Ваш E-mail</label>
-                    <input type="text" name="email" placeholder="info@koleso.online"/>
+                    <input type="text" name="email" placeholder="shikon-vl@mail.ru"/>
                     <label for="name">Ваши параметры</label>
                     <textarea type="text" name="1" placeholder="R17, сверловка 5*114.3, ширина 7 на mazda 3"></textarea>
                     <input type="hidden" name="1-name" value="Параметры" />
@@ -270,8 +259,8 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
         <div class="for_all b-popup-small">
             <h3>Заказать звонок</h3>
             <h4>Для получения подробной информации Вы можете позвонить по одному из телефонов:</h4>
-            <h5><a href="tel:+73822575756">+7 (3822) 57-57-56</a>
-                <a href="tel:+73822977327">+7 (3822) 977-327</a></h5>
+            <h5><a href="tel:+74232087777">+7 (423) 208-77-77</a>
+                <a href="tel:+79147933137">+7 (914) 793-31-37</a></h5>
             <h4>Или оставить заявку и мы Вам перезвоним в ближайшее время:</h4>
             <form action="<?=Yii::app()->createUrl('/kolesoOnline/mail/')?>" id="b-form-call" method="POST"  data-block="#b-popup-2">
                 <div class="b-popup-form">
@@ -289,8 +278,8 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
         <div class="for_all b-popup-small">
             <h3>Уточнить цену</h3>
             <h4>Для получения подробной информации Вы можете позвонить по одному из телефонов:</h4>
-            <h5><a href="tel:+73822575756">+7 (3822) 57-57-56</a>
-                <a href="tel:+73822977327">+7 (3822) 977-327</a></h5>
+            <h5><a href="tel:+74232087777">+7 (423) 208-77-77</a>
+                <a href="tel:+79147933137">+7 (914) 793-31-37</a></h5>
             <h4>Или оставить заявку и мы Вам перезвоним в ближайшее время:</h4>
             <form action="<?=Yii::app()->createUrl('/kolesoOnline/mail/')?>" id="b-form-buy" method="POST" data-block="#b-popup-2">
                 <div class="b-popup-form">
@@ -343,7 +332,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
 
 <script type="text/javascript" src="/html/js/jquery-2.1.1.min.js"></script>
 <script type="text/javascript" src="/html/js/jquery.fancybox.js"></script>
-<? if( $mobile ): ?>
+<? if( 1 ): ?>
 <script type="text/javascript" src="/html/js/TweenMax.min.js"></script>
 <script type="text/javascript" src="/html/js/fastclick.js"></script>
 <? endif; ?>

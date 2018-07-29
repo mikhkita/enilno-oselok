@@ -10,11 +10,13 @@
 			<th><? echo $labels['name']; ?></th>
 			<th><? echo $labels['code']; ?></th>
 			<th><? echo $labels['max_price']; ?></th>
+			<th><? echo $labels['rate_id']; ?></th>
 			<th style="width: 150px;">Действия</th>
 		</tr>
 		<tr class="b-filter">
 			<td></td>
 			<td><?php echo CHtml::activeTextField($filter, 'name'); ?></td>
+			<td></td>
 			<td></td>
 			<td></td>
 			<td><a href="#" class="b-clear-filter">Сбросить фильтр</a></td>
@@ -26,6 +28,7 @@
 					<td class="align-left"><?=$item->name?></td>
 					<td class="align-left"><?=$item->code?></td>
 					<td class="align-left"><?=$item->max_price?></td>
+					<td class="align-left"><?=$item->rate?></td>
 					<td class="b-tool-cont">
 						<a href="<?php echo Yii::app()->createUrl('/'.$this->adminMenu["cur"]->code.'/adminyahoocategoryupdate',array('id'=>$item->id))?>" class="ajax-form ajax-update b-tool b-tool-update" title="Редактировать <?=$this->adminMenu["cur"]->vin_name?>"></a>
 						<a href="<?php echo Yii::app()->createUrl('/'.$this->adminMenu["cur"]->code.'/adminyahoocategorydelete',array('id'=>$item->id))?>" class="ajax-form ajax-delete b-tool b-tool-delete" data-warning="Вы действительно хотите удалить <?=$this->adminMenu["cur"]->vin_name?> &quot;<?=$item->name?>&quot;?" title="Удалить <?=$this->adminMenu["cur"]->vin_name?>"></a>

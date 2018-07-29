@@ -37,15 +37,31 @@ class IntegrateController extends Controller
         );
     }
 
+    public function actionWater(){
+        $good = Good::model()->findByPk(138);
+        $images = $this->getImages(NULL, NULL, NULL, $good, false, true );
+
+        // $account = $this->getDromAccount("6213676");
+        // if($account->watermark){
+            $images = $this->setWatermark($images, "vlv");
+        // }
+        // print_r($account);
+        
+        // $this->removeWatermark($images);
+        print_r($images);
+    }
+
 // Выкладка -------------------------------------------------------------- Выкладка
     public function actionQueueNextVk($debug = false){
         $this->doQueueNext($debug, 3875);
     }
 
     public function actionQueueNextAvito($debug = false){
-        Queue::checkReady();
+        if( $this->getParam( "AVITO", "AUTH", true ) == "on" ){
+            Queue::checkReady();
 
-        $this->doQueueNext($debug, 2048);
+            $this->doQueueNext($debug, 2048);
+        }
     }
 
     public function actionQueueNextDrom($debug = false){
@@ -62,7 +78,7 @@ class IntegrateController extends Controller
             if( !$this->getNext($category_id, $nth) ){
                 return true;
             }else{
-                if( !$debug && $category_id == 2047 ) sleep(rand(2,7));
+                if( !$debug ) sleep(rand(2,7));
             }
               
             if( $debug ) return true;
@@ -91,8 +107,14 @@ class IntegrateController extends Controller
         return ( trim($queue) == "on" );
     }
 
-    public function getNext($category_id, $nth = ""){
-        $queue = Queue::getNext($category_id);
+    public function getNext($category_id, $avito = NULL){
+        $this->actionClearArchived();
+
+        if( $avito ){
+            $queue = Queue::getAvitoAddNext($category_id);
+        }else{
+            $queue = Queue::getNext($category_id);
+        }
         // var_dump($queue);
         // die();
 
@@ -107,7 +129,8 @@ class IntegrateController extends Controller
 
         $place_name = $this->getPlaceName($advert->place->category_id);
 
-        $queue->setState("processing");
+        // if( !$avito )
+            $queue->setState("processing");
 
         $dynamic = $this->getDynObjects(array(
             57 => $advert->place->category_id,
@@ -119,12 +142,19 @@ class IntegrateController extends Controller
 
         // var_dump($unique);
         // var_dump($fields);
+        // die();
 
         if( $place_name == "AVITO" && $queue->action->code != "delete" && $queue->action->code != "updateImages" ){
             if( $fields["title"] == "not unique" ) $queue->setState("titleNotUnique");
             if( $fields["description"] == "not unique" ) $queue->setState("textNotUnique");
 
-            if( $fields["title"] == "not unique" || $fields["description"] == "not unique" )return true;
+            if( $fields["title"] == "not unique" || $fields["description"] == "not unique" ){
+                if( $avito ){
+                    return $this->getNext(2048, true);
+                }else{
+                    return true;
+                }
+            }
         }
 
         if( $place_name == "DROM" ){
@@ -135,15 +165,22 @@ class IntegrateController extends Controller
                 return false;
             }
 
-            $place = new Drom( (isset($account->ip) && $account->ip != "")?$account->ip:NULL );
+            $place = new Drom( (isset($account->proxy) && $account->proxy != "")?$account->proxy:NULL );
             $fields["contacts"] = $account->phone;
         }else if( $place_name == "AVITO" ){
+            // Log::debug("1");
             $account = $this->getAvitoAccount($fields["login"]);
+            // Log::debug("2");
             if( $account->proxy == NULL ){
+                // Log::debug("3");
                 $queue->setState("notProxy");
                 return false;
             }
-            $place = new Avito( $account->proxy  );
+            if( $queue->action->code != "add" ){
+                $place = new Avito( $account->proxy );
+            }else{
+                $place = new Avito();
+            }
             $fields["phone"] = $account->phone;
             $fields["email"] = $account->login;
             $fields["seller_name"] = $account->name;
@@ -168,21 +205,59 @@ class IntegrateController extends Controller
 
         if( !count($images) && !in_array($queue->action->code, array("delete","payUp","up")) ){
             $queue->setState("noImages");
-            return false;
+
+            if( $avito ){
+                return $this->getNext(2048, true);
+            }else{
+                return true;
+            }
+        }
+
+        if($account->watermark){
+            $images = $this->setWatermark($images, $account->watermark);
         }
 
         $fields = $place->generateFields($fields,$advert->good->good_type_id);
 
-        print_r($fields);
-        echo "<br>";
+        // print_r($fields);
+        // echo "<br>";
+
+        if($avito){
+            $fields = $place->convertFields($fields);
+
+            $fields["images"] = $place->resizeImages($images);
+            $fields["password"] = $account->password;
+            $fields["proxy"] = array_pop(explode("@", $account->proxy));
+            $fields["code"] = $advert->good->fields_assoc[3]->value;
+            $fields["id"] = $advert->id;
+
+            return $fields;
+        }
+
+        // print_r($images);
+        // echo "<br>";
+        // print_r($fields);
+        // die();
         
         if( $place_name != "VK" ){
-            $place->setUser($account->login, $account->password);
-            $res = $place->auth();  
+            if( $place_name == "DROM" ){
+                $place->setUser($account->login, $account->password);
+                $res = $place->auth();  
+            }
 
-            if( $place_name == "AVITO" )
+            if( $place_name == "AVITO" ){
+                $place->setUser($account->login, $account->password, $account->name);
+
+                if( !$place->isAuth() ){
+                    // $this->setParam( "AVITO", "AUTH", "off" );
+                    echo "Нет авторизации";
+                    $queue->setState("waiting");
+                    return false;
+                }
                 $this->parseAvito($place);
+            }
         }
+
         
         switch ($queue->action->code) {
             case 'delete':
@@ -202,10 +277,13 @@ class IntegrateController extends Controller
                 break;
             case 'add':
 
-                Log::debug("Выкладка ".$advert->good->fields_assoc[3]->value." в аккаунт ".$account->login);
-                $result = $place->addAdvert($fields,$images);
-                if( $result )
-                    $advert->setUrl($result);
+                // !!!!!! ВАЖНО !!!!!!!! Убрать условие при создании объекта AVITO
+                if( !$avito ){
+                    Log::debug("Выкладка ".$advert->good->fields_assoc[3]->value." в аккаунт ".$account->login);
+                    $result = $place->addAdvert($fields,$images);
+                    if( $result )
+                        $advert->setUrl($result);
+                }
 
                 break;
             case 'update':
@@ -243,8 +321,10 @@ class IntegrateController extends Controller
                 break;
             case 'up':
 
-                Log::debug("Поднятие ".$advert->good->fields_assoc[3]->value." в аккаунте ".$account->login);
-                $result = $place->up( $advert->url );
+                if( $place_name == "AVITO" ){
+                    Log::debug("Поднятие ".$advert->good->fields_assoc[3]->value." в аккаунте ".$account->login);
+                    $result = $place->up( $advert->url, $fields );
+                }
 
                 break;
             case 'updatePrice':
@@ -259,6 +339,10 @@ class IntegrateController extends Controller
                 break;
         }
         printf('<br>4Прошло %.4F сек.<br>', microtime(true) - $start); 
+
+        if($account->watermark){
+            $this->removeWatermark($images);
+        }
 
         if( $result ){
             // if( $place_name == "AVITO" && ($queue->action->code == "add" || $queue->action->code == "update" || $queue->action->code == "updateWithImages") ){
@@ -279,6 +363,30 @@ class IntegrateController extends Controller
         }
 
         return true;
+    }
+    public function actionClearArchived(){
+        $ids =  Controller::getIds( Queue::model()->with("advert.good_filter")->findAll("good_filter.archive <> 0 AND t.action_id <> 3") );
+        if( count($ids) )
+            Queue::model()->deleteAll("id IN (".implode(",", $ids).")");
+    }
+
+    public function actionGetNextAvito(){
+        $fields = $this->getNext(2048, true);
+        print_r(json_encode($fields));
+    }
+    public function actionSetAvitoResult($id, $result, $url = NULL){
+        $queue = Queue::model()->with("advert")->find("advert_id='$id' AND action_id=1");
+        if( $queue ){
+            if( $result == "success" ){
+                $queue->advert->setUrl($url);
+                $queue->delete();
+            }else if( $result == "error" ){
+                $queue->setState("error");
+            }
+            echo "1";
+        }else{
+            echo "0";
+        }
     }
 
     public function getPlaceName($place_id){
@@ -311,19 +419,84 @@ class IntegrateController extends Controller
     }
 
     public function actionAuto(){
-        // Все выкладывать на дром платный, дром бесплатный и авито
-        Queue::model()->addByFilter(
-            array( 27 => array(1056) ),
-            array( 27 => array(1056) ),
-            array( 58 => array(1081), 60 => array(1081), 61 => array(1081) )
-        );
+        switch (Yii::app()->params["site"]) {
+            case 'koleso':
+                // Все выкладывать на дром платный, дром бесплатный
+                Queue::model()->addByFilter(
+                    array( 27 => array(1056) ),
+                    array( 27 => array(1056) ),
+                    array( 58 => array(1081), 61 => array(1081) )
+                );      
 
-        // // Все зимние выкладывать на дром платный, дром бесплатный и авито
-        // Queue::model()->addByFilter(
-        //     array( 23 => array(465, 762), 27 => array(1056) ),
-        //     NULL,
-        //     array(60 => array(1081), 58 => array(1081))
-        // );
+                // На авито выкладывать по атрибуту "Выкладывать авито" == 2
+                Queue::model()->addByFilter(
+                    array( 27 => array(1056) ),
+                    array( 27 => array(1056) ),
+                    array( 60 => array(1081) ),
+                    array( 111 => array("min" => 2, "max" => 2) ),
+                    array( 111 => array("min" => 2, "max" => 2) )
+                );
+                break;
+            
+            case 'shikon':
+                Queue::model()->addByFilter(
+                    array(  ),
+                    array(  ),
+                    array( 61 => array(1059) )
+                );  
+                break;
+        }
+        echo json_encode(array(
+            "result" => "success",
+            "action" => "updateCronCount",
+            "count" => Cron::model()->count()
+        ));
+    }
+
+    public function actionSetCookie($login, $drom = false){
+        $text = "# Netscape HTTP Cookie File".PHP_EOL.
+        "# http://curl.haxx.se/docs/http-cookies.html".PHP_EOL.
+        "# This file was generated by libcurl! Edit at your own risk.".PHP_EOL.PHP_EOL;
+
+        if( $drom ){
+            $text .= ("www.farpost.ru\tFALSE\t/\tFALSE\t0\tPHPSESSID\t".$_POST["PHPSESSID"].PHP_EOL.
+            "#HttpOnly_.farpost.ru\tTRUE\t/\tFALSE\t1606672001\tboobs\t".$_POST["boobs"].PHP_EOL.
+            "#HttpOnly_.farpost.ru\tTRUE\t/\tFALSE\t1606672001\tpony\t".$_POST["pony"].PHP_EOL.
+            ".farpost.ru\tTRUE\t/\tFALSE\t1606672001\tlogin\t".$_POST["login"].PHP_EOL.
+            "www.farpost.ru\tFALSE\t/\tFALSE\t1606672001\tring\t".$_POST["ring"].PHP_EOL.
+            "#HttpOnly_.drom.ru\tTRUE\t/\tFALSE\t1606672001\tboobs\t".$_POST["boobs"].PHP_EOL.
+            "#HttpOnly_.drom.ru\tTRUE\t/\tFALSE\t1606672001\tpony\t".$_POST["pony"].PHP_EOL.
+            ".drom.ru\tTRUE\t/\tFALSE\t1606672001\tlogin\t".$_POST["login"].PHP_EOL.
+            "baza.drom.ru\tFALSE\t/\tFALSE\t1606672001\tring\t".$_POST["ring"].PHP_EOL);
+        }else{
+            foreach ($_POST as $name => $value) {
+                $text .= ("#HttpOnly_.avito.ru\tTRUE\t/\tTRUE\t1606672001\t$name\t$value".PHP_EOL);
+            }
+        }
+
+        file_put_contents('protected/extensions/cookies/'.md5($login).'.txt', $text);
+
+        if( !$drom )
+            $this->setParam( "AVITO", "AUTH", "on" );
+
+        echo "Авторизация сервера прошла успешно.";
+    }
+
+    public function actionCheckAuth(){
+        // $account = $this->getAvitoAccount("tomskdiski@yandex.ru");
+        // $avito = new Avito( $account->proxy  );
+
+        // if( $account->proxy != NULL ){
+        //     $avito->setUser($account->login, $account->password);
+            
+        //     if( $avito->isAuth() ){
+        //         $this->setParam( "AVITO", "AUTH", "on" );
+        //     }else{
+        //         $this->setParam( "AVITO", "AUTH", "off" );
+        //     }
+        // }else{
+        //     $this->setParam( "AVITO", "AUTH", "off" );
+        // }
     }
 // Выкладка -------------------------------------------------------------- Выкладка
 
@@ -419,7 +592,8 @@ class IntegrateController extends Controller
                         "min" => 1,
                     ),
                     43 => array(1418,1419,1857,1860)
-                )
+                ),
+                "not_contain" => 117
             )
         )->getPage(
             array(
@@ -502,7 +676,7 @@ class IntegrateController extends Controller
         $users = $this->getDromAccount();
 
         foreach ($users as $user) {
-            $drom = new Drom((isset($user->ip)) ? $user->ip : NULL);
+            $drom = new Drom((isset($user->proxy)) ? $user->proxy : NULL);
             $drom->setUser($user->login,$user->password);
             $drom->upAdverts();
         }
@@ -520,6 +694,7 @@ class IntegrateController extends Controller
         $isset_adverts = array();
 
         foreach ($users as $user) {
+            if( $user->login == "Shikon" ) continue;
             if($user->id !== NULL){
                 $drom = new Drom();
                 $links = $drom->parseAllItems("http://baza.drom.ru/user/".$user->login."/", $user->id, false);
@@ -733,6 +908,21 @@ class IntegrateController extends Controller
     public function convertTime($time){
         return date("Y-m-d H:i:s", date_timestamp_get(date_create(substr(str_replace("T", " ", $time), 0, strpos($time, "+"))))-2*60*60);
     }
+
+    public function actionParseCategoryNew(){
+
+        // $bj = new BestJapan();
+
+        // $bj->auth();
+        // $bj->setBid("q224032890", 6, 1000, 100, 2000);
+        // $bj->getState("p621235467");
+
+        $yahoo = new YahooQuery();
+
+        $yahoo->getNextPage("query=45r17+2本+5.5ミリ&f=0x4&aucmaxprice=230");
+        // parse_str("query=45r17 2本 5.5ミリ&f=0x4&bids=1", $query);
+        // print_r($query);
+    }
 // Yahoo ----------------------------------------------------------------- Yahoo
 
 // Магазин --------------------------------------------------------------- Магазин
@@ -811,6 +1001,9 @@ class IntegrateController extends Controller
 // Магазин --------------------------------------------------------------- Магазин
 
 // Планировщик ----------------------------------------------------------- Планировщик
+    public function actionCronCount(){
+        echo Cron::model()->count();
+    }
     public function actionDoNextTask($debug = false){
         if( !$this->checkTaskAccess() && !$debug ) return true;
 
@@ -863,6 +1056,15 @@ class IntegrateController extends Controller
         return ( trim($toggle) == "on" );
     }
 // Планировщик ----------------------------------------------------------- Планировщик
+
+// Отсмотрщик ------------------------------------------------------------ Отсмотрщик
+    public function actionParseDrom(){
+        $avito = new Drom();
+        $avito->setUser("beatbox787@gmail.com", "481516");
+        $res = $avito->auth();
+        $avito->parseMessages();
+    }
+// Отсмотрщик ------------------------------------------------------------ Отсмотрщик
 
 // Остальное ------------------------------------------------------------- Остальное
     public function actionTest(){
@@ -1341,6 +1543,34 @@ class IntegrateController extends Controller
         print_r($diff_cache);
 
         // $this->removeDirectories($diff_cache, Yii::app()->params["cacheFolder"]."/".$good_type_code);
+    }
+
+    public function actionOlimp(){
+        include_once Yii::app()->basePath.'/extensions/simple_html_dom.php';
+
+        $curl = new Curl();
+
+        $prev = file_get_contents("olimp.txt");
+
+        $html = str_get_html($curl->request("http://konkurs.1c.ru/"));
+
+        if( is_object($html) && $html->find(".d-lst-articles",0) ){
+            $lastUrl = $html->find(".d-lst-articles li dl dd p.h3 a",0)->getAttribute("href");
+            $lastText = $html->find(".d-lst-articles li dl dd p.h3 a",0)->plaintext;
+            if( $prev != $lastUrl ){
+                require_once("phpmail.php");
+
+                $subject = "Новая новость";
+                $message = "<a target='_blank' href='http://konkurs.1c.ru".$lastUrl."'>".$lastText."</a>";
+                $email_admin = "mike@kitaev.pro,drive-online@yandex.ru";
+                    
+                if(send_mime_mail("Конкурс 1С","konkurs@1c.ru",$name,$email_admin,'UTF-8','UTF-8',$subject,$message,true)){    
+                    file_put_contents("olimp.txt", $lastUrl);
+                }
+            }else{
+                Log::debug("Нет новых новостей");
+            }
+        }
     }
 
     public function actionParseTitles(){

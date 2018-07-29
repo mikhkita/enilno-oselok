@@ -7,6 +7,13 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
     <title><?=$this->cityReplace($this->title)?></title>
     <meta name="keywords" content='<?=$this->cityReplace($this->keywords)?>'>
     <meta name="description" content='<?=$this->cityReplace($this->description)?>'>
+    
+    <script language="javascript">
+    // document.ondragstart = xenforo;
+    // document.onselectstart = xenforo;
+    document.oncontextmenu = xenforo;
+    function xenforo() {return false}
+    </script>
 
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="format-detection" content="telephone=no">
@@ -68,6 +75,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
 
     </script>
     <? endif; ?>
+    <script type="text/javascript">(window.Image ? (new Image()) : document.createElement('img')).src = location.protocol + '//vk.com/rtrg?r=wReeJi7haO54u82VAm4SkJa7i3u/s8Y0HFxl1u2ifSR6NbgZ7pl*IyCZUQpNlerjmMncA53Q6uwz1y9W/xeJfUcGEy7Cl2C6h5FqWx5VmPmH4G8w7x0HlLzMflJ4htZhPPBOEvpzIar3I*1E/sGRbUjnRcJ*wkubMrY4LQW*ui8-&pixel_id=1000091393';</script>
 </head>
 <body>
     <ul class="ps-lines">
@@ -125,7 +133,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
                             $phone = str_split(Yii::app()->params["city"]->phone); 
                             $phone = $phone[0]." (".$phone[1].$phone[2].$phone[3].") ".$phone[4].$phone[5].$phone[6]."-".$phone[7].$phone[8]."-".$phone[9].$phone[10];
                         ?>
-                        <a href="tel:+<?=Yii::app()->params["city"]->phone?>" class="mobile-not-fancy fancy left" data-block="#b-popup-callback">+<?=$phone?></a>
+                        <? /* ?><a href="tel:+<?=Yii::app()->params["city"]->phone?>" class="mobile-not-fancy fancy left" data-block="#b-popup-callback">+<?=$phone?></a><? */ ?>
                         <a href="mailto:info@koleso.online" class="left mail">info@koleso.online</a>
                         <!-- <a href="#" class="right basket">Корзина (0)</a> -->
                     </div>
@@ -175,7 +183,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
         <div class="b b-sub-menu b-fixed-top gradient-orange mobile-only">
             <div class="b-block clearfix">
                 <a href="#" class="b-burger icon left"></a>
-                <a href="tel:+<?=Yii::app()->params["city"]->phone?>" class="mobile-not-fancy fancy b-phone-center left" data-block="#b-popup-callback">+<?=$phone?></a>
+                <!-- <a href="tel:+<?=Yii::app()->params["city"]->phone?>" class="mobile-not-fancy fancy b-phone-center left" data-block="#b-popup-callback">+<?=$phone?></a> -->
                 <a href="#" class="b-search-icon icon right"></a>
             </div>
         </div>
@@ -214,9 +222,9 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
                     <li>
                         <h3>Контактная информация</h3>
                         <a class="footer-contacts mail" href="mailto:info@koleso.online">info@koleso.online</a>
-                        <a class="mobile-not-fancy fancy footer-contacts phone" data-block="#b-popup-callback" href="tel:+<?=Yii::app()->params["city"]->phone?>">+<?=$phone?></a>
+                        <!-- <a class="mobile-not-fancy fancy footer-contacts phone" data-block="#b-popup-callback" href="tel:+<?=Yii::app()->params["city"]->phone?>">+<?=$phone?></a> -->
                         <? if(Yii::app()->params["city"]->id == 1081): ?>
-                            <span class="footer-contacts map">г. Томск, улица Мокрушина, 9 ст. 42</span>
+                            <!-- <span class="footer-contacts map">г. Томск, Комсомольский проспект, 7, стр. 9</span> -->
                         <? else: ?>
                             <br>
                         <? endif; ?>
@@ -276,9 +284,9 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
     <div id="b-popup-callback">
         <div class="for_all b-popup-small">
             <h3>Заказать звонок</h3>
-            <h4>Для получения подробной информации Вы можете позвонить по телефону:</h4>
-            <h5><a href='tel:+<?=Yii::app()->params["city"]->phone?>'>+<?=$phone?></a></h5>
-            <h4>Или оставить заявку и мы Вам перезвоним в ближайшее время:</h4>
+            <!-- <h4>Для получения подробной информации Вы можете позвонить по телефону:</h4> -->
+            <!-- <h5><a href='tel:+<?=Yii::app()->params["city"]->phone?>'>+<?=$phone?></a></h5> -->
+            <h4>Оставьте заявку и мы Вам перезвоним в ближайшее время:</h4>
             <form action="<?=Yii::app()->createUrl('/kolesoOnline/mail/')?>" id="b-form-call" method="POST"  data-block="#b-popup-2">
                 <div class="b-popup-form">
                     <label for="name">Ваше имя *</label>
@@ -294,9 +302,9 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
     <div id="b-popup-buy">
         <div class="for_all b-popup-small">
             <h3>Уточнить цену</h3>
-            <h4>Для получения подробной информации Вы можете позвонить по телефону:</h4>
-            <h5><a href='tel:+<?=Yii::app()->params["city"]->phone?>'>+<?=$phone?></a></h5>
-            <h4>Или оставить заявку и мы Вам перезвоним в ближайшее время:</h4>
+            <!-- <h4>Для получения подробной информации Вы можете позвонить по телефону:</h4> -->
+            <!-- <h5><a href='tel:+<?=Yii::app()->params["city"]->phone?>'>+<?=$phone?></a></h5> -->
+            <h4>Оставьте заявку и мы Вам перезвоним в ближайшее время:</h4>
             <form action="<?=Yii::app()->createUrl('/kolesoOnline/mail/')?>" id="b-form-buy" method="POST" data-block="#b-popup-2">
                 <div class="b-popup-form">
                     <label for="name">Ваше имя *</label>
@@ -368,7 +376,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
 
 <? if(isset(Yii::app()->params['server']) && Yii::app()->params['server'] === true && !isset($this->user->usr_id)): ?>
     <!-- Yandex.Metrika counter --><script type="text/javascript"> (function (d, w, c) { (w[c] = w[c] || []).push(function() { try { w.yaCounter34102235 = new Ya.Metrika({ id:34102235, clickmap:true, trackLinks:true, accurateTrackBounce:true, webvisor:true }); } catch(e) { } }); var n = d.getElementsByTagName("script")[0], s = d.createElement("script"), f = function () { n.parentNode.insertBefore(s, n); }; s.type = "text/javascript"; s.async = true; s.src = "https://mc.yandex.ru/metrika/watch.js"; if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); } })(document, window, "yandex_metrika_callbacks");</script><noscript><div><img src="https://mc.yandex.ru/watch/34102235" style="position:absolute; left:-9999px;" alt="" /></div></noscript><!-- /Yandex.Metrika counter -->
-    <?if(!$mobile):?>
+    <?if(!$mobile && 0):?>
         <!-- BEGIN JIVOSITE CODE {literal} -->
         <script type='text/javascript'>
         (function(){ var widget_id = 'ACaUy3Bqm4';

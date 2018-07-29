@@ -222,7 +222,12 @@ class Advert extends CActiveRecord
 	    	$criteria->addInCondition("city_id",$params['Attr'][58]);
 	   	}
 	   	if( isset($params["url"]) && $params["url"] != "" )
-	   		$criteria->addCondition("url ".(($params["url"] == 1)?"IS NOT NULL":"IS NULL"), "AND");
+	   		if( $params["url"] == 1 ){
+	   			$criteria->addCondition("url IS NOT NULL", "AND");
+				$criteria->addCondition("url != ''", "AND");
+	   		}else{
+	   			$criteria->addCondition("url IS NULL OR url = ''", "AND");
+	   		}
 	   	if( isset($params["active"]) && $params["active"] != "" )
 	   		$criteria->addCondition("active = '".$params["active"]."'", "AND");
 

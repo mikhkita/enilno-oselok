@@ -2,7 +2,7 @@
 
 Class Resize {
 
-    private $image;
+    public $image;
     private $width;
     private $height;
     private $imageResized;
@@ -50,11 +50,15 @@ Class Resize {
         return $img;
     }
 
+    public function rotate($deg){
+        $this->imageResized = imagerotate($this->image, $deg, 0);
+    }
+
     public function resizeImageAvito($option="auto", $newWidth = NULL, $newHeight = NULL) {
      
         // *** Get optimal width and height - based on $option
         $img_ratio = $this->width/$this->height;
-        $newWidth = rand(960,1280);
+        $newWidth = rand(720,960);
         $newHeight = round($newWidth*$img_ratio);
         $optionArray = $this->getDimensions($newWidth, $newHeight, strtolower($option));
      
@@ -72,16 +76,23 @@ Class Resize {
     }
 
     public function resizeImage($newWidth, $newHeight, $option="auto") {
-     // 
+     
         // *** Get optimal width and height - based on $option
         $optionArray = $this->getDimensions($newWidth, $newHeight, strtolower($option));
      
         $optimalWidth  = $optionArray['optimalWidth'];
         $optimalHeight = $optionArray['optimalHeight'];
-     
-        // *** Resample - create image canvas of x, y size
+
         $this->imageResized = imagecreatetruecolor($optimalWidth, $optimalHeight);
+        imagealphablending($this->imageResized, false);
+        imagesavealpha($this->imageResized,true);
+        $transparent = imagecolorallocatealpha($this->imageResized, 255, 255, 255, 127);
+        imagefilledrectangle($this->imageResized, 0, 0, $optimalWidth, $optimalHeight, $transparent);
         imagecopyresampled($this->imageResized, $this->image, 0, 0, 0, 0, $optimalWidth, $optimalHeight, $this->width, $this->height);
+     
+        // // *** Resample - create image canvas of x, y size
+        // $this->imageResized = imagecreatetruecolor($optimalWidth, $optimalHeight);
+        // imagecopyresampled($this->imageResized, $this->image, 0, 0, 0, 0, $optimalWidth, $optimalHeight, $this->width, $this->height);
      
         // *** if option is 'crop', then crop too
         if ($option == 'crop') {
@@ -89,21 +100,26 @@ Class Resize {
         }
     }
 
-    public function setWatermark() {
-     
-        $stamp = imagecreatefrompng('upload/watermark.png');
+    public function setWatermark($name) {
+        $this->imageResized = $this->image;
+
+        $ix = imagesx($this->imageResized);
+        $iy = imagesy($this->imageResized);
+
+        $watermark = new Resize('upload/watermark/'.$name.'.png');
+        $watermark->resizeImage($ix*0.7, $iy*0.7, "landscape");
 
         // Установка полей для штампа и получение высоты/ширины штампа
         $marge_right = 10;
         $marge_bottom = 10;
-        $sx = imagesx($stamp);
-        $sy = imagesy($stamp);
-
-        $this->imageResized = $this->image;
+        $sx = imagesx($watermark->imageResized);
+        $sy = imagesy($watermark->imageResized);
+        // echo $sx." ".$ix." <br> ";
+        // echo $sy." ".$iy." <br> ";
 
         // Копирование изображения штампа на фотографию с помощью смещения края
         // и ширины фотографии для расчета позиционирования штампа. 
-        imagecopy($this->imageResized, $stamp, (imagesx($this->imageResized) - $sx)/2, (imagesy($this->imageResized) - $sy)/2, 0, 0, $sx, $sy);
+        imagecopy($this->imageResized, $watermark->imageResized, ($ix - $sx)/2, ($iy - $sy)/2, 0, 0, $sx, $sy);
     }
 
     private function getDimensions($newWidth, $newHeight, $option) {

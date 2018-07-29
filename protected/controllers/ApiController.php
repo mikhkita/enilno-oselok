@@ -44,6 +44,7 @@ class ApiController extends Controller
             ->join(GoodAttributeFilter::tableName().' f', 'g.id=f.good_id')
             ->where("f.attribute_id=3")
             ->order("s.date DESC")
+            ->limit(30)
             ->queryAll();
 
         $customers = array();

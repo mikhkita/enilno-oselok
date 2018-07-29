@@ -14,6 +14,18 @@
 	</div>
 
 	<div class="row">
+		<?php echo $form->labelEx($model,'rank'); ?>
+		<?php echo $form->numberField($model,'rank',array('maxlength'=>10,'required'=>true)); ?>
+		<?php echo $form->error($model,'rank'); ?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->labelEx($model,'category_id'); ?>
+		<?php echo $form->dropDownList($model, 'category_id', CHtml::listData(InterpreterCategory::model()->findAll(), 'id', 'name')); ?>
+		<?php echo $form->error($model,'category_id'); ?>
+	</div>
+
+	<div class="row">
 		<?php echo $form->labelEx($model,'good_type_id'); ?>
 		<?php echo $form->dropDownList($model, 'good_type_id', CHtml::listData(GoodType::model()->findAll(), 'id', 'name')); ?>
 		<?php echo $form->error($model,'good_type_id'); ?>

@@ -11,9 +11,11 @@
  * @property string $rule_code
  * @property integer $width
  * @property integer $category_id
+ * @property integer $rank
  */
 class Interpreter extends CActiveRecord
 {
+	public $rank = 0;
 	/**
 	 * @return string the associated database table name
 	 */
@@ -31,13 +33,13 @@ class Interpreter extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('name, template, good_type_id', 'required'),
-			array('width, category_id, service, unique', 'numerical', 'integerOnly'=>true),
+			array('width, category_id, rank, service, unique', 'numerical', 'integerOnly'=>true),
 			array('name, rule_code', 'length', 'max'=>255),
 			array('template', 'length', 'max'=>20000),
 			array('good_type_id', 'length', 'max'=>10),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, name, template, good_type_id, rule_code, width, category_id, unique', 'safe', 'on'=>'search'),
+			array('id, name, template, good_type_id, rule_code, width, category_id, rank, unique', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -52,7 +54,7 @@ class Interpreter extends CActiveRecord
 			'goodType' => array(self::BELONGS_TO, 'GoodType', 'good_type_id'),
 			'exports' => array(self::HAS_MANY, 'ExportInterpreter', 'interpreter_id'),
 			'rule' => array(self::BELONGS_TO, 'Rule', 'rule_code'),
-			'category' => array(self::BELONGS_TO, 'Category', 'category_id'),
+			'category' => array(self::BELONGS_TO, 'InterpreterCategory', 'category_id'),
 		);
 	}
 
@@ -68,7 +70,8 @@ class Interpreter extends CActiveRecord
 			'good_type_id' => 'Тип товара',
 			'rule_code' => 'Доступ',
 			'width' => 'Ширина в пикселях',
-			'category_id' => 'Категория',
+			'category_id' => 'Группа',
+			'rank' => 'Sort',
 			'service' => 'Служебный',
 			'unique' => 'Уникальный',
 		);

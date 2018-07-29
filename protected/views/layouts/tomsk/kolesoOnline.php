@@ -70,6 +70,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
 
     </script>
     <? endif; ?>
+    <script type="text/javascript">(window.Image ? (new Image()) : document.createElement('img')).src = location.protocol + '//vk.com/rtrg?r=oljJONJ5Kpqx0POYSZsEpGkPVmoHml8DltSN1EYq6hFe7R9A7VSdi6JtUHPSH42FtxxISrigbwnuifttsjL/ETC2GG2jrTOmSe*Gsr/MMsZlOns21c2FwcMk6T01EWYUKszilpgsfeQValrBIF6PiqmOfKYDlYDCj1dmzw/MWtQ-&pixel_id=1000091394';</script>
 </head>
 <body>
     <ul class="ps-lines">
@@ -212,7 +213,7 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
                         <a class="mobile-not-fancy fancy footer-contacts phone" data-block="#b-popup-callback" href="tel:+73822575756">+7 (3822) 57-57-56</a>
                         <a class="mobile-not-fancy fancy footer-contacts phone" data-block="#b-popup-callback" href="tel:+73822977327">+7 (3822) 977-327</a>
                         <? if(Yii::app()->params["city"]->id == 1081): ?>
-                            <span class="footer-contacts map">г. Томск, Комсомольский проспект, 7, стр. 9</span>
+                            <!-- <span class="footer-contacts map">г. Томск, Комсомольский проспект, 7, стр. 9</span> -->
                         <? else: ?>
                             <br>
                         <? endif; ?>

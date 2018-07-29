@@ -33,7 +33,10 @@ Class Yahon {
         $max_price = intval($max_price);
 
         // if($this->cookies === NULL) return "Авторизация не пройдена";
-        $bid = (($cur_price+$step*2)<=$max_price) ? ($cur_price+$step) : ( (($cur_price+$step)<=$max_price) ? $max_price : 0);
+
+        // $bid = (($cur_price+$step*2)<=$max_price) ? ($cur_price+$step) : ( (($cur_price+$step)<=$max_price) ? $max_price : 0);
+        $bid = $max_price;
+        
         Log::debug("Yahon.php 44 строка. bid = ".$bid);
         if($bid===0) {
             return array('result' => 5);
@@ -44,6 +47,11 @@ Class Yahon {
             'quantity'=>'1',
             'lot_no'=>$lot_number
         ));
+        // print_r(array(
+        //     'user_rate'=>$bid,
+        //     'quantity'=>'1',
+        //     'lot_no'=>$lot_number
+        // ));
 
         file_put_contents(Yii::app()->basePath."/logs/sniper/bid_preview.txt", $content);
         preg_match_all('/.(input [^>]*)/m', $content, $result);
@@ -60,6 +68,7 @@ Class Yahon {
                 $fields[$name[1][0]] = $val[1][0];
             }
         }
+        // unset($fields["code"]);
         Log::debug("Yahon.php 77 строка. signature = ".$fields["signature"]." token = ".$fields["token"]);
     
         if(!isset($fields["signature"])) {
@@ -67,6 +76,7 @@ Class Yahon {
         }
         // $fields['user_rate'] = 500;
 
+        // print_r($fields);
         $content = $this->curl->request("https://www.yahon.ru/yahoo/bid_place",$fields);
     
         file_put_contents(Yii::app()->basePath."/logs/sniper/bid_place.txt", $content);
@@ -82,6 +92,7 @@ Class Yahon {
         }
         Log::debug("Yahon.php 99 строка. params = ".implode("&", $params));
 
+        // print_r($params);
         $content = $this->curl->request("https://www.yahon.ru/modules/yahoo_auction/data_request/rate.php?".implode("&", $params));
     
         // curl_setopt($ch, CURLOPT_COOKIE, $this->cookies.";lotViewMode=1");
@@ -89,12 +100,11 @@ Class Yahon {
         // curl_setopt($ch, CURLOPT_POST, 0);
     
         file_put_contents(Yii::app()->basePath."/logs/sniper/rate.txt", $content);
-        print_r($content);
         if(mb_stripos($content,"Ставка принята",0,"UTF-8")) {
-            echo "Ставка принята";
+            Log::debug("Ставка принята", false, true);
             return array('price' => $bid, 'result' => 2);
         } else {
-            echo "Ставка не принята";
+            Log::debug("Ставка не принята", false, true);
             return array('price' => $bid, 'result' => 0);
         }
     }

@@ -1,5 +1,5 @@
 <h1><?=$folder->name?></h1>
-<div class="b-top-butt">
+<div class="b-top-butt clearfix">
 	<a href="<?php echo $this->createUrl('/'.$this->adminMenu["cur"]->code.'/admincreate',array("parent_id"=>$folder->id))?>" class="ajax-form ajax-create b-butt">Создать папку</a>
 	<a href="<?php echo $this->createUrl('/'.$this->adminMenu["cur"]->code.'/admintablecreate',array("folder_id"=>$folder->id))?>" class="ajax-form ajax-create b-butt" style="margin-right: 10px;">Создать таблицу</a>
 </div>

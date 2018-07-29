@@ -3,14 +3,15 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
 if(count($goods)): ?>
     <? foreach ($goods as $key => $good): ?>   
         <li  <? unset($_GET['partial'],$_GET['GoodFilter_page']); echo "data-last='".$last."'" ?> class="gradient-grey b-good-type-<?=$good->good_type_id?>">
-            <a href="<?=Yii::app()->createUrl('/kolesoOnline/detail',array('id' => ($good->code)?$good->code:$good->fields_assoc[3]->value,'type' => $type))?>"><div class="good-img<?=((isset($partial) && $partial)?"":" after-load-back")?>" <?=((isset($partial) && $partial)?"":"data-")?>style="background-image: url(<? $images = $good->getImages(1, array("small"), NULL, NULL, true); echo $images[0]["small"];?>);"></div></a>
+            <a href="<?=Yii::app()->createUrl('/kolesoOnline/detail',array('id' => ($good->code)?$good->code:$good->fields_assoc[3]->value,'type' => $type))?>"><div class="good-img<?=((isset($partial) && $partial)?"":" after-load-back")?>" <?=((isset($partial) && $partial)?"":"data-")?>style="background-image: url(<? $images = $good->getImages(1, array("small"), 1, NULL, true); echo $images[0]["small"];?>);"></div></a>
             <div class="params-cont">
                 <a class="params-cont-a" <? if(!$mobile) echo 'target="_blank"';?> href="<?=Yii::app()->createUrl('/kolesoOnline/detail',array('id' => ($good->code)?$good->code:$good->fields_assoc[3]->value,'type' => $type))?>">
                 <? 
+                    // $isHidePrice = (is_object($good->fields_assoc[117]) && $good->fields_assoc[117]->variant_id == 4312)?true:false;
+                    $isHidePrice = false;
                     $price = Interpreter::generate($this->params[$type]["PRICE_CODE"], $good, $dynamic);
                     $amount = $good->fields_assoc[$params[$type]["CATEGORY"]["AMOUNT"]['ID']]->value." ".$params[$type]["CATEGORY"]["AMOUNT"]['UNIT'];
-                    $price = ($price==0) ? Yii::app()->params["zeroPrice"] : number_format( $price, 0, ',', ' ' )." р. за ".$amount;
-                    
+                    $price = ($price==0 || $isHidePrice) ? Yii::app()->params["zeroPrice"] : number_format( $price, 0, ',', ' ' )." р. за ".$amount;
                 ?>
                 <? if($type == 2): ?>
                     <h4><?=$good->fields_assoc[6]->value?></h4>
@@ -49,7 +50,7 @@ if(count($goods)): ?>
                     <h3>Страна: <span><?=(($good->fields_assoc[11]->value) ? $good->fields_assoc[11]->value : "Не указано")?></span></h3>
                 <? endif; ?>
                 </a>
-                <? if($price != Yii::app()->params["zeroPrice"]): ?>
+                <? if($price != Yii::app()->params["zeroPrice"] && !$isHidePrice ): ?>
                     <? if(!$mobile): ?>
                         <? if(isset($_SESSION["BASKET"]) && array_search($good->id, $_SESSION["BASKET"]) !== false): ?>
                             <a href="<?=Yii::app()->createUrl('/kolesoOnline/basket',array('id' => $good->id,'add' => true))?>" class="b-orange-butt carted">Оформить</a>

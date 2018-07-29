@@ -57,7 +57,7 @@ class YahooController extends Controller
 		$arr_name = "YL";
 		$filter_values = isset( $_POST[$arr_name] )?$_POST[$arr_name]:array();
 
-		YahooLot::model()->deleteAll("end_time<'".date("Y-m-d H:i:s", time()-60*60*5)."'");
+		YahooLot::model()->deleteAll("end_time<'".date("Y-m-d H:i:s", time()-60*60*24*2)."'");
 		$criteria=new CDbCriteria();
 
 	   	if( count($filter_values) ){
@@ -182,6 +182,11 @@ class YahooController extends Controller
 	public function actionAdminDetail($code = NULL){
 		if( $code ){
 			$item = Injapan::getDetail($code);
+
+			// Замена ссылки с яху на бестджапан
+			$pattern = "/https:\/\/page.auctions.yahoo.co.jp\/jp\/auction\/(\w+)/i";
+			$replacement = "http://www.bestjapan.ru/auction/item_\${1}.html";
+			$item->table = preg_replace($pattern, $replacement, $item->table);
 
 			$model = new Auction();
 			$model->code = $code;

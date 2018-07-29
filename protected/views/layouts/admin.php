@@ -6,6 +6,7 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<meta name="language" content="ru" />
 	<title><?php echo $this->pageTitle; ?></title>
+    <meta name="viewport" id="viewport" content="width=device-width, user-scalable=no">
     <link rel="shortcut icon" href="/favicon2.ico" type="image/x-icon"> 
     <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/reset.css" />
     <link rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/css/jquery.qtip.min.css" type="text/css">
@@ -16,7 +17,8 @@
     <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/select2.css" />
     <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/js/plupload/jquery.plupload.queue/css/jquery.plupload.queue.css" />
     <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/ionicons/css/ionicons.min.css" />
-    <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/admin.css" />
+    <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/admin.css?2" />
+    <link rel="stylesheet" media="screen and (min-width: 240px) and (max-width: 768px)" href="<?php echo Yii::app()->request->baseUrl; ?>/css/admin-mobile.css?1" />
 
     <link rel="apple-touch-icon-precomposed" sizes="57x57" href="<?php echo Yii::app()->request->baseUrl; ?>/html/icon/admin/apple-touch-icon-57x57.png" />
     <link rel="apple-touch-icon-precomposed" sizes="114x114" href="<?php echo Yii::app()->request->baseUrl; ?>/html/icon/admin/apple-touch-icon-114x114.png" />
@@ -53,7 +55,7 @@
     <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/jquery.cookie.js"></script>
     <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/form2js.js"></script>
     <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/sortable.js"></script>
-    <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/admin.js"></script>
+    <script type="text/javascript" src="<?php echo Yii::app()->request->baseUrl; ?>/js/admin.js?2"></script>
     <? foreach ($this->scripts as $script): ?>
         <script type="text/javascript" src="<?=Yii::app()->request->baseUrl?>/js/<?=$script?>.js"></script>
     <? endforeach; ?>
@@ -63,12 +65,14 @@
     <? if( Yii::app()->user->isGuest ): ?>
         <?php echo $content;?>
     <? else: ?>
+        <a href="#" class="b-mobile-go-to b-mobile-top ion-arrow-up-a"></a>
+        <a href="#" class="b-mobile-go-to b-mobile-bottom ion-arrow-down-a"></a>
         <div class="nav_container">
             <div class="b-place-state">
-                <span class="<?=(($this->place_states["DROM"] == "on")?("b-green"):("b-red"))?>" data-id="2047">Дром</span>
-                <span class="<?=(($this->place_states["AVITO"] == "on")?("b-green"):("b-red"))?>" data-id="2048">Авито</span>
-                <span class="<?=(($this->place_states["VK"] == "on")?("b-green"):("b-red"))?>" data-id="3875">Вк</span>
-                <p><?=Cron::model()->count();?></p>
+                <span class="<?=(($this->place_states["DROM"] == "on")?("b-green"):("b-yellow"))?>" data-id="2047">Дром</span>
+                <span class="<?=(($this->place_states["AVITO"] == "not_auth")?("b-red"):(($this->place_states["AVITO"] == "on")?("b-green"):("b-yellow")))?>" data-id="2048">Авито</span>
+                <span class="<?=(($this->place_states["VK"] == "on")?("b-green"):("b-yellow"))?>" data-id="3875">Вк</span>
+                <p data-url="<?php echo $this->createUrl('integrate/croncount')?>" class="b-cron-count"><?=Cron::model()->count();?></p>
             </div>
             <div class="who_am_i">
                 <div class="b-user clearfix">
@@ -82,6 +86,7 @@
                     <div class="b-panel-icons">
                         <div class="b-panel-icons-wrap">
                             <div class="b-panel-icons-item b-panel-icons-home"><a title="На сайт" href="/"></a></div>
+                            <div class="b-panel-icons-item b-panel-icons-refresh"><a title="Обновить выкладку" href="<?php echo $this->createUrl('integrate/auto')?>" class="ajax-request"></a></div>
                             <div class="b-panel-icons-item b-panel-icons-logout"><a title="Выйти" href="<?php echo $this->createUrl('site/logout')?>"></a></div>
                        </div>
                     </div>
@@ -100,6 +105,7 @@
         </div>
         <div class="main">
             <div class="b-find-advert-button ion-ios-search-strong" id="b-find-advert-button"></div>
+            <div class="b-menu-button ion-navicon" id="b-menu-button"></div>
             <div class="b-find-advert">
                 <form action="<?php echo $this->createUrl('/advert/adminfindbyid')?>" method="GET" target="_blank">
                     <input type="text" name="find_advert_id" id="b-find-advert" />

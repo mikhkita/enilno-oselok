@@ -106,12 +106,12 @@ $mobile = (preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|
 				<div id="tabs-shippping"><?=Interpreter::generate($this->params[$_GET['type']]["ORDER"], $good,$dynamic);?></div>
 				<div id="tabs-warranty"><?=Interpreter::generate($this->params[$_GET['type']]["GARANTY_CODE"], $good,$dynamic);?></div>
 			</div>
-			<? if(count($similar)): ?>
+			<? /* if(count($similar)): ?>
                 <h3 class="category-title similar">Похожие товары</h3>
                 <ul class="goods clearfix" id="similar-slider">  
                     <?php $this->renderPartial('vladivostok/_list', array('goods' => $similar,'last' => 0,'params' => $params,'type' => $_GET['type'],'dynamic'=>$dynamic)); ?>
                 </ul>
-        	<? endif; ?>
+        	<? endif; */ ?>
 		</div>
 	</div>
 </div>

@@ -1,164 +1,150 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd"> 
-<html><head>
-<title>Подтверждение ставки - Аркон Авто</title>
-<meta name="description" CONTENT="">
-<meta name="keywords" CONTENT="">
-<meta content="text/html; charset=utf-8" http-equiv=Content-Type>
-<meta name="viewport" content="width=device-width, initial-scale=1"><link rel="shortcut icon" href="https://www.yahon.ru/favicon.ico" type="image/x-icon">
-<link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css">
-<link rel="stylesheet" type="text/css" href="/assets/body.v506.css">
-<link rel="stylesheet" type="text/css" href="/assets/5cols.v506.css">
-<link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
-<script language="javascript" type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-<script language="javascript" type="text/javascript" src="/lib/js/jquery.cookies.js"></script>
-<script language="javascript" type="text/javascript" src="/assets/checks.v506.js"></script>
-<script language="javascript" type="text/javascript" src="/modules/gtranslate/js/translate.v506.js"></script>
-<script language="javascript" type="text/javascript" src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
-<script language="javascript" type="text/javascript" src="/lib/js/awesomplete.min.js"></script>
-<script language="javascript" type="text/javascript" src="/lib/js/awesomplete-ajax.js"></script>
-<!--[if lt IE 7]>
-<![if gte IE 5.5]>
-<script type="text/javascript" src="/lib/js/fixpng.js"></script>
-<style type="text/css">
-.png, IMG { filter:expression(fixPNG(this)); }
-.png A { position: relative; }
-</style>
-<![endif]>
-<![endif]-->
 
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head>
+<title>Подтверждение ставки - BestJapan.ru</title>
+<meta name="google-site-verification" content="fb07NZk269eez84bT5Za0p9Z7IaJ_j-q6pwkHY5fPCs" />
+<meta name="yandex-verification" content="475f69388c77868e" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta name="description" content="Подтверждение ставки -  Лот №: q224032890 Название лота: зимний / стоит посмотреть очень популярный set♪ Subaru Legacy Exiga оригинальный Bridgestone BLIZZAK REVO 2 215/50R17 использование не по назначению тоже Outback Forester др.. Продавец: pripri811  Подтверждение ставки - BestJapan.ru" />
+<meta name="keywords" content="Подтверждение ставки, Доставка морем (экспресс), Доставка морем (эконом доставка), Доставка морем (запчасти эконом), Доставка морем (колонки эконом), Доставка морем (запчасти экспресс), Доставка морем (колеса и диски экспресс), Доставка морем (диски и колеса эконом), Доставка морем (шины + свои диски), Доставка морем (диски под шиномонтаж), Застраховать покупку, проверку товара, Договора публичной оферты, условиями и стоимостью, страхования, вернуться на страницу лота, " />
+<link rel="stylesheet" type="text/css" href="/img/reset-fonts-grids.css">
+<link rel="stylesheet" type="text/css" href="/img/design.v2.20.css">
+<link rel="stylesheet" type="text/css" href="/img/more.v2.20.css">
+<link rel="stylesheet" type="text/css" href="/img/um.css">
+<script language="javascript" type="text/javascript" src="//yandex.st/jquery/1.7.1/jquery.min.js"></script>
+<script language="javascript" type="text/javascript" src="/lib/js/jquery.cookies.js"></script>
 </head>
 <body>
+<div id="doc3" class="yui-t6">
 
-<script>
-window.onload = function() {
-    var searchBox = document.querySelector('.awesomplete input');
-    var ajaxAwesome = new Awesomplete(searchBox);
-    ajaxAwesome.ajaxUrl = '/lib/data_request/autocomplete.php';
-}
-</script>
+<div id="hd"><div id="hdenvelope">
+<a id="logo" href="/"><span>На главную</span></a>
+<div id="rightheader"><div id="rightheader-container">
 
-<nav class="navbar navbar-inverse" role="navigation">
-    <div class="container">
-        <div class="navbar-header">
-                  <a class="navbar-brand" href="/">Yahon.ru</a>
+<ul class="navicons">
+<li><a href="/sitemap"><img src="/img/icon_sitemap.png" alt="" /></a></li>
+<li><a href="/contacts/jp"><img src="/img/icon_mail.png" alt="" /></a></li>
+<!-- <li><a href="/forum"><img src="/img/icon_people.png" alt="" /></a></li> -->
+<li><a href="/"><img src="/img/icon_home.png" alt="" /></a></li>
+</ul>
+
+<div id="logininfo">
+
+<div id="greeting">Здравствуйте, Косинов Сергей Александрович (<a href="https://www.bestjapan.ru?logout=1">выход</a>)</div><ul id="personal_menu"><li><a href="https://www.bestjapan.ru/personal/favourites">Избранное</a></li><li><a href="https://www.bestjapan.ru/personal/messages"><img src="https://www.bestjapan.ru/templates/frontend/img/new_message_blink.gif" class="pic" border="0" align="absmiddle" alt="Есть новые сообщения!">&#8202;Сообщения</a></li><li><a href="https://www.bestjapan.ru/personal/bids">Ставки</a></li><li><a href="https://www.bestjapan.ru/personal">Кабинет:</a></li></ul><ul id="balance_state"><li><a href="//www.bestjapan.ru/personal/purse">В кошельке</a>: <b>¥&#8202;&#8202;20&#8202;&#8202;803</b></li><li><small>всего ¥&#8202;&#8202;41&#8202;&#8202;606 с учетом кредита</small></li></ul><div id="basket_state"></div>
+
+
+</div>
+
+
+</div></div>
+
+<div id="rulermeny">
+<ul>
+<li><a href="https://www.bestjapan.ru/about">О компании</a></li><li><a href="https://www.bestjapan.ru/help/opt">Программы для оптовых покупателей</a></li><li><a href="https://www.bestjapan.ru/help/auc">Помощь </a></li></ul>
+
+
+</div>
+</div></div>
+
+
+<div id="basket_popup"><div id="basket_popup_holder"><div id="basket_preview" style="display:none; z-index:100; width:500px;">&nbsp;</div></div></div>
+
+<div id="bd">
+
+<div class="single_column">
+
+
+<!-- searchform start -->
+<div id="searchform"><div id="searchform_right"><div id="searchform_contents">
+
+<form action="//www.bestjapan.ru/auction/search" method="GET">
+
+<table border="0"><tr><td class="title">
+
+Поиск: </td><td class="input_field">
+
+    <div class="searchContainer">
+        <div class="searchOptions">
+            <input name="f" value="0x4" type="checkbox" ><a class="tooltips hint--right question_mark hint--success hint--rounded hint--bounce" data-hint="Поиск в описании">?</a>
         </div>
-        <form class="navbar-form navbar-left" role="search" action="/yahoo/search">
-            <div class="input-group" id="search">
-                <span class="input-group-btn">
-                <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-expanded="false">Категории <span class="caret"></span></button>
-                <ul class="dropdown-menu cat-menu" role="menu">
-                    <li>
-                        <ul class="list-unstyled col-sm-3 cat">
-                            <li><h4><a href="/yahoo/part_26318.html">Авто мото</a></h4></li>
-                            <li><a href="/yahoo/part_26322.html">Запчасти</a></li>
-                            <li><a href="/yahoo/part_2084300257.html">Шины, колеса</a></li>
-                            <li><a href="/yahoo/part_23852.html">Car Audio</a></li>
-                            <li><a href="/yahoo/part_26320.html">Аксессуары</a></li>
-                        </ul>
-                        <ul class="list-unstyled col-sm-4 cat">
-                            <li><h4><a href="/yahoo/part_23140.html">Часы, аксессуары</a></h4></li>
-                            <li><a href="/yahoo/part_2084005359.html">Женские аксессуары</a></li>
-                            <li><a href="/yahoo/part_2084005358.html">Мужские аксессуары</a></li>
-                            <li><a href="/yahoo/part_2084006476.html">Детские аксессуары</a></li>
-                            <li><a href="/yahoo/part_23260.html">Брендовые часы</a></li>
-                        </ul>
-                        <ul class="list-unstyled col-sm-4 cat">
-                            <li><h4><a href="/yahoo/part_23632.html">Видео, аудио</a></h4></li>
-                            <li><a href="/yahoo/part_23880.html">Видео</a></li>
-                            <li><a href="/yahoo/part_23764.html">Аудио</a></li>
-                            <li><a href="/yahoo/part_23636.html">Фотоаппараты, оптика</a></li>
-                            <li><a href="/yahoo/part_23960.html">Мобильные телефоны</a></li>
-                            <li><span id="all_cat"><a href="/yahoo/part_0.html">Все категории</a></span></li>
-                        </ul>
-                    </li>
-                </ul>
-                </span>
-                <input type="search" autofocus class="awesomplete form-control" list="mylist" autocomplete="off" data-autofirst placeholder="" name="q" value="">
-                <input type="hidden" name="code" value="0">
-                <span class="input-group-btn">
-                <button class="btn btn-search">Найти</button>
-                </span>
-                </div>
-            </form>
-            <form class="navbar-form navbar-right" role="form">
-                <ul class="nav">
-                                    <li>
-                    	<a href="/delivery">Тарифы</a>
-                	</li>
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" id="cabinet-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> Мой кабинет<span class="caret"></span></a>
-                        <ul class="dropdown-menu" role="menu">
-                            <li><a href="/personal/bids"><i class="fa fa-gavel"></i> Ставки</a></li>
-                            <li><a href="/personal/favourites"><i class="fa fa-heart"></i> Избранные лоты</a></li>
-                            <li><a href="/personal/orders"><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span> Заказы</a></li>
-                            <li><a href="/personal/messages">
-                    <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> Сообщения</a></li>
-                                            <li><a href="/personal/purse"><i class="fa fa-jpy"></i> Кошелек</a></li>
-                        <li class="divider"></li>
-                        <li><a href="/personal/pasport"><i class="fa fa-cog"></i> Профиль <small>(svc1)</small></a></li>
-                        <li><a href="/request">Заказ доставки</a></li>
-                        <li><a href="/requestBuying">Заказ покупки</a></li>
-                        <li><a href="/orderParts">Новые запчасти</a></li>
-                    </ul>
-                </li>
-                <li><a href="/?logout=1"><small>Выйти</small></a></li>
-                            </ul>
-        </form>
-        </div><!--/.navbar-collapse -->
+        <div class="searchInput">
+            <input name="q" type="text" value="">
+        </div>
     </div>
-</nav>
+
+</td><td>
+<select name="part_id" class="part_select"><option value="0" SELECTED>во всех разделах</option><option value="26318" >Авто-мото, запчасти</option><option value="23632" >Бытовая техника</option><option value="23976" >Еда, напитки</option><option value="25464" >Игры и игрушки</option><option value="21600" >Книги, журналы</option><option value="20000" >Коллекционирование</option><option value="20060" >Комиксы и аниме товары</option><option value="23336" >Компьютеры</option><option value="42177" >Красота и  здоровье</option><option value="22152" >Музыка</option><option value="23000" >Одежда и обувь</option><option value="24698" >Спорт, активный отдых</option><option value="24202" >Товары для детей</option><option value="24198" >Товары для дома</option><option value="22896" >Товары для офиса</option><option value="2084032594" >Товары для фанатов</option><option value="21964" >Фильмы, видео</option><option value="24242" >Хобби, увлечения</option><option value="26086" >Цветы и садоводство</option><option value="23140" >Часы и аксессуары</option><option value="26084" >Прочее</option></select></td><td class="search_button">
+<input type="image" class="search_button" src="/img/button_search.png" alt="Найти"/>
+</td></tr></table></form>
+
+<form action="//www.bestjapan.ru/auction/search" method="GET" onsubmit="this.num_lot.value = this.num_lot.value.replace(/(^\s+)|(\s+$)/g, ''); if(this.num_lot.value.length > 5) {location.href = '/auction/item_' + this.num_lot.value.toLowerCase() + '.html';} return false;">
+<table border="0"><tr><td class="title">
+Номер лота:</td><td class="input_field"><input type="text" name="num_lot" size="12"></td><td class="left">
+
+<input type="image" class="open_button" src="/img/button_open_item.png" alt="Открыть лот"/></td><td><img src="/img/parts_search.gif"></td><td><a href="http://www.bestjapan.ru/auction/parts_search/" style="color: #ab1013; font-weight: bold;"">поиск запчастей</a></td>
+</tr>
 
 
+</table>
+</form>
+			
+				
+</div></div></div><!-- searchform end -->
 
+<div class="rightnav"><ul class="rightnav"><li><a href="https://www.bestjapan.ru/auctions">Аукционы Yahoo!</a></li><li><a href="https://www.bestjapan.ru/crooooberPromo">Покупки на CROOOOBER.com</a></li></ul></div>
+</div><div class="single_column">
 
+<div id="content">
+<!-- CONTENT -->
 
-
-
-
-
-
-     
-
-
-
-
-<div class="container">
-
-<div class="container"><form method="POST" onsubmit="return this.rest.checked;" action="https://www.yahon.ru/yahoo/bid_place"><table border="0" cellpadding="0" cellspacing="0" class="table"><tr><td class="fld">Лот:</td><td class="value">x426603684</td></tr><tr><td class="fld">Название лота:</td><td class="value">* Legacy Impreza*215/45R18*BS/REV02* оригинальныйSAA*</td></tr><tr><td class="fld"><b>Ваша ставка</b>:</td><td class="value"><b>&yen;16000</b></td></tr><tr><td class="fld">Текущая цена:</td><td class="value">&yen; 15<img src="https://www.yahon.ru/lib/res/img/1x1.gif" height="1" width="2" border="0">500</td></tr><tr><td class="fld">Ваши пожелания по данному лоту:</td><td class="value"><textarea cols="50" rows="3" name="comments" id="comments"  tabindex="1"></textarea></td></tr><tr><td class="fld"><b>Кол-во товаров</b>:</td><td class="value"><b>1</b></td></tr><tr><td class="fld">Желаемый способ доставки из Японии:</td><td class="value"><select name="deliveryType" id="deliveryType"  tabindex="2"><option value="2" >Доставка морем</option><option value="1" >Авиапочта EMS</option><option value="3" >Экспресс морем</option></select></td></tr></table><br><table border="0" cellpadding="0" cellspacing="0" width="80%"><tr><td align="center"><button type="submit" name="make" class="btn btn-primary btn-lg"  tabindex="3">Сделать ставку</button><input type="hidden" id="user_rate" name="user_rate" id="user_rate" value="16000"><input type="hidden" id="quantity" name="quantity" id="quantity" value="1"><input type="hidden" id="lot_no" name="lot_no" id="lot_no" value="x426603684"><input type="hidden" id="token" name="token" id="token" value="565c873c2cd8f"><input type="hidden" id="signature" name="signature" id="signature" value="56d72bf252f3e8e1d1e30207ef29d7fd"></td><td></td></tr></table></form></div>
-    
-</div>
-
-
-
-<div class="container">
-    <hr>
-    <footer>
-        <div class="row">
-            <div class="col-md-4">
-                <address> <span class="phones">8-423-254-82-29
-                <br>8-914-326-67-20</span>
-                <br>Владивосток, ул. Шошина, д. 6 (<a href="http://maps.yandex.ru/-/CVeo7X1m">карта</a>)</address>
-            </div>
-            <div class="col-md-4">
-                    <small><p>100 &yen; — 54.8 <span class="rur">p<span>уб.</span><br>
-                    1 $ — 120.8 ¥</p>
-                    Следующий пароход пока неизвестен                    </small>
-                
-            </div>
-            <div class="col-md-4">
-                <p><small>Почта: <a href="mailto:info@yahon.ru">info@yahon.ru</a><br>
-                Yahon.ru — доставка товаров с японских аукционов.</small></p>
-                <img src="https://www.paypalobjects.com/webstatic/mktg/logo/bdg_now_accepting_pp_2line_w.png" height="40" width="138" alt="Now Accepting PayPal">
-            </div>
-        </div>
-    </footer>
-</div>
+<div class="breadcrumbNavi"><a href="/"><img src="/img/icon_home.png" alt="На главную страницу"></a> &rarr; <a class="" href="/auctions">Аукцион яху (Yahoo! JAPAN Auctions) </a> &rarr;</div><h1>Подтверждение ставки</h1><form method="POST" action="https://www.bestjapan.ru/auction/bid_place"><table border="0" cellpadding="0" cellspacing="0" class="simple"><tr valign="top"><td align="right">Лот №:</td><td>q224032890</td></tr><tr valign="top"><td align="right">Название лота:</td><td> зимний / стоит посмотреть  очень популярный set♪ Subaru  Legacy  Exiga  оригинальный  Bridgestone BLIZZAK REVO 2 215/50R17 использование не по назначению  тоже  Outback  Forester  др. .</td></tr><tr valign="top"><td align="right">Продавец:</td><td>pripri811</td></tr><tr valign="top"><td align="right">Рейтинг продавца:</td><td>2773</td></tr><tr valign="top"><td align="right">Текущая цена:</td><td>&yen; 1 000</td></tr><tr valign="top"><td align="right">Окончание торгов:</td><td>30 июля 22:33</td></tr><tr valign="top"><td align="right">Окончание торгов (мск):</td><td>30 июля 16:33:40</td></tr><tr valign="top"><td align="right"><b>Ваша ставка</b>:</td><td><b>&yen;2000</b></td></tr><tr valign="top"><td align="right"><b>Кол-во товаров</b>:</td><td><b>1</b></td></tr><tr valign="top"><td align="right">Желаемый способ доставки из Японии:</td><td><label class="RadioButton" for="9393eec05eba04c6f204babb144f2199"><input id="9393eec05eba04c6f204babb144f2199" type="radio" name="deliveryType" value="2" checked  tabindex="1"> - <span class="ell_descr"><a href="/help/delivery/sea" target="_blank">Доставка морем (экспресс)</a></span></label><br><label class="RadioButton" for="6d1e3da96610028d144b09ccd03b3c97"><input id="6d1e3da96610028d144b09ccd03b3c97" type="radio" name="deliveryType" value="11"   tabindex="2"> - <span class="ell_descr"><a href="/help/delivery/sea" target="_blank">Доставка морем (эконом доставка)</a></span></label><br><label class="RadioButton" for="db29ade14aad3d71a32c61d466304fe3"><input id="db29ade14aad3d71a32c61d466304fe3" type="radio" name="deliveryType" value="4"   tabindex="3"> - <span class="ell_descr"><a href="/help/delivery/sea" target="_blank">Доставка морем (запчасти эконом)</a></span></label><br><label class="RadioButton" for="cc12682c272a03f15be249e86c737759"><input id="cc12682c272a03f15be249e86c737759" type="radio" name="deliveryType" value="14"   tabindex="4"> - <span class="ell_descr"><a href="/help/delivery/sea" target="_blank">Доставка морем (колонки эконом)</a></span></label><br><label class="RadioButton" for="ea23fd2187ef194bb64620980dfe2c2b"><input id="ea23fd2187ef194bb64620980dfe2c2b" type="radio" name="deliveryType" value="12"   tabindex="5"> - <span class="ell_descr"><a href="/help/delivery/sea" target="_blank">Доставка морем (запчасти экспресс)</a></span></label><br><label class="RadioButton" for="3fa299e922af195db5561e06e001e76e"><input id="3fa299e922af195db5561e06e001e76e" type="radio" name="deliveryType" value="13"   tabindex="6"> - <span class="ell_descr"><a href="/help/delivery/sea" target="_blank">Доставка морем (колеса и диски экспресс)</a></span></label><br><label class="RadioButton" for="d505f162fc2b19c990ec0dcbd8535c39"><input id="d505f162fc2b19c990ec0dcbd8535c39" type="radio" name="deliveryType" value="6"   tabindex="7"> - <span class="ell_descr"><a href="/help/delivery/sea" target="_blank">Доставка морем (диски и колеса эконом)</a></span></label><br><label class="RadioButton" for="d8d391d4d9fc95c2d6a37a1e0dad79f4"><input id="d8d391d4d9fc95c2d6a37a1e0dad79f4" type="radio" name="deliveryType" value="7"   tabindex="8"> - <span class="ell_descr"><a href="/help/delivery/sea" target="_blank">Доставка морем (шины + свои диски)</a></span></label><br><label class="RadioButton" for="80d9474670fe1de1f876a96aefbe8ba6"><input id="80d9474670fe1de1f876a96aefbe8ba6" type="radio" name="deliveryType" value="9"   tabindex="9"> - <span class="ell_descr"><a href="/help/delivery/sea" target="_blank">Доставка морем (диски под шиномонтаж)</a></span></label><br></td></tr><tr valign="top"><td align="right">Ваши пожелания по данному лоту:</td><td><textarea cols="50" rows="2" name="comments" id="comments"  tabindex="10"></textarea></td></tr><tr valign="top"><td align="right">Страхование покупки:</td><td><input type="checkbox" name="insurance" value="Y" style="background-color:transparent;" checked> <img src="https://www.bestjapan.ru/templates/backend/img/icon/shield_16.png" class="pic" border="0"><a target="_blank" href="/help/payment/insurance" class="help">Застраховать покупку</a> (0.5% от стоимости)</td></tr><tr valign="top"><td align="right">Проверка товара:</td><td><input type="checkbox" name="inspection" value="Y" style="background-color:transparent;" 
+		onclick="this.form.inspcomment.disabled = !this.checked;"> Заказать <a href="/help/payment/checking" class="help">проверку товара</a></td></tr><tr valign="top"><td align="right">Что требуется проверить:</td><td><textarea cols="50" rows="3" name="inspcomment" id="inspcomment" disabled tabindex="11"></textarea></td></tr><tr valign="top"><td align="right"></td><td><br><input type="checkbox" name="offer" value="Y" style="background-color:transparent;"> Я принимаю условия <a target="_blank" href="/public_offer" class="help">Договора публичной оферты</a><br><input type="checkbox" name="rest" value="Y" style="background-color:transparent;" > C <a href="/help/delivery" target="_blank">условиями и стоимостью</a> доставки в Россию и <a target="_blank" href="/help/payment/insurance" class="help">страхования</a> данного лота ознакомлен и согласен.<br><br></td></tr></table><br><table border="0" cellpadding="0" cellspacing="0" width="80%"><tr><td align="center"><input type="submit" value="Сделать ставку" name="make" class="wizard_nav_btn" disabled tabindex="12"><input type="hidden" id="user_rate" name="user_rate" id="user_rate" value="2000"><input type="hidden" id="quantity" name="quantity" id="quantity" value="1"><input type="hidden" id="lot_no" name="lot_no" id="lot_no" value="q224032890"><input type="hidden" id="token" name="token" id="token" value="5b5daf242322b"><input type="hidden" id="signature" name="signature" id="signature" value="0a173932c8586092dea11497f8400ab0"></td><td><a href="//www.bestjapan.ru/auction/item_q224032890.html" class="text">вернуться на страницу лота</a></td></tr></table></form>
 <script>
-(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-ga('create', 'UA-56018864-1', 'auto');
-ga('send', 'pageview');
+    jQuery(document).ready(function(){
+        try {
+            jQuery('input[type=checkbox][name=rest], input[type=checkbox][name=offer]').change(function(){
+                var isChecked=jQuery('input[type=checkbox][name=rest]').is(':checked') && jQuery('input[type=checkbox][name=offer]').is(':checked');
+                jQuery('input[type=submit][name=make]').attr("disabled", !isChecked);
+            });
+        } catch(e) {}
+    });
 </script>
-</body>
+
+
+</div></div></div>
+
+
+
+
+<div id="ft">
+<div class="ftwrp">
+<p><b>&copy; 2009-2018 bestjapan.ru - Аукцион Yahoo.</b> <span style="padding-left: 30px;">Лицензия 古物商: 501110007738 [Toyama/富山県公安委員会]</span></p>
+
+<p>Информация на сайте носит исключительно информационный характер и не является публичной офертой. Для получения подробной информации о стоимости лота на аукционе yahoo просьба обращаться к менеджерам компании. <span style="color:white;">0.436s</p>
+</div>
+</div> 
+
+</div><!-- id="doc3" -->
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-18864726-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+<!-- Yandex.Metrika -->
+<script src="//mc.yandex.ru/metrika/watch.js" type="text/javascript"></script>
+<div style="display:none;"><script type="text/javascript">
+try { var yaCounter1380421 = new Ya.Metrika(1380421); } catch(e){}
+</script></div>
+<noscript><div style="position:absolute"><img src="//mc.yandex.ru/watch/1380421" alt="" /></div></noscript>
+<!-- /Yandex.Metrika -->
+</body></html>

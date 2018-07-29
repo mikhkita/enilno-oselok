@@ -153,7 +153,7 @@
                     </div> -->
                 </div>
                 <ul class="goods clearfix" id="goods">  
-                    <?php $this->renderPartial('vladivostok/_list', array('goods' => $goods,'last' => $last,'params' => $params,'type' => $_GET['type'],'dynamic'=>$dynamic)); ?>
+                    <?php $this->renderPartial('tomsk/_list', array('goods' => $goods,'last' => $last,'params' => $params,'type' => $_GET['type'],'dynamic'=>$dynamic)); ?>
                 </ul>
                 <div class="load" style="display:none;">Загрузка...</div>
                 <? else: ?>
@@ -164,7 +164,7 @@
                     <div id="similar" style="display:none;">
                         <h3 class="similar-title">Похожие товары</h3>
                         <ul class="goods clearfix">  
-                            <?php $this->renderPartial('vladivostok/_list', array('goods' => $similar,'last' => 0,'params' => $params,'type' => $_GET['type'],'dynamic'=>$dynamic)); ?>
+                            <?php $this->renderPartial('tomsk/_list', array('goods' => $similar,'last' => 0,'params' => $params,'type' => $_GET['type'],'dynamic'=>$dynamic)); ?>
                         </ul>
                     </div>
                 <? endif; ?>

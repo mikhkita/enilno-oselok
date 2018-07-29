@@ -128,12 +128,12 @@ window.onload = function() {
 
 <div id="bid_place_box" align="center"></div>
 <script language="JavaScript">
-var lot_no = "x426603684";
-var user_rate = 16000;
+var lot_no = "x462271706";
+var user_rate = 1;
 var quantity = 1;
 var deliveryType = 2;
 var comments = "";
-var script_url = "/modules/yahoo_auction/data_request/rate.php?token=565c873cdeb4b&signature=428678919210f23231210b8e166cf19bd6aaa38d";
+var script_url = "/modules/yahoo_auction/data_request/rate.php?token=5802806227f90&signature=066cda75eba03e5baaf7763493085e16baef6126";
 
 MakeBid(script_url, lot_no, user_rate, quantity, deliveryType, comments);
 
@@ -165,8 +165,8 @@ function CheckRate(form, max_rate, min_rate, lot_no, quantity) {
                 <br>Владивосток, ул. Шошина, д. 6 (<a href="http://maps.yandex.ru/-/CVeo7X1m">карта</a>)</address>
             </div>
             <div class="col-md-4">
-                    <small><p>100 &yen; — 54.8 <span class="rur">p<span>уб.</span><br>
-                    1 $ — 120.8 ¥</p>
+                    <small><p>100 &yen; — 62.2 <span class="rur">p<span>уб.</span><br>
+                    1 $ — 101.3 ¥</p>
                     Следующий пароход пока неизвестен                    </small>
                 
             </div>
